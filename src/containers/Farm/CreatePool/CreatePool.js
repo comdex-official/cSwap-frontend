@@ -309,8 +309,6 @@ const CreatePoolModal = ({
           <div className="pool-asset-first-container mt-3">
             <div className="assets-select-card">
               <div className="assets-left">
-                {/* <label className="leftlabel">{isLimitOrder ? "Sell" : variables[lang].from}</label> */}
-                {/* <label className="leftlabel">Select Token</label> */}
                 <div className="assets-select-wrapper">
                   <Row>
                     <div className="cswap-head">

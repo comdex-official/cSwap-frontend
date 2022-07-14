@@ -257,12 +257,14 @@ button {
     }
   }
 
-  &.ant-btn-secondary{
+  &.ant-btn-secondary {
     background: $secondary-btn-color;
     border-color: $secondary-btn-color;
     color: $white;
     border-radius: 40px;
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       background: darken($secondary-btn-color, 0.5);
       color: $white;
     }
@@ -330,7 +332,6 @@ button {
     .ant-slider-handle {
       background-color: $white;
       border: 3px solid $secondary-color;
-      // display: none;
       @media screen and (max-width: 991px) {
         display: block;
       }
