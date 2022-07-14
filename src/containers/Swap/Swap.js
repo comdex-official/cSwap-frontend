@@ -72,7 +72,6 @@ const Swap = ({
   setBaseCoinPoolPrice,
   setParams,
 }) => {
-  const [inProgress, setInProgress] = useState(false);
   const [validationError, setValidationError] = useState();
   const [slippageError, setSlippageError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -202,9 +201,7 @@ const Swap = ({
   };
 
   const fetchPools = (offset, limit, countTotal, reverse) => {
-    setInProgress(true);
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
       if (error) {
         message.error(error);
         return;

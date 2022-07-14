@@ -12,6 +12,7 @@ import * as PropTypes from "prop-types";
 import {
   setFetchBalanceInProgress,
   setPool,
+  setPoolApr,
   setPoolBalance,
   setSpotPrice,
 } from "../../../actions/liquidity";
@@ -19,6 +20,7 @@ import { connect, useDispatch } from "react-redux";
 import { queryAllBalances } from "../../../services/bank/query";
 import { useParams } from "react-router";
 import {
+  queryFarmedPoolCoin,
   queryLiquidityPair,
   queryPool,
   queryPoolCoinDeserialize,
@@ -27,11 +29,16 @@ import {
 import { setPair } from "../../../actions/asset";
 import { iconNameFromDenom } from "../../../utils/string";
 import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getDenomBalance,
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import {
+  calculateDollarValue,
+  commaSeparator,
+  marketPrice,
+} from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { Link } from "react-router-dom";
 import PoolTokenValue from "./PoolTokenValue";
@@ -61,10 +68,15 @@ const FarmDetails = ({
   markets,
   aprMap,
   balances,
+  rewardMap,
+  setPoolApr,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
+  const [normalRewardDollarValuePerDay, setNormalRewardDollarValuePerDay] =
+    useState();
+  const [farmedTokensDollarValue, setFarmedTokensDollarValue] = useState();
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -105,6 +117,66 @@ const FarmDetails = ({
 
     setPair({});
   }, []);
+
+  useEffect(() => {
+    if (pool?.id && rewardMap[pool?.id?.low]) {
+      getPoolDollarValue();
+      getFarmedPoolCoin();
+    }
+  }, [pool, markets]);
+
+  useEffect(() => {
+    if (normalRewardDollarValuePerDay && farmedTokensDollarValue) {
+      setPoolApr(
+        pool?.id,
+        (normalRewardDollarValuePerDay / farmedTokensDollarValue) * 365 * 100
+      );
+    } else if (normalRewardDollarValuePerDay && !farmedTokensDollarValue) {
+      setPoolApr(pool?.id, normalRewardDollarValuePerDay * 365 * 100);
+    }
+  }, [farmedTokensDollarValue, normalRewardDollarValuePerDay]);
+
+  const getPoolDollarValue = () => {
+    let normalRewardDollarValue = calculateDollarValue(
+      rewardMap,
+      markets,
+      pool?.id.toNumber(),
+      "normalRewards"
+    );
+    setNormalRewardDollarValuePerDay(normalRewardDollarValue);
+  };
+
+  const getFarmedPoolCoin = () => {
+    queryFarmedPoolCoin(pool?.id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      queryPoolCoinDeserialize(
+        pool?.id,
+        result?.coin?.amount,
+        (errorResponse, data) => {
+          if (errorResponse) {
+            message.error(errorResponse);
+            return;
+          }
+
+          const providedTokens = data?.coins;
+
+          const totalLiquidityInDollar =
+            Number(amountConversion(providedTokens?.[0]?.amount)) *
+              marketPrice(markets, providedTokens?.[0]?.denom) +
+            Number(amountConversion(providedTokens?.[1]?.amount)) *
+              marketPrice(markets, providedTokens?.[1]?.denom);
+
+          if (totalLiquidityInDollar) {
+            setFarmedTokensDollarValue(totalLiquidityInDollar);
+          }
+        }
+      );
+    });
+  };
 
   const fetchPool = () => {
     queryPool(id, (error, result) => {
@@ -175,6 +247,7 @@ const FarmDetails = ({
   };
 
   const handleBalanceRefresh = () => {
+    getFarmedPoolCoin();
     dispatch({
       type: "BALANCE_REFRESH_SET",
       value: refreshBalance + 1,
@@ -368,6 +441,7 @@ FarmDetails.propTypes = {
   setFetchBalanceInProgress: PropTypes.func.isRequired,
   setPair: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
+  setPoolApr: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
@@ -378,6 +452,7 @@ FarmDetails.propTypes = {
       amount: PropTypes.string,
     })
   ),
+  inProgress: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -410,7 +485,7 @@ FarmDetails.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
-  inProgress: PropTypes.bool,
+  rewardMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -426,6 +501,7 @@ const stateToProps = (state) => {
     pair: state.asset.pair,
     markets: state.oracle.market.list,
     aprMap: state.liquidity.aprMap,
+    rewardMap: state.liquidity.rewardMap,
   };
 };
 
@@ -435,6 +511,7 @@ const actionsToProps = {
   setFetchBalanceInProgress,
   setSpotPrice,
   setPair,
+  setPoolApr,
 };
 
 export default connect(stateToProps, actionsToProps)(FarmDetails);

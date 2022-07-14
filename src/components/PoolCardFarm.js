@@ -37,7 +37,6 @@ const PoolCardFarm = ({
   pool,
   markets,
   rewardMap,
-  incentives,
   setPoolApr,
   setSwapApr,
   aprMap,
@@ -79,7 +78,7 @@ const PoolCardFarm = ({
       getPoolDollarValue();
       getFarmedPoolCoin();
     }
-  }, [pool, markets, incentives]);
+  }, [pool, markets]);
 
   useEffect(() => {
     if (normalRewardDollarValuePerDay && farmedTokensDollarValue) {
@@ -276,17 +275,12 @@ const PoolCardFarm = ({
                   )}%`
                 : "-"}
             </p>
-            {!swapAprMap[pool?.id?.low] ? (
-              <div className="percent-box">
-                {commaSeparator(
-                  Number(swapAprMap[pool?.id?.low] || 0).toFixed(
-                    DOLLAR_DECIMALS
-                  )
-                )}
-                %{" "}
-                <SvgIcon name={iconNameFromDenom(params?.swapFeeDistrDenom)} />
-              </div>
-            ) : null}
+            <div className="percent-box">
+              {commaSeparator(
+                Number(swapAprMap[pool?.id?.low] || 0).toFixed(DOLLAR_DECIMALS)
+              )}
+              % <SvgIcon name={iconNameFromDenom(params?.swapFeeDistrDenom)} />
+            </div>
           </div>
 
           <div className="cardbottom-row">
@@ -320,16 +314,6 @@ PoolCardFarm.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
-  ),
-  incentives: PropTypes.arrayOf(
-    PropTypes.shape({
-      poolId: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-      totalEpochs: PropTypes.shape({
-        low: PropTypes.number,
-      }),
     })
   ),
   markets: PropTypes.arrayOf(
@@ -368,7 +352,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     markets: state.oracle.market.list,
     rewardMap: state.liquidity.rewardMap,
-    incentives: state.liquidity.incentives,
     aprMap: state.liquidity.aprMap,
     swapAprMap: state.liquidity.swapAprMap,
     lang: state.language,

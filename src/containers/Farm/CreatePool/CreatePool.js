@@ -37,7 +37,6 @@ import Snack from "../../../components/common/Snack";
 import variables from "../../../utils/variables";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { comdex } from "../../../config/network";
-import { marketPrice } from "../../../utils/number";
 import Long from "long";
 
 const CreatePoolModal = ({
@@ -70,9 +69,6 @@ const CreatePoolModal = ({
 
   const baseAvailable = getDenomBalance(balances, baseToken);
   const quoteAvailable = getDenomBalance(balances, quoteToken);
-
-  const baseTokenPrice = marketPrice(markets, baseToken);
-  const quoteTokenPrice = marketPrice(markets, quoteToken);
 
   useEffect(() => {
     queryLiquidityPairs((error, result) => {

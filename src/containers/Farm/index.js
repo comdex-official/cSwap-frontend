@@ -7,7 +7,6 @@ import { message, Spin } from "antd";
 import { queryPoolsList } from "../../services/liquidity/query";
 import {
   setPools,
-  setPool,
   setFetchBalanceInProgress,
   setPoolBalance,
   setFirstReserveCoinDenom,
@@ -17,13 +16,11 @@ import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { setSpotPrice } from "../../actions/liquidity";
 import { useDispatch } from "react-redux";
-import { Tabs } from "antd";
 import CreatePool from "./CreatePool";
 import PoolCardFarm from "../../components/PoolCardFarm";
 
 const Farm = ({
   setPools,
-  setPool,
   setPoolBalance,
   setFetchBalanceInProgress,
   pools,
@@ -35,28 +32,8 @@ const Farm = ({
   masterPoolMap,
 }) => {
   const [inProgress, setInProgress] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [defaultTabSelect, setDefaultTabSelect] = useState("1");
 
   const dispatch = useDispatch();
-  const callback = (key) => {
-    setDefaultTabSelect(key);
-  };
-  const { TabPane } = Tabs;
-
-  const showModal = (pool) => {
-    setPool(pool);
-    setDefaultTabSelect("1");
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   useEffect(() => {
     fetchPools(
@@ -146,16 +123,14 @@ const Farm = ({
                   <div className="pool-card-section">
                     {!inProgress && userPools && userPools.length > 0 ? (
                       userPools.map((item, index) => (
-                        <div key={item?.id} onClick={() => showModal(item)}>
-                          <PoolCardFarm
-                            parent={"user"}
-                            key={item.id}
-                            pool={item}
-                            poolIndex={index}
-                            lang={lang}
-                            userLiquidity={userLiquidityInPools[item?.id]}
-                          />
-                        </div>
+                        <PoolCardFarm
+                          parent={"user"}
+                          key={item.id}
+                          pool={item}
+                          poolIndex={index}
+                          lang={lang}
+                          userLiquidity={userLiquidityInPools[item?.id]}
+                        />
                       ))
                     ) : (
                       <div className="ml-3">
@@ -176,15 +151,13 @@ const Farm = ({
                     ? pools.map((item, index) => {
                         if (masterPoolMap?.[item?.id]?.poolId) {
                           return (
-                            <div key={item?.id} onClick={() => showModal(item)}>
-                              <PoolCardFarm
-                                key={item.id}
-                                pool={item}
-                                poolIndex={index}
-                                lang={lang}
-                                userLiquidity={userLiquidityInPools[item?.id]}
-                              />
-                            </div>
+                            <PoolCardFarm
+                              key={item.id}
+                              pool={item}
+                              poolIndex={index}
+                              lang={lang}
+                              userLiquidity={userLiquidityInPools[item?.id]}
+                            />
                           );
                         }
                       })
@@ -202,15 +175,13 @@ const Farm = ({
                     ? pools.map((item, index) => {
                         if (!masterPoolMap?.[item?.id]?.poolId) {
                           return (
-                            <div key={item?.id} onClick={() => showModal(item)}>
-                              <PoolCardFarm
-                                key={item.id}
-                                pool={item}
-                                poolIndex={index}
-                                lang={lang}
-                                userLiquidity={userLiquidityInPools[item?.id]}
-                              />
-                            </div>
+                            <PoolCardFarm
+                              key={item.id}
+                              pool={item}
+                              poolIndex={index}
+                              lang={lang}
+                              userLiquidity={userLiquidityInPools[item?.id]}
+                            />
                           );
                         }
                       })
@@ -230,7 +201,6 @@ Farm.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setFetchBalanceInProgress: PropTypes.func.isRequired,
   setFirstReserveCoinDenom: PropTypes.func.isRequired,
-  setPool: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPools: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
@@ -272,7 +242,6 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setPools,
-  setPool,
   setPoolBalance,
   setFetchBalanceInProgress,
   setSecondReserveCoinDenom,

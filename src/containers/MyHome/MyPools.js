@@ -16,19 +16,14 @@ import {
   setSecondReserveCoinDenom,
 } from "../../actions/liquidity";
 import TooltipIcon from "../../components/TooltipIcon";
-import { queryAllBalances } from "../../services/bank/query";
 import PoolCardRow from "./MyPoolRow";
 import { commaSeparator } from "../../utils/number";
 import { useNavigate } from "react-router";
 
 const MyPools = ({
   setPools,
-  setPoolBalance,
-  setFetchBalanceInProgress,
   pools,
   lang,
-  setSpotPrice,
-  refreshBalance,
   balances,
   aprMap,
   userLiquidityInPools,
@@ -55,26 +50,6 @@ const MyPools = ({
       }
 
       setPools(result.pools);
-    });
-  };
-  const queryPoolBalance = (pool) => {
-    fetchPoolBalance(pool?.reserveAccountAddress);
-  };
-
-  const fetchPoolBalance = (address) => {
-    setFetchBalanceInProgress(true);
-    queryAllBalances(address, (error, result) => {
-      setFetchBalanceInProgress(false);
-
-      if (error) {
-        return;
-      }
-
-      setPoolBalance(result.balances);
-      const spotPrice =
-        (result.balances && result.balances[0] && result.balances[0].amount) /
-        (result.balances && result.balances[1] && result.balances[1].amount);
-      setSpotPrice(spotPrice.toFixed(6));
     });
   };
 
