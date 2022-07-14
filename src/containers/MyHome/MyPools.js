@@ -32,6 +32,19 @@ const MyPools = ({
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchPools = (offset, limit, countTotal, reverse) => {
+      setInProgress(true);
+      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setPools(result.pools);
+      });
+    };
+
     fetchPools(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
@@ -39,19 +52,6 @@ const MyPools = ({
       false
     );
   }, []);
-
-  const fetchPools = (offset, limit, countTotal, reverse) => {
-    setInProgress(true);
-    queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setPools(result.pools);
-    });
-  };
 
   const userPools = pools.filter((pool) => {
     return balances.find((balance) => {
