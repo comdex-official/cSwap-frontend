@@ -106,7 +106,6 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const tableData =
     userPools.length > 0 &&
     userPools.map((item, index) => {
-      console.log("it is", userLiquidityInPools[item.id]);
       return {
         key: index,
         assetpair: item,

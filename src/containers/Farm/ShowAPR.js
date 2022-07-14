@@ -31,6 +31,7 @@ const ShowAPR = ({
   setPoolApr,
   isSwapFee,
   setSwapApr,
+  setParams,
   farmedTokensDollarValue,
   setFarmedTokensDollarValue,
   setNormalRewardDollarValuePerDay,
