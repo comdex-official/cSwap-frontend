@@ -30,18 +30,13 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
-  if (denom === harbor.coinMinimalDenom) {
-    // TODO: take this price dynamically
-    return 0.12;
-  }
-
   const value = array.filter((item) => item.symbol === denomToSymbol(denom));
 
   if (value && value[0]) {
     return value[0] && value[0].rates / 1000000;
   }
 
-  return 1; // returning 1 as we are using ust.
+  return 0; 
 };
 
 export const calculateDollarValue = (

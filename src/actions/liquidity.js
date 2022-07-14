@@ -17,7 +17,7 @@ import {
   SWAP_APR_SET,
   SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
-  NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
+  NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET, POOL_PRICE_SET,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -204,5 +204,13 @@ export const setFarmedTokensDollarValue = (poolId, value) => {
     type: FARMED_TOKENS_DOLLAR_VALUE,
     value,
     poolId,
+  };
+};
+
+export const setPoolPrice = (denom, value) => {
+  return {
+    type: POOL_PRICE_SET,
+    value,
+    denom,
   };
 };

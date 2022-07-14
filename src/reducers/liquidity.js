@@ -19,7 +19,7 @@ import {
   SWAP_APR_SET,
   NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
   SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
-  FARMED_TOKENS_DOLLAR_VALUE,
+  FARMED_TOKENS_DOLLAR_VALUE, POOL_PRICE_SET,
 } from "../constants/liquidity";
 
 const pool = (
@@ -238,6 +238,17 @@ const farmedTokensDollarValue = (state = {}, action) => {
   return state;
 };
 
+const poolPriceMap = (state = {}, action) => {
+  if (action.type === POOL_PRICE_SET) {
+    return {
+      ...state,
+      [action.denom]: action.value,
+    };
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -260,4 +271,5 @@ export default combineReducers({
   normalRewardDollarValuePerDay,
   swapRewardDollarValuePerDay,
   farmedTokensDollarValue,
+  poolPriceMap,
 });
