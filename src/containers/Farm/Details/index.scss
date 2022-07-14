@@ -1,0 +1,137 @@
+@import "../../../assets/scss/variables.scss";
+
+.common-card {
+  background: $background-light;
+  padding: 15px 35px;
+  border-radius: $base-border-radius + 5;
+  box-shadow: $box-shadow-inner-light;
+  position: relative;
+  @media screen and (max-width: 767px) {
+    padding: 35px 20px;
+  }
+  .dark-mode & {
+    background: $background-dark1;
+    border: 1px solid $border-dark;
+    box-shadow: $box-shadow-inner-dark;
+  }
+}
+
+.pool-details-list {
+  .tooltip-icon {
+    margin-left: 3px;
+    margin-bottom: -1px;
+    .dark-mode & {
+      fill: $text-color-light;
+    }
+  }
+}
+
+.ant-btn {
+  &.back-btn {
+    border-color: #303950;
+    background: none;
+    border-radius: 30px !important;
+    font-weight: normal;
+    .dark-mode & {
+      color: $white;
+    }
+    &:hover {
+      .dark-mode & {
+        background: #303950;
+        border-color: #303950;
+      }
+    }
+  }
+}
+
+.card-titles {
+  margin-bottom: 1.8rem;
+  .dark-mode & {
+    color: $white;
+  }
+}
+
+.card-title-label {
+  .dark-mode & {
+    color: $text-color-light;
+  }
+}
+
+.ant-slider {
+  &.comdex-slider-alt {
+    margin-top: 0;
+    width: 100%;
+    margin-bottom: 0;
+
+    .ant-slider-rail {
+      background: #5d6a82;
+      height: 6px;
+      border-radius: 6px;
+      .dark-mode & {
+        background: $white;
+      }
+    }
+    .ant-slider-track {
+      background: $secondary-color;
+      height: 6px;
+    }
+
+    .ant-slider-handle {
+      background-color: $secondary-color;
+      border: 3px solid $secondary-color;
+    }
+
+    .ant-slider-step {
+      display: none;
+      .ant-slider-dot {
+        width: 1px;
+        height: 6px;
+        border: 0;
+        top: -6px;
+        background: $silver-color;
+
+        &.ant-slider-dot-active {
+          background: $secondary-color;
+        }
+        &:first-child {
+          margin-left: 0;
+        }
+        &:nth-child(2) {
+          margin-left: -1px;
+        }
+        &:last-child {
+          margin-left: -1px;
+        }
+      }
+    }
+
+    .ant-slider-mark {
+      top: 20px;
+      width: calc(100% - 15px);
+
+      span {
+        font-size: $font-size-sm;
+        font-weight: 300;
+
+        .dark-mode & {
+          color: $text-color-light;
+        }
+      }
+      span:nth-child(2) {
+        left: 50% !important;
+      }
+      span:nth-child(3) {
+        left: 100% !important;
+      }
+    }
+    &:hover {
+      .ant-slider-track {
+        background: $secondary-color;
+      }
+      .ant-slider-handle {
+        background-color: $secondary-color;
+        border: 3px solid $secondary-color !important;
+      }
+    }
+  }
+}

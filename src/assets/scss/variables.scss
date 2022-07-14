@@ -1,0 +1,97 @@
+/*
+*
+COMDEX
+*                                                           
+*/
+
+$white: #fff;
+$black: #000;
+$red: #ca2d2d;
+
+$dark-color: #040517;
+$primary-color: #0e7ac9; // primary color for all components
+$secondary-color: #fe4350;
+$secondary-color-light: #232231;
+$secondary-color-hover: #c92f39;
+$success-color: #00ce8e; // success state color
+$warning-color: #fdc011; // warning state color
+$error-color: #f5222d; // error state color
+$silver-color: #c0c0c0;
+$purple-color: #7957e4;
+$secondary-btn-color: #73AED2;
+
+//body-bg
+$body-background-light: #f1f2f7;
+$body-background-dark: #040516;
+
+// background
+$background-dark1: #030b1e;
+$background-dark2: #0d1627;
+$background-light: #ffffff;
+$background-light2: #f2f2f2;
+$primary-gradient: linear-gradient(180deg, #fe4350 1.34%, #053c75 100.83%);
+$primary-gradient-2: linear-gradient(146.26deg, #fe4350 1.34%, #053c75 100.83%);
+$background-select-hover-dark: #2b3548;
+$background-popover: #0c1424;
+$background-input-dark: #0c1424;
+$assets-bg-light: #f4f5f7;
+
+$border-dark: #303950;
+$border-light: #697589;
+
+// Text color
+$text-color-light: #73aed2;
+$text-color-dark: #585873;
+$text-color-label-dark: #acbfdb;
+$text-color-dark2: #03253e;
+$text-color-light2: #747f86;
+$text-color-label-dark2: #2d3748;
+
+// shadow
+$box-shadow-inner-dark: inset 5px 5px 12px 1px #262b38;
+$box-shadow-input-dark: inset 0 4px 12px 6px #1d2330;
+$box-shadow-dark: inset 0 4px 16px 6px #1d2330;
+$box-shadow-inner-light: 3px 3px 10px rgba(174, 174, 192, 0.4),
+  inset -8px -8px 12px rgba(174, 174, 192, 0.25);
+$box-shadow-inner-light-hover: 3px 3px 10px rgba(174, 174, 192, 0.4),
+  inset -8px -8px 12px rgba(174, 174, 192, 0.25);
+
+// Side bar
+$sidebar-bg-light: #f4f9fc;
+$sidebar-bg-dark: $background-dark1;
+$sidebar-menu-background-dark: #0c111e;
+$sidebar-menu-border-dark: #11264a;
+$menu-active-light: radial-gradient(
+  101.47% 3485.03% at -1.47% 45.45%,
+  rgba(14, 122, 201, 0.13) 0%,
+  rgba(26, 28, 30, 0.1) 100%
+);
+$menu-active-dark: $sidebar-menu-background-dark;
+$menu-icon-dark: #73aed2;
+
+$btn-bg-dark: $background-dark1;
+
+$font-family: "Lexend Deca", sans-serif !important;
+$font-size-base: 14px;
+$font-size-xlg: $font-size-base + 4px; //18px
+$font-size-lg: $font-size-base + 2px; //16px
+$font-size-sm: $font-size-base - 2px; //12px
+
+$disabled-color: rgba(0, 0, 0, 0.25); // disable state color
+$border-radius-base: 6px; // major border radius
+$border-color-base: #d9d9d9; // major border color
+$border-input-light: #2b3548;
+
+$box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15); // major shadow for layers
+
+$form-input-bg-light: #f1f2f7;
+$form-input-bg-dark: #243333;
+
+$tooltip-bg-dark: #464646;
+$tooltip-bg-light: #ececec;
+$tooltip-color-dark: #5a5f63;
+$tooltip-color-light: #ffffff;
+
+$base-border-radius: 15px;
+
+$slider-empty-bg: #171424;

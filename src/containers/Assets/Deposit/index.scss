@@ -1,0 +1,53 @@
+@import "../../../assets/scss/variables.scss";
+
+.ant-message-notice-content {
+  background-color: $background-input-dark !important;
+  color: #fff;
+}
+
+.assets-maxhalf {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: pointer;
+  .ant-btn {
+    font-size: $font-size-sm - 1;
+    border-radius: 1px;
+    padding: 1px 0;
+    margin-left: 4px;
+    line-height: 1;
+    text-align: center;
+    width: 30px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    .dark-mode & {
+      background: #132239;
+      color: $white;
+    }
+
+    &.active {
+      background: $secondary-color;
+      border-radius: 2px;
+      .dark-mode & {
+        background: $secondary-color;
+      }
+
+      span {
+        color: #fff !important;
+        .dark-mode & {
+          color: $white;
+        }
+      }
+    }
+  }
+}
+.assets-input-box {
+  input {
+    background: $assets-bg-light;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+  }
+}

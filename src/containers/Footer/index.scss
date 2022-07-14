@@ -1,0 +1,26 @@
+@import "../../assets/scss/variables.scss";
+
+.footer {
+  text-align: center;
+  color: $text-color-dark;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  .dark-mode & {
+    color: $text-color-light;
+  }
+  .social-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    a {
+      width: 100%;
+      .icon {
+        width: 20px;
+      }
+    }
+  }
+}
