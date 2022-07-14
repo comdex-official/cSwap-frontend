@@ -1,0 +1,82 @@
+{
+  "name": "comdex-web-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@cosmjs/crypto": "^0.28.7",
+    "@cosmjs/encoding": "^0.28.7",
+    "@cosmjs/ledger-amino": "^0.28.10",
+    "@cosmjs/math": "^0.28.7",
+    "@cosmjs/proto-signing": "^0.28.7",
+    "@cosmjs/stargate": "^0.28.7",
+    "@cosmjs/tendermint-rpc": "^0.28.7",
+    "@keplr-wallet/common": "^0.10.1",
+    "@keplr-wallet/stores": "^0.10.1",
+    "@restart/context": "^2.1.4",
+    "antd": "^4.16.8",
+    "babel-plugin-import": "^1.13.0",
+    "bignumber.js": "^9.0.2",
+    "classnames": "^2.3.1",
+    "coingecko-api": "^1.0.10",
+    "comdex-codec": "comdex-official/proto-codecs#main",
+    "cosmjs-types": "^0.5.0",
+    "highcharts": "^10.0.0",
+    "highcharts-react-official": "^3.0.0",
+    "js-base64": "^3.6.1",
+    "lodash": "^4.17.21",
+    "long": "^5.2.0",
+    "moment": "^2.29.1",
+    "react": "^18.0.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-custom-scrollbars": "4.2.1",
+    "react-dom": "^18.0.0",
+    "react-responsive": "^9.0.0-beta.4",
+    "react-router": "^6.3.0",
+    "react-scripts": "4.0.3",
+    "react-toastify": "^9.0.4",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
+    "ts-proto": "1.108.0",
+    "web-vitals": "^2.1.2"
+  },
+  "scripts": {
+    "start-old": "react-scripts start",
+    "build-old": "react-scripts build",
+    "test-old": "react-scripts test --env=jsdom",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@ledgerhq/hw-transport-webusb": "^6.27.1",
+    "axios": "^0.27.2",
+    "customize-cra": "^1.0.0",
+    "less": "^4.1.2",
+    "less-loader": "5.0.0",
+    "prop-types": "^15.7.2",
+    "react-app-rewired": "^2.1.5",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^6.3.0",
+    "sass": "^1.49.11"
+  }
+}

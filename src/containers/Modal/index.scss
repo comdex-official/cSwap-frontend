@@ -1,0 +1,142 @@
+@import "../../assets/scss/variables.scss";
+
+.wallet-links {
+  padding: 7px 25px;
+  display: flex;
+  justify-content: center;
+  background-color: $secondary-color;
+  backdrop-filter: blur(40px);
+  color: white;
+  font-size: 13px;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: $base-border-radius;
+  .round-icon {
+    width: 25px;
+    height: 25px;
+    background-color: gray;
+    border-radius: 50%;
+  }
+}
+
+.connect-modal {
+  &.ant-modal {
+    border-radius: $base-border-radius;
+    .ant-modal-content {
+      background: $background-light;
+      border-radius: $base-border-radius;
+      padding: 30px;
+      max-width: 500px;
+      .dark-mode & {
+        background: $background-dark1;
+      }
+      .ant-modal-body {
+        padding: 4px 10px;
+        h2 {
+          text-align: center;
+          margin-bottom: 28px;
+          font-size: 1.3rem;
+          color: $text-color-dark;
+          .dark-mode & {
+            color: #fff;
+          }
+        }
+        .no-link {
+          background: radial-gradient(
+            145.79% 37573.33% at 50% 50%,
+            rgba(39, 48, 68, 0.54) 0%,
+            rgba(30, 34, 43, 0.19) 100%
+          );
+          padding: 15px;
+          text-align: center;
+          max-width: 320px;
+          margin: auto;
+          cursor: pointer;
+        }
+        .yes-link {
+          background: #212121;
+          padding: 15px;
+          text-align: center;
+          margin: 8px auto 0 auto;
+          max-width: 320px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+// Custom Code here
+
+.left-aligned-modal {
+  position: relative;
+}
+.connect-modal-new {
+  position: absolute !important;
+  top: 13% !important;
+  right: 3%;
+  margin: 0;
+}
+
+.new-disconnect-modal-main {
+  position: relative !important;
+  color: #fff;
+}
+.new-disconnect-modal {
+  position: absolute !important;
+  top: 10% !important;
+  right: 2% !important;
+}
+
+.new-modal-disconnect-button {
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 5px 15px;
+  color: #fff;
+  font-size: 13px;
+  background-color: $red;
+  border-radius: $base-border-radius;
+  cursor: pointer;
+}
+.new-modal-disconect-data {
+  color: #fff;
+}
+
+.new-modal-disconnect-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new-modal-disconnect-box span {
+  width: 10px;
+  height: 10px;
+  background-color: $success-color;
+  border-radius: 50%;
+  display: block;
+  margin-right: 7px;
+}
+.new-modal-disconnect-box-balance-container {
+  margin: 10px 0;
+}
+.balance__value__data {
+  color: #434e65;
+}
+.new-modal-disconnect-box-address-container {
+  margin: 10px 0 20px 0;
+}
+.new-modal-disconnect-address {
+  display: flex;
+}
+.new-modal-disconnect-address span {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #434e65;
+}
+.address-value-data {
+  overflow: scroll;
+  white-space: nowrap;
+  color: #434e65;
+  text-overflow: ellipsis;
+}
