@@ -1,0 +1,208 @@
+@import "../../assets/scss/variables.scss";
+
+.cswap-section {
+  column-gap: 1rem;
+  .cswap-head {
+    background: $background-light;
+    padding: 6px 25px;
+    border-radius: $base-border-radius + 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    box-shadow: $box-shadow-inner-light;
+    margin-bottom: 10px;
+    @media screen and (max-width: 576px) {
+      display: block;
+    }
+    .dark-mode & {
+      background: $background-dark1;
+      border: 1px solid $border-dark;
+      box-shadow: $box-shadow-inner-dark;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-lg + 3;
+      width: 50%;
+      .icon-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        background: $primary-gradient;
+        padding: 1px;
+        margin-right: 15px;
+        .svg-icon-inner {
+          width: 100%;
+          height: 100%;
+          background: $background-light;
+          border-radius: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .dark-mode & {
+            background: $background-dark1;
+          }
+          .icon {
+            width: 50px;
+            height: 100%;
+          }
+        }
+      }
+    }
+    .head-right {
+      label {
+        font-size: $font-size-sm - 1;
+        color: $text-color-light2;
+        margin-bottom: 0;
+        line-height: 1;
+        .dark-mode & {
+          color: $text-color-light;
+        }
+      }
+      p {
+        margin-bottom: 0;
+        line-height: 1;
+        font-size: $font-size-base;
+      }
+    }
+  }
+  .cswap-content {
+    background: $background-light;
+    padding: 35px;
+    border-radius: $base-border-radius + 5;
+    box-shadow: $box-shadow-inner-light;
+    position: relative;
+    @media screen and (max-width: 767px) {
+      padding: 35px 20px;
+    }
+    .dark-mode & {
+      background: $background-dark1;
+      border: 1px solid $border-dark;
+      box-shadow: $box-shadow-inner-dark;
+    }
+    .ant-switch-handle {
+      &::before {
+        background: $secondary-color;
+      }
+    }
+    .ant-switch-checked:focus {
+      box-shadow: none;
+    }
+    .ant-switch-checked {
+      background-color: $text-color-light;
+    }
+    .setting-popover {
+      position: absolute;
+      right: 15px;
+      top: 37px;
+      width: 20px;
+      fill: #354774;
+      cursor: pointer;
+    }
+  }
+  .toggle_active div span {
+    color: $text-color-light;
+  }
+  .order_table_section {
+    grid-column: 1 / span 2;
+  }
+}
+.swap-assets-right {
+  .ant-input {
+    margin-top: 28px !important;
+  }
+}
+.slippage-tolerance {
+  .tolerance-bottom {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    .ant-radio-group {
+      margin-right: 18px;
+      .ant-radio-button-wrapper {
+        background: none;
+        border: 0;
+        padding: 0 10px;
+        border-radius: 4px;
+        font-size: $font-size-sm;
+        height: 28px;
+        .dark-mode & {
+          color: $text-color-label-dark;
+        }
+        &::before {
+          display: none;
+        }
+        &.ant-radio-button-wrapper-checked {
+          background: $tooltip-bg-light;
+          color: $text-color-label-dark;
+          .dark-mode & {
+            background: #2b3548;
+            color: $text-color-label-dark;
+          }
+        }
+      }
+    }
+    .input-section {
+      max-width: 85px;
+      .input-cmdx {
+        height: 30px;
+        border-radius: 5px;
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.maxhalf {
+  .ant-btn:nth-child(1) {
+    background: $secondary-color;
+    span {
+      color: #fff !important ;
+      background: $secondary-color;
+      .dark-mode & {
+        color: $white;
+      }
+    }
+  }
+}
+.maxhalf {
+  .ant-btn:nth-child(2) {
+    background: $white;
+    span {
+      .dark-mode & {
+        color: $white;
+      }
+    }
+  }
+}
+
+.pool_price_section{
+  min-height: 80px !important;
+  .assets-select-wrapper{
+    margin-top: 10px;
+  }
+  .swap-assets-right .ant-input{
+    margin-top: 8px !important;
+  }
+}
+.pool_balance{
+  color: $background-dark1;
+  .dark-mode & {
+    color: $background-light2;
+  }
+  .label-left{
+    .dark-mode & {
+      color: $text-color-light;
+    }
+  }
+}
+.loader {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
