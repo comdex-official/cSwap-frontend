@@ -36,20 +36,19 @@ export const marketPrice = (array, denom) => {
     return value[0] && value[0].rates / 1000000;
   }
 
-  return 0; 
+  return 0;
 };
 
 export const calculateDollarValue = (
   rewardMap,
-  poolPriceMap,
+  markets,
   poolId,
   rewardType
 ) => {
   let dollarValue = 0;
 
   for (const [key, value] of Object.entries(rewardMap[poolId][rewardType])) {
-    console.log('it is', poolPriceMap[key], key)
-    dollarValue += amountConversion(value) * poolPriceMap[key];
+    dollarValue += amountConversion(value) * marketPrice(markets, key);
   }
 
   return dollarValue;

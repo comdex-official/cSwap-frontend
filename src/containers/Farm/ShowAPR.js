@@ -159,13 +159,13 @@ const ShowAPR = ({
   const getPoolDollarValue = () => {
     let normalRewardDollarValue = calculateDollarValue(
       rewardMap,
-      poolPriceMap,
+      markets,
       pool?.id.toNumber(),
       "normalRewards"
     );
     let swapRewardDollarValue = calculateDollarValue(
       rewardMap,
-      poolPriceMap,
+      markets,
       pool?.id.toNumber(),
       "swapRewards"
     );
