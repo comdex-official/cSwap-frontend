@@ -50,13 +50,17 @@ const PoolCardFarm = ({
   }, [pool]);
 
   useEffect(() => {
-    getUserLiquidity(pool);
-  }, [pool, address]);
+    if (pool?.id && address) {
+      getUserLiquidity(pool);
+    }
+  }, [pool, address, markets, poolPriceMap]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
+        (item) =>
+          Number(item?.amount) *
+          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -171,9 +175,11 @@ const PoolCardFarm = ({
                 <label>Liquidity</label>
                 <p>
                   $
-                  {commaSeparator(Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                  {commaSeparator(
+                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
                       DOLLAR_DECIMALS
-                  ))}
+                    )
+                  )}
                 </p>
               </>
             ) : null}
