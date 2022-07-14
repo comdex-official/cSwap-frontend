@@ -19,6 +19,7 @@ import TooltipIcon from "../../components/TooltipIcon";
 import PoolCardRow from "./MyPoolRow";
 import { useNavigate } from "react-router";
 import ShowAPR from "../Farm/ShowAPR";
+import { commaSeparator } from "../../utils/number";
 
 const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -77,8 +78,9 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
       dataIndex: "position",
       key: "position",
       render: (position) => (
-        //TODO: take dynamic value
-        <div>${Number(position || 0).toFixed(DOLLAR_DECIMALS)}</div>
+        <div>
+          ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
+        </div>
       ),
     },
     {
@@ -104,6 +106,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const tableData =
     userPools.length > 0 &&
     userPools.map((item, index) => {
+      console.log("it is", userLiquidityInPools[item.id]);
       return {
         key: index,
         assetpair: item,

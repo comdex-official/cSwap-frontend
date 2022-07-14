@@ -342,7 +342,6 @@ const CreatePoolModal = ({
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
-                    {/*// TODO: integrated max click*/}
                     <Button
                       className="active"
                       onClick={() => handleBaseInputMax()}
@@ -565,7 +564,6 @@ const CreatePoolModal = ({
                 <p className="pool-paira">Transferred to community pool</p>
               </div>
               <div className="poolcreationfee-right">
-                {/*// TODO: take fee from pool params*/}
                 <span>
                   {amountConversionWithComma(
                     liquidityParams?.poolCreationFee?.[0]?.amount || 0

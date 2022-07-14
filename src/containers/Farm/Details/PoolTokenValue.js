@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { amountConversion } from "../../../utils/coin";
-import { marketPrice } from "../../../utils/number";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -41,9 +41,11 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
   return (
     <>
       $
-      {Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
-        DOLLAR_DECIMALS
-      ) || 0}{" "}
+      {commaSeparator(
+        Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
+          DOLLAR_DECIMALS
+        )
+      )}{" "}
     </>
   );
 };
