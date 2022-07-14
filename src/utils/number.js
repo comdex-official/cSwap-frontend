@@ -2,7 +2,6 @@ import { Decimal } from "@cosmjs/math";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import { denomToSymbol } from "./string";
 import { amountConversion } from "./coin";
-import { harbor } from "../config/network";
 
 export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {

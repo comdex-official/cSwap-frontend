@@ -99,7 +99,7 @@ const ShowAPR = ({
       getPoolDollarValue();
       getFarmedPoolCoin();
     }
-  }, [pool, markets]);
+  }, [pool, markets, rewardMap]);
 
   useEffect(() => {
     if (
