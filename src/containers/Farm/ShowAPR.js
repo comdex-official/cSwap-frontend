@@ -19,7 +19,7 @@ import {
   setNormalRewardDollarValuePerDay,
   setPoolApr,
   setSwapApr,
-    setPoolPrice,
+  setPoolPrice,
   setSwapRewardDollarValuePerDay,
 } from "../../actions/liquidity";
 import { setParams } from "../../actions/swap";
@@ -39,8 +39,8 @@ const ShowAPR = ({
   normalRewardDollarValuePerDay,
   swapRewardDollarValuePerDay,
   setSwapRewardDollarValuePerDay,
-    setPoolPrice,
-    poolPriceMap
+  setPoolPrice,
+  poolPriceMap,
 }) => {
   useEffect(() => {
     if (isSwapFee) {
@@ -91,7 +91,7 @@ const ShowAPR = ({
     }
 
     setPoolPrice(firstAsset?.denom, xPoolPrice);
-    setPoolPrice(secondAsset?.denom, yPoolPrice)
+    setPoolPrice(secondAsset?.denom, yPoolPrice);
   };
 
   useEffect(() => {
@@ -159,13 +159,13 @@ const ShowAPR = ({
   const getPoolDollarValue = () => {
     let normalRewardDollarValue = calculateDollarValue(
       rewardMap,
-      markets,
+      poolPriceMap,
       pool?.id.toNumber(),
       "normalRewards"
     );
     let swapRewardDollarValue = calculateDollarValue(
       rewardMap,
-      markets,
+      poolPriceMap,
       pool?.id.toNumber(),
       "swapRewards"
     );
@@ -194,9 +194,11 @@ const ShowAPR = ({
 
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-            (poolPriceMap[providedTokens?.[0]?.denom] || marketPrice(markets, providedTokens?.[0]?.denom)) +
+              (poolPriceMap[providedTokens?.[0]?.denom] ||
+                marketPrice(markets, providedTokens?.[0]?.denom)) +
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-            (poolPriceMap[providedTokens?.[1]?.denom] || marketPrice(markets, providedTokens?.[1]?.denom));
+              (poolPriceMap[providedTokens?.[1]?.denom] ||
+                marketPrice(markets, providedTokens?.[1]?.denom));
 
           if (totalLiquidityInDollar) {
             setFarmedTokensDollarValue(pool?.id, totalLiquidityInDollar);
