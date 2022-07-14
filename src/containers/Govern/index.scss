@@ -5,6 +5,7 @@
   padding: 1px;
   border-radius: $base-border-radius;
   box-shadow: $box-shadow-inner-light;
+  border: 1px solid transparent;
   .dark-mode & {
     background: $background-dark1;
     border: 1px solid $border-dark;
@@ -19,8 +20,8 @@
       border-bottom: 1px solid rgba($text-color-light, 0.2);
     }
 
-    .filter-select {
-      .ant-select-selector {
+    .filter-select{
+      .ant-select-selector{
         background: $background-dark1;
         border-radius: 40px;
         padding: 0 40px;
@@ -80,12 +81,12 @@
             overflow: inherit;
 
             .ant-progress-bg {
-              background: #f9535e;
+              background: #F9535E;
               min-height: 100%;
               position: relative;
               border-radius: 20px 0 0 20px;
             }
-            .ant-progress-success-bg {
+            .ant-progress-success-bg{
               background: $secondary-btn-color;
               min-height: 100%;
               border-radius: 20px 0 0 20px;
@@ -112,22 +113,13 @@
     }
   }
 }
-.ant-select-dropdown {
-  background: $secondary-color !important;
-}
-
-.govern-select-option {
-  &:hover {
-    background-color: $secondary-color !important;
-  }
-}
 
 .earn-deposite-card {
   padding: 40px 25px 35px 25px;
   border-radius: $base-border-radius;
   background: $background-light;
   box-shadow: $box-shadow-inner-light;
-  border: 1px solid $border-dark;
+  border: 1px solid transparent;
 
   .dark-mode & {
     background-color: $background-dark1;
@@ -308,9 +300,8 @@
   }
 }
 
-.count {
-  color: rgba(0, 0, 0, 0.85);
+.count{
   .dark-mode & {
-    color: $white;
+    color: #fff;
   }
 }
