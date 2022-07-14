@@ -31,10 +31,11 @@ import {
   denomConversion,
   getDenomBalance,
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { marketPrice } from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { Link } from "react-router-dom";
 import PoolTokenValue from "./PoolTokenValue";
+import ShowAPR from "../ShowAPR";
 
 const { TabPane } = Tabs;
 
@@ -59,8 +60,8 @@ const FarmDetails = ({
   pair,
   setPair,
   markets,
-  aprMap,
   balances,
+    poolPriceMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -68,7 +69,6 @@ const FarmDetails = ({
 
   const dispatch = useDispatch();
   const { id } = useParams();
-
   const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
   const queuedAmounts =
@@ -116,6 +116,7 @@ const FarmDetails = ({
       setPool(result?.pool);
     });
   };
+
   useEffect(() => {
     if (pool?.pairId) {
       queryLiquidityPair(pool?.pairId, (error, result) => {
@@ -192,7 +193,7 @@ const FarmDetails = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) => Number(item?.amount) * (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -309,11 +310,7 @@ const FarmDetails = ({
                 <TooltipIcon text="Annual percentage rate of CMDX rewards for the corresponding  pool. Note:- APRs are subject to change with pool size." />
               </label>
               <p>
-                {aprMap[pool?.id?.low]
-                  ? `${commaSeparator(
-                      Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-                    )}%`
-                  : "-"}
+                <ShowAPR pool={pool} />
               </p>
             </Col>
           </Row>
@@ -371,13 +368,13 @@ FarmDetails.propTypes = {
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
     })
   ),
+  inProgress: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -398,6 +395,7 @@ FarmDetails.propTypes = {
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
   }),
+  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -410,7 +408,6 @@ FarmDetails.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
-  inProgress: PropTypes.bool,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -425,7 +422,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
-    aprMap: state.liquidity.aprMap,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 

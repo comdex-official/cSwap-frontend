@@ -257,12 +257,14 @@ button {
     }
   }
 
-  &.ant-btn-secondary{
+  &.ant-btn-secondary {
     background: $secondary-btn-color;
     border-color: $secondary-btn-color;
     color: $white;
     border-radius: 40px;
-    &:hover, &:active, &:focus {
+    &:hover,
+    &:active,
+    &:focus {
       background: darken($secondary-btn-color, 0.5);
       color: $white;
     }
@@ -330,7 +332,6 @@ button {
     .ant-slider-handle {
       background-color: $white;
       border: 3px solid $secondary-color;
-      // display: none;
       @media screen and (max-width: 991px) {
         display: block;
       }
@@ -578,6 +579,9 @@ button {
               font-size: $font-size-sm + 3;
               color: $dark-color;
               text-align: left !important;
+              &::before{
+                display: none;
+              }
               .dark-mode & {
                 color: $text-color-light;
               }
@@ -903,6 +907,31 @@ button {
 }
 
 .ant-select-dropdown {
+  border-radius: 10px;
+  .dark-mode & {
+    background: $background-dark2;
+  }
+  .ant-select-item {
+    .ant-select-item-option-content {
+      .dark-mode & {
+        color: $white;
+      }
+    }
+    &.ant-select-item-option-selected,
+    &.ant-select-item-option-active, &:hover {
+      background: $background-light2;
+      font-weight: normal;
+      color: $secondary-color;
+
+      .dark-mode & {
+        background: $background-select-hover-dark;
+      }
+    }
+  }
+}
+
+.ant-select-dropdown {
+
   &.asset-select-dropdown {
     background: $background-light2;
     border-radius: 4px;
@@ -1270,6 +1299,30 @@ button {
 .ant-steps-horizontal:not(.ant-steps-label-vertical) {
   .ant-steps-item {
     padding-left: 5px !important;
+    &.ant-steps-item-finish, &.ant-steps-item-active {
+      .ant-steps-item-container {
+        .ant-steps-item-icon {
+          border-color: $secondary-color;
+          background: $secondary-color;
+          .dark-mode & {
+            color: $text-color-light;
+          }
+          .ant-steps-icon {
+            color: $white;
+            .dark-mode & {
+              color: $white;
+            }
+          }
+        }
+        .ant-steps-item-content {
+          .ant-steps-item-title {
+            &::after {
+              background: $secondary-color;
+            }
+          }
+        }
+      }
+    }
   }
   .ant-steps-item-title::after {
     position: absolute;
@@ -1281,55 +1334,25 @@ button {
     content: "";
   }
   .ant-steps-item-wait .ant-steps-item-icon {
-    background: $background-dark1;
+    background: $background-light;
     border-color: $secondary-color;
-    color: $white;
+    .dark-mode & {
+      background: $background-dark1
+    }
     .ant-steps-icon {
-      color: $white;
+      color: $text-color-dark2;
+      .dark-mode & {
+        color: $white;
+      }
     }
   }
   .ant-steps-item-process {
     .ant-steps-item-container {
-      .ant-steps-item-tail {
-      }
       .ant-steps-item-icon {
         background: $background-light;
         border-color: $secondary-color;
         .dark-mode & {
           background: $secondary-color;
-        }
-      }
-      .ant-steps-item-content {
-        .ant-steps-item-title {
-          &::after {
-          }
-        }
-      }
-    }
-  }
-  .ant-steps-item-finish {
-    .ant-steps-item-container {
-      .ant-steps-item-tail {
-      }
-      .ant-steps-item-icon {
-        background: $background-light;
-        border-color: $secondary-color;
-        .dark-mode & {
-          background: $secondary-color;
-          color: $text-color-light;
-        }
-        .ant-steps-icon {
-          color: $white;
-          .dark-mode & {
-            color: $white;
-          }
-        }
-      }
-      .ant-steps-item-content {
-        .ant-steps-item-title {
-          &::after {
-            background: $secondary-color;
-          }
         }
       }
     }

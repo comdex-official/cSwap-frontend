@@ -15,6 +15,9 @@ import {
   POOL_INCENTIVES_SET,
   POOL_APR_SET,
   SWAP_APR_SET,
+  SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
+  FARMED_TOKENS_DOLLAR_VALUE,
+  NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET, POOL_PRICE_SET,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -177,5 +180,37 @@ export const setSwapApr = (poolId, value) => {
     type: SWAP_APR_SET,
     value,
     poolId,
+  };
+};
+
+export const setNormalRewardDollarValuePerDay = (poolId, value) => {
+  return {
+    type: NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
+    value,
+    poolId,
+  };
+};
+
+export const setSwapRewardDollarValuePerDay = (poolId, value) => {
+  return {
+    type: SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
+    value,
+    poolId,
+  };
+};
+
+export const setFarmedTokensDollarValue = (poolId, value) => {
+  return {
+    type: FARMED_TOKENS_DOLLAR_VALUE,
+    value,
+    poolId,
+  };
+};
+
+export const setPoolPrice = (denom, value) => {
+  return {
+    type: POOL_PRICE_SET,
+    value,
+    denom,
   };
 };

@@ -15,7 +15,7 @@ import variables from "../../../../utils/variables";
 import { connect } from "react-redux";
 import * as PropTypes from "prop-types";
 import Info from "../../Info";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
+import { APP_ID } from "../../../../constants/common";
 import Long from "long";
 import PoolTokenValue from "../PoolTokenValue";
 

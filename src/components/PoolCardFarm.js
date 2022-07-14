@@ -10,59 +10,34 @@ import {
 import { SvgIcon } from "./common";
 import { connect } from "react-redux";
 import { iconNameFromDenom } from "../utils/string";
+import { commaSeparator, marketPrice } from "../utils/number";
 import {
-  calculateDollarValue,
-  commaSeparator,
-  marketPrice,
-} from "../utils/number";
-import {
-  queryFarmedPoolCoin,
   queryLiquidityPair,
-  queryLiquidityParams,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
 } from "../services/liquidity/query";
 import { message } from "antd";
 import { DOLLAR_DECIMALS } from "../constants/common";
-import {
-  setPoolApr,
-  setSwapApr,
-  setUserLiquidityInPools,
-} from "../actions/liquidity";
+import { setUserLiquidityInPools } from "../actions/liquidity";
 import { useNavigate } from "react-router";
-import { setParams } from "../actions/swap";
+import ShowAPR from "../containers/Farm/ShowAPR";
 
 const PoolCardFarm = ({
   lang,
   pool,
   markets,
-  rewardMap,
-  incentives,
-  setPoolApr,
-  setSwapApr,
-  aprMap,
   userLiquidity,
   setUserLiquidityInPools,
   userLiquidityInPools,
   address,
   balances,
   swapAprMap,
-  setParams,
   params,
   parent,
+  poolPriceMap,
 }) => {
   const [pair, setPair] = useState();
-  const [normalRewardDollarValuePerDay, setNormalRewardDollarValuePerDay] =
-    useState();
-  const [swapRewardDollarValuePerDay, setSwapRewardDollarValuePerDay] =
-    useState();
-
-  const [farmedTokensDollarValue, setFarmedTokensDollarValue] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchParams();
-  }, []);
 
   useEffect(() => {
     if (pool?.pairId) {
@@ -75,105 +50,17 @@ const PoolCardFarm = ({
   }, [pool]);
 
   useEffect(() => {
-    if (pool?.id && rewardMap[pool?.id?.low]) {
-      getPoolDollarValue();
-      getFarmedPoolCoin();
+    if (pool?.id && address) {
+      getUserLiquidity(pool);
     }
-  }, [pool, markets, incentives]);
-
-  useEffect(() => {
-    if (normalRewardDollarValuePerDay && farmedTokensDollarValue) {
-      setPoolApr(
-        pool?.id,
-        (normalRewardDollarValuePerDay / farmedTokensDollarValue) * 365 * 100
-      );
-    } else if (normalRewardDollarValuePerDay && !farmedTokensDollarValue) {
-      setPoolApr(pool?.id, normalRewardDollarValuePerDay * 365 * 100);
-    }
-  }, [farmedTokensDollarValue, normalRewardDollarValuePerDay]);
-
-  useEffect(() => {
-    if (swapRewardDollarValuePerDay && farmedTokensDollarValue) {
-      setSwapApr(
-        pool?.id,
-        (swapRewardDollarValuePerDay / farmedTokensDollarValue) * 365 * 100
-      );
-    } else if (swapRewardDollarValuePerDay && !farmedTokensDollarValue) {
-      setSwapApr(pool?.id, swapRewardDollarValuePerDay * 365 * 100);
-    }
-  }, [farmedTokensDollarValue, swapRewardDollarValuePerDay]);
-
-  useEffect(() => {
-    getUserLiquidity(pool);
-  }, [pool, address]);
-
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.params) {
-        setParams(result?.params);
-      }
-    });
-  };
-
-  const getPoolDollarValue = () => {
-    let normalRewardDollarValue = calculateDollarValue(
-      rewardMap,
-      markets,
-      pool?.id.toNumber(),
-      "normalRewards"
-    );
-    let swapRewardDollarValue = calculateDollarValue(
-      rewardMap,
-      markets,
-      pool?.id.toNumber(),
-      "swapRewards"
-    );
-
-    setNormalRewardDollarValuePerDay(normalRewardDollarValue);
-    setSwapRewardDollarValuePerDay(swapRewardDollarValue);
-  };
-
-  const getFarmedPoolCoin = () => {
-    queryFarmedPoolCoin(pool?.id, (error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      queryPoolCoinDeserialize(
-        pool?.id,
-        result?.coin?.amount,
-        (errorResponse, data) => {
-          if (errorResponse) {
-            message.error(errorResponse);
-            return;
-          }
-
-          const providedTokens = data?.coins;
-
-          const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount)) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(amountConversion(providedTokens?.[1]?.amount)) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
-
-          if (totalLiquidityInDollar) {
-            setFarmedTokensDollarValue(totalLiquidityInDollar);
-          }
-        }
-      );
-    });
-  };
+  }, [pool, address, markets, poolPriceMap]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) =>
+          Number(item?.amount) *
+          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -226,9 +113,11 @@ const PoolCardFarm = ({
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
+              (poolPriceMap[providedTokens?.[0]?.denom] ||
+                marketPrice(markets, providedTokens?.[0]?.denom)) +
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
+              (poolPriceMap[providedTokens?.[1]?.denom] ||
+                marketPrice(markets, providedTokens?.[1]?.denom));
 
           if (totalLiquidityInDollar) {
             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -270,23 +159,14 @@ const PoolCardFarm = ({
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <p>
-              {aprMap[pool?.id?.low]
-                ? `${commaSeparator(
-                    Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-                  )}%`
-                : "-"}
+              <ShowAPR pool={pool} isSwapFee={true} />
             </p>
-            {!swapAprMap[pool?.id?.low] ? (
-              <div className="percent-box">
-                {commaSeparator(
-                  Number(swapAprMap[pool?.id?.low] || 0).toFixed(
-                    DOLLAR_DECIMALS
-                  )
-                )}
-                %{" "}
-                <SvgIcon name={iconNameFromDenom(params?.swapFeeDistrDenom)} />
-              </div>
-            ) : null}
+            <div className="percent-box">
+              {commaSeparator(
+                Number(swapAprMap[pool?.id?.low] || 0).toFixed(DOLLAR_DECIMALS)
+              )}
+              % <SvgIcon name={iconNameFromDenom(params?.swapFeeDistrDenom)} />
+            </div>
           </div>
 
           <div className="cardbottom-row">
@@ -295,8 +175,10 @@ const PoolCardFarm = ({
                 <label>Liquidity</label>
                 <p>
                   $
-                  {Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                    DOLLAR_DECIMALS
+                  {commaSeparator(
+                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )
                   )}
                 </p>
               </>
@@ -309,9 +191,6 @@ const PoolCardFarm = ({
 };
 
 PoolCardFarm.propTypes = {
-  setParams: PropTypes.func.isRequired,
-  setPoolApr: PropTypes.func.isRequired,
-  setSwapApr: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   lang: PropTypes.string,
@@ -320,16 +199,6 @@ PoolCardFarm.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
-  ),
-  incentives: PropTypes.arrayOf(
-    PropTypes.shape({
-      poolId: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-      totalEpochs: PropTypes.shape({
-        low: PropTypes.number,
-      }),
     })
   ),
   markets: PropTypes.arrayOf(
@@ -358,7 +227,7 @@ PoolCardFarm.propTypes = {
     reserveCoinDenoms: PropTypes.array,
   }),
   poolIndex: PropTypes.number,
-  rewardMap: PropTypes.object,
+  poolPriceMap: PropTypes.object,
   swapAprMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
@@ -367,21 +236,16 @@ const stateToProps = (state) => {
   return {
     address: state.account.address,
     markets: state.oracle.market.list,
-    rewardMap: state.liquidity.rewardMap,
-    incentives: state.liquidity.incentives,
-    aprMap: state.liquidity.aprMap,
     swapAprMap: state.liquidity.swapAprMap,
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     params: state.swap.params,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
 const actionsToProps = {
-  setPoolApr,
-  setSwapApr,
-  setParams,
   setUserLiquidityInPools,
 };
 

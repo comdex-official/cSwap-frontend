@@ -5,6 +5,7 @@
   padding: 1px;
   border-radius: $base-border-radius;
   box-shadow: $box-shadow-inner-light;
+  border: 1px solid transparent;
   .dark-mode & {
     background: $background-dark1;
     border: 1px solid $border-dark;
@@ -112,22 +113,13 @@
     }
   }
 }
-.ant-select-dropdown {
-  background: $secondary-color !important;
-}
-
-.govern-select-option {
-  &:hover {
-    background-color: $secondary-color !important;
-  }
-}
 
 .earn-deposite-card {
   padding: 40px 25px 35px 25px;
   border-radius: $base-border-radius;
   background: $background-light;
   box-shadow: $box-shadow-inner-light;
-  border: 1px solid $border-dark;
+  border: 1px solid transparent;
 
   .dark-mode & {
     background-color: $background-dark1;
@@ -309,5 +301,7 @@
 }
 
 .count{
-  color: #fff;
+  .dark-mode & {
+    color: #fff;
+  }
 }

@@ -90,7 +90,12 @@
       box-shadow: none;
     }
     .ant-switch-checked {
-      background-color: $text-color-light;
+      background-color: $red;
+      .ant-switch-handle {
+        &::before {
+          background: $white;
+        }
+      }
     }
     .setting-popover {
       position: absolute;
@@ -100,9 +105,6 @@
       fill: #354774;
       cursor: pointer;
     }
-  }
-  .toggle_active div span {
-    color: $text-color-light;
   }
   .order_table_section {
     grid-column: 1 / span 2;
@@ -180,21 +182,21 @@
   }
 }
 
-.pool_price_section{
+.pool_price_section {
   min-height: 80px !important;
-  .assets-select-wrapper{
+  .assets-select-wrapper {
     margin-top: 10px;
   }
-  .swap-assets-right .ant-input{
+  .swap-assets-right .ant-input {
     margin-top: 8px !important;
   }
 }
-.pool_balance{
+.pool_balance {
   color: $background-dark1;
   .dark-mode & {
     color: $background-light2;
   }
-  .label-left{
+  .label-left {
     .dark-mode & {
       color: $text-color-light;
     }
