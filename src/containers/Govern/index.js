@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Progress, message, Spin } from "antd";
+import { Button, List, Select, message, Spin } from "antd";
 import "./index.scss";
 import { useNavigate } from "react-router";
 import { fetchRestProposals } from "../../services/govern/query";

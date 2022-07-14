@@ -37,7 +37,6 @@ import Snack from "../../../components/common/Snack";
 import variables from "../../../utils/variables";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { comdex } from "../../../config/network";
-import { marketPrice } from "../../../utils/number";
 import Long from "long";
 
 const CreatePoolModal = ({
@@ -70,9 +69,6 @@ const CreatePoolModal = ({
 
   const baseAvailable = getDenomBalance(balances, baseToken);
   const quoteAvailable = getDenomBalance(balances, quoteToken);
-
-  const baseTokenPrice = marketPrice(markets, baseToken);
-  const quoteTokenPrice = marketPrice(markets, quoteToken);
 
   useEffect(() => {
     queryLiquidityPairs((error, result) => {
@@ -313,8 +309,6 @@ const CreatePoolModal = ({
           <div className="pool-asset-first-container mt-3">
             <div className="assets-select-card">
               <div className="assets-left">
-                {/* <label className="leftlabel">{isLimitOrder ? "Sell" : variables[lang].from}</label> */}
-                {/* <label className="leftlabel">Select Token</label> */}
                 <div className="assets-select-wrapper">
                   <Row>
                     <div className="cswap-head">
@@ -346,7 +340,6 @@ const CreatePoolModal = ({
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
-                    {/*// TODO: integrated max click*/}
                     <Button
                       className="active"
                       onClick={() => handleBaseInputMax()}
@@ -569,7 +562,6 @@ const CreatePoolModal = ({
                 <p className="pool-paira">Transferred to community pool</p>
               </div>
               <div className="poolcreationfee-right">
-                {/*// TODO: take fee from pool params*/}
                 <span>
                   {amountConversionWithComma(
                     liquidityParams?.poolCreationFee?.[0]?.amount || 0

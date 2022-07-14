@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { amountConversion } from "../../../utils/coin";
-import { marketPrice } from "../../../utils/number";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryPoolCoinDeserialize } from "../../../services/liquidity/query";
 
-const PoolTokenValue = ({ pool, poolTokens, markets }) => {
+const PoolTokenValue = ({ pool, poolTokens, markets, poolPriceMap }) => {
   const [totalLiquidityInDollar, setTotalLiquidityInDollar] = useState();
 
   useEffect(() => {
     if (pool?.poolCoinDenom) {
       queryTokensShares(pool);
     }
-  }, [pool, markets, poolTokens]);
+  }, [pool, markets, poolTokens, poolPriceMap]);
 
   const queryTokensShares = (pool) => {
     if (poolTokens) {
@@ -27,9 +27,11 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
         const providedTokens = result?.coins;
         const totalLiquidityInDollar =
           Number(amountConversion(providedTokens?.[0]?.amount)) *
-            marketPrice(markets, providedTokens?.[0]?.denom) +
+            (poolPriceMap[providedTokens?.[0]?.denom] ||
+              marketPrice(markets, providedTokens?.[0]?.denom)) +
           Number(amountConversion(providedTokens?.[1]?.amount)) *
-            marketPrice(markets, providedTokens?.[1]?.denom);
+            (poolPriceMap[providedTokens?.[1]?.denom] ||
+              marketPrice(markets, providedTokens?.[1]?.denom));
 
         if (totalLiquidityInDollar) {
           setTotalLiquidityInDollar(totalLiquidityInDollar);
@@ -41,9 +43,11 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
   return (
     <>
       $
-      {Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
-        DOLLAR_DECIMALS
-      ) || 0}{" "}
+      {commaSeparator(
+        Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
+          DOLLAR_DECIMALS
+        )
+      )}{" "}
     </>
   );
 };
@@ -70,6 +74,7 @@ PoolTokenValue.propTypes = {
     reserveAccountAddress: PropTypes.string,
     poolCoinDenom: PropTypes.string,
   }),
+  poolPriceMap: PropTypes.object,
   poolTokens: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
@@ -79,6 +84,7 @@ const stateToProps = (state) => {
     pool: state.liquidity.pool._,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
