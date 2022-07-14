@@ -17,17 +17,10 @@ import {
 } from "../../actions/liquidity";
 import TooltipIcon from "../../components/TooltipIcon";
 import PoolCardRow from "./MyPoolRow";
-import { commaSeparator } from "../../utils/number";
 import { useNavigate } from "react-router";
+import ShowAPR from "../Farm/ShowAPR";
 
-const MyPools = ({
-  setPools,
-  pools,
-  lang,
-  balances,
-  aprMap,
-  userLiquidityInPools,
-}) => {
+const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
 
@@ -65,12 +58,14 @@ const MyPools = ({
       dataIndex: "assetpair",
       key: "assetpair",
       align: "center",
+      render: (pool) => <PoolCardRow key={pool.id} pool={pool} lang={lang} />,
     },
     {
       title: "APR",
       dataIndex: "apr",
       key: "apr",
       align: "left",
+      render: (pool) => <ShowAPR pool={pool} />,
     },
     {
       title: (
@@ -111,21 +106,10 @@ const MyPools = ({
     userPools.map((item, index) => {
       return {
         key: index,
-        assetpair: (
-          <PoolCardRow
-            key={item.id}
-            pool={item}
-            poolIndex={index}
-            lang={lang}
-          />
-        ),
+        assetpair: item,
         position: userLiquidityInPools[item?.id],
         reward: item.reward,
-        apr: aprMap[item?.id?.low]
-          ? `${commaSeparator(
-              Number(aprMap[item?.id?.low]).toFixed(DOLLAR_DECIMALS)
-            )}%`
-          : "-",
+        apr: item,
         action: item,
       };
     });
@@ -152,7 +136,6 @@ MyPools.propTypes = {
   lang: PropTypes.string.isRequired,
   setFirstReserveCoinDenom: PropTypes.func.isRequired,
   setSecondReserveCoinDenom: PropTypes.func.isRequired,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -192,7 +175,6 @@ const stateToProps = (state) => {
     pools: state.liquidity.pool.list,
     markets: state.oracle.market.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
-    aprMap: state.liquidity.aprMap,
   };
 };
 

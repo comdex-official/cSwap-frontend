@@ -83,6 +83,7 @@ const History = (props) => {
                   )}`}
                   rel="noreferrer"
                   target="_blank"
+                  aria-label="explorer"
                 >
                   {" "}
                   {hash && truncateString(hash, 10, 10)}

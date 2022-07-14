@@ -49,7 +49,7 @@ const Balances = ({
     if (tab) {
       setActiveKey(tab);
     }
-  }, []);
+  }, [tab]);
 
   useEffect(() => {
     setUserLiquidityInPools();
