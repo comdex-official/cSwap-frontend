@@ -578,6 +578,9 @@ button {
               font-size: $font-size-sm + 3;
               color: $dark-color;
               text-align: left !important;
+              &::before{
+                display: none;
+              }
               .dark-mode & {
                 color: $text-color-light;
               }
