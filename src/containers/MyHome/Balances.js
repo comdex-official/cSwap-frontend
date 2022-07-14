@@ -60,7 +60,7 @@ const Balances = ({
       true,
       false
     );
-  }, [markets, balances]);
+  }, [markets, balances, poolPriceMap]);
 
   const fetchPools = (offset, limit, countTotal, reverse) => {
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
