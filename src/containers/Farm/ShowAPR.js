@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {
   calculateDollarValue,
   commaSeparator,
+  getPoolPrice,
   marketPrice,
 } from "../../utils/number";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -61,38 +62,18 @@ const ShowAPR = ({
       }
 
       if (oracleAsset?.denom) {
-        getPoolPrice(
+        let { xPoolPrice, yPoolPrice } = getPoolPrice(
           marketPrice(markets, oracleAsset?.denom),
           oracleAsset?.denom,
           firstAsset,
           secondAsset
         );
+
+        setPoolPrice(firstAsset?.denom, xPoolPrice);
+        setPoolPrice(secondAsset?.denom, yPoolPrice);
       }
     }
   }, [pool]);
-
-  const getPoolPrice = (
-    oraclePrice,
-    oracleAssetDenom,
-    firstAsset,
-    secondAsset
-  ) => {
-    let x = firstAsset?.amount,
-      y = secondAsset?.amount,
-      xPoolPrice,
-      yPoolPrice;
-
-    if (oracleAssetDenom === firstAsset?.denom) {
-      yPoolPrice = (x / y) * oraclePrice;
-      xPoolPrice = (y / x) * yPoolPrice;
-    } else {
-      xPoolPrice = (y / x) * oraclePrice;
-      yPoolPrice = (x / y) * xPoolPrice;
-    }
-
-    setPoolPrice(firstAsset?.denom, xPoolPrice);
-    setPoolPrice(secondAsset?.denom, yPoolPrice);
-  };
 
   useEffect(() => {
     if (pool?.id && rewardMap[pool?.id?.low] && markets) {

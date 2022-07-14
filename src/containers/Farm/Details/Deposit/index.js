@@ -50,6 +50,7 @@ const Deposit = ({
   pair,
   refreshData,
   updateBalance,
+  poolPriceMap,
 }) => {
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
@@ -276,7 +277,9 @@ const Deposit = ({
 
   const showFirstCoinValue = () => {
     const price = reverse ? spotPrice : 1 / spotPrice;
-    const oralcePrice = marketPrice(markets, pair?.baseCoinDenom);
+    const oralcePrice =
+      poolPriceMap[pair?.quoteCoinDenom] ||
+      marketPrice(markets, pair?.quoteCoinDenom);
     const total = price * oralcePrice * firstInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -286,7 +289,9 @@ const Deposit = ({
 
   const showSecondCoinValue = () => {
     const price = reverse ? 1 / spotPrice : spotPrice;
-    const oralcePrice = marketPrice(markets, pair?.quoteCoinDenom);
+    const oralcePrice =
+      poolPriceMap[pair?.baseCoinDenom] ||
+      marketPrice(markets, pair?.baseCoinDenom);
     const total = price * oralcePrice * secondInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -493,6 +498,7 @@ Deposit.propTypes = {
       denom: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -523,6 +529,7 @@ const stateToProps = (state) => {
     secondReserveCoinDenom: state.liquidity.secondReserveCoinDenom,
     pair: state.asset.pair,
     poolBalance: state.liquidity.poolBalance,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 

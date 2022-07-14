@@ -28,7 +28,11 @@ import CustomInput from "../../components/CustomInput";
 import { ValidateInputNumber } from "../../config/_validation";
 import CustomSelect from "../../components/CustomSelect";
 import { comdex } from "../../config/network";
-import { decimalConversion, marketPrice } from "../../utils/number";
+import {
+  decimalConversion,
+  getPoolPrice,
+  marketPrice,
+} from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -71,6 +75,8 @@ const Swap = ({
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
   setParams,
+  poolPriceMap,
+  setPoolPrice,
 }) => {
   const [validationError, setValidationError] = useState();
   const [slippageError, setSlippageError] = useState();
@@ -234,6 +240,32 @@ const Swap = ({
     }
   }, [pool]);
 
+  useEffect(() => {
+    if (pool?.id) {
+      let firstAsset = pool?.balances[0];
+      let secondAsset = pool?.balances[1];
+
+      let oracleAsset = {};
+      if (marketPrice(markets, firstAsset?.denom)) {
+        oracleAsset = firstAsset;
+      } else if (marketPrice(markets, secondAsset?.denom)) {
+        oracleAsset = secondAsset;
+      }
+
+      if (oracleAsset?.denom) {
+        let { xPoolPrice, yPoolPrice } = getPoolPrice(
+          marketPrice(markets, oracleAsset?.denom),
+          oracleAsset?.denom,
+          firstAsset,
+          secondAsset
+        );
+
+        setPoolPrice(firstAsset?.denom, xPoolPrice);
+        setPoolPrice(secondAsset?.denom, yPoolPrice);
+      }
+    }
+  }, [pool]);
+
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(
       (item) =>
@@ -275,9 +307,7 @@ const Swap = ({
         (Number(amountConversion(assetVolume)) + Number(value))) *
         100
     );
-    const offerCoinFee = value * (decimalConversion(params?.swapFeeRate))
-    ;
-
+    const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
     setValidationError(
       ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
     );
@@ -335,7 +365,9 @@ const Swap = ({
 
   const showOfferCoinValue = () => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const oralcePrice = marketPrice(markets, demandCoin?.denom);
+    const oralcePrice =
+      poolPriceMap[demandCoin?.denom] ||
+      marketPrice(markets, demandCoin?.denom);
     const total = price * oralcePrice * offerCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -378,7 +410,7 @@ const Swap = ({
         Number(availableBalance) > DEFAULT_FEE
           ? availableBalance - DEFAULT_FEE
           : 0;
-      const nativeOfferCoinFee = value * (decimalConversion(params?.swapFeeRate));
+      const nativeOfferCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
@@ -387,7 +419,7 @@ const Swap = ({
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance);
-      const offerCoinFee = value * (decimalConversion(params?.swapFeeRate));
+      const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(amountConversion(value - offerCoinFee))
@@ -399,7 +431,8 @@ const Swap = ({
     if (offerCoin?.denom === comdex.coinMinimalDenom) {
       const value =
         Number(availableBalance / 2) > DEFAULT_FEE ? availableBalance / 2 : 0;
-      const nativeOfferCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
+      const nativeOfferCoinFee =
+        value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(amountConversion(value))
@@ -643,7 +676,7 @@ const Swap = ({
                   <Row className="mt-1">
                     <Col>
                       <label>
-                        { isLimitOrder ? "Trade Fee" : variables[lang].swap_fee}{" "}
+                        {isLimitOrder ? "Trade Fee" : variables[lang].swap_fee}{" "}
                         <TooltipIcon text={variables[lang].tooltip_tx_fee} />
                       </label>
                     </Col>

@@ -34,6 +34,7 @@ const PoolCardFarm = ({
   swapAprMap,
   params,
   parent,
+  poolPriceMap,
 }) => {
   const [pair, setPair] = useState();
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const PoolCardFarm = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) => Number(item?.amount) * (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -108,9 +109,11 @@ const PoolCardFarm = ({
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
+              (poolPriceMap[providedTokens?.[0]?.denom] ||
+                marketPrice(markets, providedTokens?.[0]?.denom)) +
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
+              (poolPriceMap[providedTokens?.[1]?.denom] ||
+                marketPrice(markets, providedTokens?.[1]?.denom));
 
           if (totalLiquidityInDollar) {
             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -168,9 +171,9 @@ const PoolCardFarm = ({
                 <label>Liquidity</label>
                 <p>
                   $
-                  {Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                    DOLLAR_DECIMALS
-                  )}
+                  {commaSeparator(Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                      DOLLAR_DECIMALS
+                  ))}
                 </p>
               </>
             ) : null}
@@ -218,6 +221,7 @@ PoolCardFarm.propTypes = {
     reserveCoinDenoms: PropTypes.array,
   }),
   poolIndex: PropTypes.number,
+  poolPriceMap: PropTypes.object,
   swapAprMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
@@ -231,6 +235,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     params: state.swap.params,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 

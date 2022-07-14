@@ -31,6 +31,7 @@ Balances.propTypes = {
       script_id: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -48,6 +49,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
