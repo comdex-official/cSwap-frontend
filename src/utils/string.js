@@ -71,22 +71,22 @@ export const minimalDenomToDenom = (key) => {
   }
 };
 
-export const iconNameFromDenom = (denom) => {
-  const iconMap = {
-    ucgold: "gold-icon",
-    ucsilver: "silver-icon",
-    ucoil: "crude-oil",
-    uatom: "atom-icon",
-    [ibcDenoms["uatom"]]: "atom-icon",
-    ucmdx: "comdex-icon",
-    uxprt: "xprt-icon",
-    [ibcDenoms["uxprt"]]: "xprt-icon",
-    uosmo: "osmosis-icon",
-    [ibcDenoms["uosmo"]]: "osmosis-icon",
-    ucmst: "cmst-icon",
-    uharbor: "harbor-icon",
-  };
+const iconMap = {
+  ucgold: "gold-icon",
+  ucsilver: "silver-icon",
+  ucoil: "crude-oil",
+  uatom: "atom-icon",
+  [ibcDenoms["uatom"]]: "atom-icon",
+  ucmdx: "comdex-icon",
+  uxprt: "xprt-icon",
+  [ibcDenoms["uxprt"]]: "xprt-icon",
+  uosmo: "osmosis-icon",
+  [ibcDenoms["uosmo"]]: "osmosis-icon",
+  ucmst: "cmst-icon",
+  uharbor: "harbor-icon",
+};
 
+export const iconNameFromDenom = (denom) => {
   return iconMap[denom];
 };
 
@@ -180,12 +180,12 @@ export const uniqueQuoteDenomsForBase = (list, type, denom) => {
 };
 
 export const makeHdPath = (
-    accountNumber = "0",
-    addressIndex = "0",
-    coinType = comdex.coinType
+  accountNumber = "0",
+  addressIndex = "0",
+  coinType = comdex.coinType
 ) => {
   return stringToPath(
-      "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
+    "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
   );
 };
 

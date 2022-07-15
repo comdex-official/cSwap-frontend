@@ -170,7 +170,7 @@ const PoolCardFarm = ({
           </div>
 
           <div className="cardbottom-row">
-            {parent === "user" && userLiquidity ? (
+            {parent === "user" ? (
               <>
                 <label>Liquidity</label>
                 <p>
