@@ -167,14 +167,14 @@ const UnFarm = ({
           <Row className="pool_balance p-1 mb-2">
             <Col className="label-left">You will unfarm</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={amount} /> ≈{" "}
+              <PoolTokenValue poolTokens={amount} /> ≈{" "}
               {Number(amount).toFixed() || 0} PoolToken
             </Col>
           </Row>
           <Row className="pool_balance p-1">
             <Col className="label-left">You farmed</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={userLockedAmount} /> ≈{" "}
+              <PoolTokenValue poolTokens={userLockedAmount} /> ≈{" "}
               {Number(userLockedAmount).toFixed() || 0} PoolToken
             </Col>
           </Row>

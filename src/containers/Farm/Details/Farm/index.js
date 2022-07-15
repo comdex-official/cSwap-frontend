@@ -142,7 +142,7 @@ const Farm = ({
           <Row className="pool_balance p-1 mb-2">
             <Col className="label-left">You will farm</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={amount} /> ≈{" "}
+              <PoolTokenValue poolTokens={amount} /> ≈{" "}
               {Number(amount).toFixed() || 0} PoolToken
             </Col>
           </Row>
