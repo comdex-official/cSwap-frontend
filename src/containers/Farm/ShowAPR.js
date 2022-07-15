@@ -1,29 +1,29 @@
-import PropTypes from "prop-types";
-import {
-  calculateDollarValue,
-  commaSeparator,
-  getPoolPrice,
-  marketPrice,
-} from "../../utils/number";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { useEffect } from "react";
-import {
-  queryFarmedPoolCoin,
-  queryLiquidityParams,
-  queryPoolCoinDeserialize,
-} from "../../services/liquidity/query";
 import { message } from "antd";
-import { amountConversion } from "../../utils/coin";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import {
   setFarmedTokensDollarValue,
   setNormalRewardDollarValuePerDay,
   setPoolApr,
-  setSwapApr,
   setPoolPrice,
-  setSwapRewardDollarValuePerDay,
+  setSwapApr,
+  setSwapRewardDollarValuePerDay
 } from "../../actions/liquidity";
 import { setParams } from "../../actions/swap";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+  queryFarmedPoolCoin,
+  queryLiquidityParams,
+  queryPoolCoinDeserialize
+} from "../../services/liquidity/query";
+import { amountConversion } from "../../utils/coin";
+import {
+  calculateDollarValue,
+  commaSeparator,
+  getPoolPrice,
+  marketPrice
+} from "../../utils/number";
 
 const ShowAPR = ({
   pool,
@@ -73,7 +73,7 @@ const ShowAPR = ({
         setPoolPrice(secondAsset?.denom, yPoolPrice);
       }
     }
-  }, [pool]);
+  }, [markets]);
 
   useEffect(() => {
     if (pool?.id && rewardMap[pool?.id?.low] && markets) {

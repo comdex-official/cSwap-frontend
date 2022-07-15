@@ -1,21 +1,21 @@
+import { message } from "antd";
+import axios from "axios";
+import CoinGecko from "coingecko-api";
+import moment from "moment";
 import { ASSET_DATA_SET } from "../constants/asset";
 import {
   COIN_STATS_FETCH_ERROR,
   COIN_STATS_FETCH_SUCCESS,
-  VOLUME_CHART_DATA_FETCH_ERROR,
-  VOLUME_CHART_DATA_SET,
   PRICE_CHART_DATA_FETCH_ERROR,
+  PRICE_CHART_DATA_FETCH_IN_PROGRESS,
   PRICE_CHART_DATA_SET,
   RANGE_SET,
   TOTA_COLLATERAL_LIST_SET,
-  PRICE_CHART_DATA_FETCH_IN_PROGRESS,
+  VOLUME_CHART_DATA_FETCH_ERROR,
   VOLUME_CHART_DATA_FETCH_IN_PROGRGESS,
+  VOLUME_CHART_DATA_SET
 } from "../constants/dashboard";
-import CoinGecko from "coingecko-api";
-import { message } from "antd";
 import { getPriceChartURL } from "../constants/url";
-import moment from "moment";
-import axios from "axios";
 
 export const setAssetData = (list, pagination) => {
   return {
@@ -63,22 +63,22 @@ export const fetchCoinStats =
   };
 
 export const fetchCoinPrices = (ids, callback) =>
-          CoinGeckoClient.coins
-              .markets({
-                ids: ids,
-                vs_currency: "usd"
-              })
-              .then((res) => {
-                if (res.data) {
-                  callback(null, res.data)
-                }
-              })
-              .catch((error) => {
-                callback(error)
-                message.error(
-                    error.response ? error.response.data.message : error.message
-                );
-              });
+  CoinGeckoClient.coins
+    .markets({
+      ids: ids,
+      vs_currency: "usd",
+    })
+    .then((res) => {
+      if (res.data) {
+        callback(null, res.data);
+      }
+    })
+    .catch((error) => {
+      callback(error);
+      message.error(
+        error.response ? error.response.data.message : error.message
+      );
+    });
 
 export const setVolumeChartData = (data) => {
   return {
