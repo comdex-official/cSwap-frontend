@@ -5,25 +5,22 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-    setAccountAddress,
-    setAccountBalances,
-    setAccountName,
-    setAssetBalance,
-    setcAssetBalance,
-    setCollateralBalance,
-    setDebtBalance,
-    setPoolBalance,
-    showAccountConnectModal
+  setAccountAddress,
+  setAccountBalances,
+  setAccountName,
+  setAssetBalance,
+  setPoolBalance,
+  showAccountConnectModal
 } from "../../actions/account";
 import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
 import {
-    CMST_POOL_ID_LIST,
-    DEFAULT_PAGE_NUMBER,
-    DEFAULT_PAGE_SIZE,
-    HARBOR_POOL_ID_LIST
+  CMST_POOL_ID_LIST,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  HARBOR_POOL_ID_LIST
 } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
@@ -40,7 +37,6 @@ const ConnectButton = ({
   setAccountBalances,
   lang,
   setAssetBalance,
-  setcAssetBalance,
   setPoolBalance,
   markets,
   refreshBalance,
@@ -85,7 +81,6 @@ const ConnectButton = ({
 
       setAccountBalances(result.balances, result.pagination);
       calculateAssetBalance(result.balances);
-      calculatecAssetBalance(result.balances);
       calculatePoolBalance(result.balances);
     });
   };
@@ -164,18 +159,6 @@ const ConnectButton = ({
     });
   };
 
-  const calculatecAssetBalance = (balances) => {
-    const cAssets = balances.filter(
-      (item) =>
-        item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm")
-    );
-    const value = cAssets.map((item) => {
-      return marketPrice(markets, item.denom) * item.amount;
-    });
-
-    setcAssetBalance(Lodash.sum(value));
-  };
-
   const calculatePoolBalance = () => {
     const sum = Lodash.sumBy(poolBalances);
 
@@ -240,9 +223,6 @@ ConnectButton.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
-  setcAssetBalance: PropTypes.func.isRequired,
-  setCollateralBalance: PropTypes.func.isRequired,
-  setDebtBalance: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPoolPrice: PropTypes.func.isRequired,
@@ -292,10 +272,7 @@ const actionsToProps = {
   setAccountAddress,
   setAccountBalances,
   setPoolBalance,
-  setcAssetBalance,
   setAssetBalance,
-  setDebtBalance,
-  setCollateralBalance,
   setMarkets,
   setAccountName,
   setPoolIncentives,

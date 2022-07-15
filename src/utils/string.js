@@ -1,8 +1,5 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
-import { comdex } from "../config/network";
-import { denomConversion } from "./coin";
-import { calculatePoolShare } from "./calculations";
-import { ibcDenoms } from "../config/network";
+import { comdex, ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
 
@@ -129,16 +126,6 @@ export const toDecimals = (value, decimal = comdex.coinDecimals) =>
     ? value.substr(0, value.indexOf(".")) +
       value.substr(value.indexOf("."), decimal + 1)
     : value;
-
-export const showTotalAssetCount = (asset) => {
-  return `${(asset && calculatePoolShare(asset)) || 0} ${denomConversion(
-    asset?.denom || ""
-  )}`;
-};
-
-export const showUserAssetCount = (assetShare, denom) => {
-  return `${assetShare} ${denomConversion(denom) || ""}`;
-};
 
 export const uniqueDenoms = (list, type) => {
   return [
