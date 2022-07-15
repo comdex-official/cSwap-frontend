@@ -17,7 +17,7 @@ const variables = {
     // Connect account
     connect: "Connect",
     connected: "Connected",
-    testnet: "Devnet-2",
+    testnet: "Testnet",
     mainnet: "Mainnet",
     connect_wallet: "Connect Wallet",
     keplr_wallet: "Keplr Wallet",
