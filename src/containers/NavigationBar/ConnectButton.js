@@ -5,25 +5,25 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  setAccountAddress,
-  setAccountBalances,
-  setAccountName,
-  setAssetBalance,
-  setcAssetBalance,
-  setCollateralBalance,
-  setDebtBalance,
-  setPoolBalance,
-  showAccountConnectModal,
+    setAccountAddress,
+    setAccountBalances,
+    setAccountName,
+    setAssetBalance,
+    setcAssetBalance,
+    setCollateralBalance,
+    setDebtBalance,
+    setPoolBalance,
+    showAccountConnectModal
 } from "../../actions/account";
 import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
 import {
-  CMST_POOL_IDS,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  HARBOR_POOL_IDS,
+    CMST_POOL_ID_LIST,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
+    HARBOR_POOL_ID_LIST
 } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
@@ -149,8 +149,8 @@ const ConnectButton = ({
       }
     };
 
-    fetchListedPools(HARBOR_POOL_IDS);
-    fetchListedPools(CMST_POOL_IDS);
+    fetchListedPools(HARBOR_POOL_ID_LIST);
+    fetchListedPools(CMST_POOL_ID_LIST);
   }, [calculatePoolPrice]);
 
   const fetchPoolIncentives = () => {
