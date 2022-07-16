@@ -1,41 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row, SvgIcon } from "../../../components/common";
 import { Button, message, Tabs } from "antd";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
-import Farm from "./Farm";
-import Unfarm from "./Unfarm";
-import "./index.scss";
-import TooltipIcon from "../../../components/TooltipIcon";
-import MediaQuery from "react-responsive";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
+import MediaQuery from "react-responsive";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { setPair } from "../../../actions/asset";
 import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
-  setSpotPrice,
+  setSpotPrice
 } from "../../../actions/liquidity";
-import { connect, useDispatch } from "react-redux";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import TooltipIcon from "../../../components/TooltipIcon";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
-import { useParams } from "react-router";
 import {
   queryLiquidityPair,
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../../../services/liquidity/query";
-import { setPair } from "../../../actions/asset";
-import { iconNameFromDenom } from "../../../utils/string";
 import {
   amountConversionWithComma,
   denomConversion,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { Link } from "react-router-dom";
-import PoolTokenValue from "./PoolTokenValue";
+import { iconNameFromDenom } from "../../../utils/string";
 import ShowAPR from "../ShowAPR";
+import Deposit from "./Deposit";
+import Farm from "./Farm";
+import "./index.scss";
+import PoolTokenValue from "./PoolTokenValue";
+import Unfarm from "./Unfarm";
+import Withdraw from "./Withdraw";
 
 const { TabPane } = Tabs;
 
@@ -61,7 +61,7 @@ const FarmDetails = ({
   setPair,
   markets,
   balances,
-    poolPriceMap,
+  poolPriceMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -69,12 +69,13 @@ const FarmDetails = ({
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
+  const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
   const queuedAmounts =
-    queuedSoftLocks &&
-    queuedSoftLocks.length > 0 &&
-    queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+    queuedSoftLocks && queuedSoftLocks.length > 0
+      ? queuedSoftLocks?.map((item) => item?.poolCoin?.amount)
+      : 0;
+
   const userLockedPoolTokens =
     Number(
       queuedAmounts?.length > 0 &&
@@ -193,7 +194,9 @@ const FarmDetails = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
+        (item) =>
+          Number(item?.amount) *
+          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -232,12 +235,14 @@ const FarmDetails = ({
             <Farm
               refreshData={queryPoolBalance}
               updateBalance={handleBalanceRefresh}
+              userPoolTokens={userPoolTokens}
             />
           </TabPane>
           <TabPane tab="Unfarm" key="4">
             <Unfarm
               refreshData={queryPoolBalance}
               updateBalance={handleBalanceRefresh}
+              userLockedPoolTokens={userLockedPoolTokens}
             />
           </TabPane>
         </Tabs>

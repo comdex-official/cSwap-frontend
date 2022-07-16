@@ -44,7 +44,6 @@ const CreatePoolModal = ({
   params,
   lang,
 }) => {
-  console.log("the params", params);
   const [current, setCurrent] = useState(0);
   const [baseToken, setBaseToken] = useState();
   const [quoteToken, setQuoteToken] = useState();

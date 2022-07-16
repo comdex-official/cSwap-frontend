@@ -115,7 +115,7 @@ const ConnectButton = ({
     if (address) {
       fetchBalances(address);
     }
-  }, [address]);
+  }, [address, refreshBalance]);
 
   useEffect(() => {
     fetchPoolIncentives();
