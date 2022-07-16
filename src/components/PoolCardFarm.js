@@ -1,32 +1,31 @@
+import { message } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import variables from "../utils/variables";
+import { connect } from "react-redux";
+import { useNavigate } from "react-router";
+import { setUserLiquidityInPools } from "../actions/liquidity";
+import { DOLLAR_DECIMALS } from "../constants/common";
+import ShowAPR from "../containers/Farm/ShowAPR";
+import {
+  queryLiquidityPair,
+  queryPoolCoinDeserialize,
+  queryPoolSoftLocks
+} from "../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getDenomBalance,
+  getDenomBalance
 } from "../utils/coin";
-import { SvgIcon } from "./common";
-import { connect } from "react-redux";
-import { iconNameFromDenom } from "../utils/string";
 import { commaSeparator, marketPrice } from "../utils/number";
-import {
-  queryLiquidityPair,
-  queryPoolCoinDeserialize,
-  queryPoolSoftLocks,
-} from "../services/liquidity/query";
-import { message } from "antd";
-import { DOLLAR_DECIMALS } from "../constants/common";
-import { setUserLiquidityInPools } from "../actions/liquidity";
-import { useNavigate } from "react-router";
-import ShowAPR from "../containers/Farm/ShowAPR";
+import { iconNameFromDenom } from "../utils/string";
+import variables from "../utils/variables";
+import { SvgIcon } from "./common";
 
 const PoolCardFarm = ({
   lang,
   pool,
   markets,
-  userLiquidity,
   setUserLiquidityInPools,
   userLiquidityInPools,
   address,
@@ -53,7 +52,7 @@ const PoolCardFarm = ({
     if (pool?.id && address) {
       getUserLiquidity(pool);
     }
-  }, [pool, address, markets, poolPriceMap]);
+  }, [pool, address]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {

@@ -16,12 +16,7 @@ import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
-import {
-  CMST_POOL_ID_LIST,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  HARBOR_POOL_ID_LIST
-} from "../../constants/common";
+import { CMST_POOL_ID_LIST, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { queryPool, queryPoolIncentives } from "../../services/liquidity/query";
@@ -50,40 +45,71 @@ const ConnectButton = ({
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
-    fetchMarkets();
-
     if (userAddress) {
       setAccountAddress(userAddress);
 
       fetchKeplrAccountName().then((name) => {
         setAccountName(name);
       });
-
-      fetchBalances(address);
     }
   }, [address, refreshBalance]);
 
   useEffect(() => {
-    fetchBalances(
-      address,
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, [markets]);
+    fetchMarkets();
+  }, []);
 
-  const fetchBalances = (address) => {
-    queryAllBalances(address, (error, result) => {
-      if (error) {
-        return;
-      }
+  const getPrice = useCallback(
+    (denom) => {
+      return marketPrice(markets, denom) || 0;
+    },
+    [markets]
+  );
 
-      setAccountBalances(result.balances, result.pagination);
-      calculateAssetBalance(result.balances);
-      calculatePoolBalance(result.balances);
-    });
-  };
+  const calculateAssetBalance = useCallback(
+    (balances) => {
+      const assetBalances = balances.filter(
+        (item) =>
+          item.denom.substr(0, 4) === "ibc/" ||
+          item.denom === comdex.coinMinimalDenom ||
+          item.denom === cmst.coinMinimalDenom ||
+          item.denom === harbor.coinMinimalDenom
+      );
+
+      const value = assetBalances.map((item) => {
+        return getPrice(item.denom) * item.amount;
+      });
+
+      setAssetBalance(Lodash.sum(value));
+    },
+    [getPrice, setAssetBalance]
+  );
+
+  const calculatePoolBalance = useCallback(() => {
+    const sum = Lodash.sumBy(poolBalances);
+
+    setPoolBalance(Number(sum * 10 ** 6));
+  }, [poolBalances, setPoolBalance]);
+
+  const fetchBalances = useCallback(
+    (address) => {
+      queryAllBalances(address, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        setAccountBalances(result.balances, result.pagination);
+        calculateAssetBalance(result.balances);
+        calculatePoolBalance(result.balances);
+      });
+    },
+    [calculateAssetBalance, setAccountBalances, calculatePoolBalance]
+  );
+
+  useEffect(() => {
+    if (address) {
+      fetchBalances(address);
+    }
+  }, [address]);
 
   useEffect(() => {
     fetchPoolIncentives();
@@ -99,34 +125,10 @@ const ConnectButton = ({
     });
   };
 
-  const calculatePoolPrice = useCallback(
-    (pool) => {
-      if (pool?.id) {
-        let firstAsset = pool?.balances[0];
-        let secondAsset = pool?.balances[1];
-
-        let oracleAsset = {};
-        if (marketPrice(markets, firstAsset?.denom)) {
-          oracleAsset = firstAsset;
-        } else if (marketPrice(markets, secondAsset?.denom)) {
-          oracleAsset = secondAsset;
-        }
-
-        if (oracleAsset?.denom) {
-          let { xPoolPrice, yPoolPrice } = getPoolPrice(
-            marketPrice(markets, oracleAsset?.denom),
-            oracleAsset?.denom,
-            firstAsset,
-            secondAsset
-          );
-
-          setPoolPrice(firstAsset?.denom, xPoolPrice);
-          setPoolPrice(secondAsset?.denom, yPoolPrice);
-        }
-      }
-    },
-    [markets, setPoolPrice]
-  );
+  const calculatePoolPrice = useCallback((pool) => {
+    if (pool?.id) {
+    }
+  }, []);
 
   useEffect(() => {
     const fetchListedPools = (list) => {
@@ -138,15 +140,37 @@ const ConnectButton = ({
               return;
             }
 
-            calculatePoolPrice(result?.pool);
+            let firstAsset = result?.pool?.balances[0];
+            let secondAsset = result?.pool?.balances[1];
+
+            let oracleAsset = {};
+            if (marketPrice(markets, firstAsset?.denom)) {
+              oracleAsset = firstAsset;
+            } else if (marketPrice(markets, secondAsset?.denom)) {
+              oracleAsset = secondAsset;
+            }
+
+            if (oracleAsset?.denom) {
+              let { xPoolPrice, yPoolPrice } = getPoolPrice(
+                marketPrice(markets, oracleAsset?.denom),
+                oracleAsset?.denom,
+                firstAsset,
+                secondAsset
+              );
+
+              setPoolPrice(firstAsset?.denom, xPoolPrice);
+              setPoolPrice(secondAsset?.denom, yPoolPrice);
+            }
           });
         }
       }
     };
 
-    fetchListedPools(HARBOR_POOL_ID_LIST);
-    fetchListedPools(CMST_POOL_ID_LIST);
-  }, [calculatePoolPrice]);
+    if (markets?.length) {
+      fetchListedPools(HARBOR_POOL_ID_LIST);
+      fetchListedPools(CMST_POOL_ID_LIST);
+    }
+  }, [markets]);
 
   const fetchPoolIncentives = () => {
     queryPoolIncentives((error, result) => {
@@ -157,32 +181,6 @@ const ConnectButton = ({
 
       setPoolIncentives(result?.poolIncentives);
     });
-  };
-
-  const calculatePoolBalance = () => {
-    const sum = Lodash.sumBy(poolBalances);
-
-    setPoolBalance(Number(sum * 10 ** 6));
-  };
-
-  const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
-  };
-
-  const calculateAssetBalance = (balances) => {
-    const assetBalances = balances.filter(
-      (item) =>
-        item.denom.substr(0, 4) === "ibc/" ||
-        item.denom === comdex.coinMinimalDenom ||
-        item.denom === cmst.coinMinimalDenom ||
-        item.denom === harbor.coinMinimalDenom
-    );
-
-    const value = assetBalances.map((item) => {
-      return getPrice(item.denom) * item.amount;
-    });
-
-    setAssetBalance(Lodash.sum(value));
   };
 
   const WalletConnectedDropdown = <ConnectModal />;
