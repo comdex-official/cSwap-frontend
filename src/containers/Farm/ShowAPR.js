@@ -10,11 +10,9 @@ import {
   setSwapApr,
   setSwapRewardDollarValuePerDay
 } from "../../actions/liquidity";
-import { setParams } from "../../actions/swap";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   queryFarmedPoolCoin,
-  queryLiquidityParams,
   queryPoolCoinDeserialize
 } from "../../services/liquidity/query";
 import { amountConversion } from "../../utils/coin";
@@ -33,7 +31,6 @@ const ShowAPR = ({
   setPoolApr,
   isSwapFee,
   setSwapApr,
-  setParams,
   farmedTokensDollarValue,
   setFarmedTokensDollarValue,
   setNormalRewardDollarValuePerDay,
@@ -43,12 +40,6 @@ const ShowAPR = ({
   setPoolPrice,
   poolPriceMap,
 }) => {
-  useEffect(() => {
-    if (isSwapFee) {
-      fetchParams();
-    }
-  }, [isSwapFee]);
-
   useEffect(() => {
     if (pool?.id) {
       let firstAsset = pool?.balances[0];
@@ -123,19 +114,6 @@ const ShowAPR = ({
       setSwapApr(pool?.id, swapRewardDollarValuePerDay[pool?.id] * 365 * 100);
     }
   }, [farmedTokensDollarValue, swapRewardDollarValuePerDay]);
-
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.params) {
-        setParams(result?.params);
-      }
-    });
-  };
 
   const getPoolDollarValue = () => {
     let normalRewardDollarValue = calculateDollarValue(
@@ -220,9 +198,6 @@ ShowAPR.propTypes = {
     })
   ),
   normalRewardDollarValuePerDay: PropTypes.object,
-  params: PropTypes.shape({
-    swapFeeDistrDenom: PropTypes.string,
-  }),
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -247,7 +222,6 @@ const stateToProps = (state) => {
     aprMap: state.liquidity.aprMap,
     swapAprMap: state.liquidity.swapAprMap,
     poolPriceMap: state.liquidity.poolPriceMap,
-    params: state.swap.params,
     farmedTokensDollarValue: state.liquidity.farmedTokensDollarValue,
     normalRewardDollarValuePerDay:
       state.liquidity.normalRewardDollarValuePerDay,
@@ -258,7 +232,6 @@ const stateToProps = (state) => {
 const actionToProps = {
   setPoolApr,
   setSwapApr,
-  setParams,
   setNormalRewardDollarValuePerDay,
   setSwapRewardDollarValuePerDay,
   setFarmedTokensDollarValue,

@@ -14,12 +14,17 @@ import {
 } from "../../actions/account";
 import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
+import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
 import { CMST_POOL_ID_LIST, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
-import { queryPool, queryPoolIncentives } from "../../services/liquidity/query";
+import {
+  queryLiquidityParams,
+  queryPool,
+  queryPoolIncentives
+} from "../../services/liquidity/query";
 import { queryMarketList } from "../../services/oracle/query";
 import { getPoolPrice, marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
@@ -40,6 +45,7 @@ const ConnectButton = ({
   setAccountName,
   setPoolIncentives,
   setPoolPrice,
+  setParams,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -113,6 +119,7 @@ const ConnectButton = ({
 
   useEffect(() => {
     fetchPoolIncentives();
+    fetchParams();
   }, []);
 
   const fetchMarkets = (offset, limit, isTotal, isReverse) => {
@@ -125,10 +132,47 @@ const ConnectButton = ({
     });
   };
 
-  const calculatePoolPrice = useCallback((pool) => {
-    if (pool?.id) {
-    }
-  }, []);
+  const fetchParams = () => {
+    queryLiquidityParams((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.params) {
+        setParams(result?.params);
+      }
+    });
+  };
+
+  const calculatePoolPrice = useCallback(
+    (pool) => {
+      if (pool?.id) {
+        let firstAsset = pool?.balances[0];
+        let secondAsset = pool?.balances[1];
+
+        let oracleAsset = {};
+        if (marketPrice(markets, firstAsset?.denom)) {
+          oracleAsset = firstAsset;
+        } else if (marketPrice(markets, secondAsset?.denom)) {
+          oracleAsset = secondAsset;
+        }
+
+        if (oracleAsset?.denom) {
+          let { xPoolPrice, yPoolPrice } = getPoolPrice(
+            marketPrice(markets, oracleAsset?.denom),
+            oracleAsset?.denom,
+            firstAsset,
+            secondAsset
+          );
+
+          setPoolPrice(firstAsset?.denom, xPoolPrice);
+          setPoolPrice(secondAsset?.denom, yPoolPrice);
+        }
+      }
+    },
+    [markets, setPoolPrice]
+  );
 
   useEffect(() => {
     const fetchListedPools = (list) => {
@@ -140,37 +184,15 @@ const ConnectButton = ({
               return;
             }
 
-            let firstAsset = result?.pool?.balances[0];
-            let secondAsset = result?.pool?.balances[1];
-
-            let oracleAsset = {};
-            if (marketPrice(markets, firstAsset?.denom)) {
-              oracleAsset = firstAsset;
-            } else if (marketPrice(markets, secondAsset?.denom)) {
-              oracleAsset = secondAsset;
-            }
-
-            if (oracleAsset?.denom) {
-              let { xPoolPrice, yPoolPrice } = getPoolPrice(
-                marketPrice(markets, oracleAsset?.denom),
-                oracleAsset?.denom,
-                firstAsset,
-                secondAsset
-              );
-
-              setPoolPrice(firstAsset?.denom, xPoolPrice);
-              setPoolPrice(secondAsset?.denom, yPoolPrice);
-            }
+            calculatePoolPrice(result?.pool);
           });
         }
       }
     };
 
-    if (markets?.length) {
-      fetchListedPools(HARBOR_POOL_ID_LIST);
-      fetchListedPools(CMST_POOL_ID_LIST);
-    }
-  }, [markets]);
+    fetchListedPools(HARBOR_POOL_ID_LIST);
+    fetchListedPools(CMST_POOL_ID_LIST);
+  }, [calculatePoolPrice]);
 
   const fetchPoolIncentives = () => {
     queryPoolIncentives((error, result) => {
@@ -222,6 +244,7 @@ ConnectButton.propTypes = {
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
+  setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPoolPrice: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
@@ -275,6 +298,7 @@ const actionsToProps = {
   setAccountName,
   setPoolIncentives,
   setPoolPrice,
+  setParams,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

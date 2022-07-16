@@ -1,15 +1,14 @@
-import "./index.scss";
-import * as PropTypes from "prop-types";
-import { Row, Col } from "../../components/common";
-import { connect } from "react-redux";
-import React, { useEffect, useState } from "react";
 import { message, Spin } from "antd";
-import { queryPoolsList } from "../../services/liquidity/query";
+import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { setPools } from "../../actions/liquidity";
-import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
-import { useDispatch } from "react-redux";
-import CreatePool from "./CreatePool";
+import { Col, Row } from "../../components/common";
 import PoolCardFarm from "../../components/PoolCardFarm";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { queryPoolsList } from "../../services/liquidity/query";
+import CreatePool from "./CreatePool";
+import "./index.scss";
 
 const Farm = ({
   setPools,
