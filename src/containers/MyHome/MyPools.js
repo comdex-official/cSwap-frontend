@@ -1,25 +1,25 @@
-import "./index.scss";
+import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row } from "../../components/common";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { Button, Table, message } from "antd";
-import { queryPoolsList } from "../../services/liquidity/query";
-import { setPools } from "../../actions/liquidity";
-import {
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
+import { useNavigate } from "react-router";
 import {
   setFirstReserveCoinDenom,
-  setSecondReserveCoinDenom,
+  setPools,
+  setSecondReserveCoinDenom
 } from "../../actions/liquidity";
+import { Col, Row } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
-import PoolCardRow from "./MyPoolRow";
-import { useNavigate } from "react-router";
-import ShowAPR from "../Farm/ShowAPR";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
+} from "../../constants/common";
+import { queryPoolsList } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
+import ShowAPR from "../Farm/ShowAPR";
+import "./index.scss";
+import PoolCardRow from "./MyPoolRow";
 
 const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -72,7 +72,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
       title: (
         <>
           My Liquidity
-          <TooltipIcon text="Your current liquidity position in the corresponding cAsset pool" />
+          <TooltipIcon text="Your current liquidity position in the corresponding Asset pool" />
         </>
       ),
       dataIndex: "position",
