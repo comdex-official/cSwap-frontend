@@ -637,6 +637,9 @@
     .ant-skeleton-button{
       height: 16px;
       line-height: 16px;
+      &::after{
+        background: linear-gradient(90deg, rgba(188, 17, 17, 0.2) 25%, rgba(50, 65, 230, 0.24) 37%, rgba(188, 17, 17, 0.2) 63%);
+      }
     }
   }
 }
