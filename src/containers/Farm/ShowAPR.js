@@ -1,6 +1,6 @@
 import { message, Skeleton } from "antd";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   setFarmedTokensDollarValue,
@@ -40,6 +40,8 @@ const ShowAPR = ({
   setPoolPrice,
   poolPriceMap,
 }) => {
+  const [isFetching, setIsFetching] = useState(false);
+
   useEffect(() => {
     if (pool?.id) {
       let firstAsset = pool?.balances[0];
@@ -89,7 +91,7 @@ const ShowAPR = ({
       normalRewardDollarValuePerDay[pool?.id] &&
       !farmedTokensDollarValue[pool?.id]
     ) {
-      setPoolApr(pool?.id, normalRewardDollarValuePerDay * 365 * 100);
+      setPoolApr(pool?.id, normalRewardDollarValuePerDay[pool?.id] * 365 * 100);
     }
   }, [farmedTokensDollarValue, normalRewardDollarValuePerDay, pool]);
 
@@ -134,9 +136,11 @@ const ShowAPR = ({
   };
 
   const getFarmedPoolCoin = () => {
+    setIsFetching(true);
     queryFarmedPoolCoin(pool?.id, (error, result) => {
       if (error) {
         message.error(error);
+        setIsFetching(false);
         return;
       }
 
@@ -144,6 +148,8 @@ const ShowAPR = ({
         pool?.id,
         result?.coin?.amount,
         (errorResponse, data) => {
+          setIsFetching(false);
+
           if (errorResponse) {
             message.error(errorResponse);
             return;
@@ -169,11 +175,19 @@ const ShowAPR = ({
 
   return (
     <>
-      {aprMap[pool?.id?.low]
-        ? `${commaSeparator(
-            Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-          )}%`
-        : <Skeleton.Button className="apr-skeleton" active={true} size={"small"} /> }
+      {isFetching ? (
+        <Skeleton.Button
+          className="apr-skeleton"
+          active={true}
+          size={"small"}
+        />
+      ) : aprMap[pool?.id?.low] ? (
+        `${commaSeparator(
+          Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
+        )}%`
+      ) : (
+        "-"
+      )}
     </>
   );
 };
