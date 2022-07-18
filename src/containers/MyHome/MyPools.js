@@ -1,42 +1,44 @@
-import "./index.scss";
+import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row } from "../../components/common";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { Button, Table, message } from "antd";
-import { queryPoolsList } from "../../services/liquidity/query";
-import { setPools } from "../../actions/liquidity";
-import {
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
+import { useNavigate } from "react-router";
 import {
   setFirstReserveCoinDenom,
-  setSecondReserveCoinDenom,
-} from "../../actions/liquidity";
-import TooltipIcon from "../../components/TooltipIcon";
-import { queryAllBalances } from "../../services/bank/query";
-import PoolCardRow from "./MyPoolRow";
-import { commaSeparator } from "../../utils/number";
-import { useNavigate } from "react-router";
-
-const MyPools = ({
   setPools,
-  setPoolBalance,
-  setFetchBalanceInProgress,
-  pools,
-  lang,
-  setSpotPrice,
-  refreshBalance,
-  balances,
-  aprMap,
-  userLiquidityInPools,
-}) => {
+  setSecondReserveCoinDenom
+} from "../../actions/liquidity";
+import { Col, Row } from "../../components/common";
+import TooltipIcon from "../../components/TooltipIcon";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
+} from "../../constants/common";
+import { queryPoolsList } from "../../services/liquidity/query";
+import { commaSeparator } from "../../utils/number";
+import ShowAPR from "../Farm/ShowAPR";
+import "./index.scss";
+import PoolCardRow from "./MyPoolRow";
+
+const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchPools = (offset, limit, countTotal, reverse) => {
+      setInProgress(true);
+      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setPools(result.pools);
+      });
+    };
+
     fetchPools(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
@@ -44,39 +46,6 @@ const MyPools = ({
       false
     );
   }, []);
-
-  const fetchPools = (offset, limit, countTotal, reverse) => {
-    setInProgress(true);
-    queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setPools(result.pools);
-    });
-  };
-  const queryPoolBalance = (pool) => {
-    fetchPoolBalance(pool?.reserveAccountAddress);
-  };
-
-  const fetchPoolBalance = (address) => {
-    setFetchBalanceInProgress(true);
-    queryAllBalances(address, (error, result) => {
-      setFetchBalanceInProgress(false);
-
-      if (error) {
-        return;
-      }
-
-      setPoolBalance(result.balances);
-      const spotPrice =
-        (result.balances && result.balances[0] && result.balances[0].amount) /
-        (result.balances && result.balances[1] && result.balances[1].amount);
-      setSpotPrice(spotPrice.toFixed(6));
-    });
-  };
 
   const userPools = pools.filter((pool) => {
     return balances.find((balance) => {
@@ -90,25 +59,28 @@ const MyPools = ({
       dataIndex: "assetpair",
       key: "assetpair",
       align: "center",
+      render: (pool) => <PoolCardRow key={pool.id} pool={pool} lang={lang} />,
     },
     {
       title: "APR",
       dataIndex: "apr",
       key: "apr",
       align: "left",
+      render: (pool) => <ShowAPR pool={pool} />,
     },
     {
       title: (
         <>
           My Liquidity
-          <TooltipIcon text="Your current liquidity position in the corresponding cAsset pool" />
+          <TooltipIcon text="Your current liquidity position in the corresponding Asset pool" />
         </>
       ),
       dataIndex: "position",
       key: "position",
       render: (position) => (
-        //TODO: take dynamic value
-        <div>${Number(position || 0).toFixed(DOLLAR_DECIMALS)}</div>
+        <div>
+          ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
+        </div>
       ),
     },
     {
@@ -136,21 +108,10 @@ const MyPools = ({
     userPools.map((item, index) => {
       return {
         key: index,
-        assetpair: (
-          <PoolCardRow
-            key={item.id}
-            pool={item}
-            poolIndex={index}
-            lang={lang}
-          />
-        ),
+        assetpair: item,
         position: userLiquidityInPools[item?.id],
         reward: item.reward,
-        apr: aprMap[item?.id?.low]
-          ? `${commaSeparator(
-              Number(aprMap[item?.id?.low]).toFixed(DOLLAR_DECIMALS)
-            )}%`
-          : "-",
+        apr: item,
         action: item,
       };
     });
@@ -177,7 +138,6 @@ MyPools.propTypes = {
   lang: PropTypes.string.isRequired,
   setFirstReserveCoinDenom: PropTypes.func.isRequired,
   setSecondReserveCoinDenom: PropTypes.func.isRequired,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -217,7 +177,6 @@ const stateToProps = (state) => {
     pools: state.liquidity.pool.list,
     markets: state.oracle.market.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
-    aprMap: state.liquidity.aprMap,
   };
 };
 

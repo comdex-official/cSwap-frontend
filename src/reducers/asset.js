@@ -1,15 +1,15 @@
+import { combineReducers } from "redux";
 import {
   ASSETS_SET,
-  PAIRS_SET,
-  PAIR_SET,
-  PAIR_ID_SET,
-  OUT_ASSET_SET,
-  IN_ASSET_SET,
   COLLATERAL_RATIO_SET,
   IN_AMOUNT_SET,
+  IN_ASSET_SET,
   OUT_AMOUNT_SET,
+  OUT_ASSET_SET,
+  PAIRS_SET,
+  PAIR_ID_SET,
+  PAIR_SET
 } from "../constants/asset";
-import { combineReducers } from "redux";
 
 const pairs = (
   state = {
@@ -32,7 +32,6 @@ const _ = (
   state = {
     list: [],
     pagination: {},
-    cAssets: [],
     inProgress: false,
   },
   action
@@ -41,7 +40,6 @@ const _ = (
     return {
       ...state,
       list: action.list,
-      cAssets: action.cAssets,
       pagination: action.pagination,
     };
   }

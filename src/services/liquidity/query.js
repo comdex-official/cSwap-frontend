@@ -1,7 +1,7 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/liquidity/v1beta1/query";
-import { createQueryClient } from "../helper";
 import Long from "long";
 import { APP_ID } from "../../constants/common";
+import { createQueryClient } from "../helper";
 
 export const queryLiquidityPairs = (callback) => {
   createQueryClient((error, client) => {

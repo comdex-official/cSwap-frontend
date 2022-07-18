@@ -1,17 +1,16 @@
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import React, { useState, useEffect } from "react";
 import { Button, Form, message, Slider } from "antd";
-import variables from "../../../../utils/variables";
+import Long from "long";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Col, Row } from "../../../../components/common";
+import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { Row, Col } from "../../../../components/common";
+import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
-import Snack from "../../../../components/common/Snack";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
-import { queryPoolSoftLocks } from "../../../../services/liquidity/query";
 import { commaSeparator } from "../../../../utils/number";
-import Long from "long";
+import variables from "../../../../utils/variables";
 import PoolTokenValue from "../PoolTokenValue";
 
 const marks = {
@@ -27,39 +26,11 @@ const UnFarm = ({
   refreshData,
   updateBalance,
   aprMap,
+  userLockedPoolTokens,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const [sliderValue, setSliderValue] = useState();
   const [amount, setAmount] = useState(0);
-  const [activeSoftLock, setActiveSoftLock] = useState(0);
-  const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
-
-  const queuedAmounts =
-    queuedSoftLocks &&
-    queuedSoftLocks.length > 0 &&
-    queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-  const userLockedAmount =
-    Number(
-      queuedAmounts?.length > 0 &&
-        queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-    ) + Number(activeSoftLock?.amount) || 0;
-
-  useEffect(() => {
-    if (address && pool?.id) {
-      fetchSoftLock();
-    }
-  }, [address, pool, updateBalance]);
-
-  const fetchSoftLock = () => {
-    queryPoolSoftLocks(address, pool?.id, (error, result) => {
-      if (error) {
-        return;
-      }
-
-      setActiveSoftLock(result?.activePoolCoin);
-      setQueuedSoftLocks(result?.queuedPoolCoin);
-    });
-  };
 
   const onChange = (value) => {
     setSliderValue(value);
@@ -67,7 +38,7 @@ const UnFarm = ({
   };
 
   const calculateBondAmount = (input) => {
-    const amount = (input / 100) * userLockedAmount;
+    const amount = (input / 100) * userLockedPoolTokens;
     setAmount(amount);
   };
 
@@ -109,7 +80,6 @@ const UnFarm = ({
 
         refreshData(pool);
         updateBalance();
-        fetchSoftLock();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -146,7 +116,7 @@ const UnFarm = ({
                     value={sliderValue}
                     max={100}
                     min={0}
-                    disabled={!Number(userLockedAmount)}
+                    disabled={!Number(userLockedPoolTokens)}
                     onChange={onChange}
                     tooltipVisible={false}
                   />
@@ -156,7 +126,7 @@ const UnFarm = ({
                       onChange(event.target?.value);
                     }}
                     placeholder="0"
-                    disabled={!Number(userLockedAmount)}
+                    disabled={!Number(userLockedPoolTokens)}
                     value={`${sliderValue}`}
                   />
                   <span className="percent-text">%</span>
@@ -167,15 +137,15 @@ const UnFarm = ({
           <Row className="pool_balance p-1 mb-2">
             <Col className="label-left">You will unfarm</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={amount} /> ≈{" "}
+              <PoolTokenValue poolTokens={amount} /> ≈{" "}
               {Number(amount).toFixed() || 0} PoolToken
             </Col>
           </Row>
           <Row className="pool_balance p-1">
             <Col className="label-left">You farmed</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={userLockedAmount} /> ≈{" "}
-              {Number(userLockedAmount).toFixed() || 0} PoolToken
+              <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{" "}
+              {Number(userLockedPoolTokens).toFixed() || 0} PoolToken
             </Col>
           </Row>
           <Row>
@@ -227,6 +197,7 @@ UnFarm.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
+  userLockedPoolTokens: PropTypes.number,
 };
 
 const stateToProps = (state) => {

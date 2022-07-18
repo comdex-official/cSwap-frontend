@@ -1,9 +1,9 @@
-import React from "react";
-import * as PropTypes from "prop-types";
 import { Select } from "antd";
-import { SvgIcon } from "../common";
-import { iconNameFromDenom } from "../../utils/string";
+import * as PropTypes from "prop-types";
+import React from "react";
 import { denomConversion } from "../../utils/coin";
+import { iconNameFromDenom } from "../../utils/string";
+import { SvgIcon } from "../common";
 
 const Option = Select.Option;
 

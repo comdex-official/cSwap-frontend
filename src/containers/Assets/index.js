@@ -1,27 +1,33 @@
-import "./index.scss";
+import { message, Table } from "antd";
+import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
 import React from "react";
-import { Table } from "antd";
-import variables from "../../utils/variables";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon } from "../../components/common";
+import { embedChainInfo } from "../../config/chain";
+import { ibcAssetsInfo } from "../../config/ibc";
+import { cmst, comdex, harbor } from "../../config/network";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../utils/coin";
-import { ibcAssetsInfo } from "../../config/ibc";
-import { embedChainInfo } from "../../config/chain";
-import { message } from "antd";
-import { iconNameFromDenom } from "../../utils/string";
-import { cmst, harbor, comdex } from "../../config/network";
-import Lodash from "lodash";
 import { commaSeparator, marketPrice } from "../../utils/number";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+import { iconNameFromDenom } from "../../utils/string";
+import variables from "../../utils/variables";
+import Deposit from "./Deposit";
+import "./index.scss";
+import Withdraw from "./Withdraw";
 
-const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
+const Assets = ({
+  lang,
+  assetBalance,
+  balances,
+  markets,
+  parent,
+  poolPriceMap,
+}) => {
   const columns = [
     {
       title: "Asset",
@@ -40,9 +46,9 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
       ),
     },
     {
-      title: "Oracle Price",
-      dataIndex: "oraclePrice",
-      key: "oraclePrice",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       align: "left",
       width: 100,
       render: (price) => (
@@ -93,7 +99,7 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
   ];
 
   const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
+    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
   let ibcBalances = ibcAssetsInfo.map((channelInfo) => {
@@ -162,7 +168,7 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
         </>
       ),
       noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
-      oraclePrice: getPrice(comdex?.coinMinimalDenom),
+      price: getPrice(comdex?.coinMinimalDenom),
       amount: {
         value: nativeCoinValue || 0,
       },
@@ -180,7 +186,7 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
         </>
       ),
       noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      oraclePrice: getPrice(cmst?.coinMinimalDenom),
+      price: getPrice(cmst?.coinMinimalDenom),
       amount: {
         value: cmstCoinValue || 0,
       },
@@ -198,7 +204,7 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
         </>
       ),
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
-      oraclePrice: getPrice(harbor?.coinMinimalDenom),
+      price: getPrice(harbor?.coinMinimalDenom),
       amount: {
         value: harborCoinValue || 0,
       },
@@ -228,7 +234,7 @@ const Assets = ({ lang, assetBalance, balances, markets, parent }) => {
           </>
         ),
         noOfTokens: item?.balance?.amount,
-        oraclePrice: getPrice(item.currency?.coinMinimalDenom),
+        price: getPrice(item.currency?.coinMinimalDenom),
         amount: item.balance,
         ibcdeposit: item,
         ibcwithdraw: item,
@@ -292,6 +298,7 @@ Assets.propTypes = {
       script_id: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -300,6 +307,7 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 

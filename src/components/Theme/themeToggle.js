@@ -1,22 +1,22 @@
 import * as PropTypes from "prop-types";
-import { SvgIcon } from "../common";
-import { connect } from "react-redux";
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { setDarkTheme } from "../../actions/theme";
+import { SvgIcon } from "../common";
 
 const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
   useEffect(() => {
-    initialTheme();
-  }, []);
+    const initialTheme = () => {
+      if (localStorage.getItem("isDarkMode") === "false") {
+        document.body.classList.remove("dark-mode");
+        setDarkTheme(false);
+      } else {
+        document.body.classList.add("dark-mode");
+      }
+    };
 
-  const initialTheme = () => {
-    if (localStorage.getItem("isDarkMode") === "false") {
-      document.body.classList.remove("dark-mode");
-      setDarkTheme(false);
-    } else {
-      document.body.classList.add("dark-mode");
-    }
-  };
+    initialTheme();
+  }, [setDarkTheme]);
 
   const checkboxHandle = () => {
     if (isDarkMode) {

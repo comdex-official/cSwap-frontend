@@ -41,14 +41,12 @@ const CautionNotice = () => {
             <Button
               onClick={(e) => {
                 e.preventDefault();
+                setIsVisible(false);
+                localStorage.setItem("agreement_accepted", "true");
               }}
               disabled={!isChecked}
               name="Agree"
               type="primary"
-              onClick={() => {
-                setIsVisible(false);
-                localStorage.setItem("agreement_accepted", "true");
-              }}
               className="btn-filled"
             >
               Agree

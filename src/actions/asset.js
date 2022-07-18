@@ -1,14 +1,14 @@
-import {
-  PAIRS_SET,
-  PAIR_ID_SET,
-  PAIR_SET,
-  ASSETS_SET,
-  OUT_ASSET_SET,
-  IN_ASSET_SET,
-  OUT_AMOUNT_SET,
-} from "../constants/asset";
 import { message } from "antd";
 import axios from "axios";
+import {
+  ASSETS_SET,
+  IN_ASSET_SET,
+  OUT_AMOUNT_SET,
+  OUT_ASSET_SET,
+  PAIRS_SET,
+  PAIR_ID_SET,
+  PAIR_SET
+} from "../constants/asset";
 
 export const setPairs = (list, pagination) => {
   return {
@@ -54,15 +54,10 @@ export const setAmountOut = (value) => {
 };
 
 export const setAssets = (list, pagination) => {
-  const cAssets = list.filter(
-    (item) =>
-      item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm")
-  );
   return {
     type: ASSETS_SET,
     list,
     pagination,
-    cAssets,
   };
 };
 
