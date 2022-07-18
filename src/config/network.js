@@ -1,13 +1,13 @@
 export const comdex = {
-  chainId: "test-1",
-  chainName: "Comdex Test Chain",
+  chainId: process.env.REACT_APP_CHAIN_ID,
+  chainName: process.env.REACT_APP_CHAIN_NAME,
+  rpc: process.env.REACT_APP_RPC,
+  rest: process.env.REACT_APP_REST,
+  explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
   coinDecimals: 6,
   prefix: "comdex",
-  rpc: "https://int-rpc.comdex.one",
-  rest: "https://int-rest.comdex.one",
-  explorerUrlToTx: `https://dev-explorer.comdex.one/transactions/{txHash}`,
   coinType: 118,
 };
 
