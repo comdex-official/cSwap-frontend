@@ -1,25 +1,24 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { setPair, setPairs } from "../../actions/asset";
+import {
+  setBaseCoinPoolPrice,
+  setPool,
+  setPoolBalance,
+  setPoolPrice,
+  setPools
+} from "../../actions/liquidity";
 import {
   setDemandCoinAmount,
   setDemandCoinDenom,
+  setLimitOrderToggle,
+  setLimitPrice,
   setOfferCoinAmount,
   setOfferCoinDenom,
   setReverse,
   setSlippage,
-  setParams,
-  setSlippageTolerance,
-  setLimitOrderToggle,
-  setLimitPrice,
+  setSlippageTolerance
 } from "../../actions/swap";
-import {
-  setPool,
-  setPoolBalance,
-  setPools,
-  setBaseCoinPoolPrice,
-  setPoolPrice,
-} from "../../actions/liquidity";
-import { setPairs, setPair } from "../../actions/asset";
 import Swap from "./Swap";
 
 Swap.propTypes = {
@@ -29,7 +28,6 @@ Swap.propTypes = {
   setDemandCoinAmount: PropTypes.func.isRequired,
   setLimitOrderToggle: PropTypes.func.isRequired,
   setLimitPrice: PropTypes.func.isRequired,
-  setParams: PropTypes.func.isRequired,
   setPoolPrice: PropTypes.func.isRequired,
   setSlippage: PropTypes.func.isRequired,
   setSlippageTolerance: PropTypes.func.isRequired,
@@ -160,7 +158,6 @@ const actionsToProps = {
   setSlippage,
   setPairs,
   setPair,
-  setParams,
   setSlippageTolerance,
   setLimitOrderToggle,
   setLimitPrice,

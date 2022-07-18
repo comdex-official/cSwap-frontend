@@ -1,44 +1,42 @@
-import "./index.scss";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { Button, Popover, Radio } from "antd";
-import TooltipIcon from "../../components/TooltipIcon";
+import { Button, message, Popover, Radio } from "antd";
 import React, { useEffect, useState } from "react";
+import { Col, Row, SvgIcon } from "../../components/common";
+import CustomSwitch from "../../components/common/CustomSwitch";
+import CustomInput from "../../components/CustomInput";
+import CustomSelect from "../../components/CustomSelect";
+import TooltipIcon from "../../components/TooltipIcon";
+import { comdex } from "../../config/network";
+import { ValidateInputNumber } from "../../config/_validation";
 import {
+  DEFAULT_FEE,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
+} from "../../constants/common";
+import {
+  queryLiquidityPairs,
+  queryPoolsList
+} from "../../services/liquidity/query";
+import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
-import {
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
-import { amountConversion } from "../../utils/coin";
-import {
-  queryLiquidityPairs,
-  queryLiquidityParams,
-  queryPoolsList,
-} from "../../services/liquidity/query";
-import variables from "../../utils/variables";
-import { message } from "antd";
-import CustomButton from "./CustomButton";
-import CustomInput from "../../components/CustomInput";
-import { ValidateInputNumber } from "../../config/_validation";
-import CustomSelect from "../../components/CustomSelect";
-import { comdex } from "../../config/network";
 import {
   decimalConversion,
   getPoolPrice,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../utils/string";
-import CustomSwitch from "../../components/common/CustomSwitch";
+import variables from "../../utils/variables";
+import CustomButton from "./CustomButton";
+import "./index.scss";
 import Order from "./Order";
 
 const Swap = ({
@@ -74,7 +72,6 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
-  setParams,
   poolPriceMap,
   setPoolPrice,
 }) => {
@@ -156,7 +153,6 @@ const Swap = ({
       false
     );
 
-    fetchParams();
     // returned function will be called on component unmount
     return () => {
       setOfferCoinDenom("");
@@ -164,18 +160,6 @@ const Swap = ({
     };
   }, []);
 
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.params) {
-        setParams(result?.params);
-      }
-    });
-  };
   useEffect(() => {
     queryLiquidityPairs((error, result) => {
       if (error) {

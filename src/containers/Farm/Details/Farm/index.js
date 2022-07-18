@@ -1,18 +1,17 @@
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import React, { useState } from "react";
 import { Button, Form, message, Slider } from "antd";
-import variables from "../../../../utils/variables";
+import Long from "long";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Col, Row } from "../../../../components/common";
+import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { Row, Col } from "../../../../components/common";
+import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
-import Snack from "../../../../components/common/Snack";
-import Info from "../../Info";
-import { getDenomBalance } from "../../../../utils/coin";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { commaSeparator } from "../../../../utils/number";
-import Long from "long";
+import variables from "../../../../utils/variables";
+import Info from "../../Info";
 import PoolTokenValue from "../PoolTokenValue";
 
 const marks = {
@@ -27,14 +26,12 @@ const Farm = ({
   pool,
   refreshData,
   updateBalance,
-  balances,
   aprMap,
+  userPoolTokens,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const [sliderValue, setSliderValue] = useState();
   const [amount, setAmount] = useState(0);
-
-  const userPoolBalance = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
   const onChange = (value) => {
     setSliderValue(value);
@@ -42,7 +39,7 @@ const Farm = ({
   };
 
   const calculateBondAmount = (input) => {
-    const amount = (input / 100) * userPoolBalance;
+    const amount = (input / 100) * userPoolTokens;
     setAmount(amount);
   };
 
@@ -121,7 +118,7 @@ const Farm = ({
                     value={sliderValue}
                     max={100}
                     min={0}
-                    disabled={!Number(userPoolBalance)}
+                    disabled={!Number(userPoolTokens)}
                     onChange={onChange}
                     tooltipVisible={false}
                   />
@@ -130,7 +127,7 @@ const Farm = ({
                     onChange={(event) => {
                       onChange(event.target?.value);
                     }}
-                    disabled={!Number(userPoolBalance)}
+                    disabled={!Number(userPoolTokens)}
                     placeholder="0"
                     value={`${sliderValue}`}
                   />
@@ -142,7 +139,7 @@ const Farm = ({
           <Row className="pool_balance p-1 mb-2">
             <Col className="label-left">You will farm</Col>
             <Col className="text-right">
-              $<PoolTokenValue poolTokens={amount} /> ≈{" "}
+              <PoolTokenValue poolTokens={amount} /> ≈{" "}
               {Number(amount).toFixed() || 0} PoolToken
             </Col>
           </Row>
@@ -179,12 +176,6 @@ Farm.propTypes = {
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
   aprMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -195,6 +186,7 @@ Farm.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
+  userPoolTokens: PropTypes.number,
 };
 
 const stateToProps = (state) => {
@@ -202,7 +194,6 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     pool: state.liquidity.pool._,
-    balances: state.account.balances.list,
     aprMap: state.liquidity.aprMap,
   };
 };

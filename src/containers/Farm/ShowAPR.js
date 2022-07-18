@@ -1,29 +1,27 @@
+import { message, Skeleton } from "antd";
 import PropTypes from "prop-types";
-import {
-  calculateDollarValue,
-  commaSeparator,
-  getPoolPrice,
-  marketPrice,
-} from "../../utils/number";
-import { DOLLAR_DECIMALS } from "../../constants/common";
 import { useEffect } from "react";
-import {
-  queryFarmedPoolCoin,
-  queryLiquidityParams,
-  queryPoolCoinDeserialize,
-} from "../../services/liquidity/query";
-import { message } from "antd";
-import { amountConversion } from "../../utils/coin";
 import { connect } from "react-redux";
 import {
   setFarmedTokensDollarValue,
   setNormalRewardDollarValuePerDay,
   setPoolApr,
-  setSwapApr,
   setPoolPrice,
-  setSwapRewardDollarValuePerDay,
+  setSwapApr,
+  setSwapRewardDollarValuePerDay
 } from "../../actions/liquidity";
-import { setParams } from "../../actions/swap";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+  queryFarmedPoolCoin,
+  queryPoolCoinDeserialize
+} from "../../services/liquidity/query";
+import { amountConversion } from "../../utils/coin";
+import {
+  calculateDollarValue,
+  commaSeparator,
+  getPoolPrice,
+  marketPrice
+} from "../../utils/number";
 
 const ShowAPR = ({
   pool,
@@ -33,7 +31,6 @@ const ShowAPR = ({
   setPoolApr,
   isSwapFee,
   setSwapApr,
-  setParams,
   farmedTokensDollarValue,
   setFarmedTokensDollarValue,
   setNormalRewardDollarValuePerDay,
@@ -43,12 +40,6 @@ const ShowAPR = ({
   setPoolPrice,
   poolPriceMap,
 }) => {
-  useEffect(() => {
-    if (isSwapFee) {
-      fetchParams();
-    }
-  }, [isSwapFee]);
-
   useEffect(() => {
     if (pool?.id) {
       let firstAsset = pool?.balances[0];
@@ -73,14 +64,14 @@ const ShowAPR = ({
         setPoolPrice(secondAsset?.denom, yPoolPrice);
       }
     }
-  }, [pool]);
+  }, [markets]);
 
   useEffect(() => {
     if (pool?.id && rewardMap[pool?.id?.low] && markets) {
       getPoolDollarValue();
       getFarmedPoolCoin();
     }
-  }, [pool, markets, rewardMap]);
+  }, [pool, markets, rewardMap, poolPriceMap]);
 
   useEffect(() => {
     if (
@@ -123,19 +114,6 @@ const ShowAPR = ({
       setSwapApr(pool?.id, swapRewardDollarValuePerDay[pool?.id] * 365 * 100);
     }
   }, [farmedTokensDollarValue, swapRewardDollarValuePerDay]);
-
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.params) {
-        setParams(result?.params);
-      }
-    });
-  };
 
   const getPoolDollarValue = () => {
     let normalRewardDollarValue = calculateDollarValue(
@@ -195,7 +173,7 @@ const ShowAPR = ({
         ? `${commaSeparator(
             Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
           )}%`
-        : "-"}
+        : <Skeleton.Button className="apr-skeleton" active={true} size={"small"} /> }
     </>
   );
 };
@@ -220,9 +198,6 @@ ShowAPR.propTypes = {
     })
   ),
   normalRewardDollarValuePerDay: PropTypes.object,
-  params: PropTypes.shape({
-    swapFeeDistrDenom: PropTypes.string,
-  }),
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -247,7 +222,6 @@ const stateToProps = (state) => {
     aprMap: state.liquidity.aprMap,
     swapAprMap: state.liquidity.swapAprMap,
     poolPriceMap: state.liquidity.poolPriceMap,
-    params: state.swap.params,
     farmedTokensDollarValue: state.liquidity.farmedTokensDollarValue,
     normalRewardDollarValuePerDay:
       state.liquidity.normalRewardDollarValuePerDay,
@@ -258,7 +232,6 @@ const stateToProps = (state) => {
 const actionToProps = {
   setPoolApr,
   setSwapApr,
-  setParams,
   setNormalRewardDollarValuePerDay,
   setSwapRewardDollarValuePerDay,
   setFarmedTokensDollarValue,

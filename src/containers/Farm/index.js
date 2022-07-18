@@ -1,34 +1,21 @@
-import "./index.scss";
-import * as PropTypes from "prop-types";
-import { Row, Col } from "../../components/common";
-import { connect } from "react-redux";
-import React, { useEffect, useState } from "react";
 import { message, Spin } from "antd";
-import { queryPoolsList } from "../../services/liquidity/query";
-import {
-  setPools,
-  setFetchBalanceInProgress,
-  setPoolBalance,
-  setFirstReserveCoinDenom,
-  setSecondReserveCoinDenom,
-} from "../../actions/liquidity";
-import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
-import { queryAllBalances } from "../../services/bank/query";
-import { setSpotPrice } from "../../actions/liquidity";
-import { useDispatch } from "react-redux";
-import CreatePool from "./CreatePool";
+import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
+import { setPools } from "../../actions/liquidity";
+import { Col, Row } from "../../components/common";
 import PoolCardFarm from "../../components/PoolCardFarm";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { queryPoolsList } from "../../services/liquidity/query";
+import CreatePool from "./CreatePool";
+import "./index.scss";
 
 const Farm = ({
   setPools,
-  setPoolBalance,
-  setFetchBalanceInProgress,
   pools,
   lang,
-  setSpotPrice,
   refreshBalance,
   balances,
-  userLiquidityInPools,
   masterPoolMap,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -63,27 +50,6 @@ const Farm = ({
       }
 
       setPools(result.pools);
-    });
-  };
-
-  const queryPoolBalance = (pool) => {
-    fetchPoolBalance(pool?.reserveAccountAddress);
-  };
-
-  const fetchPoolBalance = (address) => {
-    setFetchBalanceInProgress(true);
-    queryAllBalances(address, (error, result) => {
-      setFetchBalanceInProgress(false);
-
-      if (error) {
-        return;
-      }
-
-      setPoolBalance(result.balances);
-      const spotPrice =
-        (result.balances && result.balances[0] && result.balances[0].amount) /
-        (result.balances && result.balances[1] && result.balances[1].amount);
-      setSpotPrice(spotPrice.toFixed(6));
     });
   };
 
@@ -129,7 +95,6 @@ const Farm = ({
                           pool={item}
                           poolIndex={index}
                           lang={lang}
-                          userLiquidity={userLiquidityInPools[item?.id]}
                         />
                       ))
                     ) : (
@@ -156,7 +121,6 @@ const Farm = ({
                               pool={item}
                               poolIndex={index}
                               lang={lang}
-                              userLiquidity={userLiquidityInPools[item?.id]}
                             />
                           );
                         }
@@ -180,7 +144,6 @@ const Farm = ({
                               pool={item}
                               poolIndex={index}
                               lang={lang}
-                              userLiquidity={userLiquidityInPools[item?.id]}
                             />
                           );
                         }
@@ -199,12 +162,7 @@ const Farm = ({
 Farm.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
-  setFetchBalanceInProgress: PropTypes.func.isRequired,
-  setFirstReserveCoinDenom: PropTypes.func.isRequired,
-  setPoolBalance: PropTypes.func.isRequired,
   setPools: PropTypes.func.isRequired,
-  setSpotPrice: PropTypes.func.isRequired,
-  setSecondReserveCoinDenom: PropTypes.func.isRequired,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -224,29 +182,20 @@ Farm.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
-  inProgress: PropTypes.bool,
-  userLiquidityInPools: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    inProgress: state.liquidity.inProgress,
     pools: state.liquidity.pool.list,
     refreshBalance: state.account.refreshBalance,
     balances: state.account.balances.list,
-    userLiquidityInPools: state.liquidity.userLiquidityInPools,
     masterPoolMap: state.liquidity.masterPoolMap,
   };
 };
 
 const actionsToProps = {
   setPools,
-  setPoolBalance,
-  setFetchBalanceInProgress,
-  setSecondReserveCoinDenom,
-  setFirstReserveCoinDenom,
-  setSpotPrice,
 };
 
 export default connect(stateToProps, actionsToProps)(Farm);
