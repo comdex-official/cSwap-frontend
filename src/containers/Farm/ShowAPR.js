@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, Skeleton } from "antd";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { connect } from "react-redux";
@@ -173,7 +173,7 @@ const ShowAPR = ({
         ? `${commaSeparator(
             Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
           )}%`
-        : "-"}
+        : <Skeleton.Button className="apr-skeleton" active={true} size={"small"} /> }
     </>
   );
 };

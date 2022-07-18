@@ -629,3 +629,14 @@
     }
   }
 }
+
+.ant-skeleton{
+  &.apr-skeleton{
+    height: 16px;
+    margin-top: 1.8px;
+    .ant-skeleton-button{
+      height: 16px;
+      line-height: 16px;
+    }
+  }
+}
