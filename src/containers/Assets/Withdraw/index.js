@@ -193,7 +193,7 @@ const Withdraw = ({
                   </Button>
                 </span>
               </div>
-              <Form.Item label="Amount to Withdraw">
+              <Form.Item label="Amount to Withdraw" className="assets-input-box">
                 <CustomInput
                   value={amount}
                   onChange={(event) => onChange(event.target.value)}

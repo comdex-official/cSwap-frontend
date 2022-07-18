@@ -91,6 +91,11 @@
     }
     .ant-switch-checked {
       background-color: $red;
+      .ant-switch-handle {
+        &::before {
+          background: $white;
+        }
+      }
     }
     .setting-popover {
       position: absolute;

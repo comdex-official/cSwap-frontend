@@ -228,7 +228,9 @@
       }
     }
     .name {
-      color: $white;
+      .dark-mode & {
+        color: $white;
+      }
       font-size: 17px;
     }
   }
@@ -272,19 +274,19 @@
     text-align: center;
     font-size: 19px;
     border: none;
-    background: #18305a !important;
+    background: $assets-bg-light;
     margin-left: 10px;
-    color: $white;
+
+    .dark-mode & {
+      background: #081938;
+      border-color: #18305a;
+      color: $white;
+    }
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       display: none;
       margin: 0;
-    }
-    .dark-mode & {
-      background: transparent;
-      border-color: #18305a;
-      color: $white;
     }
   }
 }
@@ -624,6 +626,17 @@
           }
         }
       }
+    }
+  }
+}
+
+.ant-skeleton{
+  &.apr-skeleton{
+    height: 16px;
+    margin-top: 1.8px;
+    .ant-skeleton-button{
+      height: 16px;
+      line-height: 16px;
     }
   }
 }
