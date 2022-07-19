@@ -49,14 +49,12 @@ const CreatePoolModal = ({
   const [quoteToken, setQuoteToken] = useState();
   const [baseAmount, setBaseAmount] = useState();
   const [quoteAmount, setQuoteAmount] = useState();
-  const [swapFeePercentage, setSwapFeePercentage] = useState();
   const [isAccepted, setAccepted] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [liquidityPairs, setLiquidityPairs] = useState();
   const [baseAmountValidationError, setBaseAmountValidationError] = useState();
   const [quoteAmountValidationError, setQuoteAmountValidationError] =
     useState();
-  const [swapFeeValidationError, setSwapFeeValidationError] = useState();
 
   const BASE_PERCENTAGE = 50;
   const QUOTE_PERCENTAGE = 50;
@@ -81,7 +79,6 @@ const CreatePoolModal = ({
     setQuoteToken();
     setBaseAmount();
     setQuoteAmount();
-    setSwapFeePercentage();
     setAccepted(false);
   };
 
@@ -119,12 +116,6 @@ const CreatePoolModal = ({
     setQuoteAmountValidationError(
       ValidateInputNumber(Number(getAmount(value)))
     );
-  };
-
-  const handleSwapPercentageChange = (value) => {
-    value = toDecimals(value).toString().trim();
-    setSwapFeePercentage(value);
-    setSwapFeeValidationError(ValidateInputNumber(Number(value)));
   };
 
   const handleCreate = () => {
@@ -478,36 +469,6 @@ const CreatePoolModal = ({
               </div>
             </div>
           </div>
-          <div className="swap-fee-container pool-asset-second-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper ">
-                  <Row>
-                    <div className="cswap-head" />
-                    <Col>
-                      <div className="pool-denom">Swap Fee</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <div className="selected-amount swap-fee-input-container input-select validation-input-select">
-                    <CustomInput
-                      decimals={DOLLAR_DECIMALS}
-                      value={swapFeePercentage}
-                      validationError={swapFeeValidationError}
-                      className="assets-select-input with-select"
-                      onChange={(event) =>
-                        handleSwapPercentageChange(event.target.value)
-                      }
-                    />
-                    <span className="ml-1 swap-percentage">%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div className="checkbox-container mt-3 text-center ml-3">
             <Checkbox onChange={onCheckChange} checked={isAccepted}>
               <p>
@@ -583,12 +544,7 @@ const CreatePoolModal = ({
           {current === steps.length - 1 && (
             <Button
               loading={inProgress}
-              disabled={
-                !swapFeePercentage ||
-                swapFeePercentage > 100 ||
-                !isAccepted ||
-                swapFeeValidationError?.message
-              }
+              disabled={!isAccepted}
               type="primary"
               onClick={() => handleCreate()}
             >
