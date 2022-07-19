@@ -44,8 +44,7 @@ export const embedChainInfo = [
     ],
     coinType: 118,
     features: ["ibc-transfer"],
-    explorerUrlToTx:
-      "https://explorer.theta-testnet.polypore.xyz/transactions/{txHash}",
+    explorerUrlToTx: "https://meteor-explorer.comdex.one/transactions/{txHash}",
   },
   {
     rpc: "https://rpc.testnet.persistence.one",
@@ -93,8 +92,8 @@ export const embedChainInfo = [
       "https://test-core-1.explorer.persistence.one/transactions/{txHash}",
   },
   {
-    rpc: "https://osmosis-testnet.rpc.zenscape.one/",
-    rest: "https://osmosis-testnet.rest.zenscape.one/",
+    rpc: "https://osmot.rpc.comdex.one",
+    rest: "http://osmot.rest.comdex.one",
     chainId: "osmo-test-4",
     chainName: "Osmosis-Test",
     stakeCurrency: {
