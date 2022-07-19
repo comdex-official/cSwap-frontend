@@ -1,7 +1,7 @@
 export const embedChainInfo = [
   {
-    rpc: "https://staging-cswap.comdex.one/vega",
-    rest: "https://staging-cswap.comdex.one/vega-rest",
+    rpc: "https://staging.cswap.one/vega",
+    rest: "https://staging.cswap.one/vega-rest",
     chainId: "theta-testnet-001",
     chainName: "Cosmos Hub Test",
     stakeCurrency: {
