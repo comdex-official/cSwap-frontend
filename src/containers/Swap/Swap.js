@@ -6,7 +6,10 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import { ValidateInputNumber } from "../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -435,7 +438,13 @@ const Swap = ({
     price = toDecimals(price).toString().trim();
 
     setLimitPrice(price);
-    setPriceValidationError(ValidateInputNumber(Number(price)));
+    setPriceValidationError(
+      ValidatePriceInputNumber(
+        Number(price),
+        Number(decimalConversion(pair?.lastPrice)),
+        Number(decimalConversion(params?.maxPriceLimitRatio))
+      )
+    );
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 

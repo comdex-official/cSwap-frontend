@@ -71,6 +71,7 @@ Swap.propTypes = {
     }),
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
+    lastPrice: PropTypes.string,
   }),
   pairs: PropTypes.shape({
     list: PropTypes.arrayOf(
@@ -88,6 +89,7 @@ Swap.propTypes = {
   }),
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
+    maxPriceLimitRatio: PropTypes.string,
   }),
   pool: PropTypes.shape({
     id: PropTypes.shape({
