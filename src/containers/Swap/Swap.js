@@ -18,6 +18,8 @@ import {
 } from "../../constants/common";
 import {
   queryLiquidityPairs,
+  queryLiquidityParams,
+  queryPool,
   queryPoolsList
 } from "../../services/liquidity/query";
 import {
@@ -67,6 +69,7 @@ const Swap = ({
   pool,
   poolBalance,
   params,
+  setParams,
   setSlippageTolerance,
   slippageTolerance,
   isLimitOrder,
@@ -462,6 +465,36 @@ const Swap = ({
     offerCoin?.denom
   );
 
+  const handleRefreshDetails = () => {
+    setLimitPrice(0);
+    fetchParams();
+    fetchPool();
+  };
+
+  const fetchParams = () => {
+    queryLiquidityParams((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.params) {
+        setParams(result?.params);
+      }
+    });
+  };
+
+  const fetchPool = () => {
+    queryPool(pool?.id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setPool(result?.pool);
+    });
+  };
+
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -687,16 +720,19 @@ const Swap = ({
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
                   validationError={
-                    validationError || slippageError || priceValidationError
+                    validationError ||
+                    slippageError ||
+                    (isLimitOrder && priceValidationError)
                   }
                   isDisabled={
                     !pool?.id ||
                     !Number(demandCoin?.amount) ||
                     !Number(slippageTolerance) ||
-                    priceValidationError?.message
+                    (isLimitOrder && priceValidationError?.message)
                   }
                   max={availableBalance}
                   name={
