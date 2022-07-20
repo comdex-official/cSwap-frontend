@@ -18,8 +18,8 @@ import {
   MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
+  queryLiquidityPair,
   queryLiquidityPairs,
-  queryLiquidityParams,
   queryPool,
   queryPoolsList
 } from "../../services/liquidity/query";
@@ -70,7 +70,6 @@ const Swap = ({
   pool,
   poolBalance,
   params,
-  setParams,
   slippageTolerance,
   isLimitOrder,
   setLimitOrderToggle,
@@ -184,11 +183,12 @@ const Swap = ({
       const quoteCoinBalanceInPool = pool?.balances?.find(
         (item) => item.denom === pair?.quoteCoinDenom
       )?.amount;
-      const baseCoinPoolPrice = quoteCoinBalanceInPool / baseCoinBalanceInPool;
+      const baseCoinPoolPrice = Number(
+        quoteCoinBalanceInPool / baseCoinBalanceInPool
+      ).toFixed(comdex?.coinDecimals);
 
-      setBaseCoinPoolPrice(
-        Number(baseCoinPoolPrice).toFixed(comdex.coinDecimals)
-      );
+      setBaseCoinPoolPrice(baseCoinPoolPrice);
+      handleLimitPriceChange(baseCoinPoolPrice);
     }
   }, [pool]);
 
@@ -403,13 +403,18 @@ const Swap = ({
     price = toDecimals(price).toString().trim();
 
     setLimitPrice(price);
-    setPriceValidationError(
-      ValidatePriceInputNumber(
-        Number(price),
-        Number(decimalConversion(pair?.lastPrice)),
-        Number(decimalConversion(params?.maxPriceLimitRatio))
-      )
-    );
+
+    if (pair?.lastPrice) {
+      setPriceValidationError(
+        ValidatePriceInputNumber(
+          Number(price),
+          Number(decimalConversion(pair?.lastPrice)),
+          Number(decimalConversion(params?.maxPriceLimitRatio))
+        )
+      );
+    } else {
+      setPriceValidationError(false);
+    }
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -429,19 +434,19 @@ const Swap = ({
 
   const handleRefreshDetails = () => {
     setLimitPrice(0);
-    fetchParams();
+    fetchPair();
     fetchPool();
   };
 
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
+  const fetchPair = () => {
+    queryLiquidityPair(pair?.id, (error, result) => {
       if (error) {
         message.error(error);
         return;
       }
 
-      if (result?.params) {
-        setParams(result?.params);
+      if (result?.pair) {
+        setPair(result?.pair);
       }
     });
   };
@@ -457,6 +462,10 @@ const Swap = ({
     });
   };
 
+  console.log(
+    "it is",
+    isLimitOrder ? !Number(limitPrice) && priceValidationError?.message : false
+  );
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -681,7 +690,9 @@ const Swap = ({
                   isDisabled={
                     !pool?.id ||
                     !Number(demandCoin?.amount) ||
-                    (isLimitOrder && priceValidationError?.message)
+                    (isLimitOrder
+                      ? !Number(limitPrice) || priceValidationError?.message
+                      : false)
                   }
                   max={availableBalance}
                   name={
