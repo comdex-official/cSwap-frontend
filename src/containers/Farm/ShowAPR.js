@@ -186,7 +186,7 @@ const ShowAPR = ({
           Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
         )}%`
       ) : (
-        "-"
+        `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}
     </>
   );

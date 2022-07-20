@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import "./index.css";
-import { Tabs } from "antd";
-import { Table, message } from "antd";
-import { useSelector } from "react-redux";
-import { queryUserOrders } from "../../../services/liquidity/query";
+import { message, Table, Tabs } from "antd";
 import Long from "long";
-import { orderStatusText } from "../../../utils/string";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { setOrders } from "../../../actions/order";
+import { queryUserOrders } from "../../../services/liquidity/query";
 import {
   amountConversion,
   denomConversion,
-  orderPriceReverseConversion,
+  orderPriceReverseConversion
 } from "../../../utils/coin";
-import { setOrders } from "../../../actions/order";
-import moment from "moment";
+import { orderStatusText } from "../../../utils/string";
+import "./index.css";
 
 const Order = () => {
   const address = useSelector((state) => state.account.address);
   const [myOrders, setMyOrders] = useState([]);
 
   useEffect(() => {
+    fetchOrders(address);
     setInterval(() => fetchOrders(address), 10000);
   }, [address]);
 

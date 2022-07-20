@@ -31,7 +31,6 @@ const PoolCardFarm = ({
   address,
   balances,
   swapAprMap,
-  params,
   parent,
   poolPriceMap,
 }) => {
@@ -157,14 +156,15 @@ const PoolCardFarm = ({
           </div>
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
-            <p>
+            <p className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </p>
-            <div className="percent-box">
+            <div>
+              Swap Fee APR -{" "}
               {commaSeparator(
                 Number(swapAprMap[pool?.id?.low] || 0).toFixed(DOLLAR_DECIMALS)
               )}
-              % <SvgIcon name={iconNameFromDenom(params?.swapFeeDistrDenom)} />
+              %
             </div>
           </div>
 
@@ -211,9 +211,6 @@ PoolCardFarm.propTypes = {
       script_id: PropTypes.string,
     })
   ),
-  params: PropTypes.shape({
-    swapFeeDistrDenom: PropTypes.string,
-  }),
   parent: PropTypes.string,
   pool: PropTypes.shape({
     id: PropTypes.shape({
@@ -239,7 +236,6 @@ const stateToProps = (state) => {
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
-    params: state.swap.params,
     poolPriceMap: state.liquidity.poolPriceMap,
   };
 };

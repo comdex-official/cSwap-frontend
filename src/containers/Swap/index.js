@@ -14,8 +14,7 @@ import {
   setLimitOrderToggle,
   setLimitPrice,
   setOfferCoinAmount,
-  setOfferCoinDenom,
-  setReverse,
+  setOfferCoinDenom, setParams, setReverse,
   setSlippage,
   setSlippageTolerance
 } from "../../actions/swap";
@@ -31,6 +30,7 @@ Swap.propTypes = {
   setPoolPrice: PropTypes.func.isRequired,
   setSlippage: PropTypes.func.isRequired,
   setSlippageTolerance: PropTypes.func.isRequired,
+  setParams: PropTypes.func.isRequired,
   setPair: PropTypes.func.isRequired,
   setPairs: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
@@ -71,6 +71,7 @@ Swap.propTypes = {
     }),
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
+    lastPrice: PropTypes.string,
   }),
   pairs: PropTypes.shape({
     list: PropTypes.arrayOf(
@@ -88,6 +89,7 @@ Swap.propTypes = {
   }),
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
+    maxPriceLimitRatio: PropTypes.string,
   }),
   pool: PropTypes.shape({
     id: PropTypes.shape({
@@ -163,6 +165,7 @@ const actionsToProps = {
   setLimitPrice,
   setBaseCoinPoolPrice,
   setPoolPrice,
+  setParams,
 };
 
 export default connect(stateToProps, actionsToProps)(Swap);
