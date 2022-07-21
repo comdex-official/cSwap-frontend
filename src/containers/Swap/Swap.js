@@ -454,7 +454,6 @@ const Swap = ({
   const fetchPool = () => {
     queryPool(pool?.id, (error, result) => {
       if (error) {
-        message.error(error);
         return;
       }
 
