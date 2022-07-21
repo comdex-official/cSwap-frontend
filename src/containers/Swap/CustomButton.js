@@ -37,18 +37,6 @@ const CustomButton = ({
     setComplete(false);
   }, []);
 
-  const calculateOrderPrice = () => {
-    if (orderDirection === 1) {
-      return orderPriceConversion(
-        poolPrice + poolPrice * Number(slippageTolerance / 100)
-      );
-    } else {
-      return orderPriceConversion(
-        poolPrice - poolPrice * Number(slippageTolerance / 100)
-      );
-    }
-  };
-
   const priceWithOutConversion = () => {
     return poolPrice + poolPrice * Number(slippageTolerance / 100);
   };
@@ -60,36 +48,63 @@ const CustomButton = ({
     return getAmount(amount);
   };
 
+  const getMessage = (isLimitOrder) => {
+    if (isLimitOrder) {
+      return {
+        typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+        value: {
+          orderer: address,
+          orderLifespan: { seconds: 600, nanos: 0 },
+          pairId: pair?.id,
+          appId: Long.fromNumber(APP_ID),
+          direction: orderDirection,
+          /** offer_coin specifies the amount of coin the orderer offers */
+          offerCoin: {
+            denom: offerCoin?.denom,
+            amount: getAmount(
+              Number(offerCoin?.amount) + Number(offerCoin?.fee)
+            ),
+          },
+          demandCoinDenom: demandCoin?.denom,
+          price: orderPriceConversion(limitPrice),
+          /** amount specifies the amount of base coin the orderer wants to buy or sell */
+          amount:
+            orderDirection === 2
+              ? getAmount(offerCoin?.amount)
+              : calculateBuyAmount(),
+        },
+      };
+    } else {
+      return {
+        typeUrl: "/comdex.liquidity.v1beta1.MsgMarketOrder",
+        value: {
+          orderer: address,
+          pairId: pair?.id,
+          appId: Long.fromNumber(APP_ID),
+          direction: orderDirection,
+          /** offer_coin specifies the amount of coin the orderer offers */
+          offerCoin: {
+            denom: offerCoin?.denom,
+            amount: getAmount(
+              Number(offerCoin?.amount) + Number(offerCoin?.fee)
+            ),
+          },
+          demandCoinDenom: demandCoin?.denom,
+          amount:
+            orderDirection === 2
+              ? getAmount(offerCoin?.amount)
+              : calculateBuyAmount(),
+        },
+      };
+    }
+  };
+
   const handleSwap = () => {
     setInProgress(true);
-    const price = calculateOrderPrice();
 
     signAndBroadcastTransaction(
       {
-        message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
-          value: {
-            orderer: address,
-            orderLifespan: isLimitOrder ? { seconds: 600, nanos: 0 } : "0",
-            pairId: pair?.id,
-            appId: Long.fromNumber(APP_ID),
-            direction: orderDirection,
-            /** offer_coin specifies the amount of coin the orderer offers */
-            offerCoin: {
-              denom: offerCoin?.denom,
-              amount: getAmount(
-                Number(offerCoin?.amount) + Number(offerCoin?.fee)
-              ),
-            },
-            demandCoinDenom: demandCoin?.denom,
-            price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
-            /** amount specifies the amount of base coin the orderer wants to buy or sell */
-            amount:
-              orderDirection === 2
-                ? getAmount(offerCoin?.amount)
-                : calculateBuyAmount(),
-          },
-        },
+        message: getMessage(isLimitOrder),
         fee: {
           amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
           gas: "500000",
