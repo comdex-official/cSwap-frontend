@@ -167,6 +167,22 @@
 }
 
 .farm-modal-tab {
+  height: 100%;
+  .ant-tabs-nav{
+    margin-bottom: 16px !important;
+  }
+  .ant-tabs-content-holder{
+    height: 100%;
+    .ant-tabs-content{
+      height: 100%;
+      .ant-tabs-tabpane{
+        height: 100%;
+        .common-card{
+          height: 100%;
+        }
+      }
+    }
+  }
   .farm-content-card {
     box-shadow: none;
     padding: 25px 0 15px 0;
