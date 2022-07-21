@@ -6,7 +6,10 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import { ValidateInputNumber } from "../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -15,6 +18,8 @@ import {
 } from "../../constants/common";
 import {
   queryLiquidityPairs,
+  queryLiquidityParams,
+  queryPool,
   queryPoolsList
 } from "../../services/liquidity/query";
 import {
@@ -64,6 +69,7 @@ const Swap = ({
   pool,
   poolBalance,
   params,
+  setParams,
   setSlippageTolerance,
   slippageTolerance,
   isLimitOrder,
@@ -435,7 +441,13 @@ const Swap = ({
     price = toDecimals(price).toString().trim();
 
     setLimitPrice(price);
-    setPriceValidationError(ValidateInputNumber(Number(price)));
+    setPriceValidationError(
+      ValidatePriceInputNumber(
+        Number(price),
+        Number(decimalConversion(pair?.lastPrice)),
+        Number(decimalConversion(params?.maxPriceLimitRatio))
+      )
+    );
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -452,6 +464,36 @@ const Swap = ({
     !reverse ? "in" : "out",
     offerCoin?.denom
   );
+
+  const handleRefreshDetails = () => {
+    setLimitPrice(0);
+    fetchParams();
+    fetchPool();
+  };
+
+  const fetchParams = () => {
+    queryLiquidityParams((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.params) {
+        setParams(result?.params);
+      }
+    });
+  };
+
+  const fetchPool = () => {
+    queryPool(pool?.id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setPool(result?.pool);
+    });
+  };
 
   return (
     <div className="app-content-wrapper cswap-section">
@@ -678,16 +720,19 @@ const Swap = ({
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
                   validationError={
-                    validationError || slippageError || priceValidationError
+                    validationError ||
+                    slippageError ||
+                    (isLimitOrder && priceValidationError)
                   }
                   isDisabled={
                     !pool?.id ||
                     !Number(demandCoin?.amount) ||
                     !Number(slippageTolerance) ||
-                    priceValidationError?.message
+                    (isLimitOrder && priceValidationError?.message)
                   }
                   max={availableBalance}
                   name={

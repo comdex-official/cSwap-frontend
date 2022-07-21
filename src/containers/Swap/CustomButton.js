@@ -1,15 +1,14 @@
-import * as PropTypes from "prop-types";
 import { Button, message } from "antd";
-import { connect } from "react-redux";
-import { getAmount, orderPriceConversion } from "../../utils/coin";
-import { signAndBroadcastTransaction } from "../../services/helper";
+import Long from "long";
+import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
-import variables from "../../utils/variables";
-import { useDispatch } from "react-redux";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
-import Long from "long";
+import { signAndBroadcastTransaction } from "../../services/helper";
+import { getAmount, orderPriceConversion } from "../../utils/coin";
+import variables from "../../utils/variables";
 
 const CustomButton = ({
   offerCoin,
@@ -27,6 +26,7 @@ const CustomButton = ({
   isLimitOrder,
   limitPrice,
   baseCoinPoolPrice,
+  refreshDetails,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -111,6 +111,7 @@ const CustomButton = ({
 
         setComplete(true);
         updateValues();
+        refreshDetails();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -157,6 +158,8 @@ const CustomButton = ({
 };
 
 CustomButton.propTypes = {
+  refreshDetails: PropTypes.func.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -177,7 +180,6 @@ CustomButton.propTypes = {
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),
-  refreshBalance: PropTypes.number.isRequired,
   slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   validationError: PropTypes.oneOfType([
