@@ -216,7 +216,7 @@ const FarmDetails = ({
     <Row>
       <Col md="6">
         <Tabs
-          className="comdex-tabs farm-modal-tab"
+          className="comdex-tabs farm-modal-tab farm-details-tab"
           tabBarExtraContent={operations}
         >
           <TabPane tab="Deposit" key="1">

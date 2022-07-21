@@ -168,6 +168,9 @@
 
 .farm-modal-tab {
   height: 100%;
+  .ant-tabs-nav{
+    margin-bottom: 16px !important;
+  }
   .ant-tabs-content-holder{
     height: 100%;
     .ant-tabs-content{
