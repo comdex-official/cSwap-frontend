@@ -911,6 +911,13 @@ button {
   .dark-mode & {
     background: $background-dark2;
   }
+  .ant-select-item-empty{
+    .dark-mode & {
+      .ant-empty-description{
+        color: $white;
+      }
+    }
+  }
   .ant-select-item {
     .ant-select-item-option-content {
       .dark-mode & {

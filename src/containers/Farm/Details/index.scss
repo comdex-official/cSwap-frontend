@@ -28,10 +28,13 @@
 
 .ant-btn {
   &.back-btn {
-    border-color: #303950;
+    border:1px solid #303950;
+    color: #303950;
     background: none;
     border-radius: 30px !important;
     font-weight: normal;
+    height: 32px;
+    line-height: 100%;
     .dark-mode & {
       color: $white;
     }
@@ -39,6 +42,7 @@
       .dark-mode & {
         background: #303950;
         border-color: #303950;
+        color: $white;
       }
     }
   }
@@ -132,6 +136,21 @@
       .ant-slider-handle {
         background-color: $secondary-color;
         border: 3px solid $secondary-color !important;
+      }
+    }
+  }
+}
+
+.farm-details-tab{
+  .ant-tabs-content-holder{
+    height: 100%;
+    .ant-tabs-content{
+      height: 100%;
+      .ant-tabs-tabpane{
+        height: 100%;
+        .common-card{
+          height: 100%;
+        }
       }
     }
   }
