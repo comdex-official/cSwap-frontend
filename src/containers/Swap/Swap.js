@@ -477,6 +477,14 @@ const Swap = ({
     fetchPool();
   };
 
+  useEffect(() => {
+    if (pool?.id) {
+      let intervalId = setInterval(() => fetchPool(), 10000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [pool]);
+
   const fetchPair = () => {
     queryLiquidityPair(pair?.id, (error, result) => {
       if (error) {
