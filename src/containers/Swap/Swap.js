@@ -7,38 +7,37 @@ import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
 import {
-  ValidateInputNumber,
-  ValidatePriceInputNumber,
+  ValidateInputNumber
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList,
+  queryPoolsList
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import {
   decimalConversion,
   getPoolPrice,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -83,7 +82,6 @@ const Swap = ({
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
-  const [priceValidationError, setPriceValidationError] = useState();
   const [baseSupply, setBaseSupply] = useState(0);
   const [quoteSupply, setQuoteSupply] = useState(0);
 
@@ -458,17 +456,6 @@ const Swap = ({
 
     setLimitPrice(price);
 
-    if (pair?.lastPrice) {
-      setPriceValidationError(
-        ValidatePriceInputNumber(
-          Number(price),
-          Number(decimalConversion(pair?.lastPrice)),
-          Number(decimalConversion(params?.maxPriceLimitRatio))
-        )
-      );
-    } else {
-      setPriceValidationError(false);
-    }
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -649,7 +636,6 @@ const Swap = ({
                           }
                           className="assets-select-input with-select"
                           value={limitPrice}
-                          validationError={priceValidationError}
                         />{" "}
                       </div>
                     </div>
@@ -733,16 +719,8 @@ const Swap = ({
                   refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
-                  validationError={
-                    validationError || (isLimitOrder && priceValidationError)
-                  }
-                  isDisabled={
-                    !pool?.id ||
-                    !Number(demandCoin?.amount) ||
-                    (isLimitOrder
-                      ? !Number(limitPrice) || priceValidationError?.message
-                      : false)
-                  }
+                  validationError={validationError}
+                  isDisabled={!pool?.id || !Number(demandCoin?.amount)}
                   max={availableBalance}
                   name={
                     !pool?.id
