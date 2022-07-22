@@ -12,30 +12,30 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   decimalConversion,
   getPoolPrice,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase
+  uniqueQuoteDenomsForBase,
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -68,7 +68,6 @@ const Swap = ({
   pool,
   poolBalance,
   params,
-  slippageTolerance,
   isLimitOrder,
   setLimitOrderToggle,
   limitPrice,
