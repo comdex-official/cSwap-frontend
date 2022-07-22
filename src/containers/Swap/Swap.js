@@ -8,37 +8,37 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber
+  ValidatePriceInputNumber,
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   decimalConversion,
   getPoolPrice,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase
+  uniqueQuoteDenomsForBase,
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -61,6 +61,7 @@ const Swap = ({
   setOfferCoinDenom,
   setOfferCoinAmount,
   setDemandCoinAmount,
+  setSwapCalculations,
   setSlippage,
   slippage,
   setPair,
@@ -83,6 +84,8 @@ const Swap = ({
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
+  const [baseSupply, setBaseSupply] = useState(0);
+  const [quoteSupply, setQuoteSupply] = useState(0);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -171,6 +174,7 @@ const Swap = ({
   const resetValues = () => {
     setOfferCoinAmount(0, 0);
     setDemandCoinAmount(0);
+    setSwapCalculations(0);
     setValidationError();
     setLimitPrice(0);
   };
@@ -270,15 +274,64 @@ const Swap = ({
       return calculateDemandCoinAmount(limitPrice, value);
     }
 
-    const demandCoinPrice = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
-
-    calculateDemandCoinAmount(demandCoinPrice, value);
+    swapCalculations(value);
   };
 
   const calculateDemandCoinAmount = (price, input) => {
     const amount = price * input;
     setDemandCoinAmount(amount.toFixed(6));
   };
+
+  const swapCalculations = (input) => {
+    // 1= buy, 2=sell
+
+    let orderDirection = reverse ? "buy" : "sell";
+    let expectedDemandCoinAmount, price, amount;
+    if (orderDirection === "buy") {
+      expectedDemandCoinAmount =
+        baseSupply -
+        (baseSupply * quoteSupply) / (quoteSupply + Number(getAmount(input)));
+
+      price = (Number(getAmount(input)) / expectedDemandCoinAmount).toFixed(
+        comdex?.coinDecimals
+      );
+      amount = expectedDemandCoinAmount;
+    } else {
+      expectedDemandCoinAmount =
+        quoteSupply -
+        (baseSupply * quoteSupply) / (baseSupply + Number(getAmount(input)));
+
+      price = (expectedDemandCoinAmount / Number(getAmount(input))).toFixed(
+        comdex?.coinDecimals
+      );
+
+      amount = getAmount(input);
+    }
+
+    setDemandCoinAmount(amountConversion(expectedDemandCoinAmount));
+    setSwapCalculations(
+      Number(amountConversion(expectedDemandCoinAmount)),
+      Number(price),
+      Math.round(Number(amount))
+    );
+  };
+
+  useEffect(() => {
+    if (pair?.baseCoinDenom && pair?.id) {
+      let baseSupply, quoteSupply;
+
+      if (pair?.baseCoinDenom === pool?.balances[0]?.denom) {
+        baseSupply = pool?.balances[0]?.amount;
+        quoteSupply = pool?.balances[1]?.amount;
+      } else {
+        baseSupply = pool?.balances[1]?.amount;
+        quoteSupply = pool?.balances[0]?.amount;
+      }
+
+      setBaseSupply(Number(baseSupply));
+      setQuoteSupply(Number(quoteSupply));
+    }
+  }, [pool, pair]);
 
   const handleDemandCoinDenomChange = (value) => {
     if (offerCoin?.denom === value) {
@@ -346,6 +399,7 @@ const Swap = ({
     setOfferCoinDenom(demandCoinDenom);
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
+    setSwapCalculations(0, 0, 0);
     setLimitPrice(0);
     setReverse(!reverse);
   };
@@ -438,12 +492,6 @@ const Swap = ({
     fetchPool();
   };
 
-  useEffect(() => {
-    if (pair?.id) {
-      setInterval(() => fetchPair(pair?.id), 10000);
-    }
-  }, [pair]);
-
   const fetchPair = () => {
     queryLiquidityPair(pair?.id, (error, result) => {
       if (error) {
@@ -467,10 +515,6 @@ const Swap = ({
     });
   };
 
-  console.log(
-    "it is",
-    isLimitOrder ? !Number(limitPrice) && priceValidationError?.message : false
-  );
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">

@@ -14,9 +14,12 @@ import {
   setLimitOrderToggle,
   setLimitPrice,
   setOfferCoinAmount,
-  setOfferCoinDenom, setParams, setReverse,
+  setOfferCoinDenom,
+  setParams,
+  setReverse,
   setSlippage,
-  setSlippageTolerance
+  setSlippageTolerance,
+  setSwapCalculations
 } from "../../actions/swap";
 import Swap from "./Swap";
 
@@ -30,6 +33,7 @@ Swap.propTypes = {
   setPoolPrice: PropTypes.func.isRequired,
   setSlippage: PropTypes.func.isRequired,
   setSlippageTolerance: PropTypes.func.isRequired,
+  setSwapCalculations: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPair: PropTypes.func.isRequired,
   setPairs: PropTypes.func.isRequired,
@@ -166,6 +170,7 @@ const actionsToProps = {
   setBaseCoinPoolPrice,
   setPoolPrice,
   setParams,
+  setSwapCalculations,
 };
 
 export default connect(stateToProps, actionsToProps)(Swap);
