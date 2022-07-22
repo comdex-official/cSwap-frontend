@@ -10,6 +10,7 @@ const Option = Select.Option;
 const CustomSelect = ({ value, onChange, list }) => {
   return (
     <Select
+      aria-label="Select"
       className="assets-select"
       dropdownClassName="asset-select-dropdown"
       value={value}
