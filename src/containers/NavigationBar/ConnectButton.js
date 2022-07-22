@@ -181,7 +181,6 @@ const ConnectButton = ({
         for (let i = 0; i < list?.length; i++) {
           queryPool(list[i], (error, result) => {
             if (error) {
-              message.error(error);
               return;
             }
 

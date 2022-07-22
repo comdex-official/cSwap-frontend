@@ -110,7 +110,6 @@ const FarmDetails = ({
   const fetchPool = () => {
     queryPool(id, (error, result) => {
       if (error) {
-        message.error(error);
         return;
       }
 

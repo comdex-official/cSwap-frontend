@@ -27,23 +27,17 @@ const CustomButton = ({
   limitPrice,
   baseCoinPoolPrice,
   refreshDetails,
+  swapCalculations,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
-
-  const poolPrice = Number(baseCoinPoolPrice);
 
   useEffect(() => {
     setComplete(false);
   }, []);
 
-  const priceWithOutConversion = () => {
-    return poolPrice + poolPrice * Number(slippageTolerance / 100);
-  };
-
   const calculateBuyAmount = () => {
-    const price = priceWithOutConversion();
-    const amount = Number(offerCoin?.amount) / price;
+    const amount = Number(offerCoin?.amount) / limitPrice;
 
     return getAmount(amount);
   };
@@ -76,7 +70,7 @@ const CustomButton = ({
       };
     } else {
       return {
-        typeUrl: "/comdex.liquidity.v1beta1.MsgMarketOrder",
+        typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
         value: {
           orderer: address,
           pairId: pair?.id,
@@ -90,10 +84,8 @@ const CustomButton = ({
             ),
           },
           demandCoinDenom: demandCoin?.denom,
-          amount:
-            orderDirection === 2
-              ? getAmount(offerCoin?.amount)
-              : calculateBuyAmount(),
+          amount: String(swapCalculations?.amount),
+          price: orderPriceConversion(swapCalculations?.price),
         },
       };
     }
@@ -197,6 +189,11 @@ CustomButton.propTypes = {
   }),
   slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  swapCalculations: PropTypes.shape({
+    expectedAmount: PropTypes.number,
+    amount: PropTypes.number,
+    price: PropTypes.number,
+  }),
   validationError: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.shape({
@@ -213,6 +210,7 @@ const stateToProps = (state) => {
     slippage: state.swap.slippage,
     slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
+    swapCalculations: state.swap.calculations,
   };
 };
 

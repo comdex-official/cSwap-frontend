@@ -19,7 +19,9 @@ const Order = () => {
 
   useEffect(() => {
     fetchOrders(address);
-    setInterval(() => fetchOrders(address), 10000);
+    let intervalId = setInterval(() => fetchOrders(address), 10000);
+
+    return () => clearInterval(intervalId);
   }, [address]);
 
   const fetchOrders = async (address) => {

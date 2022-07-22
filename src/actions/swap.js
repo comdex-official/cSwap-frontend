@@ -9,7 +9,8 @@ import {
   PARAMS_SET,
   REVERSE_SET,
   SLIPPAGE_SET,
-  SLIPPAGE_TOLERANCE_SET
+  SLIPPAGE_TOLERANCE_SET,
+  SWAP_CALCULATIONS_SET
 } from "../constants/swap";
 
 export const setDemandCoinDenom = (value) => {
@@ -88,5 +89,14 @@ export const setLimitPrice = (value) => {
   return {
     type: LIMIT_PRICE_SET,
     value,
+  };
+};
+
+export const setSwapCalculations = (expectedAmount, price, amount) => {
+  return {
+    type: SWAP_CALCULATIONS_SET,
+    expectedAmount,
+    price,
+    amount,
   };
 };

@@ -1,16 +1,16 @@
+import { Button, List, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
-import { Button, List, Select, message, Spin } from "antd";
-import "./index.scss";
-import { useNavigate } from "react-router";
-import { fetchRestProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useNavigate } from "react-router";
+import { Col, Row, SvgIcon } from "../../components/common";
 import NoData from "../../components/NoData";
-import { formatTime, getDuration } from "../../utils/date";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { comdex } from "../../config/network";
+import { fetchRestProposals } from "../../services/govern/query";
 import { queryStakeTokens } from "../../services/staking/query";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { formatTime, getDuration } from "../../utils/date";
+import "./index.scss";
 
 const { Option } = Select;
 
@@ -42,7 +42,7 @@ const Govern = () => {
       title: "Total Staked",
       counts: (
         <>
-          {amountConversionWithComma(stakedTokens)}{" "}
+          {amountConversionWithComma(stakedTokens || 0)}{" "}
           {denomConversion(comdex.coinMinimalDenom)}
         </>
       ),

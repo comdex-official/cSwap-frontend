@@ -1,18 +1,20 @@
+import { combineReducers } from "redux";
 import {
   CAUTION_NOTICE_VALUES_SET,
-  DEMAND_COIN_DENOM_SET,
-  DEMAND_COIN_AMOUNT_SET,
-  OFFER_COIN_DENOM_SET,
-  OFFER_COIN_AMOUNT_SET,
-  REVERSE_SET,
   COMPLETE_SET,
-  SLIPPAGE_SET,
-  PARAMS_SET,
-  SLIPPAGE_TOLERANCE_SET,
   DEFAULT_SLIPPAGE_TOLERANCE,
-  LIMIT_ORDER_TOGGLE_SET, LIMIT_PRICE_SET,
+  DEMAND_COIN_AMOUNT_SET,
+  DEMAND_COIN_DENOM_SET,
+  LIMIT_ORDER_TOGGLE_SET,
+  LIMIT_PRICE_SET,
+  OFFER_COIN_AMOUNT_SET,
+  OFFER_COIN_DENOM_SET,
+  PARAMS_SET,
+  REVERSE_SET,
+  SLIPPAGE_SET,
+  SLIPPAGE_TOLERANCE_SET,
+  SWAP_CALCULATIONS_SET
 } from "../constants/swap";
-import { combineReducers } from "redux";
 
 const cautionNotice = (state = { show: false, isAccepted: false }, action) => {
   if (action.type === CAUTION_NOTICE_VALUES_SET) {
@@ -79,6 +81,26 @@ const demandCoin = (
   }
 };
 
+const calculations = (
+  state = {
+    expectedAmount: 0,
+    price: 0,
+    amount: 0,
+  },
+  action
+) => {
+  if (action.type === SWAP_CALCULATIONS_SET) {
+    return {
+      ...state,
+      amount: action?.amount,
+      expectedAmount: action?.expectedAmount,
+      price: action?.price,
+    };
+  }
+
+  return state;
+};
+
 const reverse = (state = false, action) => {
   if (action.type === REVERSE_SET) {
     return action.value || false;
@@ -121,19 +143,19 @@ const params = (state = {}, action) => {
   return state;
 };
 
-const isLimitOrder = (state=false, action) => {
-  if(action.type === LIMIT_ORDER_TOGGLE_SET){
-    return action.value
+const isLimitOrder = (state = false, action) => {
+  if (action.type === LIMIT_ORDER_TOGGLE_SET) {
+    return action.value;
   }
   return state;
-}
+};
 
-const limitPrice = (state= 0, action) => {
-  if(action.type === LIMIT_PRICE_SET){
-    return action.value
+const limitPrice = (state = 0, action) => {
+  if (action.type === LIMIT_PRICE_SET) {
+    return action.value;
   }
   return state;
-}
+};
 
 export default combineReducers({
   cautionNotice,
@@ -146,4 +168,5 @@ export default combineReducers({
   slippageTolerance,
   isLimitOrder,
   limitPrice,
+  calculations,
 });
