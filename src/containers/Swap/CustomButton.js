@@ -32,19 +32,12 @@ const CustomButton = ({
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
 
-  const poolPrice = Number(baseCoinPoolPrice);
-
   useEffect(() => {
     setComplete(false);
   }, []);
 
-  const priceWithOutConversion = () => {
-    return poolPrice + poolPrice * Number(slippageTolerance / 100);
-  };
-
   const calculateBuyAmount = () => {
-    const price = priceWithOutConversion();
-    const amount = Number(offerCoin?.amount) / price;
+    const amount = Number(offerCoin?.amount) / limitPrice;
 
     return getAmount(amount);
   };

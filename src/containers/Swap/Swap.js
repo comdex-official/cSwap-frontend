@@ -6,9 +6,7 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import {
-  ValidateInputNumber
-} from "../../config/_validation";
+import { ValidateInputNumber } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -172,7 +170,7 @@ const Swap = ({
   const resetValues = () => {
     setOfferCoinAmount(0, 0);
     setDemandCoinAmount(0);
-    setSwapCalculations(0);
+    setSwapCalculations(0, 0, 0);
     setValidationError();
     setLimitPrice(0);
   };
@@ -270,9 +268,9 @@ const Swap = ({
 
     if (isLimitOrder && limitPrice) {
       return calculateDemandCoinAmount(limitPrice, value);
+    } else if (!isLimitOrder) {
+      swapCalculations(value);
     }
-
-    swapCalculations(value);
   };
 
   const calculateDemandCoinAmount = (price, input) => {
@@ -720,7 +718,11 @@ const Swap = ({
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
                   validationError={validationError}
-                  isDisabled={!pool?.id || !Number(demandCoin?.amount)}
+                  isDisabled={
+                    !pool?.id ||
+                    !Number(demandCoin?.amount) ||
+                    (isLimitOrder ? !Number(limitPrice) : false)
+                  }
                   max={availableBalance}
                   name={
                     !pool?.id
