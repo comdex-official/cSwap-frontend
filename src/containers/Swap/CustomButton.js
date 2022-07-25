@@ -17,7 +17,6 @@ const CustomButton = ({
   name,
   isDisabled,
   setComplete,
-  slippageTolerance,
   validationError,
   lang,
   refreshBalance,
@@ -25,8 +24,9 @@ const CustomButton = ({
   orderDirection,
   isLimitOrder,
   limitPrice,
-  baseCoinPoolPrice,
   refreshDetails,
+  baseCoinPoolPrice,
+  slippageTolerance,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -183,7 +183,6 @@ CustomButton.propTypes = {
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),
-  slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   validationError: PropTypes.oneOfType([
     PropTypes.bool,
@@ -198,7 +197,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     demandCoin: state.swap.demandCoin,
     offerCoin: state.swap.offerCoin,
-    slippage: state.swap.slippage,
     slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
   };
