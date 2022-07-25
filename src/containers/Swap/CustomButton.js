@@ -30,7 +30,7 @@ const CustomButton = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
-  
+
   const poolPrice = Number(baseCoinPoolPrice);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const CustomButton = ({
   const priceWithOutConversion = () => {
     return poolPrice + poolPrice * Number(slippageTolerance / 100);
   };
-  
+
   const calculateBuyAmount = () => {
     const price = priceWithOutConversion();
     const amount = Number(offerCoin?.amount) / price;
@@ -90,7 +90,6 @@ const CustomButton = ({
   const handleSwap = () => {
     setInProgress(true);
 
-    message.info("Note: Order may execute full or partial.")
     signAndBroadcastTransaction(
       {
         message: getMessage(isLimitOrder),

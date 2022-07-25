@@ -683,6 +683,13 @@ const Swap = ({
                   </Row>
                 </Col>
               </Row>
+              {!isLimitOrder ? (
+                <Row className="mt-1">
+                  <Col className="text-center note-text">
+                    Note: Order can be executed full or partial.
+                  </Col>
+                </Row>
+              ) : null}
               <div className="assets-form-btn">
                 <CustomButton
                   isLimitOrder={isLimitOrder}

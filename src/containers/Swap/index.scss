@@ -208,3 +208,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.note-text {
+  color: $text-color-light2;
+  .dark-mode & {
+    color: $text-color-light;
+  }
+}
