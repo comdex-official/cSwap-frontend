@@ -91,12 +91,3 @@ export const setLimitPrice = (value) => {
     value,
   };
 };
-
-export const setSwapCalculations = (expectedAmount, price, amount) => {
-  return {
-    type: SWAP_CALCULATIONS_SET,
-    expectedAmount,
-    price,
-    amount,
-  };
-};
