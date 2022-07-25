@@ -187,7 +187,6 @@ const Swap = ({
       ).toFixed(comdex?.coinDecimals);
 
       setBaseCoinPoolPrice(baseCoinPoolPrice);
-      handleLimitPriceChange(baseCoinPoolPrice);
     }
   }, [pool]);
 
@@ -441,6 +440,12 @@ const Swap = ({
   useEffect(() => {
     if (pool?.id) {
       let intervalId = setInterval(() => fetchPool(), 10000);
+
+      return () => clearInterval(intervalId);
+    }
+
+    if (isLimitOrder && pair?.id) {
+      let intervalId = setInterval(() => fetchPair(), 10000);
 
       return () => clearInterval(intervalId);
     }

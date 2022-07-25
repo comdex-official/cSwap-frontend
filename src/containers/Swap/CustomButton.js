@@ -90,6 +90,7 @@ const CustomButton = ({
   const handleSwap = () => {
     setInProgress(true);
 
+    message.info("Note: Order may execute full or partial.")
     signAndBroadcastTransaction(
       {
         message: getMessage(isLimitOrder),
