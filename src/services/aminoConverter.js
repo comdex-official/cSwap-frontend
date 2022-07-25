@@ -50,48 +50,6 @@ export const customAminoTypes = {
       };
     },
   },
-  "/comdex.liquidity.v1beta1.MsgMarketOrder": {
-    aminoType: "comdex/liquidity/MsgMarketOrder",
-    toAmino: ({
-      orderer,
-      pairId,
-      appId,
-      direction,
-      offerCoin,
-      demandCoinDenom,
-      amount,
-    }) => {
-      return {
-        orderer: orderer,
-        pair_id: String(pairId),
-        app_id: String(appId),
-        direction: Number(direction),
-        offer_coin: offerCoin,
-        demand_coin_denom: demandCoinDenom,
-        amount: amount,
-      };
-    },
-    fromAmino: ({
-      orderer,
-      pair_id,
-      app_id,
-      direction,
-      offer_coin,
-      demand_coin_denom,
-      amount,
-    }) => {
-      return {
-        orderer: orderer,
-        pairId: parseInt(pair_id),
-        appId: parseInt(app_id),
-        direction: direction,
-        offerCoin: offer_coin,
-        demandCoinDenom: demand_coin_denom,
-        amount: amount,
-      };
-    },
-  },
-
   "/comdex.liquidity.v1beta1.MsgDeposit": {
     aminoType: "comdex/liquidity/MsgDeposit",
     toAmino: ({ depositor, depositCoins, poolId, appId }) => {

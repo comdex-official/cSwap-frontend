@@ -1,5 +1,4 @@
 import { amountConversion } from "../utils/coin";
-import { comdex } from "./network";
 
 export const ValidateInputNumber = (value, max, key) => {
   if (value < 0) {
@@ -19,30 +18,5 @@ export const ValidateInputNumber = (value, max, key) => {
   }
   if (key === "whole" && !Number.isInteger(Number(value))) {
     return new Error("Input must be a whole number");
-  }
-};
-
-export const ValidatePriceInputNumber = (
-  value,
-  lastPrice,
-  maxPriceLimitRatio
-) => {
-  if (value < 0) {
-    return new Error("Input must be positive number");
-  }
-
-  if (
-    value < lastPrice - maxPriceLimitRatio * lastPrice ||
-    value > lastPrice + maxPriceLimitRatio * lastPrice
-  ) {
-    return new Error(
-      `Price not in range ${(
-        lastPrice -
-        maxPriceLimitRatio * lastPrice
-      ).toFixed(comdex?.coinDecimals)} - ${(
-        lastPrice +
-        maxPriceLimitRatio * lastPrice
-      ).toFixed(comdex?.coinDecimals)}`
-    );
   }
 };

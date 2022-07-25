@@ -17,7 +17,6 @@ const CustomButton = ({
   name,
   isDisabled,
   setComplete,
-  slippageTolerance,
   validationError,
   lang,
   refreshBalance,
@@ -25,7 +24,6 @@ const CustomButton = ({
   orderDirection,
   isLimitOrder,
   limitPrice,
-  baseCoinPoolPrice,
   refreshDetails,
   swapCalculations,
 }) => {
@@ -169,7 +167,6 @@ CustomButton.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
-  baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   demandCoin: PropTypes.shape({
     amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     denom: PropTypes.string,
@@ -188,7 +185,6 @@ CustomButton.propTypes = {
     swapFeeRate: PropTypes.string,
   }),
   slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   swapCalculations: PropTypes.shape({
     expectedAmount: PropTypes.number,
     amount: PropTypes.number,
@@ -208,7 +204,6 @@ const stateToProps = (state) => {
     demandCoin: state.swap.demandCoin,
     offerCoin: state.swap.offerCoin,
     slippage: state.swap.slippage,
-    slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
     swapCalculations: state.swap.calculations,
   };
