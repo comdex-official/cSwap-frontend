@@ -25,68 +25,66 @@ const CustomButton = ({
   isLimitOrder,
   limitPrice,
   refreshDetails,
-  swapCalculations,
+  baseCoinPoolPrice,
+  slippageTolerance,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
+
+  const poolPrice = Number(baseCoinPoolPrice);
 
   useEffect(() => {
     setComplete(false);
   }, []);
 
+  const priceWithOutConversion = () => {
+    return poolPrice + poolPrice * Number(slippageTolerance / 100);
+  };
+
   const calculateBuyAmount = () => {
-    const amount = Number(offerCoin?.amount) / limitPrice;
+    const price = priceWithOutConversion();
+    const amount = Number(offerCoin?.amount) / price;
 
     return getAmount(amount);
   };
 
-  const getMessage = (isLimitOrder) => {
-    if (isLimitOrder) {
-      return {
-        typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
-        value: {
-          orderer: address,
-          orderLifespan: { seconds: 600, nanos: 0 },
-          pairId: pair?.id,
-          appId: Long.fromNumber(APP_ID),
-          direction: orderDirection,
-          /** offer_coin specifies the amount of coin the orderer offers */
-          offerCoin: {
-            denom: offerCoin?.denom,
-            amount: getAmount(
-              Number(offerCoin?.amount) + Number(offerCoin?.fee)
-            ),
-          },
-          demandCoinDenom: demandCoin?.denom,
-          price: orderPriceConversion(limitPrice),
-          /** amount specifies the amount of base coin the orderer wants to buy or sell */
-          amount:
-            orderDirection === 2
-              ? getAmount(offerCoin?.amount)
-              : calculateBuyAmount(),
-        },
-      };
+  const calculateOrderPrice = () => {
+    if (orderDirection === 1) {
+      return orderPriceConversion(
+        poolPrice + poolPrice * Number(slippageTolerance / 100)
+      );
     } else {
-      return {
-        typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
-        value: {
-          orderer: address,
-          pairId: pair?.id,
-          appId: Long.fromNumber(APP_ID),
-          direction: orderDirection,
-          /** offer_coin specifies the amount of coin the orderer offers */
-          offerCoin: {
-            denom: offerCoin?.denom,
-            amount: getAmount(
-              Number(offerCoin?.amount) + Number(offerCoin?.fee)
-            ),
-          },
-          demandCoinDenom: demandCoin?.denom,
-          amount: String(swapCalculations?.amount),
-          price: orderPriceConversion(swapCalculations?.price),
-        },
-      };
+      return orderPriceConversion(
+        poolPrice - poolPrice * Number(slippageTolerance / 100)
+      );
     }
+  };
+
+  const getMessage = (isLimitOrder) => {
+    const price = calculateOrderPrice();
+
+    return {
+      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+      value: {
+        orderer: address,
+        orderLifespan: isLimitOrder ? { seconds: 600, nanos: 0 } : "0",
+        pairId: pair?.id,
+        appId: Long.fromNumber(APP_ID),
+        direction: orderDirection,
+        /** offer_coin specifies the amount of coin the orderer offers */
+        offerCoin: {
+          denom: offerCoin?.denom,
+          amount: getAmount(Number(offerCoin?.amount) + Number(offerCoin?.fee)),
+        },
+        demandCoinDenom: demandCoin?.denom,
+        price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
+        /** amount specifies the amount of base coin the orderer wants to buy or sell */
+        amount:
+          orderDirection === 2
+            ? getAmount(offerCoin?.amount)
+            : calculateBuyAmount(),
+      },
+    };
   };
 
   const handleSwap = () => {
@@ -167,6 +165,7 @@ CustomButton.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
+  baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   demandCoin: PropTypes.shape({
     amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     denom: PropTypes.string,
@@ -184,12 +183,7 @@ CustomButton.propTypes = {
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),
-  slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  swapCalculations: PropTypes.shape({
-    expectedAmount: PropTypes.number,
-    amount: PropTypes.number,
-    price: PropTypes.number,
-  }),
+  slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   validationError: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.shape({
@@ -203,9 +197,8 @@ const stateToProps = (state) => {
     address: state.account.address,
     demandCoin: state.swap.demandCoin,
     offerCoin: state.swap.offerCoin,
-    slippage: state.swap.slippage,
+    slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
-    swapCalculations: state.swap.calculations,
   };
 };
 

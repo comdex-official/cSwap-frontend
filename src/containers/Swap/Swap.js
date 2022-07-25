@@ -6,36 +6,39 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import { ValidateInputNumber } from "../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList,
+  queryPoolsList
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import {
   decimalConversion,
   getPoolPrice,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -58,7 +61,6 @@ const Swap = ({
   setOfferCoinDenom,
   setOfferCoinAmount,
   setDemandCoinAmount,
-  setSwapCalculations,
   setSlippage,
   slippage,
   setPair,
@@ -79,8 +81,7 @@ const Swap = ({
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
-  const [baseSupply, setBaseSupply] = useState(0);
-  const [quoteSupply, setQuoteSupply] = useState(0);
+  const [priceValidationError, setPriceValidationError] = useState();
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -169,7 +170,6 @@ const Swap = ({
   const resetValues = () => {
     setOfferCoinAmount(0, 0);
     setDemandCoinAmount(0);
-    setSwapCalculations(0, 0, 0);
     setValidationError();
     setLimitPrice(0);
   };
@@ -187,7 +187,6 @@ const Swap = ({
       ).toFixed(comdex?.coinDecimals);
 
       setBaseCoinPoolPrice(baseCoinPoolPrice);
-      handleLimitPriceChange(baseCoinPoolPrice);
     }
   }, [pool]);
 
@@ -267,66 +266,17 @@ const Swap = ({
 
     if (isLimitOrder && limitPrice) {
       return calculateDemandCoinAmount(limitPrice, value);
-    } else if (!isLimitOrder) {
-      swapCalculations(value);
     }
+
+    const demandCoinPrice = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
+
+    calculateDemandCoinAmount(demandCoinPrice, value);
   };
 
   const calculateDemandCoinAmount = (price, input) => {
     const amount = price * input;
     setDemandCoinAmount(amount.toFixed(6));
   };
-
-  const swapCalculations = (input) => {
-    // 1= buy, 2=sell
-
-    let orderDirection = reverse ? "buy" : "sell";
-    let expectedDemandCoinAmount, price, amount;
-    if (orderDirection === "buy") {
-      expectedDemandCoinAmount =
-        baseSupply -
-        (baseSupply * quoteSupply) / (quoteSupply + Number(getAmount(input)));
-
-      price = (Number(getAmount(input)) / expectedDemandCoinAmount).toFixed(
-        comdex?.coinDecimals
-      );
-      amount = expectedDemandCoinAmount;
-    } else {
-      expectedDemandCoinAmount =
-        quoteSupply -
-        (baseSupply * quoteSupply) / (baseSupply + Number(getAmount(input)));
-
-      price = (expectedDemandCoinAmount / Number(getAmount(input))).toFixed(
-        comdex?.coinDecimals
-      );
-
-      amount = getAmount(input);
-    }
-
-    setDemandCoinAmount(amountConversion(expectedDemandCoinAmount));
-    setSwapCalculations(
-      Number(amountConversion(expectedDemandCoinAmount)),
-      Number(price),
-      Math.round(Number(amount))
-    );
-  };
-
-  useEffect(() => {
-    if (pair?.baseCoinDenom && pair?.id) {
-      let baseSupply, quoteSupply;
-
-      if (pair?.baseCoinDenom === pool?.balances[0]?.denom) {
-        baseSupply = pool?.balances[0]?.amount;
-        quoteSupply = pool?.balances[1]?.amount;
-      } else {
-        baseSupply = pool?.balances[1]?.amount;
-        quoteSupply = pool?.balances[0]?.amount;
-      }
-
-      setBaseSupply(Number(baseSupply));
-      setQuoteSupply(Number(quoteSupply));
-    }
-  }, [pool, pair]);
 
   const handleDemandCoinDenomChange = (value) => {
     if (offerCoin?.denom === value) {
@@ -394,7 +344,6 @@ const Swap = ({
     setOfferCoinDenom(demandCoinDenom);
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
-    setSwapCalculations(0, 0, 0);
     setLimitPrice(0);
     setReverse(!reverse);
   };
@@ -453,6 +402,18 @@ const Swap = ({
 
     setLimitPrice(price);
 
+    if (pair?.lastPrice) {
+      setPriceValidationError(
+        ValidatePriceInputNumber(
+          Number(price),
+          Number(decimalConversion(pair?.lastPrice)),
+          Number(decimalConversion(params?.maxPriceLimitRatio))
+        )
+      );
+    } else {
+      setPriceValidationError(false);
+    }
+
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -479,6 +440,12 @@ const Swap = ({
   useEffect(() => {
     if (pool?.id) {
       let intervalId = setInterval(() => fetchPool(), 10000);
+
+      return () => clearInterval(intervalId);
+    }
+
+    if (isLimitOrder && pair?.id) {
+      let intervalId = setInterval(() => fetchPair(), 10000);
 
       return () => clearInterval(intervalId);
     }
@@ -639,6 +606,7 @@ const Swap = ({
                           onChange={(event) =>
                             handleLimitPriceChange(event.target.value)
                           }
+                          validationError={priceValidationError}
                           className="assets-select-input with-select"
                           value={limitPrice}
                         />{" "}
@@ -715,6 +683,13 @@ const Swap = ({
                   </Row>
                 </Col>
               </Row>
+              {!isLimitOrder ? (
+                <Row className="mt-1">
+                  <Col className="text-center note-text">
+                    Note: Order can be executed full or partial.
+                  </Col>
+                </Row>
+              ) : null}
               <div className="assets-form-btn">
                 <CustomButton
                   isLimitOrder={isLimitOrder}
@@ -724,11 +699,15 @@ const Swap = ({
                   refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
-                  validationError={validationError}
+                  validationError={
+                    validationError || (isLimitOrder && priceValidationError)
+                  }
                   isDisabled={
                     !pool?.id ||
                     !Number(demandCoin?.amount) ||
-                    (isLimitOrder ? !Number(limitPrice) : false)
+                    (isLimitOrder
+                      ? !Number(limitPrice) || priceValidationError?.message
+                      : false)
                   }
                   max={availableBalance}
                   name={
