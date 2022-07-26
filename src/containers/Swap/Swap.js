@@ -684,9 +684,9 @@ const Swap = ({
                 </Col>
               </Row>
               {!isLimitOrder ? (
-                <Row className="mt-1">
-                  <Col className="text-center note-text">
-                    Note: Order can be executed full or partial.
+                <Row className="mt-3">
+                  <Col className="text-left note-text">
+                    Note: The requested swap could be completed fully, partially, or canceled due to price limiting and to maintain pool stability.
                   </Col>
                 </Row>
               ) : null}
