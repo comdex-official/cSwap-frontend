@@ -1,7 +1,7 @@
 export const embedChainInfo = [
   {
-    rpc: "https://staging.cswap.one/vega",
-    rest: "https://staging.cswap.one/vega-rest",
+    rpc: "https://devnet.cswap.one/vega",
+    rest: "https://devnet.cswap.one/vega-rest",
     chainId: "theta-testnet-001",
     chainName: "Cosmos Hub Test",
     stakeCurrency: {
@@ -93,7 +93,7 @@ export const embedChainInfo = [
   },
   {
     rpc: "https://osmot.rpc.comdex.one",
-    rest: "http://osmot.rest.comdex.one",
+    rest: "https://osmot.rest.comdex.one",
     chainId: "osmo-test-4",
     chainName: "Osmosis-Test",
     stakeCurrency: {
