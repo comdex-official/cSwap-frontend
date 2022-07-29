@@ -1,19 +1,11 @@
-import { ibcDenoms } from "./network";
+import AssetList from "../config/ibc_assets.json";
 
-export const ibcAssetsInfo = [
-  {
-    counterpartyChainId: "theta-testnet-001",
-    //cosmos
-    sourceChannelId: "channel-2",
-    destChannelId: "channel-547",
-    coinMinimalDenom: "uatom",
-    ibcDenomHash: ibcDenoms["uatom"],
-  },
-  {
-    counterpartyChainId: "osmo-test-4",
-    sourceChannelId: "channel-1",
-    destChannelId: "channel-380",
-    coinMinimalDenom: "uosmo",
-    ibcDenomHash: ibcDenoms["uosmo"],
-  },
-];
+export const ibcAssetsInfo = AssetList?.tokens?.map((token) => {
+  return {
+    counterpartyChainId: token?.chainId,
+    sourceChannelId: token?.comdexChannel,
+    destChannelId: token?.channel,
+    coinMinimalDenom: token?.coinMinimalDenom,
+    ibcDenomHash: token?.ibcDenomHash,
+  };
+});

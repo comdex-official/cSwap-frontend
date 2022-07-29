@@ -4,10 +4,11 @@ import * as PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
-import { embedChainInfo } from "../../config/chain";
 import { ibcAssetsInfo } from "../../config/ibc";
+import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -102,6 +103,7 @@ const Assets = ({
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
+  let embedChainInfo = AssetList?.tokens?.map((token) => getChainConfig(token));
   let ibcBalances = ibcAssetsInfo.map((channelInfo) => {
     const chainInfo = embedChainInfo.filter(
       (item) => item.chainId === channelInfo.counterpartyChainId
@@ -134,7 +136,6 @@ const Assets = ({
       ibc: ibcBalance,
       sourceChannelId: channelInfo.sourceChannelId,
       destChannelId: channelInfo.destChannelId,
-      isUnstable: channelInfo.isUnstable,
       currency: originCurrency,
     };
   });
