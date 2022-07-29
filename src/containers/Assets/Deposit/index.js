@@ -61,7 +61,7 @@ const Deposit = ({
       queryBalance(
         chain?.chainInfo?.rpc,
         account?.address,
-        chain?.denom,
+        chain?.coinMinimalDenom,
         (error, result) => {
           setBalanceInProgress(false);
 

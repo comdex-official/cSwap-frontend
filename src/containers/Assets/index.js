@@ -1,10 +1,9 @@
-import { message, Table } from "antd";
+import { Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
-import { ibcAssetsInfo } from "../../config/ibc";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -103,40 +102,22 @@ const Assets = ({
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
-  let embedChainInfo = AssetList?.tokens?.map((token) => getChainConfig(token));
-  let ibcBalances = ibcAssetsInfo.map((channelInfo) => {
-    const chainInfo = embedChainInfo.filter(
-      (item) => item.chainId === channelInfo.counterpartyChainId
-    )[0];
-
-    const originCurrency =
-      chainInfo &&
-      chainInfo.currencies.find(
-        (cur) => cur.coinMinimalDenom === channelInfo.coinMinimalDenom
-      );
-
-    if (!originCurrency) {
-      message.info(
-        `Unknown currency ${channelInfo.coinMinimalDenom} for ${channelInfo.counterpartyChainId}`
-      );
-    }
-
+  let ibcBalances = AssetList?.tokens.map((token) => {
     const ibcBalance = balances.find(
-      (item) => item.denom === channelInfo?.ibcDenomHash
+      (item) => item.denom === token?.ibcDenomHash
     );
+    
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
-      chainInfo: chainInfo,
-      denom: originCurrency?.coinMinimalDenom,
+      chainInfo: getChainConfig(token),
+      coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
         amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
         value: value || 0,
       },
-      ibc: ibcBalance,
-      sourceChannelId: channelInfo.sourceChannelId,
-      destChannelId: channelInfo.destChannelId,
-      currency: originCurrency,
+      sourceChannelId: token.comdexChannel,
+      destChannelId: token.channel,
     };
   });
 
@@ -226,16 +207,14 @@ const Assets = ({
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
-                <SvgIcon
-                  name={iconNameFromDenom(item.currency?.coinMinimalDenom)}
-                />
+                <SvgIcon name={iconNameFromDenom(item?.coinMinimalDenom)} />
               </div>{" "}
-              {item.currency?.coinDenom}{" "}
+              {denomConversion(item?.coinMinimalDenom)}{" "}
             </div>
           </>
         ),
         noOfTokens: item?.balance?.amount,
-        price: getPrice(item.currency?.coinMinimalDenom),
+        price: getPrice(item?.coinMinimalDenom),
         amount: item.balance,
         ibcdeposit: item,
         ibcwithdraw: item,
