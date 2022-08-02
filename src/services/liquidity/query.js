@@ -127,7 +127,7 @@ export const queryPoolSoftLocks = (depositor, poolId, callback) => {
     const queryService = new QueryClientImpl(client);
 
     queryService
-      .SoftLock({
+      .Farmer({
         appId: Long.fromNumber(APP_ID),
         poolId,
         depositor,

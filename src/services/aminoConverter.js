@@ -108,41 +108,41 @@ export const customAminoTypes = {
       };
     },
   },
-  "/comdex.liquidity.v1beta1.MsgTokensSoftLock": {
-    aminoType: "comdex/liquidity/MsgTokensSoftLock",
-    toAmino: ({ depositor, poolId, softLockCoin, appId }) => {
+  "/comdex.liquidity.v1beta1.MsgFarm": {
+    aminoType: "comdex/liquidity/MsgFarm",
+    toAmino: ({ depositor, poolId, farmingPoolCoin, appId }) => {
       return {
         depositor,
         pool_id: String(poolId),
         app_id: String(appId),
-        soft_lock_coin: softLockCoin,
+        farming_pool_coin: farmingPoolCoin,
       };
     },
-    fromAmino: ({ depositor, pool_id, soft_lock_coin, app_id }) => {
+    fromAmino: ({ depositor, pool_id, farming_pool_coin, app_id }) => {
       return {
         depositor,
         poolId: Number(pool_id),
         appId: Number(app_id),
-        softLockCoin: soft_lock_coin,
+        farmingPoolCoin: farming_pool_coin,
       };
     },
   },
-  "/comdex.liquidity.v1beta1.MsgTokensSoftUnlock": {
-    aminoType: "comdex/liquidity/MsgTokensSoftUnlock",
-    toAmino: ({ depositor, poolId, softUnlockCoin, appId }) => {
+  "/comdex.liquidity.v1beta1.MsgUnfarm": {
+    aminoType: "comdex/liquidity/MsgUnfarm",
+    toAmino: ({ depositor, poolId, unfarmingPoolCoin, appId }) => {
       return {
         depositor,
         pool_id: String(poolId),
         app_id: String(appId),
-        soft_unlock_coin: softUnlockCoin,
+        unfarming_pool_coin: unfarmingPoolCoin,
       };
     },
-    fromAmino: ({ depositor, pool_id, soft_unlock_coin, app_id }) => {
+    fromAmino: ({ depositor, pool_id, unfarming_pool_coin, app_id }) => {
       return {
         depositor,
         poolId: Number(pool_id),
         appId: Number(app_id),
-        softUnlockCoin: soft_unlock_coin,
+        unfarmingPoolCoin: unfarming_pool_coin,
       };
     },
   },
