@@ -48,13 +48,13 @@ const UnFarm = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgTokensSoftUnlock",
+          typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarm",
           value: {
-            depositor: address,
+            farmer: address,
             poolId: pool?.id,
             appId: Long.fromNumber(APP_ID),
             /** soft_lock_coin specifies coins to stake */
-            softUnlockCoin: {
+            unfarmingPoolCoin: {
               amount: Number(amount).toFixed(0).toString(),
               denom: pool?.poolCoinDenom,
             },

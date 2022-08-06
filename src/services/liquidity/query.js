@@ -117,7 +117,7 @@ export const queryLiquidityParams = (callback) => {
   });
 };
 
-export const queryPoolSoftLocks = (depositor, poolId, callback) => {
+export const queryPoolSoftLocks = (farmer, poolId, callback) => {
   createQueryClient((error, client) => {
     if (error) {
       callback(error);
@@ -127,10 +127,10 @@ export const queryPoolSoftLocks = (depositor, poolId, callback) => {
     const queryService = new QueryClientImpl(client);
 
     queryService
-      .SoftLock({
+      .Farmer({
         appId: Long.fromNumber(APP_ID),
         poolId,
-        depositor,
+        farmer,
       })
       .then((result) => {
         callback(null, result);

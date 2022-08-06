@@ -49,13 +49,13 @@ const Farm = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgTokensSoftLock",
+          typeUrl: "/comdex.liquidity.v1beta1.MsgFarm",
           value: {
-            depositor: address,
+            farmer: address,
             poolId: pool?.id,
             appId: Long.fromNumber(APP_ID),
             /** soft_lock_coin specifies coins to stake */
-            softLockCoin: {
+            farmingPoolCoin: {
               amount: Number(amount).toFixed(0).toString(),
               denom: pool?.poolCoinDenom,
             },
