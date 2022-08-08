@@ -17,6 +17,7 @@ const Farm = ({
   refreshBalance,
   balances,
   masterPoolMap,
+  userLiquidityInPools,
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
@@ -60,11 +61,9 @@ const Farm = ({
     });
   };
 
-  const userPools = pools.filter((pool) => {
-    return balances.find((balance) => {
-      return balance.denom === pool.poolCoinDenom;
-    });
-  });
+  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  );
 
   return (
     <div className="app-content-wrapper">
@@ -182,6 +181,7 @@ Farm.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
+  userLiquidityInPools: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -191,6 +191,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     balances: state.account.balances.list,
     masterPoolMap: state.liquidity.masterPoolMap,
+    userLiquidityInPools: state.liquidity.userLiquidityInPools,
   };
 };
 
