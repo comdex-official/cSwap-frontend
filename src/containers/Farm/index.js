@@ -90,7 +90,7 @@ const Farm = ({
                       userPools.map((item, index) => (
                         <PoolCardFarm
                           parent={"user"}
-                          key={item.id}
+                          key={item?.id}
                           pool={item}
                           poolIndex={index}
                           lang={lang}
@@ -116,7 +116,7 @@ const Farm = ({
                         if (masterPoolMap?.[item?.id]?.poolId) {
                           return (
                             <PoolCardFarm
-                              key={item.id}
+                              key={item?.id}
                               pool={item}
                               poolIndex={index}
                               lang={lang}
@@ -139,7 +139,7 @@ const Farm = ({
                         if (!masterPoolMap?.[item?.id]?.poolId) {
                           return (
                             <PoolCardFarm
-                              key={item.id}
+                              key={item?.id}
                               pool={item}
                               poolIndex={index}
                               lang={lang}
