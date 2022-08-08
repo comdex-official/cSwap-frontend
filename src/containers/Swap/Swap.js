@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button, message, Popover, Radio } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row, SvgIcon } from "../../components/common";
 import CustomSwitch from "../../components/common/CustomSwitch";
@@ -82,6 +82,7 @@ const Swap = ({
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
+  const [orderLifespan, setOrderLifeSpan] = useState(0);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -435,6 +436,7 @@ const Swap = ({
     setLimitPrice(0);
     fetchPair();
     fetchPool();
+    setOrderLifeSpan(0);
   };
 
   useEffect(() => {
@@ -474,6 +476,47 @@ const Swap = ({
     });
   };
 
+  const handleOrderLifespanChange = (value) => {
+    value = value.toString().trim();
+
+    // checking minimum one block and maximum 24hours value.
+
+    if (value >= 0 && value <= 86400) {
+      setOrderLifeSpan(value);
+    }
+  };
+
+  const SettingPopup = (
+    <div className="slippage-tolerance">
+      <div>
+        Limit order lifespan{" "}
+        <TooltipIcon text="Your transaction will revert if it is pending for more than this period of time." />
+      </div>
+      <div className="tolerance-bottom">
+        <Radio.Group
+          onChange={(event) => setOrderLifeSpan(event.target.value)}
+          defaultValue="a"
+          value={orderLifespan}
+        >
+          <Radio.Button value="0">1Block</Radio.Button>
+          <Radio.Button value="21600">6H</Radio.Button>
+          <Radio.Button value="43200">12H</Radio.Button>
+          <Radio.Button value="86400">24H</Radio.Button>
+        </Radio.Group>
+        <div className="input-section lifespan-setting">
+          <CustomInput
+            className="input-cmdx"
+            onChange={(event) => handleOrderLifespanChange(event.target.value)}
+            value={orderLifespan}
+            validationError={false}
+            placeholder="0"
+          />
+          <span className="percent-text">S</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -490,6 +533,17 @@ const Swap = ({
                 isChecked={isLimitOrder}
               />
 
+              {isLimitOrder ? (
+                <Popover
+                  className="setting-popover"
+                  content={SettingPopup}
+                  placement="bottomRight"
+                  overlayClassName="cmdx-popver"
+                  trigger="click"
+                >
+                  <SvgIcon name="setting" viewbox="0 0 33 33" />
+                </Popover>
+              ) : null}
               <div className="assets-select-card">
                 <div className="assets-left">
                   <label className="leftlabel">
@@ -686,7 +740,9 @@ const Swap = ({
               {!isLimitOrder ? (
                 <Row className="mt-3">
                   <Col className="text-left note-text">
-                    Note: The requested swap could be completed fully, partially, or canceled due to price limiting and to maintain pool stability.
+                    Note: The requested swap could be completed fully,
+                    partially, or canceled due to price limiting and to maintain
+                    pool stability.
                   </Col>
                 </Row>
               ) : null}
@@ -696,6 +752,7 @@ const Swap = ({
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  orderLifespan={orderLifespan}
                   refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}

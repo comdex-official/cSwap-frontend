@@ -27,6 +27,7 @@ const CustomButton = ({
   refreshDetails,
   baseCoinPoolPrice,
   slippageTolerance,
+  orderLifespan,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -67,7 +68,9 @@ const CustomButton = ({
       typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
       value: {
         orderer: address,
-        orderLifespan: isLimitOrder ? { seconds: 600, nanos: 0 } : "0",
+        orderLifespan: isLimitOrder
+          ? { seconds: orderLifespan, nanos: 0 }
+          : "0",
         pairId: pair?.id,
         appId: Long.fromNumber(APP_ID),
         direction: orderDirection,
@@ -180,6 +183,7 @@ CustomButton.propTypes = {
     denom: PropTypes.string,
     fee: PropTypes.number,
   }),
+  orderLifespan: PropTypes.number,
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),
