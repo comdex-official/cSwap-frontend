@@ -7,7 +7,13 @@ import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
-import { getAmount, orderPriceConversion } from "../../utils/coin";
+import { queryOrder } from "../../services/liquidity/query";
+import {
+  amountConversion,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
+} from "../../utils/coin";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -110,6 +116,39 @@ const CustomButton = ({
           return;
         }
 
+        if (!isLimitOrder) {
+          let parsedData = JSON.parse(result?.rawLog)?.[0];
+          let order = parsedData?.events?.find(
+            (item) => item?.type === "limit_order"
+          );
+          let orderId = order?.attributes?.find(
+            (item) => item?.key === "order_id"
+          )?.value;
+          let pairId = order?.attributes?.find(
+            (item) => item?.key === "pair_id"
+          )?.value;
+
+          if (orderId && pairId) {
+            queryOrder(orderId, pairId, (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              let data = result?.order;
+              message.success(
+                `Received ${amountConversion(
+                  data?.receivedCoin?.amount
+                )} ${denomConversion(
+                  data?.receivedCoin?.denom
+                )} for ${amountConversion(
+                  data?.offerCoin?.amount
+                )} ${denomConversion(data?.offerCoin?.denom)}`
+              );
+            });
+          }
+        }
+        
         if (result?.code) {
           message.info(result?.rawLog);
           return;

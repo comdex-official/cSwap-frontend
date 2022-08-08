@@ -46,6 +46,28 @@ export const queryUserOrders = (pairId, address, callback) => {
   });
 };
 
+export const queryOrder = (orderId, pairId, callback) => {
+  createQueryClient((error, client) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    const queryService = new QueryClientImpl(client);
+
+    queryService
+      .Order({
+        pairId: Long.fromNumber(pairId),
+        id: Long.fromNumber(orderId),
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryPoolsList = (
   offset,
   limit,
