@@ -82,7 +82,7 @@ const Swap = ({
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
-  const [orderLifespan, setOrderLifeSpan] = useState(0);
+  const [orderLifespan, setOrderLifeSpan] = useState(21600);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -436,7 +436,6 @@ const Swap = ({
     setLimitPrice(0);
     fetchPair();
     fetchPool();
-    setOrderLifeSpan(0);
   };
 
   useEffect(() => {
@@ -498,10 +497,10 @@ const Swap = ({
           defaultValue="a"
           value={orderLifespan}
         >
-          <Radio.Button value="0">1Block</Radio.Button>
-          <Radio.Button value="21600">6H</Radio.Button>
-          <Radio.Button value="43200">12H</Radio.Button>
-          <Radio.Button value="86400">24H</Radio.Button>
+          <Radio.Button value={0}>1Block</Radio.Button>
+          <Radio.Button value={21600}>6H</Radio.Button>
+          <Radio.Button value={43200}>12H</Radio.Button>
+          <Radio.Button value={86400}>24H</Radio.Button>
         </Radio.Group>
         <div className="input-section lifespan-setting">
           <CustomInput
@@ -781,7 +780,7 @@ const Swap = ({
         </Row>
       </div>
       <div className="order_table_section">
-        {isLimitOrder ? <Order /> : null}
+        {isLimitOrder ? <Order lang={lang}/> : null}
       </div>
     </div>
   );

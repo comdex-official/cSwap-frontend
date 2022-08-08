@@ -1,9 +1,9 @@
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
 import {
-    MsgCreatePool,
-    MsgDeposit, MsgFarm, MsgLimitOrder, MsgUnfarm,
-    MsgWithdraw
+  MsgCancelOrder, MsgCreatePool,
+  MsgDeposit, MsgFarm, MsgLimitOrder, MsgUnfarm,
+  MsgWithdraw
 } from "comdex-codec/build/comdex/liquidity/v1beta1/tx";
 
 export const myRegistry = new Registry([
@@ -14,4 +14,5 @@ export const myRegistry = new Registry([
   ["/comdex.liquidity.v1beta1.MsgLimitOrder", MsgLimitOrder],
   ["/comdex.liquidity.v1beta1.MsgFarm", MsgFarm],
   ["/comdex.liquidity.v1beta1.MsgUnfarm", MsgUnfarm],
+  ["/comdex.liquidity.v1beta1.MsgCancelOrder", MsgCancelOrder],
 ]);

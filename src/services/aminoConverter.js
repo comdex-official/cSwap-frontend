@@ -146,4 +146,24 @@ export const customAminoTypes = {
       };
     },
   },
+  "/comdex.liquidity.v1beta1.MsgCancelOrder": {
+    aminoType: "comdex/liquidity/MsgCancelOrder",
+
+    toAmino: ({ orderer, pairId, orderId, appId }) => {
+      return {
+        orderer,
+        pair_id: String(pairId),
+        order_id: String(orderId),
+        app_id: String(appId),
+      };
+    },
+    fromAmino: ({ orderer, pair_id, order_id, app_id }) => {
+      return {
+        orderer,
+        pairId: Number(pair_id),
+        appId: Number(app_id),
+        orderId: Number(order_id),
+      };
+    },
+  },
 };
