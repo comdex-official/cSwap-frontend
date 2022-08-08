@@ -9,8 +9,7 @@ import {
   PARAMS_SET,
   REVERSE_SET,
   SLIPPAGE_SET,
-  SLIPPAGE_TOLERANCE_SET,
-  SWAP_CALCULATIONS_SET
+  SLIPPAGE_TOLERANCE_SET
 } from "../constants/swap";
 
 export const setDemandCoinDenom = (value) => {
