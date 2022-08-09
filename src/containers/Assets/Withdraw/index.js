@@ -1,25 +1,21 @@
-import "./index.scss";
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
-import React, { useState } from "react";
 import { Button, Form, message, Modal } from "antd";
-import variables from "../../../utils/variables";
-import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
-import {
-  amountConversion,
-  denomConversion,
-  getAmount,
-} from "../../../utils/coin";
-import { defaultFee } from "../../../services/transaction";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { toDecimals, truncateString } from "../../../utils/string";
-import { fetchProofHeight } from "../../../actions/asset";
-import CustomInput from "../../../components/CustomInput";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { ValidateInputNumber } from "../../../config/_validation";
+import { fetchProofHeight } from "../../../actions/asset";
+import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
+import CustomInput from "../../../components/CustomInput";
 import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { aminoSignIBCTx } from "../../../services/helper";
+import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
+import { defaultFee } from "../../../services/transaction";
+import { denomConversion, getAmount } from "../../../utils/coin";
+import { toDecimals, truncateString } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import "./index.scss";
 
 const Withdraw = ({
   lang,
@@ -80,7 +76,7 @@ const Withdraw = ({
           source_port: "transfer",
           source_channel: chain.sourceChannelId,
           token: {
-            denom: chain.ibc?.denom,
+            denom: chain.ibcDenomHash,
             amount: getAmount(amount),
           },
           sender: address,
@@ -175,25 +171,24 @@ const Withdraw = ({
               <div className="availabe-balance">
                 {variables[lang].available}
                 <span className="ml-1">
-                  {(chain && chain.ibc && amountConversion(chain.ibc.amount)) ||
-                    0}{" "}
-                  {(chain.currency &&
-                    chain.currency.coinDenom &&
-                    denomConversion(chain.currency.coinDenom)) ||
-                    ""}
+                  {chain?.balance?.amount || 0}{" "}
+                  {denomConversion(chain?.coinMinimalDenom) || ""}
                 </span>
                 <span className="assets-maxhalf">
                   <Button
                     className=" active"
                     onClick={() => {
-                      setAmount(amountConversion(chain?.ibc?.amount || 0));
+                      setAmount(chain?.balance?.amount || 0);
                     }}
                   >
                     {variables[lang].max}
                   </Button>
                 </span>
               </div>
-              <Form.Item label="Amount to Withdraw" className="assets-input-box">
+              <Form.Item
+                label="Amount to Withdraw"
+                className="assets-input-box"
+              >
                 <CustomInput
                   value={amount}
                   onChange={(event) => onChange(event.target.value)}

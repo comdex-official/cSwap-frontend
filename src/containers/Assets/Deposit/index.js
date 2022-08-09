@@ -95,7 +95,7 @@ const Deposit = ({
           source_port: "transfer",
           source_channel: chain.destChannelId,
           token: {
-            denom: chain.denom,
+            denom: chain?.coinMinimalDenom,
             amount: getAmount(amount),
           },
           sender: sourceAddress,
