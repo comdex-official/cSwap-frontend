@@ -106,7 +106,7 @@ const Assets = ({
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
-    
+
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
@@ -118,6 +118,7 @@ const Assets = ({
       },
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
+      ibcDenomHash: token?.ibcDenomHash,
     };
   });
 
@@ -292,3 +293,4 @@ const stateToProps = (state) => {
 };
 
 export default connect(stateToProps)(Assets);
+
