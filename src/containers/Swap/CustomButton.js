@@ -136,19 +136,21 @@ const CustomButton = ({
               }
 
               let data = result?.order;
+
               message.success(
                 `Received ${amountConversion(
                   data?.receivedCoin?.amount
                 )} ${denomConversion(
                   data?.receivedCoin?.denom
                 )} for ${amountConversion(
-                  data?.offerCoin?.amount
+                  Number(data?.offerCoin?.amount) -
+                    Number(data?.remainingOfferCoin?.amount)
                 )} ${denomConversion(data?.offerCoin?.denom)}`
               );
             });
           }
         }
-        
+
         if (result?.code) {
           message.info(result?.rawLog);
           return;
