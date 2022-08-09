@@ -478,9 +478,7 @@ const Swap = ({
   const handleOrderLifespanChange = (value) => {
     value = value.toString().trim();
 
-    // checking minimum one block and maximum 24hours value.
-
-    if (value >= 0 && value <= 86400) {
+    if (value >= 0 && value <= params?.maxOrderLifespan?.seconds.toNumber()) {
       setOrderLifeSpan(value);
     }
   };
@@ -516,6 +514,7 @@ const Swap = ({
     </div>
   );
 
+  console.log("the params", params);
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -780,7 +779,7 @@ const Swap = ({
         </Row>
       </div>
       <div className="order_table_section">
-        {isLimitOrder ? <Order lang={lang}/> : null}
+        {isLimitOrder ? <Order lang={lang} /> : null}
       </div>
     </div>
   );
