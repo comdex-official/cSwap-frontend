@@ -7,7 +7,13 @@ import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
-import { getAmount, orderPriceConversion } from "../../utils/coin";
+import { queryOrder } from "../../services/liquidity/query";
+import {
+  amountConversion,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
+} from "../../utils/coin";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -27,6 +33,7 @@ const CustomButton = ({
   refreshDetails,
   baseCoinPoolPrice,
   slippageTolerance,
+  orderLifespan,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -67,7 +74,9 @@ const CustomButton = ({
       typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
       value: {
         orderer: address,
-        orderLifespan: isLimitOrder ? { seconds: 600, nanos: 0 } : "0",
+        orderLifespan: isLimitOrder
+          ? { seconds: orderLifespan, nanos: 0 }
+          : "0",
         pairId: pair?.id,
         appId: Long.fromNumber(APP_ID),
         direction: orderDirection,
@@ -105,6 +114,41 @@ const CustomButton = ({
         if (error) {
           message.error(error);
           return;
+        }
+
+        if (!isLimitOrder) {
+          let parsedData = JSON.parse(result?.rawLog)?.[0];
+          let order = parsedData?.events?.find(
+            (item) => item?.type === "limit_order"
+          );
+          let orderId = order?.attributes?.find(
+            (item) => item?.key === "order_id"
+          )?.value;
+          let pairId = order?.attributes?.find(
+            (item) => item?.key === "pair_id"
+          )?.value;
+
+          if (orderId && pairId) {
+            queryOrder(orderId, pairId, (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              let data = result?.order;
+
+              message.success(
+                `Received ${amountConversion(
+                  data?.receivedCoin?.amount
+                )} ${denomConversion(
+                  data?.receivedCoin?.denom
+                )} for ${amountConversion(
+                  Number(data?.offerCoin?.amount) -
+                    Number(data?.remainingOfferCoin?.amount)
+                )} ${denomConversion(data?.offerCoin?.denom)}`
+              );
+            });
+          }
         }
 
         if (result?.code) {
@@ -180,6 +224,7 @@ CustomButton.propTypes = {
     denom: PropTypes.string,
     fee: PropTypes.number,
   }),
+  orderLifespan: PropTypes.number,
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),

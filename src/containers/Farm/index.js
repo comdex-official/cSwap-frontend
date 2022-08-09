@@ -17,6 +17,7 @@ const Farm = ({
   refreshBalance,
   balances,
   masterPoolMap,
+  userLiquidityInPools,
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
@@ -60,11 +61,9 @@ const Farm = ({
     });
   };
 
-  const userPools = pools.filter((pool) => {
-    return balances.find((balance) => {
-      return balance.denom === pool.poolCoinDenom;
-    });
-  });
+  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  );
 
   return (
     <div className="app-content-wrapper">
@@ -91,7 +90,7 @@ const Farm = ({
                       userPools.map((item, index) => (
                         <PoolCardFarm
                           parent={"user"}
-                          key={item.id}
+                          key={item?.id}
                           pool={item}
                           poolIndex={index}
                           lang={lang}
@@ -117,7 +116,7 @@ const Farm = ({
                         if (masterPoolMap?.[item?.id]?.poolId) {
                           return (
                             <PoolCardFarm
-                              key={item.id}
+                              key={item?.id}
                               pool={item}
                               poolIndex={index}
                               lang={lang}
@@ -140,7 +139,7 @@ const Farm = ({
                         if (!masterPoolMap?.[item?.id]?.poolId) {
                           return (
                             <PoolCardFarm
-                              key={item.id}
+                              key={item?.id}
                               pool={item}
                               poolIndex={index}
                               lang={lang}
@@ -182,6 +181,7 @@ Farm.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
+  userLiquidityInPools: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -191,6 +191,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     balances: state.account.balances.list,
     masterPoolMap: state.liquidity.masterPoolMap,
+    userLiquidityInPools: state.liquidity.userLiquidityInPools,
   };
 };
 

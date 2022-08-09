@@ -10,7 +10,8 @@ import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
-  setSpotPrice
+  setSpotPrice,
+  setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -27,7 +28,7 @@ import {
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
-import { marketPrice } from "../../../utils/number";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
@@ -62,6 +63,8 @@ const FarmDetails = ({
   markets,
   balances,
   poolPriceMap,
+  setUserLiquidityInPools,
+  userLiquidityInPools,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -131,7 +134,7 @@ const FarmDetails = ({
   }, [pool]);
 
   useEffect(() => {
-    if (pool?.id && userPoolTokens) {
+    if (pool?.id) {
       fetchProvidedCoins();
     }
   }, [pool, userPoolTokens, userLockedPoolTokens]);
@@ -206,10 +209,15 @@ const FarmDetails = ({
     DOLLAR_DECIMALS
   );
 
-  const TotalUserPoolLiquidity = amountConversionWithComma(
-    calculatePoolLiquidity(providedTokens),
-    DOLLAR_DECIMALS
-  );
+  useEffect(() => {
+    let totalUserPoolLiquidity = amountConversionWithComma(
+      calculatePoolLiquidity(providedTokens),
+      DOLLAR_DECIMALS
+    );
+    if (pool?.id) {
+      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity);
+    }
+  }, [providedTokens]);
 
   return (
     <Row>
@@ -343,7 +351,14 @@ const FarmDetails = ({
             </Col>
             <Col sm="4" className="mb-3">
               <label>My liquidity</label>
-              <p>{`$${TotalUserPoolLiquidity}`}</p>
+              <p>
+                $
+                {commaSeparator(
+                  Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                    DOLLAR_DECIMALS
+                  )
+                )}
+              </p>
             </Col>
             <Col sm="4" className="mb-3">
               <label>Available LP Amount</label>
@@ -371,6 +386,7 @@ FarmDetails.propTypes = {
   setPool: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
+  setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -436,6 +452,8 @@ const actionsToProps = {
   setFetchBalanceInProgress,
   setSpotPrice,
   setPair,
+  setUserLiquidityInPools,
 };
 
 export default connect(stateToProps, actionsToProps)(FarmDetails);
+

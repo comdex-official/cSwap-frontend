@@ -8,7 +8,7 @@ import FarmDetails from "./containers/Farm/Details";
 
 const routes = [
   {
-    path: "/swap",
+    path: "/trade",
     element: <Swap />,
   },
   {
