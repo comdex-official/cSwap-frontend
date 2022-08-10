@@ -198,10 +198,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(availableBalance.amount)) ||
                         0}{" "}
-                      {(chain.currency &&
-                        chain.currency.coinDenom &&
-                        denomConversion(chain.currency.coinDenom)) ||
-                        ""}
+                      {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
                     <span className="assets-maxhalf">
                       <Button
