@@ -35,9 +35,7 @@ const Withdraw = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(getAmount(value), chain?.ibc?.amount)
-    );
+    setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
   };
 
   const showModal = () => {
@@ -74,16 +72,16 @@ const Withdraw = ({
         typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
         value: {
           source_port: "transfer",
-          source_channel: chain.sourceChannelId,
+          source_channel: chain?.sourceChannelId,
           token: {
-            denom: chain.ibcDenomHash,
+            denom: chain?.ibcDenomHash,
             amount: getAmount(amount),
           },
           sender: address,
           receiver: destinationAddress,
           timeout_height: {
-            revisionNumber: Number(proofHeight.revision_number),
-            revisionHeight: Number(proofHeight.revision_height) + 100,
+            revisionNumber: Number(proofHeight?.revision_number),
+            revisionHeight: Number(proofHeight?.revision_height) + 100,
           },
           timeout_timestamp: undefined,
         },
@@ -99,7 +97,7 @@ const Withdraw = ({
         message.error(
           <Snack
             message={variables[lang].tx_failed}
-            explorerUrlToTx={comdex.explorerUrlToTx}
+            explorerUrlToTx={comdex?.explorerUrlToTx}
             hash={result?.transactionHash}
           />
         );
@@ -109,7 +107,7 @@ const Withdraw = ({
       message.success(
         <Snack
           message={variables[lang].tx_success}
-          explorerUrlToTx={comdex.explorerUrlToTx}
+          explorerUrlToTx={comdex?.explorerUrlToTx}
           hash={result?.transactionHash}
         />
       );
