@@ -1,24 +1,25 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { setPair, setPairs } from "../../actions/asset";
+import {
+  setBaseCoinPoolPrice,
+  setPool,
+  setPoolBalance,
+  setPoolPrice,
+  setPools
+} from "../../actions/liquidity";
 import {
   setDemandCoinAmount,
   setDemandCoinDenom,
-  setOfferCoinAmount,
-  setOfferCoinDenom,
-  setReverse,
-  setSlippage,
-  setParams,
-  setSlippageTolerance,
   setLimitOrderToggle,
   setLimitPrice,
+  setOfferCoinAmount,
+  setOfferCoinDenom,
+  setParams,
+  setReverse,
+  setSlippage,
+  setSlippageTolerance
 } from "../../actions/swap";
-import {
-  setPool,
-  setPoolBalance,
-  setPools,
-  setBaseCoinPoolPrice,
-} from "../../actions/liquidity";
-import { setPairs, setPair } from "../../actions/asset";
 import Swap from "./Swap";
 
 Swap.propTypes = {
@@ -28,9 +29,10 @@ Swap.propTypes = {
   setDemandCoinAmount: PropTypes.func.isRequired,
   setLimitOrderToggle: PropTypes.func.isRequired,
   setLimitPrice: PropTypes.func.isRequired,
-  setParams: PropTypes.func.isRequired,
+  setPoolPrice: PropTypes.func.isRequired,
   setSlippage: PropTypes.func.isRequired,
   setSlippageTolerance: PropTypes.func.isRequired,
+  setParams: PropTypes.func.isRequired,
   setPair: PropTypes.func.isRequired,
   setPairs: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
@@ -71,6 +73,7 @@ Swap.propTypes = {
     }),
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
+    lastPrice: PropTypes.string,
   }),
   pairs: PropTypes.shape({
     list: PropTypes.arrayOf(
@@ -88,6 +91,7 @@ Swap.propTypes = {
   }),
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
+    maxPriceLimitRatio: PropTypes.string,
   }),
   pool: PropTypes.shape({
     id: PropTypes.shape({
@@ -105,6 +109,7 @@ Swap.propTypes = {
       denom: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -141,6 +146,7 @@ const stateToProps = (state) => {
     isLimitOrder: state.swap.isLimitOrder,
     limitPrice: state.swap.limitPrice,
     baseCoinPoolPrice: state.liquidity.baseCoinPoolPrice,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
@@ -156,11 +162,12 @@ const actionsToProps = {
   setSlippage,
   setPairs,
   setPair,
-  setParams,
   setSlippageTolerance,
   setLimitOrderToggle,
   setLimitPrice,
   setBaseCoinPoolPrice,
+  setPoolPrice,
+  setParams,
 };
 
 export default connect(stateToProps, actionsToProps)(Swap);

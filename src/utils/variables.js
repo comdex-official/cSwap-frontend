@@ -17,7 +17,7 @@ const variables = {
     // Connect account
     connect: "Connect",
     connected: "Connected",
-    testnet: "Devnet-2",
+    testnet: "Testnet",
     mainnet: "Mainnet",
     connect_wallet: "Connect Wallet",
     keplr_wallet: "Keplr Wallet",
@@ -41,7 +41,6 @@ const variables = {
     cmdx_price: "CMDX Price",
     others: "OTHERS",
     staked: "Staked",
-    casset_market_cap: "cAsset Market Cap",
     trading_fee: "Trading Fee",
     txn_fee: "TXN Fee",
     gold: "ucgold",
@@ -49,7 +48,6 @@ const variables = {
     crude_oil: "Crude Oil",
     price: "Price",
     trade: "Trade",
-    total_value_of_all_cassets_in_lps: "Total Value of all CASSETS IN LPS",
     comdex_description:
       "Comdex's synthetics protocol unlocks access to a vast set of commodity debt assets and liquidity, making the flow of capital from DeFi to CeFi seamless.",
     day: "Day",
@@ -76,7 +74,6 @@ const variables = {
     farming: "Farming",
     total_value: "Total Value",
     current_ltv: "Current LTV",
-    cAsset_balance: "cAsset Balance",
     mint_balance: "Mint Balance",
     farm_balance: "Farm Balance",
     asset_balance: "Asset Balance",
@@ -119,8 +116,6 @@ const variables = {
     // Borrow Page
     edit: "Edit",
     close: "Close",
-    borrow_cAssets: "Borrow cAssets",
-    borrow_cAsset: "Borrow cAsset",
     choose_collateral: "Collateral Asset",
     collateral_asset:
       "Collateral asset may affect the minimum collateral ratio.",
@@ -141,7 +136,6 @@ const variables = {
     remove_liquidity: " Remove Liquidity",
     long: "Long",
     short: "Short",
-    provide_casset: "Provide cAsset",
     provide_ust: "Provide UST",
     provide: "Provide",
     total_amount: "Total amount",
@@ -156,7 +150,7 @@ const variables = {
     unbond_token: "Unbond Token",
     unbond: "Unbond",
     bond: "Bond",
-    start_earning : "Start Earning",
+    start_earning: "Start Earning",
     bond_lptokens: "Bond LP Tokens",
     unbonding_period: "Unbonding Period",
     amount_to_unbond: "Amount to Unbond",
@@ -221,10 +215,7 @@ const variables = {
       "Total value locked of collateral, liquidity and staked CMDX",
     tooltip_market_cap: "Market Cap = Current Price * Circulating Supply",
     tooltip_staked: "Total Value of Staked CMDX",
-    tooltip_liquidity: "Total liquidity in cAsset pools",
-    tooltip_collateral: "Total collateral locked for minted cAssets",
     // Mint
-    tooltip_total_casset: "Total value of all cAssets held",
     tooltip_total_mint: "Total collateral value minus borrowed value",
     tooltip_total_farm: "Total value of all assets in liquidity pools",
     tooltip_total_asset: "Total value of native and IBC tokens in wallet",
@@ -232,14 +223,8 @@ const variables = {
       "cSwap price calculated based on the pool price and spread",
     tooltip_tx_fee: "Fee paid to the protocol to execute this transaction",
     lq_ratio: "Liquidation Ratio",
-    debt: "Debt", 
-    casset: "cAsset",
+    debt: "Debt",
     cswap_price: "cSwap Price",
-    tooltip_burn_amount:
-      "The minted cAsset will be burned to keep the protocol solvent once you withdraw your collateral",
-    tooltip_withdraw_amount:
-      "Amount of collateral redeemed for the borrowed cAsset",
-
     //Assets
     total_asset_balance: "Total Asset Balance",
     comdex_assets: "Assets",

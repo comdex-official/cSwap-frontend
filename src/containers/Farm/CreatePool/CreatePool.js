@@ -1,44 +1,38 @@
+import { Button, Checkbox, message, Modal, Steps } from "antd";
+import Long from "long";
+import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import "./index.scss";
-import { Modal, Button } from "antd";
+import { connect } from "react-redux";
+import { setPoolTokenSupply } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
-import CustomSelect from "../../../components/CustomSelect";
+import Snack from "../../../components/common/Snack";
 import CustomInput from "../../../components/CustomInput";
+import CustomSelect from "../../../components/CustomSelect";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import {
+  APP_ID,
+  DEFAULT_FEE,
+  DOLLAR_DECIMALS
+} from "../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../services/helper";
+import { queryLiquidityPairs } from "../../../services/liquidity/query";
+import { defaultFee } from "../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import {
   iconNameFromDenom,
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../../utils/string";
-import { Steps, message } from "antd";
-import { Checkbox } from "antd";
-import * as PropTypes from "prop-types";
-import { setPoolTokenSupply } from "../../../actions/liquidity";
-import { connect } from "react-redux";
-import {
-  APP_ID,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS,
-} from "../../../constants/common";
-import {
-  queryLiquidityPairs,
-  queryLiquidityParams,
-} from "../../../services/liquidity/query";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { defaultFee } from "../../../services/transaction";
-import Snack from "../../../components/common/Snack";
 import variables from "../../../utils/variables";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { comdex } from "../../../config/network";
-import { marketPrice } from "../../../utils/number";
-import Long from "long";
+import "./index.scss";
 
 const CreatePoolModal = ({
   openPoolModal,
@@ -47,7 +41,7 @@ const CreatePoolModal = ({
   address,
   refreshData,
   refreshBalance,
-  markets,
+  params,
   lang,
 }) => {
   const [current, setCurrent] = useState(0);
@@ -55,24 +49,18 @@ const CreatePoolModal = ({
   const [quoteToken, setQuoteToken] = useState();
   const [baseAmount, setBaseAmount] = useState();
   const [quoteAmount, setQuoteAmount] = useState();
-  const [swapFeePercentage, setSwapFeePercentage] = useState();
   const [isAccepted, setAccepted] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [liquidityPairs, setLiquidityPairs] = useState();
-  const [liquidityParams, setLiquidityParams] = useState();
   const [baseAmountValidationError, setBaseAmountValidationError] = useState();
   const [quoteAmountValidationError, setQuoteAmountValidationError] =
     useState();
-  const [swapFeeValidationError, setSwapFeeValidationError] = useState();
 
   const BASE_PERCENTAGE = 50;
   const QUOTE_PERCENTAGE = 50;
 
   const baseAvailable = getDenomBalance(balances, baseToken);
   const quoteAvailable = getDenomBalance(balances, quoteToken);
-
-  const baseTokenPrice = marketPrice(markets, baseToken);
-  const quoteTokenPrice = marketPrice(markets, quoteToken);
 
   useEffect(() => {
     queryLiquidityPairs((error, result) => {
@@ -82,12 +70,6 @@ const CreatePoolModal = ({
       setLiquidityPairs(result?.pairs);
     });
 
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        return;
-      }
-      setLiquidityParams(result.params);
-    });
     resetValues();
   }, []);
 
@@ -97,7 +79,6 @@ const CreatePoolModal = ({
     setQuoteToken();
     setBaseAmount();
     setQuoteAmount();
-    setSwapFeePercentage();
     setAccepted(false);
   };
 
@@ -135,12 +116,6 @@ const CreatePoolModal = ({
     setQuoteAmountValidationError(
       ValidateInputNumber(Number(getAmount(value)))
     );
-  };
-
-  const handleSwapPercentageChange = (value) => {
-    value = toDecimals(value).toString().trim();
-    setSwapFeePercentage(value);
-    setSwapFeeValidationError(ValidateInputNumber(Number(value)));
   };
 
   const handleCreate = () => {
@@ -313,8 +288,6 @@ const CreatePoolModal = ({
           <div className="pool-asset-first-container mt-3">
             <div className="assets-select-card">
               <div className="assets-left">
-                {/* <label className="leftlabel">{isLimitOrder ? "Sell" : variables[lang].from}</label> */}
-                {/* <label className="leftlabel">Select Token</label> */}
                 <div className="assets-select-wrapper">
                   <Row>
                     <div className="cswap-head">
@@ -346,7 +319,6 @@ const CreatePoolModal = ({
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
-                    {/*// TODO: integrated max click*/}
                     <Button
                       className="active"
                       onClick={() => handleBaseInputMax()}
@@ -497,46 +469,14 @@ const CreatePoolModal = ({
               </div>
             </div>
           </div>
-          <div className="swap-fee-container pool-asset-second-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper ">
-                  <Row>
-                    <div className="cswap-head" />
-                    <Col>
-                      <div className="pool-denom">Swap Fee</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <div className="selected-amount swap-fee-input-container input-select validation-input-select">
-                    <CustomInput
-                      decimals={DOLLAR_DECIMALS}
-                      value={swapFeePercentage}
-                      validationError={swapFeeValidationError}
-                      className="assets-select-input with-select"
-                      onChange={(event) =>
-                        handleSwapPercentageChange(event.target.value)
-                      }
-                    />
-                    <span className="ml-1 swap-percentage">%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div className="checkbox-container mt-3 text-center ml-3">
             <Checkbox onChange={onCheckChange} checked={isAccepted}>
               <p>
                 I understand that creating a new pool will cost{" "}
                 {`${amountConversionWithComma(
-                  liquidityParams?.poolCreationFee?.[0]?.amount
+                  params?.poolCreationFee?.[0]?.amount
                 )} 
-              ${denomConversion(
-                liquidityParams?.poolCreationFee?.[0]?.denom
-              )}`}{" "}
+              ${denomConversion(params?.poolCreationFee?.[0]?.denom)}`}{" "}
               </p>{" "}
             </Checkbox>
           </div>
@@ -569,16 +509,13 @@ const CreatePoolModal = ({
                 <p className="pool-paira">Transferred to community pool</p>
               </div>
               <div className="poolcreationfee-right">
-                {/*// TODO: take fee from pool params*/}
                 <span>
                   {amountConversionWithComma(
-                    liquidityParams?.poolCreationFee?.[0]?.amount || 0
+                    params?.poolCreationFee?.[0]?.amount || 0
                   )}
                 </span>
                 <span className="ml-1">
-                  {denomConversion(
-                    liquidityParams?.poolCreationFee?.[0]?.denom
-                  )}
+                  {denomConversion(params?.poolCreationFee?.[0]?.denom)}
                 </span>
               </div>
             </div>
@@ -607,12 +544,7 @@ const CreatePoolModal = ({
           {current === steps.length - 1 && (
             <Button
               loading={inProgress}
-              disabled={
-                !swapFeePercentage ||
-                swapFeePercentage > 100 ||
-                !isAccepted ||
-                swapFeeValidationError?.message
-              }
+              disabled={!isAccepted}
               type="primary"
               onClick={() => handleCreate()}
             >
@@ -647,6 +579,14 @@ CreatePoolModal.propTypes = {
       script_id: PropTypes.string,
     })
   ),
+  params: PropTypes.shape({
+    poolCreationFee: PropTypes.arrayOf(
+      PropTypes.shape({
+        amount: PropTypes.string,
+        denom: PropTypes.string,
+      })
+    ),
+  }),
 };
 
 const stateToProps = (state) => {
@@ -655,6 +595,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    params: state.swap.params,
   };
 };
 

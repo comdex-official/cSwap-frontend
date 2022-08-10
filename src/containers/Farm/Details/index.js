@@ -1,40 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row, SvgIcon } from "../../../components/common";
 import { Button, message, Tabs } from "antd";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
-import Farm from "./Farm";
-import Unfarm from "./Unfarm";
-import "./index.scss";
-import TooltipIcon from "../../../components/TooltipIcon";
-import MediaQuery from "react-responsive";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
+import MediaQuery from "react-responsive";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { setPair } from "../../../actions/asset";
 import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
   setSpotPrice,
+  setUserLiquidityInPools
 } from "../../../actions/liquidity";
-import { connect, useDispatch } from "react-redux";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import TooltipIcon from "../../../components/TooltipIcon";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
-import { useParams } from "react-router";
 import {
   queryLiquidityPair,
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../../../services/liquidity/query";
-import { setPair } from "../../../actions/asset";
-import { iconNameFromDenom } from "../../../utils/string";
 import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { Link } from "react-router-dom";
+import { iconNameFromDenom } from "../../../utils/string";
+import ShowAPR from "../ShowAPR";
+import Deposit from "./Deposit";
+import Farm from "./Farm";
+import "./index.scss";
 import PoolTokenValue from "./PoolTokenValue";
+import Unfarm from "./Unfarm";
+import Withdraw from "./Withdraw";
 
 const { TabPane } = Tabs;
 
@@ -59,8 +62,10 @@ const FarmDetails = ({
   pair,
   setPair,
   markets,
-  aprMap,
   balances,
+  poolPriceMap,
+  setUserLiquidityInPools,
+  userLiquidityInPools,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -70,11 +75,11 @@ const FarmDetails = ({
   const { id } = useParams();
 
   const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-
   const queuedAmounts =
-    queuedSoftLocks &&
-    queuedSoftLocks.length > 0 &&
-    queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+    queuedSoftLocks && queuedSoftLocks.length > 0
+      ? queuedSoftLocks?.map((item) => item?.poolCoin?.amount)
+      : 0;
+
   const userLockedPoolTokens =
     Number(
       queuedAmounts?.length > 0 &&
@@ -109,13 +114,13 @@ const FarmDetails = ({
   const fetchPool = () => {
     queryPool(id, (error, result) => {
       if (error) {
-        message.error(error);
         return;
       }
 
       setPool(result?.pool);
     });
   };
+
   useEffect(() => {
     if (pool?.pairId) {
       queryLiquidityPair(pool?.pairId, (error, result) => {
@@ -130,7 +135,7 @@ const FarmDetails = ({
   }, [pool]);
 
   useEffect(() => {
-    if (pool?.id && userPoolTokens) {
+    if (pool?.id) {
       fetchProvidedCoins();
     }
   }, [pool, userPoolTokens, userLockedPoolTokens]);
@@ -192,7 +197,9 @@ const FarmDetails = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) =>
+          Number(item?.amount) *
+          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -203,16 +210,21 @@ const FarmDetails = ({
     DOLLAR_DECIMALS
   );
 
-  const TotalUserPoolLiquidity = amountConversionWithComma(
-    calculatePoolLiquidity(providedTokens),
-    DOLLAR_DECIMALS
-  );
+  useEffect(() => {
+    let totalUserPoolLiquidity = Number(
+      amountConversion(calculatePoolLiquidity(providedTokens))
+    );
+
+    if (pool?.id) {
+      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity);
+    }
+  }, [providedTokens]);
 
   return (
     <Row>
       <Col md="6">
         <Tabs
-          className="comdex-tabs farm-modal-tab"
+          className="comdex-tabs farm-modal-tab farm-details-tab"
           tabBarExtraContent={operations}
         >
           <TabPane tab="Deposit" key="1">
@@ -231,12 +243,14 @@ const FarmDetails = ({
             <Farm
               refreshData={queryPoolBalance}
               updateBalance={handleBalanceRefresh}
+              userPoolTokens={userPoolTokens}
             />
           </TabPane>
           <TabPane tab="Unfarm" key="4">
             <Unfarm
               refreshData={queryPoolBalance}
               updateBalance={handleBalanceRefresh}
+              userLockedPoolTokens={userLockedPoolTokens}
             />
           </TabPane>
         </Tabs>
@@ -309,11 +323,7 @@ const FarmDetails = ({
                 <TooltipIcon text="Annual percentage rate of CMDX rewards for the corresponding  pool. Note:- APRs are subject to change with pool size." />
               </label>
               <p>
-                {aprMap[pool?.id?.low]
-                  ? `${commaSeparator(
-                      Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-                    )}%`
-                  : "-"}
+                <ShowAPR pool={pool} />
               </p>
             </Col>
           </Row>
@@ -342,7 +352,14 @@ const FarmDetails = ({
             </Col>
             <Col sm="4" className="mb-3">
               <label>My liquidity</label>
-              <p>{`$${TotalUserPoolLiquidity}`}</p>
+              <p>
+                $
+                {commaSeparator(
+                  Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                    DOLLAR_DECIMALS
+                  )
+                )}
+              </p>
             </Col>
             <Col sm="4" className="mb-3">
               <label>Available LP Amount</label>
@@ -370,14 +387,15 @@ FarmDetails.propTypes = {
   setPool: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
+  setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
     })
   ),
+  inProgress: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -398,6 +416,7 @@ FarmDetails.propTypes = {
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
   }),
+  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -410,7 +429,6 @@ FarmDetails.propTypes = {
       reserveCoinDenoms: PropTypes.array,
     })
   ),
-  inProgress: PropTypes.bool,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -425,7 +443,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
-    aprMap: state.liquidity.aprMap,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
@@ -435,6 +453,7 @@ const actionsToProps = {
   setFetchBalanceInProgress,
   setSpotPrice,
   setPair,
+  setUserLiquidityInPools,
 };
 
 export default connect(stateToProps, actionsToProps)(FarmDetails);

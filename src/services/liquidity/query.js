@@ -1,7 +1,7 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/liquidity/v1beta1/query";
-import { createQueryClient } from "../helper";
 import Long from "long";
 import { APP_ID } from "../../constants/common";
+import { createQueryClient } from "../helper";
 
 export const queryLiquidityPairs = (callback) => {
   createQueryClient((error, client) => {
@@ -38,6 +38,28 @@ export const queryUserOrders = (pairId, address, callback) => {
         pairId,
         appId: Long.fromNumber(APP_ID),
         orderer: address.toString(),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryOrder = (orderId, pairId, callback) => {
+  createQueryClient((error, client) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    const queryService = new QueryClientImpl(client);
+
+    queryService
+      .Order({
+        pairId: Long.fromNumber(pairId),
+        id: Long.fromNumber(orderId),
+        appId: Long.fromNumber(APP_ID),
       })
       .then((result) => {
         callback(null, result);
@@ -117,7 +139,7 @@ export const queryLiquidityParams = (callback) => {
   });
 };
 
-export const queryPoolSoftLocks = (depositor, poolId, callback) => {
+export const queryPoolSoftLocks = (farmer, poolId, callback) => {
   createQueryClient((error, client) => {
     if (error) {
       callback(error);
@@ -127,10 +149,10 @@ export const queryPoolSoftLocks = (depositor, poolId, callback) => {
     const queryService = new QueryClientImpl(client);
 
     queryService
-      .SoftLock({
+      .Farmer({
         appId: Long.fromNumber(APP_ID),
         poolId,
-        depositor,
+        farmer,
       })
       .then((result) => {
         callback(null, result);

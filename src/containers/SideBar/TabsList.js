@@ -3,7 +3,7 @@ export const tabsList = [
     name: "c Swap",
     value: "swap",
     langKey: "c_swap",
-    route: "swap",
+    route: "trade",
     index: 0,
   },
   {

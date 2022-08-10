@@ -39,6 +39,7 @@ const Balances = ({
   markets,
   setUserLiquidityInPools,
   userLiquidityInPools,
+    poolPriceMap,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
 
@@ -49,7 +50,7 @@ const Balances = ({
     if (tab) {
       setActiveKey(tab);
     }
-  }, []);
+  }, [tab]);
 
   useEffect(() => {
     setUserLiquidityInPools();
@@ -59,7 +60,7 @@ const Balances = ({
       true,
       false
     );
-  }, [markets, balances]);
+  }, [markets, balances, poolPriceMap]);
 
   const fetchPools = (offset, limit, countTotal, reverse) => {
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
@@ -128,9 +129,9 @@ const Balances = ({
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
+             (poolPriceMap[providedTokens?.[0]?.denom] || marketPrice(markets, providedTokens?.[0]?.denom) )+
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
+              (poolPriceMap[providedTokens?.[1]?.denom] || marketPrice(markets, providedTokens?.[1]?.denom));
 
           if (totalLiquidityInDollar) {
             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);

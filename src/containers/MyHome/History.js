@@ -1,15 +1,15 @@
-import * as PropTypes from "prop-types";
-import { Col, Row } from "../../components/common";
-import { Table, message } from "antd";
-import { comdex } from "../../config/network";
-import { connect } from "react-redux";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
+import { message, Table } from "antd";
+import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setTransactionHistory } from "../../actions/account";
+import { Col, Row } from "../../components/common";
+import Copy from "../../components/Copy";
+import { comdex } from "../../config/network";
 import { fetchTxHistory, messageTypeToText } from "../../services/transaction";
 import { generateHash, truncateString } from "../../utils/string";
 import Date from "./Date";
-import { setTransactionHistory } from "../../actions/account";
-import React, { useEffect, useState } from "react";
-import Copy from "../../components/Copy";
 
 const columns = [
   {
@@ -39,13 +39,13 @@ const columns = [
   },
 ];
 
-const History = (props) => {
+const History = ({ address, setTransactionHistory, history }) => {
   const [inProgress, setInProgress] = useState(false);
   const [pageNumber, setpageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
-    getTransactions(props.address, pageNumber, pageSize);
+    getTransactions(address, pageNumber, pageSize);
   }, []);
 
   const getTransactions = (address, pageNumber, pageSize) => {
@@ -57,15 +57,15 @@ const History = (props) => {
         return;
       }
 
-      props.setTransactionHistory(result.txs, result.totalCount);
+      setTransactionHistory(result.txs, result.totalCount);
     });
   };
 
   const tableData =
-    props.history &&
-    props.history.list &&
-    props.history.list.length > 0 &&
-    props.history.list.map((item, index) => {
+    history &&
+    history.list &&
+    history.list.length > 0 &&
+    history.list.map((item, index) => {
       const decodedTransaction = decodeTxRaw(item.tx);
       const hash = generateHash(item.tx);
 
@@ -83,6 +83,7 @@ const History = (props) => {
                   )}`}
                   rel="noreferrer"
                   target="_blank"
+                  aria-label="explorer"
                 >
                   {" "}
                   {hash && truncateString(hash, 10, 10)}
@@ -95,6 +96,7 @@ const History = (props) => {
         msgType: messageTypeToText(
           decodedTransaction.body.messages?.[0].typeUrl
         ),
+        date: item?.height,
         height: item.height,
       };
     });
@@ -102,7 +104,7 @@ const History = (props) => {
   const handleChange = (value) => {
     setpageNumber(value.current);
     setPageSize(value.pageSize);
-    getTransactions(props.address, value.current, value.pageSize);
+    getTransactions(address, value.current, value.pageSize);
   };
 
   return (
@@ -115,12 +117,12 @@ const History = (props) => {
               dataSource={tableData}
               loading={inProgress}
               pagination={{
-                total: props.history && props.history.count,
+                total: history && history.count,
                 showSizeChanger: true,
                 defaultPageSize: 5,
                 pageSizeOptions: ["5", "10", "20", "50"],
               }}
-              total={props.history && props.history.count}
+              total={history && history.count}
               onChange={(event) => handleChange(event)}
             />
           </div>

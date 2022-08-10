@@ -1,41 +1,32 @@
 import { combineReducers } from "redux";
-import {AMOUNT_SET, DIRECTION_SET, ORDER_LIST_SET, TYPE_SET} from "../constants/order";
+import { AMOUNT_SET, ORDER_LIST_SET, TYPE_SET } from "../constants/order";
 
 const type = (state = "limit", action) => {
-    if(action.type === TYPE_SET){
-        return action.value
-    }
+  if (action.type === TYPE_SET) {
+    return action.value;
+  }
 
-    return state;
-}
+  return state;
+};
 
-const direction = (state = "buy", action) => {
-    if(action.type === DIRECTION_SET){
-        return action.value
-    }
+const amount = (state = 0, action) => {
+  if (action.type === AMOUNT_SET) {
+    return action.value;
+  }
 
-    return state;
-}
+  return state;
+};
 
-const amount = (state=0, action) => {
-    if(action.type === AMOUNT_SET){
-        return action.value
-    }
+const list = (state = [], action) => {
+  if (action.type === ORDER_LIST_SET) {
+    return action.list;
+  }
 
-    return state;
-}
-
-const list = (state=[], action) => {
-    if(action.type === ORDER_LIST_SET){
-        return action.list
-    }
-
-    return state;
-}
+  return state;
+};
 
 export default combineReducers({
-    type,
-    direction,
-    amount,
-    list,
+  type,
+  amount,
+  list,
 });

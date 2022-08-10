@@ -1,0 +1,39 @@
+{
+  "tokens": [
+    {
+      "chainId": "theta-testnet-001",
+      "chainName": "Cosmos Hub Test",
+      "rpc": "https://devnet.cswap.one/vega",
+      "rest": "https://devnet.cswap.one/vega-rest",
+      "coinDenom": "ATOM",
+      "coinMinimalDenom": "uatom",
+      "coinDecimals": 6,
+      "coinType": 118,
+      "addressPrefix": "cosmos",
+      "channel": "channel-547",
+      "comdexChannel": "channel-2",
+      "ibcDenomHash": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+      "logoURI": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/atom.svg",
+      "coinGeckoId": "cosmos",
+      "explorerUrlToTx": "https://explorer.theta-testnet.polypore.xyz/transactions/{txHash}"
+    },
+    {
+      "chainId": "osmo-test-4",
+      "chainName": "Osmosis-Test",
+      "rpc": "https://osmot.rpc.comdex.one",
+      "rest": "https://osmot.rest.comdex.one",
+      "coinDenom": "OSMO",
+      "coinMinimalDenom": "uosmo",
+      "coinDecimals": 6,
+      "coinType": 118,
+      "addressPrefix": "osmo",
+      "channel": "channel-429",
+      "comdexChannel": "channel-1",
+      "ibcDenomHash": "ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+      "logoURI": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/osmo.svg",
+      "coinGeckoId": "osmosis",
+      "explorerUrlToTx": "https://bigdipper.testnet.osmo.mp20.net/transactions/{txHash}"
+    }
+  ]
+}
+

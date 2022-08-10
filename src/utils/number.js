@@ -2,7 +2,6 @@ import { Decimal } from "@cosmjs/math";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import { denomToSymbol } from "./string";
 import { amountConversion } from "./coin";
-import { harbor } from "../config/network";
 
 export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {
@@ -30,18 +29,13 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
-  if (denom === harbor.coinMinimalDenom) {
-    // TODO: take this price dynamically
-    return 0.12;
-  }
-
   const value = array.filter((item) => item.symbol === denomToSymbol(denom));
 
   if (value && value[0]) {
     return value[0] && value[0].rates / 1000000;
   }
 
-  return 1; // returning 1 as we are using ust.
+  return 0;
 };
 
 export const calculateDollarValue = (
@@ -61,4 +55,26 @@ export const calculateDollarValue = (
 
 export const getAccountNumber = (value) => {
   return value === "" ? "0" : value;
+};
+
+export const getPoolPrice = (
+  oraclePrice,
+  oracleAssetDenom,
+  firstAsset,
+  secondAsset
+) => {
+  let x = firstAsset?.amount,
+    y = secondAsset?.amount,
+    xPoolPrice,
+    yPoolPrice;
+
+  if (oracleAssetDenom === firstAsset?.denom) {
+    yPoolPrice = (x / y) * oraclePrice;
+    xPoolPrice = (y / x) * yPoolPrice;
+  } else {
+    xPoolPrice = (y / x) * oraclePrice;
+    yPoolPrice = (x / y) * xPoolPrice;
+  }
+
+  return { xPoolPrice, yPoolPrice };
 };

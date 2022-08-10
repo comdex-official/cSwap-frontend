@@ -1,8 +1,8 @@
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
-
 import { DEFAULT_FEE } from "../constants/common";
+
 
 export const getTypeURL = (key) => {
   switch (key) {
@@ -16,6 +16,8 @@ export const getTypeURL = (key) => {
       return "/comdex.vault.v1beta1.MsgDrawRequest";
     case "repay":
       return "/comdex.vault.v1beta1.MsgRepayRequest";
+    default:
+      return "";
   }
 };
 
@@ -45,9 +47,9 @@ export const messageTypeToText = (type) => {
       return "IBC-Transfer";
     case "/comdex.auction.v1beta1.MsgPlaceBidRequest":
       return "PlaceBid";
-    case "/comdex.liquidity.v1beta1.MsgTokensSoftUnlock":
+    case "/comdex.liquidity.v1beta1.MsgUnfarm":
       return "Unfarm";
-    case "/comdex.liquidity.v1beta1.MsgTokensSoftLock":
+    case "/comdex.liquidity.v1beta1.MsgFarm":
       return "Farm";
     case "/comdex.liquidity.v1beta1.MsgLimitOrder":
       return "LimitOrder";

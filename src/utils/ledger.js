@@ -2,8 +2,6 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import {LedgerSigner} from "@cosmjs/ledger-amino";
 import { comdex } from "../config/network";
 import { makeHdPath } from "./string";
-import {message} from 'antd';
-import { setAccountAddress } from "../actions/account";
 
 const interactiveTimeout = 120_000;
 

@@ -167,6 +167,22 @@
 }
 
 .farm-modal-tab {
+  height: 100%;
+  .ant-tabs-nav{
+    margin-bottom: 16px !important;
+  }
+  .ant-tabs-content-holder{
+    height: 100%;
+    .ant-tabs-content{
+      height: 100%;
+      .ant-tabs-tabpane{
+        height: 100%;
+        .common-card{
+          height: 100%;
+        }
+      }
+    }
+  }
   .farm-content-card {
     box-shadow: none;
     padding: 25px 0 15px 0;
@@ -228,7 +244,9 @@
       }
     }
     .name {
-      color: $white;
+      .dark-mode & {
+        color: $white;
+      }
       font-size: 17px;
     }
   }
@@ -272,18 +290,19 @@
     text-align: center;
     font-size: 19px;
     border: none;
-    background: #081938 !important;
+    background: $assets-bg-light;
     margin-left: 10px;
+
+    .dark-mode & {
+      background: #081938;
+      border-color: #18305a;
+      color: $white;
+    }
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       display: none;
       margin: 0;
-    }
-    .dark-mode & {
-      background: transparent;
-      border-color: #18305a;
-      color: $white;
     }
   }
 }
@@ -395,7 +414,7 @@
       display: flex;
       justify-content: space-between;
       .cardbottom-row {
-        padding: 4px 0;
+        padding: 4px 15px 0 0;
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;
@@ -622,6 +641,20 @@
             color: $white;
           }
         }
+      }
+    }
+  }
+}
+
+.ant-skeleton{
+  &.apr-skeleton{
+    height: 16px;
+    margin-top: 1.8px;
+    .ant-skeleton-button{
+      height: 16px;
+      line-height: 16px;
+      &::after{
+        background: linear-gradient(90deg, rgba(188, 17, 17, 0.2) 25%, rgba(50, 65, 230, 0.24) 37%, rgba(188, 17, 17, 0.2) 63%);
       }
     }
   }

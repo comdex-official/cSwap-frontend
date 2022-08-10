@@ -1,7 +1,7 @@
+import { Input } from "antd";
+import * as PropTypes from "prop-types";
 import React from "react";
 import { comdex } from "../../config/network";
-import * as PropTypes from "prop-types";
-import { Input } from "antd";
 
 const CustomInput = ({
   type = "number",
@@ -12,7 +12,7 @@ const CustomInput = ({
   onChange,
   onFocus,
   validationError,
-    decimals,
+  decimals,
 }) => {
   const isError = validationError?.message?.length > 0;
 
@@ -23,15 +23,18 @@ const CustomInput = ({
         value={value || ""}
         className={className}
         disabled={disabled}
-        placeholder={placeholder || Number().toFixed(decimals || comdex.coinDecimals)}
+        placeholder={
+          placeholder || Number().toFixed(decimals || comdex.coinDecimals)
+        }
         onChange={onChange}
         onFocus={onFocus}
+        aria-label="Input"
       />
-      {isError ?
+      {isError ? (
         <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
           {validationError?.message}
         </div>
-        : null}
+      ) : null}
     </>
   );
 };

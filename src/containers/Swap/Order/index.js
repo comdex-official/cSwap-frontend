@@ -1,25 +1,34 @@
-import React, { useEffect, useState } from "react";
-import "./index.css";
-import { Tabs } from "antd";
-import { Table, message } from "antd";
-import { useSelector } from "react-redux";
-import { queryUserOrders } from "../../../services/liquidity/query";
+import { Button, message, Table, Tabs } from "antd";
 import Long from "long";
-import { orderStatusText } from "../../../utils/string";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { setOrders } from "../../../actions/order";
+import Snack from "../../../components/common/Snack/index";
+import { APP_ID } from "../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../services/helper";
+import { queryUserOrders } from "../../../services/liquidity/query";
+import { defaultFee } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  orderPriceReverseConversion,
+  orderPriceReverseConversion
 } from "../../../utils/coin";
-import { setOrders } from "../../../actions/order";
-import moment from "moment";
+import { orderStatusText } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import "./index.css";
 
-const Order = () => {
+const Order = ({ lang }) => {
   const address = useSelector((state) => state.account.address);
   const [myOrders, setMyOrders] = useState([]);
+  const [inProgress, setInProgress] = useState(false);
+  const [order, setOrder] = useState();
 
   useEffect(() => {
-    setInterval(() => fetchOrders(address), 10000);
+    fetchOrders(address);
+    let intervalId = setInterval(() => fetchOrders(address), 10000);
+
+    return () => clearInterval(intervalId);
   }, [address]);
 
   const fetchOrders = async (address) => {
@@ -29,12 +38,55 @@ const Order = () => {
           message.error(error);
           return;
         }
+        
         setOrders(result?.orders);
         setMyOrders(result?.orders);
       });
     }
   };
 
+  const handleCancle = (order) => {
+    setOrder(order);
+    setInProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgCancelOrder",
+          value: {
+            orderer: address.toString(),
+            appId: Long.fromNumber(APP_ID),
+            pairId: order?.pairId,
+            orderId: order?.id,
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setInProgress(false);
+
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.code) {
+          message.info(result?.rawLog);
+          return;
+        }
+
+        fetchOrders();
+        setOrder();
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
   const { TabPane } = Tabs;
   function callback(key) {
     console.log(key);
@@ -77,6 +129,23 @@ const Order = () => {
       title: "Status",
       dataIndex: "status",
     },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      align: "right",
+      render: (item) => (
+        <Button
+          type="primary"
+          loading={order?.id === item?.id && inProgress}
+          onClick={() => handleCancle(item)}
+          className="btn-filled"
+          size="small"
+        >
+          Cancle
+        </Button>
+      ),
+    },
   ];
 
   const openOrdersData =
@@ -107,6 +176,7 @@ const Order = () => {
             )} ${denomConversion(item?.remainingOfferCoin?.denom)}`
           : "",
         status: item?.status ? orderStatusText(item.status) : "",
+        action: item,
       };
     });
 

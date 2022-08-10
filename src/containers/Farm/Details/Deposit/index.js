@@ -1,47 +1,44 @@
-import React, { useEffect, useState } from "react";
-import variables from "../../../../utils/variables";
-import { SvgIcon } from "../../../../components/common";
 import { Button, message } from "antd";
-import CustomInput from "../../../../components/CustomInput";
-import Info from "../../Info";
+import Long from "long";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import {
+  setBaseCoinPoolPrice,
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom,
-  setSpotPrice,
+  setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setComplete, setReverse } from "../../../../actions/swap";
-import { connect } from "react-redux";
+import { Row, SvgIcon } from "../../../../components/common";
+import Snack from "../../../../components/common/Snack";
+import CustomInput from "../../../../components/CustomInput";
 import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
+import {
+  APP_ID,
+  DEFAULT_FEE,
+  DOLLAR_DECIMALS
+} from "../../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
-import { signAndBroadcastTransaction } from "../../../../services/helper";
-import Long from "long";
-import {
-  APP_ID,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS,
-} from "../../../../constants/common";
-import { defaultFee } from "../../../../services/transaction";
-import Snack from "../../../../components/common/Snack";
 import { marketPrice } from "../../../../utils/number";
-import { Row } from "../../../../components/common";
+import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import variables from "../../../../utils/variables";
+import Info from "../../Info";
 
 const Deposit = ({
   lang,
   address,
   pool,
-  setSpotPrice,
-  spotPrice,
   balances,
   reverse,
   setReverse,
@@ -50,6 +47,9 @@ const Deposit = ({
   pair,
   refreshData,
   updateBalance,
+  poolPriceMap,
+  baseCoinPoolPrice,
+  setBaseCoinPoolPrice,
 }) => {
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
@@ -63,22 +63,20 @@ const Deposit = ({
   }, []);
 
   useEffect(() => {
-    const poolBalance = pool?.balances;
-    if (poolBalance?.length > 0) {
-      const exactInAsset =
-        poolBalance && poolBalance[0] && poolBalance[0].denom;
+    if (pool?.balances?.length > 0 && pair?.id) {
+      const baseCoinBalanceInPool = pool?.balances?.find(
+        (item) => item.denom === pair?.baseCoinDenom
+      )?.amount;
+      const quoteCoinBalanceInPool = pool?.balances?.find(
+        (item) => item.denom === pair?.quoteCoinDenom
+      )?.amount;
+      const baseCoinPoolPrice = quoteCoinBalanceInPool / baseCoinBalanceInPool;
 
-      const spotPrice =
-        (poolBalance && poolBalance[0] && poolBalance[0].amount) /
-        (poolBalance && poolBalance[1] && poolBalance[1].amount);
-
-      setSpotPrice(
-        exactInAsset === comdex.coinMinimalDenom
-          ? spotPrice.toFixed(6)
-          : (1 / spotPrice).toFixed(6)
+      setBaseCoinPoolPrice(
+        Number(baseCoinPoolPrice).toFixed(comdex.coinDecimals)
       );
     }
-  }, [pool]);
+  }, [pool, pair]);
 
   useEffect(() => {
     if (firstInput) {
@@ -94,14 +92,14 @@ const Deposit = ({
 
       isFinite(Number(numberOfTokens)) && setSecondInput(numberOfTokens);
     }
-  }, [spotPrice]);
+  }, [baseCoinPoolPrice]);
 
   const getOutputPrice = () => {
-    return reverse ? spotPrice : 1 / spotPrice; // calculating price from pool
+    return reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
   };
 
   const getInputPrice = () => {
-    return reverse ? 1 / spotPrice : spotPrice;
+    return reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
   };
 
   const resetValues = () => {
@@ -229,7 +227,7 @@ const Deposit = ({
   const showOfferCoinSpotPrice = () => {
     const denomIn = denomConversion(pair?.baseCoinDenom);
     const denomOut = denomConversion(pair?.quoteCoinDenom);
-    const price = reverse ? spotPrice : 1 / spotPrice;
+    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
 
     return `1 ${denomIn || ""} = ${Number(
       price && isFinite(price) ? price : 0
@@ -239,7 +237,7 @@ const Deposit = ({
   const showDemandCoinSpotPrice = () => {
     const denomIn = denomConversion(pair?.baseCoinDenom);
     const denomOut = denomConversion(pair?.quoteCoinDenom);
-    const price = reverse ? 1 / spotPrice : spotPrice;
+    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
 
     return `1 ${denomOut || ""} = ${Number(
       price && isFinite(price) ? price : 0
@@ -275,8 +273,10 @@ const Deposit = ({
   };
 
   const showFirstCoinValue = () => {
-    const price = reverse ? spotPrice : 1 / spotPrice;
-    const oralcePrice = marketPrice(markets, pair?.baseCoinDenom);
+    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
+    const oralcePrice =
+      poolPriceMap[pair?.quoteCoinDenom] ||
+      marketPrice(markets, pair?.quoteCoinDenom);
     const total = price * oralcePrice * firstInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -285,8 +285,10 @@ const Deposit = ({
   };
 
   const showSecondCoinValue = () => {
-    const price = reverse ? 1 / spotPrice : spotPrice;
-    const oralcePrice = marketPrice(markets, pair?.quoteCoinDenom);
+    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    const oralcePrice =
+      poolPriceMap[pair?.baseCoinDenom] ||
+      marketPrice(markets, pair?.baseCoinDenom);
     const total = price * oralcePrice * secondInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -448,9 +450,10 @@ Deposit.propTypes = {
   setPool: PropTypes.func.isRequired,
   setReverse: PropTypes.func.isRequired,
   setSecondReserveCoinDenom: PropTypes.func.isRequired,
-  setSpotPrice: PropTypes.func.isRequired,
+  setBaseCoinPoolPrice: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -493,6 +496,7 @@ Deposit.propTypes = {
       denom: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -517,12 +521,13 @@ const stateToProps = (state) => {
     address: state.account.address,
     reverse: state.swap.reverse,
     markets: state.oracle.market.list,
-    spotPrice: state.liquidity.spotPrice,
+    baseCoinPoolPrice: state.liquidity.baseCoinPoolPrice,
     balances: state.account.balances.list,
     firstReserveCoinDenom: state.liquidity.firstReserveCoinDenom,
     secondReserveCoinDenom: state.liquidity.secondReserveCoinDenom,
     pair: state.asset.pair,
     poolBalance: state.liquidity.poolBalance,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
@@ -532,7 +537,7 @@ const actionsToProps = {
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
   setComplete,
-  setSpotPrice,
+  setBaseCoinPoolPrice,
   setReverse,
 };
 

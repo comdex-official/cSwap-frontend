@@ -1,21 +1,18 @@
+import { combineReducers } from "redux";
 import {
   ACCOUNT_ADDRESS_SET,
   ACCOUNT_BALANCES_SET,
   ACCOUNT_CONNECT_MODAL_SHOW,
+  ACCOUNT_NAME_SET,
+  ACCOUNT_POOL_BALANCE_SET,
   ACCOUNT_VAULTS_SET,
+  ASSET_BALANCE_SET,
+  BALANCE_REFRESH_SET,
   FORM_MODAL_SHOW,
   TOTAL_VALUE_SET,
   TRANSACTION_HISTORY_SET,
-  VAULT_SET,
-  ASSET_BALANCE_SET,
-  cASSET_BALANCE_SET,
-  ACCOUNT_POOL_BALANCE_SET,
-  DEBT_BALANCE_SET,
-  COLLATERAL_BALANCE_SET,
-  BALANCE_REFRESH_SET,
-  ACCOUNT_NAME_SET,
+  VAULT_SET
 } from "../../constants/account";
-import { combineReducers } from "redux";
 
 const address = (state = "", action) => {
   if (action.type === ACCOUNT_ADDRESS_SET) {
@@ -116,10 +113,7 @@ const balances = (
     list: [],
     pagination: {},
     asset: 0,
-    cAsset: 0,
     pool: 0,
-    debt: 0,
-    collateral: 0,
   },
   action
 ) => {
@@ -135,25 +129,10 @@ const balances = (
         ...state,
         asset: action.value,
       };
-    case cASSET_BALANCE_SET:
-      return {
-        ...state,
-        cAsset: action.value,
-      };
     case ACCOUNT_POOL_BALANCE_SET:
       return {
         ...state,
         pool: action.value,
-      };
-    case DEBT_BALANCE_SET:
-      return {
-        ...state,
-        debt: action.value,
-      };
-    case COLLATERAL_BALANCE_SET:
-      return {
-        ...state,
-        collateral: action.value,
       };
     default:
       return state;

@@ -108,41 +108,61 @@ export const customAminoTypes = {
       };
     },
   },
-  "/comdex.liquidity.v1beta1.MsgTokensSoftLock": {
-    aminoType: "comdex/liquidity/MsgTokensSoftLock",
-    toAmino: ({ depositor, poolId, softLockCoin, appId }) => {
+  "/comdex.liquidity.v1beta1.MsgFarm": {
+    aminoType: "comdex/liquidity/MsgFarm",
+    toAmino: ({ farmer, poolId, farmingPoolCoin, appId }) => {
       return {
-        depositor,
+        farmer,
         pool_id: String(poolId),
         app_id: String(appId),
-        soft_lock_coin: softLockCoin,
+        farming_pool_coin: farmingPoolCoin,
       };
     },
-    fromAmino: ({ depositor, pool_id, soft_lock_coin, app_id }) => {
+    fromAmino: ({ farmer, pool_id, farming_pool_coin, app_id }) => {
       return {
-        depositor,
+        farmer,
         poolId: Number(pool_id),
         appId: Number(app_id),
-        softLockCoin: soft_lock_coin,
+        farmingPoolCoin: farming_pool_coin,
       };
     },
   },
-  "/comdex.liquidity.v1beta1.MsgTokensSoftUnlock": {
-    aminoType: "comdex/liquidity/MsgTokensSoftUnlock",
-    toAmino: ({ depositor, poolId, softUnlockCoin, appId }) => {
+  "/comdex.liquidity.v1beta1.MsgUnfarm": {
+    aminoType: "comdex/liquidity/MsgUnfarm",
+    toAmino: ({ farmer, poolId, unfarmingPoolCoin, appId }) => {
       return {
-        depositor,
+        farmer,
         pool_id: String(poolId),
         app_id: String(appId),
-        soft_unlock_coin: softUnlockCoin,
+        unfarming_pool_coin: unfarmingPoolCoin,
       };
     },
-    fromAmino: ({ depositor, pool_id, soft_unlock_coin, app_id }) => {
+    fromAmino: ({ farmer, pool_id, unfarming_pool_coin, app_id }) => {
       return {
-        depositor,
+        farmer,
         poolId: Number(pool_id),
         appId: Number(app_id),
-        softUnlockCoin: soft_unlock_coin,
+        unfarmingPoolCoin: unfarming_pool_coin,
+      };
+    },
+  },
+  "/comdex.liquidity.v1beta1.MsgCancelOrder": {
+    aminoType: "comdex/liquidity/MsgCancelOrder",
+
+    toAmino: ({ orderer, pairId, orderId, appId }) => {
+      return {
+        orderer,
+        pair_id: String(pairId),
+        order_id: String(orderId),
+        app_id: String(appId),
+      };
+    },
+    fromAmino: ({ orderer, pair_id, order_id, app_id }) => {
+      return {
+        orderer,
+        pairId: Number(pair_id),
+        appId: Number(app_id),
+        orderId: Number(order_id),
       };
     },
   },

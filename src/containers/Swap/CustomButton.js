@@ -1,15 +1,20 @@
-import * as PropTypes from "prop-types";
 import { Button, message } from "antd";
-import { connect } from "react-redux";
-import { getAmount, orderPriceConversion } from "../../utils/coin";
-import { signAndBroadcastTransaction } from "../../services/helper";
+import Long from "long";
+import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
-import variables from "../../utils/variables";
-import { useDispatch } from "react-redux";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
-import Long from "long";
+import { signAndBroadcastTransaction } from "../../services/helper";
+import { queryOrder } from "../../services/liquidity/query";
+import {
+  amountConversion,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
+} from "../../utils/coin";
+import variables from "../../utils/variables";
 
 const CustomButton = ({
   offerCoin,
@@ -18,7 +23,6 @@ const CustomButton = ({
   name,
   isDisabled,
   setComplete,
-  slippageTolerance,
   validationError,
   lang,
   refreshBalance,
@@ -26,7 +30,10 @@ const CustomButton = ({
   orderDirection,
   isLimitOrder,
   limitPrice,
+  refreshDetails,
   baseCoinPoolPrice,
+  slippageTolerance,
+  orderLifespan,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -36,6 +43,17 @@ const CustomButton = ({
   useEffect(() => {
     setComplete(false);
   }, []);
+
+  const priceWithOutConversion = () => {
+    return poolPrice + poolPrice * Number(slippageTolerance / 100);
+  };
+
+  const calculateBuyAmount = () => {
+    const price = priceWithOutConversion();
+    const amount = Number(offerCoin?.amount) / price;
+
+    return getAmount(amount);
+  };
 
   const calculateOrderPrice = () => {
     if (orderDirection === 1) {
@@ -49,47 +67,41 @@ const CustomButton = ({
     }
   };
 
-  const priceWithOutConversion = () => {
-    return poolPrice + poolPrice * Number(slippageTolerance / 100);
-  };
+  const getMessage = (isLimitOrder) => {
+    const price = calculateOrderPrice();
 
-  const calculateBuyAmount = () => {
-    const price = priceWithOutConversion();
-    const amount = Number(offerCoin?.amount) / price;
-
-    return getAmount(amount);
+    return {
+      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+      value: {
+        orderer: address,
+        orderLifespan: isLimitOrder
+          ? { seconds: orderLifespan, nanos: 0 }
+          : "0",
+        pairId: pair?.id,
+        appId: Long.fromNumber(APP_ID),
+        direction: orderDirection,
+        /** offer_coin specifies the amount of coin the orderer offers */
+        offerCoin: {
+          denom: offerCoin?.denom,
+          amount: getAmount(Number(offerCoin?.amount) + Number(offerCoin?.fee)),
+        },
+        demandCoinDenom: demandCoin?.denom,
+        price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
+        /** amount specifies the amount of base coin the orderer wants to buy or sell */
+        amount:
+          orderDirection === 2
+            ? getAmount(offerCoin?.amount)
+            : calculateBuyAmount(),
+      },
+    };
   };
 
   const handleSwap = () => {
     setInProgress(true);
-    const price = calculateOrderPrice();
 
     signAndBroadcastTransaction(
       {
-        message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
-          value: {
-            orderer: address,
-            orderLifespan: isLimitOrder ? { seconds: 600, nanos: 0 } : "0",
-            pairId: pair?.id,
-            appId: Long.fromNumber(APP_ID),
-            direction: orderDirection,
-            /** offer_coin specifies the amount of coin the orderer offers */
-            offerCoin: {
-              denom: offerCoin?.denom,
-              amount: getAmount(
-                Number(offerCoin?.amount) + Number(offerCoin?.fee)
-              ),
-            },
-            demandCoinDenom: demandCoin?.denom,
-            price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
-            /** amount specifies the amount of base coin the orderer wants to buy or sell */
-            amount:
-              orderDirection === 2
-                ? getAmount(offerCoin?.amount)
-                : calculateBuyAmount(),
-          },
-        },
+        message: getMessage(isLimitOrder),
         fee: {
           amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
           gas: "500000",
@@ -104,6 +116,41 @@ const CustomButton = ({
           return;
         }
 
+        if (!isLimitOrder) {
+          let parsedData = JSON.parse(result?.rawLog)?.[0];
+          let order = parsedData?.events?.find(
+            (item) => item?.type === "limit_order"
+          );
+          let orderId = order?.attributes?.find(
+            (item) => item?.key === "order_id"
+          )?.value;
+          let pairId = order?.attributes?.find(
+            (item) => item?.key === "pair_id"
+          )?.value;
+
+          if (orderId && pairId) {
+            queryOrder(orderId, pairId, (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              let data = result?.order;
+
+              message.success(
+                `Received ${amountConversion(
+                  data?.receivedCoin?.amount
+                )} ${denomConversion(
+                  data?.receivedCoin?.denom
+                )} for ${amountConversion(
+                  Number(data?.offerCoin?.amount) -
+                    Number(data?.remainingOfferCoin?.amount)
+                )} ${denomConversion(data?.offerCoin?.denom)}`
+              );
+            });
+          }
+        }
+
         if (result?.code) {
           message.info(result?.rawLog);
           return;
@@ -111,6 +158,7 @@ const CustomButton = ({
 
         setComplete(true);
         updateValues();
+        refreshDetails();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -157,6 +205,8 @@ const CustomButton = ({
 };
 
 CustomButton.propTypes = {
+  refreshDetails: PropTypes.func.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -174,11 +224,10 @@ CustomButton.propTypes = {
     denom: PropTypes.string,
     fee: PropTypes.number,
   }),
+  orderLifespan: PropTypes.number,
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
   }),
-  refreshBalance: PropTypes.number.isRequired,
-  slippage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   slippageTolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   validationError: PropTypes.oneOfType([
     PropTypes.bool,
@@ -193,7 +242,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     demandCoin: state.swap.demandCoin,
     offerCoin: state.swap.offerCoin,
-    slippage: state.swap.slippage,
     slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
   };

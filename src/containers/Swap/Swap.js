@@ -1,40 +1,48 @@
-import "./index.scss";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { Button, Popover, Radio } from "antd";
-import TooltipIcon from "../../components/TooltipIcon";
+import { Button, message, Popover, Radio } from "antd";
 import React, { useEffect, useState } from "react";
+import { Col, Row, SvgIcon } from "../../components/common";
+import CustomSwitch from "../../components/common/CustomSwitch";
+import CustomInput from "../../components/CustomInput";
+import CustomSelect from "../../components/CustomSelect";
+import TooltipIcon from "../../components/TooltipIcon";
+import { comdex } from "../../config/network";
 import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
+import {
+  DEFAULT_FEE,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
+  MAX_SLIPPAGE_TOLERANCE
+} from "../../constants/common";
+import {
+  queryLiquidityPair,
+  queryLiquidityPairs,
+  queryPool,
+  queryPoolsList
+} from "../../services/liquidity/query";
+import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import {
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
-import { amountConversion } from "../../utils/coin";
-import {
-  queryLiquidityPairs,
-  queryLiquidityParams,
-  queryPoolsList,
-} from "../../services/liquidity/query";
-import variables from "../../utils/variables";
-import { message } from "antd";
-import CustomButton from "./CustomButton";
-import CustomInput from "../../components/CustomInput";
-import { ValidateInputNumber } from "../../config/_validation";
-import CustomSelect from "../../components/CustomSelect";
-import { comdex } from "../../config/network";
-import { decimalConversion, marketPrice } from "../../utils/number";
+  decimalConversion,
+  getPoolPrice,
+  marketPrice
+} from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../utils/string";
-import CustomSwitch from "../../components/common/CustomSwitch";
+import variables from "../../utils/variables";
+import CustomButton from "./CustomButton";
+import "./index.scss";
 import Order from "./Order";
 
 const Swap = ({
@@ -62,58 +70,19 @@ const Swap = ({
   pool,
   poolBalance,
   params,
-  setSlippageTolerance,
-  slippageTolerance,
   isLimitOrder,
   setLimitOrderToggle,
   limitPrice,
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
-  setParams,
+  poolPriceMap,
+  setPoolPrice,
 }) => {
-  const [inProgress, setInProgress] = useState(false);
   const [validationError, setValidationError] = useState();
-  const [slippageError, setSlippageError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
-
-  const handleSlippageToleranceChange = (value) => {
-    value = value.toString().trim();
-
-    setSlippageError(ValidateInputNumber(value));
-    setSlippageTolerance(value);
-  };
-
-  const SettingPopup = (
-    <div className="slippage-tolerance">
-      <div>
-        Slippage Tolerance{" "}
-        <TooltipIcon text="Your transaction will revert if the price changes unfavourably by more than this percent." />
-      </div>
-      <div className="tolerance-bottom">
-        <Radio.Group
-          onChange={(event) => setSlippageTolerance(event.target.value)}
-          defaultValue="a"
-        >
-          <Radio.Button value="0.5">0.5%</Radio.Button>
-          <Radio.Button value="1">1%</Radio.Button>
-          <Radio.Button value="1.5">1.5%</Radio.Button>
-        </Radio.Group>
-        <div className="input-section">
-          <CustomInput
-            className="input-cmdx"
-            onChange={(event) =>
-              handleSlippageToleranceChange(event.target.value)
-            }
-            value={slippageTolerance}
-            validationError={slippageError}
-            placeholder="0"
-          />
-        </div>
-      </div>
-    </div>
-  );
+  const [orderLifespan, setOrderLifeSpan] = useState(21600);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -151,7 +120,6 @@ const Swap = ({
       false
     );
 
-    fetchParams();
     // returned function will be called on component unmount
     return () => {
       setOfferCoinDenom("");
@@ -159,18 +127,6 @@ const Swap = ({
     };
   }, []);
 
-  const fetchParams = () => {
-    queryLiquidityParams((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.params) {
-        setParams(result?.params);
-      }
-    });
-  };
   useEffect(() => {
     queryLiquidityPairs((error, result) => {
       if (error) {
@@ -202,9 +158,7 @@ const Swap = ({
   };
 
   const fetchPools = (offset, limit, countTotal, reverse) => {
-    setInProgress(true);
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -229,11 +183,37 @@ const Swap = ({
       const quoteCoinBalanceInPool = pool?.balances?.find(
         (item) => item.denom === pair?.quoteCoinDenom
       )?.amount;
-      const baseCoinPoolPrice = quoteCoinBalanceInPool / baseCoinBalanceInPool;
+      const baseCoinPoolPrice = Number(
+        quoteCoinBalanceInPool / baseCoinBalanceInPool
+      ).toFixed(comdex?.coinDecimals);
 
-      setBaseCoinPoolPrice(
-        Number(baseCoinPoolPrice).toFixed(comdex.coinDecimals)
-      );
+      setBaseCoinPoolPrice(baseCoinPoolPrice);
+    }
+  }, [pool]);
+
+  useEffect(() => {
+    if (pool?.id) {
+      let firstAsset = pool?.balances[0];
+      let secondAsset = pool?.balances[1];
+
+      let oracleAsset = {};
+      if (marketPrice(markets, firstAsset?.denom)) {
+        oracleAsset = firstAsset;
+      } else if (marketPrice(markets, secondAsset?.denom)) {
+        oracleAsset = secondAsset;
+      }
+
+      if (oracleAsset?.denom) {
+        let { xPoolPrice, yPoolPrice } = getPoolPrice(
+          marketPrice(markets, oracleAsset?.denom),
+          oracleAsset?.denom,
+          firstAsset,
+          secondAsset
+        );
+
+        setPoolPrice(firstAsset?.denom, xPoolPrice);
+        setPoolPrice(secondAsset?.denom, yPoolPrice);
+      }
     }
   }, [pool]);
 
@@ -278,9 +258,7 @@ const Swap = ({
         (Number(amountConversion(assetVolume)) + Number(value))) *
         100
     );
-    const offerCoinFee = value * (decimalConversion(params?.swapFeeRate))
-    ;
-
+    const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
     setValidationError(
       ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
     );
@@ -338,7 +316,9 @@ const Swap = ({
 
   const showOfferCoinValue = () => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const oralcePrice = marketPrice(markets, demandCoin?.denom);
+    const oralcePrice =
+      poolPriceMap[demandCoin?.denom] ||
+      marketPrice(markets, demandCoin?.denom);
     const total = price * oralcePrice * offerCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
@@ -381,7 +361,7 @@ const Swap = ({
         Number(availableBalance) > DEFAULT_FEE
           ? availableBalance - DEFAULT_FEE
           : 0;
-      const nativeOfferCoinFee = value * (decimalConversion(params?.swapFeeRate));
+      const nativeOfferCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
@@ -390,7 +370,7 @@ const Swap = ({
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance);
-      const offerCoinFee = value * (decimalConversion(params?.swapFeeRate));
+      const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(amountConversion(value - offerCoinFee))
@@ -402,7 +382,8 @@ const Swap = ({
     if (offerCoin?.denom === comdex.coinMinimalDenom) {
       const value =
         Number(availableBalance / 2) > DEFAULT_FEE ? availableBalance / 2 : 0;
-      const nativeOfferCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
+      const nativeOfferCoinFee =
+        value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(amountConversion(value))
@@ -421,7 +402,19 @@ const Swap = ({
     price = toDecimals(price).toString().trim();
 
     setLimitPrice(price);
-    setPriceValidationError(ValidateInputNumber(Number(price)));
+
+    if (pair?.lastPrice) {
+      setPriceValidationError(
+        ValidatePriceInputNumber(
+          Number(price),
+          Number(decimalConversion(pair?.lastPrice)),
+          Number(decimalConversion(params?.maxPriceLimitRatio))
+        )
+      );
+    } else {
+      setPriceValidationError(false);
+    }
+
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -439,6 +432,88 @@ const Swap = ({
     offerCoin?.denom
   );
 
+  const handleRefreshDetails = () => {
+    setLimitPrice(0);
+    fetchPair();
+    fetchPool();
+  };
+
+  useEffect(() => {
+    if (pool?.id) {
+      let intervalId = setInterval(() => fetchPool(), 10000);
+
+      return () => clearInterval(intervalId);
+    }
+
+    if (isLimitOrder && pair?.id) {
+      let intervalId = setInterval(() => fetchPair(), 10000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [pool]);
+
+  const fetchPair = () => {
+    queryLiquidityPair(pair?.id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.pair) {
+        setPair(result?.pair);
+      }
+    });
+  };
+
+  const fetchPool = () => {
+    queryPool(pool?.id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setPool(result?.pool);
+    });
+  };
+
+  const handleOrderLifespanChange = (value) => {
+    value = value.toString().trim();
+
+    if (value >= 0 && value <= params?.maxOrderLifespan?.seconds.toNumber()) {
+      setOrderLifeSpan(value);
+    }
+  };
+
+  const SettingPopup = (
+    <div className="slippage-tolerance">
+      <div>
+        Limit order lifespan{" "}
+        <TooltipIcon text="Your transaction will revert if it is pending for more than this period of time." />
+      </div>
+      <div className="tolerance-bottom">
+        <Radio.Group
+          onChange={(event) => setOrderLifeSpan(event.target.value)}
+          defaultValue="a"
+          value={orderLifespan}
+        >
+          <Radio.Button value={0}>1Block</Radio.Button>
+          <Radio.Button value={21600}>6H</Radio.Button>
+          <Radio.Button value={43200}>12H</Radio.Button>
+          <Radio.Button value={86400}>24H</Radio.Button>
+        </Radio.Group>
+        <div className="input-section lifespan-setting">
+          <CustomInput
+            className="input-cmdx"
+            onChange={(event) => handleOrderLifespanChange(event.target.value)}
+            value={orderLifespan}
+            validationError={false}
+            placeholder="0"
+          />
+          <span className="percent-text">S</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -454,7 +529,8 @@ const Swap = ({
                 name="Limit Order"
                 isChecked={isLimitOrder}
               />
-              {!isLimitOrder ? (
+
+              {isLimitOrder ? (
                 <Popover
                   className="setting-popover"
                   content={SettingPopup}
@@ -581,9 +657,9 @@ const Swap = ({
                           onChange={(event) =>
                             handleLimitPriceChange(event.target.value)
                           }
+                          validationError={priceValidationError}
                           className="assets-select-input with-select"
                           value={limitPrice}
-                          validationError={priceValidationError}
                         />{" "}
                       </div>
                     </div>
@@ -634,7 +710,7 @@ const Swap = ({
                       </Col>
                       <Col
                         className={
-                          slippageTolerance < slippage
+                          MAX_SLIPPAGE_TOLERANCE < slippage
                             ? "alert-label text-right"
                             : "text-right"
                         }
@@ -646,7 +722,7 @@ const Swap = ({
                   <Row className="mt-1">
                     <Col>
                       <label>
-                        { isLimitOrder ? "Trade Fee" : variables[lang].swap_fee}{" "}
+                        {isLimitOrder ? "Trade Fee" : variables[lang].swap_fee}{" "}
                         <TooltipIcon text={variables[lang].tooltip_tx_fee} />
                       </label>
                     </Col>
@@ -658,28 +734,40 @@ const Swap = ({
                   </Row>
                 </Col>
               </Row>
+              {!isLimitOrder ? (
+                <Row className="mt-3">
+                  <Col className="text-left note-text">
+                    Note: The requested swap could be completed fully,
+                    partially, or canceled due to price limiting and to maintain
+                    pool stability.
+                  </Col>
+                </Row>
+              ) : null}
               <div className="assets-form-btn">
                 <CustomButton
                   isLimitOrder={isLimitOrder}
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  orderLifespan={orderLifespan}
+                  refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}
                   baseCoinPoolPrice={baseCoinPoolPrice}
                   validationError={
-                    validationError || slippageError || priceValidationError
+                    validationError || (isLimitOrder && priceValidationError)
                   }
                   isDisabled={
                     !pool?.id ||
                     !Number(demandCoin?.amount) ||
-                    !Number(slippageTolerance) ||
-                    priceValidationError?.message
+                    (isLimitOrder
+                      ? !Number(limitPrice) || priceValidationError?.message
+                      : false)
                   }
                   max={availableBalance}
                   name={
                     !pool?.id
                       ? "No pool exists"
-                      : slippageTolerance < slippage && !isLimitOrder
+                      : MAX_SLIPPAGE_TOLERANCE < slippage && !isLimitOrder
                       ? variables[lang].swap_anyway
                       : variables[lang].swap
                   }
@@ -690,7 +778,7 @@ const Swap = ({
         </Row>
       </div>
       <div className="order_table_section">
-        {isLimitOrder ? <Order /> : null}
+        {isLimitOrder ? <Order lang={lang} /> : null}
       </div>
     </div>
   );
