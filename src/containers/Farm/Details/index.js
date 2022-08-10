@@ -24,6 +24,7 @@ import {
   queryPoolSoftLocks
 } from "../../../services/liquidity/query";
 import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getDenomBalance
@@ -210,10 +211,10 @@ const FarmDetails = ({
   );
 
   useEffect(() => {
-    let totalUserPoolLiquidity = amountConversionWithComma(
-      calculatePoolLiquidity(providedTokens),
-      DOLLAR_DECIMALS
+    let totalUserPoolLiquidity = Number(
+      amountConversion(calculatePoolLiquidity(providedTokens))
     );
+
     if (pool?.id) {
       setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity);
     }
@@ -456,4 +457,3 @@ const actionsToProps = {
 };
 
 export default connect(stateToProps, actionsToProps)(FarmDetails);
-
