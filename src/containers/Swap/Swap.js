@@ -514,7 +514,6 @@ const Swap = ({
     </div>
   );
 
-  console.log("the params", params);
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
