@@ -66,12 +66,9 @@ const ConnectButton = ({
     fetchMarkets();
   }, []);
 
-  const getPrice = useCallback(
-    (denom) => {
-      return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
-    },
-    [markets]
-  );
+  const getPrice = (denom) => {
+    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
+  };
 
   const calculateAssetBalance = useCallback(
     (balances) => {
@@ -117,7 +114,7 @@ const ConnectButton = ({
     if (address) {
       fetchBalances(address);
     }
-  }, [address, refreshBalance, markets, poolPriceMap]);
+  }, [address, refreshBalance, markets]);
 
   useEffect(() => {
     calculateAssetBalance(balances);
