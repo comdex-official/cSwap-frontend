@@ -13,8 +13,6 @@ export const ibcDenomToDenom = (key) => {
   switch (key) {
     case ibcDenoms["uatom"]:
       return "uatom";
-    case ibcDenoms["uxprt"]:
-      return "uxprt";
     case ibcDenoms["uosmo"]:
       return "uosmo";
     default:
@@ -29,9 +27,6 @@ export const denomToSymbol = (key) => {
       return "ATOM";
     case "udvpn":
       return "DVPN";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "XPRT";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "OSMO";
@@ -55,9 +50,6 @@ export const minimalDenomToDenom = (key) => {
       return "atom";
     case "udvpn":
       return "dvpn";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "xprt";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmo";
@@ -75,8 +67,6 @@ const iconMap = {
   uatom: "atom-icon",
   [ibcDenoms["uatom"]]: "atom-icon",
   ucmdx: "comdex-icon",
-  uxprt: "xprt-icon",
-  [ibcDenoms["uxprt"]]: "xprt-icon",
   uosmo: "osmosis-icon",
   [ibcDenoms["uosmo"]]: "osmosis-icon",
   ucmst: "cmst-icon",
