@@ -14,3 +14,5 @@ Note: Take the REACT_APP_{Token}_IBC_DENOM variable values from  https://github.
 
 Example: REACT_APP_ATOM_IBC_DENOM value has to be updated from https://github.com/comdex-official/comdex-assetlists cosmos chain details.
     
+Update the app id and pool list IDs in the build pipeline, details will be provided by Blockchain dev team. Following values will be provided,
+REACT_APP_APP_ID, REACT_APP_HARBOR_POOL_ID_LIST, REACT_APP_CMST_POOL_ID_LIST
