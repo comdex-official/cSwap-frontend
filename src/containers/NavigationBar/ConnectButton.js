@@ -47,6 +47,7 @@ const ConnectButton = ({
   setPoolPrice,
   setParams,
   poolPriceMap,
+  balances,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -65,12 +66,9 @@ const ConnectButton = ({
     fetchMarkets();
   }, []);
 
-  const getPrice = useCallback(
-    (denom) => {
-      return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
-    },
-    [markets]
-  );
+  const getPrice = (denom) => {
+    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
+  };
 
   const calculateAssetBalance = useCallback(
     (balances) => {
@@ -117,6 +115,10 @@ const ConnectButton = ({
       fetchBalances(address);
     }
   }, [address, refreshBalance, markets]);
+
+  useEffect(() => {
+    calculateAssetBalance(balances);
+  }, [balances, poolPriceMap, markets]);
 
   useEffect(() => {
     fetchPoolIncentives();
@@ -249,6 +251,12 @@ ConnectButton.propTypes = {
   setPoolPrice: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
   address: PropTypes.string,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -287,6 +295,7 @@ const stateToProps = (state) => {
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
     poolPriceMap: state.liquidity.poolPriceMap,
+    balances: state.account.balances.list,
   };
 };
 
