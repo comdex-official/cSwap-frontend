@@ -47,11 +47,9 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
     );
   }, []);
 
-  const userPools = pools.filter((pool) => {
-    return balances.find((balance) => {
-      return balance.denom === pool.poolCoinDenom;
-    });
-  });
+  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  );
 
   const columns = [
     {
