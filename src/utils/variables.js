@@ -106,7 +106,7 @@ const variables = {
     token: "Token",
     amount: "Amount",
     send: "Send",
-    cancle: "Cancle",
+    cancel: "Cancel",
     available: "Available",
     max: "Max",
     half: "Half",
