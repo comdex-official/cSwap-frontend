@@ -258,7 +258,11 @@ const Swap = ({
         (Number(amountConversion(assetVolume)) + Number(value))) *
         100
     );
-    const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
+
+    const offerCoinFee =
+      value * decimalConversion(params?.swapFeeRate) +
+      decimalConversion(params?.swapFeeRate) / 10;
+
     setValidationError(
       ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
     );
@@ -286,6 +290,11 @@ const Swap = ({
       setDemandCoinDenom(value);
     }
 
+    if (isLimitOrder) {
+      setLimitPrice(0);
+      setPriceValidationError();
+    }
+
     setDemandCoinDenom(value);
     updatePoolDetails(offerCoin?.denom, value);
   };
@@ -297,6 +306,10 @@ const Swap = ({
       setOfferCoinDenom(value);
     }
 
+    if (isLimitOrder) {
+      setLimitPrice(0);
+      setPriceValidationError();
+    }
     updatePoolDetails(value, demandCoin?.denom);
   };
 
