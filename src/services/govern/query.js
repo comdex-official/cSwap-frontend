@@ -1,17 +1,35 @@
+import axios from "axios";
 import { QueryClientImpl } from "cosmjs-types/cosmos/gov/v1beta1/query";
-import { createQueryClient } from "../helper";
 import Long from "long";
 import { comdex } from "../../config/network";
-import axios from "axios";
+import { createQueryClient } from "../helper";
+
+let myClient = null;
+
+export const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        callback(error);
+      }
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
 
 export const queryAllProposals = (callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Proposals({ proposalStatus: 0, voter: "", depositor: "" })
@@ -25,13 +43,11 @@ export const queryAllProposals = (callback) => {
 };
 
 export const queryUserVote = (address, proposalId, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Vote({ proposalId: Long.fromNumber(proposalId), voter: address })
