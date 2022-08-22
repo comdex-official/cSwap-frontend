@@ -2,6 +2,26 @@ import { QueryClientImpl } from "comdex-codec/build/comdex/market/v1beta1/query"
 import Long from "long";
 import { createQueryClient } from "../helper";
 
+let myClient = null;
+
+export const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        callback(error);
+      }
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
+
 export const queryMarketList = (
   offset,
   limit,
@@ -9,13 +29,13 @@ export const queryMarketList = (
   reverse,
   callback
 ) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryMarkets({
         pagination: {
           key: "",

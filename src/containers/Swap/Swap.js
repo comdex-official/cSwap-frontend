@@ -363,9 +363,11 @@ const Swap = ({
   };
 
   const showPoolPrice = () => {
-    return `${Number(
+    let price = Number(
       baseCoinPoolPrice && isFinite(baseCoinPoolPrice) ? baseCoinPoolPrice : 0
-    ).toFixed(6)}`;
+    );
+
+    return (pool?.id ? price || 0 : 0).toFixed(6);
   };
 
   const handleMaxClick = () => {
@@ -427,7 +429,6 @@ const Swap = ({
     } else {
       setPriceValidationError(false);
     }
-
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
@@ -494,6 +495,14 @@ const Swap = ({
     if (value >= 0 && value <= params?.maxOrderLifespan?.seconds.toNumber()) {
       setOrderLifeSpan(value);
     }
+  };
+
+  const priceRange = (lastPrice, maxPriceLimitRatio) => {
+    return `${(lastPrice - maxPriceLimitRatio * lastPrice).toFixed(
+      comdex?.coinDecimals
+    )} - ${(lastPrice + maxPriceLimitRatio * lastPrice).toFixed(
+      comdex?.coinDecimals
+    )}`;
   };
 
   const SettingPopup = (
@@ -651,7 +660,7 @@ const Swap = ({
                     </div>
                     <div className="assets-right swap-assets-right">
                       <div className="label-right">
-                        {variables[lang].pool_price}
+                        {variables[lang].pool_price}:
                         <span
                           className="ml-1 cursor-pointer"
                           onClick={() =>
@@ -662,7 +671,7 @@ const Swap = ({
                             )
                           }
                         >
-                          {pool?.id && showPoolPrice()}
+                          {showPoolPrice()}
                         </span>{" "}
                       </div>
                       <div>
@@ -670,10 +679,20 @@ const Swap = ({
                           onChange={(event) =>
                             handleLimitPriceChange(event.target.value)
                           }
-                          validationError={priceValidationError}
                           className="assets-select-input with-select"
                           value={limitPrice}
                         />{" "}
+                      </div>
+                      <div className="label-right">
+                        Tolerance range:
+                        <span className="ml-1 cursor-pointer">
+                          {priceRange(
+                            Number(decimalConversion(pair?.lastPrice)),
+                            Number(
+                              decimalConversion(params?.maxPriceLimitRatio)
+                            )
+                          )}
+                        </span>{" "}
                       </div>
                     </div>
                   </div>
