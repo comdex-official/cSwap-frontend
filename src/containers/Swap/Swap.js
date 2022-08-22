@@ -106,18 +106,6 @@ const Swap = ({
   }, [pools, pairs]);
 
   useEffect(() => {
-    if (pair?.lastPrice && params?.maxPriceLimitRatio) {
-      setPriceValidationError(
-        ValidatePriceInputNumber(
-          Number(limitPrice),
-          Number(decimalConversion(pair?.lastPrice)),
-          Number(decimalConversion(params?.maxPriceLimitRatio))
-        )
-      );
-    }
-  }, [pair, params]);
-
-  useEffect(() => {
     fetchPairs(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
@@ -304,6 +292,7 @@ const Swap = ({
 
     if (isLimitOrder) {
       setLimitPrice(0);
+      setPriceValidationError();
     }
 
     setDemandCoinDenom(value);
@@ -319,6 +308,7 @@ const Swap = ({
 
     if (isLimitOrder) {
       setLimitPrice(0);
+      setPriceValidationError();
     }
     updatePoolDetails(value, demandCoin?.denom);
   };
@@ -428,6 +418,17 @@ const Swap = ({
 
     setLimitPrice(price);
 
+    if (pair?.lastPrice) {
+      setPriceValidationError(
+        ValidatePriceInputNumber(
+          Number(price),
+          Number(decimalConversion(pair?.lastPrice)),
+          Number(decimalConversion(params?.maxPriceLimitRatio))
+        )
+      );
+    } else {
+      setPriceValidationError(false);
+    }
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
