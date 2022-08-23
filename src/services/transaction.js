@@ -87,6 +87,8 @@ export const messageTypeToText = (type) => {
       return "CloseBorrow";
     case "/cosmos.gov.v1beta1.MsgVote":
       return "Vote";
+    case "/comdex.liquidity.v1beta1.MsgCancelOrder":
+      return "CancelOrder";
     default:
       return type;
   }
