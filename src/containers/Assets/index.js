@@ -11,8 +11,7 @@ import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
-  getAmount
+  denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -115,7 +114,7 @@ const Assets = ({
       coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
         amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
-        value: getAmount(value || 0),
+        value: value || 0,
       },
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
