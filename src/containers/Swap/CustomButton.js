@@ -49,7 +49,7 @@ const CustomButton = ({
   };
 
   const calculateBuyAmount = () => {
-    const price = priceWithOutConversion();
+    const price = isLimitOrder ? limitPrice : priceWithOutConversion();
     const amount = Number(offerCoin?.amount) / price;
 
     return getAmount(amount);

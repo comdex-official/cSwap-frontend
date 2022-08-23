@@ -156,7 +156,9 @@ const FarmDetails = ({
   };
 
   const queryPoolBalance = () => {
-    fetchPoolBalance(pool?.reserveAccountAddress);
+    if (pool?.reserveAccountAddress) {
+      fetchPoolBalance(pool?.reserveAccountAddress);
+    }
     if (id) {
       fetchPool(id);
     }

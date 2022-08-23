@@ -38,14 +38,14 @@ const Order = ({ lang }) => {
           message.error(error);
           return;
         }
-        
+
         setOrders(result?.orders);
         setMyOrders(result?.orders);
       });
     }
   };
 
-  const handleCancle = (order) => {
+  const handleCancel = (order) => {
     setOrder(order);
     setInProgress(true);
 
@@ -138,11 +138,11 @@ const Order = ({ lang }) => {
         <Button
           type="primary"
           loading={order?.id === item?.id && inProgress}
-          onClick={() => handleCancle(item)}
+          onClick={() => handleCancel(item)}
           className="btn-filled"
           size="small"
         >
-          Cancle
+          Cancel
         </Button>
       ),
     },

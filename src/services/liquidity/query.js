@@ -3,14 +3,32 @@ import Long from "long";
 import { APP_ID } from "../../constants/common";
 import { createQueryClient } from "../helper";
 
+let myClient = null;
+
+export const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        callback(error);
+      }
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
+
 export const queryLiquidityPairs = (callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Pairs({
@@ -25,13 +43,11 @@ export const queryLiquidityPairs = (callback) => {
 };
 
 export const queryUserOrders = (pairId, address, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .OrdersByOrderer({
@@ -47,13 +63,11 @@ export const queryUserOrders = (pairId, address, callback) => {
 };
 
 export const queryOrder = (orderId, pairId, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Order({
@@ -75,13 +89,11 @@ export const queryPoolsList = (
   reverse,
   callback
 ) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Pools({
@@ -99,13 +111,11 @@ export const queryPoolsList = (
 };
 
 export const queryLiquidityPair = (pairId, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Pair({
@@ -120,13 +130,11 @@ export const queryLiquidityPair = (pairId, callback) => {
 };
 
 export const queryLiquidityParams = (callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .GenericParams({
@@ -140,13 +148,11 @@ export const queryLiquidityParams = (callback) => {
 };
 
 export const queryPoolSoftLocks = (farmer, poolId, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Farmer({
@@ -162,13 +168,11 @@ export const queryPoolSoftLocks = (farmer, poolId, callback) => {
 };
 
 export const queryPoolCoinDeserialize = (poolId, poolTokens, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .DeserializePoolCoin({
@@ -184,13 +188,11 @@ export const queryPoolCoinDeserialize = (poolId, poolTokens, callback) => {
 };
 
 export const queryPoolIncentives = (callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .PoolIncentives({
@@ -204,13 +206,11 @@ export const queryPoolIncentives = (callback) => {
 };
 
 export const queryFarmedPoolCoin = (poolId, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .FarmedPoolCoin({
@@ -225,13 +225,11 @@ export const queryFarmedPoolCoin = (poolId, callback) => {
 };
 
 export const queryPool = (id, callback) => {
-  createQueryClient((error, client) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
-    const queryService = new QueryClientImpl(client);
 
     queryService
       .Pool({

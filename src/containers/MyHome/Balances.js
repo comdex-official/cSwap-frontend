@@ -1,31 +1,32 @@
-import "./index.scss";
-import { Col, Row } from "../../components/common";
-import React, { useEffect, useState } from "react";
-import { Tabs } from "antd";
+import { message, Tabs } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import TooltipIcon from "../../components/TooltipIcon";
-import { amountConversionWithComma, amountConversion } from "../../utils/coin";
-import variables from "../../utils/variables";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { decode } from "../../utils/string";
-import { commaSeparator, formatNumber } from "../../utils/number";
+import { Col, Row } from "../../components/common";
+import TooltipIcon from "../../components/TooltipIcon";
 import {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PAGE_NUMBER,
-  DOLLAR_DECIMALS,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
 } from "../../constants/common";
-import { getDenomBalance } from "../../utils/coin";
-import { marketPrice } from "../../utils/number";
 import {
   queryPoolCoinDeserialize,
   queryPoolsList,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../../services/liquidity/query";
-import { message } from "antd";
-import History from "./History";
-import MyPools from "./MyPools";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  getDenomBalance
+} from "../../utils/coin";
+import { commaSeparator, formatNumber, marketPrice } from "../../utils/number";
+import { decode } from "../../utils/string";
+import variables from "../../utils/variables";
 import Assets from "../Assets";
+import History from "./History";
+import "./index.scss";
+import MyPools from "./MyPools";
 
 const { TabPane } = Tabs;
 
@@ -39,7 +40,7 @@ const Balances = ({
   markets,
   setUserLiquidityInPools,
   userLiquidityInPools,
-    poolPriceMap,
+  poolPriceMap,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
 
@@ -71,11 +72,7 @@ const Balances = ({
 
       setPools(result.pools, result.pagination);
 
-      const userPools = result?.pools?.filter((pool) => {
-        return balances.find((balance) => {
-          return balance.denom === pool.poolCoinDenom;
-        });
-      });
+      const userPools = result?.pools;
 
       if (
         balances &&
@@ -129,9 +126,11 @@ const Balances = ({
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-             (poolPriceMap[providedTokens?.[0]?.denom] || marketPrice(markets, providedTokens?.[0]?.denom) )+
+              (poolPriceMap[providedTokens?.[0]?.denom] ||
+                marketPrice(markets, providedTokens?.[0]?.denom)) +
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-              (poolPriceMap[providedTokens?.[1]?.denom] || marketPrice(markets, providedTokens?.[1]?.denom));
+              (poolPriceMap[providedTokens?.[1]?.denom] ||
+                marketPrice(markets, providedTokens?.[1]?.denom));
 
           if (totalLiquidityInDollar) {
             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -311,7 +310,7 @@ const Balances = ({
                   <TabPane tab="Assets" key="1">
                     <Assets parent="portfolio" />
                   </TabPane>
-                  <TabPane tab="Farm" key="2">
+                  <TabPane tab="Liquidity" key="2">
                     <MyPools />
                   </TabPane>
                   <TabPane tab="History" key="3">

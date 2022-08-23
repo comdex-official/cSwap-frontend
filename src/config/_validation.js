@@ -36,13 +36,11 @@ export const ValidatePriceInputNumber = (
     value > lastPrice + maxPriceLimitRatio * lastPrice
   ) {
     return new Error(
-      `Price not in range ${(
-        lastPrice -
-        maxPriceLimitRatio * lastPrice
-      ).toFixed(comdex?.coinDecimals)} - ${(
-        lastPrice +
-        maxPriceLimitRatio * lastPrice
-      ).toFixed(comdex?.coinDecimals)}`
+      `Tolerance range ${(lastPrice - maxPriceLimitRatio * lastPrice).toFixed(
+        comdex?.coinDecimals
+      )} - ${(lastPrice + maxPriceLimitRatio * lastPrice).toFixed(
+        comdex?.coinDecimals
+      )}`
     );
   }
 };
