@@ -5,7 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor } from "../../config/network";
+import { comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import {
@@ -127,11 +127,6 @@ const Assets = ({
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
-  const cmstCoin = balances.filter(
-    (item) => item.denom === cmst?.coinMinimalDenom
-  )[0];
-  const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
-
   const harborCoin = balances.filter(
     (item) => item.denom === harbor?.coinMinimalDenom
   )[0];
@@ -154,24 +149,6 @@ const Assets = ({
       price: getPrice(comdex?.coinMinimalDenom),
       amount: {
         value: nativeCoinValue || 0,
-      },
-    },
-    {
-      key: cmst.coinMinimalDenom,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(cmst?.coinMinimalDenom)} />
-            </div>{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      price: getPrice(cmst?.coinMinimalDenom),
-      amount: {
-        value: cmstCoinValue || 0,
       },
     },
     {
@@ -293,4 +270,3 @@ const stateToProps = (state) => {
 };
 
 export default connect(stateToProps)(Assets);
-
