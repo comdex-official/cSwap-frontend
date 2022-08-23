@@ -24,7 +24,7 @@ import {
 export const setPools = (list, pagination) => {
   
   let poolsWithOutCmst = list.filter(
-    (item) => item?.id?.toNumber() !== process.env.REACT_APP_APP_CMST_POOL_ID
+    (item) => item?.id?.toNumber() !== Number(process.env.REACT_APP_APP_CMST_POOL_ID)
   );
 
   return {
