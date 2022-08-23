@@ -203,7 +203,7 @@ const Assets = ({
     ibcBalances &&
     ibcBalances.map((item) => {
       return {
-        key: item.denom,
+        key: item?.coinMinimalDenom,
         asset: (
           <>
             <div className="assets-withicon">
