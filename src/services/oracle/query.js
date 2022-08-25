@@ -4,7 +4,7 @@ import { createQueryClient } from "../helper";
 
 let myClient = null;
 
-export const getQueryService = (callback) => {
+const getQueryService = (callback) => {
   if (myClient) {
     const queryService = new QueryClientImpl(myClient);
 
