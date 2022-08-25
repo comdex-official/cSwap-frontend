@@ -3,7 +3,37 @@ import {
   ChainStore,
   getKeplrFromWindow
 } from "@keplr-wallet/stores";
-import { comdex } from "../config/network";
+import { cmst, comdex, harbor } from "../config/network";
+
+const getCurrencies = (chain) => {
+  if (chain?.rpc === comdex?.rpc) {
+    return [
+      {
+        coinDenom: chain?.coinDenom,
+        coinMinimalDenom: chain?.coinMinimalDenom,
+        coinDecimals: chain?.coinDecimals,
+      },
+      {
+        coinDenom: cmst?.coinDenom,
+        coinMinimalDenom: cmst?.coinMinimalDenom,
+        coinDecimals: cmst?.coinDecimals,
+      },
+      {
+        coinDenom: harbor?.coinDenom,
+        coinMinimalDenom: harbor?.coinMinimalDenom,
+        coinDecimals: harbor?.coinDecimals,
+      },
+    ];
+  } else {
+    return [
+      {
+        coinDenom: chain?.coinDenom,
+        coinMinimalDenom: chain?.coinMinimalDenom,
+        coinDecimals: chain?.coinDecimals,
+      },
+    ];
+  }
+};
 
 export const getChainConfig = (chain = comdex) => {
   return {
@@ -27,13 +57,7 @@ export const getChainConfig = (chain = comdex) => {
       bech32PrefixConsAddr: `${chain?.prefix}valcons`,
       bech32PrefixConsPub: `${chain?.prefix}valconspub`,
     },
-    currencies: [
-      {
-        coinDenom: chain?.coinDenom,
-        coinMinimalDenom: chain?.coinMinimalDenom,
-        coinDecimals: chain?.coinDecimals,
-      },
-    ],
+    currencies: getCurrencies(chain),
     feeCurrencies: [
       {
         coinDenom: chain?.coinDenom,
