@@ -10,7 +10,7 @@ const Footer = () => {
           aria-label="Discord"
           target="_blank"
           rel="noreferrer"
-          href="https://discord.com/invite/7vjPvWKKMT"
+          href="https://bit.ly/ComdexOfficialDiscord"
         >
           <SvgIcon name="discord" viewbox="0 0 29.539 22.155" />
         </a>
@@ -26,7 +26,7 @@ const Footer = () => {
           aria-label="Telegram"
           target="_blank"
           rel="noreferrer"
-          href="https://t.me/ComdexChat"
+          href="https://t.me/cSwap_DEX"
         >
           <SvgIcon name="telegram" viewbox="0 0 24.635 20.66" />
         </a>
@@ -34,7 +34,7 @@ const Footer = () => {
           aria-label="Twitter"
           target="_blank"
           rel="noreferrer"
-          href="https://twitter.com/ComdexOfficial"
+          href="https://twitter.com/cSwap_DEX"
         >
           <SvgIcon name="twitter" viewbox="0 0 25.617 20.825" />
         </a>
@@ -42,7 +42,7 @@ const Footer = () => {
           aria-label="Medium"
           target="_blank"
           rel="noreferrer"
-          href="https://blog.comdex.one"
+          href="https://medium.com/@cSwap_DEX"
         >
           <SvgIcon name="medium" viewbox="0 0 25.825 20.66" />
         </a>
