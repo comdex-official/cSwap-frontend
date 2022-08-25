@@ -8,6 +8,9 @@ import Tabs from "./Tabs";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useNavigate } from "react-router";
 
+import DarkLogo from '../../assets/images/cSwap-dark-logo.svg';
+import LightLogo from '../../assets/images/cSwap-light-logo.svg';
+
 const { Sider } = Layout;
 
 const SideBar = () => {
@@ -66,8 +69,8 @@ const SideBar = () => {
                 })
               }
             >
-              <SvgIcon className="white" name="logo-colored" />
-              <SvgIcon className="blue" name="logo-colored-blue" />
+              <img className="blue" src={DarkLogo} alt="Logo" />
+              <img className="white" src={LightLogo} alt="Logo" />
             </div>
             <Scrollbars>
               <div className="side_bar_inner">
