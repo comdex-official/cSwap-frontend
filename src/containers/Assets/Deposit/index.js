@@ -115,13 +115,17 @@ const Deposit = ({
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
       setInProgress(false);
       if (error) {
-        message.error(
-          <Snack
-            message={variables[lang].tx_failed}
-            explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-            hash={result?.transactionHash}
-          />
-        );
+        if (result?.transactionHash) {
+          message.error(
+            <Snack
+              message={variables[lang].tx_failed}
+              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              hash={result?.transactionHash}
+            />
+          );
+        } else {
+          message.error(error);
+        }
         return;
       }
 
@@ -234,7 +238,10 @@ const Deposit = ({
                 loading={inProgress}
                 type="primary"
                 disabled={
-                  inProgress || !Number(amount) || validationError?.message
+                  inProgress ||
+                  balanceInProgress ||
+                  !Number(amount) ||
+                  validationError?.message
                 }
                 className="btn-filled modal-btn"
                 onClick={signIBCTx}
