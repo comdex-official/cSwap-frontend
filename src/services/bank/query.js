@@ -11,8 +11,9 @@ export const getQueryService = (callback) => {
   } else {
     createQueryClient((error, client) => {
       if (error) {
-        callback(error);
+        return callback(error);
       }
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 
@@ -21,10 +22,7 @@ export const getQueryService = (callback) => {
   }
 };
 
-export const queryAllBalances = (
-  owner,
-  callback
-) => {
+export const queryAllBalances = (owner, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);

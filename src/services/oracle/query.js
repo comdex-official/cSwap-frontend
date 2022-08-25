@@ -12,8 +12,9 @@ export const getQueryService = (callback) => {
   } else {
     createQueryClient((error, client) => {
       if (error) {
-        callback(error);
+        return callback(error);
       }
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 
