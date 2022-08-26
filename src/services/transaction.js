@@ -34,21 +34,25 @@ export const abbreviateMessage = (msg) => {
         return sh;
       }, {});
     const output = [];
+
     Object.keys(sum).forEach((k) => {
       output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k);
     });
     return output.join(", ");
   }
+
   if (msg["@type"]) {
     return msg["@type"]
       .substring(msg["@type"]?.lastIndexOf(".") + 1)
       .replace("Msg", "");
   }
+
   if (msg?.typeUrl) {
     return msg?.typeUrl
       .substring(msg?.typeUrl?.lastIndexOf(".") + 1)
       .replace("Msg", "");
   }
+
   return msg?.type
     ?.substring(msg?.type?.lastIndexOf("/") + 1)
     .replace("Msg", "");
