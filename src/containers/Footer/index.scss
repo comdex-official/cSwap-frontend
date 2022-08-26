@@ -16,10 +16,11 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    flex-wrap: wrap;
     a {
-      width: 100%;
+      padding: 2px 5px;
       .icon {
-        width: 20px;
+        width: 18px;
       }
     }
   }

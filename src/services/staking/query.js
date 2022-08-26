@@ -3,7 +3,7 @@ import { createQueryClient } from "../helper";
 
 let myClient = null;
 
-export const getQueryService = (callback) => {
+const getQueryService = (callback) => {
   if (myClient) {
     const queryService = new QueryClientImpl(myClient);
 
@@ -11,8 +11,9 @@ export const getQueryService = (callback) => {
   } else {
     createQueryClient((error, client) => {
       if (error) {
-        callback(error);
+        return callback(error);
       }
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 

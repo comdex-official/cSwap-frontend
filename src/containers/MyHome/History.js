@@ -7,7 +7,7 @@ import { setTransactionHistory } from "../../actions/account";
 import { Col, Row } from "../../components/common";
 import Copy from "../../components/Copy";
 import { comdex } from "../../config/network";
-import { fetchTxHistory, messageTypeToText } from "../../services/transaction";
+import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
 import { generateHash, truncateString } from "../../utils/string";
 import Date from "./Date";
 
@@ -93,8 +93,8 @@ const History = ({ address, setTransactionHistory, history }) => {
             <Copy text={hash} />
           </div>
         ),
-        msgType: messageTypeToText(
-          decodedTransaction.body.messages?.[0].typeUrl
+        msgType: abbreviateMessage(
+          decodedTransaction.body.messages
         ),
         date: item?.height,
         height: item.height,

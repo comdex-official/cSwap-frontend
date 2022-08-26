@@ -94,13 +94,17 @@ const Withdraw = ({
       setInProgress(false);
 
       if (error) {
-        message.error(
-          <Snack
-            message={variables[lang].tx_failed}
-            explorerUrlToTx={comdex?.explorerUrlToTx}
-            hash={result?.transactionHash}
-          />
-        );
+        if (result?.transactionHash) {
+          message.error(
+            <Snack
+              message={variables[lang].tx_failed}
+              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              hash={result?.transactionHash}
+            />
+          );
+        } else {
+          message.error(error);
+        }
         return;
       }
 

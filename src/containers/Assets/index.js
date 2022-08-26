@@ -119,6 +119,7 @@ const Assets = ({
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
+      explorerUrlToTx: token?.explorerUrlToTx,
     };
   });
 
