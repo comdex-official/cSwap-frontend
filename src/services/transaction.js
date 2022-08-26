@@ -3,7 +3,6 @@ import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
 import { DEFAULT_FEE } from "../constants/common";
 
-
 export const getTypeURL = (key) => {
   switch (key) {
     case "create":
@@ -21,77 +20,36 @@ export const getTypeURL = (key) => {
   }
 };
 
-export const messageTypeToText = (type) => {
-  switch (type) {
-    case "/cosmos.bank.v1beta1.MsgSend":
-      return "Send";
-    case "/comdex.vault.v1beta1.MsgCreateRequest":
-      return "CreateVault";
-    case "/comdex.vault.v1beta1.MsgDepositRequest":
-      return "VaultDepositCollateral";
-    case "/comdex.vault.v1beta1.MsgWithdrawRequest":
-      return "VaultWithdrawCollateral";
-    case "/comdex.vault.v1beta1.MsgDrawRequest":
-      return "VaultDrawDebt";
-    case "/comdex.vault.v1beta1.MsgRepayRequest":
-      return "VaultRepayDebt";
-    case "/comdex.vault.v1beta1.MsgCloseRequest":
-      return "CloseVault";
-    case "/comdex.liquidity.v1beta1.MsgDeposit":
-      return "PoolDeposit";
-    case "/comdex.liquidity.v1beta1.MsgWithdraw":
-      return "PoolWithdraw";
-    case "/comdex.liquidity.v1beta1.MsgSwapWithinBatch":
-      return "PoolSwap";
-    case "/ibc.applications.transfer.v1.MsgTransfer":
-      return "IBC-Transfer";
-    case "/comdex.auction.v1beta1.MsgPlaceBidRequest":
-      return "PlaceBid";
-    case "/comdex.liquidity.v1beta1.MsgUnfarm":
-      return "Unfarm";
-    case "/comdex.liquidity.v1beta1.MsgFarm":
-      return "Farm";
-    case "/comdex.liquidity.v1beta1.MsgLimitOrder":
-      return "LimitOrder";
-    case "/comdex.liquidity.v1beta1.MsgUnbondPoolTokens":
-      return "UnbondPoolTokens";
-    case "/comdex.liquidity.v1beta1.MsgBondPoolTokens":
-      return "MsgBondPoolTokens";
-    case "/comdex.liquidity.v1beta1.MsgDepositWithinBatch":
-      return "PoolDeposit";
-    case "/comdex.liquidity.v1beta1.MsgWithdrawWithinBatch":
-      return "PoolWithdraw";
-    case "/comdex.locker.v1beta1.MsgWithdrawAssetRequest":
-      return "WithdrawAsset";
-    case "/comdex.locker.v1beta1.MsgCreateLockerRequest":
-      return "CreateLocker";
-    case "/comdex.locker.v1beta1.MsgDepositAssetRequest":
-      return "DepositAssetRequest";
-    case "/comdex.lend.v1beta1.MsgLend":
-      return "Lend";
-    case "/comdex.lend.v1beta1.MsgCloseLend":
-      return "Close";
-    case "/comdex.lend.v1beta1.MsgWithdraw":
-      return "Withdraw";
-    case "/comdex.lend.v1beta1.MsgDeposit":
-      return "Deposit";
-    case "/comdex.lend.v1beta1.MsgBorrow":
-      return "Borrow";
-    case "/comdex.lend.v1beta1.MsgRepay":
-      return "Repay";
-    case "/comdex.lend.v1beta1.MsgDepositBorrow":
-      return "DepositBorrow";
-    case "/comdex.lend.v1beta1.MsgDraw":
-      return "Draw";
-    case "/comdex.lend.v1beta1.MsgCloseBorrow":
-      return "CloseBorrow";
-    case "/cosmos.gov.v1beta1.MsgVote":
-      return "Vote";
-    case "/comdex.liquidity.v1beta1.MsgCancelOrder":
-      return "CancelOrder";
-    default:
-      return type;
+export const abbreviateMessage = (msg) => {
+  if (Array.isArray(msg)) {
+    const sum = msg
+      .map((x) => abbreviateMessage(x))
+      .reduce((s, c) => {
+        const sh = s;
+        if (sh[c]) {
+          sh[c] += 1;
+        } else {
+          sh[c] = 1;
+        }
+        return sh;
+      }, {});
+    const output = [];
+    Object.keys(sum).forEach((k) => {
+      output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k);
+    });
+    return output.join(", ");
   }
+  if (msg["@type"]) {
+    return msg["@type"]
+      .substring(msg["@type"].lastIndexOf(".") + 1)
+      .replace("Msg", "");
+  }
+  if (msg.typeUrl) {
+    return msg.typeUrl
+      .substring(msg.typeUrl.lastIndexOf(".") + 1)
+      .replace("Msg", "");
+  }
+  return msg.type.substring(msg.type.lastIndexOf("/") + 1).replace("Msg", "");
 };
 
 export const defaultFee = () => {
