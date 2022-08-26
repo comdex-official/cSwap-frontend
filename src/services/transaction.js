@@ -41,15 +41,17 @@ export const abbreviateMessage = (msg) => {
   }
   if (msg["@type"]) {
     return msg["@type"]
-      .substring(msg["@type"].lastIndexOf(".") + 1)
+      .substring(msg["@type"]?.lastIndexOf(".") + 1)
       .replace("Msg", "");
   }
-  if (msg.typeUrl) {
-    return msg.typeUrl
-      .substring(msg.typeUrl.lastIndexOf(".") + 1)
+  if (msg?.typeUrl) {
+    return msg?.typeUrl
+      .substring(msg?.typeUrl?.lastIndexOf(".") + 1)
       .replace("Msg", "");
   }
-  return msg.type.substring(msg.type.lastIndexOf("/") + 1).replace("Msg", "");
+  return msg?.type
+    ?.substring(msg?.type?.lastIndexOf("/") + 1)
+    .replace("Msg", "");
 };
 
 export const defaultFee = () => {
