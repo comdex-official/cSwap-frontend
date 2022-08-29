@@ -324,9 +324,9 @@ const FarmDetails = ({
                 Apr
                 <TooltipIcon text="Annual percentage rate of CMDX rewards for the corresponding  pool. Note:- APRs are subject to change with pool size." />
               </label>
-              <p>
+              <div>
                 <ShowAPR pool={pool} />
-              </p>
+              </div>
             </Col>
           </Row>
         </div>
