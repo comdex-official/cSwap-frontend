@@ -297,7 +297,7 @@ const FarmDetails = ({
           </Row>
           <Row className="pool-details-list">
             <Col sm="6" className="mb-3">
-              <label>Total amount</label>
+              <label>Total Amount</label>
               <p>
                 {" "}
                 {pair?.baseCoinDenom &&

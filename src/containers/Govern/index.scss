@@ -65,6 +65,12 @@
             color: $white;
           }
         }
+        p{
+          a{
+            font-size: $font-size-sm;
+            color: $text-color-light;
+          }
+        }
       }
 
       .right-section {

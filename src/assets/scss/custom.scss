@@ -179,14 +179,15 @@ button {
   .ant-tooltip-inner {
     background-color: $tooltip-bg-light !important;
     color: $tooltip-color-dark;
-    font-size: $font-size-sm - 2;
-    min-height: 20px;
+    font-size: $font-size-sm;
+    min-height: 18px;
     padding: 2px 3px;
-    line-height: 12px;
+    line-height: 13px;
     border-radius: 3px !important;
+    font-weight: 400;
 
     .dark-mode & {
-      background-color: $tooltip-bg-light;
+      background-color: $dark-color;
       color: $tooltip-color-dark;
     }
   }
