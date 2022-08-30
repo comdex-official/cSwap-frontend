@@ -7,15 +7,15 @@ import { setUserLiquidityInPools } from "../actions/liquidity";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
-  queryLiquidityPair,
-  queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+    queryLiquidityPair,
+    queryPoolCoinDeserialize,
+    queryPoolSoftLocks
 } from "../services/liquidity/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getDenomBalance
 } from "../utils/coin";
 import { commaSeparator, marketPrice } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
@@ -128,7 +128,7 @@ const PoolCardFarm = ({
   return (
     <div
       className="poolcard-two"
-      onClick={() => navigate(`/farm-details/${pool.id && pool.id.toNumber()}`)}
+      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
     >
       <div className="poolcard-two-inner">
         <div className="card-upper">
