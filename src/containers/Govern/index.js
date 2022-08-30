@@ -160,7 +160,7 @@ const Govern = () => {
                           key={item?.proposal_id}
                           className="governlist-row"
                           onClick={() =>
-                            navigate(`/govern-details/${item?.proposal_id}`)
+                            navigate(`/govern/${item?.proposal_id}`)
                           }
                         >
                           <div className="left-section">

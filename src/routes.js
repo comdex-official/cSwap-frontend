@@ -1,10 +1,10 @@
 import Assets from "./containers/Assets";
-import Swap from "./containers/Swap";
 import Farm from "./containers/Farm";
-import Govern from "./containers/Govern";
-import Balances from "./containers/MyHome";
-import GovernDetails from "./containers/Govern/Details";
 import FarmDetails from "./containers/Farm/Details";
+import Govern from "./containers/Govern";
+import GovernDetails from "./containers/Govern/Details";
+import Balances from "./containers/MyHome";
+import Swap from "./containers/Swap";
 
 const routes = [
   {
@@ -24,7 +24,7 @@ const routes = [
     element: <Govern />,
   },
   {
-    path: "/govern-details/:id",
+    path: "/govern/:id",
     element: <GovernDetails />,
   },
   {
@@ -32,7 +32,7 @@ const routes = [
     element: <Balances />,
   },
   {
-    path: "/farm-details/:id",
+    path: "/farm/:id",
     element: <FarmDetails />,
   },
 ];
