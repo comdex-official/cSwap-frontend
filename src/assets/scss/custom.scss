@@ -266,7 +266,8 @@ button {
     &:hover,
     &:active,
     &:focus {
-      background: darken($secondary-btn-color, 0.5);
+      background: rgba($secondary-btn-color, 0.7);
+      border-color: rgba($secondary-btn-color, 0.7);
       color: $white;
     }
   }
@@ -897,6 +898,15 @@ button {
           height: 16px;
         }
       }
+
+      &:hover{
+        .ant-select-arrow{
+          .icon{
+            fill: $secondary-color;
+          }
+        }
+      }
+
     }
 
     &.center-select-text {
@@ -1373,4 +1383,21 @@ button {
   .back-btn {
     padding: 0 25px;
   }
+}
+
+
+::-webkit-scrollbar {
+  width: 4.2px;
+  height: 4.2px;
+  background: $background-light;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: $secondary-color;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: none;
 }

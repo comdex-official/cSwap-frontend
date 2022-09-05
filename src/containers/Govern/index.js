@@ -80,7 +80,7 @@ const Govern = () => {
     setProposals(allFilteredProposal);
   };
 
-  const MAX_LENGTH = 220;
+  const MAX_LENGTH = 70;
 
   return (
     <div className="app-content-wrapper">
@@ -166,7 +166,7 @@ const Govern = () => {
                           <div className="left-section">
                             <h3>#{item?.proposal_id}</h3>
                             <h3>{item?.content?.title}</h3>
-                            <p>{`${item?.content?.description.substring(0, MAX_LENGTH)}...`}<Link to="/govern">Read More</Link> </p>
+                            <p>{`${item?.content?.description.substring(0, MAX_LENGTH)}...`}</p>
                           </div>
                           <div className="right-section">
                             <Row>

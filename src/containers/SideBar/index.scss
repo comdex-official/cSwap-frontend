@@ -195,7 +195,7 @@
               background: #E0F1FA;
               padding: 1px;
               text-transform: uppercase;
-              height: calc(100% / 7.4);
+              height: calc(100% / 6);
 
               @media screen and (min-width: 1200px) {
                 height: calc(100% / 7.8);
@@ -240,7 +240,7 @@
               }
             }
 
-            &.active_tab {
+            &.active_tab, &:hover {
               color: #1B1B1B;
               background: $primary-gradient;
 

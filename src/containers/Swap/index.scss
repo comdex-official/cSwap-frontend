@@ -104,6 +104,9 @@
       width: 20px;
       fill: #354774;
       cursor: pointer;
+      &:hover{
+        fill: $secondary-color;
+      }
     }
   }
   .order_table_section {
