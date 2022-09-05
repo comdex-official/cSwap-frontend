@@ -4,16 +4,16 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
-  setFirstReserveCoinDenom,
-  setPools,
-  setSecondReserveCoinDenom
+    setFirstReserveCoinDenom,
+    setPools,
+    setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
 import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
+    DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
@@ -90,7 +90,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
         <Button
           type="primary"
           onClick={() =>
-            navigate(`/farm-details/${item.id && item.id.toNumber()}`)
+            navigate(`/farm/${item.id && item.id.toNumber()}`)
           }
           className="btn-filled"
           size="small"
