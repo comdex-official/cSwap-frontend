@@ -52,9 +52,7 @@ const Assets = ({
       align: "left",
       width: 100,
       render: (price) => (
-        <>
-          <p>${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p>
-        </>
+        <><p className="text-left">${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p></>
       ),
     },
     {

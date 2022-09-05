@@ -3,7 +3,10 @@
 .composite-card {
   &.govern-card2 {
     padding: 26px;
-
+    .description-row{
+      max-height: 165px;
+      overflow-y: auto;
+    }
     h3 {
       .dark-mode & {
         color: $white;

@@ -50,10 +50,16 @@
       .icon {
         width: 20px;
         height: 20px;
+        transition: all ease-in 0.1s;
       }
       &.active {
         .icon {
           fill: $secondary-color;
+        }
+      }
+      &:hover{
+        .icon{
+          transform: scale(1.2);
         }
       }
     }
@@ -124,8 +130,14 @@
           height: 26px;
           width: 26px;
           cursor: pointer;
+          transition: all ease-in 0.1s;
           .dark-mode & {
             fill: $white;
+          }
+        }
+        &:hover{
+          .icon{
+            transform: scale(1.1);
           }
         }
       }

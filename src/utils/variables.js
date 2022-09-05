@@ -138,7 +138,7 @@ const variables = {
     short: "Short",
     provide_ust: "Provide UST",
     provide: "Provide",
-    total_amount: "Total amount",
+    total_amount: "Total Amount",
     pool_details: "POOL DETAILS",
     your_details: "YOUR DETAILS",
     my_amount: "My amount",
