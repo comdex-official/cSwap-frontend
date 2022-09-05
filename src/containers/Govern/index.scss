@@ -58,9 +58,6 @@
         .dark-mode & {
           background: $body-background-dark;
         }
-        .left-section {
-          background-position: 90.5% 50%;
-        }
       }
 
       &:last-child {
@@ -75,20 +72,22 @@
         width: 55%;
         padding-right: 10%;
         line-height: 1.2;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8.381' height='15' viewBox='0 0 8.381 15'%3E%3Cpath id='Path_39' data-name='Path 39' d='M0 .893A.9.9 0 0 1 .253.261.877.877 0 0 1 1.5.261l6 5.987L13.491.261a.882.882 0 1 1 1.248 1.248l-6.6 6.619a.87.87 0 0 1-.632.253.939.939 0 0 1-.632-.253L.253 1.509A.86.86 0 0 1 0 .893Z' transform='translate(0 15) rotate(-90)' fill='%23fff'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: 90% 50%;
-        transition: all ease-in 0.1s;
         
         h3 {
           font-size: 20px;
-          margin-bottom: 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-bottom: 8px;
 
           .dark-mode & {
             color: $white;
           }
         }
         p{
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           a{
             font-size: $font-size-sm;
             color: $text-color-light;
@@ -98,6 +97,18 @@
 
       .right-section {
         width: 45%;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8.381' height='15' viewBox='0 0 8.381 15'%3E%3Cpath id='Path_39' data-name='Path 39' d='M0 .893A.9.9 0 0 1 .253.261.877.877 0 0 1 1.5.261l6 5.987L13.491.261a.882.882 0 1 1 1.248 1.248l-6.6 6.619a.87.87 0 0 1-.632.253.939.939 0 0 1-.632-.253L.253 1.509A.86.86 0 0 1 0 .893Z' transform='translate(0 15) rotate(-90)' fill='%23fff'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: 100% 50%;
+        transition: all ease-in 0.1s;
+
+        .right-col{
+          &:last-child{
+            p{
+              margin-bottom: 0;
+            }
+          }
+        }
 
         .ant-progress {
           .ant-progress-outer {
@@ -139,6 +150,13 @@
           }
         }
       }
+
+      &:hover{
+        .left-section {
+          background-position: 100.5% 50%;
+        }
+      }
+
     }
   }
 }

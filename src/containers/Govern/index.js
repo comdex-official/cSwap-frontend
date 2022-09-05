@@ -170,21 +170,21 @@ const Govern = () => {
                           </div>
                           <div className="right-section">
                             <Row>
-                              <Col sm="6">
+                              <Col sm="6" className='right-col'>
                                 <label>Voting starts :</label>
                                 <p>
                                   {formatTime(item?.voting_start_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6">
+                              <Col sm="6" className='right-col'>
                                 <label>Voting Ends :</label>
                                 <p>
                                   {formatTime(item?.voting_end_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6">
+                              <Col sm="6" className='right-col'>
                                 <label>Duration : </label>
                                 <p>
                                   {getDuration(
