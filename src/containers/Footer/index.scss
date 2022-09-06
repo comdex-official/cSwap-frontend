@@ -22,6 +22,11 @@
       .icon {
         width: 18px;
       }
+      &:hover{
+        .icon{
+          fill: $secondary-color;
+        }
+      }
     }
   }
 }
