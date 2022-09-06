@@ -10,7 +10,6 @@ import { fetchRestProposals } from "../../services/govern/query";
 import { queryStakeTokens } from "../../services/staking/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { formatTime, getDuration } from "../../utils/date";
-import { Link } from "react-router-dom";
 import "./index.scss";
 
 const { Option } = Select;
@@ -79,8 +78,6 @@ const Govern = () => {
       });
     setProposals(allFilteredProposal);
   };
-
-  const MAX_LENGTH = 70;
 
   return (
     <div className="app-content-wrapper">
@@ -166,25 +163,25 @@ const Govern = () => {
                           <div className="left-section">
                             <h3>#{item?.proposal_id}</h3>
                             <h3>{item?.content?.title}</h3>
-                            <p>{`${item?.content?.description.substring(0, MAX_LENGTH)}...`}</p>
+                            <p>{item?.content?.description} </p>
                           </div>
                           <div className="right-section">
                             <Row>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting starts :</label>
                                 <p>
                                   {formatTime(item?.voting_start_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting Ends :</label>
                                 <p>
                                   {formatTime(item?.voting_end_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Duration : </label>
                                 <p>
                                   {getDuration(
