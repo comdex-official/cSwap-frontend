@@ -6,10 +6,9 @@ import { connect } from "react-redux";
 import { Col, Row } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
+import { APP_ID } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
-import { commaSeparator } from "../../../../utils/number";
 import variables from "../../../../utils/variables";
 import PoolTokenValue from "../PoolTokenValue";
 
@@ -25,7 +24,6 @@ const UnFarm = ({
   pool,
   refreshData,
   updateBalance,
-  aprMap,
   userLockedPoolTokens,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -94,16 +92,9 @@ const UnFarm = ({
     <div className="common-card">
       <div className="farm-content-card">
         <Form layout="vertical">
-          <Row>
+          <Row className="mb-3">
             <Col>
-              <label className="card-title-label">{variables[lang].apr}</label>
-              <h2 className="card-titles">
-                {aprMap[pool?.id?.low]
-                  ? `${commaSeparator(
-                      Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-                    )}%`
-                  : "-"}
-              </h2>
+              <h2 className="card-titles">Amount to Unfarm</h2>
             </Col>
           </Row>
           <Row className="mb-5">
@@ -134,7 +125,7 @@ const UnFarm = ({
               </div>
             </Col>
           </Row>
-          <Row className="pool_balance p-1 mb-2">
+          <Row className="pool_balance p-1 mb-2 pt-1">
             <Col className="label-left">You will unfarm</Col>
             <Col className="text-right">
               <PoolTokenValue poolTokens={amount} /> ≈{" "}
@@ -177,7 +168,6 @@ UnFarm.propTypes = {
   refreshData: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -206,7 +196,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     pool: state.liquidity.pool._,
     balances: state.account.balances.list,
-    aprMap: state.liquidity.aprMap,
   };
 };
 

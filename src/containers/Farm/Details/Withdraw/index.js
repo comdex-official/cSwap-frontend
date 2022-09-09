@@ -1,22 +1,21 @@
-import React from "react";
-import { Slider, Button, message, Form } from "antd";
-import { useState } from "react";
+import { Button, Form, message, Slider } from "antd";
+import Long from "long";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Col, Row } from "../../../../components/common";
+import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
+import { APP_ID } from "../../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
-import { signAndBroadcastTransaction } from "../../../../services/helper";
-import { defaultFee } from "../../../../services/transaction";
-import Snack from "../../../../components/common/Snack";
 import variables from "../../../../utils/variables";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
 import Info from "../../Info";
-import { APP_ID } from "../../../../constants/common";
-import Long from "long";
 import PoolTokenValue from "../PoolTokenValue";
 
 const marks = {
@@ -112,7 +111,7 @@ const Remove = ({
           </Row>
           <Row className="mb-5">
             <Col>
-              <div className="slider-bar mt-3 pb-3">
+              <div className="slider-bar mt-4 pb-4">
                 <div className="slider-numbers remove-liquidity-slider">
                   <Slider
                     className="comdex-slider-alt"
@@ -136,7 +135,7 @@ const Remove = ({
               </div>
             </Col>
           </Row>
-          <Row className="pool_balance p-1 mb-2 pt-4">
+          <Row className="pool_balance p-1 mb-2 pt-1">
             <Col className="label-left">Tokens to be withdrawn</Col>
             <Col className="text-right">
               <PoolTokenValue poolTokens={amount || 0} /> ≈ {amount || 0}{" "}
