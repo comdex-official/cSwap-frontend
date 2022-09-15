@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React from "react";
@@ -52,7 +52,11 @@ const Assets = ({
       align: "left",
       width: 100,
       render: (price) => (
-        <><p className="text-left">${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p></>
+        <>
+          <p className="text-left">
+            ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
+          </p>
+        </>
       ),
     },
     {
@@ -79,7 +83,23 @@ const Assets = ({
       // width: 210,
       render: (value) => {
         if (value) {
-          return <Deposit chain={value} />;
+          return value?.depositUrlOverride ? (
+            <Button type="primary" size="small">
+              <a
+                href={value?.depositUrlOverride}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Deposit{" "}
+                <span className="hyperlink-icon">
+                  {" "}
+                  <SvgIcon name="hyperlink" />
+                </span>
+              </a>
+            </Button>
+          ) : (
+            <Deposit chain={value} />
+          );
         }
       },
     },
@@ -90,7 +110,23 @@ const Assets = ({
       width: 110,
       render: (value) => {
         if (value) {
-          return <Withdraw chain={value} />;
+          return value?.withdrawUrlOverride ? (
+            <Button type="primary" size="small">
+              <a
+                href={value?.withdrawUrlOverride}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Withdraw{" "}
+                <span className="hyperlink-icon">
+                  {" "}
+                  <SvgIcon name="hyperlink" />
+                </span>
+              </a>
+            </Button>
+          ) : (
+            <Withdraw chain={value} />
+          );
         }
       },
     },
@@ -118,6 +154,8 @@ const Assets = ({
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
       explorerUrlToTx: token?.explorerUrlToTx,
+      depositUrlOverride: token?.depositUrlOverride,
+      withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
 
