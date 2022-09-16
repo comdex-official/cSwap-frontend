@@ -23,13 +23,13 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
         return;
       }
 
-      console.log("the reslt is", result?.data);
       setPoolRewards(result?.data);
     });
   };
+
   return (
     <>
-      {isFetchingAPR ? (
+      {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
         <Skeleton.Button
           className="apr-skeleton"
           active={true}
