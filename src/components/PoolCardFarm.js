@@ -7,15 +7,15 @@ import { setUserLiquidityInPools } from "../actions/liquidity";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
-    queryLiquidityPair,
-    queryPoolCoinDeserialize,
-    queryPoolSoftLocks
+  queryLiquidityPair,
+  queryPoolCoinDeserialize,
+  queryPoolSoftLocks
 } from "../services/liquidity/query";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getDenomBalance
 } from "../utils/coin";
 import { commaSeparator, marketPrice } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
@@ -30,7 +30,7 @@ const PoolCardFarm = ({
   userLiquidityInPools,
   address,
   balances,
-  swapAprMap,
+  rewardsMap,
   parent,
   poolPriceMap,
 }) => {
@@ -162,7 +162,7 @@ const PoolCardFarm = ({
             <div>
               Swap Fee APR -{" "}
               {commaSeparator(
-                Number(swapAprMap[pool?.id?.low] || 0).toFixed(DOLLAR_DECIMALS)
+                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed(DOLLAR_DECIMALS)
               )}
               %
             </div>
@@ -224,7 +224,7 @@ PoolCardFarm.propTypes = {
   }),
   poolIndex: PropTypes.number,
   poolPriceMap: PropTypes.object,
-  swapAprMap: PropTypes.object,
+  rewardsMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -232,7 +232,7 @@ const stateToProps = (state) => {
   return {
     address: state.account.address,
     markets: state.oracle.market.list,
-    swapAprMap: state.liquidity.swapAprMap,
+    rewardsMap: state.liquidity.rewardsMap,
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,

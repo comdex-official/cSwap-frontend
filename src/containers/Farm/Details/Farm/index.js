@@ -26,7 +26,7 @@ const Farm = ({
   pool,
   refreshData,
   updateBalance,
-  aprMap,
+  rewardsMap,
   userPoolTokens,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -100,9 +100,9 @@ const Farm = ({
             <Col>
               <label className="card-title-label">{variables[lang].apr}</label>
               <h2 className="card-titles">
-                {aprMap[pool?.id?.low]
+                {rewardsMap[pool?.id?.low]
                   ? `${commaSeparator(
-                      Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
+                      Number(rewardsMap[pool?.id?.low]?.incentive_rewards[0]?.apr).toFixed(DOLLAR_DECIMALS)
                     )}%`
                   : "-"}
               </h2>
@@ -175,7 +175,7 @@ Farm.propTypes = {
   refreshData: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
-  aprMap: PropTypes.object,
+  rewardsMap: PropTypes.object,
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -194,7 +194,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     pool: state.liquidity.pool._,
-    aprMap: state.liquidity.aprMap,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 

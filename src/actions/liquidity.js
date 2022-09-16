@@ -2,21 +2,16 @@ import {
   BASE_COIN_POOL_PRICE_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
   FIRST_RESERVE_COIN_DENOM_SET,
-  NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
   POOLS_LIQUIDITY_LIST_SET,
   POOLS_SET,
-  POOL_APR_SET,
   POOL_BALANCES_SET,
   POOL_BALANCE_FETCH_IN_PROGRESS,
   POOL_BALANCE_SET,
   POOL_INCENTIVES_SET,
-  POOL_PRICE_SET,
-  POOL_SET,
+  POOL_PRICE_SET, POOL_REWARDS_SET, POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
   SPOT_PRICE_SET,
-  SWAP_APR_SET,
-  SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET
 } from "../constants/liquidity";
@@ -173,38 +168,6 @@ export const setPoolIncentives = (list) => {
   };
 };
 
-export const setPoolApr = (poolId, value) => {
-  return {
-    type: POOL_APR_SET,
-    value,
-    poolId,
-  };
-};
-
-export const setSwapApr = (poolId, value) => {
-  return {
-    type: SWAP_APR_SET,
-    value,
-    poolId,
-  };
-};
-
-export const setNormalRewardDollarValuePerDay = (poolId, value) => {
-  return {
-    type: NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
-    value,
-    poolId,
-  };
-};
-
-export const setSwapRewardDollarValuePerDay = (poolId, value) => {
-  return {
-    type: SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
-    value,
-    poolId,
-  };
-};
-
 export const setFarmedTokensDollarValue = (poolId, value) => {
   return {
     type: FARMED_TOKENS_DOLLAR_VALUE,
@@ -218,5 +181,12 @@ export const setPoolPrice = (denom, value) => {
     type: POOL_PRICE_SET,
     value,
     denom,
+  };
+};
+
+export const setPoolRewards = (value) => {
+  return {
+    type: POOL_REWARDS_SET,
+    value,
   };
 };
