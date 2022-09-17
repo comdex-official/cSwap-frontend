@@ -6,10 +6,9 @@ import { connect } from "react-redux";
 import { Col, Row } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
+import { APP_ID } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
-import { commaSeparator } from "../../../../utils/number";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
 import PoolTokenValue from "../PoolTokenValue";
@@ -26,7 +25,6 @@ const Farm = ({
   pool,
   refreshData,
   updateBalance,
-  rewardsMap,
   userPoolTokens,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -96,16 +94,9 @@ const Farm = ({
     <div className="common-card">
       <div className="farm-content-card">
         <Form layout="vertical">
-          <Row>
+          <Row className="mb-3">
             <Col>
-              <label className="card-title-label">{variables[lang].apr}</label>
-              <h2 className="card-titles">
-                {rewardsMap[pool?.id?.low]
-                  ? `${commaSeparator(
-                      Number(rewardsMap[pool?.id?.low]?.incentive_rewards[0]?.apr).toFixed(DOLLAR_DECIMALS)
-                    )}%`
-                  : "-"}
-              </h2>
+              <h2 className="card-titles">Amount to Farm</h2>
             </Col>
           </Row>
           <Row className="mb-5">
@@ -136,7 +127,7 @@ const Farm = ({
               </div>
             </Col>
           </Row>
-          <Row className="pool_balance p-1 mb-2">
+          <Row className="pool_balance p-1 mb-2 pt-1">
             <Col className="label-left">You will farm</Col>
             <Col className="text-right">
               <PoolTokenValue poolTokens={amount} /> ≈{" "}
@@ -175,7 +166,6 @@ Farm.propTypes = {
   refreshData: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
-  rewardsMap: PropTypes.object,
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -194,7 +184,6 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     pool: state.liquidity.pool._,
-    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 
