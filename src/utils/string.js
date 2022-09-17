@@ -174,3 +174,10 @@ export const proposalStatusMap = {
   PROPOSAL_STATUS_REJECTED: "Rejected",
   PROPOSAL_STATUS_FAILED: "Failed",
 };
+
+export const proposalOptionMap = {
+  1: "Yes",
+  2: "Abstain",
+  3: "No",
+  4: "NoWithVeto",
+};
