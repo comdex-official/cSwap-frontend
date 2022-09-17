@@ -3,28 +3,39 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setPoolRewards } from "../../actions/liquidity";
+import SvgIcon from '../../components/common/svg-icon/svg-icon';
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
+import { iconNameFromDenom } from "../../utils/string";
 
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
 
   useEffect(() => {
+    const getAPRs = () => {
+      setIsFetchingAPR(true);
+      fetchRestAPRs((error, result) => {
+        setIsFetchingAPR(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+  
+        setPoolRewards(result?.data);
+      });
+    };
+
     getAPRs();
-  }, [pool]);
-
-  const getAPRs = () => {
-    setIsFetchingAPR(true);
-    fetchRestAPRs((error, result) => {
-      setIsFetchingAPR(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setPoolRewards(result?.data);
-    });
+  }, [pool, setPoolRewards]);
+  
+  const showIndividualAPR = (list) => {
+    return Object.keys(list).map((key) => (
+      <span className="ml-1">
+        {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+        % {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+      </span>
+    ));
   };
 
   return (
@@ -36,11 +47,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
           size={"small"}
         />
       ) : Number(rewardsMap?.[pool?.id?.low]?.incentive_rewards[0]?.apr) ? (
-        `${commaSeparator(
-          Number(
-            rewardsMap?.[pool?.id?.low]?.incentive_rewards[0]?.apr
-          ).toFixed(DOLLAR_DECIMALS)
-        )}%`
+        showIndividualAPR(rewardsMap?.[pool?.id?.low]?.incentive_rewards)
       ) : (
         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}

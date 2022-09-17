@@ -160,9 +160,9 @@ const PoolCardFarm = ({
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
             <div>
-              Swap Fee APR -{" "}
+              Swap APR -{" "}
               {commaSeparator(
-                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed(DOLLAR_DECIMALS)
+                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed()
               )}
               %
             </div>
@@ -193,7 +193,6 @@ PoolCardFarm.propTypes = {
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   lang: PropTypes.string,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
