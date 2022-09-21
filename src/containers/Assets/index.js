@@ -5,7 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
-import { comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import {
@@ -50,9 +50,9 @@ const Assets = ({
       dataIndex: "price",
       key: "price",
       align: "left",
-      width: 100,
+      width: 150,
       render: (price) => (
-        <><p className="text-left">${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p></>
+        <><p className="text-left">{commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))} {denomConversion(cmst?.coinMinimalDenom)}</p></>
       ),
     },
     {
