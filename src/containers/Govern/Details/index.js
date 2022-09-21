@@ -1,26 +1,30 @@
-import * as PropTypes from "prop-types";
+import { Button, List, message } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
-import { Button, List, message } from "antd";
-import "./index.scss";
-import VoteNowModal from "../VoteNowModal";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import Copy from "../../../components/Copy";
+import { comdex } from "../../../config/network";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   fetchRestProposal,
   fetchRestProposer,
-  queryUserVote,
+  queryUserVote
 } from "../../../services/govern/query";
-import { formatTime, getDuration } from "../../../utils/date";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { proposalStatusMap, truncateString } from "../../../utils/string";
 import { denomConversion } from "../../../utils/coin";
-import { comdex } from "../../../config/network";
+import { formatTime, getDuration } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
-import Copy from "../../../components/Copy";
+import {
+  proposalOptionMap,
+  proposalStatusMap,
+  truncateString
+} from "../../../utils/string";
+import VoteNowModal from "../VoteNowModal";
+import "./index.scss";
 
 const GovernDetails = ({ address }) => {
   const { id } = useParams();
@@ -96,7 +100,7 @@ const GovernDetails = ({ address }) => {
           return;
         }
 
-        setVotedOption(result?.vote);
+        setVotedOption(result?.vote?.option);
       });
     }
   }, [address, id, proposal]);
@@ -135,16 +139,19 @@ const GovernDetails = ({ address }) => {
     let abstain = Number(value?.abstain);
     let totalValue = yes + no + abstain + veto;
 
-    yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    veto = Number((veto / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    abstain = Number((abstain / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
+    yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    no = Number((no / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    veto = Number((veto / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    abstain = Number((abstain / totalValue || 0) * 100).toFixed(
+      DOLLAR_DECIMALS
+    );
+
     setGetVotes({
       ...getVotes,
-      yes: yes,
-      no: no,
-      veto: veto,
-      abstain: abstain,
+      yes: yes || 0,
+      no: no || 0,
+      veto: veto || 0,
+      abstain: abstain || 0,
     });
   };
 
@@ -206,7 +213,7 @@ const GovernDetails = ({ address }) => {
             color: "#F76872",
           },
           {
-            name: "noWithVeto",
+            name: "NoWithVeto",
             y: Number(getVotes?.veto || 0),
             color: "#AACBB9",
           },
@@ -251,7 +258,7 @@ const GovernDetails = ({ address }) => {
                   <List.Item>
                     <div>
                       <p>{item?.title}</p>
-                      <h3 className="count">{item?.counts}</h3>
+                      <h3>{item?.counts}</h3>
                     </div>
                   </List.Item>
                 )}
@@ -265,10 +272,26 @@ const GovernDetails = ({ address }) => {
           <div className="composite-card govern-card2 earn-deposite-card h-100">
             <Row>
               <Col>
-                <h3>#{proposal?.proposal_id}</h3>
+                <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
+                <span className=" mr-1">
+                  {votedOption
+                    ? `You voted: ${proposalOptionMap[votedOption]}`
+                    : ""}
+                </span>
+
                 <Button type="primary" className="btn-filled">
+                  <span
+                    className={
+                      proposalStatusMap[proposal?.status] === "Rejected" ||
+                      proposalStatusMap[proposal?.status] === "Failed"
+                        ? "failed-circle"
+                        : proposalStatusMap[proposal?.status] === "Passed"
+                        ? "passed-circle"
+                        : "warning-circle"
+                    }
+                  ></span>
                   {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
@@ -333,7 +356,7 @@ const GovernDetails = ({ address }) => {
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
-                          <label>noWithVeto </label>
+                          <label>NoWithVeto </label>
                           <p>{Number(getVotes?.veto || "0.00")}%</p>
                         </div>
                       </li>
