@@ -17,14 +17,9 @@ import {
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
-  
-  let poolsWithOutCmst = list.filter(
-    (item) => item?.id?.toNumber() !== Number(process.env.REACT_APP_APP_CMST_POOL_ID)
-  );
-
   return {
     type: POOLS_SET,
-    list: poolsWithOutCmst,
+    list,
     pagination,
   };
 };

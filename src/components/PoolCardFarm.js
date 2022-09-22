@@ -125,11 +125,19 @@ const PoolCardFarm = ({
     }
   };
 
+  const handleClick = (event) => {
+    console.log(
+      "the event",
+      event?.target?.tagName,
+      typeof event?.target?.tagName
+    );
+    if (event?.target?.tagName === "DIV") {
+      navigate(`/farm/${pool.id && pool.id.toNumber()}`);
+    }
+  };
+  
   return (
-    <div
-      className="poolcard-two"
-      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
-    >
+    <div className="poolcard-two" onClick={(event) => handleClick(event)}>
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
@@ -154,9 +162,6 @@ const PoolCardFarm = ({
             <label>{variables[lang].poolLiquidity}</label>
             <p>{`$${TotalPoolLiquidity}`}</p>
           </div>
-
-      
-
           <div className="cardbottom-row">
             {parent === "user" ? (
               <>
@@ -173,7 +178,6 @@ const PoolCardFarm = ({
             ) : null}
           </div>
 
-
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <div className="percent-box">
@@ -182,12 +186,13 @@ const PoolCardFarm = ({
             <div>
               Swap APR -{" "}
               {commaSeparator(
-                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed()
+                Number(
+                  rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                ).toFixed()
               )}
               %
             </div>
           </div>
-
         </div>
       </div>
     </div>
