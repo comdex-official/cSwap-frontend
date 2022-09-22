@@ -168,16 +168,16 @@
 
 .farm-modal-tab {
   height: 100%;
-  .ant-tabs-nav{
+  .ant-tabs-nav {
     margin-bottom: 16px !important;
   }
-  .ant-tabs-content-holder{
+  .ant-tabs-content-holder {
     height: 100%;
-    .ant-tabs-content{
+    .ant-tabs-content {
       height: 100%;
-      .ant-tabs-tabpane{
+      .ant-tabs-tabpane {
         height: 100%;
-        .common-card{
+        .common-card {
           height: 100%;
         }
       }
@@ -358,6 +358,7 @@
   .poolcard-two-inner {
     cursor: pointer;
     border-radius: $base-border-radius;
+    height: 100%;
     .card-upper {
       display: flex;
       align-items: center;
@@ -435,18 +436,47 @@
           border: 1px solid $text-color-light;
           color: $text-color-light;
           background: rgba($color: $text-color-light, $alpha: 0.2);
-          display: flex;
-          align-items: center;
-          font-size: $font-size-sm - 1;
+          font-size: $font-size-sm + 1;
           border-radius: 5px;
           padding: 1px 4px;
           width: fit-content;
+          span {
+            display: flex;
+            align-items: center;
+          }
           .icon {
             background: $white;
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             border-radius: 15px;
-            margin-left: 3px;
+            margin: 3px 5px 3px 0;
+          }
+          .view-all-farm-apr {
+            border: none;
+            font-size: 12px;
+            box-shadow: none;
+            &:hover {
+              color: black;
+              border: none;
+              background-color: transparent;
+            }
+            &:active {
+              border: none;
+              background-color: transparent;
+            }
+            &:focus {
+              color: black;
+              border: none;
+              background-color: transparent;
+            }
+            .dark-mode & {
+              &:focus {
+                color: white;
+              }
+              &:hover {
+                color: white;
+              }
+            }
           }
         }
       }
@@ -646,16 +676,66 @@
   }
 }
 
-.ant-skeleton{
-  &.apr-skeleton{
+.ant-skeleton {
+  &.apr-skeleton {
     height: 16px;
     margin-top: 1.8px;
-    .ant-skeleton-button{
+    .ant-skeleton-button {
       height: 16px;
       line-height: 16px;
-      &::after{
-        background: linear-gradient(90deg, rgba(188, 17, 17, 0.2) 25%, rgba(50, 65, 230, 0.24) 37%, rgba(188, 17, 17, 0.2) 63%);
+      &::after {
+        background: linear-gradient(
+          90deg,
+          rgba(188, 17, 17, 0.2) 25%,
+          rgba(50, 65, 230, 0.24) 37%,
+          rgba(188, 17, 17, 0.2) 63%
+        );
       }
     }
   }
+}
+.farm-apr-modal {
+  .ant-modal-content {
+    padding: 10px 20px !important;
+    .ant-modal-body {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 5px 24px !important;
+      span {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+        color: black;
+        .dark-mode & {
+          color: white;
+        }
+      }
+
+      .icon {
+        background: $white;
+        width: 20px;
+        height: 20px;
+        border-radius: 15px;
+        margin: 3px 5px 3px 0;
+      }
+    }
+  }
+  span {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    color: black;
+    .dark-mode & {
+      color: white;
+    }
+  }
+
+  .icon {
+    background: $white;
+    width: 20px;
+    height: 20px;
+    border-radius: 15px;
+    margin: 3px 5px 3px 0;
+  }
+  
 }

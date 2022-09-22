@@ -337,3 +337,11 @@
     }
   }
 }
+.portfolio-apr {
+  display: flex;
+  column-gap: 5px;
+  .view-all-farm-apr {
+    border: 2px solid $secondary-color !important;
+    margin: 0 0 0 10px !important;
+  }
+}
