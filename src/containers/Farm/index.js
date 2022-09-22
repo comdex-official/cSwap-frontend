@@ -60,9 +60,15 @@ const Farm = ({
     });
   };
 
-  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find(
+      (pool) =>
+        pool?.id?.toNumber() === Number(poolKey) &&
+        Number(userLiquidityInPools[poolKey]) > 0
+    )
   );
+
+  const userPools = rawUserPools.filter(item => item);// removes undefined values from array
 
   return (
     <div className="app-content-wrapper">
