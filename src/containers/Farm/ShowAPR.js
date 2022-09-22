@@ -8,9 +8,24 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
+import { Button, Modal } from 'antd';
 
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const getAPRs = () => {
@@ -21,21 +36,60 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
           message.error(error);
           return;
         }
-  
+
         setPoolRewards(result?.data);
       });
     };
 
     getAPRs();
   }, [pool, setPoolRewards]);
-  
+
   const showIndividualAPR = (list) => {
-    return Object.keys(list).map((key) => (
-      <span className="ml-1">
-        {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
-        % {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-      </span>
-    ));
+    if (list?.length > 2) {
+      return (
+        <>
+          {Object.keys(list).map((key, index) => (
+            <>
+              {index < 2 ?
+                <span className="ml-1">
+                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                  %
+                </span>
+                :
+                ""}
+            </>
+          ))}
+          <Button type="primary" onClick={showModal} className="view-all-farm-apr">
+            View All &rarr;
+          </Button>
+          <Modal title="Pool APRs" className="farm-apr-modal" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel} centered={true} footer={false}>
+            {Object.keys(list).map((key) => (
+              <>
+                <span className="ml-1">
+                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                  %
+                </span>
+              </>
+            ))}
+          </Modal>
+
+        </>
+      )
+    }
+    else {
+      return Object.keys(list).map((key) => (
+        <>
+          <span className="ml-1">
+            {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+            {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+            %
+          </span>
+
+        </>
+      ));
+    }
   };
 
   return (
