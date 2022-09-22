@@ -452,31 +452,7 @@
             margin: 3px 5px 3px 0;
           }
           .view-all-farm-apr {
-            border: none;
-            font-size: 12px;
-            box-shadow: none;
-            &:hover {
-              color: black;
-              border: none;
-              background-color: transparent;
-            }
-            &:active {
-              border: none;
-              background-color: transparent;
-            }
-            &:focus {
-              color: black;
-              border: none;
-              background-color: transparent;
-            }
-            .dark-mode & {
-              &:focus {
-                color: white;
-              }
-              &:hover {
-                color: white;
-              }
-            }
+            cursor: pointer;
           }
         }
       }
@@ -695,29 +671,43 @@
   }
 }
 .farm-apr-modal {
-  .ant-modal-content {
-    padding: 10px 20px !important;
-    .ant-modal-body {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 5px 24px !important;
-      span {
-        display: flex;
-        align-items: center;
-        margin: 10px;
-        color: black;
-        .dark-mode & {
-          color: white;
-        }
-      }
+  .ant-tooltip-inner {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    flex-wrap: wrap;
+    width: 270px;
 
-      .icon {
-        background: $white;
-        width: 20px;
-        height: 20px;
-        border-radius: 15px;
-        margin: 3px 5px 3px 0;
+    background: $background-light !important;
+    color: $tooltip-color-dark;
+    font-size: $font-size-sm;
+    min-height: 18px;
+    padding: 2px 3px;
+    line-height: 13px;
+    border-radius: 10px;
+    font-weight: 400;
+
+    .dark-mode & {
+      background: $background-dark1 !important;
+      color: $tooltip-color-dark;
+      border: 2px solid $border-dark;
+    }
+    span {
+      display: flex;
+      align-items: center;
+      margin: 10px;
+      color: black;
+      .dark-mode & {
+        color: white;
       }
+    }
+
+    .icon {
+      background: $white;
+      width: 20px;
+      height: 20px;
+      border-radius: 15px;
+      margin: 3px 5px 3px 0;
     }
   }
   span {
@@ -737,5 +727,4 @@
     border-radius: 15px;
     margin: 3px 5px 3px 0;
   }
-  
 }

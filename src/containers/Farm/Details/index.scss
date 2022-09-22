@@ -156,32 +156,8 @@
   }
 }
 .view-all-farm-apr {
-  border: none !important;
-  font-size: 12px !important;
-  box-shadow: none !important;
-  &:hover {
-    color: black !important;
-    border: none !important;
-    background-color: transparent !important;
-  }
-  &:active {
-    border: none !important;
-    background-color: transparent !important;
-  }
-  &:focus {
-    color: black !important;
-    border: none !important;
-    background-color: transparent !important;
-  }
-  .dark-mode & {
-    &:focus {
-      color: white !important;
-    }
-    &:hover {
-      color: white !important;
-    }
-  }
+  cursor: pointer;
 }
 .farm-apr-modal span {
-  margin: 0 0 0 10px ;
+  margin: 0 0 0 10px;
 }
