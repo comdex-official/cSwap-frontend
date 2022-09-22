@@ -8,24 +8,10 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import { Button, Modal } from 'antd';
+import { Tooltip } from 'antd';
 
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     const getAPRs = () => {
@@ -60,21 +46,22 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
                 ""}
             </>
           ))}
-          <Button type="primary" onClick={showModal} className="view-all-farm-apr">
-            View All &rarr;
-          </Button>
-          <Modal title="Pool APRs" className="farm-apr-modal" visible={isModalOpen} onOk={handleOk} onCancel={handleCancel} centered={true} footer={false}>
-            {Object.keys(list).map((key) => (
-              <>
-                <span className="ml-1">
-                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
-                  %
-                </span>
-              </>
-            ))}
-          </Modal>
 
+          <span className="comdex-tooltip ">
+            <Tooltip overlayClassName=" farm-apr-modal " title={
+              Object.keys(list).map((key) => (
+                <>
+                  <span className="ml-1">
+                    {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                    {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                    %
+                  </span>
+                </>
+              ))
+            }>
+              <span className="view-all-farm-apr"> View All &rarr;</span>
+            </Tooltip>
+          </span>
         </>
       )
     }
@@ -94,6 +81,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
 
   return (
     <>
+
       {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
         <Skeleton.Button
           className="apr-skeleton"
