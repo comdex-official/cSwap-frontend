@@ -28,7 +28,7 @@
 
 .ant-btn {
   &.back-btn {
-    border:1px solid #303950;
+    border: 1px solid #303950;
     color: #303950;
     background: none;
     border-radius: 30px !important;
@@ -141,17 +141,47 @@
   }
 }
 
-.farm-details-tab{
-  .ant-tabs-content-holder{
+.farm-details-tab {
+  .ant-tabs-content-holder {
     height: 100%;
-    .ant-tabs-content{
+    .ant-tabs-content {
       height: 100%;
-      .ant-tabs-tabpane{
+      .ant-tabs-tabpane {
         height: 100%;
-        .common-card{
+        .common-card {
           height: 100%;
         }
       }
     }
   }
+}
+.view-all-farm-apr {
+  border: none !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+  &:hover {
+    color: black !important;
+    border: none !important;
+    background-color: transparent !important;
+  }
+  &:active {
+    border: none !important;
+    background-color: transparent !important;
+  }
+  &:focus {
+    color: black !important;
+    border: none !important;
+    background-color: transparent !important;
+  }
+  .dark-mode & {
+    &:focus {
+      color: white !important;
+    }
+    &:hover {
+      color: white !important;
+    }
+  }
+}
+.farm-apr-modal span {
+  margin: 0 0 0 10px ;
 }

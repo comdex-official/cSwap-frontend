@@ -154,19 +154,8 @@ const PoolCardFarm = ({
             <label>{variables[lang].poolLiquidity}</label>
             <p>{`$${TotalPoolLiquidity}`}</p>
           </div>
-          <div className="cardbottom-row">
-            <label>{variables[lang].apr}</label>
-            <div className="percent-box">
-              <ShowAPR pool={pool} isSwapFee={true} />
-            </div>
-            <div>
-              Swap APR -{" "}
-              {commaSeparator(
-                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed()
-              )}
-              %
-            </div>
-          </div>
+
+      
 
           <div className="cardbottom-row">
             {parent === "user" ? (
@@ -183,6 +172,22 @@ const PoolCardFarm = ({
               </>
             ) : null}
           </div>
+
+
+          <div className="cardbottom-row">
+            <label>{variables[lang].apr}</label>
+            <div className="percent-box">
+              <ShowAPR pool={pool} isSwapFee={true} />
+            </div>
+            <div>
+              Swap APR -{" "}
+              {commaSeparator(
+                Number(rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0).toFixed()
+              )}
+              %
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
