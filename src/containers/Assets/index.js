@@ -128,7 +128,6 @@ const Assets = ({
 
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
-    console.log('the vale', value, ibcBalance?.denom)
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
