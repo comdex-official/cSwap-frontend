@@ -63,7 +63,6 @@ const ConnectButton = ({
   }, [address, refreshBalance]);
 
   useEffect(() => {
-    // fetchMarkets();
     fetchPrices();
   }, []);
 
