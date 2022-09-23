@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { comdex } from "../../config/network";
+import { cmst, comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
