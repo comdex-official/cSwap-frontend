@@ -1,15 +1,14 @@
 import { Button, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
-import { IoReload } from "react-icons/io5";
+import React from "react";
 import { connect } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
+import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import { queryAllBalances } from "../../services/bank/query";
 import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
@@ -32,22 +31,6 @@ const Assets = ({
   poolPriceMap,
   address,
 }) => {
-  const [inProgress, setInProgress] = useState(false);
-
-  const handleBalanceRefresh = () => {
-    if (address) {
-      setInProgress(true);
-      queryAllBalances(address, (error, result) => {
-        setInProgress(false);
-        if (error) {
-          return;
-        }
-
-        setAccountBalances(result.balances, result.pagination);
-      });
-    }
-  };
-
   const columns = [
     {
       title: "Asset",
@@ -314,6 +297,7 @@ const Assets = ({
 
   const tableData = Lodash.concat(currentChainData, tableIBCData);
 
+  console.log("rendering...", balances);
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
@@ -328,13 +312,6 @@ const Assets = ({
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].CMST}
-                  <span
-                    className="asset-reload-btn"
-                    onClick={() => handleBalanceRefresh()}
-                  >
-                    {" "}
-                    <IoReload />{" "}
-                  </span>
                 </div>
               </div>
             </Col>
@@ -346,7 +323,6 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
-              loading={inProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
@@ -360,6 +336,7 @@ const Assets = ({
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
+  setMarkets: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
@@ -395,6 +372,7 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setAccountBalances,
+  setMarkets,
 };
 
 export default connect(stateToProps, actionsToProps)(Assets);
