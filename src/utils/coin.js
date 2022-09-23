@@ -1,4 +1,4 @@
-import { comdex } from "../config/network";
+import { comdex, ibcDenoms } from "../config/network";
 import { commaSeparator } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
@@ -23,11 +23,19 @@ export const orderPriceConversion = (amount) => {
 };
 
 export const orderPriceReverseConversion = (amount) => {
-  const result = Number(amount) / (10 ** 18);
+  const result = Number(amount) / 10 ** 18;
   return result.toFixed(comdex.coinDecimals).toString();
 };
 
 export const denomConversion = (denom) => {
+  if (denom === "weth-wei" || denom === ibcDenoms["weth-wei"]) {
+    return "WETH";
+  }
+
+  if (denom === "uusdc" || denom === ibcDenoms["uusdc"]) {
+    return "USDC";
+  }
+
   if (denom && denom.substr(0, 1) === "u") {
     if (
       denom &&
