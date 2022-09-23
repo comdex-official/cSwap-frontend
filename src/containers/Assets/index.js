@@ -2,7 +2,8 @@ import { Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React from "react";
-import { connect } from "react-redux";
+import { IoReload } from "react-icons/io5";
+import { connect, useDispatch } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -27,7 +28,18 @@ const Assets = ({
   markets,
   parent,
   poolPriceMap,
+  refreshBalance,
 }) => {
+  const dispatch = useDispatch();
+
+  const handleBalanceRefresh = () => {
+    dispatch({
+      type: "BALANCE_REFRESH_SET",
+      value: refreshBalance + 1,
+    });
+  };
+
+
   const columns = [
     {
       title: "Asset",
@@ -116,7 +128,6 @@ const Assets = ({
 
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
-    console.log('the vale', value, ibcBalance?.denom)
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
@@ -248,6 +259,13 @@ const Assets = ({
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].CMST}
+                  <span
+                  className="asset-reload-btn"
+                  onClick={() => handleBalanceRefresh()}
+                >
+                  {" "}
+                  <IoReload />{" "}
+                </span>
                 </div>
               </div>
             </Col>
@@ -271,6 +289,7 @@ const Assets = ({
 
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -299,6 +318,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     poolPriceMap: state.liquidity.poolPriceMap,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 

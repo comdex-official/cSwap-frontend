@@ -126,14 +126,11 @@ const PoolCardFarm = ({
     }
   };
 
-  const handleClick = (event) => {
-    if (event?.target?.tagName === "DIV") {
-      navigate(`/farm/${pool.id && pool.id.toNumber()}`);
-    }
-  };
-
   return (
-    <div className="poolcard-two" onClick={(event) => handleClick(event)}>
+    <div
+      className="poolcard-two"
+      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
+    >
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
@@ -181,7 +178,7 @@ const PoolCardFarm = ({
             <div className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
-            <div>
+            <div className="swap-apr">
               Swap APR -{" "}
               {commaSeparator(
                 Number(
