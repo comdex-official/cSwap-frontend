@@ -1,16 +1,18 @@
-import { Button, Table } from "antd";
+import { Button, message, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
+import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { getChainConfig } from "../../services/keplr";
+import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -33,10 +35,13 @@ const Assets = ({
   address,
 }) => {
   const [inProgress, setInProgress] = useState(false);
+  const [pricesInProgress, setPricesInProgress] = useState(false);
 
   const handleBalanceRefresh = () => {
     if (address) {
       setInProgress(true);
+      updatePrices();
+
       queryAllBalances(address, (error, result) => {
         setInProgress(false);
         if (error) {
@@ -46,6 +51,21 @@ const Assets = ({
         setAccountBalances(result.balances, result.pagination);
       });
     }
+  };
+
+  const updatePrices = () => {
+    setPricesInProgress(true);
+
+    fetchRestPrices((error, result) => {
+      setPricesInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setMarkets(result.data);
+    });
   };
 
   const columns = [
@@ -346,7 +366,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
-              loading={inProgress}
+              loading={inProgress || pricesInProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
@@ -360,6 +380,7 @@ const Assets = ({
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
+  setMarkets: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
@@ -395,6 +416,7 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setAccountBalances,
+  setMarkets,
 };
 
 export default connect(stateToProps, actionsToProps)(Assets);
