@@ -15,7 +15,6 @@ const Farm = ({
   pools,
   lang,
   refreshBalance,
-  balances,
   masterPoolMap,
   userLiquidityInPools,
 }) => {
@@ -61,9 +60,15 @@ const Farm = ({
     });
   };
 
-  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find(
+      (pool) =>
+        pool?.id?.toNumber() === Number(poolKey) &&
+        Number(userLiquidityInPools[poolKey]) > 0
+    )
   );
+
+  const userPools = rawUserPools.filter(item => item);// removes undefined values from array
 
   return (
     <div className="app-content-wrapper">
@@ -162,12 +167,6 @@ Farm.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
   setPools: PropTypes.func.isRequired,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   masterPoolMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
@@ -189,7 +188,6 @@ const stateToProps = (state) => {
     lang: state.language,
     pools: state.liquidity.pool.list,
     refreshBalance: state.account.refreshBalance,
-    balances: state.account.balances.list,
     masterPoolMap: state.liquidity.masterPoolMap,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
   };

@@ -2,189 +2,94 @@ import { message, Skeleton } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import {
-  setFarmedTokensDollarValue,
-  setNormalRewardDollarValuePerDay,
-  setPoolApr,
-  setPoolPrice,
-  setSwapApr,
-  setSwapRewardDollarValuePerDay
-} from "../../actions/liquidity";
+import { setPoolRewards } from "../../actions/liquidity";
+import SvgIcon from '../../components/common/svg-icon/svg-icon';
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import {
-  queryFarmedPoolCoin,
-  queryPoolCoinDeserialize
-} from "../../services/liquidity/query";
-import { amountConversion } from "../../utils/coin";
-import {
-  calculateDollarValue,
-  commaSeparator,
-  getPoolPrice,
-  marketPrice
-} from "../../utils/number";
+import { fetchRestAPRs } from "../../services/liquidity/query";
+import { commaSeparator } from "../../utils/number";
+import { iconNameFromDenom } from "../../utils/string";
+import { Tooltip } from 'antd';
 
-const ShowAPR = ({
-  pool,
-  aprMap,
-  rewardMap,
-  markets,
-  setPoolApr,
-  isSwapFee,
-  setSwapApr,
-  farmedTokensDollarValue,
-  setFarmedTokensDollarValue,
-  setNormalRewardDollarValuePerDay,
-  normalRewardDollarValuePerDay,
-  swapRewardDollarValuePerDay,
-  setSwapRewardDollarValuePerDay,
-  setPoolPrice,
-  poolPriceMap,
-}) => {
-  const [isFetching, setIsFetching] = useState(false);
+const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
+  const [isFetchingAPR, setIsFetchingAPR] = useState(false);
 
   useEffect(() => {
-    if (pool?.id) {
-      let firstAsset = pool?.balances[0];
-      let secondAsset = pool?.balances[1];
-
-      let oracleAsset = {};
-      if (marketPrice(markets, firstAsset?.denom)) {
-        oracleAsset = firstAsset;
-      } else if (marketPrice(markets, secondAsset?.denom)) {
-        oracleAsset = secondAsset;
-      }
-
-      if (oracleAsset?.denom) {
-        let { xPoolPrice, yPoolPrice } = getPoolPrice(
-          marketPrice(markets, oracleAsset?.denom),
-          oracleAsset?.denom,
-          firstAsset,
-          secondAsset
-        );
-
-        setPoolPrice(firstAsset?.denom, xPoolPrice);
-        setPoolPrice(secondAsset?.denom, yPoolPrice);
-      }
-    }
-  }, [markets]);
-
-  useEffect(() => {
-    if (pool?.id && rewardMap[pool?.id?.low] && markets) {
-      getPoolDollarValue();
-      getFarmedPoolCoin();
-    }
-  }, [pool, markets, rewardMap, poolPriceMap]);
-
-  useEffect(() => {
-    if (
-      normalRewardDollarValuePerDay[pool?.id] &&
-      farmedTokensDollarValue[pool?.id]
-    ) {
-      setPoolApr(
-        pool?.id,
-        (normalRewardDollarValuePerDay[pool?.id] /
-          farmedTokensDollarValue[pool?.id]) *
-          365 *
-          100
-      );
-    } else if (
-      normalRewardDollarValuePerDay[pool?.id] &&
-      !farmedTokensDollarValue[pool?.id]
-    ) {
-      setPoolApr(pool?.id, normalRewardDollarValuePerDay[pool?.id] * 365 * 100);
-    }
-  }, [farmedTokensDollarValue, normalRewardDollarValuePerDay, pool]);
-
-  useEffect(() => {
-    if (
-      swapRewardDollarValuePerDay[pool?.id] &&
-      farmedTokensDollarValue[pool?.id] &&
-      isSwapFee
-    ) {
-      setSwapApr(
-        pool?.id,
-        (swapRewardDollarValuePerDay[pool?.id] /
-          farmedTokensDollarValue[pool?.id]) *
-          365 *
-          100
-      );
-    } else if (
-      swapRewardDollarValuePerDay[pool?.id] &&
-      !farmedTokensDollarValue[pool?.id] &&
-      isSwapFee
-    ) {
-      setSwapApr(pool?.id, swapRewardDollarValuePerDay[pool?.id] * 365 * 100);
-    }
-  }, [farmedTokensDollarValue, swapRewardDollarValuePerDay]);
-
-  const getPoolDollarValue = () => {
-    let normalRewardDollarValue = calculateDollarValue(
-      rewardMap,
-      markets,
-      pool?.id.toNumber(),
-      "normalRewards"
-    );
-    let swapRewardDollarValue = calculateDollarValue(
-      rewardMap,
-      markets,
-      pool?.id.toNumber(),
-      "swapRewards"
-    );
-
-    setNormalRewardDollarValuePerDay(pool?.id, normalRewardDollarValue);
-    setSwapRewardDollarValuePerDay(pool?.id, swapRewardDollarValue);
-  };
-
-  const getFarmedPoolCoin = () => {
-    setIsFetching(true);
-    queryFarmedPoolCoin(pool?.id, (error, result) => {
-      if (error) {
-        message.error(error);
-        setIsFetching(false);
-        return;
-      }
-
-      queryPoolCoinDeserialize(
-        pool?.id,
-        result?.coin?.amount,
-        (errorResponse, data) => {
-          setIsFetching(false);
-
-          if (errorResponse) {
-            message.error(errorResponse);
-            return;
-          }
-
-          const providedTokens = data?.coins;
-
-          const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount)) *
-              (poolPriceMap[providedTokens?.[0]?.denom] ||
-                marketPrice(markets, providedTokens?.[0]?.denom)) +
-            Number(amountConversion(providedTokens?.[1]?.amount)) *
-              (poolPriceMap[providedTokens?.[1]?.denom] ||
-                marketPrice(markets, providedTokens?.[1]?.denom));
-
-          if (totalLiquidityInDollar) {
-            setFarmedTokensDollarValue(pool?.id, totalLiquidityInDollar);
-          }
+    const getAPRs = () => {
+      setIsFetchingAPR(true);
+      fetchRestAPRs((error, result) => {
+        setIsFetchingAPR(false);
+        if (error) {
+          message.error(error);
+          return;
         }
-      );
-    });
+
+        setPoolRewards(result?.data);
+      });
+    };
+
+    getAPRs();
+  }, [pool, setPoolRewards]);
+
+  const showIndividualAPR = (list) => {
+    if (list?.length > 2) {
+      return (
+        <>
+          {Object.keys(list).map((key, index) => (
+            <>
+              {index < 2 ?
+                <span className="ml-1">
+                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                  %
+                </span>
+                :
+                ""}
+            </>
+          ))}
+
+          <span className="comdex-tooltip ">
+            <Tooltip overlayClassName=" farm-apr-modal " title={
+              Object.keys(list).map((key) => (
+                <>
+                  <span className="ml-1">
+                    {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                    {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                    %
+                  </span>
+                </>
+              ))
+            }>
+              <span className="view-all-farm-apr"> View All &rarr;</span>
+            </Tooltip>
+          </span>
+        </>
+      )
+    }
+    else {
+      return Object.keys(list).map((key) => (
+        <>
+          <span className="ml-1">
+            {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+            {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+            %
+          </span>
+
+        </>
+      ));
+    }
   };
 
   return (
     <>
-      {isFetching ? (
+
+      {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
         <Skeleton.Button
           className="apr-skeleton"
           active={true}
           size={"small"}
         />
-      ) : aprMap[pool?.id?.low] ? (
-        `${commaSeparator(
-          Number(aprMap[pool?.id?.low]).toFixed(DOLLAR_DECIMALS)
-        )}%`
+      ) : Number(rewardsMap?.[pool?.id?.low]?.incentive_rewards[0]?.apr) ? (
+        showIndividualAPR(rewardsMap?.[pool?.id?.low]?.incentive_rewards)
       ) : (
         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}
@@ -193,25 +98,7 @@ const ShowAPR = ({
 };
 
 ShowAPR.propTypes = {
-  setFarmedTokensDollarValue: PropTypes.func.isRequired,
-  setNormalRewardDollarValuePerDay: PropTypes.func.isRequired,
-  setPoolPrice: PropTypes.func.isRequired,
-  setSwapRewardDollarValuePerDay: PropTypes.func.isRequired,
-  aprMap: PropTypes.object,
-  farmedTokensDollarValue: PropTypes.object,
-  isSwapFee: PropTypes.bool,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
-  normalRewardDollarValuePerDay: PropTypes.object,
+  setPoolRewards: PropTypes.func.isRequired,
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,
@@ -222,34 +109,17 @@ ShowAPR.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
-
-  poolPriceMap: PropTypes.object,
-  rewardMap: PropTypes.object,
-  swapAprMap: PropTypes.object,
-  swapRewardDollarValuePerDay: PropTypes.object,
+  rewardsMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.list,
-    rewardMap: state.liquidity.rewardMap,
-    aprMap: state.liquidity.aprMap,
-    swapAprMap: state.liquidity.swapAprMap,
-    poolPriceMap: state.liquidity.poolPriceMap,
-    farmedTokensDollarValue: state.liquidity.farmedTokensDollarValue,
-    normalRewardDollarValuePerDay:
-      state.liquidity.normalRewardDollarValuePerDay,
-    swapRewardDollarValuePerDay: state.liquidity.swapRewardDollarValuePerDay,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 
-const actionToProps = {
-  setPoolApr,
-  setSwapApr,
-  setNormalRewardDollarValuePerDay,
-  setSwapRewardDollarValuePerDay,
-  setFarmedTokensDollarValue,
-  setPoolPrice,
+const actionsToProps = {
+  setPoolRewards,
 };
 
-export default connect(stateToProps, actionToProps)(ShowAPR);
+export default connect(stateToProps, actionsToProps)(ShowAPR);

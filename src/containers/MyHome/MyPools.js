@@ -64,7 +64,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
       dataIndex: "apr",
       key: "apr",
       align: "left",
-      render: (pool) => <ShowAPR pool={pool} />,
+      render: (pool) => <div className="farm-apr-modal portfolio-apr"><ShowAPR pool={pool} /></div>,
     },
     {
       title: (
