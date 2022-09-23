@@ -125,19 +125,11 @@ const PoolCardFarm = ({
     }
   };
 
-  const handleClick = (event) => {
-    console.log(
-      "the event",
-      event?.target?.tagName,
-      typeof event?.target?.tagName
-    );
-    if (event?.target?.tagName === "DIV") {
-      navigate(`/farm/${pool.id && pool.id.toNumber()}`);
-    }
-  };
-  
   return (
-    <div className="poolcard-two" onClick={(event) => handleClick(event)}>
+    <div
+      className="poolcard-two"
+      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
+    >
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
