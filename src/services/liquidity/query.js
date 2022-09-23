@@ -1,6 +1,8 @@
+import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/liquidity/v1beta1/query";
 import Long from "long";
 import { APP_ID } from "../../constants/common";
+import { API_URL } from '../../constants/url';
 import { createQueryClient } from "../helper";
 
 let myClient = null;
@@ -244,4 +246,15 @@ export const queryPool = (id, callback) => {
         callback(error?.message);
       });
   });
+};
+
+export const fetchRestAPRs = (callback) => {
+  axios
+    .get(`${API_URL}/cswap/aprs`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
 };
