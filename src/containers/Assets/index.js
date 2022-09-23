@@ -52,7 +52,11 @@ const Assets = ({
       align: "left",
       width: 150,
       render: (price) => (
-        <><p className="text-left">{commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))} {denomConversion(cmst?.coinMinimalDenom)}</p></>
+        <>
+          <p className="text-left">
+            ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
+          </p>
+        </>
       ),
     },
     {
@@ -100,7 +104,11 @@ const Assets = ({
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
-  let ibcBalances = AssetList?.tokens.map((token) => {
+  let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
+    (item) => !item.hasOwnProperty("depositUrlOverride")
+  );
+
+  let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
