@@ -1,13 +1,15 @@
 import { Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 import { IoReload } from "react-icons/io5";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import { setAccountBalances } from "../../actions/account";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import { queryAllBalances } from "../../services/bank/query";
 import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
@@ -28,17 +30,23 @@ const Assets = ({
   markets,
   parent,
   poolPriceMap,
-  refreshBalance,
+  address,
 }) => {
-  const dispatch = useDispatch();
+  const [inProgress, setInProgress] = useState(false);
 
   const handleBalanceRefresh = () => {
-    dispatch({
-      type: "BALANCE_REFRESH_SET",
-      value: refreshBalance + 1,
-    });
-  };
+    if (address) {
+      setInProgress(true);
+      queryAllBalances(address, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          return;
+        }
 
+        setAccountBalances(result.balances, result.pagination);
+      });
+    }
+  };
 
   const columns = [
     {
@@ -260,12 +268,12 @@ const Assets = ({
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].CMST}
                   <span
-                  className="asset-reload-btn"
-                  onClick={() => handleBalanceRefresh()}
-                >
-                  {" "}
-                  <IoReload />{" "}
-                </span>
+                    className="asset-reload-btn"
+                    onClick={() => handleBalanceRefresh()}
+                  >
+                    {" "}
+                    <IoReload />{" "}
+                  </span>
                 </div>
               </div>
             </Col>
@@ -277,6 +285,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
+              loading={inProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
@@ -289,7 +298,8 @@ const Assets = ({
 
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
-  refreshBalance: PropTypes.number.isRequired,
+  setAccountBalances: PropTypes.func.isRequired,
+  address: PropTypes.string,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -318,8 +328,12 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     poolPriceMap: state.liquidity.poolPriceMap,
-    refreshBalance: state.account.refreshBalance,
+    address: state.account.address,
   };
 };
 
-export default connect(stateToProps)(Assets);
+const actionsToProps = {
+  setAccountBalances,
+};
+
+export default connect(stateToProps, actionsToProps)(Assets);
