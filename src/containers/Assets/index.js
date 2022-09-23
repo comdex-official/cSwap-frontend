@@ -90,13 +90,16 @@ const Assets = ({
       dataIndex: "amount",
       key: "amount",
       align: "left",
-      render: (balance) => (
+      render: (amount) => (
         <>
           <p>
+            {amount?.denom === cmst?.coinMinimalDenom ? "$" : ""}
             {commaSeparator(
-              amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
+              amountConversion(amount?.value || 0, DOLLAR_DECIMALS)
             )}{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}
+            {amount?.denom !== cmst?.coinMinimalDenom
+              ? denomConversion(cmst?.coinMinimalDenom)
+              : ""}{" "}
           </p>
         </>
       ),
@@ -171,6 +174,7 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
+    console.log("ibc denom", ibcBalance, getPrice(ibcBalance?.denom));
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
@@ -179,7 +183,9 @@ const Assets = ({
       balance: {
         amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
         value: value || 0,
+        denom: ibcBalance?.denom,
       },
+
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
@@ -225,6 +231,7 @@ const Assets = ({
       },
       amount: {
         value: nativeCoinValue || 0,
+        denom: comdex?.coinMinimalDenom,
       },
     },
     {
@@ -247,6 +254,7 @@ const Assets = ({
 
       amount: {
         value: cmstCoinValue || 0,
+        denom: cmst?.coinMinimalDenom,
       },
     },
     {
@@ -269,6 +277,7 @@ const Assets = ({
 
       amount: {
         value: harborCoinValue || 0,
+        denom: harbor?.coinMinimalDenom,
       },
     },
   ];
@@ -294,7 +303,10 @@ const Assets = ({
           </>
         ),
         noOfTokens: item?.balance?.amount,
-        price: getPrice(item?.coinMinimalDenom),
+        price: {
+          value: getPrice(item?.ibcDenomHash),
+          denom: item?.ibcDenomHash,
+        },
         amount: item.balance,
         ibcdeposit: item,
         ibcwithdraw: item,
