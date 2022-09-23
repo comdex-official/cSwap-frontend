@@ -1,12 +1,15 @@
 import { Button, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
+import { IoReload } from "react-icons/io5";
 import { connect } from "react-redux";
+import { setAccountBalances } from "../../actions/account";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import { queryAllBalances } from "../../services/bank/query";
 import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
@@ -27,7 +30,24 @@ const Assets = ({
   markets,
   parent,
   poolPriceMap,
+  address,
 }) => {
+  const [inProgress, setInProgress] = useState(false);
+
+  const handleBalanceRefresh = () => {
+    if (address) {
+      setInProgress(true);
+      queryAllBalances(address, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          return;
+        }
+
+        setAccountBalances(result.balances, result.pagination);
+      });
+    }
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -50,11 +70,17 @@ const Assets = ({
       dataIndex: "price",
       key: "price",
       align: "left",
-      width: 100,
+      width: 150,
       render: (price) => (
         <>
           <p className="text-left">
-            ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
+            {price?.denom === cmst?.coinMinimalDenom ? "$" : ""}
+            {commaSeparator(
+              Number(price?.value || 0).toFixed(DOLLAR_DECIMALS)
+            )}{" "}
+            {price?.denom !== cmst?.coinMinimalDenom
+              ? denomConversion(cmst?.coinMinimalDenom)
+              : ""}
           </p>
         </>
       ),
@@ -67,10 +93,10 @@ const Assets = ({
       render: (balance) => (
         <>
           <p>
-            $
             {commaSeparator(
               amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
-            )}
+            )}{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}
           </p>
         </>
       ),
@@ -136,7 +162,11 @@ const Assets = ({
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
-  let ibcBalances = AssetList?.tokens.map((token) => {
+  let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
+    (item) => !item.hasOwnProperty("depositUrlOverride")
+  );
+
+  let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
@@ -189,7 +219,10 @@ const Assets = ({
         </>
       ),
       noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
-      price: getPrice(comdex?.coinMinimalDenom),
+      price: {
+        value: getPrice(comdex?.coinMinimalDenom),
+        denom: comdex?.coinMinimalDenom,
+      },
       amount: {
         value: nativeCoinValue || 0,
       },
@@ -207,7 +240,11 @@ const Assets = ({
         </>
       ),
       noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      price: getPrice(cmst?.coinMinimalDenom),
+      price: {
+        value: getPrice(cmst?.coinMinimalDenom),
+        denom: cmst?.coinMinimalDenom,
+      },
+
       amount: {
         value: cmstCoinValue || 0,
       },
@@ -225,7 +262,11 @@ const Assets = ({
         </>
       ),
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
-      price: getPrice(harbor?.coinMinimalDenom),
+      price: {
+        value: getPrice(harbor?.coinMinimalDenom),
+        denom: harbor?.coinMinimalDenom,
+      },
+
       amount: {
         value: harborCoinValue || 0,
       },
@@ -275,7 +316,14 @@ const Assets = ({
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  {variables[lang].USD}
+                  {variables[lang].CMST}
+                  <span
+                    className="asset-reload-btn"
+                    onClick={() => handleBalanceRefresh()}
+                  >
+                    {" "}
+                    <IoReload />{" "}
+                  </span>
                 </div>
               </div>
             </Col>
@@ -287,6 +335,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
+              loading={inProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
@@ -299,6 +348,8 @@ const Assets = ({
 
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAccountBalances: PropTypes.func.isRequired,
+  address: PropTypes.string,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -327,7 +378,12 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     poolPriceMap: state.liquidity.poolPriceMap,
+    address: state.account.address,
   };
 };
 
-export default connect(stateToProps)(Assets);
+const actionsToProps = {
+  setAccountBalances,
+};
+
+export default connect(stateToProps, actionsToProps)(Assets);

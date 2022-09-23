@@ -1,6 +1,5 @@
 import { Decimal } from "@cosmjs/math";
 import { DOLLAR_DECIMALS } from "../constants/common";
-import { denomToSymbol } from "./string";
 import { amountConversion } from "./coin";
 
 export const formatNumber = (number) => {
@@ -29,13 +28,11 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
-  const value = array.filter((item) => item.symbol === denomToSymbol(denom));
-
-  if (value && value[0]) {
-    return value[0] && value[0].rates / 1000000;
+  if (array?.ucmst?.[denom]?.price) {
+    return array?.ucmst?.[denom]?.price;
   }
 
-  return 0;
+  return 0; // returning 0 values if price not exists interms of cmst.
 };
 
 export const calculateDollarValue = (

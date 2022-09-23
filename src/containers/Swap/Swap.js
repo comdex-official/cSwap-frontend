@@ -335,9 +335,9 @@ const Swap = ({
       marketPrice(markets, demandCoin?.denom);
     const total = price * oralcePrice * offerCoin?.amount;
 
-    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )}`;
+    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
   };
 
   const showDemandCoinSpotPrice = () => {

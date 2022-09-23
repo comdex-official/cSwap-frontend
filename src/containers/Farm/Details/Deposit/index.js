@@ -14,7 +14,7 @@ import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { comdex } from "../../../../config/network";
+import { cmst, comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
@@ -279,9 +279,9 @@ const Deposit = ({
       marketPrice(markets, pair?.quoteCoinDenom);
     const total = price * oralcePrice * firstInput;
 
-    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )}`;
+    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
   };
 
   const showSecondCoinValue = () => {
@@ -291,9 +291,9 @@ const Deposit = ({
       marketPrice(markets, pair?.baseCoinDenom);
     const total = price * oralcePrice * secondInput;
 
-    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )}`;
+    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
   };
 
   return (

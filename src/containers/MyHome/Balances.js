@@ -158,7 +158,7 @@ const Balances = ({
       text: null,
     },
     subtitle: {
-      text: `${getTotalValue()} <br /> ${variables[lang].USD}`,
+      text: `${getTotalValue()} <br /> ${variables[lang].CMST}`,
       floating: !!address,
       style: {
         fontSize: "20px",
@@ -238,7 +238,7 @@ const Balances = ({
                 <div className="MyHome-chart">
                   {getTotalValue() <= 0 ? (
                     <div className="nodatachart">
-                      {Number(0).toFixed(DOLLAR_DECIMALS)} <p>USD</p>
+                      {Number(0).toFixed(DOLLAR_DECIMALS)} <p>CMST</p>
                     </div>
                   ) : (
                     <HighchartsReact
@@ -257,7 +257,7 @@ const Balances = ({
                         />
                       </label>
                       <h2>
-                        {getTotalValue()} {variables[lang].USD}
+                        {getTotalValue()} {variables[lang].CMST}
                       </h2>
                     </Col>
                   </Row>
@@ -275,7 +275,7 @@ const Balances = ({
                           assetBalance,
                           DOLLAR_DECIMALS
                         )}{" "}
-                        {variables[lang].USD}
+                        {variables[lang].CMST}
                       </h3>
                     </Col>
                     <Col xs="12" md="12" lg="6">
@@ -290,7 +290,7 @@ const Balances = ({
                         {commaSeparator(
                           Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
                         )}{" "}
-                        {variables[lang].USD}
+                        {variables[lang].CMST}
                       </h3>
                     </Col>
                   </Row>
