@@ -433,9 +433,6 @@
           }
         }
         .percent-box {
-          border: 1px solid $text-color-light;
-          color: $text-color-light;
-          background: rgba($color: $text-color-light, $alpha: 0.2);
           font-size: $font-size-sm + 1;
           border-radius: 5px;
           padding: 1px 4px;
@@ -453,6 +450,9 @@
           }
           .view-all-farm-apr {
             cursor: pointer;
+            text-align: center;
+            justify-content: center;
+            width: 100%;
           }
         }
       }
@@ -672,11 +672,11 @@
 }
 .farm-apr-modal {
   .ant-tooltip-inner {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     margin: 10px;
-    flex-wrap: wrap;
-    width: 270px;
+    width: 100%;
 
     background: $background-light !important;
     color: $tooltip-color-dark;

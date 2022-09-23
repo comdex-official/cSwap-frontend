@@ -59,7 +59,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
                 </>
               ))
             }>
-              <span className="view-all-farm-apr"> View All &rarr;</span>
+              <span className="view-all-farm-apr"> View All</span>
             </Tooltip>
           </span>
         </>
