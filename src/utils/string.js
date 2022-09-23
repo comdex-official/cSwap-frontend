@@ -15,6 +15,10 @@ export const ibcDenomToDenom = (key) => {
       return "uatom";
     case ibcDenoms["uosmo"]:
       return "uosmo";
+    case ibcDenoms["uusdc"]:
+      return "USDC";
+    case ibcDenoms["weth-wei"]:
+      return "WETH";
     default:
       return "";
   }
@@ -32,12 +36,10 @@ export const denomToSymbol = (key) => {
       return "OSMO";
     case "ucmdx":
       return "CMDX";
-    case "ucgold":
-      return "XAU";
-    case "ucsilver":
-      return "XAG";
-    case "ucoil":
-      return "OIL";
+    case "uusdc":
+      return "USDC";
+    case "weth-wei":
+      return "WETH";
     default:
       return "cosmos";
   }
@@ -71,6 +73,10 @@ const iconMap = {
   [ibcDenoms["uosmo"]]: "osmosis-icon",
   ucmst: "cmst-icon",
   uharbor: "harbor-icon",
+  uusdc: "usdc-icon",
+  [ibcDenoms["uusdc"]]: "usdc-icon",
+  "weth-wei": "weth-icon",
+  [ibcDenoms["weth-wei"]]: "weth-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
