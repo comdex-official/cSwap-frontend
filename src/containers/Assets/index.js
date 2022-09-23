@@ -5,7 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
-import { comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import {
@@ -50,9 +50,14 @@ const Assets = ({
       dataIndex: "price",
       key: "price",
       align: "left",
-      width: 100,
+      width: 150,
       render: (price) => (
-        <><p className="text-left">${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p></>
+        <>
+          <p className="text-left">
+            {commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}
+          </p>
+        </>
       ),
     },
     {
@@ -63,10 +68,10 @@ const Assets = ({
       render: (balance) => (
         <>
           <p>
-            $
             {commaSeparator(
               amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
-            )}
+            )}{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}
           </p>
         </>
       ),
@@ -100,13 +105,18 @@ const Assets = ({
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
-  let ibcBalances = AssetList?.tokens.map((token) => {
+  let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
+    (item) => !item.hasOwnProperty("depositUrlOverride")
+  );
+
+  let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
 
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
+    console.log('the vale', value, ibcBalance?.denom)
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
@@ -125,6 +135,12 @@ const Assets = ({
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
+
+  const cmstCoin = balances.filter(
+    (item) => item.denom === cmst?.coinMinimalDenom
+  )[0];
+
+  const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
 
   const harborCoin = balances.filter(
     (item) => item.denom === harbor?.coinMinimalDenom
@@ -148,6 +164,24 @@ const Assets = ({
       price: getPrice(comdex?.coinMinimalDenom),
       amount: {
         value: nativeCoinValue || 0,
+      },
+    },
+    {
+      key: cmst.coinMinimalDenom,
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon name={iconNameFromDenom(cmst?.coinMinimalDenom)} />
+            </div>{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}{" "}
+          </div>
+        </>
+      ),
+      noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
+      price: getPrice(cmst?.coinMinimalDenom),
+      amount: {
+        value: cmstCoinValue || 0,
       },
     },
     {
@@ -213,7 +247,7 @@ const Assets = ({
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  {variables[lang].USD}
+                  {variables[lang].CMST}
                 </div>
               </div>
             </Col>
