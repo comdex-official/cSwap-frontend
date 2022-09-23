@@ -74,7 +74,9 @@ const iconMap = {
   ucmst: "cmst-icon",
   uharbor: "harbor-icon",
   uusdc: "usdc-icon",
+  [ibcDenoms["uusdc"]]: "usdc-icon",
   "weth-wei": "weth-icon",
+  [ibcDenoms["weth-wei"]]: "weth-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
