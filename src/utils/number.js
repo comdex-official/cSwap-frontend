@@ -32,7 +32,7 @@ export const marketPrice = (array, denom) => {
     return array?.ucmst?.[denom]?.price;
   }
 
-  return array?.others?.[denom]?.price;
+  return 0; // returning 0 values if price not exists interms of cmst.
 };
 
 export const calculateDollarValue = (

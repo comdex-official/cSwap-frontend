@@ -213,7 +213,7 @@ const Assets = ({
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  {variables[lang].USD}
+                  {variables[lang].CMST}
                 </div>
               </div>
             </Col>
