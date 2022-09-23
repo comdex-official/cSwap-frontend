@@ -433,6 +433,9 @@
           }
         }
         .percent-box {
+          border: 1px solid $text-color-light;
+          color: $text-color-light;
+          background: rgba($color: $text-color-light, $alpha: 0.2);
           font-size: $font-size-sm + 1;
           border-radius: 5px;
           padding: 1px 4px;
@@ -454,6 +457,9 @@
             justify-content: center;
             width: 100%;
           }
+        }
+        .swap-apr {
+          width: max-content;
         }
       }
     }

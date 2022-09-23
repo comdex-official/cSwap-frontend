@@ -183,7 +183,7 @@ const PoolCardFarm = ({
             <div className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
-            <div>
+            <div className="swap-apr">
               Swap APR -{" "}
               {commaSeparator(
                 Number(
