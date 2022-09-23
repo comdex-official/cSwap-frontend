@@ -174,7 +174,6 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    console.log("ibc denom", ibcBalance, getPrice(ibcBalance?.denom));
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
