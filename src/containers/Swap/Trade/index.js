@@ -1,14 +1,13 @@
-import React from 'react'
-import './index.scss';
-import { Tabs } from 'antd';
-import { Table } from 'antd';
+import { Table, Tabs } from 'antd';
+import React from 'react';
 import { Col, Row } from '../../../components/common';
+import './index.scss';
 
 const Trade = () => {
     const { TabPane } = Tabs;
     const orderBookColumn = [
         {
-            title: 'Price USDT',
+            title: 'Price CMST',
             dataIndex: 'name',
         },
         {
@@ -16,13 +15,13 @@ const Trade = () => {
             dataIndex: 'age',
         },
         {
-            title: 'Total USDT',
+            title: 'Total CMST',
             dataIndex: 'address',
         },
     ];
     const tradesColumn = [
         {
-            title: 'Price USDT',
+            title: 'Price CMST',
             dataIndex: 'name',
         },
         {
