@@ -4,18 +4,20 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
-    setFirstReserveCoinDenom,
-    setPools,
-    setSecondReserveCoinDenom
+  setFirstReserveCoinDenom,
+  setPools,
+  setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
+import { cmst } from "../../config/network";
 import {
-    DEFAULT_PAGE_NUMBER,
-    DEFAULT_PAGE_SIZE,
-    DOLLAR_DECIMALS
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
+import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
 import ShowAPR from "../Farm/ShowAPR";
 import "./index.scss";
@@ -64,7 +66,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
       dataIndex: "apr",
       key: "apr",
       align: "left",
-      render: (pool) => <ShowAPR pool={pool} />,
+      render: (pool) => <div className="farm-apr-modal portfolio-apr"><ShowAPR pool={pool} /></div>,
     },
     {
       title: (
@@ -77,7 +79,7 @@ const MyPools = ({ setPools, pools, lang, balances, userLiquidityInPools }) => {
       key: "position",
       render: (position) => (
         <div>
-          ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
+          {commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}{" "}{denomConversion(cmst?.coinMinimalDenom)}
         </div>
       ),
     },

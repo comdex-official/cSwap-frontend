@@ -4,18 +4,19 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
+import { cmst } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
-    queryLiquidityPair,
-    queryPoolCoinDeserialize,
-    queryPoolSoftLocks
+  queryLiquidityPair,
+  queryPoolCoinDeserialize,
+  queryPoolSoftLocks
 } from "../services/liquidity/query";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getDenomBalance
 } from "../utils/coin";
 import { commaSeparator, marketPrice } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
@@ -30,7 +31,7 @@ const PoolCardFarm = ({
   userLiquidityInPools,
   address,
   balances,
-  swapAprMap,
+  rewardsMap,
   parent,
   poolPriceMap,
 }) => {
@@ -125,11 +126,14 @@ const PoolCardFarm = ({
     }
   };
 
+  const handleClick = (event) => {
+    if (event?.target?.tagName === "DIV") {
+      navigate(`/farm/${pool.id && pool.id.toNumber()}`);
+    }
+  };
+
   return (
-    <div
-      className="poolcard-two"
-      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
-    >
+    <div className="poolcard-two" onClick={(event) => handleClick(event)}>
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
@@ -152,36 +156,40 @@ const PoolCardFarm = ({
         <div className="card-bottom">
           <div className="cardbottom-row">
             <label>{variables[lang].poolLiquidity}</label>
-            <p>{`$${TotalPoolLiquidity}`}</p>
+            <p>{`${TotalPoolLiquidity} ${denomConversion(
+              cmst?.coinMinimalDenom
+            )}`}</p>
           </div>
+          <div className="cardbottom-row">
+            {parent === "user" ? (
+              <>
+                <label>Liquidity</label>
+                <p>
+                  {commaSeparator(
+                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )
+                  )}{" "}
+                  {denomConversion(cmst?.coinMinimalDenom)}
+                </p>
+              </>
+            ) : null}
+          </div>
+
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <div className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
             <div>
-              Swap Fee APR -{" "}
+              Swap APR -{" "}
               {commaSeparator(
-                Number(swapAprMap[pool?.id?.low] || 0).toFixed(DOLLAR_DECIMALS)
+                Number(
+                  rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                ).toFixed()
               )}
               %
             </div>
-          </div>
-
-          <div className="cardbottom-row">
-            {parent === "user" ? (
-              <>
-                <label>Liquidity</label>
-                <p>
-                  $
-                  {commaSeparator(
-                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )
-                  )}
-                </p>
-              </>
-            ) : null}
           </div>
         </div>
       </div>
@@ -193,7 +201,6 @@ PoolCardFarm.propTypes = {
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   lang: PropTypes.string,
-  aprMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -224,7 +231,7 @@ PoolCardFarm.propTypes = {
   }),
   poolIndex: PropTypes.number,
   poolPriceMap: PropTypes.object,
-  swapAprMap: PropTypes.object,
+  rewardsMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
 
@@ -232,7 +239,7 @@ const stateToProps = (state) => {
   return {
     address: state.account.address,
     markets: state.oracle.market.list,
-    swapAprMap: state.liquidity.swapAprMap,
+    rewardsMap: state.liquidity.rewardsMap,
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,

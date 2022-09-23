@@ -15,6 +15,7 @@ import {
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
+import { cmst } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
 import {
@@ -317,14 +318,16 @@ const FarmDetails = ({
                 Pool Liquidity
                 <TooltipIcon text="Total Liquidity of the current pool" />
               </label>
-              <p>{`$${TotalPoolLiquidity}`}</p>
+              <p>{`${TotalPoolLiquidity} ${denomConversion(
+                cmst?.coinMinimalDenom
+              )}`}</p>
             </Col>
             <Col sm="6" className="mb-3">
               <label>
                 Apr
                 <TooltipIcon text="Annual percentage rate of CMDX rewards for the corresponding  pool. Note:- APRs are subject to change with pool size." />
               </label>
-              <div>
+              <div className="farm-apr-modal">
                 <ShowAPR pool={pool} />
               </div>
             </Col>
@@ -355,12 +358,12 @@ const FarmDetails = ({
             <Col sm="4" className="mb-3">
               <label>My liquidity</label>
               <p>
-                $
                 {commaSeparator(
                   Number(userLiquidityInPools[pool?.id] || 0).toFixed(
                     DOLLAR_DECIMALS
                   )
-                )}
+                )}{" "}
+                {denomConversion(cmst?.coinMinimalDenom)}
               </p>
             </Col>
             <Col sm="4" className="mb-3">

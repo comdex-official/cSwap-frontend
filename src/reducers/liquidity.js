@@ -3,23 +3,19 @@ import {
   BASE_COIN_POOL_PRICE_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
   FIRST_RESERVE_COIN_DENOM_SET,
-  NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET,
   POOLS_LIQUIDITY_LIST_SET,
   POOLS_SET,
-  POOL_APR_SET,
   POOL_BALANCES_SET,
   POOL_BALANCE_FETCH_IN_PROGRESS,
   POOL_BALANCE_SET,
   POOL_DEPOSITS_SET,
   POOL_INCENTIVES_SET,
   POOL_PRICE_SET,
+  POOL_REWARDS_SET,
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
-  SPOT_PRICE_SET,
-  SWAP_APR_SET,
-  SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET,
-  USER_LIQUIDITY_IN_DOLLAR_SET,
+  SPOT_PRICE_SET, USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET
 } from "../constants/liquidity";
 
@@ -184,50 +180,6 @@ const masterPoolMap = (state = {}, action) => {
   return state;
 };
 
-const aprMap = (state = {}, action) => {
-  if (action.type === POOL_APR_SET) {
-    return {
-      ...state,
-      [action.poolId]: action.value,
-    };
-  }
-
-  return state;
-};
-
-const swapAprMap = (state = {}, action) => {
-  if (action.type === SWAP_APR_SET) {
-    return {
-      ...state,
-      [action.poolId]: action.value,
-    };
-  }
-
-  return state;
-};
-
-const normalRewardDollarValuePerDay = (state = {}, action) => {
-  if (action.type === NORMAL_REWARD_DOLLAR_VALUE_PER_DAY_SET) {
-    return {
-      ...state,
-      [action.poolId]: action.value,
-    };
-  }
-
-  return state;
-};
-
-const swapRewardDollarValuePerDay = (state = {}, action) => {
-  if (action.type === SWAP_REWARD_DOLLAR_VALUE_PER_DAY_SET) {
-    return {
-      ...state,
-      [action.poolId]: action.value,
-    };
-  }
-
-  return state;
-};
-
 const farmedTokensDollarValue = (state = {}, action) => {
   if (action.type === FARMED_TOKENS_DOLLAR_VALUE) {
     return {
@@ -250,6 +202,14 @@ const poolPriceMap = (state = {}, action) => {
   return state;
 };
 
+const rewardsMap = (state = {}, action) => {
+  if (action.type === POOL_REWARDS_SET) {
+    return action.value;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -267,10 +227,7 @@ export default combineReducers({
   incentives,
   masterPoolMap,
   rewardMap,
-  aprMap,
-  swapAprMap,
-  normalRewardDollarValuePerDay,
-  swapRewardDollarValuePerDay,
   farmedTokensDollarValue,
   poolPriceMap,
+  rewardsMap,
 });

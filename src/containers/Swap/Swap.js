@@ -132,13 +132,8 @@ const Swap = ({
       if (error) {
         return;
       }
-      let pairsWithoutCmst = result?.pairs?.filter(
-        (item) =>
-          item?.baseCoinDenom !== cmst?.coinMinimalDenom &&
-          item?.quoteCoinDenom !== cmst?.coinMinimalDenom
-      );
-      
-      setLiquidityPairs(pairsWithoutCmst);
+
+      setLiquidityPairs(result?.pairs);
     });
   }, []);
 
@@ -340,9 +335,9 @@ const Swap = ({
       marketPrice(markets, demandCoin?.denom);
     const total = price * oralcePrice * offerCoin?.amount;
 
-    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )}`;
+    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
   };
 
   const showDemandCoinSpotPrice = () => {
@@ -447,7 +442,7 @@ const Swap = ({
     liquidityPairs,
     !reverse ? "in" : "out"
   );
-  
+
   const outputOptions = uniqueQuoteDenomsForBase(
     liquidityPairs,
     !reverse ? "in" : "out",

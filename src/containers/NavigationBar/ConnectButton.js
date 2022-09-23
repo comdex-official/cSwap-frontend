@@ -16,7 +16,7 @@ import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
-import { comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { CMST_POOL_ID_LIST, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
@@ -25,7 +25,7 @@ import {
   queryPool,
   queryPoolIncentives
 } from "../../services/liquidity/query";
-import { queryMarketList } from "../../services/oracle/query";
+import { fetchRestPrices, queryMarketList } from "../../services/oracle/query";
 import { getPoolPrice, marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -63,7 +63,8 @@ const ConnectButton = ({
   }, [address, refreshBalance]);
 
   useEffect(() => {
-    fetchMarkets();
+    // fetchMarkets();
+    fetchPrices();
   }, []);
 
   const getPrice = (denom) => {
@@ -76,6 +77,7 @@ const ConnectButton = ({
         (item) =>
           item.denom.substr(0, 4) === "ibc/" ||
           item.denom === comdex.coinMinimalDenom ||
+          item.denom === cmst.coinMinimalDenom ||
           item.denom === harbor.coinMinimalDenom
       );
 
@@ -134,6 +136,16 @@ const ConnectButton = ({
     });
   };
 
+  const fetchPrices = () => {
+    fetchRestPrices((error, result)=>{
+      if(error){
+        message.error(error);
+        return;
+      }
+
+      setMarkets(result.data);
+    })
+  }
   const fetchParams = () => {
     queryLiquidityParams((error, result) => {
       if (error) {
