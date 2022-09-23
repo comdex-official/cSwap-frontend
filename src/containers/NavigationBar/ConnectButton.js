@@ -16,7 +16,7 @@ import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
-import { comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { CMST_POOL_ID_LIST, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
@@ -77,6 +77,7 @@ const ConnectButton = ({
         (item) =>
           item.denom.substr(0, 4) === "ibc/" ||
           item.denom === comdex.coinMinimalDenom ||
+          item.denom === cmst.coinMinimalDenom ||
           item.denom === harbor.coinMinimalDenom
       );
 
