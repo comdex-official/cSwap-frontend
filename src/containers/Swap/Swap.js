@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { cmst, comdex } from "../../config/network";
+import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -132,13 +132,8 @@ const Swap = ({
       if (error) {
         return;
       }
-      let pairsWithoutCmst = result?.pairs?.filter(
-        (item) =>
-          item?.baseCoinDenom !== cmst?.coinMinimalDenom &&
-          item?.quoteCoinDenom !== cmst?.coinMinimalDenom
-      );
-      
-      setLiquidityPairs(pairsWithoutCmst);
+
+      setLiquidityPairs(result?.pairs);
     });
   }, []);
 
@@ -447,7 +442,7 @@ const Swap = ({
     liquidityPairs,
     !reverse ? "in" : "out"
   );
-  
+
   const outputOptions = uniqueQuoteDenomsForBase(
     liquidityPairs,
     !reverse ? "in" : "out",

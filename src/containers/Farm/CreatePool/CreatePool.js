@@ -8,7 +8,7 @@ import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
 import CustomInput from "../../../components/CustomInput";
 import CustomSelect from "../../../components/CustomSelect";
-import { cmst, comdex } from "../../../config/network";
+import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import {
   APP_ID,
@@ -67,14 +67,8 @@ const CreatePoolModal = ({
       if (error) {
         return;
       }
-      
-      let pairsWithOutCmst = result?.pairs?.filter(
-        (item) =>
-          item?.baseCoinDenom !== cmst?.coinMinimalDenom &&
-          item?.quoteCoinDenom !== cmst?.coinMinimalDenom
-      );
-      
-      setLiquidityPairs(pairsWithOutCmst);
+
+      setLiquidityPairs(result?.pairs);
     });
 
     resetValues();
