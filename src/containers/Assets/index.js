@@ -74,8 +74,13 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            {commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}
+            {price?.denom === cmst?.coinMinimalDenom ? "$" : ""}
+            {commaSeparator(
+              Number(price?.value || 0).toFixed(DOLLAR_DECIMALS)
+            )}{" "}
+            {price?.denom !== cmst?.coinMinimalDenom
+              ? denomConversion(cmst?.coinMinimalDenom)
+              : ""}
           </p>
         </>
       ),
@@ -180,7 +185,10 @@ const Assets = ({
         </>
       ),
       noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
-      price: getPrice(comdex?.coinMinimalDenom),
+      price: {
+        value: getPrice(comdex?.coinMinimalDenom),
+        denom: comdex?.coinMinimalDenom,
+      },
       amount: {
         value: nativeCoinValue || 0,
       },
@@ -198,7 +206,11 @@ const Assets = ({
         </>
       ),
       noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      price: getPrice(cmst?.coinMinimalDenom),
+      price: {
+        value: getPrice(cmst?.coinMinimalDenom),
+        denom: cmst?.coinMinimalDenom,
+      },
+
       amount: {
         value: cmstCoinValue || 0,
       },
@@ -216,7 +228,11 @@ const Assets = ({
         </>
       ),
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
-      price: getPrice(harbor?.coinMinimalDenom),
+      price: {
+        value: getPrice(harbor?.coinMinimalDenom),
+        denom: harbor?.coinMinimalDenom,
+      },
+
       amount: {
         value: harborCoinValue || 0,
       },
