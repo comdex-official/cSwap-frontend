@@ -50,11 +50,12 @@ const Assets = ({
       dataIndex: "price",
       key: "price",
       align: "left",
-      width: 100,
+      width: 150,
       render: (price) => (
         <>
           <p className="text-left">
-            ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
+            {commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}
           </p>
         </>
       ),
@@ -67,10 +68,10 @@ const Assets = ({
       render: (balance) => (
         <>
           <p>
-            $
             {commaSeparator(
               amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
-            )}
+            )}{" "}
+            {denomConversion(cmst?.coinMinimalDenom)}
           </p>
         </>
       ),
@@ -115,6 +116,7 @@ const Assets = ({
 
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
+    console.log('the vale', value, ibcBalance?.denom)
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
@@ -245,7 +247,7 @@ const Assets = ({
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  {variables[lang].USD}
+                  {variables[lang].CMST}
                 </div>
               </div>
             </Col>
