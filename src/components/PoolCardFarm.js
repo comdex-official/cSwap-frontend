@@ -52,7 +52,7 @@ const PoolCardFarm = ({
     if (pool?.id && address) {
       getUserLiquidity(pool);
     }
-  }, [pool, address, poolPriceMap]);
+  }, [pool, address, poolPriceMap, markets]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
