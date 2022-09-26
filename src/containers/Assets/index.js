@@ -34,7 +34,6 @@ const Assets = ({
   refreshBalance
 }) => {
 
-  const [inProgress, setInProgress] = useState(false);
   const [pricesInProgress, setPricesInProgress] = useState(false);
 
   const dispatch = useDispatch();
@@ -361,7 +360,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
-              loading={inProgress || pricesInProgress}
+              loading={pricesInProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
