@@ -1,8 +1,9 @@
-import { Button, Table } from "antd";
+import { Button, message, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { IoReload } from "react-icons/io5";
+import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
 import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
@@ -10,6 +11,7 @@ import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
+import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -29,8 +31,37 @@ const Assets = ({
   markets,
   parent,
   poolPriceMap,
-  address,
+  refreshBalance
 }) => {
+
+  const [pricesInProgress, setPricesInProgress] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleBalanceRefresh = () => {
+    dispatch({
+      type: "BALANCE_REFRESH_SET",
+      value: refreshBalance + 1,
+    });
+
+    updatePrices()
+  };
+
+  const updatePrices = () => {
+    setPricesInProgress(true);
+
+    fetchRestPrices((error, result) => {
+      setPricesInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setMarkets(result.data);
+    });
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -311,6 +342,13 @@ const Assets = ({
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].CMST}
+                  <span
+                    className="asset-reload-btn"
+                    onClick={() => handleBalanceRefresh()}
+                  >
+                    {" "}
+                    <IoReload />{" "}
+                  </span>
                 </div>
               </div>
             </Col>
@@ -322,6 +360,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
+              loading={pricesInProgress}
               pagination={false}
               scroll={{ x: "100%" }}
             />
@@ -336,7 +375,6 @@ Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
-  address: PropTypes.string,
   assetBalance: PropTypes.number,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -356,6 +394,7 @@ Assets.propTypes = {
     })
   ),
   poolPriceMap: PropTypes.object,
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -365,8 +404,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     poolPriceMap: state.liquidity.poolPriceMap,
-    address: state.account.address,
-  };
+    refreshBalance: state.account.refreshBalance,  };
 };
 
 const actionsToProps = {
