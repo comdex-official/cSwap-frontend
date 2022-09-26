@@ -52,7 +52,7 @@ const PoolCardFarm = ({
     if (pool?.id && address) {
       getUserLiquidity(pool);
     }
-  }, [pool, address]);
+  }, [pool, address, poolPriceMap, markets]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
@@ -183,7 +183,7 @@ const PoolCardFarm = ({
               {commaSeparator(
                 Number(
                   rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
-                ).toFixed()
+                ).toFixed(DOLLAR_DECIMALS)
               )}
               %
             </div>

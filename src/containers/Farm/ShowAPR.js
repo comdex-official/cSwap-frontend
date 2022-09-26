@@ -1,4 +1,4 @@
-import { message, Skeleton } from "antd";
+import { message, Skeleton, Tooltip } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -8,7 +8,6 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import { Tooltip } from 'antd';
 
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
@@ -39,7 +38,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
               {index < 2 ?
                 <span className="ml-1">
                   {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS))}
                   %
                 </span>
                 :
@@ -70,7 +69,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
         <>
           <span className="ml-1">
             {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-            {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
+            {commaSeparator((Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS))}
             %
           </span>
 

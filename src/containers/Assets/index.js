@@ -297,7 +297,6 @@ const Assets = ({
 
   const tableData = Lodash.concat(currentChainData, tableIBCData);
 
-  console.log("rendering...", balances);
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
