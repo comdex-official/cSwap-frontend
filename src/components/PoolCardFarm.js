@@ -183,7 +183,7 @@ const PoolCardFarm = ({
               {commaSeparator(
                 Number(
                   rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
-                ).toFixed()
+                ).toFixed(DOLLAR_DECIMALS)
               )}
               %
             </div>
