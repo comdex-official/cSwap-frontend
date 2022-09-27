@@ -87,10 +87,7 @@ const Order = ({ lang }) => {
       }
     );
   };
-  const { TabPane } = Tabs;
-  function callback(key) {
-    console.log(key);
-  }
+  
   const openOrderColumns = [
     {
       title: "Order ID",
@@ -180,25 +177,31 @@ const Order = ({ lang }) => {
       };
     });
 
+  const tabItems = [
+    {
+      label: "Active Orders",
+      key: "1",
+      children: (
+        <Table
+          showHeader={true}
+          columns={openOrderColumns}
+          dataSource={openOrdersData}
+          pagination={false}
+          className="custom-table "
+        />
+      ),
+    },
+  ];
+
   return (
     <>
       <div className="position_main_container mt-15px ">
         <div className="position_container">
           <Tabs
             defaultActiveKey="1"
-            onChange={callback}
             className="comdex-tabs"
-          >
-            <TabPane tab="Active Orders" key="1">
-              <Table
-                showHeader={true}
-                columns={openOrderColumns}
-                dataSource={openOrdersData}
-                pagination={false}
-                className="custom-table "
-              />
-            </TabPane>
-          </Tabs>
+            items={tabItems}
+          />
         </div>
       </div>
     </>

@@ -7,11 +7,11 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { setPair } from "../../../actions/asset";
 import {
-    setFetchBalanceInProgress,
-    setPool,
-    setPoolBalance,
-    setSpotPrice,
-    setUserLiquidityInPools
+  setFetchBalanceInProgress,
+  setPool,
+  setPoolBalance,
+  setSpotPrice,
+  setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -19,16 +19,16 @@ import { cmst } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
 import {
-    queryLiquidityPair,
-    queryPool,
-    queryPoolCoinDeserialize,
-    queryPoolSoftLocks
+  queryLiquidityPair,
+  queryPool,
+  queryPoolCoinDeserialize,
+  queryPoolSoftLocks
 } from "../../../services/liquidity/query";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -39,8 +39,6 @@ import "./index.scss";
 import PoolTokenValue from "./PoolTokenValue";
 import Unfarm from "./Unfarm";
 import Withdraw from "./Withdraw";
-
-const { TabPane } = Tabs;
 
 const operations = (
   <MediaQuery maxWidth={767}>
@@ -223,40 +221,59 @@ const FarmDetails = ({
     }
   }, [providedTokens]);
 
+  const tabItems = [
+    {
+      label: "Deposit",
+      key: "1",
+      children: (
+        <Deposit
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
+      ),
+    },
+    {
+      label: "Withdraw",
+      key: "2",
+      children: (
+        <Withdraw
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
+      ),
+    },
+    {
+      label: "Farm",
+      key: "3",
+      children: (
+        <Farm
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userPoolTokens={userPoolTokens}
+        />
+      ),
+    },
+    {
+      label: "Unfarm",
+      key: "4",
+      children: (
+        <Unfarm
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userLockedPoolTokens={userLockedPoolTokens}
+        />
+      ),
+    },
+  ];
+
   return (
     <Row>
       <Col md="6">
         <Tabs
           className="comdex-tabs farm-modal-tab farm-details-tab"
           tabBarExtraContent={operations}
-        >
-          <TabPane tab="Deposit" key="1">
-            <Deposit
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-            />
-          </TabPane>
-          <TabPane tab="Withdraw" key="2">
-            <Withdraw
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-            />
-          </TabPane>
-          <TabPane tab="Farm" key="3">
-            <Farm
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-              userPoolTokens={userPoolTokens}
-            />
-          </TabPane>
-          <TabPane tab="Unfarm" key="4">
-            <Unfarm
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-              userLockedPoolTokens={userLockedPoolTokens}
-            />
-          </TabPane>
-        </Tabs>
+          items={tabItems}
+        />
       </Col>
       <Col md="6">
         <MediaQuery minWidth={767}>
