@@ -4,17 +4,17 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
-  setFirstReserveCoinDenom,
-  setPools,
-  setSecondReserveCoinDenom
+    setFirstReserveCoinDenom,
+    setPools,
+    setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
 import { cmst } from "../../config/network";
 import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
+    DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
@@ -144,17 +144,7 @@ MyPools.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({

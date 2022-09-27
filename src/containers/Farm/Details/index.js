@@ -40,8 +40,6 @@ import PoolTokenValue from "./PoolTokenValue";
 import Unfarm from "./Unfarm";
 import Withdraw from "./Withdraw";
 
-const { TabPane } = Tabs;
-
 const operations = (
   <MediaQuery maxWidth={767}>
     <Link to="/farm">
@@ -223,40 +221,59 @@ const FarmDetails = ({
     }
   }, [providedTokens]);
 
+  const tabItems = [
+    {
+      label: "Deposit",
+      key: "1",
+      children: (
+        <Deposit
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
+      ),
+    },
+    {
+      label: "Withdraw",
+      key: "2",
+      children: (
+        <Withdraw
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
+      ),
+    },
+    {
+      label: "Farm",
+      key: "3",
+      children: (
+        <Farm
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userPoolTokens={userPoolTokens}
+        />
+      ),
+    },
+    {
+      label: "Unfarm",
+      key: "4",
+      children: (
+        <Unfarm
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userLockedPoolTokens={userLockedPoolTokens}
+        />
+      ),
+    },
+  ];
+
   return (
     <Row>
       <Col md="6">
         <Tabs
           className="comdex-tabs farm-modal-tab farm-details-tab"
           tabBarExtraContent={operations}
-        >
-          <TabPane tab="Deposit" key="1">
-            <Deposit
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-            />
-          </TabPane>
-          <TabPane tab="Withdraw" key="2">
-            <Withdraw
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-            />
-          </TabPane>
-          <TabPane tab="Farm" key="3">
-            <Farm
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-              userPoolTokens={userPoolTokens}
-            />
-          </TabPane>
-          <TabPane tab="Unfarm" key="4">
-            <Unfarm
-              refreshData={queryPoolBalance}
-              updateBalance={handleBalanceRefresh}
-              userLockedPoolTokens={userLockedPoolTokens}
-            />
-          </TabPane>
-        </Tabs>
+          items={tabItems}
+        />
       </Col>
       <Col md="6">
         <MediaQuery minWidth={767}>
@@ -401,17 +418,7 @@ FarmDetails.propTypes = {
     })
   ),
   inProgress: PropTypes.bool,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pair: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,

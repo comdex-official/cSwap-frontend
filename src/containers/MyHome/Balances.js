@@ -28,8 +28,6 @@ import History from "./History";
 import "./index.scss";
 import MyPools from "./MyPools";
 
-const { TabPane } = Tabs;
-
 const Balances = ({
   lang,
   assetBalance,
@@ -228,6 +226,20 @@ const Balances = ({
     ],
   };
 
+  const tabItems = [
+    {
+      label: "Assets",
+      key: "1",
+      children: <Assets parent="portfolio" />,
+    },
+    {
+      label: "Liquidity",
+      key: "2",
+      children: <MyPools />,
+    },
+    { label: "History", key: "3", children: <History /> },
+  ];
+
   return (
     <div className="app-content-wrapper">
       {address ? (
@@ -306,17 +318,8 @@ const Balances = ({
                   onChange={setActiveKey}
                   activeKey={activeKey}
                   type="card"
-                >
-                  <TabPane tab="Assets" key="1">
-                    <Assets parent="portfolio" />
-                  </TabPane>
-                  <TabPane tab="Liquidity" key="2">
-                    <MyPools />
-                  </TabPane>
-                  <TabPane tab="History" key="3">
-                    <History />
-                  </TabPane>
-                </Tabs>
+                  items={tabItems}
+                />
               </div>
             </Col>
           </Row>

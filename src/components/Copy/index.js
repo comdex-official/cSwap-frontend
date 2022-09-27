@@ -1,8 +1,8 @@
-import * as PropTypes from "prop-types";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import React, { useState } from "react";
-import { SvgIcon } from "../common";
 import { Tooltip } from "antd";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { SvgIcon } from "../common";
 import "./index.scss";
 
 const Copy = ({ text }) => {
@@ -25,7 +25,7 @@ const Copy = ({ text }) => {
         e.stopPropagation();
       }}
     >
-      <Tooltip arrow visible={open} color="#FE4350" title="Copied!">
+      <Tooltip arrow open={open} color="#FE4350" title="Copied!">
         <CopyToClipboard onCopy={onCopy} text={text}>
           <SvgIcon name="copy" viewbox="0 0 17.61 20.985" />
         </CopyToClipboard>

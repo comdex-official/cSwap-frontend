@@ -29,7 +29,7 @@ const Deposit = ({
   refreshBalance,
   setBalanceRefresh,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
   const [amount, setAmount] = useState();
@@ -77,7 +77,7 @@ const Deposit = ({
         setProofHeight(data);
       });
     });
-    setIsModalVisible(true);
+    setIsModalOpen(true);
   };
 
   const signIBCTx = () => {
@@ -138,16 +138,16 @@ const Deposit = ({
       );
 
       setBalanceRefresh(refreshBalance + 1);
-      setIsModalVisible(false);
+      setIsModalOpen(false);
     });
   };
 
   const handleOk = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   return (
@@ -160,7 +160,7 @@ const Deposit = ({
         centered={true}
         closable={true}
         footer={null}
-        visible={isModalVisible}
+        open={isOpen}
         width={480}
         onCancel={handleCancel}
         onOk={handleOk}

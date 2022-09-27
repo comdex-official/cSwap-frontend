@@ -3,7 +3,7 @@ import { MARKET_LIST_SET } from "../constants/oracle";
 
 const market = (
   state = {
-    list: [],
+    list: {},
     pagination: {},
   },
   action

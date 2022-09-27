@@ -111,7 +111,7 @@ const Farm = ({
                     min={0}
                     disabled={!Number(userPoolTokens)}
                     onChange={onChange}
-                    tooltipVisible={false}
+                    tooltip={{ open: false }}
                   />
                   <CustomInput
                     defaultValue={sliderValue}

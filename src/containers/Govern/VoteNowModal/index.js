@@ -1,22 +1,22 @@
-import * as PropTypes from "prop-types";
-import { Button, Radio, Modal, Space, message } from "antd";
-import { Row, Col, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
-import React, { useState } from "react";
-import "./index.scss";
-import variables from "../../../utils/variables";
-import Snack from "../../../components/common/Snack";
-import { defaultFee } from "../../../services/transaction";
-import { signAndBroadcastTransaction } from "../../../services/helper";
+import { Button, message, Modal, Radio, Space } from "antd";
 import Long from "long";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import Snack from "../../../components/common/Snack";
+import { signAndBroadcastTransaction } from "../../../services/helper";
+import { defaultFee } from "../../../services/transaction";
+import variables from "../../../utils/variables";
+import "./index.scss";
 
 const VoteNowModal = ({ address, proposal, lang }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [userVote, setUserVote] = useState();
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsModalOpen(true);
   };
 
   const handleOk = () => {
@@ -59,7 +59,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   return (
@@ -78,7 +78,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
         className="votenow-modal"
         footer={null}
         header={null}
-        visible={isModalVisible}
+        open={isModalOpen}
         width={550}
         onOk={handleOk}
         onCancel={handleCancel}
