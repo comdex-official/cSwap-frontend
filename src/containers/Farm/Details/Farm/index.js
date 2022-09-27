@@ -176,7 +176,7 @@ Farm.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
-  userPoolTokens: PropTypes.number,
+  userPoolTokens: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const stateToProps = (state) => {
