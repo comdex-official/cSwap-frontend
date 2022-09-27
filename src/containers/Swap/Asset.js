@@ -1,9 +1,9 @@
 import * as PropTypes from "prop-types";
-import { iconNameFromDenom } from "../../utils/string";
-import { denomConversion } from "../../utils/coin";
-import variables from "../../utils/variables";
 import { Col, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
+import { denomConversion } from "../../utils/coin";
+import { iconNameFromDenom } from "../../utils/string";
+import variables from "../../utils/variables";
 
 export const Asset = ({ asset, lang }) => {
   return (
@@ -65,17 +65,7 @@ Asset.propTypes = {
       denom: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   text: PropTypes.string,
   premium: PropTypes.string,
 };

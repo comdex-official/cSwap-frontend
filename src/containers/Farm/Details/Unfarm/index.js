@@ -109,7 +109,7 @@ const UnFarm = ({
                     min={0}
                     disabled={!Number(userLockedPoolTokens)}
                     onChange={onChange}
-                    tooltipVisible={false}
+                    tooltip={{ open: false }}
                   />
                   <CustomInput
                     defaultValue={sliderValue}

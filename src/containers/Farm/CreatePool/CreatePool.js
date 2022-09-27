@@ -489,7 +489,7 @@ const CreatePoolModal = ({
   return (
     <>
       <Modal
-        visible={openPoolModal}
+        open={openPoolModal}
         onOk={closePool}
         onCancel={closePool}
         footer={false}
@@ -569,17 +569,7 @@ CreatePoolModal.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   params: PropTypes.shape({
     poolCreationFee: PropTypes.arrayOf(
       PropTypes.shape({

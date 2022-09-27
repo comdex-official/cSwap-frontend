@@ -4,11 +4,11 @@ import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
-  setBaseCoinPoolPrice,
-  setFirstReserveCoinDenom,
-  setPool,
-  setPoolBalance,
-  setSecondReserveCoinDenom
+    setBaseCoinPoolPrice,
+    setFirstReserveCoinDenom,
+    setPool,
+    setPoolBalance,
+    setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -17,18 +17,18 @@ import CustomInput from "../../../../components/CustomInput";
 import { cmst, comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
-  APP_ID,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS
+    APP_ID,
+    DEFAULT_FEE,
+    DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getAmount,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getAmount,
+    getDenomBalance
 } from "../../../../utils/coin";
 import { marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
@@ -461,17 +461,7 @@ Deposit.propTypes = {
     })
   ),
   firstReserveCoinDenom: PropTypes.string,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pair: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,

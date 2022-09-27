@@ -7,11 +7,11 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { setPair } from "../../../actions/asset";
 import {
-  setFetchBalanceInProgress,
-  setPool,
-  setPoolBalance,
-  setSpotPrice,
-  setUserLiquidityInPools
+    setFetchBalanceInProgress,
+    setPool,
+    setPoolBalance,
+    setSpotPrice,
+    setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -19,16 +19,16 @@ import { cmst } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
 import {
-  queryLiquidityPair,
-  queryPool,
-  queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+    queryLiquidityPair,
+    queryPool,
+    queryPoolCoinDeserialize,
+    queryPoolSoftLocks
 } from "../../../services/liquidity/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -401,17 +401,7 @@ FarmDetails.propTypes = {
     })
   ),
   inProgress: PropTypes.bool,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pair: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,

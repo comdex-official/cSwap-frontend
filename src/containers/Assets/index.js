@@ -13,9 +13,9 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -382,17 +382,7 @@ Assets.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   poolPriceMap: PropTypes.object,
   refreshBalance: PropTypes.number.isRequired,
 };

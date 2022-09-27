@@ -12,7 +12,7 @@ const CustomSelect = ({ value, onChange, list }) => {
     <Select
       aria-label="Select"
       className="assets-select"
-      dropdownClassName="asset-select-dropdown"
+      popupClassName="asset-select-dropdown"
       value={value}
       placeholder={
         <div className="select-placeholder">
