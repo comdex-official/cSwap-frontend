@@ -16,7 +16,7 @@ import {
   queryUserVote
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
-import { formatTime, getDuration } from "../../../utils/date";
+import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
@@ -46,13 +46,6 @@ const GovernDetails = ({ address }) => {
     {
       title: "Voting Ends",
       counts: formatTime(proposal?.voting_end_time) || "--/--/--",
-    },
-    {
-      title: "Duration",
-      counts: `${
-        getDuration(proposal?.voting_end_time, proposal?.voting_start_time) || 0
-      }
-      Days`,
     },
     {
       title: "Proposer",
@@ -248,10 +241,10 @@ const GovernDetails = ({ address }) => {
                   gutter: 16,
                   xs: 1,
                   sm: 2,
-                  md: 2,
-                  lg: 4,
-                  xl: 4,
-                  xxl: 4,
+                  md: 3,
+                  lg: 3,
+                  xl: 3,
+                  xxl: 3,
                 }}
                 dataSource={data}
                 renderItem={(item) => (
@@ -281,7 +274,7 @@ const GovernDetails = ({ address }) => {
                     : ""}
                 </span>
 
-                <Button type="primary" className="btn-filled">
+                <Button type="primary">
                   <span
                     className={
                       proposalStatusMap[proposal?.status] === "Rejected" ||

@@ -9,7 +9,7 @@ import { comdex } from "../../config/network";
 import { fetchRestProposals } from "../../services/govern/query";
 import { queryStakeTokens } from "../../services/staking/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
-import { formatTime, getDuration } from "../../utils/date";
+import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
 import "./index.scss";
 
@@ -166,7 +166,7 @@ const Govern = () => {
                               #{item?.proposal_id}
                               <Button
                                 type="primary"
-                                className="btn-filled ml-1"
+                                className="ml-1"
                               >
                                 <span
                                   className={
@@ -200,16 +200,6 @@ const Govern = () => {
                                 <p>
                                   {formatTime(item?.voting_end_time) ||
                                     "--/--/--"}
-                                </p>
-                              </Col>
-                              <Col sm="6" className="right-col">
-                                <label>Duration : </label>
-                                <p>
-                                  {getDuration(
-                                    item?.voting_end_time,
-                                    item?.voting_start_time
-                                  ) || 0}{" "}
-                                  Days
                                 </p>
                               </Col>
                             </Row>
