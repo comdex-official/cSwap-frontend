@@ -2,7 +2,7 @@ import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/liquidity/v1beta1/query";
 import Long from "long";
 import { APP_ID } from "../../constants/common";
-import { API_URL } from '../../constants/url';
+import { API_URL } from "../../constants/url";
 import { createQueryClient } from "../helper";
 
 let myClient = null;
@@ -17,7 +17,7 @@ const getQueryService = (callback) => {
       if (error) {
         return callback(error);
       }
-      
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 
@@ -200,25 +200,6 @@ export const queryPoolIncentives = (callback) => {
     queryService
       .PoolIncentives({
         appId: Long.fromNumber(APP_ID),
-      })
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => callback(error?.message));
-  });
-};
-
-export const queryFarmedPoolCoin = (poolId, callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .FarmedPoolCoin({
-        appId: Long.fromNumber(APP_ID),
-        poolId,
       })
       .then((result) => {
         callback(null, result);
