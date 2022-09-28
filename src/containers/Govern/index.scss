@@ -20,13 +20,13 @@
       border-bottom: 1px solid rgba($text-color-light, 0.2);
     }
 
-    .filter-select{
-      .ant-select-arrow{
-        .icon{
+    .filter-select {
+      .ant-select-arrow {
+        .icon {
           width: 12px;
         }
       }
-      .ant-select-selector{
+      .ant-select-selector {
         background: $background-dark1;
         border-radius: 40px;
         padding: 0 40px;
@@ -34,7 +34,7 @@
         .dark-mode & {
           border-color: $text-color-light;
         }
-        &:hover{
+        &:hover {
           background: $background-dark2;
           border-color: $secondary-color;
         }
@@ -53,7 +53,7 @@
       border-bottom: 1px solid rgba($text-color-light, 0.4);
       cursor: pointer;
       transition: all ease-in 0.1s;
-      &:hover{
+      &:hover {
         background: $body-background-light;
         .dark-mode & {
           background: $body-background-dark;
@@ -72,7 +72,7 @@
         width: 55%;
         padding-right: 10%;
         line-height: 1.2;
-        
+
         h3 {
           font-size: 20px;
           white-space: nowrap;
@@ -84,11 +84,11 @@
             color: $white;
           }
         }
-        p{
+        p {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          a{
+          a {
             font-size: $font-size-sm;
             color: $text-color-light;
           }
@@ -102,9 +102,9 @@
         background-position: 100% 50%;
         transition: all ease-in 0.1s;
 
-        .right-col{
-          &:last-child{
-            p{
+        .right-col {
+          &:last-child {
+            p {
               margin-bottom: 0;
             }
           }
@@ -121,12 +121,12 @@
             overflow: inherit;
 
             .ant-progress-bg {
-              background: #F9535E;
+              background: #f9535e;
               min-height: 100%;
               position: relative;
               border-radius: 20px 0 0 20px;
             }
-            .ant-progress-success-bg{
+            .ant-progress-success-bg {
               background: $secondary-btn-color;
               min-height: 100%;
               border-radius: 20px 0 0 20px;
@@ -151,12 +151,11 @@
         }
       }
 
-      &:hover{
+      &:hover {
         .left-section {
           background-position: 100.5% 50%;
         }
       }
-
     }
   }
 }
@@ -347,8 +346,38 @@
   }
 }
 
-.count{
+.count {
   .dark-mode & {
     color: #fff;
+  }
+}
+
+.ant-btn {
+  .passed-circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: $success-color;
+    width: 11px;
+    height: 11px;
+    margin-right: 3px;
+  }
+  .failed-circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: $error-color;
+    width: 11px;
+    height: 11px;
+    margin-right: 3px;
+  }
+  .warning-circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: $warning-color;
+    width: 11px;
+    height: 11px;
+    margin-right: 3px;
   }
 }

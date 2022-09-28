@@ -19,36 +19,6 @@
       }
     }
 
-    .ant-btn {
-      .passed-circle {
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
-        background: $success-color;
-        width: 11px;
-        height: 11px;
-        margin-right: 3px;
-      }
-      .failed-circle {
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
-        background: $error-color;
-        width: 11px;
-        height: 11px;
-        margin-right: 3px;
-      }
-      .warning-circle {
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
-        background: $warning-color;
-        width: 11px;
-        height: 11px;
-        margin-right: 3px;
-      }
-    }
-
     .govern-dlt-card {
       display: flex;
 
