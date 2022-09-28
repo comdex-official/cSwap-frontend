@@ -2,8 +2,9 @@ import { message, Skeleton, Tooltip } from "antd";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import uuid from "react-uuid";
 import { setPoolRewards } from "../../actions/liquidity";
-import SvgIcon from '../../components/common/svg-icon/svg-icon';
+import SvgIcon from "../../components/common/svg-icon/svg-icon";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
@@ -34,53 +35,55 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
       return (
         <>
           {Object.keys(list).map((key, index) => (
-            <>
-              {index < 2 ?
+            <div key={uuid()}>
+              {index < 2 ? (
                 <span className="ml-1">
                   {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-                  {commaSeparator((Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS))}
+                  {commaSeparator(
+                    (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
+                  )}
                   %
                 </span>
-                :
-                ""}
-            </>
+              ) : (
+                ""
+              )}
+            </div>
           ))}
 
           <span className="comdex-tooltip ">
-            <Tooltip overlayClassName=" farm-apr-modal " title={
-              Object.keys(list).map((key) => (
-                <>
+            <Tooltip
+              overlayClassName=" farm-apr-modal "
+              title={Object.keys(list).map((key) => (
+                <div key={uuid()}>
                   <span className="ml-1">
                     {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-                    {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}
-                    %
+                    {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
                   </span>
-                </>
-              ))
-            }>
+                </div>
+              ))}
+            >
               <span className="view-all-farm-apr"> View All</span>
             </Tooltip>
           </span>
         </>
-      )
-    }
-    else {
+      );
+    } else {
       return Object.keys(list).map((key) => (
-        <>
+        <div key={uuid()}>
           <span className="ml-1">
             {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-            {commaSeparator((Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS))}
+            {commaSeparator(
+              (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
+            )}
             %
           </span>
-
-        </>
+        </div>
       ));
     }
   };
 
   return (
     <>
-
       {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
         <Skeleton.Button
           className="apr-skeleton"

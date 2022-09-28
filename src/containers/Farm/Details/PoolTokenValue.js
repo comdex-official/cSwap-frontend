@@ -54,17 +54,7 @@ const PoolTokenValue = ({ pool, poolTokens, markets, poolPriceMap }) => {
 
 PoolTokenValue.propTypes = {
   lang: PropTypes.string.isRequired,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pool: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,

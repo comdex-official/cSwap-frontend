@@ -120,7 +120,7 @@ const Remove = ({
                     max={100}
                     min={0}
                     onChange={onChange}
-                    tooltipVisible={false}
+                    tooltip={{ open: false }}
                   />
                   <CustomInput
                     defaultValue={sliderValue}

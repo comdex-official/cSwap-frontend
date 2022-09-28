@@ -1,9 +1,9 @@
-import { Button, Modal, Checkbox } from "antd";
+import { Button, Checkbox, Modal } from "antd";
 import React, { useState } from "react";
 import "./index.scss";
 
 const CautionNotice = () => {
-  const [isVisible, setIsVisible] = useState(
+  const [isOpen, setIsOpen] = useState(
     localStorage.getItem("agreement_accepted") === null
   );
   const [isChecked, setIsChecked] = useState(false);
@@ -15,7 +15,7 @@ const CautionNotice = () => {
         className="caution-notice-modal"
         footer={null}
         header={null}
-        visible={isVisible}
+        open={isOpen}
         width={550}
         isHidecloseButton={true}
       >
@@ -41,7 +41,7 @@ const CautionNotice = () => {
             <Button
               onClick={(e) => {
                 e.preventDefault();
-                setIsVisible(false);
+                setIsOpen(false);
                 localStorage.setItem("agreement_accepted", "true");
               }}
               disabled={!isChecked}

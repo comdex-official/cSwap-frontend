@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cosmjs/crypto": "^0.28.7",
-    "@cosmjs/encoding": "^0.28.7",
-    "@cosmjs/ledger-amino": "^0.28.10",
-    "@cosmjs/math": "^0.28.7",
-    "@cosmjs/proto-signing": "^0.28.7",
-    "@cosmjs/stargate": "^0.28.7",
-    "@cosmjs/tendermint-rpc": "^0.28.7",
-    "@keplr-wallet/common": "^0.10.1",
-    "@keplr-wallet/stores": "^0.10.1",
+    "@cosmjs/crypto": "^0.29.0",
+    "@cosmjs/encoding": "^0.29.0",
+    "@cosmjs/ledger-amino": "^0.29.0",
+    "@cosmjs/math": "^0.29.0",
+    "@cosmjs/proto-signing": "^0.29.0",
+    "@cosmjs/stargate": "^0.29.0",
+    "@cosmjs/tendermint-rpc": "^0.29.0",
+    "@keplr-wallet/common": "^0.11.4",
+    "@keplr-wallet/stores": "^0.11.4",
     "@restart/context": "^2.1.4",
     "antd": "^4.16.8",
     "babel-plugin-import": "^1.13.0",
@@ -35,11 +35,11 @@
     "react-router": "^6.3.0",
     "react-scripts": "4.0.3",
     "react-toastify": "^9.0.4",
+    "react-uuid": "^1.0.3",
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
-    "ts-proto": "1.108.0",
-    "web-vitals": "^2.1.2"
+    "web-vitals": "^3.0.2"
   },
   "scripts": {
     "start-old": "react-scripts start",
@@ -76,7 +76,7 @@
     "less-loader": "5.0.0",
     "prop-types": "^15.7.2",
     "react-app-rewired": "^2.1.5",
-    "react-redux": "^7.2.4",
+    "react-redux": "^8.0.4",
     "react-router-dom": "^6.3.0",
     "sass": "^1.49.11"
   }

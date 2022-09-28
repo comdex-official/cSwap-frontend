@@ -2,23 +2,23 @@ import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setPair, setPairs } from "../../actions/asset";
 import {
-  setBaseCoinPoolPrice,
-  setPool,
-  setPoolBalance,
-  setPoolPrice,
-  setPools
+    setBaseCoinPoolPrice,
+    setPool,
+    setPoolBalance,
+    setPoolPrice,
+    setPools
 } from "../../actions/liquidity";
 import {
-  setDemandCoinAmount,
-  setDemandCoinDenom,
-  setLimitOrderToggle,
-  setLimitPrice,
-  setOfferCoinAmount,
-  setOfferCoinDenom,
-  setParams,
-  setReverse,
-  setSlippage,
-  setSlippageTolerance
+    setDemandCoinAmount,
+    setDemandCoinDenom,
+    setLimitOrderToggle,
+    setLimitPrice,
+    setOfferCoinAmount,
+    setOfferCoinDenom,
+    setParams,
+    setReverse,
+    setSlippage,
+    setSlippageTolerance
 } from "../../actions/swap";
 import Swap from "./Swap";
 
@@ -54,17 +54,7 @@ Swap.propTypes = {
   isLimitOrder: PropTypes.bool,
   lang: PropTypes.string,
   limitPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
   pair: PropTypes.shape({
     id: PropTypes.shape({
       high: PropTypes.number,

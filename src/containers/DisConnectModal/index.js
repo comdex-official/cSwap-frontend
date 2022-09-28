@@ -25,18 +25,18 @@ const DisConnectModal = ({
   name,
   balances,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const handleDisconnect = () => {
@@ -60,8 +60,7 @@ const DisConnectModal = ({
         <div> {variables[lang].balance_wallet}</div>
         <div className="balance__value__data">
           {amountConversionWithComma(
-            getDenomBalance(balances, comdex?.coinMinimalDenom),
-            DOLLAR_DECIMALS
+            getDenomBalance(balances, comdex?.coinMinimalDenom) || 0, DOLLAR_DECIMALS
           )}{" "}
           {denomConversion(comdex?.coinMinimalDenom)}
         </div>
@@ -103,7 +102,7 @@ const DisConnectModal = ({
         className="connect-modal"
         footer={null}
         header={null}
-        visible={isModalVisible}
+        open={isModalOpen}
         width={550}
         onCancel={handleCancel}
         onOk={handleOk}

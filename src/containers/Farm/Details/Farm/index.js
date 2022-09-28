@@ -111,7 +111,7 @@ const Farm = ({
                     min={0}
                     disabled={!Number(userPoolTokens)}
                     onChange={onChange}
-                    tooltipVisible={false}
+                    tooltip={{ open: false }}
                   />
                   <CustomInput
                     defaultValue={sliderValue}
@@ -176,7 +176,7 @@ Farm.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
-  userPoolTokens: PropTypes.number,
+  userPoolTokens: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const stateToProps = (state) => {
