@@ -174,8 +174,8 @@ export const makeHdPath = (
 
 export const proposalStatusMap = {
   PROPOSAL_STATUS_UNSPECIFIED: "Nil",
-  PROPOSAL_STATUS_DEPOSIT_PERIOD: "DepositPeriod",
-  PROPOSAL_STATUS_VOTING_PERIOD: "VotingPeriod",
+  PROPOSAL_STATUS_DEPOSIT_PERIOD: "Deposit Period",
+  PROPOSAL_STATUS_VOTING_PERIOD: "Voting Period",
   PROPOSAL_STATUS_PASSED: "Passed",
   PROPOSAL_STATUS_REJECTED: "Rejected",
   PROPOSAL_STATUS_FAILED: "Failed",
@@ -185,5 +185,5 @@ export const proposalOptionMap = {
   1: "Yes",
   2: "Abstain",
   3: "No",
-  4: "NoWithVeto",
+  4: "No With Veto",
 };
