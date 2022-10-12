@@ -1,4 +1,3 @@
-export const ASSET_DATA_SET = "ASSET_DATA_SET";
 export const PAIRS_SET = "PAIRS_SET";
 export const PAIR_ID_SET = "PAIR_ID_SET";
 export const PAIR_SET = "PAIR_SET";

@@ -25,7 +25,7 @@ import {
   queryPool,
   queryPoolIncentives
 } from "../../services/liquidity/query";
-import { fetchRestPrices, queryMarketList } from "../../services/oracle/query";
+import { fetchRestPrices } from "../../services/oracle/query";
 import { getPoolPrice, marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -125,26 +125,16 @@ const ConnectButton = ({
     fetchParams();
   }, []);
 
-  const fetchMarkets = (offset, limit, isTotal, isReverse) => {
-    queryMarketList(offset, limit, isTotal, isReverse, (error, result) => {
-      if (error) {
-        return;
-      }
-
-      setMarkets(result.markets, result.pagination);
-    });
-  };
-
   const fetchPrices = () => {
-    fetchRestPrices((error, result)=>{
-      if(error){
+    fetchRestPrices((error, result) => {
+      if (error) {
         message.error(error);
         return;
       }
 
       setMarkets(result.data);
-    })
-  }
+    });
+  };
   const fetchParams = () => {
     queryLiquidityParams((error, result) => {
       if (error) {

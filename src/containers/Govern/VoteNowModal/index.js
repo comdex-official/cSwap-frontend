@@ -100,7 +100,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
                 <Space direction="vertical">
                   <Radio value={1}>Yes</Radio>
                   <Radio value={3}>No</Radio>
-                  <Radio value={4}>NoWithVeto</Radio>
+                  <Radio value={4}>No With Veto</Radio>
                   <Radio value={2}>Abstain</Radio>
                 </Space>
               </Radio.Group>

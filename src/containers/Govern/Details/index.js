@@ -11,17 +11,17 @@ import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  fetchRestProposal,
-  fetchRestProposer,
-  queryUserVote
+    fetchRestProposal,
+    fetchRestProposer,
+    queryUserVote
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
-  proposalOptionMap,
-  proposalStatusMap,
-  truncateString
+    proposalOptionMap,
+    proposalStatusMap,
+    truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.scss";
@@ -206,7 +206,7 @@ const GovernDetails = ({ address }) => {
             color: "#F76872",
           },
           {
-            name: "NoWithVeto",
+            name: "No With Veto",
             y: Number(getVotes?.veto || 0),
             color: "#AACBB9",
           },
@@ -349,7 +349,7 @@ const GovernDetails = ({ address }) => {
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
-                          <label>NoWithVeto </label>
+                          <label>No With Veto </label>
                           <p>{Number(getVotes?.veto || "0.00")}%</p>
                         </div>
                       </li>

@@ -3,12 +3,12 @@ import {
   FARMED_TOKENS_DOLLAR_VALUE,
   FIRST_RESERVE_COIN_DENOM_SET,
   POOLS_LIQUIDITY_LIST_SET,
-  POOLS_SET,
-  POOL_BALANCES_SET,
-  POOL_BALANCE_FETCH_IN_PROGRESS,
+  POOLS_SET, POOL_BALANCE_FETCH_IN_PROGRESS,
   POOL_BALANCE_SET,
   POOL_INCENTIVES_SET,
-  POOL_PRICE_SET, POOL_REWARDS_SET, POOL_SET,
+  POOL_PRICE_SET,
+  POOL_REWARDS_SET,
+  POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
   SPOT_PRICE_SET,
@@ -70,14 +70,6 @@ export const setPoolTokenSupply = (value) => {
   return {
     type: POOL_TOKEN_SUPPLY_SET,
     value,
-  };
-};
-
-export const setPoolBalances = (value, index) => {
-  return {
-    type: POOL_BALANCES_SET,
-    value,
-    index,
   };
 };
 
