@@ -10,7 +10,6 @@ import {
   POOL_BALANCE_SET,
   POOL_DEPOSITS_SET,
   POOL_INCENTIVES_SET,
-  POOL_PRICE_SET,
   POOL_REWARDS_SET,
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
@@ -192,17 +191,6 @@ const farmedTokensDollarValue = (state = {}, action) => {
   return state;
 };
 
-const poolPriceMap = (state = {}, action) => {
-  if (action.type === POOL_PRICE_SET) {
-    return {
-      ...state,
-      [action.denom]: action.value,
-    };
-  }
-
-  return state;
-};
-
 const rewardsMap = (state = {}, action) => {
   if (action.type === POOL_REWARDS_SET) {
     return action.value;
@@ -229,6 +217,5 @@ export default combineReducers({
   masterPoolMap,
   rewardMap,
   farmedTokensDollarValue,
-  poolPriceMap,
   rewardsMap,
 });
