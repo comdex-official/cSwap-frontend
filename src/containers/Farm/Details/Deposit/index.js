@@ -347,8 +347,6 @@ const Deposit = ({
                 onChange={(event) => handleFirstInputChange(event.target.value)}
                 validationError={inputValidationError}
               />
-              <small>{pool?.id && showFirstCoinValue()}</small>
-
               <small>{pool?.id && showOfferCoinSpotPrice()}</small>
             </div>
           </div>
@@ -403,7 +401,6 @@ const Deposit = ({
                 }
                 validationError={outputValidationError}
               />
-              <small>{pool?.id && showSecondCoinValue()}</small>
               <small>{pool?.id && showDemandCoinSpotPrice()}</small>
             </div>
           </div>
