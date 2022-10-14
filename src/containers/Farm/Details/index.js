@@ -62,7 +62,6 @@ const FarmDetails = ({
   setPair,
   markets,
   balances,
-  poolPriceMap,
   setUserLiquidityInPools,
   userLiquidityInPools,
 }) => {
@@ -198,9 +197,7 @@ const FarmDetails = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) =>
-          Number(item?.amount) *
-          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
+        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -428,7 +425,6 @@ FarmDetails.propTypes = {
     baseCoinDenom: PropTypes.string,
     quoteCoinDenom: PropTypes.string,
   }),
-  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -455,7 +451,6 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
-    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 

@@ -12,21 +12,19 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
-import { setPoolIncentives, setPoolPrice } from "../../actions/liquidity";
-import { setMarkets } from "../../actions/oracle";
+import { setPoolIncentives } from "../../actions/liquidity";
+import { setMarkets, updateMarketPrice } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
-import { CMST_POOL_ID_LIST, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import {
   queryLiquidityParams,
-  queryPool,
   queryPoolIncentives
 } from "../../services/liquidity/query";
-import { fetchRestPrices } from "../../services/oracle/query";
-import { getPoolPrice, marketPrice } from "../../utils/number";
+import { fetchCMSTPrice, fetchRestPrices } from "../../services/oracle/query";
+import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
@@ -41,12 +39,11 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
+  updateMarketPrice,
   poolBalances,
   setAccountName,
   setPoolIncentives,
-  setPoolPrice,
   setParams,
-  poolPriceMap,
   balances,
 }) => {
   useEffect(() => {
@@ -67,7 +64,7 @@ const ConnectButton = ({
   }, []);
 
   const getPrice = (denom) => {
-    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
+    return marketPrice(markets, denom) || 0;
   };
 
   const calculateAssetBalance = useCallback(
@@ -118,7 +115,7 @@ const ConnectButton = ({
 
   useEffect(() => {
     calculateAssetBalance(balances);
-  }, [balances, poolPriceMap, markets]);
+  }, [balances, markets]);
 
   useEffect(() => {
     fetchPoolIncentives();
@@ -148,53 +145,14 @@ const ConnectButton = ({
     });
   };
 
-  const calculatePoolPrice = useCallback(
-    (pool) => {
-      if (pool?.id) {
-        let firstAsset = pool?.balances[0];
-        let secondAsset = pool?.balances[1];
-
-        let oracleAsset = {};
-        if (marketPrice(markets, firstAsset?.denom)) {
-          oracleAsset = firstAsset;
-        } else if (marketPrice(markets, secondAsset?.denom)) {
-          oracleAsset = secondAsset;
-        }
-
-        if (oracleAsset?.denom) {
-          let { xPoolPrice, yPoolPrice } = getPoolPrice(
-            marketPrice(markets, oracleAsset?.denom),
-            oracleAsset?.denom,
-            firstAsset,
-            secondAsset
-          );
-
-          setPoolPrice(firstAsset?.denom, xPoolPrice);
-          setPoolPrice(secondAsset?.denom, yPoolPrice);
-        }
-      }
-    },
-    [markets, setPoolPrice]
-  );
-
   useEffect(() => {
-    const fetchListedPools = (list) => {
-      if (list?.length > 0) {
-        for (let i = 0; i < list?.length; i++) {
-          queryPool(list[i], (error, result) => {
-            if (error) {
-              return;
-            }
-
-            calculatePoolPrice(result?.pool);
-          });
-        }
+    fetchCMSTPrice((error, result) => {
+      if (error) {
+        return;
       }
-    };
-
-    fetchListedPools(HARBOR_POOL_ID_LIST);
-    fetchListedPools(CMST_POOL_ID_LIST);
-  }, [calculatePoolPrice]);
+      updateMarketPrice(result?.data?.cmst_price, cmst?.coinMinimalDenom);
+    });
+  }, []);
 
   const fetchPoolIncentives = () => {
     queryPoolIncentives((error, result) => {
@@ -248,8 +206,8 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
-  setPoolPrice: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
+  updateMarketPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -259,7 +217,6 @@ ConnectButton.propTypes = {
   ),
   markets: PropTypes.object,
   poolBalances: PropTypes.array,
-  poolPriceMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -284,7 +241,6 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
-    poolPriceMap: state.liquidity.poolPriceMap,
     balances: state.account.balances.list,
   };
 };
@@ -296,9 +252,9 @@ const actionsToProps = {
   setPoolBalance,
   setAssetBalance,
   setMarkets,
+  updateMarketPrice,
   setAccountName,
   setPoolIncentives,
-  setPoolPrice,
   setParams,
 };
 
