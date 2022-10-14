@@ -33,7 +33,6 @@ const PoolCardFarm = ({
   balances,
   rewardsMap,
   parent,
-  poolPriceMap,
 }) => {
   const [pair, setPair] = useState();
   const navigate = useNavigate();
@@ -52,14 +51,12 @@ const PoolCardFarm = ({
     if (pool?.id && address) {
       getUserLiquidity(pool);
     }
-  }, [pool, address, poolPriceMap, markets]);
+  }, [pool, address, markets]);
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) =>
-          Number(item?.amount) *
-          (poolPriceMap[item?.denom] || marketPrice(markets, item?.denom))
+        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -112,11 +109,9 @@ const PoolCardFarm = ({
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
             Number(amountConversion(providedTokens?.[0]?.amount)) *
-              (poolPriceMap[providedTokens?.[0]?.denom] ||
-                marketPrice(markets, providedTokens?.[0]?.denom)) +
+              marketPrice(markets, providedTokens?.[0]?.denom) +
             Number(amountConversion(providedTokens?.[1]?.amount)) *
-              (poolPriceMap[providedTokens?.[1]?.denom] ||
-                marketPrice(markets, providedTokens?.[1]?.denom));
+              marketPrice(markets, providedTokens?.[1]?.denom);
 
           if (totalLiquidityInDollar) {
             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -217,7 +212,6 @@ PoolCardFarm.propTypes = {
     reserveCoinDenoms: PropTypes.array,
   }),
   poolIndex: PropTypes.number,
-  poolPriceMap: PropTypes.object,
   rewardsMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
 };
@@ -230,7 +224,6 @@ const stateToProps = (state) => {
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
-    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
