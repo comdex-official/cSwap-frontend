@@ -1173,20 +1173,7 @@
     sha.js "^2.4.11"
     unorm "^1.5.0"
 
-"@cosmjs/crypto@^0.29.1":
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/@cosmjs/crypto/-/crypto-0.29.1.tgz#1c5b2fe6de08e43b1ca65c3b33e7a39c9e6f6cb1"
-  integrity sha512-H64KHUbp1nndPAJ3DoJs8OSOcpFjn2o/ptGgDaa1xhX4OiT7CF8IFoKyzzbPMLS/l/jWWkByc3uMn9R/LwW/Mg==
-  dependencies:
-    "@cosmjs/encoding" "^0.29.1"
-    "@cosmjs/math" "^0.29.1"
-    "@cosmjs/utils" "^0.29.1"
-    "@noble/hashes" "^1"
-    bn.js "^5.2.0"
-    elliptic "^6.5.3"
-    libsodium-wrappers "^0.7.6"
-
-"@cosmjs/crypto@^0.29.2":
+"@cosmjs/crypto@^0.29.1", "@cosmjs/crypto@^0.29.2":
   version "0.29.2"
   resolved "https://registry.yarnpkg.com/@cosmjs/crypto/-/crypto-0.29.2.tgz#63308d8c91ade0de73861ef1e5099cba26db5d1b"
   integrity sha512-mm4BNiuLAvfJOPYilP8uCs4MKJIogri2A5jb0xn+ZiyFTdIw6xp5eLU7SLxI/V+F2VMPfQDNfS+syPEkDN7g/w==
