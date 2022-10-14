@@ -577,7 +577,6 @@ const Swap = ({
                       onChange={(event) => onChange(event.target.value)}
                       validationError={validationError}
                     />
-                    <small>{pool?.id && showOfferCoinValue()}</small>
                     <small>{pool?.id && showOfferCoinSpotPrice()}</small>
                   </div>
                 </div>
