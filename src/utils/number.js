@@ -58,25 +58,3 @@ export const calculateDollarValue = (
 export const getAccountNumber = (value) => {
   return value === "" ? "0" : value;
 };
-
-export const getPoolPrice = (
-  oraclePrice,
-  oracleAssetDenom,
-  firstAsset,
-  secondAsset
-) => {
-  let x = firstAsset?.amount,
-    y = secondAsset?.amount,
-    xPoolPrice,
-    yPoolPrice;
-
-  if (oracleAssetDenom === firstAsset?.denom) {
-    yPoolPrice = (x / y) * oraclePrice;
-    xPoolPrice = (y / x) * yPoolPrice;
-  } else {
-    xPoolPrice = (y / x) * oraclePrice;
-    yPoolPrice = (x / y) * xPoolPrice;
-  }
-
-  return { xPoolPrice, yPoolPrice };
-};
