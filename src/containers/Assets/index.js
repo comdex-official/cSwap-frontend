@@ -13,9 +13,9 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -30,7 +30,6 @@ const Assets = ({
   balances,
   markets,
   parent,
-  poolPriceMap,
   refreshBalance
 }) => {
 
@@ -176,7 +175,7 @@ const Assets = ({
   ];
 
   const getPrice = (denom) => {
-    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
+    return marketPrice(markets, denom) || 0;
   };
 
   let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
@@ -383,7 +382,6 @@ Assets.propTypes = {
     })
   ),
   markets: PropTypes.object,
-  poolPriceMap: PropTypes.object,
   refreshBalance: PropTypes.number.isRequired,
 };
 
@@ -393,7 +391,6 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
-    poolPriceMap: state.liquidity.poolPriceMap,
     refreshBalance: state.account.refreshBalance,  };
 };
 
