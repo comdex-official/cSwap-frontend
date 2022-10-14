@@ -2077,12 +2077,21 @@
     secretjs "0.17.7"
     utility-types "^3.10.0"
 
-"@keplr-wallet/common@0.11.9", "@keplr-wallet/common@^0.11.9":
+"@keplr-wallet/common@0.11.9":
   version "0.11.9"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.9.tgz#9ada7c84b650256b809ac77881f08aa7bbb21f60"
   integrity sha512-Ghe/d/lHbYdTqcvNFX7nsoLwZRLc/scRoxFxyHnGwxJir3tqYjfIU6lbGa0YXKFCf8LX6+Py/ZnleVEcFs/ubA==
   dependencies:
     "@keplr-wallet/crypto" "0.11.9"
+    buffer "^6.0.3"
+    delay "^4.4.0"
+
+"@keplr-wallet/common@^0.11.10":
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.10.tgz#75e85156cf2ffe7198fe672f6092a2960c2f3e20"
+  integrity sha512-e8JhnJ2jyAl6Ar2VzuxEOLHbqWy/Jpo4LXN3VBodiazrkLLLcuEVutc5Ez5VT6ohVoPG2GrvM3zkIRzHw5XKyA==
+  dependencies:
+    "@keplr-wallet/crypto" "0.11.10"
     buffer "^6.0.3"
     delay "^4.4.0"
 
@@ -2102,6 +2111,20 @@
     buffer "^6.0.3"
     long "^4.0.0"
     protobufjs "^6.11.2"
+
+"@keplr-wallet/crypto@0.11.10":
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/crypto/-/crypto-0.11.10.tgz#9f993a7322186baa05b6e24da0f348974dfacc01"
+  integrity sha512-88xN6O1YoGA41RYLpAYWGdESIUHY+A1G1Uj/fjYpKQ5UapJ9PTAp1LiWGeLmV9Ztt1LdBiyRUK0V/f13cyc5fw==
+  dependencies:
+    "@ethersproject/keccak256" "^5.5.0"
+    bip32 "^2.0.6"
+    bip39 "^3.0.3"
+    bs58check "^2.1.2"
+    buffer "^6.0.3"
+    crypto-js "^4.0.0"
+    elliptic "^6.5.3"
+    sha.js "^2.4.11"
 
 "@keplr-wallet/crypto@0.11.9":
   version "0.11.9"
