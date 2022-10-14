@@ -8,7 +8,7 @@
     "@cosmjs/ledger-amino": "^0.29.1",
     "@cosmjs/math": "^0.29.1",
     "@cosmjs/proto-signing": "^0.29.1",
-    "@cosmjs/stargate": "^0.29.1",
+    "@cosmjs/stargate": "^0.29.2",
     "@cosmjs/tendermint-rpc": "^0.29.1",
     "@keplr-wallet/common": "^0.11.9",
     "@keplr-wallet/stores": "^0.11.9",
