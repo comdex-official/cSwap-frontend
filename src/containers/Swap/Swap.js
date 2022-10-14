@@ -31,9 +31,7 @@ import {
   getDenomBalance
 } from "../../utils/coin";
 import {
-  decimalConversion,
-  getPoolPrice,
-  marketPrice
+  decimalConversion, marketPrice
 } from "../../utils/number";
 import {
   toDecimals,
@@ -76,8 +74,6 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
-  poolPriceMap,
-  setPoolPrice,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -189,32 +185,6 @@ const Swap = ({
       ).toFixed(comdex?.coinDecimals);
 
       setBaseCoinPoolPrice(baseCoinPoolPrice);
-    }
-  }, [pool]);
-
-  useEffect(() => {
-    if (pool?.id) {
-      let firstAsset = pool?.balances[0];
-      let secondAsset = pool?.balances[1];
-
-      let oracleAsset = {};
-      if (marketPrice(markets, firstAsset?.denom)) {
-        oracleAsset = firstAsset;
-      } else if (marketPrice(markets, secondAsset?.denom)) {
-        oracleAsset = secondAsset;
-      }
-
-      if (oracleAsset?.denom) {
-        let { xPoolPrice, yPoolPrice } = getPoolPrice(
-          marketPrice(markets, oracleAsset?.denom),
-          oracleAsset?.denom,
-          firstAsset,
-          secondAsset
-        );
-
-        setPoolPrice(firstAsset?.denom, xPoolPrice);
-        setPoolPrice(secondAsset?.denom, yPoolPrice);
-      }
     }
   }, [pool]);
 
@@ -330,10 +300,8 @@ const Swap = ({
 
   const showOfferCoinValue = () => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const oralcePrice =
-      poolPriceMap[demandCoin?.denom] ||
-      marketPrice(markets, demandCoin?.denom);
-    const total = price * oralcePrice * offerCoin?.amount;
+    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
+    const total = price * demandCoinPrice * offerCoin?.amount;
 
     return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
