@@ -1173,7 +1173,7 @@
     sha.js "^2.4.11"
     unorm "^1.5.0"
 
-"@cosmjs/crypto@^0.29.1", "@cosmjs/crypto@^0.29.2":
+"@cosmjs/crypto@^0.29.2":
   version "0.29.2"
   resolved "https://registry.yarnpkg.com/@cosmjs/crypto/-/crypto-0.29.2.tgz#63308d8c91ade0de73861ef1e5099cba26db5d1b"
   integrity sha512-mm4BNiuLAvfJOPYilP8uCs4MKJIogri2A5jb0xn+ZiyFTdIw6xp5eLU7SLxI/V+F2VMPfQDNfS+syPEkDN7g/w==
@@ -2081,12 +2081,21 @@
     secretjs "0.17.7"
     utility-types "^3.10.0"
 
-"@keplr-wallet/common@0.11.10", "@keplr-wallet/common@^0.11.9":
+"@keplr-wallet/common@0.11.10":
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.10.tgz#75e85156cf2ffe7198fe672f6092a2960c2f3e20"
   integrity sha512-e8JhnJ2jyAl6Ar2VzuxEOLHbqWy/Jpo4LXN3VBodiazrkLLLcuEVutc5Ez5VT6ohVoPG2GrvM3zkIRzHw5XKyA==
   dependencies:
     "@keplr-wallet/crypto" "0.11.10"
+    buffer "^6.0.3"
+    delay "^4.4.0"
+
+"@keplr-wallet/common@^0.11.11":
+  version "0.11.11"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.11.tgz#4f862b472ecb99eb4eb1b68a907760bd49fb80ef"
+  integrity sha512-XZUkuhS/a9aI1AZ5onT8Tg+kzk4coZ0G5oY5YyvDVp+EmCBet44T1Bkhv1WUPSFMcnNkjut9WWwPz2LWMwGlfg==
+  dependencies:
+    "@keplr-wallet/crypto" "0.11.11"
     buffer "^6.0.3"
     delay "^4.4.0"
 
@@ -2111,6 +2120,20 @@
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/crypto/-/crypto-0.11.10.tgz#9f993a7322186baa05b6e24da0f348974dfacc01"
   integrity sha512-88xN6O1YoGA41RYLpAYWGdESIUHY+A1G1Uj/fjYpKQ5UapJ9PTAp1LiWGeLmV9Ztt1LdBiyRUK0V/f13cyc5fw==
+  dependencies:
+    "@ethersproject/keccak256" "^5.5.0"
+    bip32 "^2.0.6"
+    bip39 "^3.0.3"
+    bs58check "^2.1.2"
+    buffer "^6.0.3"
+    crypto-js "^4.0.0"
+    elliptic "^6.5.3"
+    sha.js "^2.4.11"
+
+"@keplr-wallet/crypto@0.11.11":
+  version "0.11.11"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/crypto/-/crypto-0.11.11.tgz#64b507b72fea6ffc4e82b0657545b895ec27f3c4"
+  integrity sha512-e/iPSMphYaFXhFgB4wRTGo39F/yxN+gIYVmlh2kx4mfSzYviJBR6pucj0skBnTz2ikmIN2LbMzr1T4BAlquwrA==
   dependencies:
     "@ethersproject/keccak256" "^5.5.0"
     bip32 "^2.0.6"
