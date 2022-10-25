@@ -47,6 +47,14 @@ const _ = (
   return state;
 };
 
+const map = (state = {}, action) => {
+  if (action.type === ASSETS_SET) {
+    return action.map;
+  }
+
+  return state;
+};
+
 const pairId = (state = null, action) => {
   if (action.type === PAIR_ID_SET) {
     return action.value || state;
@@ -113,4 +121,5 @@ export default combineReducers({
   inAmount,
   outAmount,
   collateralRatio,
+  map,
 });

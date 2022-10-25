@@ -12,11 +12,14 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
+import { setAssets } from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
 import { setMarkets, updateMarketPrice } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import {
@@ -28,6 +31,7 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
+
 
 const ConnectButton = ({
   setAccountAddress,
@@ -45,6 +49,7 @@ const ConnectButton = ({
   setPoolIncentives,
   setParams,
   balances,
+  setAssets,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -61,6 +66,12 @@ const ConnectButton = ({
 
   useEffect(() => {
     fetchPrices();
+    fetchAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false
+    );
   }, []);
 
   const getPrice = (denom) => {
@@ -132,6 +143,18 @@ const ConnectButton = ({
       setMarkets(result.data);
     });
   };
+
+  const fetchAssets = (offset, limit, countTotal, reverse) => {
+    queryAssets(offset, limit, countTotal, reverse, (error, data) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      
+      setAssets(data.assets);
+    });
+  };
+
   const fetchParams = () => {
     queryLiquidityParams((error, result) => {
       if (error) {
@@ -203,6 +226,7 @@ ConnectButton.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
+  setAssets: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
@@ -256,6 +280,7 @@ const actionsToProps = {
   setAccountName,
   setPoolIncentives,
   setParams,
+  setAssets,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
