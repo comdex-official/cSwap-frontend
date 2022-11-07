@@ -43,6 +43,7 @@ const CreatePoolModal = ({
   refreshBalance,
   params,
   lang,
+  assetMap,
 }) => {
   const [current, setCurrent] = useState(0);
   const [baseToken, setBaseToken] = useState();
@@ -107,7 +108,8 @@ const CreatePoolModal = ({
 
   const handleBaseAmountChange = (value) => {
     value = toDecimals(value)?.toString().trim();
-    setBaseAmountValidationError(ValidateInputNumber(Number(getAmount(value))));
+    setBaseAmountValidationError(ValidateInputNumber(Number(getAmount(value,
+      assetMap[baseToken]?.decimals?.toNumber()))));
     setBaseAmount(value);
   };
 
@@ -115,7 +117,7 @@ const CreatePoolModal = ({
     value = toDecimals(value).toString().trim();
     setQuoteAmount(value);
     setQuoteAmountValidationError(
-      ValidateInputNumber(Number(getAmount(value)))
+      ValidateInputNumber(Number(getAmount(value, assetMap[quoteToken]?.decimals?.toNumber())))
     );
   };
 
@@ -133,11 +135,11 @@ const CreatePoolModal = ({
       const deposits = [
         {
           denom: baseToken,
-          amount: getAmount(baseAmount),
+          amount: getAmount(baseAmount, assetMap[baseToken]?.decimals?.toNumber()),
         },
         {
           denom: quoteToken,
-          amount: getAmount(quoteAmount),
+          amount: getAmount(quoteAmount, assetMap[quoteToken]?.decimals?.toNumber()),
         },
       ];
 
@@ -316,7 +318,7 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(baseAvailable || 0)}{" "}
+                    {amountConversionWithComma(baseAvailable || 0, assetMap[baseToken]?.decimals?.toNumber())}{" "}
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
@@ -371,7 +373,7 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(quoteAvailable || 0)}{" "}
+                    {amountConversionWithComma(quoteAvailable || 0, assetMap[quoteToken]?.decimals?.toNumber())}{" "}
                     {denomConversion(quoteToken)}
                   </span>{" "}
                   <div className="maxhalf">
@@ -475,7 +477,8 @@ const CreatePoolModal = ({
               <p>
                 I understand that creating a new pool will cost{" "}
                 {`${amountConversionWithComma(
-                  params?.poolCreationFee?.[0]?.amount
+                  params?.poolCreationFee?.[0]?.amount,
+                  assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals?.toNumber()
                 )} 
               ${denomConversion(params?.poolCreationFee?.[0]?.denom)}`}{" "}
               </p>{" "}
@@ -512,7 +515,8 @@ const CreatePoolModal = ({
               <div className="poolcreationfee-right">
                 <span>
                   {amountConversionWithComma(
-                    params?.poolCreationFee?.[0]?.amount || 0
+                    params?.poolCreationFee?.[0]?.amount || 0,
+                    assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals?.toNumber()
                   )}
                 </span>
                 <span className="ml-1">
@@ -563,6 +567,7 @@ CreatePoolModal.propTypes = {
   refreshData: PropTypes.func.isRequired,
   refreshBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -587,6 +592,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     params: state.swap.params,
+    assetMap: state.asset.map,
   };
 };
 

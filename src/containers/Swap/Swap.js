@@ -30,9 +30,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import {
-  decimalConversion, marketPrice
-} from "../../utils/number";
+import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -74,6 +72,7 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetMap,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -226,7 +225,13 @@ const Swap = ({
     // (input_number / (input token share in pool + input_number))*100
     setSlippage(
       (Number(value) /
-        (Number(amountConversion(assetVolume)) + Number(value))) *
+        (Number(
+          amountConversion(
+            assetVolume,
+            assetMap[selectedAsset?.denom]?.decimals?.toNumber()
+          )
+        ) +
+          Number(value))) *
         100
     );
 
@@ -235,7 +240,13 @@ const Swap = ({
       decimalConversion(params?.swapFeeRate) / 10;
 
     setValidationError(
-      ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
+      ValidateInputNumber(
+        Number(
+          getAmount(value, assetMap[selectedAsset?.denom]?.decimals?.toNumber())
+        ),
+        availableBalance,
+        "macro"
+      )
     );
 
     setOfferCoinAmount(value, offerCoinFee);
@@ -349,7 +360,10 @@ const Swap = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value - nativeOfferCoinFee)
+            amountConversion(
+              value - nativeOfferCoinFee,
+              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+            )
           )
         : handleOfferCoinAmountChange();
     } else {
@@ -357,7 +371,12 @@ const Swap = ({
       const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value - offerCoinFee))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value - offerCoinFee,
+              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -370,14 +389,24 @@ const Swap = ({
         value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+            )
+          )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance / 2);
       const offerCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -555,7 +584,10 @@ const Swap = ({
                   <div className="label-right">
                     {variables[lang].available}
                     <span className="ml-1">
-                      {amountConversionWithComma(availableBalance)}{" "}
+                      {amountConversionWithComma(
+                        availableBalance,
+                        assetMap[offerCoin?.denom]?.decimals?.toNumber()
+                      )}{" "}
                       {denomConversion(offerCoin?.denom)}
                     </span>{" "}
                     <div className="maxhalf">

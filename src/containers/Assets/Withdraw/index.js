@@ -23,6 +23,7 @@ const Withdraw = ({
   address,
   refreshBalance,
   setBalanceRefresh,
+  assetMap,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState("");
@@ -75,7 +76,7 @@ const Withdraw = ({
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
-            amount: getAmount(amount),
+            amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals?.toNumber()),
           },
           sender: address,
           receiver: destinationAddress,
@@ -223,7 +224,8 @@ const Withdraw = ({
 Withdraw.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
-  address: PropTypes.string,
+  address: PropTypes.string,  
+  assetMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -232,6 +234,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     refreshBalance: state.account.refreshBalance,
+    assetMap: state.asset.map,
   };
 };
 

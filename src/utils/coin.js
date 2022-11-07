@@ -1,20 +1,29 @@
 import { comdex, ibcDenoms } from "../config/network";
-import { commaSeparator } from "./number";
+import { commaSeparator, getExponent } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
-export const getAmount = (selectedAmount) =>
-  (selectedAmount * 10 ** comdex.coinDecimals).toFixed(0).toString();
+export const getAmount = (selectedAmount, decimal) =>
+  (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
+    .toFixed(0)
+    .toString();
 
 export const amountConversionWithComma = (amount, decimals) => {
-  const result = Number(amount) / 10 ** comdex.coinDecimals;
+  const result = Number(amount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return commaSeparator(result.toFixed(decimals || comdex.coinDecimals));
+  return commaSeparator(
+    result.toFixed(getExponent(decimals) || comdex.coinDecimals)
+  );
+};
+
+export const commaSeparatorWithRounding = (amount, round) => {
+  return commaSeparator(amount.toFixed(getExponent(round)));
 };
 
 export const amountConversion = (amount, decimals) => {
-  const result = Number(amount) / 10 ** comdex.coinDecimals;
 
-  return result.toFixed(decimals || comdex.coinDecimals);
+  const result = Number(amount) / (decimals || 10 ** comdex.coinDecimals);
+
+  return result.toFixed(getExponent(decimals) || comdex.coinDecimals);
 };
 
 export const orderPriceConversion = (amount) => {

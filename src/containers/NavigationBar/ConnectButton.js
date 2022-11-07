@@ -27,6 +27,7 @@ import {
   queryPoolIncentives
 } from "../../services/liquidity/query";
 import { fetchCMSTPrice, fetchRestPrices } from "../../services/oracle/query";
+import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -50,6 +51,7 @@ const ConnectButton = ({
   setParams,
   balances,
   setAssets,
+  assetMap,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -89,7 +91,7 @@ const ConnectButton = ({
       );
 
       const value = assetBalances.map((item) => {
-        return getPrice(item.denom) * item.amount;
+        return getPrice(item.denom) * amountConversion(item.amount, assetMap[item?.denom]?.decimals?.toNumber());
       });
 
       setAssetBalance(Lodash.sum(value));
@@ -233,6 +235,7 @@ ConnectButton.propTypes = {
   setPoolIncentives: PropTypes.func.isRequired,
   updateMarketPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -266,6 +269,7 @@ const stateToProps = (state) => {
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
+    assetMap: state.asset.map,
   };
 };
 

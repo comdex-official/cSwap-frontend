@@ -49,6 +49,7 @@ const Deposit = ({
   updateBalance,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetMap,
 }) => {
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
@@ -83,7 +84,7 @@ const Deposit = ({
 
       setOutputValidationError(
         ValidateInputNumber(
-          Number(getAmount(numberOfTokens)),
+          Number(getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals?.toNumber())),
           secondAssetAvailableBalance,
           "macro"
         )
@@ -113,7 +114,7 @@ const Deposit = ({
 
     setInputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value)),
+        Number(getAmount(value, assetMap[pair?.baseCoinDenom]?.decimals?.toNumber())),
         firstAssetAvailableBalance,
         "macro"
       )
@@ -125,7 +126,7 @@ const Deposit = ({
 
     setOutputValidationError(
       ValidateInputNumber(
-        Number(getAmount(numberOfTokens)),
+        Number(getAmount(numberOfTokens, assetMap[pair?.quoteCoinDenom]?.decimals?.toNumber())),
         secondAssetAvailableBalance,
         "macro"
       )
@@ -138,7 +139,7 @@ const Deposit = ({
 
     setOutputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value)),
+        Number(getAmount(value, assetMap[pair?.quoteCoinDenom]?.decimals?.toNumber())),
         secondAssetAvailableBalance,
         "macro"
       )
@@ -150,7 +151,7 @@ const Deposit = ({
 
     setInputValidationError(
       ValidateInputNumber(
-        Number(getAmount(numberOfTokens)),
+        Number(getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals?.toNumber())),
         firstAssetAvailableBalance,
         "macro"
       )
@@ -171,11 +172,11 @@ const Deposit = ({
     const deposits = [
       {
         denom: pair?.baseCoinDenom,
-        amount: getAmount(firstInput),
+        amount: getAmount(firstInput, assetMap[pair?.baseCoinDenom]?.decimals?.toNumber()),
       },
       {
         denom: pair?.quoteCoinDenom,
-        amount: getAmount(secondInput),
+        amount: getAmount(secondInput, assetMap[pair?.quoteCoinDenom]?.decimals?.toNumber()),
       },
     ];
 
@@ -245,7 +246,7 @@ const Deposit = ({
 
   const handleFirstInputMax = (max) => {
     if (
-      Number(getAmount((max * getOutputPrice()).toFixed(6))) <
+      Number(getAmount((max * getOutputPrice(), assetMap[pair?.baseCoinDenom]?.decimals?.toNumber()).toFixed(6))) <
       Number(secondAssetAvailableBalance)
     ) {
       return handleFirstInputChange(max);
@@ -258,7 +259,7 @@ const Deposit = ({
 
   const handleSecondInputMax = (max) => {
     if (
-      Number(getAmount((max * getInputPrice()).toFixed(6))) <
+      Number(getAmount((max * getInputPrice(), assetMap[pair?.quoteCoinDenom]?.decimals?.toNumber()).toFixed(6))) <
       Number(firstAssetAvailableBalance)
     ) {
       return handleSecondInputChange(max);
@@ -321,7 +322,8 @@ const Deposit = ({
               {variables[lang].available}{" "}
               <span className="ml-1">
                 {" "}
-                {amountConversionWithComma(firstAssetAvailableBalance)}{" "}
+                {amountConversionWithComma(firstAssetAvailableBalance,
+                  assetMap[pair?.baseCoinDenom]?.decimals?.toNumber())}{" "}
                 {denomConversion(pair?.baseCoinDenom)}
               </span>
               <div className="maxhalf">
@@ -377,7 +379,8 @@ const Deposit = ({
             <div className="label-right">
               {variables[lang].available}{" "}
               <span className="ml-1">
-                {amountConversionWithComma(secondAssetAvailableBalance)}{" "}
+                {amountConversionWithComma(secondAssetAvailableBalance,
+                  assetMap[pair?.quoteCoinDenom]?.decimals?.toNumber())}{" "}
                 {denomConversion(pair?.quoteCoinDenom)}
               </span>
               <div className="maxhalf">
@@ -445,6 +448,7 @@ Deposit.propTypes = {
   setBaseCoinPoolPrice: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -508,6 +512,7 @@ const stateToProps = (state) => {
     secondReserveCoinDenom: state.liquidity.secondReserveCoinDenom,
     pair: state.asset.pair,
     poolBalance: state.liquidity.poolBalance,
+    assetMap: state.asset.map,
   };
 };
 

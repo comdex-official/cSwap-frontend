@@ -28,6 +28,7 @@ const Deposit = ({
   address,
   refreshBalance,
   setBalanceRefresh,
+  assetMap,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
@@ -96,7 +97,7 @@ const Deposit = ({
           source_channel: chain.destChannelId,
           token: {
             denom: chain?.coinMinimalDenom,
-            amount: getAmount(amount),
+            amount: getAmount(amount, assetMap[chain?.coinMinimalDenom]?.decimals?.toNumber()),
           },
           sender: sourceAddress,
           receiver: address,
@@ -200,7 +201,7 @@ const Deposit = ({
                     <span className="ml-1">
                       {(availableBalance &&
                         availableBalance.amount &&
-                        amountConversion(availableBalance.amount)) ||
+                        amountConversion(availableBalance.amount, assetMap[availableBalance?.denom]?.decimals?.toNumber())) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
@@ -211,9 +212,10 @@ const Deposit = ({
                           setAmount(
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE
+                                  availableBalance?.amount - DEFAULT_FEE,
+                                  assetMap[availableBalance?.denom]?.decimals?.toNumber()
                                 )
-                              : amountConversion(availableBalance?.amount)
+                              : amountConversion(availableBalance?.amount, assetMap[availableBalance?.denom]?.decimals?.toNumber())
                           );
                         }}
                       >
@@ -260,6 +262,7 @@ Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -268,6 +271,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     refreshBalance: state.account.refreshBalance,
+    assetMap: state.asset.map,
   };
 };
 

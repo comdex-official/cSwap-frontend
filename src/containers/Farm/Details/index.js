@@ -27,6 +27,7 @@ import {
 import {
   amountConversion,
   amountConversionWithComma,
+  commaSeparatorWithRounding,
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
@@ -64,6 +65,7 @@ const FarmDetails = ({
   balances,
   setUserLiquidityInPools,
   userLiquidityInPools,
+  assetMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -190,20 +192,21 @@ const FarmDetails = ({
     let denomBalance = list?.filter((item) => item.denom === denom)[0];
 
     return `${amountConversionWithComma(
-      denomBalance?.amount || 0
+      denomBalance?.amount || 0,
+      assetMap[denomBalance?.denom]?.decimals?.toNumber()
     )} ${denomConversion(denom)}`;
   };
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals?.toNumber())) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
   };
 
-  const TotalPoolLiquidity = amountConversionWithComma(
+  const TotalPoolLiquidity = commaSeparatorWithRounding(
     calculatePoolLiquidity(pool?.balances),
     DOLLAR_DECIMALS
   );
@@ -408,6 +411,7 @@ FarmDetails.propTypes = {
   setSpotPrice: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -451,6 +455,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
+    assetMap: state.asset.map,
   };
 };
 

@@ -16,8 +16,7 @@ import {
   queryPoolSoftLocks
 } from "../../services/liquidity/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
+  amountConversion, commaSeparatorWithRounding,
   getDenomBalance
 } from "../../utils/coin";
 import { commaSeparator, formatNumber, marketPrice } from "../../utils/number";
@@ -280,7 +279,7 @@ const Balances = ({
                         />
                       </label>
                       <h3>
-                        {amountConversionWithComma(
+                        {commaSeparatorWithRounding(
                           assetBalance,
                           DOLLAR_DECIMALS
                         )}{" "}

@@ -32,7 +32,7 @@ export const marketPrice = (array, denom) => {
   if (denom === cmst?.coinMinimalDenom) {
     return array?.external?.[denom]?.price;
   }
-  
+
   if (array?.ucmst?.[denom]?.price) {
     return array?.ucmst?.[denom]?.price;
   }
@@ -57,4 +57,14 @@ export const calculateDollarValue = (
 
 export const getAccountNumber = (value) => {
   return value === "" ? "0" : value;
+};
+
+export const getExponent = (number) => {
+  let count = 0;
+  while (number > 1) {
+    number = number / 10;
+    count++;
+  }
+
+  return count;
 };

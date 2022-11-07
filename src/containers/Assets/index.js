@@ -8,13 +8,12 @@ import { setAccountBalances } from "../../actions/account";
 import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor, ibcDenoms } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
+  amountConversion, commaSeparatorWithRounding,
   denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
@@ -30,9 +29,9 @@ const Assets = ({
   balances,
   markets,
   parent,
-  refreshBalance
+  refreshBalance,
+  assetMap,
 }) => {
-
   const [pricesInProgress, setPricesInProgress] = useState(false);
 
   const dispatch = useDispatch();
@@ -43,7 +42,7 @@ const Assets = ({
       value: refreshBalance + 1,
     });
 
-    updatePrices()
+    updatePrices();
   };
 
   const updatePrices = () => {
@@ -108,7 +107,10 @@ const Assets = ({
           <p>
             {amount?.denom === cmst?.coinMinimalDenom ? "$" : ""}
             {commaSeparator(
-              amountConversion(amount?.value || 0, DOLLAR_DECIMALS)
+              amountConversion(
+                amount?.value || 0,
+                assetMap[amount?.denom]?.decimals?.toNumber()
+              )
             )}{" "}
             {amount?.denom !== cmst?.coinMinimalDenom
               ? denomConversion(cmst?.coinMinimalDenom)
@@ -179,7 +181,7 @@ const Assets = ({
   };
 
   let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
-    (item) => !item.hasOwnProperty("depositUrlOverride")
+    (item) => !item.hasOwnProperty("depositUrlOverride111")
   );
 
   let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
@@ -188,12 +190,14 @@ const Assets = ({
     );
 
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
-
+    
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
-        amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
+        amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount, 
+          
+          ibcBalance?.denom ===ibcDenoms["weth-wei"] ?assetMap["weth-wei"]?.decimals?.toNumber() :assetMap[ibcBalance?.denom]?.decimals?.toNumber()) : 0,
         value: value || 0,
         denom: ibcBalance?.denom,
       },
@@ -222,6 +226,13 @@ const Assets = ({
     (item) => item.denom === harbor?.coinMinimalDenom
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
+
+  const wethCoin = balances.filter(
+    (item) => item.denom === "weth-wei"
+  )[0];
+  const wethCoinValue = getPrice("weth-wei") * harborCoin?.amount;
+
+console.log('it is', assetMap, assetMap["weth-wei"]?.decimals?.toNumber(), amountConversion(wethCoin?.amount, assetMap["weth-wei"]?.decimals?.toNumber()));
 
   const currentChainData = [
     {
@@ -292,6 +303,29 @@ const Assets = ({
         denom: harbor?.coinMinimalDenom,
       },
     },
+    {
+      key: assetMap["weth-wei"],
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon name={iconNameFromDenom(comdex?.coinMinimalDenom)} />
+            </div>{" "}
+            {"w-eth"}{" "}
+          </div>
+        </>
+      ),
+      noOfTokens: wethCoin?.amount ? amountConversion(wethCoin.amount, assetMap["weth-wei"]?.decimals?.toNumber()) : 0,
+      price: {
+        value: getPrice(comdex?.coinMinimalDenom),
+        denom: comdex?.coinMinimalDenom,
+      },
+      amount: {
+        value: wethCoinValue || 0,
+        denom: comdex?.coinMinimalDenom,
+      },
+    },
+   
   ];
 
   ibcBalances =
@@ -339,7 +373,7 @@ const Assets = ({
                 </div>
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
-                  {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
+                  {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].CMST}
                   <span
                     className="asset-reload-btn"
@@ -375,6 +409,7 @@ Assets.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   assetBalance: PropTypes.number,
+  assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -391,7 +426,9 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
-    refreshBalance: state.account.refreshBalance,  };
+    refreshBalance: state.account.refreshBalance,
+    assetMap: state.asset.map,
+  };
 };
 
 const actionsToProps = {
