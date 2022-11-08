@@ -1,14 +1,11 @@
-import { Button, List, message, Select, Spin } from "antd";
+import { Button, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoData from "../../components/NoData";
-import { comdex } from "../../config/network";
 import { fetchRestProposals } from "../../services/govern/query";
-import { queryStakeTokens } from "../../services/staking/query";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
 import "./index.scss";
@@ -20,39 +17,10 @@ const Govern = () => {
   const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [allProposals, setAllProposals] = useState();
-  const [stakedTokens, setStakedTokens] = useState();
 
   useEffect(() => {
     fetchAllProposals();
-    fetchStakeTokens();
   }, []);
-
-  const fetchStakeTokens = () => {
-    queryStakeTokens((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setStakedTokens(result?.pool?.bondedTokens);
-    });
-  };
-
-  const data = [
-    {
-      title: "Total Staked",
-      counts: (
-        <>
-          {amountConversionWithComma(stakedTokens || 0)}{" "}
-          {denomConversion(comdex.coinMinimalDenom)}
-        </>
-      ),
-    },
-    {
-      title: "Total Proposals",
-      counts: allProposals?.length || 0,
-    },
-  ];
 
   const fetchAllProposals = () => {
     setInProgress(true);
@@ -88,34 +56,6 @@ const Govern = () => {
         </div>
       ) : (
         <>
-          <Row>
-            <Col>
-              <div className="composite-card earn-deposite-card myhome-upper d-block ">
-                <div className="myhome-upper-left w-100">
-                  <List
-                    grid={{
-                      gutter: 16,
-                      xs: 1,
-                      sm: 2,
-                      md: 2,
-                      lg: 2,
-                      xl: 2,
-                      xxl: 2,
-                    }}
-                    dataSource={data}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <div>
-                          <p>{item.title}</p>
-                          <h3 className="count">{item.counts}</h3>
-                        </div>
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              </div>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <div className="comdex-card govern-card">
