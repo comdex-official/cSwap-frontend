@@ -179,7 +179,7 @@ const Assets = ({
   };
 
   let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
-    (item) => !item.hasOwnProperty("depositUrlOverride")
+    (item) => item.coinMinimalDenom !== "weth-wei" // excluding showing weth from assets.
   );
 
   let ibcBalances = assetsWithoutExternalLinks?.map((token) => {

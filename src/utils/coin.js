@@ -5,17 +5,24 @@ import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 export const getAmount = (selectedAmount) =>
   (selectedAmount * 10 ** comdex.coinDecimals).toFixed(0).toString();
 
+
 export const amountConversionWithComma = (amount, decimals) => {
-  const result = Number(amount) / 10 ** comdex.coinDecimals;
+  let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
+
+  const result = Number(finiteAmount) / ( 10 ** comdex.coinDecimals);
 
   return commaSeparator(result.toFixed(decimals || comdex.coinDecimals));
+
 };
 
 export const amountConversion = (amount, decimals) => {
-  const result = Number(amount) / 10 ** comdex.coinDecimals;
+  let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
 
-  return result.toFixed(decimals || comdex.coinDecimals);
+  const result = Number(finiteAmount) / 10 ** comdex.coinDecimals;
+
+  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : 0);
 };
+
 
 export const orderPriceConversion = (amount) => {
   const result = Number(amount) * 10 ** 18;
