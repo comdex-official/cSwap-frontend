@@ -11,17 +11,17 @@ import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    fetchRestProposal,
-    fetchRestProposer,
-    queryUserVote
+  fetchRestProposal,
+  fetchRestProposer,
+  queryUserVote
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
-    proposalOptionMap,
-    proposalStatusMap,
-    truncateString
+  proposalOptionMap,
+  proposalStatusMap,
+  truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.scss";
@@ -177,6 +177,7 @@ const GovernDetails = ({ address }) => {
         size: "120%",
         innerSize: "75%",
         borderWidth: 0,
+        className: "votes-chart",
         dataLabels: {
           enabled: false,
           distance: -14,
