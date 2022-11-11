@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon } from "../../components/common";
-import NoData from "../../components/NoData";
+import NoDataIcon from "../../components/common/NoDataIcon";
 import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
@@ -148,7 +148,7 @@ const Govern = () => {
                       );
                     })
                   ) : (
-                    <NoData />
+                    <NoDataIcon />
                   )}
                 </div>
               </div>
