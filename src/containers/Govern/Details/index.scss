@@ -132,4 +132,10 @@
     display: flex;
     align-items: center;
   }
+
+  .votes-chart {
+    .highcharts-empty-series {
+      fill: #787f9e;
+    }
+  }
 }

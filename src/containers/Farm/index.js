@@ -68,11 +68,11 @@ const Farm = ({
     )
   );
 
-  const userPools = rawUserPools.filter(item => item);// removes undefined values from array
+  const userPools = rawUserPools.filter((item) => item); // removes undefined values from array
 
   return (
     <div className="app-content-wrapper">
-      {inProgress ? (
+      {inProgress && !pools?.length ? (
         <div className="loader">
           <Spin />
         </div>
@@ -85,13 +85,13 @@ const Farm = ({
             />
           </div>
 
-          {userPools && userPools.length > 0 ? (
+          {userPools?.length > 0 ? (
             <div className="pools-bottom-section mb-5">
               <div className="farm-heading">My Pools</div>
               <Row>
                 <Col sm="12">
                   <div className="pool-card-section">
-                    {!inProgress && userPools && userPools.length > 0 ? (
+                    {userPools?.length > 0 ? (
                       userPools.map((item, index) => (
                         <PoolCardFarm
                           parent={"user"}
@@ -116,8 +116,8 @@ const Farm = ({
             <Row>
               <Col>
                 <div className="pool-card-section">
-                  {!inProgress && pools && pools.length > 0
-                    ? pools.map((item, index) => {
+                  {pools?.length > 0
+                    ? pools?.map((item, index) => {
                         if (masterPoolMap?.[item?.id]?.poolId) {
                           return (
                             <PoolCardFarm
@@ -139,7 +139,7 @@ const Farm = ({
             <Row>
               <Col>
                 <div className="pool-card-section">
-                  {!inProgress && pools && pools.length > 0
+                  {pools?.length > 0
                     ? pools.map((item, index) => {
                         if (!masterPoolMap?.[item?.id]?.poolId) {
                           return (

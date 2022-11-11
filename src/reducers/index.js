@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 import account from "./account";
 import asset from "./asset";
+import govern from "./govern";
 import language from "./language";
-import swap from "./swap";
+import ledger from './ledger';
 import liquidity from "./liquidity";
-import theme from "./theme";
 import oracle from "./oracle";
 import order from './order';
-import ledger from './ledger'
+import swap from "./swap";
+import theme from "./theme";
 
 const app = combineReducers({
   language,
@@ -19,6 +20,7 @@ const app = combineReducers({
   oracle,
   order,
   ledger,
+  govern
 });
 
 const root = (state, action) => {

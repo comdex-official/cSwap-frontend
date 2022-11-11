@@ -3,8 +3,9 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
+import { setAllProposals, setProposals } from "../../actions/govern";
 import { Col, Row, SvgIcon } from "../../components/common";
-import NoData from "../../components/NoData";
+import NoDataIcon from "../../components/common/NoDataIcon";
 import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
@@ -12,11 +13,9 @@ import "./index.scss";
 
 const { Option } = Select;
 
-const Govern = () => {
+const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
-  const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
-  const [allProposals, setAllProposals] = useState();
 
   useEffect(() => {
     fetchAllProposals();
@@ -50,7 +49,7 @@ const Govern = () => {
 
   return (
     <div className="app-content-wrapper">
-      {inProgress ? (
+      {inProgress && !proposals?.length ? (
         <div className="loader">
           <Spin />
         </div>
@@ -104,10 +103,7 @@ const Govern = () => {
                           <div className="left-section">
                             <h3>
                               #{item?.proposal_id}
-                              <Button
-                                type="primary"
-                                className="ml-1"
-                              >
+                              <Button type="primary" className="ml-1">
                                 <span
                                   className={
                                     proposalStatusMap[item?.status] ===
@@ -148,7 +144,7 @@ const Govern = () => {
                       );
                     })
                   ) : (
-                    <NoData />
+                    <NoDataIcon />
                   )}
                 </div>
               </div>
@@ -162,14 +158,22 @@ const Govern = () => {
 
 Govern.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAllProposals: PropTypes.func.isRequired,
+  setProposals: PropTypes.func.isRequired,
+  allProposals: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    allProposals: state.govern.allProposals,
+    proposals: state.govern.proposals,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setAllProposals,
+  setProposals,
+};
 
 export default connect(stateToProps, actionsToProps)(Govern);

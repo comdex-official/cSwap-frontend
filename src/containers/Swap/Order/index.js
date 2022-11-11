@@ -4,6 +4,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { setOrders } from "../../../actions/order";
+import NoDataIcon from "../../../components/common/NoDataIcon";
 import Snack from "../../../components/common/Snack/index";
 import { APP_ID } from "../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../services/helper";
@@ -87,7 +88,7 @@ const Order = ({ lang }) => {
       }
     );
   };
-  
+
   const openOrderColumns = [
     {
       title: "Order ID",
@@ -188,6 +189,7 @@ const Order = ({ lang }) => {
           dataSource={openOrdersData}
           pagination={false}
           className="custom-table "
+          locale={{ emptyText: <NoDataIcon /> }}
         />
       ),
     },
@@ -197,11 +199,7 @@ const Order = ({ lang }) => {
     <>
       <div className="position_main_container mt-15px ">
         <div className="position_container">
-          <Tabs
-            defaultActiveKey="1"
-            className="comdex-tabs"
-            items={tabItems}
-          />
+          <Tabs defaultActiveKey="1" className="comdex-tabs" items={tabItems} />
         </div>
       </div>
     </>

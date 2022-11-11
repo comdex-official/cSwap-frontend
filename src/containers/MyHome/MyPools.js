@@ -9,6 +9,7 @@ import {
   setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
+import NoDataIcon from "../../components/common/NoDataIcon";
 import TooltipIcon from "../../components/TooltipIcon";
 import { cmst } from "../../config/network";
 import {
@@ -130,6 +131,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
+            locale={{emptyText: <NoDataIcon />}}
           />
         </Col>
       </Row>
