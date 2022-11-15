@@ -30,9 +30,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import {
-  decimalConversion, marketPrice
-} from "../../utils/number";
+import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -170,6 +168,7 @@ const Swap = ({
     setDemandCoinAmount(0);
     setValidationError();
     setLimitPrice(0);
+    setSlippage(0);
   };
 
   useEffect(() => {
@@ -421,6 +420,7 @@ const Swap = ({
     setLimitPrice(0);
     fetchPair();
     fetchPool();
+    setSlippage(0);
   };
 
   useEffect(() => {

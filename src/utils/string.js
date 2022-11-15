@@ -106,11 +106,14 @@ export const orderStatusText = (key) => {
 
 export const trimWhiteSpaces = (data) => data.split(" ").join("");
 
-export const truncateString = (string, front, back) =>
-  `${string.substr(0, front)}...${string.substr(
-    string.length - back,
-    string.length
-  )}`;
+export const truncateString = (string, front, back) => {
+  if (typeof string === "string") {
+    return `${string?.substr(0, front)}...${string?.substr(
+      string?.length - back,
+      string?.length
+    )}`;
+  }
+};
 
 export const lowercaseFirstLetter = (string) => {
   return string.charAt(0).toLowerCase() + string.slice(1).toUpperCase();

@@ -64,6 +64,7 @@ const FarmDetails = ({
   balances,
   setUserLiquidityInPools,
   userLiquidityInPools,
+  rewardsMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -343,6 +344,15 @@ const FarmDetails = ({
               </label>
               <div className="farm-apr-modal">
                 <ShowAPR pool={pool} />
+                <div className="swap-apr">
+                  Swap APR -{" "}
+                  {commaSeparator(
+                    Number(
+                      rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                    ).toFixed(DOLLAR_DECIMALS)
+                  )}
+                  %
+                </div>
               </div>
             </Col>
           </Row>
@@ -438,6 +448,7 @@ FarmDetails.propTypes = {
     })
   ),
   userLiquidityInPools: PropTypes.object,
+  rewardsMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -451,6 +462,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 
