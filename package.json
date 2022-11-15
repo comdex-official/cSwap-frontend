@@ -78,6 +78,6 @@
     "react-app-rewired": "^2.1.5",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
-    "sass": "^1.49.11"
+    "sass": "^1.56.1"
   }
 }
