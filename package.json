@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cosmjs/crypto": "^0.29.3",
-    "@cosmjs/encoding": "^0.29.3",
-    "@cosmjs/ledger-amino": "^0.29.3",
-    "@cosmjs/math": "^0.29.3",
-    "@cosmjs/proto-signing": "^0.29.3",
-    "@cosmjs/stargate": "^0.29.3",
-    "@cosmjs/tendermint-rpc": "^0.29.3",
+    "@cosmjs/crypto": "^0.29.4",
+    "@cosmjs/encoding": "^0.29.4",
+    "@cosmjs/ledger-amino": "^0.29.4",
+    "@cosmjs/math": "^0.29.4",
+    "@cosmjs/proto-signing": "^0.29.4",
+    "@cosmjs/stargate": "^0.29.4",
+    "@cosmjs/tendermint-rpc": "^0.29.4",
     "@keplr-wallet/common": "^0.11.17",
     "@keplr-wallet/stores": "^0.11.17",
     "@restart/context": "^2.1.4",
@@ -39,7 +39,7 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
-    "web-vitals": "^3.0.4"
+    "web-vitals": "^3.1.0"
   },
   "scripts": {
     "start-old": "react-scripts start",
