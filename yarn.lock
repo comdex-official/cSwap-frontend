@@ -1221,10 +1221,10 @@
   dependencies:
     bn.js "^4.11.8"
 
-"@cosmjs/math@^0.29.3":
-  version "0.29.3"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.3.tgz#29f98f6529f3d7654f1af85b329b48482eabbecb"
-  integrity sha512-4HGHqS+Yn81dZLOAYcDSQbROBD1a7ETW3ur5hziCTXMjZFILRJ3w71PlFUVppVb2u3kRDBBXuYHvZ6/V0M0nrg==
+"@cosmjs/math@^0.29.3", "@cosmjs/math@^0.29.4":
+  version "0.29.4"
+  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.4.tgz#9e9079826090718de75ff239a63314b0baf63999"
+  integrity sha512-IvT1Cj3qOMGqz7v5FxdDCBEIDL2k9m5rufrkuD4oL9kS79ebnhA0lquX6ApPubUohTXl+5PnLo02W8HEH6Stkg==
   dependencies:
     bn.js "^5.2.0"
 
