@@ -504,8 +504,7 @@ button {
 }
 
 .ant-switch {
-  background: $white;
-
+  background: rgba(0, 0, 0, 0.25);
   .dark-mode & {
     background: #2b2b2b;
   }
@@ -581,7 +580,7 @@ button {
               font-size: $font-size-sm + 3;
               color: $dark-color;
               text-align: left !important;
-              &::before{
+              &::before {
                 display: none;
               }
               .dark-mode & {
@@ -899,14 +898,13 @@ button {
         }
       }
 
-      &:hover{
-        .ant-select-arrow{
-          .icon{
+      &:hover {
+        .ant-select-arrow {
+          .icon {
             fill: $secondary-color;
           }
         }
       }
-
     }
 
     &.center-select-text {
@@ -922,9 +920,9 @@ button {
   .dark-mode & {
     background: $background-dark2;
   }
-  .ant-select-item-empty{
+  .ant-select-item-empty {
     .dark-mode & {
-      .ant-empty-description{
+      .ant-empty-description {
         color: $white;
       }
     }
@@ -936,7 +934,8 @@ button {
       }
     }
     &.ant-select-item-option-selected,
-    &.ant-select-item-option-active, &:hover {
+    &.ant-select-item-option-active,
+    &:hover {
       background: $background-light2;
       font-weight: normal;
       color: $secondary-color;
@@ -949,7 +948,6 @@ button {
 }
 
 .ant-select-dropdown {
-
   &.asset-select-dropdown {
     background: $background-light2;
     border-radius: 4px;
@@ -1385,7 +1383,6 @@ button {
     padding: 0 25px;
   }
 }
-
 
 ::-webkit-scrollbar {
   width: 4.2px;
