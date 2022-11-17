@@ -4,6 +4,7 @@ export const comdex = {
   rpc: process.env.REACT_APP_RPC,
   rest: process.env.REACT_APP_REST,
   explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
+  walletUrlForStaking: process.env.REACT_APP_COMDEX_STAKING_URL,
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
   coinDecimals: 6,
