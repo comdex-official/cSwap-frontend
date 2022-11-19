@@ -6,13 +6,18 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { setProposal, setProposer } from "../../../actions/govern";
+import {
+  setProposal,
+  setProposalTally,
+  setProposer
+} from "../../../actions/govern";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   fetchRestProposal,
+  fetchRestProposalTally,
   fetchRestProposer,
   queryUserVote
 } from "../../../services/govern/query";
@@ -33,6 +38,8 @@ const GovernDetails = ({
   proposalMap,
   setProposer,
   proposerMap,
+  setProposalTally,
+  proposalTallyMap,
 }) => {
   const { id } = useParams();
   const [votedOption, setVotedOption] = useState();
@@ -45,6 +52,7 @@ const GovernDetails = ({
 
   let proposal = proposalMap?.[id];
   let proposer = proposerMap?.[id];
+  let proposalTally = proposalTallyMap?.[id];
 
   const data = [
     {
@@ -80,6 +88,15 @@ const GovernDetails = ({
 
         setProposal(result?.proposal);
       });
+      fetchRestProposalTally(id, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setProposalTally(result?.tally, id);
+      });
+
       fetchRestProposer(id, (error, result) => {
         if (error) {
           message.error(error);
@@ -96,7 +113,6 @@ const GovernDetails = ({
 
   useEffect(() => {
     if (proposal?.proposal_id) {
-      calculateVotes();
       queryUserVote(address, proposal?.proposal_id, (error, result) => {
         if (error) {
           return;
@@ -107,12 +123,17 @@ const GovernDetails = ({
     }
   }, [address, id, proposal]);
 
+  useEffect(() => {
+    if (proposalTally?.yes) {
+      calculateVotes();
+    }
+  }, [proposalTallyMap]);
+
   const calculateTotalValue = () => {
-    let value = proposal?.final_tally_result;
-    let yes = Number(value?.yes);
-    let no = Number(value?.no);
-    let veto = Number(value?.no_with_veto);
-    let abstain = Number(value?.abstain);
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
 
     let totalValue = yes + no + abstain + veto;
 
@@ -134,11 +155,10 @@ const GovernDetails = ({
   ];
 
   const calculateVotes = () => {
-    let value = proposal?.final_tally_result;
-    let yes = Number(value?.yes);
-    let no = Number(value?.no);
-    let veto = Number(value?.no_with_veto);
-    let abstain = Number(value?.abstain);
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
     let totalValue = yes + no + abstain + veto;
 
     yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
@@ -385,9 +405,11 @@ const GovernDetails = ({
 GovernDetails.propTypes = {
   lang: PropTypes.string.isRequired,
   setProposal: PropTypes.func.isRequired,
+  setProposalTally: PropTypes.func.isRequired,
   setProposer: PropTypes.func.isRequired,
   address: PropTypes.string.isRequired,
   proposalMap: PropTypes.object,
+  proposalTallyMap: PropTypes.object,
   proposerMap: PropTypes.object,
 };
 
@@ -397,12 +419,14 @@ const stateToProps = (state) => {
     address: state.account.address,
     proposalMap: state.govern.proposalMap,
     proposerMap: state.govern.proposerMap,
+    proposalTallyMap: state.govern.proposalTallyMap,
   };
 };
 
 const actionsToProps = {
   setProposal,
   setProposer,
+  setProposalTally,
 };
 
 export default connect(stateToProps, actionsToProps)(GovernDetails);
