@@ -2,10 +2,9 @@ import { message } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { cmst } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryPoolCoinDeserialize } from "../../../services/liquidity/query";
-import { amountConversion, denomConversion } from "../../../utils/coin";
+import { amountConversion } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 
 const PoolTokenValue = ({ pool, poolTokens, markets }) => {
@@ -41,12 +40,12 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
 
   return (
     <>
+      $
       {commaSeparator(
         Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
           DOLLAR_DECIMALS
         )
       )}{" "}
-      {denomConversion(cmst?.coinMinimalDenom)}
     </>
   );
 };

@@ -7,7 +7,6 @@ export const setMarkets = (list, pagination) => {
     return map;
   }, {});
 
-  console.log('it is', priceMap)
   return {
     type: MARKET_LIST_SET,
     list: priceMap,

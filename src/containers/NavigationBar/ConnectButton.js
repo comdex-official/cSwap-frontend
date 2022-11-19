@@ -163,7 +163,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="testnet" /> {variables[lang].testnet}
+              <SvgIcon name="testnet" /> {comdex?.networkTag || "Testnet"}
             </div>
           </div>
           <DisConnectModal />

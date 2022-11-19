@@ -28,13 +28,11 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
-  console.log('the arr', array, denom)
-  
-  if (array?.[denom]?.price) {
+  if (array?.[denom]?.price && array?.[denom]?.price !== "-") {
     return array?.[denom]?.price;
   }
 
-  return 0; // returning 0 values if price not exists interms of cmst.
+  return 0; // returning 0 values if price not exists.
 };
 
 export const calculateDollarValue = (

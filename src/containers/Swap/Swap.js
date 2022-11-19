@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { cmst, comdex } from "../../config/network";
+import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -302,9 +302,9 @@ const Swap = ({
     const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
     const total = price * demandCoinPrice * offerCoin?.amount;
 
-    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
+    )}`;
   };
 
   const showDemandCoinSpotPrice = () => {

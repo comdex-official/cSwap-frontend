@@ -11,14 +11,12 @@ import {
 import { Col, Row } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import TooltipIcon from "../../components/TooltipIcon";
-import { cmst } from "../../config/network";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
-import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
 import ShowAPR from "../Farm/ShowAPR";
 import "./index.scss";
@@ -84,8 +82,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       key: "position",
       render: (position) => (
         <div>
-          {commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}{" "}
-          {denomConversion(cmst?.coinMinimalDenom)}
+          ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
         </div>
       ),
     },
@@ -131,7 +128,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
-            locale={{emptyText: <NoDataIcon />}}
+            locale={{ emptyText: <NoDataIcon /> }}
           />
         </Col>
       </Row>
