@@ -1,5 +1,4 @@
 import { Decimal } from "@cosmjs/math";
-import { cmst } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import { amountConversion } from "./coin";
 
@@ -29,12 +28,10 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
-  if (denom === cmst?.coinMinimalDenom) {
-    return array?.external?.[denom]?.price;
-  }
+  console.log('the arr', array, denom)
   
-  if (array?.ucmst?.[denom]?.price) {
-    return array?.ucmst?.[denom]?.price;
+  if (array?.[denom]?.price) {
+    return array?.[denom]?.price;
   }
 
   return 0; // returning 0 values if price not exists interms of cmst.

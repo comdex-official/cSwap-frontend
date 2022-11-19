@@ -1,17 +1,17 @@
-import { MARKET_LIST_SET, MARKET_PRICE_UPDATE } from "../constants/oracle";
+import { MARKET_LIST_SET } from "../constants/oracle";
 
 export const setMarkets = (list, pagination) => {
+
+  const priceMap = list?.reduce((map, obj) => {
+    map[obj?.denom] = obj;
+    return map;
+  }, {});
+
+  console.log('it is', priceMap)
   return {
     type: MARKET_LIST_SET,
-    list,
+    list: priceMap,
     pagination,
   };
 };
 
-export const updateMarketPrice = (value, denom) => {
-  return {
-    type: MARKET_PRICE_UPDATE,
-    value,
-    denom,
-  };
-};
