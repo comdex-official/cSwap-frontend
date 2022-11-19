@@ -16,7 +16,7 @@ const getQueryService = (callback) => {
       if (error) {
         return callback(error);
       }
-      
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 
@@ -75,6 +75,17 @@ export const fetchRestProposals = (callback) => {
 export const fetchRestProposal = (id, callback) => {
   axios
     .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestProposalTally = (id, callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}/tally`)
     .then((result) => {
       callback(null, result?.data);
     })

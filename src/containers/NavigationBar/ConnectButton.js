@@ -13,7 +13,7 @@ import {
   showAccountConnectModal
 } from "../../actions/account";
 import { setPoolIncentives } from "../../actions/liquidity";
-import { setMarkets, updateMarketPrice } from "../../actions/oracle";
+import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -23,7 +23,7 @@ import {
   queryLiquidityParams,
   queryPoolIncentives
 } from "../../services/liquidity/query";
-import { fetchCMSTPrice, fetchRestPrices } from "../../services/oracle/query";
+import { fetchRestPrices } from "../../services/oracle/query";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -39,7 +39,6 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
-  updateMarketPrice,
   poolBalances,
   setAccountName,
   setPoolIncentives,
@@ -145,15 +144,6 @@ const ConnectButton = ({
     });
   };
 
-  useEffect(() => {
-    fetchCMSTPrice((error, result) => {
-      if (error) {
-        return;
-      }
-      updateMarketPrice(result?.data?.cmst_price, cmst?.coinMinimalDenom);
-    });
-  }, []);
-
   const fetchPoolIncentives = () => {
     queryPoolIncentives((error, result) => {
       if (error) {
@@ -173,7 +163,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="testnet" /> {variables[lang].testnet}
+              <SvgIcon name="testnet" /> {comdex?.networkTag || "Testnet"}
             </div>
           </div>
           <DisConnectModal />
@@ -207,7 +197,6 @@ ConnectButton.propTypes = {
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
-  updateMarketPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -252,7 +241,6 @@ const actionsToProps = {
   setPoolBalance,
   setAssetBalance,
   setMarkets,
-  updateMarketPrice,
   setAccountName,
   setPoolIncentives,
   setParams,

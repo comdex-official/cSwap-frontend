@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
-import { cmst } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
@@ -148,21 +147,19 @@ const PoolCardFarm = ({
         <div className="card-bottom">
           <div className="cardbottom-row">
             <label>{variables[lang].poolLiquidity}</label>
-            <p>{`${TotalPoolLiquidity} ${denomConversion(
-              cmst?.coinMinimalDenom
-            )}`}</p>
+            <p>{`$${TotalPoolLiquidity}`}</p>
           </div>
           <div className="cardbottom-row">
             {parent === "user" ? (
               <>
                 <label>Liquidity</label>
                 <p>
+                  $
                   {commaSeparator(
                     Number(userLiquidityInPools[pool?.id] || 0).toFixed(
                       DOLLAR_DECIMALS
                     )
-                  )}{" "}
-                  {denomConversion(cmst?.coinMinimalDenom)}
+                  )}
                 </p>
               </>
             ) : null}
