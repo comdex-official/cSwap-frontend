@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { MARKET_LIST_SET, MARKET_PRICE_UPDATE } from "../constants/oracle";
+import { MARKET_LIST_SET } from "../constants/oracle";
 
 const market = (
   state = {
@@ -12,19 +12,7 @@ const market = (
     return {
       ...state,
       list: action?.list,
-      pagination: action.pagination,
-    };
-  } else if (action?.type === MARKET_PRICE_UPDATE) {
-    return {
-      ...state,
-      list: {
-        ...state?.list,
-        ...{
-          external: {
-            [action?.denom]: { denom: action?.denom, price: action?.value },
-          },
-        },
-      },
+      pagination: action?.pagination,
     };
   }
 

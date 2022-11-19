@@ -17,8 +17,6 @@ const variables = {
     // Connect account
     connect: "Connect",
     connected: "Connected",
-    testnet: "Testnet",
-    mainnet: "Mainnet",
     connect_wallet: "Connect Wallet",
     keplr_wallet: "Keplr Wallet",
     balance_wallet: "Balance",
@@ -86,7 +84,7 @@ const variables = {
     ust: "ust",
     atom: "atom",
     xprt: "xprt",
-    CMST: "CMST",
+    USD: "USD",
     CMDX: "CMDX",
     deposit: "Deposit",
     withdraw: "Withdraw",

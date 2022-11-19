@@ -31,9 +31,8 @@ const Assets = ({
   balances,
   markets,
   parent,
-  refreshBalance
+  refreshBalance,
 }) => {
-
   const [pricesInProgress, setPricesInProgress] = useState(false);
 
   const dispatch = useDispatch();
@@ -44,7 +43,7 @@ const Assets = ({
       value: refreshBalance + 1,
     });
 
-    updatePrices()
+    updatePrices();
   };
 
   const updatePrices = () => {
@@ -88,13 +87,7 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            {price?.denom === cmst?.coinMinimalDenom ? "$" : ""}
-            {commaSeparator(
-              Number(price?.value || 0).toFixed(DOLLAR_DECIMALS)
-            )}{" "}
-            {price?.denom !== cmst?.coinMinimalDenom
-              ? denomConversion(cmst?.coinMinimalDenom)
-              : ""}
+            ${commaSeparator(Number(price?.value || 0).toFixed(DOLLAR_DECIMALS))}
           </p>
         </>
       ),
@@ -107,13 +100,10 @@ const Assets = ({
       render: (amount) => (
         <>
           <p>
-            {amount?.denom === cmst?.coinMinimalDenom ? "$" : ""}
+            $
             {commaSeparator(
               amountConversion(amount?.value || 0, DOLLAR_DECIMALS)
-            )}{" "}
-            {amount?.denom !== cmst?.coinMinimalDenom
-              ? denomConversion(cmst?.coinMinimalDenom)
-              : ""}{" "}
+            )}
           </p>
         </>
       ),
@@ -341,7 +331,7 @@ const Assets = ({
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  {variables[lang].CMST}
+                  {variables[lang].USD}
                   <span
                     className="asset-reload-btn"
                     onClick={() => handleBalanceRefresh()}
@@ -363,7 +353,7 @@ const Assets = ({
               loading={pricesInProgress}
               pagination={false}
               scroll={{ x: "100%" }}
-              locale={{emptyText: <NoDataIcon />}}
+              locale={{ emptyText: <NoDataIcon /> }}
             />
           </Col>
         </Row>
@@ -393,7 +383,8 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
-    refreshBalance: state.account.refreshBalance,  };
+    refreshBalance: state.account.refreshBalance,
+  };
 };
 
 const actionsToProps = {
