@@ -126,6 +126,7 @@ const History = ({ address, setTransactionHistory, history }) => {
               total={history && history.count}
               onChange={(event) => handleChange(event)}
               locale={{emptyText: <NoDataIcon />}}
+              scroll={{ x: "100%" }}
             />
           </div>
         </Col>
