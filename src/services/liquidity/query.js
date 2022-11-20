@@ -231,7 +231,7 @@ export const queryPool = (id, callback) => {
 
 export const fetchRestAPRs = (callback) => {
   axios
-    .get(`${API_URL}/cswap/aprs`)
+    .get(`${API_URL}/api/v2/cswap/aprs`)
     .then((result) => {
       callback(null, result?.data);
     })
