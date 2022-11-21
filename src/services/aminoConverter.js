@@ -148,7 +148,6 @@ export const customAminoTypes = {
   },
   "/comdex.liquidity.v1beta1.MsgCancelOrder": {
     aminoType: "comdex/liquidity/MsgCancelOrder",
-
     toAmino: ({ orderer, pairId, orderId, appId }) => {
       return {
         orderer,
@@ -163,6 +162,23 @@ export const customAminoTypes = {
         pairId: Number(pair_id),
         appId: Number(app_id),
         orderId: Number(order_id),
+      };
+    },
+  },
+  "/cosmos.gov.v1beta1.MsgVote": {
+    aminoType: "cosmos-sdk/MsgVote",
+    toAmino: ({ proposalId, voter, option }) => {
+      return {
+        proposal_id: String(proposalId),
+        voter,
+        option,
+      };
+    },
+    fromAmino: ({ proposal_id, voter, option }) => {
+      return {
+        proposalId: Number(proposal_id),
+        voter,
+        option,
       };
     },
   },

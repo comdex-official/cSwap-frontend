@@ -10,7 +10,7 @@ import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
 import "./index.scss";
 
-const VoteNowModal = ({ address, proposal, lang }) => {
+const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [userVote, setUserVote] = useState();
@@ -37,6 +37,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
       address,
       (error, result) => {
         setInProgress(false);
+        setIsModalOpen(false);
         setUserVote();
         if (error) {
           message.error(error);
@@ -48,6 +49,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
           return;
         }
 
+        refreshVote();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -60,6 +62,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setUserVote();
   };
 
   return (
@@ -92,6 +95,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
                 #{proposal?.proposal_id} {proposal?.content?.title}
               </p>
               <Radio.Group
+                value={userVote}
                 name="radiogroup"
                 onChange={(e) => {
                   setUserVote(e.target.value);
@@ -136,6 +140,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
 
 VoteNowModal.propTypes = {
   lang: PropTypes.string.isRequired,
+  refreshVote: PropTypes.func.isRequired,
   address: PropTypes.string,
 };
 
