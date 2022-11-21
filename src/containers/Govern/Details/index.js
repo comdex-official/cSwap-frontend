@@ -154,6 +154,15 @@ const GovernDetails = ({
     },
   ];
 
+  const getUserVote = (vote) => {
+    if (vote === "veto") {
+      return "No with veto"
+    }
+    else {
+      return vote
+    }
+  }
+
   const calculateVotes = () => {
     let yes = Number(proposalTally?.yes);
     let no = Number(proposalTally?.no);
@@ -298,21 +307,15 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <span className=" mr-1">
-                  {votedOption
-                    ? `You voted: ${proposalOptionMap[votedOption]}`
-                    : ""}
-                </span>
-
                 <Button type="primary">
                   <span
                     className={
                       proposalStatusMap[proposal?.status] === "Rejected" ||
-                      proposalStatusMap[proposal?.status] === "Failed"
+                        proposalStatusMap[proposal?.status] === "Failed"
                         ? "failed-circle"
                         : proposalStatusMap[proposal?.status] === "Passed"
-                        ? "passed-circle"
-                        : "warning-circle"
+                          ? "passed-circle"
+                          : "warning-circle"
                     }
                   ></span>
                   {proposalStatusMap[proposal?.status]}
@@ -332,9 +335,17 @@ const GovernDetails = ({
         <Col md="6">
           <div className="composite-card govern-card2 earn-deposite-card">
             <Row>
-              <Col className="text-right">
-                <VoteNowModal proposal={proposal} />
-              </Col>
+              {address && proposalOptionMap[votedOption] !== null ?
+                <Col className="text-right">
+                  <div className="user-vote-container">
+                    {proposalOptionMap[votedOption] && <div>Your Vote : <span className="vote_msg"> {getUserVote(proposalOptionMap[votedOption])} </span>  </div>}
+                    <VoteNowModal proposal={proposal} />
+                  </div>
+                </Col> :
+                <Col className="text-right">
+                  <VoteNowModal proposal={proposal} />
+                </Col>
+              }
             </Row>
             <Row>
               <Col>

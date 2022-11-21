@@ -64,15 +64,17 @@ const VoteNowModal = ({ address, proposal, lang }) => {
 
   return (
     <>
-      <Button
-        type="primary"
-        className="btn-filled mb-n4"
-        onClick={showModal}
-        loading={inProgress}
-        disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
-      >
-        Vote Now
-      </Button>
+      <div>
+        <Button
+          type="primary"
+          className="btn-filled mb-n4"
+          onClick={showModal}
+          loading={inProgress}
+          disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
+        >
+          Vote Now
+        </Button>
+      </div>
       <Modal
         centered={true}
         className="votenow-modal"
