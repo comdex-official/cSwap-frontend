@@ -302,12 +302,6 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <span className=" mr-1">
-                  {votedOption
-                    ? `You voted: ${proposalOptionMap[votedOption]}`
-                    : ""}
-                </span>
-
                 <Button type="primary">
                   <span
                     className={
@@ -336,9 +330,26 @@ const GovernDetails = ({
         <Col md="6">
           <div className="composite-card govern-card2 earn-deposite-card">
             <Row>
-              <Col className="text-right">
-                <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
-              </Col>
+              {address && proposalOptionMap[votedOption] ? (
+                <div className="user-vote-container">
+                  {proposalOptionMap?.[votedOption] && (
+                    <div>
+                      Your Vote :{" "}
+                      <span className="vote_msg">
+                        {" "}
+                        {proposalOptionMap[votedOption]}{" "}
+                      </span>{" "}
+                    </div>
+                  )}
+                  <Col className="text-right">
+                    <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                  </Col>
+                </div>
+              ) : (
+                <Col className="text-right">
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col>
