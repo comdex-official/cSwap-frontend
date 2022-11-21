@@ -2,7 +2,7 @@ import { Button, List, message } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -111,17 +111,21 @@ const GovernDetails = ({
     }
   }, [id]);
 
+  const fetchVote = useCallback(() => {
+    queryUserVote(address, proposal?.proposal_id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setVotedOption(result?.vote?.option);
+    });
+  }, [address, proposal?.proposal_id]);
+
   useEffect(() => {
     if (proposal?.proposal_id) {
-      queryUserVote(address, proposal?.proposal_id, (error, result) => {
-        if (error) {
-          return;
-        }
-
-        setVotedOption(result?.vote?.option);
-      });
+      fetchVote();
     }
-  }, [address, id, proposal]);
+  }, [address, id, proposal, fetchVote]);
 
   useEffect(() => {
     if (proposalTally?.yes) {
@@ -298,12 +302,6 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <span className=" mr-1">
-                  {votedOption
-                    ? `You voted: ${proposalOptionMap[votedOption]}`
-                    : ""}
-                </span>
-
                 <Button type="primary">
                   <span
                     className={
@@ -332,9 +330,26 @@ const GovernDetails = ({
         <Col md="6">
           <div className="composite-card govern-card2 earn-deposite-card">
             <Row>
-              <Col className="text-right">
-                <VoteNowModal proposal={proposal} />
-              </Col>
+              {address && proposalOptionMap[votedOption] ? (
+                <div className="user-vote-container">
+                  {proposalOptionMap?.[votedOption] && (
+                    <div>
+                      Your Vote :{" "}
+                      <span className="vote_msg">
+                        {" "}
+                        {proposalOptionMap[votedOption]}{" "}
+                      </span>{" "}
+                    </div>
+                  )}
+                  <Col className="text-right">
+                    <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                  </Col>
+                </div>
+              ) : (
+                <Col className="text-right">
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col>
