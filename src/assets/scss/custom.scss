@@ -1438,6 +1438,8 @@ button {
     background: none;
     .ant-dropdown-menu-item{
       padding: 0;
+      cursor: default;
+      background: none !important;
     }
   }
 }
