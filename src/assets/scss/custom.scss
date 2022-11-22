@@ -700,6 +700,23 @@ button {
         }
       }
     }
+    &.ant-table-empty{
+      box-sizing: border-box;
+      .ant-table-tbody {
+        overflow: hidden !important;
+        tr {
+          td:last-child {
+            border-radius: 15px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .ant-table-expanded-row-fixed{
+            overflow: hidden;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }
 
