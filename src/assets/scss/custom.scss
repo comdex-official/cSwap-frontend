@@ -1430,3 +1430,14 @@ button {
   border-radius: 10px;
   background-color: none;
 }
+
+.dropconnect-overlay{
+  padding: 0;
+  .ant-dropdown-menu{
+    padding: 0;
+    background: none;
+    .ant-dropdown-menu-item{
+      padding: 0;
+    }
+  }
+}
