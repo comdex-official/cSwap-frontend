@@ -46,51 +46,51 @@ const DisConnectModal = ({
     window.location.reload();
   };
 
-  const WalletConnectedDropdown = (
-    <div className="wallet-connect-dropdown">
-      <div className="wallet-connect-upper">
-        <span />
-        <div>
-          {localStorage.getItem("loginType") === "ledger"
-            ? "native-ledger"
-            : name}
-        </div>
-      </div>
-      <div className="px-3">
-        <div> {variables[lang].balance_wallet}</div>
-        <div className="balance__value__data">
-          {amountConversionWithComma(
-            getDenomBalance(balances, comdex?.coinMinimalDenom) || 0, DOLLAR_DECIMALS
-          )}{" "}
-          {denomConversion(comdex?.coinMinimalDenom)}
-        </div>
-      </div>
-      <div className="mt-2 px-3">
-        <div>{variables[lang].address_wallet} </div>
-        <div className="wallet-address">
-          <div className="address-wallet-address d-flex">
-            <span className="mr-3"> {truncateString(address, 6, 6)} </span>{" "}
-            <Copy text={address} />
-          </div>
-        </div>
-      </div>
-      <div className="mb-2 mt-3">
-        <Button
-          type="primary"
-          onClick={showModal}
-          className="btn-filled"
-          block
-          size="small"
-        >
-          {variables[lang].disconnect}
-        </Button>
+  const items = [
+    { label: <div className="wallet-connect-dropdown">
+    <div className="wallet-connect-upper">
+      <span />
+      <div>
+        {localStorage.getItem("loginType") === "ledger"
+          ? "native-ledger"
+          : name}
       </div>
     </div>
-  );
+    <div className="px-3">
+      <div> {variables[lang].balance_wallet}</div>
+      <div className="balance__value__data">
+        {amountConversionWithComma(
+          getDenomBalance(balances, comdex?.coinMinimalDenom) || 0, DOLLAR_DECIMALS
+        )}{" "}
+        {denomConversion(comdex?.coinMinimalDenom)}
+      </div>
+    </div>
+    <div className="mt-2 px-3">
+      <div>{variables[lang].address_wallet} </div>
+      <div className="wallet-address">
+        <div className="address-wallet-address d-flex">
+          <span className="mr-3"> {truncateString(address, 6, 6)} </span>{" "}
+          <Copy text={address} />
+        </div>
+      </div>
+    </div>
+    <div className="mb-2 mt-3">
+      <Button
+        type="primary"
+        onClick={showModal}
+        className="btn-filled"
+        block
+        size="small"
+      >
+        {variables[lang].disconnect}
+      </Button>
+    </div>
+  </div>, key: 'item-1' }
+  ]
 
   return (
     <>
-      <Dropdown overlay={WalletConnectedDropdown} trigger={["click"]}>
+      <Dropdown menu={{ items }} trigger={["click"]} overlayClassName="dropconnect-overlay">
         <div className="connected_button">
           {" "}
           <SvgIcon name="user-icon" />{" "}
