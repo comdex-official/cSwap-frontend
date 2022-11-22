@@ -155,7 +155,9 @@ const ConnectButton = ({
     });
   };
 
-  const WalletConnectedDropdown = <ConnectModal />;
+  const items = [
+    { label: <ConnectModal />, key: 'item-1' }
+  ];
 
   return (
     <>
@@ -171,9 +173,10 @@ const ConnectButton = ({
       ) : (
         <div>
           <Dropdown
-            overlay={WalletConnectedDropdown}
+            menu={{ items }}
             placement="bottomRight"
             trigger={["click"]}
+            overlayClassName="dropconnect-overlay"
           >
             <Button shape="round" type="primary">
               {variables[lang].connect}
