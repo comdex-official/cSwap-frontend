@@ -212,6 +212,7 @@
                 border-radius: $base-border-radius;
                 background: $white;
                 height: 100%;
+                font-weight: normal;
 
                 .dark-mode & {
                   background: $sidebar-menu-background-dark;
