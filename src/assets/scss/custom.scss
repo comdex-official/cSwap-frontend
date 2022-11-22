@@ -18,6 +18,8 @@ body {
   font-weight: 300;
   background: $body-background-light;
   height: auto !important;
+  margin: 0;
+  padding: 0;
 
   &::before {
     background: $sidebar-bg-light;

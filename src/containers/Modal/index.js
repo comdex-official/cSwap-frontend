@@ -1,5 +1,5 @@
 import "./index.scss";
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
 import * as PropTypes from "prop-types";
 import { Spin, message } from "antd";
 import { connect } from "react-redux";
