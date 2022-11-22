@@ -135,6 +135,8 @@
         }
 
         label {
+          margin-bottom: 5px;
+          display: block;
           .dark-mode & {
             color: $text-color-light;
           }
