@@ -103,10 +103,12 @@ const GovernDetails = ({
           return;
         }
 
-        setProposer(
-          result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
-          id
-        );
+        if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
+          setProposer(
+            result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
+            id
+          );
+        }
       });
     }
   }, [id]);
