@@ -149,15 +149,11 @@ export const setPoolIncentives = (list) => {
         )
       : [];
 
-  console.log("master pool isd", list, MASTER_POOL_ID);
-
-  console.log("this", [...new Set(masterPoolsIds)]);
-  const masterPoolHashMap = [...new Set(masterPoolsIds)].reduce((map, obj) => {
+  const masterPoolHashMap = masterPoolsIds.reduce((map, obj) => {
     map[obj?.poolId] = obj;
     return map;
   }, {});
 
-  console.log("it is", masterPoolHashMap);
   return {
     type: POOL_INCENTIVES_SET,
     value: list,
