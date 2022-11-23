@@ -157,6 +157,7 @@
           padding: 10px 30px 0 30px;
           height: 100%;
           margin-bottom: 0;
+          margin-top: 0;
 
           @media screen and (max-width: 1199px) {
             margin-bottom: 0;
@@ -212,6 +213,7 @@
                 border-radius: $base-border-radius;
                 background: $white;
                 height: 100%;
+                font-weight: normal;
 
                 .dark-mode & {
                   background: $sidebar-menu-background-dark;
