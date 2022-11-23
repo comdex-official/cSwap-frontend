@@ -758,6 +758,9 @@ button {
     .icon {
       fill: $secondary-color;
       width: 12px;
+      .dark-mode & {
+        fill: $white;
+      }
     }
   }
 
@@ -822,6 +825,15 @@ button {
           background: $background-dark2;
           color: $white;
           box-shadow: $box-shadow-input-dark;
+          &::placeholder {
+            color: $white;
+          }
+          &::-webkit-placeholder {
+            color: $white;
+          }
+          &::-moz-placeholder {
+            color: $white;
+          }
         }
       }
     }
@@ -844,6 +856,10 @@ button {
           display: flex;
           align-items: center;
           font-size: $font-size-lg + 1;
+
+          .dark-mode & {
+            color: $white;
+          }
 
           .circle-icon {
             width: 40px;
