@@ -1,11 +1,14 @@
+import { MASTER_POOL_ID } from "../constants/common";
 import {
   BASE_COIN_POOL_PRICE_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
   FIRST_RESERVE_COIN_DENOM_SET,
   POOLS_LIQUIDITY_LIST_SET,
-  POOLS_SET, POOL_BALANCE_FETCH_IN_PROGRESS,
+  POOLS_SET,
+  POOL_BALANCE_FETCH_IN_PROGRESS,
   POOL_BALANCE_SET,
-  POOL_INCENTIVES_SET, POOL_REWARDS_SET,
+  POOL_INCENTIVES_SET,
+  POOL_REWARDS_SET,
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
@@ -138,7 +141,13 @@ export const setPoolIncentives = (list) => {
   }
 
   const masterPoolsIds =
-    list.length > 0 ? list?.filter((item) => item?.masterPool === true) : [];
+    list.length > 0
+      ? list?.filter(
+          (item) =>
+            item?.masterPool === true ||
+            item?.poolId?.toNumber() === MASTER_POOL_ID
+        )
+      : [];
 
   const masterPoolHashMap = masterPoolsIds.reduce((map, obj) => {
     map[obj?.poolId] = obj;
