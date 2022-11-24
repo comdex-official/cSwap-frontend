@@ -54,10 +54,16 @@ export const setAmountOut = (value) => {
 };
 
 export const setAssets = (list, pagination) => {
+  const assetDenomMap = list?.reduce((map, obj) => {
+    map[obj?.denom] = obj;
+    return map;
+  }, {});
+
   return {
     type: ASSETS_SET,
     list,
     pagination,
+    assetDenomMap: assetDenomMap,
   };
 };
 
