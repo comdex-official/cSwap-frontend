@@ -33,6 +33,7 @@ const _ = (
     list: [],
     pagination: {},
     inProgress: false,
+    assetDenomMap:{}
   },
   action
 ) => {
@@ -41,6 +42,7 @@ const _ = (
       ...state,
       list: action.list,
       pagination: action.pagination,
+      assetDenomMap: action.assetDenomMap,
     };
   }
 

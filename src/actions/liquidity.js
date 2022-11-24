@@ -149,7 +149,7 @@ export const setPoolIncentives = (list) => {
         )
       : [];
 
-  const masterPoolHashMap = masterPoolsIds.reduce((map, obj) => {
+  const masterPoolHashMap = masterPoolsIds?.reduce((map, obj) => {
     map[obj?.poolId] = obj;
     return map;
   }, {});
