@@ -54,10 +54,10 @@ const PoolCardFarm = ({
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
-      const values = poolBalance.map(
+      const values = poolBalance?.map(
         (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
       );
-      return values.reduce((prev, next) => prev + next, 0); // returning sum value
+      return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
   };
 
