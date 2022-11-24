@@ -239,3 +239,14 @@ export const fetchRestAPRs = (callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchAllTokens = (callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/tokens/all`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
