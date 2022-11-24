@@ -357,6 +357,13 @@ button {
     .ant-slider-handle {
       background-color: $white;
       border: 3px solid $secondary-color;
+      width: 14px;
+      height: 14px;
+      border-radius: 14px;
+      margin-top: -1px;
+      &:after {
+        display: none;
+      }
       @media screen and (max-width: 991px) {
         display: block;
       }
