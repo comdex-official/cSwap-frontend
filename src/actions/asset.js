@@ -1,6 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 import {
+  ASSETS_IN_PROGRESS_SET,
   ASSETS_SET,
   IN_ASSET_SET,
   OUT_AMOUNT_SET,
@@ -64,6 +65,13 @@ export const setAssets = (list, pagination) => {
     list,
     pagination,
     assetDenomMap: assetDenomMap,
+  };
+};
+
+export const setAssetsInPrgoress = (value) => {
+  return {
+    type: ASSETS_IN_PROGRESS_SET,
+    value,
   };
 };
 

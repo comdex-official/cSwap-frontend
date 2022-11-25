@@ -12,6 +12,7 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
+import { setAssets, setAssetsInPrgoress } from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
@@ -20,6 +21,7 @@ import { cmst, comdex, harbor } from "../../config/network";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import {
+  fetchAllTokens,
   queryLiquidityParams,
   queryPoolIncentives
 } from "../../services/liquidity/query";
@@ -44,6 +46,9 @@ const ConnectButton = ({
   setPoolIncentives,
   setParams,
   balances,
+  setAssets,
+  setAssetsInPrgoress,
+  assetDenomMap,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -121,6 +126,22 @@ const ConnectButton = ({
     fetchParams();
   }, []);
 
+  useEffect(() => {
+    if (!Object.keys(assetDenomMap)?.length) {
+      setAssetsInPrgoress(true);
+      fetchAllTokens((error, result) => {
+        setAssetsInPrgoress(false);
+        if (error) {
+          return;
+        }
+
+        if (result?.data?.length) {
+          setAssets(result?.data);
+        }
+      });
+    }
+  }, [setAssets, assetDenomMap]);
+
   const fetchPrices = () => {
     fetchRestPrices((error, result) => {
       if (error) {
@@ -155,9 +176,7 @@ const ConnectButton = ({
     });
   };
 
-  const items = [
-    { label: <ConnectModal />, key: 'item-1' }
-  ];
+  const items = [{ label: <ConnectModal />, key: "item-1" }];
 
   return (
     <>
@@ -196,11 +215,14 @@ ConnectButton.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
+  setAssetsInPrgoress: PropTypes.func.isRequired,
+  setAssets: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -234,6 +256,7 @@ const stateToProps = (state) => {
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
@@ -247,6 +270,8 @@ const actionsToProps = {
   setAccountName,
   setPoolIncentives,
   setParams,
+  setAssets,
+  setAssetsInPrgoress,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
