@@ -678,6 +678,7 @@
   }
 }
 .farm-apr-modal {
+  font-size: $font-size-base;
   .ant-tooltip-inner {
     display: grid;
     grid-template-rows: repeat(2, 1fr);
@@ -693,6 +694,7 @@
     line-height: 13px;
     border-radius: 10px;
     font-weight: 400;
+
 
     .dark-mode & {
       background: $background-dark1 !important;
