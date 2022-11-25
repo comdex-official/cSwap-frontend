@@ -18,7 +18,7 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -233,7 +233,7 @@ const Assets = ({
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
 
-  const currentChainData = [
+  let currentChainData = [
     {
       key: comdex.chainId,
       asset: (
@@ -303,6 +303,12 @@ const Assets = ({
       },
     },
   ];
+
+  // filter tokens to show app assets.
+  currentChainData = currentChainData?.filter(
+    (item) =>
+      item?.amount?.denom === assetDenomMap?.[item?.amount?.denom]?.denom
+  );
 
   ibcBalances =
     parent && parent === "portfolio"
