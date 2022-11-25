@@ -72,6 +72,7 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetDenomMap,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -405,15 +406,23 @@ const Swap = ({
     resetValues();
   };
 
-  const inputOptions = uniqueLiquidityPairDenoms(
+  const inOptions = uniqueLiquidityPairDenoms(
     liquidityPairs,
     !reverse ? "in" : "out"
   );
 
-  const outputOptions = uniqueQuoteDenomsForBase(
+  let inputOptions = inOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
+  );
+
+  const outOptions = uniqueQuoteDenomsForBase(
     liquidityPairs,
     !reverse ? "in" : "out",
     offerCoin?.denom
+  );
+
+  let outputOptions = outOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
   );
 
   const handleRefreshDetails = () => {
