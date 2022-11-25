@@ -38,10 +38,13 @@ const Assets = ({
   assetDenomMap,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     if (!Object.keys(assetDenomMap)?.length) {
+      setInProgress(true);
       fetchAllTokens((error, result) => {
+        setInProgress(false);
         if (error) {
           return;
         }
@@ -279,36 +282,7 @@ const Assets = ({
         denom: cmst?.coinMinimalDenom,
       },
     },
-    {
-      key: harbor.coinMinimalDenom,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(harbor?.coinMinimalDenom)} />
-            </div>{" "}
-            {denomConversion(harbor?.coinMinimalDenom)}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
-      price: {
-        value: getPrice(harbor?.coinMinimalDenom),
-        denom: harbor?.coinMinimalDenom,
-      },
-
-      amount: {
-        value: harborCoinValue || 0,
-        denom: harbor?.coinMinimalDenom,
-      },
-    },
   ];
-
-  // filter tokens to show app assets.
-  let currentFilteredChainData = currentChainData?.filter(
-    (item) =>
-      item?.amount?.denom === assetDenomMap?.[item?.amount?.denom]?.denom
-  );
 
   ibcBalances =
     parent && parent === "portfolio"
@@ -341,7 +315,7 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentFilteredChainData, tableIBCData);
+  const tableData = Lodash.concat(currentChainData, tableIBCData);
 
   return (
     <div className="app-content-wrapper">
@@ -375,7 +349,7 @@ const Assets = ({
               className="custom-table assets-table"
               dataSource={tableData}
               columns={columns}
-              loading={pricesInProgress}
+              loading={pricesInProgress || inProgress}
               pagination={false}
               scroll={{ x: "100%" }}
               locale={{ emptyText: <NoDataIcon /> }}
