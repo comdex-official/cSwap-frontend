@@ -233,7 +233,7 @@ const Assets = ({
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
 
-  const currentChainData = [
+  let currentChainData = [
     {
       key: comdex.chainId,
       asset: (
@@ -304,6 +304,12 @@ const Assets = ({
     },
   ];
 
+  // filter tokens to show app assets.
+  let currentFilteredChainData = currentChainData?.filter(
+    (item) =>
+      item?.amount?.denom === assetDenomMap?.[item?.amount?.denom]?.denom
+  );
+
   ibcBalances =
     parent && parent === "portfolio"
       ? ibcBalances.filter((item) => item?.balance?.amount > 0)
@@ -335,7 +341,7 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentChainData, tableIBCData);
+  const tableData = Lodash.concat(currentFilteredChainData, tableIBCData);
 
   return (
     <div className="app-content-wrapper">
