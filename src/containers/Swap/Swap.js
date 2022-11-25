@@ -13,7 +13,8 @@ import {
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE, MAX_SLIPPAGE_TOLERANCE
+  DEFAULT_PAGE_SIZE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
   queryLiquidityPair,
@@ -71,6 +72,7 @@ const Swap = ({
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
   assetDenomMap,
+  assetsInProgress,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -538,6 +540,7 @@ const Swap = ({
                   </label>
                   <div className="assets-select-wrapper">
                     <CustomSelect
+                      loading={assetsInProgress}
                       value={
                         offerCoin?.denom && outputOptions.length > 0
                           ? offerCoin?.denom
@@ -591,6 +594,7 @@ const Swap = ({
                     <label className="leftlabel">{variables[lang].to}</label>
                     <div className="assets-select-wrapper">
                       <CustomSelect
+                        loading={assetsInProgress}
                         value={
                           demandCoin?.denom && outputOptions.length > 0
                             ? demandCoin?.denom
