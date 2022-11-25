@@ -18,7 +18,7 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -305,7 +305,7 @@ const Assets = ({
   ];
 
   // filter tokens to show app assets.
-  currentChainData = currentChainData?.filter(
+  let currentFilteredChainData = currentChainData?.filter(
     (item) =>
       item?.amount?.denom === assetDenomMap?.[item?.amount?.denom]?.denom
   );
@@ -341,7 +341,7 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentChainData, tableIBCData);
+  const tableData = Lodash.concat(currentFilteredChainData, tableIBCData);
 
   return (
     <div className="app-content-wrapper">
