@@ -31,12 +31,12 @@ const TermsModal = () => {
       >
         <div className="pdf-view">
           <h4 className="mb-0 text-center">cSwap Terms of Use</h4>
-          <p className="text-center">Date Last Revised: [22nd Nov 2022]</p>
+          <p className="text-center">Date Last Revised: [21 Nov 2022]</p>
           <p>
             Please review these Terms of Use of cSwap (the <b>“Terms”</b>)
             carefully, as they set forth legally binding terms and conditions
             between you and the Company that govern your access and/or use of
-            (a) the website located at [••] (the <b>“Website”</b>); (b) the
+            (a) the website located at https://cswap.one/ (the <b>“Website”</b>); (b) the
             cSwap Smart Contracts (as defined below); and (c) the Comdex Chain
             (as defined below) on which the cSwap Smart Contracts (as defined
             below) are deployed, including related trademarks, and other
