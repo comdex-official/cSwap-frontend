@@ -13,9 +13,6 @@ const TermsModal = () => {
     setIsModalOpen(false);
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   return (
     <>
       <Modal
@@ -27,7 +24,6 @@ const TermsModal = () => {
         centered
         open={isModalOpen}
         onOk={handleOk}
-        onCancel={handleCancel}
       >
         <div className="pdf-view">
           <h4 className="mb-0 text-center">cSwap Terms of Use</h4>
@@ -36,14 +32,15 @@ const TermsModal = () => {
             Please review these Terms of Use of cSwap (the <b>“Terms”</b>)
             carefully, as they set forth legally binding terms and conditions
             between you and the Company that govern your access and/or use of
-            (a) the website located at https://cswap.one/ (the <b>“Website”</b>); (b) the
-            cSwap Smart Contracts (as defined below); and (c) the Comdex Chain
-            (as defined below) on which the cSwap Smart Contracts (as defined
-            below) are deployed, including related trademarks, and other
-            intellectual property, whether such access and/or use is via (i) the
-            Website <b>(“Website Access”)</b> or (ii) command line, locally
-            installed programs, Software Development Kits (“SDK”), software code
-            and blockchain and smart contract explorers (collectively
+            (a) the website located at https://cswap.one/ (the <b>“Website”</b>
+            ); (b) the cSwap Smart Contracts (as defined below); and (c) the
+            Comdex Chain (as defined below) on which the cSwap Smart Contracts
+            (as defined below) are deployed, including related trademarks, and
+            other intellectual property, whether such access and/or use is via
+            (i) the Website <b>(“Website Access”)</b> or (ii) command line,
+            locally installed programs, Software Development Kits (“SDK”),
+            software code and blockchain and smart contract explorers
+            (collectively
             <b>“Direct Access”</b>)
           </p>
           <p>
