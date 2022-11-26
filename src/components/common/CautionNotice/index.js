@@ -16,7 +16,7 @@ const TermsModal = () => {
   return (
     <>
       <Modal
-        title="Terms Conditions"
+        title="Terms and Conditions"
         className="terms-modal"
         closeIcon={false}
         footer={false}
