@@ -103,7 +103,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
       }
 
       if (result?.transactionHash) {
-        message.info(
+        message.loading(
           "Transaction Broadcasting, Waiting for transaction to be included in the block"
         );
 
@@ -169,6 +169,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
               />
             );
 
+            setInProgress(false);
             setIsModalOpen(false);
             clearInterval(time);
 

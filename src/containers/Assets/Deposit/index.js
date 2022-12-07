@@ -126,7 +126,7 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
       }
 
       if (result?.transactionHash) {
-        message.info(
+        message.loading(
           "Transaction Broadcasting, Waiting for transaction to be included in the block"
         );
 
