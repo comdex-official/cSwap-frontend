@@ -112,7 +112,7 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
           message.error(
             <Snack
               message={variables[lang].tx_failed}
-              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              explorerUrlToTx={chain?.explorerUrlToTx}
               hash={result?.transactionHash}
             />
           );
@@ -142,11 +142,10 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
       fetchTxHash(txhash, (hashResult) => {
         if (hashResult) {
           if (hashResult?.code !== undefined && hashResult?.code !== 0) {
-            message.error("the error", hashResult?.raw_log);
             message.error(
               <Snack
                 message={hashResult?.raw_log}
-                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                explorerUrlToTx={chain?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
             );
@@ -170,7 +169,7 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
             message.error(
               <Snack
                 message={hashResult?.raw_log}
-                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                explorerUrlToTx={chain?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
             );
@@ -185,11 +184,12 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
           message.success(
             <Snack
               message={"Transaction Successful. Token Transfer in progress."}
-              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              explorerUrlToTx={chain?.explorerUrlToTx}
               hash={txhash}
             />
           );
 
+          setInProgress(false);
           setIsModalOpen(false);
           clearInterval(time);
 
