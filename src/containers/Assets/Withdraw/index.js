@@ -97,8 +97,8 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
         } else {
           message.error(error);
         }
-        setInProgress(false);
-        setIsModalOpen(false);
+
+        resetValues();
         return;
       }
 
@@ -110,6 +110,12 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
         handleHash(result?.transactionHash);
       }
     });
+  };
+
+  const resetValues = () => {
+    setInProgress(false);
+    setIsModalOpen(false);
+    setAmount();
   };
 
   const handleHash = (txhash) => {
@@ -127,9 +133,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
               />
             );
 
-            setInProgress(false);
-            setIsModalOpen(false);
-
+            resetValues();
             clearInterval(time);
 
             return;
@@ -151,8 +155,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
               />
             );
 
-            setInProgress(false);
-            setIsModalOpen(false);
+            resetValues();
             clearInterval(time);
 
             return;
@@ -166,8 +169,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
             />
           );
 
-          setInProgress(false);
-          setIsModalOpen(false);
+          resetValues();
           clearInterval(time);
 
           const fetchTime = setInterval(() => {
@@ -185,7 +187,10 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
 
                 if (result?.balance?.amount !== resultBalance?.amount) {
                   handleRefresh();
+                  resetValues();
+
                   message.success("IBC Transfer Complete");
+
                   clearInterval(fetchTime);
                 }
               }
