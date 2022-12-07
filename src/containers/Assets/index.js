@@ -9,14 +9,14 @@ import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -219,6 +219,11 @@ const Assets = ({
 
   const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
 
+  const harborCoin = balances.filter(
+    (item) => item.denom === harbor?.coinMinimalDenom
+  )[0];
+  const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
+
   let currentChainData = [
     {
       key: comdex.chainId,
@@ -263,6 +268,29 @@ const Assets = ({
       amount: {
         value: cmstCoinValue || 0,
         denom: cmst?.coinMinimalDenom,
+      },
+    },
+    {
+      key: harbor.coinMinimalDenom,
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon name={iconNameFromDenom(harbor?.coinMinimalDenom)} />
+            </div>{" "}
+            {denomConversion(harbor?.coinMinimalDenom)}{" "}
+          </div>
+        </>
+      ),
+      noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
+      price: {
+        value: getPrice(harbor?.coinMinimalDenom),
+        denom: harbor?.coinMinimalDenom,
+      },
+
+      amount: {
+        value: harborCoinValue || 0,
+        denom: harbor?.coinMinimalDenom,
       },
     },
   ];
