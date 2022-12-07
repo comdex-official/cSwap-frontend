@@ -2,7 +2,6 @@ import { Button, Form, message, Modal, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { setBalanceRefresh } from "../../../actions/account";
 import { fetchProofHeight } from "../../../actions/asset";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
@@ -13,22 +12,17 @@ import { DEFAULT_FEE } from "../../../constants/common";
 import { queryBalance } from "../../../services/bank/query";
 import { aminoSignIBCTx } from "../../../services/helper";
 import { initializeIBCChain } from "../../../services/keplr";
+import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.scss";
 
-const Deposit = ({
-  lang,
-  chain,
-  address,
-  refreshBalance,
-  setBalanceRefresh,
-}) => {
+const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -113,51 +107,42 @@ const Deposit = ({
     };
 
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
-      setInProgress(false);
       if (error) {
         if (result?.transactionHash) {
-          handleHash(result?.transactionHash);
-
-          // message.error(
-          //   <Snack
-          //     message={variables[lang].tx_failed}
-          //     explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-          //     hash={result?.transactionHash}
-          //   />
-          // );
+          message.error(
+            <Snack
+              message={variables[lang].tx_failed}
+              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              hash={result?.transactionHash}
+            />
+          );
         } else {
           message.error(error);
         }
+
+        setInProgress(false);
+        setIsModalOpen(false);
         return;
       }
 
-      // message.success(
-      //   <Snack
-      //     message={variables[lang].tx_success}
-      //     explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-      //     hash={result?.transactionHash}
-      //   />
-      // );
+      if (result?.transactionHash) {
+        message.info(
+          "Transaction Broadcasting, Waiting for transaction to be included in the block"
+        );
 
-      setBalanceRefresh(refreshBalance + 1);
-      setIsModalOpen(false);
+        handleHash(result?.transactionHash);
+      }
     });
   };
 
-  const handleHash = (txhash, balance, denom, explorer) => {
+  const handleHash = (txhash) => {
     if (txhash) {
       let counter = 0;
       const time = setInterval(() => {
-        this.props.fetchTxHash(txhash, (hashResult) => {
+        fetchTxHash(txhash, (hashResult) => {
           if (hashResult) {
             if (hashResult?.code !== undefined && hashResult?.code !== 0) {
-              // this.props.showMessage(
-              //   hashResult.logs || hashResult.raw_log,
-              //   "error",
-              //   hashResult && hashResult.hash,
-              //   explorer
-              // );
-              // this.props.setTxHashInProgressFalse();
+              message.error("the error", hashResult?.raw_log);
               message.error(
                 <Snack
                   message={hashResult?.raw_log}
@@ -165,12 +150,16 @@ const Deposit = ({
                   hash={hashResult?.hash}
                 />
               );
+
+              setInProgress(false);
+              setIsModalOpen(false);
+
               clearInterval(time);
 
               return;
             }
 
-            clearInterval(time);
+            // clearInterval(time);
           }
 
           counter++;
@@ -180,12 +169,6 @@ const Deposit = ({
               hashResult.code !== undefined &&
               hashResult.code !== 0
             ) {
-              // this.props.showMessage(
-              //   hashResult.logs || hashResult.raw_log,
-              //   "error",
-              //   hashResult && hashResult.hash,
-              //   explorer
-              // );
               message.error(
                 <Snack
                   message={hashResult?.raw_log}
@@ -193,41 +176,42 @@ const Deposit = ({
                   hash={hashResult?.hash}
                 />
               );
-              // this.props.setTxHashInProgressFalse();
+
+              setInProgress(false);
+              setIsModalOpen(false);
               clearInterval(time);
 
               return;
             }
 
-            // this.props.showMessage(
-            //   "Transaction Success. Token Transfer in progress...",
-            //   "success"
-            // );
-
             message.success(
-              "Transaction Success. Token Transfer in progress..."
+              <Snack
+                message={
+                  "Transaction Successful. Token Transfer in progress."
+                }
+                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                hash={txhash}
+              />
             );
 
-            // this.props.setTxHashInProgressFalse();
+            setIsModalOpen(false);
             clearInterval(time);
-            // this.props.setIBCTxInProgress(true);
+
             const fetchTime = setInterval(() => {
               queryBalance(
-                chain?.chainInfo?.rpc,
+                comdex?.rpc,
                 address,
-                chain?.coinMinimalDenom,
+                chain?.ibcDenomHash,
                 (error, result) => {
                   if (error) return;
 
                   let resultBalance =
-                    result?.length &&
-                    result.find(
-                      (val) => val?.denom === chain?.coinMinimalDenom
-                    );
+                    balances?.length &&
+                    chain?.ibcDenomHash &&
+                    balances.find((val) => val.denom === chain?.ibcDenomHash);
 
-                  setAvailableBalance(result?.balance);
-
-                  if (resultBalance !== balance) {
+                  if (result?.balance?.amount !== resultBalance?.amount) {
+                    handleRefresh();
                     message.success("IBC Transfer Complete");
                     clearInterval(fetchTime);
                   }
@@ -355,8 +339,8 @@ const Deposit = ({
 };
 
 Deposit.propTypes = {
+  handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
-  refreshBalance: PropTypes.number.isRequired,
   address: PropTypes.string,
   chain: PropTypes.any,
 };
@@ -365,12 +349,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
-    refreshBalance: state.account.refreshBalance,
   };
 };
 
-const actionsToProps = {
-  setBalanceRefresh,
-};
-
-export default connect(stateToProps, actionsToProps)(Deposit);
+export default connect(stateToProps)(Deposit);

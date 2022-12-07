@@ -107,12 +107,11 @@ export const fetchTxHash = (hash, callback) => {
   Tendermint34Client.connect(comdex?.rpc)
     .then((tendermintClient) => {
       tendermintClient
-        .tx({hash})
+        .tx({ hash })
         .then((res) => {
           callback(null, res);
         })
         .catch((error) => {
-          console.log('this wee', error)
           callback(error && error.message);
         });
     })
