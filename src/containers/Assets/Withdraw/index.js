@@ -90,7 +90,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
           message.error(
             <Snack
               message={variables[lang].tx_failed}
-              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              explorerUrlToTx={comdex?.explorerUrlToTx}
               hash={result?.transactionHash}
             />
           );
@@ -119,11 +119,10 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
       fetchTxHash(txhash, (hashResult) => {
         if (hashResult) {
           if (hashResult?.code !== undefined && hashResult?.code !== 0) {
-            message.error("the error", hashResult?.raw_log);
             message.error(
               <Snack
                 message={hashResult?.raw_log}
-                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                explorerUrlToTx={comdex?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
             );
@@ -147,7 +146,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
             message.error(
               <Snack
                 message={hashResult?.raw_log}
-                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                explorerUrlToTx={comdex?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
             );
@@ -162,7 +161,7 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
           message.success(
             <Snack
               message={"Transaction Successful. Token Transfer in progress."}
-              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              explorerUrlToTx={comdex?.explorerUrlToTx}
               hash={txhash}
             />
           );
