@@ -14,7 +14,6 @@ import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
   MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
@@ -30,7 +29,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import { decimalConversion, marketPrice } from "../../utils/number";
+import { decimalConversion } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -72,6 +71,8 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetDenomMap,
+  assetsInProgress,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -297,16 +298,6 @@ const Swap = ({
     ).toFixed(6)} ${denomOut || ""}`;
   };
 
-  const showOfferCoinValue = () => {
-    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
-    const total = price * demandCoinPrice * offerCoin?.amount;
-
-    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
-      DOLLAR_DECIMALS
-    )}`;
-  };
-
   const showDemandCoinSpotPrice = () => {
     const denomIn = denomConversion(offerCoin?.denom);
 
@@ -405,15 +396,23 @@ const Swap = ({
     resetValues();
   };
 
-  const inputOptions = uniqueLiquidityPairDenoms(
+  const inOptions = uniqueLiquidityPairDenoms(
     liquidityPairs,
     !reverse ? "in" : "out"
   );
 
-  const outputOptions = uniqueQuoteDenomsForBase(
+  let inputOptions = inOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
+  );
+
+  const outOptions = uniqueQuoteDenomsForBase(
     liquidityPairs,
     !reverse ? "in" : "out",
     offerCoin?.denom
+  );
+
+  let outputOptions = outOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
   );
 
   const handleRefreshDetails = () => {
@@ -541,6 +540,7 @@ const Swap = ({
                   </label>
                   <div className="assets-select-wrapper">
                     <CustomSelect
+                      loading={assetsInProgress}
                       value={
                         offerCoin?.denom && outputOptions.length > 0
                           ? offerCoin?.denom
@@ -594,6 +594,7 @@ const Swap = ({
                     <label className="leftlabel">{variables[lang].to}</label>
                     <div className="assets-select-wrapper">
                       <CustomSelect
+                        loading={assetsInProgress}
                         value={
                           demandCoin?.denom && outputOptions.length > 0
                             ? demandCoin?.denom

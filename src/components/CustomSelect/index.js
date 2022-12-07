@@ -8,7 +8,7 @@ import NoDataIcon from "../common/NoDataIcon";
 
 const Option = Select.Option;
 
-const CustomSelect = ({ value, onChange, list, disabled }) => {
+const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
   return (
     <Select
       aria-label="Select"
@@ -16,6 +16,7 @@ const CustomSelect = ({ value, onChange, list, disabled }) => {
       popupClassName="asset-select-dropdown"
       value={value}
       disabled={disabled}
+      loading={loading || false}
       placeholder={
         <div className="select-placeholder">
           <div className="circle-icon">
