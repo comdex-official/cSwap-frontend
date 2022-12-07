@@ -78,7 +78,7 @@ const txSearchParams = (recipientAddress, pageNumber, pageSize, type) => {
 };
 
 export const fetchTxHistory = (address, pageNumber, pageSize, callback) => {
-  Tendermint34Client.connect(comdex.rpc)
+  Tendermint34Client.connect(comdex?.rpc)
     .then((tendermintClient) => {
       tendermintClient
         .txSearch(
@@ -101,4 +101,21 @@ export const getTransactionTimeFromHeight = async (height) => {
   const block = await tmClient.block(height);
 
   return block?.block?.header?.time;
+};
+
+export const fetchTxHash = (hash, callback) => {
+  Tendermint34Client.connect(comdex?.rpc)
+    .then((tendermintClient) => {
+      tendermintClient
+        .tx({ hash })
+        .then((res) => {
+          callback(null, res);
+        })
+        .catch((error) => {
+          callback(error && error.message);
+        });
+    })
+    .catch((error) => {
+      callback(error && error.message);
+    });
 };
