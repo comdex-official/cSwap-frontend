@@ -133,7 +133,11 @@ const Assets = ({
               </a>
             </Button>
           ) : (
-            <Deposit chain={value} />
+            <Deposit
+              chain={value}
+              balances={balances}
+              handleRefresh={handleBalanceRefresh}
+            />
           );
         }
       },
@@ -160,7 +164,11 @@ const Assets = ({
               </a>
             </Button>
           ) : (
-            <Withdraw chain={value} />
+            <Withdraw
+              chain={value}
+              balances={balances}
+              handleRefresh={handleBalanceRefresh}
+            />
           );
         }
       },
