@@ -136,92 +136,87 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
   };
 
   const handleHash = (txhash) => {
-    if (txhash) {
-      let counter = 0;
-      const time = setInterval(() => {
-        fetchTxHash(txhash, (hashResult) => {
-          if (hashResult) {
-            if (hashResult?.code !== undefined && hashResult?.code !== 0) {
-              message.error("the error", hashResult?.raw_log);
-              message.error(
-                <Snack
-                  message={hashResult?.raw_log}
-                  explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-                  hash={hashResult?.hash}
-                />
-              );
+    let counter = 0;
 
-              setInProgress(false);
-              setIsModalOpen(false);
-
-              clearInterval(time);
-
-              return;
-            }
-
-            // clearInterval(time);
-          }
-
-          counter++;
-          if (counter === 3) {
-            if (
-              hashResult &&
-              hashResult.code !== undefined &&
-              hashResult.code !== 0
-            ) {
-              message.error(
-                <Snack
-                  message={hashResult?.raw_log}
-                  explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-                  hash={hashResult?.hash}
-                />
-              );
-
-              setInProgress(false);
-              setIsModalOpen(false);
-              clearInterval(time);
-
-              return;
-            }
-
-            message.success(
+    const time = setInterval(() => {
+      fetchTxHash(txhash, (hashResult) => {
+        if (hashResult) {
+          if (hashResult?.code !== undefined && hashResult?.code !== 0) {
+            message.error("the error", hashResult?.raw_log);
+            message.error(
               <Snack
-                message={
-                  "Transaction Successful. Token Transfer in progress."
-                }
+                message={hashResult?.raw_log}
                 explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-                hash={txhash}
+                hash={hashResult?.hash}
               />
             );
 
+            setInProgress(false);
+            setIsModalOpen(false);
+
+            clearInterval(time);
+
+            return;
+          }
+        }
+
+        counter++;
+        if (counter === 3) {
+          if (
+            hashResult &&
+            hashResult.code !== undefined &&
+            hashResult.code !== 0
+          ) {
+            message.error(
+              <Snack
+                message={hashResult?.raw_log}
+                explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+                hash={hashResult?.hash}
+              />
+            );
+
+            setInProgress(false);
             setIsModalOpen(false);
             clearInterval(time);
 
-            const fetchTime = setInterval(() => {
-              queryBalance(
-                comdex?.rpc,
-                address,
-                chain?.ibcDenomHash,
-                (error, result) => {
-                  if (error) return;
-
-                  let resultBalance =
-                    balances?.length &&
-                    chain?.ibcDenomHash &&
-                    balances.find((val) => val.denom === chain?.ibcDenomHash);
-
-                  if (result?.balance?.amount !== resultBalance?.amount) {
-                    handleRefresh();
-                    message.success("IBC Transfer Complete");
-                    clearInterval(fetchTime);
-                  }
-                }
-              );
-            }, 5000);
+            return;
           }
-        });
-      }, 5000);
-    }
+
+          message.success(
+            <Snack
+              message={"Transaction Successful. Token Transfer in progress."}
+              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              hash={txhash}
+            />
+          );
+
+          setIsModalOpen(false);
+          clearInterval(time);
+
+          const fetchTime = setInterval(() => {
+            queryBalance(
+              comdex?.rpc,
+              address,
+              chain?.ibcDenomHash,
+              (error, result) => {
+                if (error) return;
+
+                let resultBalance =
+                  balances?.length &&
+                  chain?.ibcDenomHash &&
+                  balances.find((val) => val.denom === chain?.ibcDenomHash);
+
+                if (result?.balance?.amount !== resultBalance?.amount) {
+                  handleRefresh();
+                  message.success("IBC Transfer Complete");
+                  clearInterval(fetchTime);
+                }
+              }
+            );
+          }, 5000);
+        }
+      });
+    }, 5000);
   };
 
   const handleOk = () => {
