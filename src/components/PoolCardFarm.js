@@ -145,26 +145,27 @@ const PoolCardFarm = ({
           </div>
         </div>
         <div className="card-bottom">
-          <div className="cardbottom-row">
-            <label>{variables[lang].poolLiquidity}</label>
-            <p>{`$${TotalPoolLiquidity}`}</p>
+          <div className="d-flex flex-column">
+            <div className="cardbottom-row">
+              <label>{variables[lang].poolLiquidity}</label>
+              <p>{`$${TotalPoolLiquidity}`}</p>
+            </div>
+            <div className="cardbottom-row">
+              {parent === "user" ? (
+                <>
+                  <label>Liquidity</label>
+                  <p>
+                    $
+                    {commaSeparator(
+                      Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                        DOLLAR_DECIMALS
+                      )
+                    )}
+                  </p>
+                </>
+              ) : null}
+            </div>
           </div>
-          <div className="cardbottom-row">
-            {parent === "user" ? (
-              <>
-                <label>Liquidity</label>
-                <p>
-                  $
-                  {commaSeparator(
-                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )
-                  )}
-                </p>
-              </>
-            ) : null}
-          </div>
-
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <div className="percent-box">
