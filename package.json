@@ -69,6 +69,7 @@
     ]
   },
   "devDependencies": {
+    "@ledgerhq/cryptoassets": "^7.0.0",
     "@ledgerhq/hw-transport-webusb": "^6.27.7",
     "axios": "^1.2.0",
     "customize-cra": "^1.0.0",
