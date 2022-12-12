@@ -77,6 +77,8 @@ const iconMap = {
   [ibcDenoms["uusdc"]]: "usdc-icon",
   "weth-wei": "weth-icon",
   [ibcDenoms["weth-wei"]]: "weth-icon",
+  ujuno: "juno-icon",
+  [ibcDenoms["ujuno"]]: "juno-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
