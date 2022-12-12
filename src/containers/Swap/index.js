@@ -37,6 +37,7 @@ Swap.propTypes = {
   setPoolBalance: PropTypes.func.isRequired,
   setPools: PropTypes.func.isRequired,
   setReverse: PropTypes.func.isRequired,
+  assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetsInProgress: PropTypes.bool,
   balances: PropTypes.arrayOf(
@@ -135,6 +136,7 @@ const stateToProps = (state) => {
     isLimitOrder: state.swap.isLimitOrder,
     limitPrice: state.swap.limitPrice,
     baseCoinPoolPrice: state.liquidity.baseCoinPoolPrice,
+    assetMap: state.asset.map,
     assetDenomMap: state.asset._.assetDenomMap,
     assetsInProgress: state.asset._.inProgress,
   };

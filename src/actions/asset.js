@@ -60,10 +60,12 @@ export const setAssets = (list, pagination) => {
     return map;
   }, {});
 
+
   return {
     type: ASSETS_SET,
     list,
     pagination,
+    map: assetDenomMap,
     assetDenomMap: assetDenomMap,
   };
 };

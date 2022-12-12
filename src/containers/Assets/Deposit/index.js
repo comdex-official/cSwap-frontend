@@ -22,7 +22,14 @@ import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.scss";
 
-const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
+const Deposit = ({
+  lang,
+  chain,
+  address,
+  handleRefresh,
+  balances,
+  assetMap,
+}) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -90,7 +97,10 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
           source_channel: chain.destChannelId,
           token: {
             denom: chain?.coinMinimalDenom,
-            amount: getAmount(amount),
+            amount: getAmount(
+              amount,
+              assetMap[chain?.coinMinimalDenom]?.decimals
+            ),
           },
           sender: sourceAddress,
           receiver: address,
@@ -281,7 +291,12 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
                     <span className="ml-1">
                       {(availableBalance &&
                         availableBalance.amount &&
-                        amountConversion(availableBalance.amount)) ||
+                        amountConversion(
+                          availableBalance.amount,
+                          assetMap[
+                            availableBalance?.denom
+                          ]?.decimals
+                        )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
@@ -292,9 +307,17 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
                           setAmount(
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE
+                                  availableBalance?.amount - DEFAULT_FEE,
+                                  assetMap[
+                                    availableBalance?.denom
+                                  ]?.decimals
                                 )
-                              : amountConversion(availableBalance?.amount)
+                              : amountConversion(
+                                  availableBalance?.amount,
+                                  assetMap[
+                                    availableBalance?.denom
+                                  ]?.decimals
+                                )
                           );
                         }}
                       >
@@ -341,6 +364,7 @@ Deposit.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -348,6 +372,8 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    refreshBalance: state.account.refreshBalance,
+    assetMap: state.asset.map,
   };
 };
 

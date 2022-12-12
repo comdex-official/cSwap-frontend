@@ -8,33 +8,33 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber,
+  ValidatePriceInputNumber
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList,
+  queryPoolsList
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase,
+  uniqueQuoteDenomsForBase
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -72,6 +72,7 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetMap,
   assetDenomMap,
   assetsInProgress,
 }) => {
@@ -227,7 +228,13 @@ const Swap = ({
     // (input_number / (input token share in pool + input_number))*100
     setSlippage(
       (Number(value) /
-        (Number(amountConversion(assetVolume)) + Number(value))) *
+        (Number(
+          amountConversion(
+            assetVolume,
+            assetMap[selectedAsset?.denom]?.decimals
+          )
+        ) +
+          Number(value))) *
         100
     );
 
@@ -236,7 +243,13 @@ const Swap = ({
       decimalConversion(params?.swapFeeRate) / 10;
 
     setValidationError(
-      ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
+      ValidateInputNumber(
+        Number(
+          getAmount(value, assetMap[selectedAsset?.denom]?.decimals)
+        ),
+        availableBalance,
+        "macro"
+      )
     );
 
     setOfferCoinAmount(value, offerCoinFee);
@@ -360,7 +373,10 @@ const Swap = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value - nativeOfferCoinFee)
+            amountConversion(
+              value - nativeOfferCoinFee,
+              assetMap[offerCoin?.denom]?.decimals
+            )
           )
         : handleOfferCoinAmountChange();
     } else {
@@ -368,7 +384,12 @@ const Swap = ({
       const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value - offerCoinFee))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value - offerCoinFee,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -381,14 +402,24 @@ const Swap = ({
         value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance / 2);
       const offerCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -576,7 +607,10 @@ const Swap = ({
                   <div className="label-right">
                     {variables[lang].available}
                     <span className="ml-1">
-                      {amountConversionWithComma(availableBalance)}{" "}
+                      {amountConversionWithComma(
+                        availableBalance,
+                        assetMap[offerCoin?.denom]?.decimals
+                      )}{" "}
                       {denomConversion(offerCoin?.denom)}
                     </span>{" "}
                     <div className="maxhalf">
