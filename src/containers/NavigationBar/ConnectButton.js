@@ -172,12 +172,10 @@ const ConnectButton = ({
   const fetchAssets = (offset, limit, countTotal, reverse) => {
     queryAssets(offset, limit, countTotal, reverse, (error, data) => {
       if (error) {
-        console.log('the err', error, offset, limit, countTotal, reverse, data)
         message.error(error);
         return;
       }
 
-      console.log('this', offset, limit, countTotal, reverse, data)
       setAssets(data.assets);
     });
   };
