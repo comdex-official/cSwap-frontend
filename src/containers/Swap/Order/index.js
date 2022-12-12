@@ -151,7 +151,7 @@ const Order = ({ lang }) => {
     myOrders.map((item, index) => {
       return {
         key: index,
-        id: item?.id ? item?.id?.low : "",
+        id: item?.id ? item?.id?.toNumber() : "",
         expire_time: item?.expireAt
           ? moment(item.expireAt).format("MMM DD, YYYY HH:mm")
           : "",

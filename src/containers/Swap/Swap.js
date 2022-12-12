@@ -8,33 +8,33 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber
+  ValidatePriceInputNumber,
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase
+  uniqueQuoteDenomsForBase,
 } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -303,6 +303,16 @@ const Swap = ({
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
     const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
     const total = price * demandCoinPrice * offerCoin?.amount;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
+  };
+
+  const showDemandCoinValue = () => {
+    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    const offerCoinPrice = marketPrice(markets, offerCoin?.denom);
+    const total = price * offerCoinPrice * demandCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
@@ -624,6 +634,7 @@ const Swap = ({
                         className="assets-select-input with-select"
                         value={demandCoin && demandCoin.amount}
                       />{" "}
+                      <small>{pool?.id && showDemandCoinValue()}</small>
                       <small>{pool?.id && showDemandCoinSpotPrice()}</small>
                     </div>
                   </div>

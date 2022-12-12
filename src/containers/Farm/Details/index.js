@@ -346,7 +346,8 @@ const FarmDetails = ({
                   Swap APR -{" "}
                   {commaSeparator(
                     Number(
-                      rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                      rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                        ?.apr || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}
                   %
