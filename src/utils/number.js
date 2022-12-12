@@ -53,3 +53,13 @@ export const calculateDollarValue = (
 export const getAccountNumber = (value) => {
   return value === "" ? "0" : value;
 };
+
+export const getExponent = (number) => {
+  let count = 0;
+  while (number > 1) {
+    number = number / 10;
+    count++;
+  }
+
+  return count;
+};

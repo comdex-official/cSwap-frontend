@@ -9,14 +9,14 @@ import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor } from "../../config/network";
+import { cmst, comdex, harbor, ibcDenoms } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
-  amountConversionWithComma,
-  denomConversion,
+  commaSeparatorWithRounding,
+  denomConversion
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -32,6 +32,7 @@ const Assets = ({
   markets,
   parent,
   refreshBalance,
+  assetMap,
   assetDenomMap,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
@@ -104,7 +105,10 @@ const Assets = ({
           <p>
             $
             {commaSeparator(
-              amountConversion(amount?.value || 0, DOLLAR_DECIMALS)
+              amountConversion(
+                amount?.value || 0,
+                assetMap[amount?.denom]?.decimals
+              )
             )}
           </p>
         </>
@@ -194,7 +198,15 @@ const Assets = ({
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
-        amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
+        amount: ibcBalance?.amount
+          ? amountConversion(
+              ibcBalance.amount,
+
+              ibcBalance?.denom === ibcDenoms["weth-wei"]
+                ? assetMap["weth-wei"]?.decimals
+                : assetMap[ibcBalance?.denom]?.decimals
+            )
+          : 0,
         value: value || 0,
         denom: ibcBalance?.denom,
       },
@@ -340,7 +352,7 @@ const Assets = ({
                 </div>
                 <div>
                   <span>{variables[lang].total_asset_balance}</span>{" "}
-                  {amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}{" "}
+                  {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].USD}
                   <span
                     className="asset-reload-btn"
@@ -377,6 +389,7 @@ Assets.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   assetBalance: PropTypes.number,
+  assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -395,6 +408,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
+    assetMap: state.asset.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };
 };

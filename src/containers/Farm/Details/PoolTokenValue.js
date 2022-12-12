@@ -7,7 +7,7 @@ import { queryPoolCoinDeserialize } from "../../../services/liquidity/query";
 import { amountConversion } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 
-const PoolTokenValue = ({ pool, poolTokens, markets }) => {
+const PoolTokenValue = ({ pool, poolTokens, markets, assetMap }) => {
   const [totalLiquidityInDollar, setTotalLiquidityInDollar] = useState();
 
   useEffect(() => {
@@ -26,9 +26,9 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
 
         const providedTokens = result?.coins;
         const totalLiquidityInDollar =
-          Number(amountConversion(providedTokens?.[0]?.amount)) *
+          Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals)) *
             marketPrice(markets, providedTokens?.[0]?.denom) +
-          Number(amountConversion(providedTokens?.[1]?.amount)) *
+          Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals)) *
             marketPrice(markets, providedTokens?.[1]?.denom);
 
         if (totalLiquidityInDollar) {
@@ -52,6 +52,7 @@ const PoolTokenValue = ({ pool, poolTokens, markets }) => {
 
 PoolTokenValue.propTypes = {
   lang: PropTypes.string.isRequired,
+  assetMap: PropTypes.object,
   markets: PropTypes.object,
   pool: PropTypes.shape({
     id: PropTypes.shape({
@@ -72,6 +73,7 @@ const stateToProps = (state) => {
     pool: state.liquidity.pool._,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    assetMap: state.asset.map,
   };
 };
 

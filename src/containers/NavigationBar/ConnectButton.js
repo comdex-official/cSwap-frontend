@@ -18,6 +18,8 @@ import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import {
@@ -26,6 +28,7 @@ import {
   queryPoolIncentives
 } from "../../services/liquidity/query";
 import { fetchRestPrices } from "../../services/oracle/query";
+import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -47,6 +50,7 @@ const ConnectButton = ({
   setParams,
   balances,
   setAssets,
+  assetMap,
   setAssetsInPrgoress,
   assetDenomMap,
 }) => {
@@ -65,6 +69,12 @@ const ConnectButton = ({
 
   useEffect(() => {
     fetchPrices();
+    fetchAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false
+    );
   }, []);
 
   const getPrice = (denom) => {
@@ -82,7 +92,13 @@ const ConnectButton = ({
       );
 
       const value = assetBalances.map((item) => {
-        return getPrice(item.denom) * item.amount;
+        return (
+          getPrice(item.denom) *
+          amountConversion(
+            item.amount,
+            assetMap[item?.denom]?.decimals
+          )
+        );
       });
 
       setAssetBalance(Lodash.sum(value));
@@ -152,6 +168,18 @@ const ConnectButton = ({
       setMarkets(result.data);
     });
   };
+
+  const fetchAssets = (offset, limit, countTotal, reverse) => {
+    queryAssets(offset, limit, countTotal, reverse, (error, data) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setAssets(data.assets);
+    });
+  };
+
   const fetchParams = () => {
     queryLiquidityParams((error, result) => {
       if (error) {
@@ -222,6 +250,7 @@ ConnectButton.propTypes = {
   setPoolBalance: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -256,6 +285,7 @@ const stateToProps = (state) => {
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
+    assetMap: state.asset.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };
 };
