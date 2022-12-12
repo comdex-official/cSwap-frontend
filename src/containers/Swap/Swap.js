@@ -14,6 +14,7 @@ import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
   MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
@@ -29,7 +30,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import { decimalConversion } from "../../utils/number";
+import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -296,6 +297,16 @@ const Swap = ({
     return `1 ${denomIn || ""} = ${Number(
       price && isFinite(price) ? price : 0
     ).toFixed(6)} ${denomOut || ""}`;
+  };
+
+  const showOfferCoinValue = () => {
+    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
+    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
+    const total = price * demandCoinPrice * offerCoin?.amount;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
   };
 
   const showDemandCoinSpotPrice = () => {
@@ -577,6 +588,7 @@ const Swap = ({
                       onChange={(event) => onChange(event.target.value)}
                       validationError={validationError}
                     />
+                    <small>{pool?.id && showOfferCoinValue()}</small>
                     <small>{pool?.id && showOfferCoinSpotPrice()}</small>
                   </div>
                 </div>

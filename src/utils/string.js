@@ -190,3 +190,15 @@ export const proposalOptionMap = {
   3: "No",
   4: "No With Veto",
 };
+
+export const stringTagParser = (input) => {
+  const lines = input.split("\n");
+  const output = [];
+  lines.forEach((d, i) => {
+    if (i > 0) {
+      output.push(<br />);
+    }
+    output.push(d);
+  });
+  return output;
+};
