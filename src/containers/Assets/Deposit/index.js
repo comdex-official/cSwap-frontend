@@ -26,8 +26,7 @@ const Deposit = ({
   lang,
   chain,
   address,
-  refreshBalance,
-  setBalanceRefresh,
+  handleRefresh,
   balances,
   assetMap,
 }) => {
