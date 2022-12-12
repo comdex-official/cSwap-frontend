@@ -55,7 +55,7 @@ const PoolCardFarm = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals?.toNumber())) * marketPrice(markets, item?.denom)
+        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
       );
       return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -107,9 +107,9 @@ const PoolCardFarm = ({
 
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals?.toNumber())) *
+            Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals)) *
               marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals?.toNumber())) *
+            Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals)) *
               marketPrice(markets, providedTokens?.[1]?.denom);
 
           if (totalLiquidityInDollar) {

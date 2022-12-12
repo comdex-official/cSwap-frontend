@@ -78,7 +78,7 @@ const Withdraw = ({
             denom: chain?.ibcDenomHash,
             amount: getAmount(
               amount,
-              assetMap[chain?.ibcDenomHash]?.decimals?.toNumber()
+              assetMap[chain?.ibcDenomHash]?.decimals
             ),
           },
           sender: address,

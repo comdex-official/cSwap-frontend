@@ -109,7 +109,7 @@ const CreatePoolModal = ({
   const handleBaseAmountChange = (value) => {
     value = toDecimals(value)?.toString().trim();
     setBaseAmountValidationError(ValidateInputNumber(Number(getAmount(value,
-      assetMap[baseToken]?.decimals?.toNumber()))));
+      assetMap[baseToken]?.decimals))));
     setBaseAmount(value);
   };
 
@@ -117,7 +117,7 @@ const CreatePoolModal = ({
     value = toDecimals(value).toString().trim();
     setQuoteAmount(value);
     setQuoteAmountValidationError(
-      ValidateInputNumber(Number(getAmount(value, assetMap[quoteToken]?.decimals?.toNumber())))
+      ValidateInputNumber(Number(getAmount(value, assetMap[quoteToken]?.decimals)))
     );
   };
 
@@ -135,11 +135,11 @@ const CreatePoolModal = ({
       const deposits = [
         {
           denom: baseToken,
-          amount: getAmount(baseAmount, assetMap[baseToken]?.decimals?.toNumber()),
+          amount: getAmount(baseAmount, assetMap[baseToken]?.decimals),
         },
         {
           denom: quoteToken,
-          amount: getAmount(quoteAmount, assetMap[quoteToken]?.decimals?.toNumber()),
+          amount: getAmount(quoteAmount, assetMap[quoteToken]?.decimals),
         },
       ];
 
@@ -319,7 +319,7 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(baseAvailable || 0, assetMap[baseToken]?.decimals?.toNumber())}{" "}
+                    {amountConversionWithComma(baseAvailable || 0, assetMap[baseToken]?.decimals)}{" "}
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
@@ -374,7 +374,7 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(quoteAvailable || 0, assetMap[quoteToken]?.decimals?.toNumber())}{" "}
+                    {amountConversionWithComma(quoteAvailable || 0, assetMap[quoteToken]?.decimals)}{" "}
                     {denomConversion(quoteToken)}
                   </span>{" "}
                   <div className="maxhalf">
@@ -479,7 +479,7 @@ const CreatePoolModal = ({
                 I understand that creating a new pool will cost{" "}
                 {`${amountConversionWithComma(
                   params?.poolCreationFee?.[0]?.amount,
-                  assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals?.toNumber()
+                  assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals
                 )} 
               ${denomConversion(params?.poolCreationFee?.[0]?.denom)}`}{" "}
               </p>{" "}
@@ -517,7 +517,7 @@ const CreatePoolModal = ({
                 <span>
                   {amountConversionWithComma(
                     params?.poolCreationFee?.[0]?.amount || 0,
-                    assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals?.toNumber()
+                    assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals
                   )}
                 </span>
                 <span className="ml-1">

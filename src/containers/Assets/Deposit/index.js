@@ -99,7 +99,7 @@ const Deposit = ({
             denom: chain?.coinMinimalDenom,
             amount: getAmount(
               amount,
-              assetMap[chain?.coinMinimalDenom]?.decimals?.toNumber()
+              assetMap[chain?.coinMinimalDenom]?.decimals
             ),
           },
           sender: sourceAddress,
@@ -295,7 +295,7 @@ const Deposit = ({
                           availableBalance.amount,
                           assetMap[
                             availableBalance?.denom
-                          ]?.decimals?.toNumber()
+                          ]?.decimals
                         )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
@@ -310,13 +310,13 @@ const Deposit = ({
                                   availableBalance?.amount - DEFAULT_FEE,
                                   assetMap[
                                     availableBalance?.denom
-                                  ]?.decimals?.toNumber()
+                                  ]?.decimals
                                 )
                               : amountConversion(
                                   availableBalance?.amount,
                                   assetMap[
                                     availableBalance?.denom
-                                  ]?.decimals?.toNumber()
+                                  ]?.decimals
                                 )
                           );
                         }}

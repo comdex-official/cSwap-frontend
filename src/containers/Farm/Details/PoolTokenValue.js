@@ -26,9 +26,9 @@ const PoolTokenValue = ({ pool, poolTokens, markets, assetMap }) => {
 
         const providedTokens = result?.coins;
         const totalLiquidityInDollar =
-          Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals?.toNumber())) *
+          Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals)) *
             marketPrice(markets, providedTokens?.[0]?.denom) +
-          Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals?.toNumber())) *
+          Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals)) *
             marketPrice(markets, providedTokens?.[1]?.denom);
 
         if (totalLiquidityInDollar) {

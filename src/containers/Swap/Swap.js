@@ -231,7 +231,7 @@ const Swap = ({
         (Number(
           amountConversion(
             assetVolume,
-            assetMap[selectedAsset?.denom]?.decimals?.toNumber()
+            assetMap[selectedAsset?.denom]?.decimals
           )
         ) +
           Number(value))) *
@@ -245,7 +245,7 @@ const Swap = ({
     setValidationError(
       ValidateInputNumber(
         Number(
-          getAmount(value, assetMap[selectedAsset?.denom]?.decimals?.toNumber())
+          getAmount(value, assetMap[selectedAsset?.denom]?.decimals)
         ),
         availableBalance,
         "macro"
@@ -375,7 +375,7 @@ const Swap = ({
         ? handleOfferCoinAmountChange(
             amountConversion(
               value - nativeOfferCoinFee,
-              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+              assetMap[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
@@ -387,7 +387,7 @@ const Swap = ({
         ? handleOfferCoinAmountChange(
             amountConversion(
               value - offerCoinFee,
-              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+              assetMap[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
@@ -405,7 +405,7 @@ const Swap = ({
         ? handleOfferCoinAmountChange(
             amountConversion(
               value,
-              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+              assetMap[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
@@ -417,7 +417,7 @@ const Swap = ({
         ? handleOfferCoinAmountChange(
             amountConversion(
               value,
-              assetMap[offerCoin?.denom]?.decimals?.toNumber()
+              assetMap[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
@@ -609,7 +609,7 @@ const Swap = ({
                     <span className="ml-1">
                       {amountConversionWithComma(
                         availableBalance,
-                        assetMap[offerCoin?.denom]?.decimals?.toNumber()
+                        assetMap[offerCoin?.denom]?.decimals
                       )}{" "}
                       {denomConversion(offerCoin?.denom)}
                     </span>{" "}

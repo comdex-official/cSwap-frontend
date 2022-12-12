@@ -9,10 +9,10 @@ import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
-  amountConversion,
-  denomConversion,
-  getAmount,
-  orderPriceConversion
+    amountConversion,
+    denomConversion,
+    getAmount,
+    orderPriceConversion
 } from "../../utils/coin";
 import variables from "../../utils/variables";
 
@@ -53,7 +53,7 @@ const CustomButton = ({
     const price = isLimitOrder ? limitPrice : priceWithOutConversion();
     const amount = Number(offerCoin?.amount) / price;
 
-    return getAmount(amount, assetMap[offerCoin?.denom]?.decimals?.toNumber());
+    return getAmount(amount, assetMap[offerCoin?.denom]?.decimals);
   };
 
   const calculateOrderPrice = () => {
@@ -84,14 +84,14 @@ const CustomButton = ({
         /** offer_coin specifies the amount of coin the orderer offers */
         offerCoin: {
           denom: offerCoin?.denom,
-          amount: getAmount((Number(offerCoin?.amount) + Number(offerCoin?.fee),assetMap[offerCoin?.denom]?.decimals?.toNumber() )),
+          amount: getAmount((Number(offerCoin?.amount) + Number(offerCoin?.fee),assetMap[offerCoin?.denom]?.decimals )),
         },
         demandCoinDenom: demandCoin?.denom,
         price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
-            ? getAmount(offerCoin?.amount, assetMap[offerCoin?.denom]?.decimals?.toNumber())
+            ? getAmount(offerCoin?.amount, assetMap[offerCoin?.denom]?.decimals)
             : calculateBuyAmount(),
       },
     };
@@ -141,13 +141,13 @@ const CustomButton = ({
               message.success(
                 `Received ${amountConversion(
                   data?.receivedCoin?.amount,
-                  assetMap[data?.receivedCoin?.denom]?.decimals?.toNumber()
+                  assetMap[data?.receivedCoin?.denom]?.decimals
                 )} ${denomConversion(
                   data?.receivedCoin?.denom
                 )} for ${amountConversion(
                   (Number(data?.offerCoin?.amount) -
                     Number(data?.remainingOfferCoin?.amount),
-                    assetMap[data?.offerCoin?.denom]?.decimals?.toNumber())
+                    assetMap[data?.offerCoin?.denom]?.decimals)
                 )} ${denomConversion(data?.offerCoin?.denom)}`
               );
             });

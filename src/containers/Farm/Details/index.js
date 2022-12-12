@@ -194,14 +194,14 @@ const FarmDetails = ({
 
     return `${amountConversionWithComma(
       denomBalance?.amount || 0,
-      assetMap[denomBalance?.denom]?.decimals?.toNumber()
+      assetMap[denomBalance?.denom]?.decimals
     )} ${denomConversion(denom)}`;
   };
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals?.toNumber())) * marketPrice(markets, item?.denom)
+        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;

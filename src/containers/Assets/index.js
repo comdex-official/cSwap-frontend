@@ -107,7 +107,7 @@ const Assets = ({
             {commaSeparator(
               amountConversion(
                 amount?.value || 0,
-                assetMap[amount?.denom]?.decimals?.toNumber()
+                assetMap[amount?.denom]?.decimals
               )
             )}
           </p>
@@ -203,8 +203,8 @@ const Assets = ({
               ibcBalance.amount,
 
               ibcBalance?.denom === ibcDenoms["weth-wei"]
-                ? assetMap["weth-wei"]?.decimals?.toNumber()
-                : assetMap[ibcBalance?.denom]?.decimals?.toNumber()
+                ? assetMap["weth-wei"]?.decimals
+                : assetMap[ibcBalance?.denom]?.decimals
             )
           : 0,
         value: value || 0,
@@ -235,10 +235,6 @@ const Assets = ({
     (item) => item.denom === harbor?.coinMinimalDenom
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
-
-  const wethCoin = balances.filter((item) => item.denom === "weth-wei")[0];
-
-  const wethCoinValue = getPrice("weth-wei") * harborCoin?.amount;
 
   let currentChainData = [
     {
@@ -307,33 +303,6 @@ const Assets = ({
       amount: {
         value: harborCoinValue || 0,
         denom: harbor?.coinMinimalDenom,
-      },
-    },
-    {
-      key: assetMap["weth-wei"],
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(comdex?.coinMinimalDenom)} />
-            </div>{" "}
-            {"w-eth"}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: wethCoin?.amount
-        ? amountConversion(
-            wethCoin.amount,
-            assetMap["weth-wei"]?.decimals?.toNumber()
-          )
-        : 0,
-      price: {
-        value: getPrice(comdex?.coinMinimalDenom),
-        denom: comdex?.coinMinimalDenom,
-      },
-      amount: {
-        value: wethCoinValue || 0,
-        denom: comdex?.coinMinimalDenom,
       },
     },
   ];
