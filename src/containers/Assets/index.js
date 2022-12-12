@@ -189,8 +189,10 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
-
+    const value = getPrice(ibcBalance?.denom) * amountConversion(
+      ibcBalance?.amount,
+      assetMap[ibcBalance?.denom]?.decimals
+    )
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
