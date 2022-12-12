@@ -17,7 +17,14 @@ import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.scss";
 
-const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
+const Withdraw = ({
+  lang,
+  chain,
+  address,
+  assetMap,
+  balances,
+  handleRefresh,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -69,7 +76,10 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
-            amount: getAmount(amount),
+            amount: getAmount(
+              amount,
+              assetMap[chain?.ibcDenomHash]?.decimals
+            ),
           },
           sender: address,
           receiver: destinationAddress,
@@ -302,7 +312,9 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
 
 Withdraw.propTypes = {
   lang: PropTypes.string.isRequired,
+  handleRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -310,6 +322,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    assetMap: state.asset.map,
   };
 };
 
