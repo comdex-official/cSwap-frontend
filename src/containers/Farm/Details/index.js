@@ -31,6 +31,7 @@ import {
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
+import "../index.scss";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
 import Farm from "./Farm";
@@ -341,7 +342,7 @@ const FarmDetails = ({
               </label>
               <div className="farm-apr-modal">
                 <ShowAPR pool={pool} />
-                <div className="swap-apr">
+                <div className="swap-apr mt-1">
                   Swap APR -{" "}
                   {commaSeparator(
                     Number(
