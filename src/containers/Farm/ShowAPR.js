@@ -85,14 +85,16 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
 
   return (
     <>
-      {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
+      {isFetchingAPR && !rewardsMap?.[pool?.id?.toNumber()] ? (
         <Skeleton.Button
           className="apr-skeleton"
           active={true}
           size={"small"}
         />
-      ) : Number(rewardsMap?.[pool?.id?.low]?.incentive_rewards[0]?.apr) ? (
-        showIndividualAPR(rewardsMap?.[pool?.id?.low]?.incentive_rewards)
+      ) : Number(
+          rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards[0]?.apr
+        ) ? (
+        showIndividualAPR(rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards)
       ) : (
         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}
