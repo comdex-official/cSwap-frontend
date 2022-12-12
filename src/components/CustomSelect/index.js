@@ -4,16 +4,19 @@ import React from "react";
 import { denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import { SvgIcon } from "../common";
+import NoDataIcon from "../common/NoDataIcon";
 
 const Option = Select.Option;
 
-const CustomSelect = ({ value, onChange, list }) => {
+const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
   return (
     <Select
       aria-label="Select"
       className="assets-select"
       popupClassName="asset-select-dropdown"
       value={value}
+      disabled={disabled}
+      loading={loading || false}
       placeholder={
         <div className="select-placeholder">
           <div className="circle-icon">
@@ -24,6 +27,7 @@ const CustomSelect = ({ value, onChange, list }) => {
       }
       onChange={onChange}
       defaultActiveFirstOption={true}
+      notFoundContent={<NoDataIcon />}
       suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
     >
       {list &&
@@ -49,6 +53,7 @@ const CustomSelect = ({ value, onChange, list }) => {
 
 CustomSelect.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   list: PropTypes.array,
   onChange: PropTypes.func,
   value: PropTypes.any,

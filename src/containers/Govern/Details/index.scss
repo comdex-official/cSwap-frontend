@@ -1,4 +1,4 @@
-@import "../../../assets/scss/custom.scss";
+@import "../../../assets/scss/variables.scss";
 
 .composite-card {
   &.govern-card2 {
@@ -127,9 +127,25 @@
         }
       }
     }
+    .user-vote-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      .vote_msg {
+        font-weight: 600;
+        font-size: 15px;
+        text-transform: capitalize;
+      }
+    }
   }
   .address_with_copy {
     display: flex;
     align-items: center;
+  }
+
+  .votes-chart {
+    .highcharts-empty-series {
+      fill: #787f9e;
+    }
   }
 }

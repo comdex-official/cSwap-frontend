@@ -262,6 +262,7 @@ const CreatePoolModal = ({
               <div className="assets-left">
                 <div className="assets-select-wrapper">
                   <CustomSelect
+                    disabled={!baseToken}
                     onChange={handleQuoteTokenChange}
                     list={outputOptions.length > 0 ? outputOptions : null}
                     value={quoteToken || null}

@@ -15,7 +15,6 @@ import {
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
-import { cmst } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
 import {
@@ -33,6 +32,7 @@ import {
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
+import "../index.scss";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
 import Farm from "./Farm";
@@ -66,6 +66,7 @@ const FarmDetails = ({
   setUserLiquidityInPools,
   userLiquidityInPools,
   assetMap,
+  rewardsMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -335,17 +336,25 @@ const FarmDetails = ({
                 Pool Liquidity
                 <TooltipIcon text="Total Liquidity of the current pool" />
               </label>
-              <p>{`${TotalPoolLiquidity} ${denomConversion(
-                cmst?.coinMinimalDenom
-              )}`}</p>
+              <p>{`$${TotalPoolLiquidity}`}</p>
             </Col>
             <Col sm="6" className="mb-3">
               <label>
                 Apr
-                <TooltipIcon text="Annual percentage rate of CMDX rewards for the corresponding  pool. Note:- APRs are subject to change with pool size." />
+                <TooltipIcon text="Annual percentage rate of rewards for the corresponding pool. Note:- APRs are subject to change with pool size." />
               </label>
               <div className="farm-apr-modal">
                 <ShowAPR pool={pool} />
+                <div className="swap-apr mt-1">
+                  Swap APR -{" "}
+                  {commaSeparator(
+                    Number(
+                      rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                        ?.apr || 0
+                    ).toFixed(DOLLAR_DECIMALS)
+                  )}
+                  %
+                </div>
               </div>
             </Col>
           </Row>
@@ -375,12 +384,12 @@ const FarmDetails = ({
             <Col sm="4" className="mb-3">
               <label>My liquidity</label>
               <p>
+                $
                 {commaSeparator(
                   Number(userLiquidityInPools[pool?.id] || 0).toFixed(
                     DOLLAR_DECIMALS
                   )
-                )}{" "}
-                {denomConversion(cmst?.coinMinimalDenom)}
+                )}
               </p>
             </Col>
             <Col sm="4" className="mb-3">
@@ -442,6 +451,7 @@ FarmDetails.propTypes = {
     })
   ),
   userLiquidityInPools: PropTypes.object,
+  rewardsMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -456,6 +466,7 @@ const stateToProps = (state) => {
     pair: state.asset.pair,
     markets: state.oracle.market.list,
     assetMap: state.asset.map,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 

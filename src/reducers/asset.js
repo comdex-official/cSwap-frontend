@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import {
+  ASSETS_IN_PROGRESS_SET,
   ASSETS_SET,
   COLLATERAL_RATIO_SET,
   IN_AMOUNT_SET,
@@ -8,7 +9,7 @@ import {
   OUT_ASSET_SET,
   PAIRS_SET,
   PAIR_ID_SET,
-  PAIR_SET
+  PAIR_SET,
 } from "../constants/asset";
 
 const pairs = (
@@ -33,18 +34,27 @@ const _ = (
     list: [],
     pagination: {},
     inProgress: false,
+    assetDenomMap: {},
   },
   action
 ) => {
-  if (action.type === ASSETS_SET) {
-    return {
-      ...state,
-      list: action.list,
-      pagination: action.pagination,
-    };
-  }
+  switch (action.type) {
+    case ASSETS_SET:
+      return {
+        ...state,
+        list: action.list,
+        pagination: action.pagination,
+        assetDenomMap: action.assetDenomMap,
+      };
+    case ASSETS_IN_PROGRESS_SET:
+      return {
+        ...state,
+        inProgress: action?.value,
+      };
 
-  return state;
+    default:
+      return state;
+  }
 };
 
 const map = (state = {}, action) => {

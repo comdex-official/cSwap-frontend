@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
-import { cmst } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
@@ -58,7 +57,7 @@ const PoolCardFarm = ({
       const values = poolBalance.map(
         (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals?.toNumber())) * marketPrice(markets, item?.denom)
       );
-      return values.reduce((prev, next) => prev + next, 0); // returning sum value
+      return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
   };
 
@@ -146,38 +145,38 @@ const PoolCardFarm = ({
           </div>
         </div>
         <div className="card-bottom">
-          <div className="cardbottom-row">
-            <label>{variables[lang].poolLiquidity}</label>
-            <p>{`${TotalPoolLiquidity} ${denomConversion(
-              cmst?.coinMinimalDenom
-            )}`}</p>
+          <div className="d-flex flex-column">
+            <div className="cardbottom-row">
+              <label>{variables[lang].poolLiquidity}</label>
+              <p>{`$${TotalPoolLiquidity}`}</p>
+            </div>
+            <div className="cardbottom-row">
+              {parent === "user" ? (
+                <>
+                  <label>Liquidity</label>
+                  <p>
+                    $
+                    {commaSeparator(
+                      Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                        DOLLAR_DECIMALS
+                      )
+                    )}
+                  </p>
+                </>
+              ) : null}
+            </div>
           </div>
-          <div className="cardbottom-row">
-            {parent === "user" ? (
-              <>
-                <label>Liquidity</label>
-                <p>
-                  {commaSeparator(
-                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )
-                  )}{" "}
-                  {denomConversion(cmst?.coinMinimalDenom)}
-                </p>
-              </>
-            ) : null}
-          </div>
-
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <div className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
-            <div className="swap-apr">
+            <div className="swap-apr mt-1">
               Swap APR -{" "}
               {commaSeparator(
                 Number(
-                  rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                  rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                    ?.apr || 0
                 ).toFixed(DOLLAR_DECIMALS)
               )}
               %

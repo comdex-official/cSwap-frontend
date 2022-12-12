@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { cmst, comdex } from "../../config/network";
+import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -73,6 +73,8 @@ const Swap = ({
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
   assetMap,
+  assetDenomMap,
+  assetsInProgress,
 }) => {
   const [validationError, setValidationError] = useState();
   const [liquidityPairs, setLiquidityPairs] = useState();
@@ -169,6 +171,7 @@ const Swap = ({
     setDemandCoinAmount(0);
     setValidationError();
     setLimitPrice(0);
+    setSlippage(0);
   };
 
   useEffect(() => {
@@ -314,9 +317,19 @@ const Swap = ({
     const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
     const total = price * demandCoinPrice * offerCoin?.amount;
 
-    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
+    )}`;
+  };
+
+  const showDemandCoinValue = () => {
+    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    const offerCoinPrice = marketPrice(markets, offerCoin?.denom);
+    const total = price * offerCoinPrice * demandCoin?.amount;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
   };
 
   const showDemandCoinSpotPrice = () => {
@@ -435,21 +448,30 @@ const Swap = ({
     resetValues();
   };
 
-  const inputOptions = uniqueLiquidityPairDenoms(
+  const inOptions = uniqueLiquidityPairDenoms(
     liquidityPairs,
     !reverse ? "in" : "out"
   );
 
-  const outputOptions = uniqueQuoteDenomsForBase(
+  let inputOptions = inOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
+  );
+
+  const outOptions = uniqueQuoteDenomsForBase(
     liquidityPairs,
     !reverse ? "in" : "out",
     offerCoin?.denom
+  );
+
+  let outputOptions = outOptions?.filter(
+    (item) => item === assetDenomMap?.[item]?.denom
   );
 
   const handleRefreshDetails = () => {
     setLimitPrice(0);
     fetchPair();
     fetchPool();
+    setSlippage(0);
   };
 
   useEffect(() => {
@@ -570,6 +592,7 @@ const Swap = ({
                   </label>
                   <div className="assets-select-wrapper">
                     <CustomSelect
+                      loading={assetsInProgress}
                       value={
                         offerCoin?.denom && outputOptions.length > 0
                           ? offerCoin?.denom
@@ -609,6 +632,7 @@ const Swap = ({
                       onChange={(event) => onChange(event.target.value)}
                       validationError={validationError}
                     />
+                    <small>{pool?.id && showOfferCoinValue()}</small>
                     <small>{pool?.id && showOfferCoinSpotPrice()}</small>
                   </div>
                 </div>
@@ -626,6 +650,7 @@ const Swap = ({
                     <label className="leftlabel">{variables[lang].to}</label>
                     <div className="assets-select-wrapper">
                       <CustomSelect
+                        loading={assetsInProgress}
                         value={
                           demandCoin?.denom && outputOptions.length > 0
                             ? demandCoin?.denom
@@ -643,6 +668,7 @@ const Swap = ({
                         className="assets-select-input with-select"
                         value={demandCoin && demandCoin.amount}
                       />{" "}
+                      <small>{pool?.id && showDemandCoinValue()}</small>
                       <small>{pool?.id && showDemandCoinSpotPrice()}</small>
                     </div>
                   </div>

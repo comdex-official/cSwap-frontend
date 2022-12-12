@@ -1,4 +1,5 @@
 import { comdex, ibcDenoms } from "../config/network";
+import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator, getExponent } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
@@ -6,6 +7,7 @@ export const getAmount = (selectedAmount, decimal) =>
   (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
     .toFixed(0)
     .toString();
+
 
 export const amountConversionWithComma = (amount, decimals) => {
   const result = Number(amount) / (decimals || 10 ** comdex.coinDecimals);
@@ -24,7 +26,22 @@ export const amountConversion = (amount, decimals) => {
   const result = Number(amount) / (decimals || 10 ** comdex.coinDecimals);
 
   return result.toFixed(getExponent(decimals) || comdex.coinDecimals);
+  let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
+
+  const result = Number(finiteAmount) / ( 10 ** comdex.coinDecimals);
+
+  return commaSeparator(result.toFixed(decimals || comdex.coinDecimals));
+
 };
+
+export const amountConversion = (amount, decimals) => {
+  let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
+
+  const result = Number(finiteAmount) / 10 ** comdex.coinDecimals;
+
+  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : DOLLAR_DECIMALS);
+};
+
 
 export const orderPriceConversion = (amount) => {
   const result = Number(amount) * 10 ** 18;

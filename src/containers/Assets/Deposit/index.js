@@ -2,7 +2,6 @@ import { Button, Form, message, Modal, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { setBalanceRefresh } from "../../../actions/account";
 import { fetchProofHeight } from "../../../actions/asset";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
@@ -13,6 +12,7 @@ import { DEFAULT_FEE } from "../../../constants/common";
 import { queryBalance } from "../../../services/bank/query";
 import { aminoSignIBCTx } from "../../../services/helper";
 import { initializeIBCChain } from "../../../services/keplr";
+import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
@@ -28,6 +28,7 @@ const Deposit = ({
   address,
   refreshBalance,
   setBalanceRefresh,
+  balances,
   assetMap,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
@@ -97,7 +98,10 @@ const Deposit = ({
           source_channel: chain.destChannelId,
           token: {
             denom: chain?.coinMinimalDenom,
-            amount: getAmount(amount, assetMap[chain?.coinMinimalDenom]?.decimals?.toNumber()),
+            amount: getAmount(
+              amount,
+              assetMap[chain?.coinMinimalDenom]?.decimals?.toNumber()
+            ),
           },
           sender: sourceAddress,
           receiver: address,
@@ -114,33 +118,120 @@ const Deposit = ({
     };
 
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
-      setInProgress(false);
       if (error) {
         if (result?.transactionHash) {
           message.error(
             <Snack
               message={variables[lang].tx_failed}
-              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              explorerUrlToTx={chain?.explorerUrlToTx}
               hash={result?.transactionHash}
             />
           );
         } else {
           message.error(error);
         }
+
+        resetValues();
         return;
       }
 
-      message.success(
-        <Snack
-          message={variables[lang].tx_success}
-          explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
-          hash={result?.transactionHash}
-        />
-      );
+      if (result?.transactionHash) {
+        message.loading(
+          "Transaction Broadcasting, Waiting for transaction to be included in the block"
+        );
 
-      setBalanceRefresh(refreshBalance + 1);
-      setIsModalOpen(false);
+        handleHash(result?.transactionHash);
+      }
     });
+  };
+
+  const resetValues = () => {
+    setInProgress(false);
+    setIsModalOpen(false);
+    setAmount();
+  };
+
+  const handleHash = (txhash) => {
+    let counter = 0;
+
+    const time = setInterval(() => {
+      fetchTxHash(txhash, (hashResult) => {
+        if (hashResult) {
+          if (hashResult?.code !== undefined && hashResult?.code !== 0) {
+            message.error(
+              <Snack
+                message={hashResult?.raw_log}
+                explorerUrlToTx={chain?.explorerUrlToTx}
+                hash={hashResult?.hash}
+              />
+            );
+
+            resetValues();
+            clearInterval(time);
+
+            return;
+          }
+        }
+
+        counter++;
+        if (counter === 3) {
+          if (
+            hashResult &&
+            hashResult.code !== undefined &&
+            hashResult.code !== 0
+          ) {
+            message.error(
+              <Snack
+                message={hashResult?.raw_log}
+                explorerUrlToTx={chain?.explorerUrlToTx}
+                hash={hashResult?.hash}
+              />
+            );
+
+            resetValues();
+            clearInterval(time);
+
+            return;
+          }
+
+          message.success(
+            <Snack
+              message={"Transaction Successful. Token Transfer in progress."}
+              explorerUrlToTx={chain?.explorerUrlToTx}
+              hash={txhash}
+            />
+          );
+
+          resetValues();
+          clearInterval(time);
+
+          const fetchTime = setInterval(() => {
+            queryBalance(
+              comdex?.rpc,
+              address,
+              chain?.ibcDenomHash,
+              (error, result) => {
+                if (error) return;
+
+                let resultBalance =
+                  balances?.length &&
+                  chain?.ibcDenomHash &&
+                  balances.find((val) => val.denom === chain?.ibcDenomHash);
+
+                if (result?.balance?.amount !== resultBalance?.amount) {
+                  handleRefresh();
+                  resetValues();
+
+                  message.success("IBC Transfer Complete");
+
+                  clearInterval(fetchTime);
+                }
+              }
+            );
+          }, 5000);
+        }
+      });
+    }, 5000);
   };
 
   const handleOk = () => {
@@ -201,7 +292,12 @@ const Deposit = ({
                     <span className="ml-1">
                       {(availableBalance &&
                         availableBalance.amount &&
-                        amountConversion(availableBalance.amount, assetMap[availableBalance?.denom]?.decimals?.toNumber())) ||
+                        amountConversion(
+                          availableBalance.amount,
+                          assetMap[
+                            availableBalance?.denom
+                          ]?.decimals?.toNumber()
+                        )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
@@ -213,9 +309,16 @@ const Deposit = ({
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[availableBalance?.denom]?.decimals?.toNumber()
+                                  assetMap[
+                                    availableBalance?.denom
+                                  ]?.decimals?.toNumber()
                                 )
-                              : amountConversion(availableBalance?.amount, assetMap[availableBalance?.denom]?.decimals?.toNumber())
+                              : amountConversion(
+                                  availableBalance?.amount,
+                                  assetMap[
+                                    availableBalance?.denom
+                                  ]?.decimals?.toNumber()
+                                )
                           );
                         }}
                       >
@@ -259,8 +362,8 @@ const Deposit = ({
 };
 
 Deposit.propTypes = {
+  handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
-  refreshBalance: PropTypes.number.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   chain: PropTypes.any,
@@ -275,8 +378,4 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-  setBalanceRefresh,
-};
-
-export default connect(stateToProps, actionsToProps)(Deposit);
+export default connect(stateToProps)(Deposit);

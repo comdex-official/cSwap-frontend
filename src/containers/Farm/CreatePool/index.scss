@@ -1,7 +1,7 @@
 @import "../../../assets/scss/style.scss";
 .create-pool-modal {
   .ant-modal-content {
-    padding: 0 5px !important;
+    padding: 10px 15px !important;
   }
   .col {
     padding-left: 0;
@@ -87,12 +87,15 @@
   }
 }
 
-
-.poolcreation-fee{
-  background: linear-gradient(146.26deg, #fe4350 1.34%, #053c75 100.83%) !important;
+.poolcreation-fee {
+  background: linear-gradient(
+    146.26deg,
+    #fe4350 1.34%,
+    #053c75 100.83%
+  ) !important;
   padding: 1px;
   border-radius: $base-border-radius - 5;
-  .poolcreationfee-inner{
+  .poolcreationfee-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -102,19 +105,19 @@
     .dark-mode & {
       background: $background-dark1;
     }
-    .poolcreationfree-left{
-      .pool-denom{
+    .poolcreationfree-left {
+      .pool-denom {
         .dark-mode & {
           color: $white;
           font-weight: 500;
           font-size: 1rem;
         }
       }
-      .pool-paira{
+      .pool-paira {
         margin-bottom: 0;
       }
     }
-    .poolcreationfee-right{
+    .poolcreationfee-right {
       font-size: 1.3rem;
       font-weight: 500;
       .dark-mode & {

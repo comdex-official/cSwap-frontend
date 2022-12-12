@@ -2,34 +2,47 @@ import { Button, List, message } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import {
+  setProposal,
+  setProposalTally,
+  setProposer
+} from "../../../actions/govern";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    fetchRestProposal,
-    fetchRestProposer,
-    queryUserVote
+  fetchRestProposal,
+  fetchRestProposalTally,
+  fetchRestProposer,
+  queryUserVote
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
-    proposalOptionMap,
-    proposalStatusMap,
-    truncateString
+  proposalOptionMap,
+  proposalStatusMap,
+  stringTagParser,
+  truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.scss";
 
-const GovernDetails = ({ address }) => {
+const GovernDetails = ({
+  address,
+  setProposal,
+  proposalMap,
+  setProposer,
+  proposerMap,
+  setProposalTally,
+  proposalTallyMap,
+}) => {
   const { id } = useParams();
-  const [proposal, setProposal] = useState();
-  const [proposer, setProposer] = useState();
   const [votedOption, setVotedOption] = useState();
   const [getVotes, setGetVotes] = useState({
     yes: 0,
@@ -37,6 +50,10 @@ const GovernDetails = ({ address }) => {
     veto: 0,
     abstain: 0,
   });
+
+  let proposal = proposalMap?.[id];
+  let proposer = proposerMap?.[id];
+  let proposalTally = proposalTallyMap?.[id];
 
   const data = [
     {
@@ -72,38 +89,58 @@ const GovernDetails = ({ address }) => {
 
         setProposal(result?.proposal);
       });
+      fetchRestProposalTally(id, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setProposalTally(result?.tally, id);
+      });
+
       fetchRestProposer(id, (error, result) => {
         if (error) {
           message.error(error);
           return;
         }
 
-        setProposer(
-          result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer
-        );
+        if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
+          setProposer(
+            result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
+            id
+          );
+        }
       });
     }
   }, [id]);
 
+  const fetchVote = useCallback(() => {
+    queryUserVote(address, proposal?.proposal_id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setVotedOption(result?.vote?.option);
+    });
+  }, [address, proposal?.proposal_id]);
+
   useEffect(() => {
     if (proposal?.proposal_id) {
-      calculateVotes();
-      queryUserVote(address, proposal?.proposal_id, (error, result) => {
-        if (error) {
-          return;
-        }
-
-        setVotedOption(result?.vote?.option);
-      });
+      fetchVote();
     }
-  }, [address, id, proposal]);
+  }, [address, id, proposal, fetchVote]);
+
+  useEffect(() => {
+    if (proposalTally?.yes) {
+      calculateVotes();
+    }
+  }, [proposalTallyMap]);
 
   const calculateTotalValue = () => {
-    let value = proposal?.final_tally_result;
-    let yes = Number(value?.yes);
-    let no = Number(value?.no);
-    let veto = Number(value?.no_with_veto);
-    let abstain = Number(value?.abstain);
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
 
     let totalValue = yes + no + abstain + veto;
 
@@ -125,11 +162,10 @@ const GovernDetails = ({ address }) => {
   ];
 
   const calculateVotes = () => {
-    let value = proposal?.final_tally_result;
-    let yes = Number(value?.yes);
-    let no = Number(value?.no);
-    let veto = Number(value?.no_with_veto);
-    let abstain = Number(value?.abstain);
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
     let totalValue = yes + no + abstain + veto;
 
     yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
@@ -177,6 +213,7 @@ const GovernDetails = ({ address }) => {
         size: "120%",
         innerSize: "75%",
         borderWidth: 0,
+        className: "votes-chart",
         dataLabels: {
           enabled: false,
           distance: -14,
@@ -268,12 +305,6 @@ const GovernDetails = ({ address }) => {
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <span className=" mr-1">
-                  {votedOption
-                    ? `You voted: ${proposalOptionMap[votedOption]}`
-                    : ""}
-                </span>
-
                 <Button type="primary">
                   <span
                     className={
@@ -293,7 +324,9 @@ const GovernDetails = ({ address }) => {
               <Col>
                 <h3>{proposal?.content?.title}</h3>
                 <div className="description-row">
-                  <p>{proposal?.content?.description} </p>
+                  <p>
+                    {stringTagParser(proposal?.content?.description || " ")}{" "}
+                  </p>
                 </div>
               </Col>
             </Row>
@@ -302,9 +335,26 @@ const GovernDetails = ({ address }) => {
         <Col md="6">
           <div className="composite-card govern-card2 earn-deposite-card">
             <Row>
-              <Col className="text-right">
-                <VoteNowModal proposal={proposal} />
-              </Col>
+              {address && proposalOptionMap[votedOption] ? (
+                <div className="user-vote-container">
+                  {proposalOptionMap?.[votedOption] && (
+                    <div>
+                      Your Vote :{" "}
+                      <span className="vote_msg">
+                        {" "}
+                        {proposalOptionMap[votedOption]}{" "}
+                      </span>{" "}
+                    </div>
+                  )}
+                  <Col className="text-right">
+                    <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                  </Col>
+                </div>
+              ) : (
+                <Col className="text-right">
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col>
@@ -374,16 +424,29 @@ const GovernDetails = ({ address }) => {
 
 GovernDetails.propTypes = {
   lang: PropTypes.string.isRequired,
+  setProposal: PropTypes.func.isRequired,
+  setProposalTally: PropTypes.func.isRequired,
+  setProposer: PropTypes.func.isRequired,
   address: PropTypes.string.isRequired,
+  proposalMap: PropTypes.object,
+  proposalTallyMap: PropTypes.object,
+  proposerMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    proposalMap: state.govern.proposalMap,
+    proposerMap: state.govern.proposerMap,
+    proposalTallyMap: state.govern.proposalTallyMap,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setProposal,
+  setProposer,
+  setProposalTally,
+};
 
 export default connect(stateToProps, actionsToProps)(GovernDetails);

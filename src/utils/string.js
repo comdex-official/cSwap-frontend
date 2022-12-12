@@ -106,11 +106,14 @@ export const orderStatusText = (key) => {
 
 export const trimWhiteSpaces = (data) => data.split(" ").join("");
 
-export const truncateString = (string, front, back) =>
-  `${string.substr(0, front)}...${string.substr(
-    string.length - back,
-    string.length
-  )}`;
+export const truncateString = (string, front, back) => {
+  if (typeof string === "string") {
+    return `${string?.substr(0, front)}...${string?.substr(
+      string?.length - back,
+      string?.length
+    )}`;
+  }
+};
 
 export const lowercaseFirstLetter = (string) => {
   return string.charAt(0).toLowerCase() + string.slice(1).toUpperCase();
@@ -186,4 +189,16 @@ export const proposalOptionMap = {
   2: "Abstain",
   3: "No",
   4: "No With Veto",
+};
+
+export const stringTagParser = (input) => {
+  const lines = input.split("\n");
+  const output = [];
+  lines.forEach((d, i) => {
+    if (i > 0) {
+      output.push(<br />);
+    }
+    output.push(d);
+  });
+  return output;
 };

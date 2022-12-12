@@ -14,6 +14,11 @@
       p {
         color: #73aed2;
         font-size: $font-size-base - 1;
+        text-align: justify;
+        a {
+          color: $secondary-color;
+          font-weight: 600;
+        }
       }
       h3 {
         color: $secondary-color;
@@ -56,5 +61,23 @@
         }
       }
     }
+  }
+  .border-box {
+    border: 1px solid $secondary-color;
+    padding: 10px 10px;
+    font-weight: 500;
+    margin: 0.7rem 0;
+
+    p {
+      font-style: italic;
+      font-weight: 700 !important;
+      letter-spacing: 0.1px;
+      color: $secondary-color !important;
+    }
+  }
+  .disclaimer-box-container {
+    height: 13.4rem;
+    overflow: auto;
+    padding: 0 1rem;
   }
 }

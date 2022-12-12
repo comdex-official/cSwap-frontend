@@ -48,6 +48,7 @@ export const getChainConfig = (chain = comdex) => {
       coinMinimalDenom: chain?.coinMinimalDenom,
       coinDecimals: chain?.coinDecimals,
     },
+    walletUrlForStaking: chain?.walletUrlForStaking,
     bip44: {
       coinType: chain?.coinType,
     },
@@ -58,14 +59,15 @@ export const getChainConfig = (chain = comdex) => {
         coinDenom: chain?.coinDenom,
         coinMinimalDenom: chain?.coinMinimalDenom,
         coinDecimals: chain?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
       },
     ],
     coinType: chain?.coinType,
-    gasPriceStep: {
-      low: 0.01,
-      average: 0.025,
-      high: 0.04,
-    },
   };
 };
 

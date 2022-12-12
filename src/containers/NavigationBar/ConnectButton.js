@@ -12,9 +12,9 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
-import { setAssets } from "../../actions/asset";
+import { setAssets, setAssetsInPrgoress } from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
-import { setMarkets, updateMarketPrice } from "../../actions/oracle";
+import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -23,16 +23,16 @@ import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import {
+  fetchAllTokens,
   queryLiquidityParams,
   queryPoolIncentives
 } from "../../services/liquidity/query";
-import { fetchCMSTPrice, fetchRestPrices } from "../../services/oracle/query";
+import { fetchRestPrices } from "../../services/oracle/query";
 import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
-
 
 const ConnectButton = ({
   setAccountAddress,
@@ -44,7 +44,6 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
-  updateMarketPrice,
   poolBalances,
   setAccountName,
   setPoolIncentives,
@@ -52,6 +51,8 @@ const ConnectButton = ({
   balances,
   setAssets,
   assetMap,
+  setAssetsInPrgoress,
+  assetDenomMap,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -91,7 +92,13 @@ const ConnectButton = ({
       );
 
       const value = assetBalances.map((item) => {
-        return getPrice(item.denom) * amountConversion(item.amount, assetMap[item?.denom]?.decimals?.toNumber());
+        return (
+          getPrice(item.denom) *
+          amountConversion(
+            item.amount,
+            assetMap[item?.denom]?.decimals?.toNumber()
+          )
+        );
       });
 
       setAssetBalance(Lodash.sum(value));
@@ -135,6 +142,22 @@ const ConnectButton = ({
     fetchParams();
   }, []);
 
+  useEffect(() => {
+    if (!Object.keys(assetDenomMap)?.length) {
+      setAssetsInPrgoress(true);
+      fetchAllTokens((error, result) => {
+        setAssetsInPrgoress(false);
+        if (error) {
+          return;
+        }
+
+        if (result?.data?.length) {
+          setAssets(result?.data);
+        }
+      });
+    }
+  }, [setAssets, assetDenomMap]);
+
   const fetchPrices = () => {
     fetchRestPrices((error, result) => {
       if (error) {
@@ -152,7 +175,7 @@ const ConnectButton = ({
         message.error(error);
         return;
       }
-      
+
       setAssets(data.assets);
     });
   };
@@ -170,15 +193,6 @@ const ConnectButton = ({
     });
   };
 
-  useEffect(() => {
-    fetchCMSTPrice((error, result) => {
-      if (error) {
-        return;
-      }
-      updateMarketPrice(result?.data?.cmst_price, cmst?.coinMinimalDenom);
-    });
-  }, []);
-
   const fetchPoolIncentives = () => {
     queryPoolIncentives((error, result) => {
       if (error) {
@@ -190,7 +204,7 @@ const ConnectButton = ({
     });
   };
 
-  const WalletConnectedDropdown = <ConnectModal />;
+  const items = [{ label: <ConnectModal />, key: "item-1" }];
 
   return (
     <>
@@ -198,7 +212,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="testnet" /> {variables[lang].testnet}
+              <SvgIcon name="testnet" /> {comdex?.networkTag || "Testnet"}
             </div>
           </div>
           <DisConnectModal />
@@ -206,9 +220,10 @@ const ConnectButton = ({
       ) : (
         <div>
           <Dropdown
-            overlay={WalletConnectedDropdown}
+            menu={{ items }}
             placement="bottomRight"
             trigger={["click"]}
+            overlayClassName="dropconnect-overlay"
           >
             <Button shape="round" type="primary">
               {variables[lang].connect}
@@ -228,14 +243,15 @@ ConnectButton.propTypes = {
   setAccountBalances: PropTypes.func.isRequired,
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
+  setAssetsInPrgoress: PropTypes.func.isRequired,
   setAssets: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
-  updateMarketPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -270,6 +286,7 @@ const stateToProps = (state) => {
     pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
     assetMap: state.asset.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
@@ -280,11 +297,11 @@ const actionsToProps = {
   setPoolBalance,
   setAssetBalance,
   setMarkets,
-  updateMarketPrice,
   setAccountName,
   setPoolIncentives,
   setParams,
   setAssets,
+  setAssetsInPrgoress,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

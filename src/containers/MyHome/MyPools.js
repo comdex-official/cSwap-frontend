@@ -9,15 +9,14 @@ import {
   setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
+import NoDataIcon from "../../components/common/NoDataIcon";
 import TooltipIcon from "../../components/TooltipIcon";
-import { cmst } from "../../config/network";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
-import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
 import ShowAPR from "../Farm/ShowAPR";
 import "./index.scss";
@@ -59,6 +58,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       dataIndex: "assetpair",
       key: "assetpair",
       align: "center",
+      width: 200,
       render: (pool) => <PoolCardRow key={pool.id} pool={pool} lang={lang} />,
     },
     {
@@ -66,6 +66,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       dataIndex: "apr",
       key: "apr",
       align: "left",
+      width: 150,
       render: (pool) => (
         <div className="farm-apr-modal portfolio-apr">
           <ShowAPR pool={pool} />
@@ -81,10 +82,10 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       ),
       dataIndex: "position",
       key: "position",
+      width: 300,
       render: (position) => (
         <div>
-          {commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}{" "}
-          {denomConversion(cmst?.coinMinimalDenom)}
+          ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
         </div>
       ),
     },
@@ -93,6 +94,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       dataIndex: "action",
       key: "action",
       align: "right",
+      width: 100,
       render: (item) => (
         <Button
           type="primary"
@@ -130,6 +132,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
+            locale={{ emptyText: <NoDataIcon /> }}
           />
         </Col>
       </Row>

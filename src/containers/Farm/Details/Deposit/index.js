@@ -14,7 +14,7 @@ import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
-import { cmst, comdex } from "../../../../config/network";
+import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
@@ -277,9 +277,9 @@ const Deposit = ({
     const demandCoinPrice = marketPrice(markets, pair?.quoteCoinDenom);
     const total = price * demandCoinPrice * firstInput;
 
-    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
+    )}`;
   };
 
   const showSecondCoinValue = () => {
@@ -287,9 +287,9 @@ const Deposit = ({
     const oralcePrice = marketPrice(markets, pair?.baseCoinDenom);
     const total = price * oralcePrice * secondInput;
 
-    return `≈ ${Number(total && isFinite(total) ? total : 0).toFixed(
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
-    )} ${denomConversion(cmst?.coinMinimalDenom)}`;
+    )}`;
   };
 
   return (
@@ -349,6 +349,7 @@ const Deposit = ({
                 onChange={(event) => handleFirstInputChange(event.target.value)}
                 validationError={inputValidationError}
               />
+              <small>{pool?.id && showFirstCoinValue()}</small>
               <small>{pool?.id && showOfferCoinSpotPrice()}</small>
             </div>
           </div>
@@ -404,6 +405,7 @@ const Deposit = ({
                 }
                 validationError={outputValidationError}
               />
+              <small>{pool?.id && showSecondCoinValue()}</small>
               <small>{pool?.id && showDemandCoinSpotPrice()}</small>
             </div>
           </div>

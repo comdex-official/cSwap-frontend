@@ -34,7 +34,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
     if (list?.length > 2) {
       return (
         <>
-          {Object.keys(list).map((key, index) => (
+          {Object.keys(list)?.map((key, index) => (
             <div key={uuid()}>
               {index < 2 ? (
                 <span className="ml-1">
@@ -42,7 +42,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
                   {commaSeparator(
                     (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
                   )}
-                  %
+                  % {list[key]?.master_pool ? "- Master Pool" : "- External"}
                 </span>
               ) : (
                 ""
@@ -53,11 +53,12 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
           <span className="comdex-tooltip ">
             <Tooltip
               overlayClassName=" farm-apr-modal "
-              title={Object.keys(list).map((key) => (
+              title={Object.keys(list)?.map((key) => (
                 <div key={uuid()}>
                   <span className="ml-1">
                     {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
                     {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
+                    {list[key]?.master_pool ? "- Master Pool" : "- External"}
                   </span>
                 </div>
               ))}
@@ -68,14 +69,14 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
         </>
       );
     } else {
-      return Object.keys(list).map((key) => (
+      return Object.keys(list)?.map((key) => (
         <div key={uuid()}>
           <span className="ml-1">
             {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
             {commaSeparator(
               (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
             )}
-            %
+            % {list[key]?.master_pool ? "- Master Pool" : "- External"}
           </span>
         </div>
       ));
@@ -84,14 +85,16 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
 
   return (
     <>
-      {isFetchingAPR && !rewardsMap?.[pool?.id?.low] ? (
+      {isFetchingAPR && !rewardsMap?.[pool?.id?.toNumber()] ? (
         <Skeleton.Button
           className="apr-skeleton"
           active={true}
           size={"small"}
         />
-      ) : Number(rewardsMap?.[pool?.id?.low]?.incentive_rewards[0]?.apr) ? (
-        showIndividualAPR(rewardsMap?.[pool?.id?.low]?.incentive_rewards)
+      ) : Number(
+          rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards[0]?.apr
+        ) ? (
+        showIndividualAPR(rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards)
       ) : (
         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}
