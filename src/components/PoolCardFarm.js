@@ -12,8 +12,7 @@ import {
   queryPoolSoftLocks
 } from "../services/liquidity/query";
 import {
-  amountConversion,
-  amountConversionWithComma,
+  amountConversion, commaSeparatorWithRounding,
   denomConversion,
   getDenomBalance
 } from "../utils/coin";
@@ -32,6 +31,7 @@ const PoolCardFarm = ({
   balances,
   rewardsMap,
   parent,
+  assetMap,
 }) => {
   const [pair, setPair] = useState();
   const navigate = useNavigate();
@@ -54,16 +54,16 @@ const PoolCardFarm = ({
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
-      const values = poolBalance?.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+      const values = poolBalance.map(
+        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
       );
       return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
   };
 
-  const TotalPoolLiquidity = amountConversionWithComma(
+  const TotalPoolLiquidity = commaSeparatorWithRounding(
     calculatePoolLiquidity(pool?.balances),
-    2
+    DOLLAR_DECIMALS
   );
 
   const showPairDenoms = () => {
@@ -107,9 +107,9 @@ const PoolCardFarm = ({
 
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount)) *
+            Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals)) *
               marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(amountConversion(providedTokens?.[1]?.amount)) *
+            Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals)) *
               marketPrice(markets, providedTokens?.[1]?.denom);
 
           if (totalLiquidityInDollar) {
@@ -145,36 +145,38 @@ const PoolCardFarm = ({
           </div>
         </div>
         <div className="card-bottom">
-          <div className="cardbottom-row">
-            <label>{variables[lang].poolLiquidity}</label>
-            <p>{`$${TotalPoolLiquidity}`}</p>
+          <div className="d-flex flex-column">
+            <div className="cardbottom-row">
+              <label>{variables[lang].poolLiquidity}</label>
+              <p>{`$${TotalPoolLiquidity}`}</p>
+            </div>
+            <div className="cardbottom-row">
+              {parent === "user" ? (
+                <>
+                  <label>Liquidity</label>
+                  <p>
+                    $
+                    {commaSeparator(
+                      Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                        DOLLAR_DECIMALS
+                      )
+                    )}
+                  </p>
+                </>
+              ) : null}
+            </div>
           </div>
-          <div className="cardbottom-row">
-            {parent === "user" ? (
-              <>
-                <label>Liquidity</label>
-                <p>
-                  $
-                  {commaSeparator(
-                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )
-                  )}
-                </p>
-              </>
-            ) : null}
-          </div>
-
           <div className="cardbottom-row">
             <label>{variables[lang].apr}</label>
             <div className="percent-box">
               <ShowAPR pool={pool} isSwapFee={true} />
             </div>
-            <div className="swap-apr">
+            <div className="swap-apr mt-1">
               Swap APR -{" "}
               {commaSeparator(
                 Number(
-                  rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                  rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                    ?.apr || 0
                 ).toFixed(DOLLAR_DECIMALS)
               )}
               %
@@ -189,6 +191,7 @@ const PoolCardFarm = ({
 PoolCardFarm.propTypes = {
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   lang: PropTypes.string,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -221,6 +224,7 @@ const stateToProps = (state) => {
     lang: state.language,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    assetMap: state.asset.map,
   };
 };
 

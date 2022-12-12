@@ -4,11 +4,11 @@ import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
-  setBaseCoinPoolPrice,
-  setFirstReserveCoinDenom,
-  setPool,
-  setPoolBalance,
-  setSecondReserveCoinDenom
+    setBaseCoinPoolPrice,
+    setFirstReserveCoinDenom,
+    setPool,
+    setPoolBalance,
+    setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -17,18 +17,18 @@ import CustomInput from "../../../../components/CustomInput";
 import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
-  APP_ID,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS
+    APP_ID,
+    DEFAULT_FEE,
+    DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getAmount,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getAmount,
+    getDenomBalance
 } from "../../../../utils/coin";
 import { marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
@@ -49,6 +49,7 @@ const Deposit = ({
   updateBalance,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetMap,
 }) => {
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
@@ -83,7 +84,7 @@ const Deposit = ({
 
       setOutputValidationError(
         ValidateInputNumber(
-          Number(getAmount(numberOfTokens)),
+          Number(getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals)),
           secondAssetAvailableBalance,
           "macro"
         )
@@ -113,7 +114,7 @@ const Deposit = ({
 
     setInputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value)),
+        Number(getAmount(value, assetMap[pair?.baseCoinDenom]?.decimals)),
         firstAssetAvailableBalance,
         "macro"
       )
@@ -125,7 +126,7 @@ const Deposit = ({
 
     setOutputValidationError(
       ValidateInputNumber(
-        Number(getAmount(numberOfTokens)),
+        Number(getAmount(numberOfTokens, assetMap[pair?.quoteCoinDenom]?.decimals)),
         secondAssetAvailableBalance,
         "macro"
       )
@@ -138,7 +139,7 @@ const Deposit = ({
 
     setOutputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value)),
+        Number(getAmount(value, assetMap[pair?.quoteCoinDenom]?.decimals)),
         secondAssetAvailableBalance,
         "macro"
       )
@@ -150,7 +151,7 @@ const Deposit = ({
 
     setInputValidationError(
       ValidateInputNumber(
-        Number(getAmount(numberOfTokens)),
+        Number(getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals)),
         firstAssetAvailableBalance,
         "macro"
       )
@@ -171,11 +172,11 @@ const Deposit = ({
     const deposits = [
       {
         denom: pair?.baseCoinDenom,
-        amount: getAmount(firstInput),
+        amount: getAmount(firstInput, assetMap[pair?.baseCoinDenom]?.decimals),
       },
       {
         denom: pair?.quoteCoinDenom,
-        amount: getAmount(secondInput),
+        amount: getAmount(secondInput, assetMap[pair?.quoteCoinDenom]?.decimals),
       },
     ];
 
@@ -245,7 +246,7 @@ const Deposit = ({
 
   const handleFirstInputMax = (max) => {
     if (
-      Number(getAmount((max * getOutputPrice()).toFixed(6))) <
+      Number(getAmount((max * getOutputPrice(), assetMap[pair?.baseCoinDenom]?.decimals).toFixed(6))) <
       Number(secondAssetAvailableBalance)
     ) {
       return handleFirstInputChange(max);
@@ -258,7 +259,7 @@ const Deposit = ({
 
   const handleSecondInputMax = (max) => {
     if (
-      Number(getAmount((max * getInputPrice()).toFixed(6))) <
+      Number(getAmount((max * getInputPrice(), assetMap[pair?.quoteCoinDenom]?.decimals).toFixed(6))) <
       Number(firstAssetAvailableBalance)
     ) {
       return handleSecondInputChange(max);
@@ -321,7 +322,8 @@ const Deposit = ({
               {variables[lang].available}{" "}
               <span className="ml-1">
                 {" "}
-                {amountConversionWithComma(firstAssetAvailableBalance)}{" "}
+                {amountConversionWithComma(firstAssetAvailableBalance,
+                  assetMap[pair?.baseCoinDenom]?.decimals)}{" "}
                 {denomConversion(pair?.baseCoinDenom)}
               </span>
               <div className="maxhalf">
@@ -347,6 +349,7 @@ const Deposit = ({
                 onChange={(event) => handleFirstInputChange(event.target.value)}
                 validationError={inputValidationError}
               />
+              <small>{pool?.id && showFirstCoinValue()}</small>
               <small>{pool?.id && showOfferCoinSpotPrice()}</small>
             </div>
           </div>
@@ -377,7 +380,8 @@ const Deposit = ({
             <div className="label-right">
               {variables[lang].available}{" "}
               <span className="ml-1">
-                {amountConversionWithComma(secondAssetAvailableBalance)}{" "}
+                {amountConversionWithComma(secondAssetAvailableBalance,
+                  assetMap[pair?.quoteCoinDenom]?.decimals)}{" "}
                 {denomConversion(pair?.quoteCoinDenom)}
               </span>
               <div className="maxhalf">
@@ -401,6 +405,7 @@ const Deposit = ({
                 }
                 validationError={outputValidationError}
               />
+              <small>{pool?.id && showSecondCoinValue()}</small>
               <small>{pool?.id && showDemandCoinSpotPrice()}</small>
             </div>
           </div>
@@ -445,6 +450,7 @@ Deposit.propTypes = {
   setBaseCoinPoolPrice: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -508,6 +514,7 @@ const stateToProps = (state) => {
     secondReserveCoinDenom: state.liquidity.secondReserveCoinDenom,
     pair: state.asset.pair,
     poolBalance: state.liquidity.poolBalance,
+    assetMap: state.asset.map,
   };
 };
 

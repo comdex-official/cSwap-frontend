@@ -26,11 +26,13 @@ import {
 import {
   amountConversion,
   amountConversionWithComma,
+  commaSeparatorWithRounding,
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
+import "../index.scss";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
 import Farm from "./Farm";
@@ -63,6 +65,7 @@ const FarmDetails = ({
   balances,
   setUserLiquidityInPools,
   userLiquidityInPools,
+  assetMap,
   rewardsMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
@@ -190,20 +193,21 @@ const FarmDetails = ({
     let denomBalance = list?.filter((item) => item.denom === denom)[0];
 
     return `${amountConversionWithComma(
-      denomBalance?.amount || 0
+      denomBalance?.amount || 0,
+      assetMap[denomBalance?.denom]?.decimals
     )} ${denomConversion(denom)}`;
   };
 
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(item?.amount) * marketPrice(markets, item?.denom)
+        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
   };
 
-  const TotalPoolLiquidity = amountConversionWithComma(
+  const TotalPoolLiquidity = commaSeparatorWithRounding(
     calculatePoolLiquidity(pool?.balances),
     DOLLAR_DECIMALS
   );
@@ -341,11 +345,12 @@ const FarmDetails = ({
               </label>
               <div className="farm-apr-modal">
                 <ShowAPR pool={pool} />
-                <div className="swap-apr">
+                <div className="swap-apr mt-1">
                   Swap APR -{" "}
                   {commaSeparator(
                     Number(
-                      rewardsMap?.[pool?.id?.low]?.swap_fee_rewards[0]?.apr || 0
+                      rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                        ?.apr || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}
                   %
@@ -415,6 +420,7 @@ FarmDetails.propTypes = {
   setSpotPrice: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -459,6 +465,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     pair: state.asset.pair,
     markets: state.oracle.market.list,
+    assetMap: state.asset.map,
     rewardsMap: state.liquidity.rewardsMap,
   };
 };

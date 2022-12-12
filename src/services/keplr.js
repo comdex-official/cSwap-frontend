@@ -1,9 +1,11 @@
+import { Bech32Address } from "@keplr-wallet/cosmos";
 import {
   AccountSetBase,
   ChainStore,
   getKeplrFromWindow
 } from "@keplr-wallet/stores";
 import { cmst, comdex, harbor } from "../config/network";
+
 
 const getCurrencies = (chain) => {
   if (chain?.rpc === comdex?.rpc) {
@@ -50,14 +52,7 @@ export const getChainConfig = (chain = comdex) => {
     bip44: {
       coinType: chain?.coinType,
     },
-    bech32Config: {
-      bech32PrefixAccAddr: `${chain?.prefix}`,
-      bech32PrefixAccPub: `${chain?.prefix}pub`,
-      bech32PrefixValAddr: `${chain?.prefix}valoper`,
-      bech32PrefixValPub: `${chain?.prefix}valoperpub`,
-      bech32PrefixConsAddr: `${chain?.prefix}valcons`,
-      bech32PrefixConsPub: `${chain?.prefix}valconspub`,
-    },
+    bech32Config: Bech32Address.defaultBech32Config(chain?.prefix),
     currencies: getCurrencies(chain),
     feeCurrencies: [
       {

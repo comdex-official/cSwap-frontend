@@ -16,9 +16,11 @@ export const ibcDenomToDenom = (key) => {
     case ibcDenoms["uosmo"]:
       return "uosmo";
     case ibcDenoms["uusdc"]:
-      return "USDC";
+      return "uusdc";
     case ibcDenoms["weth-wei"]:
       return "WETH";
+    case ibcDenoms["ujuno"]:
+      return "ujuno";
     default:
       return "";
   }
@@ -77,6 +79,8 @@ const iconMap = {
   [ibcDenoms["uusdc"]]: "usdc-icon",
   "weth-wei": "weth-icon",
   [ibcDenoms["weth-wei"]]: "weth-icon",
+  ujuno: "juno-icon",
+  [ibcDenoms["ujuno"]]: "juno-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
@@ -189,4 +193,16 @@ export const proposalOptionMap = {
   2: "Abstain",
   3: "No",
   4: "No With Veto",
+};
+
+export const stringTagParser = (input) => {
+  const lines = input.split("\n");
+  const output = [];
+  lines.forEach((d, i) => {
+    if (i > 0) {
+      output.push(<br />);
+    }
+    output.push(d);
+  });
+  return output;
 };

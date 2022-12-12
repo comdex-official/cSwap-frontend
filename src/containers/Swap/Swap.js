@@ -14,6 +14,7 @@ import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
   MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
@@ -29,7 +30,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import { decimalConversion } from "../../utils/number";
+import { decimalConversion, marketPrice } from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -71,6 +72,7 @@ const Swap = ({
   setLimitPrice,
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
+  assetMap,
   assetDenomMap,
   assetsInProgress,
 }) => {
@@ -226,7 +228,13 @@ const Swap = ({
     // (input_number / (input token share in pool + input_number))*100
     setSlippage(
       (Number(value) /
-        (Number(amountConversion(assetVolume)) + Number(value))) *
+        (Number(
+          amountConversion(
+            assetVolume,
+            assetMap[selectedAsset?.denom]?.decimals
+          )
+        ) +
+          Number(value))) *
         100
     );
 
@@ -235,7 +243,13 @@ const Swap = ({
       decimalConversion(params?.swapFeeRate) / 10;
 
     setValidationError(
-      ValidateInputNumber(Number(getAmount(value)), availableBalance, "macro")
+      ValidateInputNumber(
+        Number(
+          getAmount(value, assetMap[selectedAsset?.denom]?.decimals)
+        ),
+        availableBalance,
+        "macro"
+      )
     );
 
     setOfferCoinAmount(value, offerCoinFee);
@@ -298,6 +312,26 @@ const Swap = ({
     ).toFixed(6)} ${denomOut || ""}`;
   };
 
+  const showOfferCoinValue = () => {
+    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
+    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
+    const total = price * demandCoinPrice * offerCoin?.amount;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
+  };
+
+  const showDemandCoinValue = () => {
+    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    const offerCoinPrice = marketPrice(markets, offerCoin?.denom);
+    const total = price * offerCoinPrice * demandCoin?.amount;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
+  };
+
   const showDemandCoinSpotPrice = () => {
     const denomIn = denomConversion(offerCoin?.denom);
 
@@ -339,7 +373,10 @@ const Swap = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value - nativeOfferCoinFee)
+            amountConversion(
+              value - nativeOfferCoinFee,
+              assetMap[offerCoin?.denom]?.decimals
+            )
           )
         : handleOfferCoinAmountChange();
     } else {
@@ -347,7 +384,12 @@ const Swap = ({
       const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value - offerCoinFee))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value - offerCoinFee,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -360,14 +402,24 @@ const Swap = ({
         value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance / 2);
       const offerCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > offerCoinFee
-        ? handleOfferCoinAmountChange(amountConversion(value))
+        ? handleOfferCoinAmountChange(
+            amountConversion(
+              value,
+              assetMap[offerCoin?.denom]?.decimals
+            )
+          )
         : handleOfferCoinAmountChange();
     }
   };
@@ -555,7 +607,10 @@ const Swap = ({
                   <div className="label-right">
                     {variables[lang].available}
                     <span className="ml-1">
-                      {amountConversionWithComma(availableBalance)}{" "}
+                      {amountConversionWithComma(
+                        availableBalance,
+                        assetMap[offerCoin?.denom]?.decimals
+                      )}{" "}
                       {denomConversion(offerCoin?.denom)}
                     </span>{" "}
                     <div className="maxhalf">
@@ -577,6 +632,7 @@ const Swap = ({
                       onChange={(event) => onChange(event.target.value)}
                       validationError={validationError}
                     />
+                    <small>{pool?.id && showOfferCoinValue()}</small>
                     <small>{pool?.id && showOfferCoinSpotPrice()}</small>
                   </div>
                 </div>
@@ -612,6 +668,7 @@ const Swap = ({
                         className="assets-select-input with-select"
                         value={demandCoin && demandCoin.amount}
                       />{" "}
+                      <small>{pool?.id && showDemandCoinValue()}</small>
                       <small>{pool?.id && showDemandCoinSpotPrice()}</small>
                     </div>
                   </div>

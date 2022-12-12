@@ -27,6 +27,7 @@ import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
   proposalStatusMap,
+  stringTagParser,
   truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
@@ -323,7 +324,9 @@ const GovernDetails = ({
               <Col>
                 <h3>{proposal?.content?.title}</h3>
                 <div className="description-row">
-                  <p>{proposal?.content?.description} </p>
+                  <p>
+                    {stringTagParser(proposal?.content?.description || " ")}{" "}
+                  </p>
                 </div>
               </Col>
             </Row>

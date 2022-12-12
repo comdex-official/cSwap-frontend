@@ -1,29 +1,33 @@
 import { comdex, ibcDenoms } from "../config/network";
-import { DOLLAR_DECIMALS } from "../constants/common";
-import { commaSeparator } from "./number";
+import { commaSeparator, getExponent } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
-export const getAmount = (selectedAmount) =>
-  (selectedAmount * 10 ** comdex.coinDecimals).toFixed(0).toString();
-
+export const getAmount = (selectedAmount, decimal) =>
+  (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
+    .toFixed(0)
+    .toString();
 
 export const amountConversionWithComma = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
 
-  const result = Number(finiteAmount) / ( 10 ** comdex.coinDecimals);
+  const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return commaSeparator(result.toFixed(decimals || comdex.coinDecimals));
+  return commaSeparator(
+    result.toFixed(getExponent(decimals) || comdex.coinDecimals)
+  );
+};
 
+export const commaSeparatorWithRounding = (amount, round) => {
+  return commaSeparator(amount.toFixed(getExponent(round)));
 };
 
 export const amountConversion = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
 
-  const result = Number(finiteAmount) / 10 ** comdex.coinDecimals;
+  const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : DOLLAR_DECIMALS);
+  return result.toFixed(getExponent(decimals) || comdex.coinDecimals);
 };
-
 
 export const orderPriceConversion = (amount) => {
   const result = Number(amount) * 10 ** 18;
@@ -38,10 +42,6 @@ export const orderPriceReverseConversion = (amount) => {
 export const denomConversion = (denom) => {
   if (denom === "weth-wei" || denom === ibcDenoms["weth-wei"]) {
     return "WETH";
-  }
-
-  if (denom === "uusdc" || denom === ibcDenoms["uusdc"]) {
-    return "USDC";
   }
 
   if (denom && denom.substr(0, 1) === "u") {
