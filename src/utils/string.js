@@ -16,9 +16,11 @@ export const ibcDenomToDenom = (key) => {
     case ibcDenoms["uosmo"]:
       return "uosmo";
     case ibcDenoms["uusdc"]:
-      return "USDC";
+      return "uusdc";
     case ibcDenoms["weth-wei"]:
       return "WETH";
+    case ibcDenoms["ujuno"]:
+      return "ujuno";
     default:
       return "";
   }
