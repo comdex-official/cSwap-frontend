@@ -71,7 +71,7 @@ const ConnectButton = ({
     fetchPrices();
     fetchAssets(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE * 2, // taking 20 records
       true,
       false
     );
