@@ -40,10 +40,6 @@ export const denomConversion = (denom) => {
     return "WETH";
   }
 
-  if (denom === "uusdc" || denom === ibcDenoms["uusdc"]) {
-    return "USDC";
-  }
-
   if (denom && denom.substr(0, 1) === "u") {
     if (
       denom &&
