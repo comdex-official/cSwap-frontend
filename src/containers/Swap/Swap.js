@@ -213,7 +213,9 @@ const Swap = ({
   };
 
   const onChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[offerCoin?.denom]?.decimals)
+      .toString()
+      .trim();
     handleOfferCoinAmountChange(value);
   };
 

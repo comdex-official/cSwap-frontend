@@ -8,7 +8,7 @@ import {
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom,
+  setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -19,7 +19,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS,
+  DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
@@ -28,7 +28,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
 import { marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
@@ -112,7 +112,7 @@ const Deposit = ({
   };
 
   const handleFirstInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[pair?.baseCoinDenom]?.decimals).toString().trim();
 
     setInputValidationError(
       ValidateInputNumber(
@@ -139,7 +139,7 @@ const Deposit = ({
   };
 
   const handleSecondInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[pair?.quoteCoinDenom]?.decimals).toString().trim();
 
     setOutputValidationError(
       ValidateInputNumber(

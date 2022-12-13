@@ -107,7 +107,7 @@ const CreatePoolModal = ({
   };
 
   const handleBaseAmountChange = (value) => {
-    value = toDecimals(value)?.toString().trim();
+    value = toDecimals(value, assetMap[baseToken]?.decimals)?.toString().trim();
     setBaseAmountValidationError(
       ValidateInputNumber(
         Number(getAmount(value, assetMap[baseToken]?.decimals))
@@ -117,7 +117,7 @@ const CreatePoolModal = ({
   };
 
   const handleQuoteAmountChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[quoteToken]?.decimals).toString().trim();
     setQuoteAmount(value);
     setQuoteAmountValidationError(
       ValidateInputNumber(
