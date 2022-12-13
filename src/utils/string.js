@@ -130,7 +130,9 @@ export const toDecimals = (value, decimal) =>
     ? value.substr(0, value.indexOf(".")) +
       value.substr(
         value.indexOf("."),
-        Number(getExponent(decimal)) + 1 || comdex?.coinDecimals
+        Number(decimal)
+          ? Number(getExponent(decimal)) + 1
+          : comdex?.coinDecimals
       )
     : value;
 
