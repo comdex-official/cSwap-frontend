@@ -40,7 +40,9 @@ const Deposit = ({
   const [balanceInProgress, setBalanceInProgress] = useState(false);
 
   const onChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[chain?.coinMinimalDenom]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
     setValidationError(
@@ -293,9 +295,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
-                          assetMap[
-                            availableBalance?.denom
-                          ]?.decimals
+                          assetMap[availableBalance?.denom]?.decimals
                         )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
@@ -308,15 +308,11 @@ const Deposit = ({
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[
-                                    availableBalance?.denom
-                                  ]?.decimals
+                                  assetMap[availableBalance?.denom]?.decimals
                                 )
                               : amountConversion(
                                   availableBalance?.amount,
-                                  assetMap[
-                                    availableBalance?.denom
-                                  ]?.decimals
+                                  assetMap[availableBalance?.denom]?.decimals
                                 )
                           );
                         }}

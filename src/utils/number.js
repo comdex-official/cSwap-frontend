@@ -1,6 +1,5 @@
 import { Decimal } from "@cosmjs/math";
 import { DOLLAR_DECIMALS } from "../constants/common";
-import { amountConversion } from "./coin";
 
 export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {
@@ -33,21 +32,6 @@ export const marketPrice = (array, denom) => {
   }
 
   return 0; // returning 0 values if price not exists.
-};
-
-export const calculateDollarValue = (
-  rewardMap,
-  markets,
-  poolId,
-  rewardType
-) => {
-  let dollarValue = 0;
-
-  for (const [key, value] of Object.entries(rewardMap[poolId][rewardType])) {
-    dollarValue += amountConversion(value) * marketPrice(markets, key);
-  }
-
-  return dollarValue;
 };
 
 export const getAccountNumber = (value) => {
