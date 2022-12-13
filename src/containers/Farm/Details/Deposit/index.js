@@ -8,7 +8,7 @@ import {
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom
+  setSecondReserveCoinDenom,
 } from "../../../../actions/liquidity";
 import { setComplete, setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -19,7 +19,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
@@ -28,7 +28,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import { marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
@@ -264,7 +264,10 @@ const Deposit = ({
       return handleFirstInputChange(max);
     } else {
       return handleSecondInputChange(
-        amountConversion(secondAssetAvailableBalance)
+        amountConversion(
+          secondAssetAvailableBalance,
+          assetMap[pair?.quoteCoinDenom]?.decimals
+        )
       );
     }
   };
@@ -280,7 +283,10 @@ const Deposit = ({
       return handleSecondInputChange(max);
     } else {
       return handleFirstInputChange(
-        amountConversion(firstAssetAvailableBalance)
+        amountConversion(
+          firstAssetAvailableBalance,
+          assetMap[pair?.baseCoinDenom]?.decimals
+        )
       );
     }
   };

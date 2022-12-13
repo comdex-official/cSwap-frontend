@@ -244,9 +244,7 @@ const Swap = ({
 
     setValidationError(
       ValidateInputNumber(
-        Number(
-          getAmount(value, assetMap[selectedAsset?.denom]?.decimals)
-        ),
+        Number(getAmount(value, assetMap[selectedAsset?.denom]?.decimals)),
         availableBalance,
         "macro"
       )
@@ -403,10 +401,7 @@ const Swap = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     } else {
@@ -415,10 +410,7 @@ const Swap = ({
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     }
@@ -838,7 +830,7 @@ const Swap = ({
         </Row>
       </div>
       <div className="order_table_section">
-        {isLimitOrder ? <Order lang={lang} /> : null}
+        {isLimitOrder ? <Order lang={lang} assetMap={assetMap} /> : null}
       </div>
     </div>
   );

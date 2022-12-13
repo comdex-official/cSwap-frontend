@@ -108,8 +108,11 @@ const CreatePoolModal = ({
 
   const handleBaseAmountChange = (value) => {
     value = toDecimals(value)?.toString().trim();
-    setBaseAmountValidationError(ValidateInputNumber(Number(getAmount(value,
-      assetMap[baseToken]?.decimals))));
+    setBaseAmountValidationError(
+      ValidateInputNumber(
+        Number(getAmount(value, assetMap[baseToken]?.decimals))
+      )
+    );
     setBaseAmount(value);
   };
 
@@ -117,7 +120,9 @@ const CreatePoolModal = ({
     value = toDecimals(value).toString().trim();
     setQuoteAmount(value);
     setQuoteAmountValidationError(
-      ValidateInputNumber(Number(getAmount(value, assetMap[quoteToken]?.decimals)))
+      ValidateInputNumber(
+        Number(getAmount(value, assetMap[quoteToken]?.decimals))
+      )
     );
   };
 
@@ -198,7 +203,9 @@ const CreatePoolModal = ({
             : null
           : baseAvailable;
 
-      return handleBaseAmountChange(amountConversion(max));
+      return handleBaseAmountChange(
+        amountConversion(max, assetMap[baseToken]?.decimals)
+      );
     }
   };
 
@@ -211,7 +218,9 @@ const CreatePoolModal = ({
             : null
           : quoteAvailable;
 
-      return handleQuoteAmountChange(amountConversion(max));
+      return handleQuoteAmountChange(
+        amountConversion(max, assetMap[quoteToken]?.decimals)
+      );
     }
   };
 
@@ -319,7 +328,10 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(baseAvailable || 0, assetMap[baseToken]?.decimals)}{" "}
+                    {amountConversionWithComma(
+                      baseAvailable || 0,
+                      assetMap[baseToken]?.decimals
+                    )}{" "}
                     {denomConversion(baseToken)}
                   </span>{" "}
                   <div className="maxhalf">
@@ -374,7 +386,10 @@ const CreatePoolModal = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(quoteAvailable || 0, assetMap[quoteToken]?.decimals)}{" "}
+                    {amountConversionWithComma(
+                      quoteAvailable || 0,
+                      assetMap[quoteToken]?.decimals
+                    )}{" "}
                     {denomConversion(quoteToken)}
                   </span>{" "}
                   <div className="maxhalf">

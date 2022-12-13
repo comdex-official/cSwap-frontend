@@ -201,7 +201,10 @@ const FarmDetails = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
+        (item) =>
+          Number(
+            amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+          ) * marketPrice(markets, item?.denom)
       );
       return values.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -213,9 +216,7 @@ const FarmDetails = ({
   );
 
   useEffect(() => {
-    let totalUserPoolLiquidity = Number(
-      amountConversion(calculatePoolLiquidity(providedTokens))
-    );
+    let totalUserPoolLiquidity = Number(calculatePoolLiquidity(providedTokens));
 
     if (pool?.id) {
       setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity);
