@@ -70,17 +70,30 @@ const Deposit = ({
       const quoteCoinBalanceInPool = pool?.balances?.find(
         (item) => item.denom === pair?.quoteCoinDenom
       )?.amount;
-      const baseCoinPoolPrice = quoteCoinBalanceInPool / baseCoinBalanceInPool;
 
-      setBaseCoinPoolPrice(
-        Number(baseCoinPoolPrice).toFixed(comdex.coinDecimals)
-      );
+      const baseCoinPoolPrice =
+        Number(
+          amountConversion(
+            quoteCoinBalanceInPool,
+            assetMap[pair?.quoteCoinDenom]?.decimals
+          )
+        ) /
+        Number(
+          amountConversion(
+            baseCoinBalanceInPool,
+            assetMap[pair?.baseCoinDenom]?.decimals
+          )
+        );
+
+      setBaseCoinPoolPrice(Number(baseCoinPoolPrice));
     }
   }, [pool, pair]);
 
   useEffect(() => {
     if (firstInput) {
-      const numberOfTokens = (firstInput * getOutputPrice()).toFixed(6);
+      const numberOfTokens = (firstInput * getOutputPrice()).toFixed(
+        comdex?.coinDecimals
+      );
 
       setOutputValidationError(
         ValidateInputNumber(
@@ -124,7 +137,9 @@ const Deposit = ({
       )
     );
 
-    const numberOfTokens = (value * getOutputPrice()).toFixed(6);
+    const numberOfTokens = (value * getOutputPrice()).toFixed(
+      comdex?.coinDecimals
+    );
 
     setFirstInput(value);
 
@@ -153,7 +168,9 @@ const Deposit = ({
       )
     );
 
-    const numberOfTokens = (value * getInputPrice()).toFixed(6);
+    const numberOfTokens = (value * getInputPrice()).toFixed(
+      comdex?.coinDecimals
+    );
 
     setSecondInput(value);
 
@@ -244,7 +261,7 @@ const Deposit = ({
 
     return `1 ${denomIn || ""} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(6)} ${denomOut || ""}`;
+    ).toFixed(comdex?.coinDecimals)} ${denomOut || ""}`;
   };
 
   const showDemandCoinSpotPrice = () => {

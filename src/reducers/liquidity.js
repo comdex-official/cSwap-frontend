@@ -132,7 +132,14 @@ const list = (state = [], action) => {
 
 const baseCoinPoolPrice = (state = 0, action) => {
   if (action.type === BASE_COIN_POOL_PRICE_SET) {
-    return action.value;
+    return action?.value;
+  }
+  return state;
+};
+
+const baseCoinPoolPriceWithoutConversion = (state = 0, action) => {
+  if (action.type === BASE_COIN_POOL_PRICE_SET) {
+    return action?.baseValue || 0;
   }
   return state;
 };
@@ -211,6 +218,7 @@ export default combineReducers({
   poolBalances,
   list,
   baseCoinPoolPrice,
+  baseCoinPoolPriceWithoutConversion,
   userLiquidityInDollar,
   userLiquidityInPools,
   incentives,
