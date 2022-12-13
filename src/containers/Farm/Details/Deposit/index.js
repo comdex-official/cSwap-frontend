@@ -279,11 +279,9 @@ const Deposit = ({
     ) {
       return handleSecondInputChange(max);
     } else {
-      return Number(firstAssetAvailableBalance) > DEFAULT_FEE
-        ? handleFirstInputChange(
-            amountConversion(firstAssetAvailableBalance - DEFAULT_FEE)
-          )
-        : handleFirstInputChange();
+      return handleFirstInputChange(
+        amountConversion(firstAssetAvailableBalance)
+      );
     }
   };
 

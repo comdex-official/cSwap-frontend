@@ -1,24 +1,26 @@
 import { message, Tabs } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { useLocation } from "react-router";
 import { Col, Row } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
+  DOLLAR_DECIMALS
 } from "../../constants/common";
 import {
   queryPoolCoinDeserialize,
   queryPoolsList,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import { commaSeparator, formatNumber, marketPrice } from "../../utils/number";
 import { decode } from "../../utils/string";
@@ -36,6 +38,7 @@ const Balances = ({
   setPools,
   balances,
   markets,
+  assetMap,
   setUserLiquidityInPools,
   userLiquidityInPools,
 }) => {
@@ -126,9 +129,19 @@ const Balances = ({
 
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount)) *
+            Number(
+              amountConversion(
+                providedTokens?.[0]?.amount,
+                assetMap[providedTokens?.[0]?.denom]?.decimals
+              )
+            ) *
               marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(amountConversion(providedTokens?.[1]?.amount)) *
+            Number(
+              amountConversion(
+                providedTokens?.[1]?.amount,
+                assetMap[providedTokens?.[0]?.denom]?.decimals
+              )
+            ) *
               marketPrice(markets, providedTokens?.[1]?.denom);
 
           if (totalLiquidityInDollar) {
@@ -214,7 +227,7 @@ const Balances = ({
           },
           {
             name: variables[lang].asset_balance,
-            y: Number(amountConversion(assetBalance)) || 0,
+            y: Number(assetBalance) || 0,
             color: isDarkMode ? "#123C73" : "#78c1ff",
           },
         ],
@@ -327,4 +340,14 @@ const Balances = ({
   );
 };
 
-export default Balances;
+Balances.propTypes = {
+  assetMap: PropTypes.object,
+};
+
+const stateToProps = (state) => {
+  return {
+    assetMap: state.asset.map,
+  };
+};
+
+export default connect(stateToProps)(Balances);
