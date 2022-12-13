@@ -9,10 +9,10 @@ import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
-    amountConversion,
-    denomConversion,
-    getAmount,
-    orderPriceConversion
+  amountConversion,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
 } from "../../utils/coin";
 import variables from "../../utils/variables";
 
@@ -84,7 +84,10 @@ const CustomButton = ({
         /** offer_coin specifies the amount of coin the orderer offers */
         offerCoin: {
           denom: offerCoin?.denom,
-          amount: getAmount((Number(offerCoin?.amount) + Number(offerCoin?.fee),assetMap[offerCoin?.denom]?.decimals )),
+          amount: getAmount(
+            Number(offerCoin?.amount) + Number(offerCoin?.fee),
+            assetMap[offerCoin?.denom]?.decimals
+          ),
         },
         demandCoinDenom: demandCoin?.denom,
         price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
@@ -147,7 +150,7 @@ const CustomButton = ({
                 )} for ${amountConversion(
                   (Number(data?.offerCoin?.amount) -
                     Number(data?.remainingOfferCoin?.amount),
-                    assetMap[data?.offerCoin?.denom]?.decimals)
+                  assetMap[data?.offerCoin?.denom]?.decimals)
                 )} ${denomConversion(data?.offerCoin?.denom)}`
               );
             });
