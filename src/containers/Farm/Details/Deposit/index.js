@@ -112,7 +112,9 @@ const Deposit = ({
   };
 
   const handleFirstInputChange = (value) => {
-    value = toDecimals(value, assetMap[pair?.baseCoinDenom]?.decimals).toString().trim();
+    value = toDecimals(value, assetMap[pair?.baseCoinDenom]?.decimals)
+      .toString()
+      .trim();
 
     setInputValidationError(
       ValidateInputNumber(
@@ -139,7 +141,9 @@ const Deposit = ({
   };
 
   const handleSecondInputChange = (value) => {
-    value = toDecimals(value, assetMap[pair?.quoteCoinDenom]?.decimals).toString().trim();
+    value = toDecimals(value, assetMap[pair?.quoteCoinDenom]?.decimals)
+      .toString()
+      .trim();
 
     setOutputValidationError(
       ValidateInputNumber(
@@ -257,7 +261,8 @@ const Deposit = ({
     if (
       Number(
         getAmount(
-          (max * getOutputPrice(), assetMap[pair?.baseCoinDenom]?.decimals)
+          max * getOutputPrice(),
+          assetMap[pair?.baseCoinDenom]?.decimals
         )
       ) < Number(secondAssetAvailableBalance)
     ) {
@@ -276,7 +281,8 @@ const Deposit = ({
     if (
       Number(
         getAmount(
-          (max * getInputPrice(), assetMap[pair?.quoteCoinDenom]?.decimals)
+          max * getInputPrice(),
+          assetMap[pair?.quoteCoinDenom]?.decimals
         )
       ) < Number(firstAssetAvailableBalance)
     ) {
