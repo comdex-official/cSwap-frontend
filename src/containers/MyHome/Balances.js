@@ -8,16 +8,17 @@ import TooltipIcon from "../../components/TooltipIcon";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../constants/common";
 import {
   queryPoolCoinDeserialize,
   queryPoolsList,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../../services/liquidity/query";
 import {
-  amountConversion, commaSeparatorWithRounding,
-  getDenomBalance
+  amountConversion,
+  commaSeparatorWithRounding,
+  getDenomBalance,
 } from "../../utils/coin";
 import { commaSeparator, formatNumber, marketPrice } from "../../utils/number";
 import { decode } from "../../utils/string";
@@ -83,9 +84,13 @@ const Balances = ({
     });
   };
 
+  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
+    (a, b) => a + b,
+    0
+  );
+
   const getTotalValue = () => {
-    const total =
-      Number(amountConversion(assetBalance)) + Number(totalFarmBalance);
+    const total = Number(assetBalance) + Number(totalFarmBalance);
     return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
   };
 
@@ -133,11 +138,6 @@ const Balances = ({
       });
     }
   };
-
-  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
-    (a, b) => a + b,
-    0
-  );
 
   const Options = {
     chart: {
