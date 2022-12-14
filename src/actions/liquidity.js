@@ -14,13 +14,16 @@ import {
   SECOND_RESERVE_COIN_DENOM_SET,
   SPOT_PRICE_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
-  USER_LIQUIDITY_IN_POOLS_SET
+  USER_LIQUIDITY_IN_POOLS_SET,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
+  const pools =
+    list.length > 0 ? list?.filter((item) => item?.id?.toNumber() !== 7) : [];
+
   return {
     type: POOLS_SET,
-    list,
+    list: pools,
     pagination,
   };
 };
