@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import {
-  ASSETS_IN_PROGRESS_SET,
+  APP_ASSETS_SET, ASSETS_IN_PROGRESS_SET,
   ASSETS_SET,
   COLLATERAL_RATIO_SET,
   IN_AMOUNT_SET,
@@ -8,8 +8,7 @@ import {
   OUT_AMOUNT_SET,
   OUT_ASSET_SET,
   PAIRS_SET,
-  PAIR_ID_SET,
-  PAIR_SET,
+  PAIR_ID_SET, PAIR_SET
 } from "../constants/asset";
 
 const pairs = (
@@ -57,6 +56,13 @@ const _ = (
   }
 };
 
+const appAssetMap = (state = {}, action) => {
+  if (action.type === APP_ASSETS_SET) {
+    return action?.map || {};
+  }
+
+  return state;
+};
 const map = (state = {}, action) => {
   if (action.type === ASSETS_SET) {
     return action.map;
@@ -132,4 +138,5 @@ export default combineReducers({
   outAmount,
   collateralRatio,
   map,
+  appAssetMap,
 });

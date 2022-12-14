@@ -12,7 +12,7 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
-import { setAssets, setAssetsInPrgoress } from "../../actions/asset";
+import { setAppAssets, setAssets, setAssetsInPrgoress } from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
@@ -50,6 +50,7 @@ const ConnectButton = ({
   setParams,
   balances,
   setAssets,
+  setAppAssets,
   assetMap,
   setAssetsInPrgoress,
   assetDenomMap,
@@ -146,17 +147,16 @@ const ConnectButton = ({
     if (!Object.keys(assetDenomMap)?.length) {
       setAssetsInPrgoress(true);
       fetchAllTokens((error, result) => {
-        setAssetsInPrgoress(false);
         if (error) {
           return;
         }
 
         if (result?.data?.length) {
-          setAssets(result?.data);
+          setAppAssets(result?.data);
         }
       });
     }
-  }, [setAssets, assetDenomMap]);
+  }, [setAppAssets, assetDenomMap]);
 
   const fetchPrices = () => {
     fetchRestPrices((error, result) => {
@@ -245,6 +245,7 @@ ConnectButton.propTypes = {
   setAssetBalance: PropTypes.func.isRequired,
   setAssetsInPrgoress: PropTypes.func.isRequired,
   setAssets: PropTypes.func.isRequired,
+  setAppAssets: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
@@ -301,6 +302,7 @@ const actionsToProps = {
   setPoolIncentives,
   setParams,
   setAssets,
+  setAppAssets,
   setAssetsInPrgoress,
 };
 

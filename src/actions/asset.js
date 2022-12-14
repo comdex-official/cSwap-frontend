@@ -1,6 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 import {
+  APP_ASSETS_SET,
   ASSETS_IN_PROGRESS_SET,
   ASSETS_SET,
   IN_ASSET_SET,
@@ -8,7 +9,7 @@ import {
   OUT_ASSET_SET,
   PAIRS_SET,
   PAIR_ID_SET,
-  PAIR_SET
+  PAIR_SET,
 } from "../constants/asset";
 
 export const setPairs = (list, pagination) => {
@@ -60,13 +61,26 @@ export const setAssets = (list, pagination) => {
     return map;
   }, {});
 
-
   return {
     type: ASSETS_SET,
     list,
     pagination,
     map: assetDenomMap,
     assetDenomMap: assetDenomMap,
+  };
+};
+
+export const setAppAssets = (list, pagination) => {
+  const assetDenomMap = list?.reduce((map, obj) => {
+    map[obj?.denom] = obj;
+    return map;
+  }, {});
+
+  return {
+    type: APP_ASSETS_SET,
+    list,
+    pagination,
+    map: assetDenomMap,
   };
 };
 
