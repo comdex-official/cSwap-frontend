@@ -6,10 +6,7 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import {
-  ValidateInputNumber,
-  ValidatePriceInputNumber
-} from "../../config/_validation";
+import { ValidateInputNumber } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -30,7 +27,11 @@ import {
   getAmount,
   getDenomBalance
 } from "../../utils/coin";
-import { decimalConversion, marketPrice } from "../../utils/number";
+import {
+  decimalConversion,
+  getExponent,
+  marketPrice
+} from "../../utils/number";
 import {
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -182,11 +183,29 @@ const Swap = ({
       const quoteCoinBalanceInPool = pool?.balances?.find(
         (item) => item.denom === pair?.quoteCoinDenom
       )?.amount;
-      const baseCoinPoolPrice = Number(
+
+      const baseCoinPoolPrice =
+        Number(
+          amountConversion(
+            quoteCoinBalanceInPool,
+            assetMap[pair?.quoteCoinDenom]?.decimals
+          )
+        ) /
+        Number(
+          amountConversion(
+            baseCoinBalanceInPool,
+            assetMap[pair?.baseCoinDenom]?.decimals
+          )
+        );
+
+      const baseCoinPoolPriceWithoutConversion = Number(
         quoteCoinBalanceInPool / baseCoinBalanceInPool
       ).toFixed(comdex?.coinDecimals);
 
-      setBaseCoinPoolPrice(baseCoinPoolPrice);
+      setBaseCoinPoolPrice(
+        Number(baseCoinPoolPrice),
+        Number(baseCoinPoolPriceWithoutConversion)
+      );
     }
   }, [pool]);
 
@@ -314,6 +333,7 @@ const Swap = ({
 
   const showOfferCoinValue = () => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
+
     const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
     const total = price * demandCoinPrice * offerCoin?.amount;
 
@@ -425,7 +445,7 @@ const Swap = ({
 
     if (pair?.lastPrice) {
       setPriceValidationError(
-        ValidatePriceInputNumber(
+        ValidateInputNumber(
           Number(price),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
@@ -513,12 +533,10 @@ const Swap = ({
     }
   };
 
-  const priceRange = (lastPrice, maxPriceLimitRatio) => {
-    return `${(lastPrice - maxPriceLimitRatio * lastPrice).toFixed(
-      comdex?.coinDecimals
-    )} - ${(lastPrice + maxPriceLimitRatio * lastPrice).toFixed(
-      comdex?.coinDecimals
-    )}`;
+  const priceRange = (lastPrice, maxPriceLimitRatio, decimal) => {
+    return `${(lastPrice - maxPriceLimitRatio * lastPrice) / decimal} - ${
+      (lastPrice + maxPriceLimitRatio * lastPrice) / decimal
+    }`;
   };
 
   const SettingPopup = (
@@ -712,7 +730,17 @@ const Swap = ({
                             Number(decimalConversion(pair?.lastPrice)),
                             Number(
                               decimalConversion(params?.maxPriceLimitRatio)
-                            )
+                            ),
+
+                            10 **
+                              Math.abs(
+                                getExponent(
+                                  assetMap[pair?.baseCoinDenom]?.decimals
+                                ) -
+                                  getExponent(
+                                    assetMap[pair?.quoteCoinDenom]?.decimals
+                                  )
+                              )
                           )}
                         </span>{" "}
                       </div>

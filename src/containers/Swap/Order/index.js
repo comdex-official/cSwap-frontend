@@ -157,9 +157,10 @@ const Order = ({ lang, assetMap }) => {
           : "",
         buy_sell: item?.direction === 1 ? "BUY" : "SELL",
         offered_coin: item?.offerCoin
-          ? `${amountConversion(item?.offerCoin?.amount)} ${denomConversion(
-              item?.offerCoin?.denom
-            )}`
+          ? `${amountConversion(
+              item?.offerCoin?.amount,
+              assetMap[item?.offerCoin?.denom]?.decimals
+            )} ${denomConversion(item?.offerCoin?.denom)}`
           : "",
         trade_amount: item?.amount ? amountConversion(item?.amount) : 0,
         price: item?.price ? orderPriceReverseConversion(item.price) : 0,

@@ -82,10 +82,11 @@ export const setPoolLiquidityList = (value, index) => {
   };
 };
 
-export const setBaseCoinPoolPrice = (value) => {
+export const setBaseCoinPoolPrice = (value, baseValue) => {
   return {
     type: BASE_COIN_POOL_PRICE_SET,
     value,
+    baseValue,
   };
 };
 
