@@ -62,10 +62,12 @@ const CustomButton = ({
 
   const calculateOrderPrice = () => {
     if (orderDirection === 1) {
+      //order direction buy: price = basecoinpoolprice + 1%
       return orderPriceConversion(
         poolPrice + poolPrice * Number(slippageTolerance / 100)
       );
     } else {
+      //order direction sell: price = basecoinpoolprice - 1%
       return orderPriceConversion(
         poolPrice - poolPrice * Number(slippageTolerance / 100)
       );
@@ -86,6 +88,7 @@ const CustomButton = ({
         appId: Long.fromNumber(APP_ID),
         direction: orderDirection,
         /** offer_coin specifies the amount of coin the orderer offers */
+
         offerCoin: {
           denom: offerCoin?.denom,
           amount: getAmount(
@@ -148,7 +151,6 @@ const CustomButton = ({
           if (orderId && pairId) {
             queryOrder(orderId, pairId, (error, result) => {
               if (error) {
-                message.error(error);
                 return;
               }
 
