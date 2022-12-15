@@ -408,7 +408,7 @@ const stateToProps = (state) => {
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
-    assetDenomMap: state.asset._.assetDenomMap,
+    assetDenomMap: state.asset.appAssetMap,
   };
 };
 
