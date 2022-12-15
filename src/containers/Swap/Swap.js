@@ -259,7 +259,7 @@ const Swap = ({
         100
     );
 
-    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate)) + 0.001; // adding 0.001 (0.1%) to existing swap fee rate for safer side to avoid offer coin insuffiencent error in case fractional calculation errors.
+    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate)) + 0.001; // adding 0.001 (0.1%) to existing swap fee rate for safer side to avoid offer coin insufficient error in case fractional calculation errors.
     const offerCoinFee = value * swapFeeRate;
 
     setValidationError(
