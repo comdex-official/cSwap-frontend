@@ -259,9 +259,8 @@ const Swap = ({
         100
     );
 
-    const offerCoinFee =
-      value * decimalConversion(params?.swapFeeRate) +
-      decimalConversion(params?.swapFeeRate) / 10;
+    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate)) + 0.001; // adding 0.001 (0.1%) to existing swap fee rate for safer side to avoid offer coin insufficient error in case fractional calculation errors.
+    const offerCoinFee = value * swapFeeRate;
 
     setValidationError(
       ValidateInputNumber(
