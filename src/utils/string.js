@@ -22,6 +22,8 @@ export const ibcDenomToDenom = (key) => {
       return "WETH";
     case ibcDenoms["ujuno"]:
       return "ujuno";
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-satoshi";
     default:
       return "";
   }
@@ -82,6 +84,9 @@ const iconMap = {
   [ibcDenoms["weth-wei"]]: "weth-icon",
   ujuno: "juno-icon",
   [ibcDenoms["ujuno"]]: "juno-icon",
+  "wbtc-satoshi": "wbtc-icon",
+  [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
+
 };
 
 export const iconNameFromDenom = (denom) => {
