@@ -30,7 +30,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../../utils/coin";
-import { marketPrice } from "../../../../utils/number";
+import { getExponent, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
@@ -138,7 +138,7 @@ const Deposit = ({
     );
 
     const numberOfTokens = (value * getOutputPrice()).toFixed(
-      comdex?.coinDecimals
+      getExponent(assetMap[pair?.baseCoinDenom]?.decimals)
     );
 
     setFirstInput(value);
@@ -169,7 +169,7 @@ const Deposit = ({
     );
 
     const numberOfTokens = (value * getInputPrice()).toFixed(
-      comdex?.coinDecimals
+      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
     );
 
     setSecondInput(value);
@@ -375,12 +375,16 @@ const Deposit = ({
                   className="active"
                   onClick={() =>
                     handleFirstInputMax(
-                      Number(firstAssetAvailableBalance) > DEFAULT_FEE
+                      pair?.baseCoinDenom === comdex?.coinDenom &&
+                        Number(firstAssetAvailableBalance) > DEFAULT_FEE
                         ? amountConversion(
                             firstAssetAvailableBalance - DEFAULT_FEE,
                             assetMap[pair?.baseCoinDenom]?.decimals
                           )
-                        : null
+                        : amountConversion(
+                            firstAssetAvailableBalance,
+                            assetMap[pair?.baseCoinDenom]?.decimals
+                          )
                     )
                   }
                 >
@@ -436,10 +440,16 @@ const Deposit = ({
                   className="active"
                   onClick={() =>
                     handleSecondInputMax(
-                      amountConversion(
-                        secondAssetAvailableBalance,
-                        assetMap[pair?.quoteCoinDenom]?.decimals
-                      )
+                      pair?.quoteCoinDenom === comdex?.coinDenom &&
+                        Number(secondAssetAvailableBalance) > DEFAULT_FEE
+                        ? amountConversion(
+                            secondAssetAvailableBalance - DEFAULT_FEE,
+                            assetMap[pair?.quoteCoinDenom]?.decimals
+                          )
+                        : amountConversion(
+                            secondAssetAvailableBalance,
+                            assetMap[pair?.quoteCoinDenom]?.decimals
+                          )
                     )
                   }
                 >
