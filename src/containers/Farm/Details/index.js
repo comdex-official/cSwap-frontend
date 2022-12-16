@@ -66,6 +66,7 @@ const FarmDetails = ({
   setUserLiquidityInPools,
   userLiquidityInPools,
   assetMap,
+  incentivesMap,
   rewardsMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
@@ -268,6 +269,9 @@ const FarmDetails = ({
     },
   ];
 
+  // console.log('pool',incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution ?  moment(
+  //   String(incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution)
+  // ).unix():"" )
   return (
     <Row>
       <Col md="6">
@@ -338,6 +342,15 @@ const FarmDetails = ({
                 <TooltipIcon text="Total Liquidity of the current pool" />
               </label>
               <p>{`$${TotalPoolLiquidity}`}</p>
+            </Col>
+            <Col sm="6" className="mb-3">
+              <label>Next Distribution In</label>
+              <p>{String(incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution)}</p>
+              <p>
+                {/* <Timer
+                  expiryTimestamp={1671254037}
+                /> */}
+              </p>
             </Col>
             <Col sm="6" className="mb-3">
               <label>
@@ -428,6 +441,7 @@ FarmDetails.propTypes = {
       amount: PropTypes.string,
     })
   ),
+  incentivesMap: PropTypes.object,
   inProgress: PropTypes.bool,
   markets: PropTypes.object,
   pair: PropTypes.shape({
@@ -467,6 +481,7 @@ const stateToProps = (state) => {
     pair: state.asset.pair,
     markets: state.oracle.market.list,
     assetMap: state.asset.map,
+    incentivesMap: state.liquidity.incentivesMap,
     rewardsMap: state.liquidity.rewardsMap,
   };
 };
