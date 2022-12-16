@@ -106,9 +106,7 @@ export const setUserLiquidityInPools = (poolId, value) => {
 };
 
 export const setPoolIncentives = (list) => {
-  console.log("the list", list);
-  let rewardMap = {};
-  let incentivesMap = {};
+  let rewardMap = {}, incentivesMap = {};
 
   for (let i = 0; i < list.length; i++) {
     if (incentivesMap[list[i].poolId] === undefined) {
