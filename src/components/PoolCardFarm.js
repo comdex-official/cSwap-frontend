@@ -9,12 +9,13 @@ import ShowAPR from "../containers/Farm/ShowAPR";
 import {
   queryLiquidityPair,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../services/liquidity/query";
 import {
-  amountConversion, commaSeparatorWithRounding,
+  amountConversion,
+  commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../utils/coin";
 import { commaSeparator, marketPrice } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
@@ -55,7 +56,10 @@ const PoolCardFarm = ({
   const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && poolBalance.length > 0) {
       const values = poolBalance.map(
-        (item) => Number(amountConversion(item?.amount, assetMap[item?.denom]?.decimals)) * marketPrice(markets, item?.denom)
+        (item) =>
+          Number(
+            amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+          ) * marketPrice(markets, item?.denom)
       );
       return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
@@ -107,9 +111,19 @@ const PoolCardFarm = ({
 
           const providedTokens = result?.coins;
           const totalLiquidityInDollar =
-            Number(amountConversion(providedTokens?.[0]?.amount, assetMap[providedTokens?.[0]?.denom]?.decimals)) *
+            Number(
+              amountConversion(
+                providedTokens?.[0]?.amount,
+                assetMap[providedTokens?.[0]?.denom]?.decimals
+              )
+            ) *
               marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(amountConversion(providedTokens?.[1]?.amount, assetMap[providedTokens?.[1]?.denom]?.decimals)) *
+            Number(
+              amountConversion(
+                providedTokens?.[1]?.amount,
+                assetMap[providedTokens?.[1]?.denom]?.decimals
+              )
+            ) *
               marketPrice(markets, providedTokens?.[1]?.denom);
 
           if (totalLiquidityInDollar) {
@@ -153,7 +167,7 @@ const PoolCardFarm = ({
             <div className="cardbottom-row">
               {parent === "user" ? (
                 <>
-                  <label>Liquidity</label>
+                  <label>My Liquidity</label>
                   <p>
                     $
                     {commaSeparator(
