@@ -10,6 +10,7 @@ import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
   amountConversion,
+  convertScientificNumberIntoDecimal,
   denomConversion,
   getAmount,
   orderPriceConversion
@@ -106,7 +107,9 @@ const CustomButton = ({
                       getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
                   )
             )
-          : price,
+          : convertScientificNumberIntoDecimal(
+              Number(price).toFixed(0)
+            ).toString(),
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
@@ -136,7 +139,7 @@ const CustomButton = ({
           return;
         }
 
-        if (!isLimitOrder) {
+        if (!isLimitOrder && result?.rawLog) {
           let parsedData = JSON.parse(result?.rawLog)?.[0];
           let order = parsedData?.events?.find(
             (item) => item?.type === "limit_order"
