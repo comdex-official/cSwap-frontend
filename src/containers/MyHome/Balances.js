@@ -139,7 +139,7 @@ const Balances = ({
             Number(
               amountConversion(
                 providedTokens?.[1]?.amount,
-                assetMap[providedTokens?.[0]?.denom]?.decimals
+                assetMap[providedTokens?.[1]?.denom]?.decimals
               )
             ) *
               marketPrice(markets, providedTokens?.[1]?.denom);
