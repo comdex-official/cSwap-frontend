@@ -14,6 +14,7 @@ import {
   setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
+import Timer from "../../../components/Timer";
 import TooltipIcon from "../../../components/TooltipIcon";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
@@ -269,9 +270,7 @@ const FarmDetails = ({
     },
   ];
 
-  // console.log('pool',incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution ?  moment(
-  //   String(incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution)
-  // ).unix():"" )
+  console.log("this", incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution);
   return (
     <Row>
       <Col md="6">
@@ -344,15 +343,6 @@ const FarmDetails = ({
               <p>{`$${TotalPoolLiquidity}`}</p>
             </Col>
             <Col sm="6" className="mb-3">
-              <label>Next Distribution In</label>
-              <p>{String(incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution)}</p>
-              <p>
-                {/* <Timer
-                  expiryTimestamp={1671254037}
-                /> */}
-              </p>
-            </Col>
-            <Col sm="6" className="mb-3">
               <label>
                 Apr
                 <TooltipIcon text="Annual percentage rate of rewards for the corresponding pool. Note:- APRs are subject to change with pool size." />
@@ -370,6 +360,18 @@ const FarmDetails = ({
                   %
                 </div>
               </div>
+            </Col>
+            <Col sm="6" className="mb-3">
+              <label>Reward distribution in</label>
+              <p>
+                {incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution ? (
+                  <Timer
+                    expiryTimestamp={
+                      incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution
+                    }
+                  />
+                ) : null}
+              </p>
             </Col>
           </Row>
         </div>
