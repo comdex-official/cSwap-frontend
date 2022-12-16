@@ -14,7 +14,6 @@ import {
   setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
-import Timer from "../../../components/Timer";
 import TooltipIcon from "../../../components/TooltipIcon";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
@@ -67,7 +66,6 @@ const FarmDetails = ({
   setUserLiquidityInPools,
   userLiquidityInPools,
   assetMap,
-  incentivesMap,
   rewardsMap,
 }) => {
   const [providedTokens, setProvidedTokens] = useState();
@@ -270,7 +268,6 @@ const FarmDetails = ({
     },
   ];
 
-  console.log("this", incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution);
   return (
     <Row>
       <Col md="6">
@@ -361,18 +358,6 @@ const FarmDetails = ({
                 </div>
               </div>
             </Col>
-            <Col sm="6" className="mb-3">
-              <label>Reward distribution in</label>
-              <p>
-                {incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution ? (
-                  <Timer
-                    expiryTimestamp={
-                      incentivesMap?.[pool?.id?.toNumber()]?.nextDistribution
-                    }
-                  />
-                ) : null}
-              </p>
-            </Col>
           </Row>
         </div>
         <div className="farm-content-card-right mt-4">
@@ -443,7 +428,6 @@ FarmDetails.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  incentivesMap: PropTypes.object,
   inProgress: PropTypes.bool,
   markets: PropTypes.object,
   pair: PropTypes.shape({
@@ -483,7 +467,6 @@ const stateToProps = (state) => {
     pair: state.asset.pair,
     markets: state.oracle.market.list,
     assetMap: state.asset.map,
-    incentivesMap: state.liquidity.incentivesMap,
     rewardsMap: state.liquidity.rewardsMap,
   };
 };
