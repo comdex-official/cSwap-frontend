@@ -5,7 +5,12 @@ import { connect, useDispatch } from "react-redux";
 import { setPools } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import PoolCardFarm from "../../components/PoolCardFarm";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import Timer from "../../components/Timer";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  MASTER_POOL_ID
+} from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import CreatePool from "./CreatePool";
 import "./index.scss";
@@ -17,6 +22,7 @@ const Farm = ({
   refreshBalance,
   masterPoolMap,
   userLiquidityInPools,
+  incentivesMap,
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
@@ -85,6 +91,20 @@ const Farm = ({
             />
           </div>
 
+          <div className="farm-heading mb-5">
+            <p>
+              {" "}
+              {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
+                <Timer
+                  text={"Reward distribution in: "}
+                  expiryTimestamp={
+                    incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
+                  }
+                />
+              ) : null}
+            </p>
+          </div>
+          
           {userPools?.length > 0 ? (
             <div className="pools-bottom-section mb-5">
               <div className="farm-heading">My Pools</div>
@@ -167,6 +187,7 @@ Farm.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
   setPools: PropTypes.func.isRequired,
+  incentivesMap: PropTypes.object,
   masterPoolMap: PropTypes.object,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
@@ -190,6 +211,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     masterPoolMap: state.liquidity.masterPoolMap,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    incentivesMap: state.liquidity.incentivesMap,
   };
 };
 
