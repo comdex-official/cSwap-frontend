@@ -181,7 +181,15 @@ const rewardMap = (state = {}, action) => {
 
 const masterPoolMap = (state = {}, action) => {
   if (action.type === POOL_INCENTIVES_SET) {
-    return action.masterPoolMap;
+    return action?.masterPoolMap;
+  }
+
+  return state;
+};
+
+const incentivesMap = (state = {}, action) => {
+  if (action.type === POOL_INCENTIVES_SET) {
+    return action?.incentivesMap;
   }
 
   return state;
@@ -224,6 +232,7 @@ export default combineReducers({
   incentives,
   masterPoolMap,
   rewardMap,
+  incentivesMap,
   farmedTokensDollarValue,
   rewardsMap,
 });
