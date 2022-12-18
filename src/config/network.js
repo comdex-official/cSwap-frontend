@@ -32,6 +32,7 @@ export const ibcDenoms = {
   "weth-wei": process.env.REACT_APP_WETH_IBC_DENOM,
   ujuno: process.env.REACT_APP_JUNO_IBC_DENOM,
   "wbtc-satoshi": process.env.REACT_APP_WBTC_IBC_DENOM,
+  stuatom: process.env.REACT_APP_STATOM_IBC_DENOM,
 };
 
 export const tokenCoinGeckoIds = [
