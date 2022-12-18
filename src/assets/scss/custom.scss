@@ -1475,3 +1475,58 @@ button {
     }
   }
 }
+
+.timer-main{
+  display: flex;
+  align-items: center;
+  .left-text{
+    max-width: 160px;
+    line-height: 1.4;
+    font-size: 1.2rem;
+  }
+  .timer-count{
+    display: flex;
+    align-items: center;
+    .cols{
+      padding: 0 5px;
+      .cols-card{
+        background: rgb(28,57,92);
+        background: linear-gradient(135deg, rgba(28,57,92,1) 0%, rgba(74,87,108,1) 46%, rgba(40,47,65,1) 100%);
+        width: 46px;
+        height: 46px;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 1px;
+        margin-bottom: 5px;
+        .cols-inner{
+          background: #0E1D38;
+          position: relative;
+          height: 100%;
+          border-radius: 5px;
+          font-size: 1.8rem;
+          font-weight: 400;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          &::after {
+            content: ' ';
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: rgba(#070F20, 0.5);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius:0 0 5px 5px;
+          }
+        }
+      }
+      .label{
+        color: $text-color-light2;
+        font-size: $font-size-sm - 1;
+        text-transform: uppercase;
+        font-weight: lighter;
+      }
+    }
+  }
+}
