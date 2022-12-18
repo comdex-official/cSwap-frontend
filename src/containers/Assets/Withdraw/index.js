@@ -33,7 +33,9 @@ const Withdraw = ({
   const [validationError, setValidationError] = useState();
 
   const onChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[chain?.ibcDenomHash]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
     setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
@@ -76,10 +78,7 @@ const Withdraw = ({
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
-            amount: getAmount(
-              amount,
-              assetMap[chain?.ibcDenomHash]?.decimals
-            ),
+            amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals),
           },
           sender: address,
           receiver: destinationAddress,

@@ -9,7 +9,7 @@ import { setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor, ibcDenoms } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
@@ -105,10 +105,7 @@ const Assets = ({
           <p>
             $
             {commaSeparator(
-              amountConversion(
-                amount?.value || 0,
-                assetMap[amount?.denom]?.decimals
-              )
+              Number(amount?.value || 0).toFixed(DOLLAR_DECIMALS)
             )}
           </p>
         </>
@@ -192,8 +189,10 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
-
+    const value = getPrice(ibcBalance?.denom) * amountConversion(
+      ibcBalance?.amount,
+      assetMap[ibcBalance?.denom]?.decimals
+    )
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
@@ -201,10 +200,7 @@ const Assets = ({
         amount: ibcBalance?.amount
           ? amountConversion(
               ibcBalance.amount,
-
-              ibcBalance?.denom === ibcDenoms["weth-wei"]
-                ? assetMap["weth-wei"]?.decimals
-                : assetMap[ibcBalance?.denom]?.decimals
+              assetMap[ibcBalance?.denom]?.decimals
             )
           : 0,
         value: value || 0,
@@ -254,8 +250,9 @@ const Assets = ({
         value: getPrice(comdex?.coinMinimalDenom),
         denom: comdex?.coinMinimalDenom,
       },
+
       amount: {
-        value: nativeCoinValue || 0,
+        value: amountConversion(nativeCoinValue || 0),
         denom: comdex?.coinMinimalDenom,
       },
     },
@@ -278,7 +275,7 @@ const Assets = ({
       },
 
       amount: {
-        value: cmstCoinValue || 0,
+        value: amountConversion(cmstCoinValue || 0),
         denom: cmst?.coinMinimalDenom,
       },
     },
@@ -301,7 +298,7 @@ const Assets = ({
       },
 
       amount: {
-        value: harborCoinValue || 0,
+        value: amountConversion(harborCoinValue || 0),
         denom: harbor?.coinMinimalDenom,
       },
     },
@@ -327,7 +324,9 @@ const Assets = ({
             </div>
           </>
         ),
-        noOfTokens: item?.balance?.amount,
+        noOfTokens: Number(item?.balance?.amount || 0)?.toFixed(
+          comdex?.coinDecimals
+        ),
         price: {
           value: getPrice(item?.ibcDenomHash),
           denom: item?.ibcDenomHash,
@@ -409,7 +408,7 @@ const stateToProps = (state) => {
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
-    assetDenomMap: state.asset._.assetDenomMap,
+    assetDenomMap: state.asset.appAssetMap,
   };
 };
 

@@ -132,7 +132,14 @@ const list = (state = [], action) => {
 
 const baseCoinPoolPrice = (state = 0, action) => {
   if (action.type === BASE_COIN_POOL_PRICE_SET) {
-    return action.value;
+    return action?.value;
+  }
+  return state;
+};
+
+const baseCoinPoolPriceWithoutConversion = (state = 0, action) => {
+  if (action.type === BASE_COIN_POOL_PRICE_SET) {
+    return action?.baseValue || 0;
   }
   return state;
 };
@@ -174,7 +181,15 @@ const rewardMap = (state = {}, action) => {
 
 const masterPoolMap = (state = {}, action) => {
   if (action.type === POOL_INCENTIVES_SET) {
-    return action.masterPoolMap;
+    return action?.masterPoolMap;
+  }
+
+  return state;
+};
+
+const incentivesMap = (state = {}, action) => {
+  if (action.type === POOL_INCENTIVES_SET) {
+    return action?.incentivesMap;
   }
 
   return state;
@@ -211,11 +226,13 @@ export default combineReducers({
   poolBalances,
   list,
   baseCoinPoolPrice,
+  baseCoinPoolPriceWithoutConversion,
   userLiquidityInDollar,
   userLiquidityInPools,
   incentives,
   masterPoolMap,
   rewardMap,
+  incentivesMap,
   farmedTokensDollarValue,
   rewardsMap,
 });

@@ -9,11 +9,13 @@ import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
-    amountConversion,
-    denomConversion,
-    getAmount,
-    orderPriceConversion
+  amountConversion,
+  convertScientificNumberIntoDecimal,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
 } from "../../utils/coin";
+import { getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -35,33 +37,38 @@ const CustomButton = ({
   slippageTolerance,
   orderLifespan,
   assetMap,
+  baseCoinPoolPriceWithoutConversion,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
 
-  const poolPrice = Number(baseCoinPoolPrice);
+  const poolPrice = Number(baseCoinPoolPriceWithoutConversion);
 
   useEffect(() => {
     setComplete(false);
   }, []);
 
   const priceWithOutConversion = () => {
-    return poolPrice + poolPrice * Number(slippageTolerance / 100);
+    return (
+      baseCoinPoolPrice + baseCoinPoolPrice * Number(slippageTolerance / 100)
+    );
   };
 
   const calculateBuyAmount = () => {
     const price = isLimitOrder ? limitPrice : priceWithOutConversion();
     const amount = Number(offerCoin?.amount) / price;
 
-    return getAmount(amount, assetMap[offerCoin?.denom]?.decimals);
+    return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
 
   const calculateOrderPrice = () => {
     if (orderDirection === 1) {
+      //order direction buy: price = basecoinpoolprice + 1%
       return orderPriceConversion(
         poolPrice + poolPrice * Number(slippageTolerance / 100)
       );
     } else {
+      //order direction sell: price = basecoinpoolprice - 1%
       return orderPriceConversion(
         poolPrice - poolPrice * Number(slippageTolerance / 100)
       );
@@ -82,12 +89,27 @@ const CustomButton = ({
         appId: Long.fromNumber(APP_ID),
         direction: orderDirection,
         /** offer_coin specifies the amount of coin the orderer offers */
+
         offerCoin: {
           denom: offerCoin?.denom,
-          amount: getAmount((Number(offerCoin?.amount) + Number(offerCoin?.fee),assetMap[offerCoin?.denom]?.decimals )),
+          amount: getAmount(
+            Number(offerCoin?.amount) + Number(offerCoin?.fee),
+            assetMap[offerCoin?.denom]?.decimals
+          ),
         },
         demandCoinDenom: demandCoin?.denom,
-        price: isLimitOrder ? orderPriceConversion(limitPrice) : price,
+        price: isLimitOrder
+          ? orderPriceConversion(
+              limitPrice *
+                10 **
+                  Math.abs(
+                    getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                  )
+            )
+          : convertScientificNumberIntoDecimal(
+              Number(price).toFixed(0)
+            ).toString(),
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
@@ -113,11 +135,11 @@ const CustomButton = ({
       (error, result) => {
         setInProgress(false);
         if (error) {
-          message.error(error);
+          message.error(error?.rawLog || error);
           return;
         }
 
-        if (!isLimitOrder) {
+        if (!isLimitOrder && result?.rawLog) {
           let parsedData = JSON.parse(result?.rawLog)?.[0];
           let order = parsedData?.events?.find(
             (item) => item?.type === "limit_order"
@@ -132,7 +154,6 @@ const CustomButton = ({
           if (orderId && pairId) {
             queryOrder(orderId, pairId, (error, result) => {
               if (error) {
-                message.error(error);
                 return;
               }
 
@@ -145,9 +166,9 @@ const CustomButton = ({
                 )} ${denomConversion(
                   data?.receivedCoin?.denom
                 )} for ${amountConversion(
-                  (Number(data?.offerCoin?.amount) -
+                  Number(data?.offerCoin?.amount) -
                     Number(data?.remainingOfferCoin?.amount),
-                    assetMap[data?.offerCoin?.denom]?.decimals)
+                  assetMap[data?.offerCoin?.denom]?.decimals
                 )} ${denomConversion(data?.offerCoin?.denom)}`
               );
             });
@@ -214,6 +235,10 @@ CustomButton.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  baseCoinPoolPriceWithoutConversion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   demandCoin: PropTypes.shape({
     amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     denom: PropTypes.string,
@@ -249,6 +274,8 @@ const stateToProps = (state) => {
     slippageTolerance: state.swap.slippageTolerance,
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
+    baseCoinPoolPriceWithoutConversion:
+      state.liquidity.baseCoinPoolPriceWithoutConversion,
   };
 };
 

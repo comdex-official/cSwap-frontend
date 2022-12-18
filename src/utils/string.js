@@ -1,5 +1,6 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
 import { comdex, ibcDenoms } from "../config/network";
+import { getExponent } from "./number";
 
 const encoding = require("@cosmjs/encoding");
 
@@ -21,6 +22,8 @@ export const ibcDenomToDenom = (key) => {
       return "WETH";
     case ibcDenoms["ujuno"]:
       return "ujuno";
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-satoshi";
     default:
       return "";
   }
@@ -81,6 +84,9 @@ const iconMap = {
   [ibcDenoms["weth-wei"]]: "weth-icon",
   ujuno: "juno-icon",
   [ibcDenoms["ujuno"]]: "juno-icon",
+  "wbtc-satoshi": "wbtc-icon",
+  [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
+
 };
 
 export const iconNameFromDenom = (denom) => {
@@ -124,10 +130,15 @@ export const lowercaseFirstLetter = (string) => {
 };
 
 //Considering input with given decimal point only.
-export const toDecimals = (value, decimal = comdex.coinDecimals) =>
+export const toDecimals = (value, decimal) =>
   value.indexOf(".") >= 0
     ? value.substr(0, value.indexOf(".")) +
-      value.substr(value.indexOf("."), decimal + 1)
+      value.substr(
+        value.indexOf("."),
+        Number(decimal)
+          ? Number(getExponent(decimal)) + 1
+          : comdex?.coinDecimals
+      )
     : value;
 
 export const uniqueDenoms = (list, type) => {

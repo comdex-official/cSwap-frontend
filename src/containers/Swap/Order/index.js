@@ -19,7 +19,7 @@ import { orderStatusText } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.css";
 
-const Order = ({ lang }) => {
+const Order = ({ lang, assetMap }) => {
   const address = useSelector((state) => state.account.address);
   const [myOrders, setMyOrders] = useState([]);
   const [inProgress, setInProgress] = useState(false);
@@ -157,20 +157,23 @@ const Order = ({ lang }) => {
           : "",
         buy_sell: item?.direction === 1 ? "BUY" : "SELL",
         offered_coin: item?.offerCoin
-          ? `${amountConversion(item?.offerCoin?.amount)} ${denomConversion(
-              item?.offerCoin?.denom
-            )}`
+          ? `${amountConversion(
+              item?.offerCoin?.amount,
+              assetMap[item?.offerCoin?.denom]?.decimals
+            )} ${denomConversion(item?.offerCoin?.denom)}`
           : "",
         trade_amount: item?.amount ? amountConversion(item?.amount) : 0,
         price: item?.price ? orderPriceReverseConversion(item.price) : 0,
         received: item?.receivedCoin
-          ? `${amountConversion(item?.receivedCoin?.amount)} ${denomConversion(
-              item?.receivedCoin?.denom
-            )}`
+          ? `${amountConversion(
+              item?.receivedCoin?.amount,
+              assetMap[item?.receivedCoin?.denom]?.decimals
+            )} ${denomConversion(item?.receivedCoin?.denom)}`
           : "",
         remaining: item?.remainingOfferCoin
           ? `${amountConversion(
-              item?.remainingOfferCoin?.amount
+              item?.remainingOfferCoin?.amount,
+              assetMap[item?.remainingOfferCoin?.denom]?.decimals
             )} ${denomConversion(item?.remainingOfferCoin?.denom)}`
           : "",
         status: item?.status ? orderStatusText(item.status) : "",
