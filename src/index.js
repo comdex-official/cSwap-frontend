@@ -1,6 +1,7 @@
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import 'antd/dist/reset.css';
 import App from "./App";
 import React from "react";
 import { CautionNotice } from "./components/common";
