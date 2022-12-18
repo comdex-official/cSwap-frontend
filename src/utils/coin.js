@@ -67,6 +67,10 @@ export const denomConversion = (denom) => {
     return "WBTC";
   }
 
+  if (denom === "stuatom" || denom === ibcDenoms["stuatom"]) {
+    return "stATOM";
+  }
+
   if (denom && denom.substr(0, 1) === "u") {
     if (
       denom &&
