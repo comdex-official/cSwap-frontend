@@ -328,6 +328,12 @@
 .tx-hash-col {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  a{
+    .dark-mode & {
+      color: $white;
+    }
+  }
   .icon {
     fill: $background-dark2;
     margin-left: 8px;

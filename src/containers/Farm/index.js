@@ -96,7 +96,7 @@ const Farm = ({
               {" "}
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
                 <Timer
-                  text={"Reward distribution in: "}
+                  text={"Reward distribution in "}
                   expiryTimestamp={
                     incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
                   }
