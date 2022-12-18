@@ -514,6 +514,7 @@ const CreatePoolModal = ({
         footer={false}
         centered={true}
         className="create-pool-modal"
+        closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
       >
         <h2 className="pool-denom">Create New Pool</h2>
         <Steps className="comdex-steps" current={current}>

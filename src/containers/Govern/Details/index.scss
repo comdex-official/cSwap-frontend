@@ -1,6 +1,10 @@
 @import "../../../assets/scss/variables.scss";
 
 .composite-card {
+  .card-header{
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
   &.govern-card2 {
     padding: 26px;
     .description-row {
