@@ -46,6 +46,7 @@
           .icon {
             width: 50px;
             height: 100%;
+            border-radius: 50%;
           }
         }
       }
@@ -104,7 +105,7 @@
       width: 20px;
       fill: #354774;
       cursor: pointer;
-      &:hover{
+      &:hover {
         fill: $secondary-color;
       }
     }
