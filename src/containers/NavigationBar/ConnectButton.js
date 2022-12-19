@@ -3,7 +3,7 @@ import { decode } from "js-base64";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
   setAccountAddress,
   setAccountBalances,
@@ -33,6 +33,8 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import websocket from 'websocket';
 
 const ConnectButton = ({
   setAccountAddress,
@@ -55,6 +57,83 @@ const ConnectButton = ({
   setAssetsInPrgoress,
   assetDenomMap,
 }) => {
+  const dispatch = useDispatch();
+
+  const subscription = {
+    "jsonrpc": "2.0",
+    "method": "subscribe",
+    "id": "0",
+    "params": {
+      "query": `coin_spent.spender='${address}'`
+    },
+  };
+  const subscription2 = {
+    "jsonrpc": "2.0",
+    "method": "subscribe",
+    "id": "0",
+    "params": {
+      "query": `coin_received.receiver='${address}'`
+    }
+  };
+
+  useEffect(() => {
+    if (address) {
+
+      const ws = new WebSocket(
+        "wss://testnet2rpc.comdex.one/websocket"
+      );
+      const ws1 = new WebSocket(
+        "wss://testnet2rpc.comdex.one/websocket"
+      );
+
+      ws.onopen = () => {
+        console.log("Connection Established! 0");
+        ws.send(JSON.stringify(subscription));
+      };
+      ws1.onopen = () => {
+        console.log("Connection Established! 1");
+        ws1.send(JSON.stringify(subscription2));
+      };
+
+      ws.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        console.log(response, "ws - 0");
+        if (response?.result?.events) {
+          dispatch({
+            type: "BALANCE_REFRESH_SET",
+            value: refreshBalance + 1,
+          });
+        }
+      };
+
+      ws1.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        console.log(response, "ws - 1");
+        console.log(response?.result?.events, "response?.result?.event");
+        if (response?.result?.events) {
+          dispatch({
+            type: "BALANCE_REFRESH_SET",
+            value: refreshBalance + 1,
+          });
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("Connection Closed! 0");
+      };
+      ws1.onclose = () => {
+        console.log("Connection Closed! 1");
+      };
+
+      ws.onerror = (error) => {
+        console.log(error, "WS Error");
+      };
+      ws1.onerror = (error) => {
+        console.log(error, "WS 1 Error");
+      };
+    }
+  }, [address]);
+
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
