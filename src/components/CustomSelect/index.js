@@ -13,7 +13,7 @@ const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
     <Select
       aria-label="Select"
       className="assets-select"
-      popupClassName="asset-select-dropdown"
+      popupClassName="asset-select-dropdown swap-asset-select-dropdown"
       value={value}
       disabled={disabled}
       loading={loading || false}
@@ -38,7 +38,7 @@ const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
             <Option key={item} value={item}>
               <div className="select-inner">
                 <div className="svg-icon">
-                  <div className="svg-icon-inner">
+                  <div className="svg-icon-inner swap-svg-icon-inner">
                     <SvgIcon name={iconNameFromDenom(item)} />
                   </div>
                 </div>
