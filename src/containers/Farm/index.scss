@@ -82,6 +82,7 @@
           width: 100%;
           height: 100%;
           fill: $background-dark1;
+          border-radius: 50%;
           .dark-mode & {
             fill: $white;
           }
@@ -238,6 +239,7 @@
           width: 100%;
           height: 100%;
           fill: $background-dark1;
+          border-radius: 50%;
         }
       }
     }
@@ -400,6 +402,7 @@
               width: 100%;
               height: 100%;
               fill: $text-color-label-dark;
+              border-radius: 50%;
               .dark-mode & {
                 fill: $white;
               }
