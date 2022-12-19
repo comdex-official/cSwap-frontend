@@ -146,7 +146,6 @@ const PoolCardFarm = ({
               <div className="card-svgicon-inner">
                 <SvgIcon
                   name={iconNameFromDenom(pair?.baseCoinDenom)}
-                  viewBox="0 0 23.515 31"
                 />{" "}
               </div>
             </div>
