@@ -78,61 +78,32 @@ const ConnectButton = ({
 
   useEffect(() => {
     if (address) {
-
       const ws = new WebSocket(
-        "wss://testnet2rpc.comdex.one/websocket"
-      );
-      const ws1 = new WebSocket(
         "wss://testnet2rpc.comdex.one/websocket"
       );
 
       ws.onopen = () => {
-        console.log("Connection Established! 0");
         ws.send(JSON.stringify(subscription));
-      };
-      ws1.onopen = () => {
-        console.log("Connection Established! 1");
-        ws1.send(JSON.stringify(subscription2));
+        ws.send(JSON.stringify(subscription2));
       };
 
       ws.onmessage = (event) => {
         const response = JSON.parse(event.data);
-        console.log(response, "ws - 0");
         if (response?.result?.events) {
-          dispatch({
-            type: "BALANCE_REFRESH_SET",
-            value: refreshBalance + 1,
-          });
-        }
-      };
-
-      ws1.onmessage = (event) => {
-        const response = JSON.parse(event.data);
-        console.log(response, "ws - 1");
-        console.log(response?.result?.events, "response?.result?.event");
-        if (response?.result?.events) {
-          dispatch({
-            type: "BALANCE_REFRESH_SET",
-            value: refreshBalance + 1,
-          });
+          fetchBalances();
         }
       };
 
       ws.onclose = () => {
         console.log("Connection Closed! 0");
       };
-      ws1.onclose = () => {
-        console.log("Connection Closed! 1");
-      };
 
       ws.onerror = (error) => {
         console.log(error, "WS Error");
       };
-      ws1.onerror = (error) => {
-        console.log(error, "WS 1 Error");
-      };
     }
   }, [address]);
+  
 
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -198,7 +169,7 @@ const ConnectButton = ({
         if (error) {
           return;
         }
-
+        console.log(result, "fetch balance result");
         setAccountBalances(result.balances, result.pagination);
         calculateAssetBalance(result.balances);
         calculatePoolBalance(result.balances);
