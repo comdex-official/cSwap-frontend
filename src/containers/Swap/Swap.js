@@ -32,11 +32,7 @@ import {
   getExponent,
   marketPrice
 } from "../../utils/number";
-import {
-  getPairMappings,
-  toDecimals,
-  uniqueLiquidityPairDenoms
-} from "../../utils/string";
+import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
 import "./index.scss";
@@ -82,7 +78,8 @@ const Swap = ({
   const [priceValidationError, setPriceValidationError] = useState();
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
   const [pairsMapping, setPairsMapping] = useState({});
-  const [outputOptions, setOutputOptions] = useState([]);
+  const [outputOptions, setoutputOptions] = useState([]);
+  const [inputOptions, setinputOptions] = useState([]);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -90,12 +87,11 @@ const Swap = ({
       (item) => item.id.toNumber === firstPool?.pairId.toNumber
     )[0];
 
-    if (
-      !offerCoin?.denom &&
-      poolPair?.id &&
-      pairsMapping[poolPair?.baseCoinDenom]
-    ) {
-      handleOfferCoinDenomChange(poolPair?.baseCoinDenom);
+    if (!offerCoin?.denom && poolPair?.id) {
+      setOfferCoinDenom(poolPair?.baseCoinDenom);
+    }
+    if (!demandCoin?.denom && poolPair?.id) {
+      setDemandCoinDenom(poolPair?.quoteCoinDenom);
     }
 
     if (poolPair?.id) {
@@ -104,13 +100,21 @@ const Swap = ({
 
     setReverse(false);
     resetValues();
-  }, [pools, pairs, pairsMapping]);
+  }, [pools, pairs]);
 
   useEffect(() => {
     if (pairs?.list?.length) {
       setPairsMapping(getPairMappings(pairs?.list));
     }
   }, [pairs]);
+
+  useEffect(() => {
+    setoutputOptions(pairsMapping[offerCoin?.denom]);
+  }, [offerCoin?.denom, pairsMapping]);
+
+  useEffect(() => {
+    setinputOptions(Object.keys(pairsMapping));
+  }, [pairsMapping]);
 
   useEffect(() => {
     fetchPairs(
@@ -235,6 +239,9 @@ const Swap = ({
       if (selectedPair?.baseCoinDenom !== denomIn) {
         setReverse(true);
       }
+      else{
+        setReverse(false)
+      }
       setPool(selectedPool);
       setPoolBalance(selectedPool?.balances);
     } else {
@@ -313,7 +320,6 @@ const Swap = ({
   const handleOfferCoinDenomChange = (value) => {
     setOfferCoinDenom(value);
 
-    setOutputOptions(pairsMapping[value]);
     setDemandCoinDenom(pairsMapping[value]?.[0]);
 
     if (isLimitOrder) {
@@ -371,7 +377,8 @@ const Swap = ({
   };
 
   const handleSwapChange = () => {
-    handleOfferCoinDenomChange(demandCoin?.denom);
+    setOfferCoinDenom(demandCoin?.denom);
+    setDemandCoinDenom(offerCoin?.denom);
 
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
@@ -465,15 +472,6 @@ const Swap = ({
     setLimitOrderToggle(value);
     resetValues();
   };
-
-  const inOptions = uniqueLiquidityPairDenoms(
-    liquidityPairs,
-    !reverse ? "in" : "out"
-  );
-
-  let inputOptions = inOptions?.filter(
-    (item) => item === assetDenomMap?.[item]?.denom
-  );
 
   const handleRefreshDetails = () => {
     setLimitPrice(0);
