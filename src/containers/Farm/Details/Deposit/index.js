@@ -92,13 +92,13 @@ const Deposit = ({
   useEffect(() => {
     if (firstInput) {
       const numberOfTokens = (firstInput * getOutputPrice()).toFixed(
-        comdex?.coinDecimals
+        assetMap[pair?.quoteCoinDenom]?.decimals
       );
 
       setOutputValidationError(
         ValidateInputNumber(
           Number(
-            getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals)
+            getAmount(numberOfTokens, assetMap[pair?.quoteCoinDenom]?.decimals)
           ),
           secondAssetAvailableBalance,
           "macro"
@@ -138,7 +138,7 @@ const Deposit = ({
     );
 
     const numberOfTokens = (value * getOutputPrice()).toFixed(
-      getExponent(assetMap[pair?.baseCoinDenom]?.decimals)
+      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
     );
 
     setFirstInput(value);
@@ -169,7 +169,7 @@ const Deposit = ({
     );
 
     const numberOfTokens = (value * getInputPrice()).toFixed(
-      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+      getExponent(assetMap[pair?.baseCoinDenom]?.decimals)
     );
 
     setSecondInput(value);
@@ -279,7 +279,7 @@ const Deposit = ({
       Number(
         getAmount(
           max * getOutputPrice(),
-          assetMap[pair?.baseCoinDenom]?.decimals
+          assetMap[pair?.quoteCoinDenom]?.decimals
         )
       ) < Number(secondAssetAvailableBalance)
     ) {
@@ -299,7 +299,7 @@ const Deposit = ({
       Number(
         getAmount(
           max * getInputPrice(),
-          assetMap[pair?.quoteCoinDenom]?.decimals
+          assetMap[pair?.baseCoinDenom]?.decimals
         )
       ) < Number(firstAssetAvailableBalance)
     ) {
