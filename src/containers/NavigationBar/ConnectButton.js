@@ -78,9 +78,7 @@ const ConnectButton = ({
 
   useEffect(() => {
     if (address) {
-      const ws = new WebSocket(
-        "wss://testnet2rpc.comdex.one/websocket"
-      );
+      let ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_API_URL}`);
 
       ws.onopen = () => {
         ws.send(JSON.stringify(subscription));
@@ -90,7 +88,9 @@ const ConnectButton = ({
       ws.onmessage = (event) => {
         const response = JSON.parse(event.data);
         if (response?.result?.events) {
-          fetchBalances();
+          const savedAddress = localStorage.getItem("ac");
+          const userAddress = savedAddress ? decode(savedAddress) : address;
+          fetchBalances(userAddress);
         }
       };
 
@@ -103,7 +103,7 @@ const ConnectButton = ({
       };
     }
   }, [address]);
-  
+
 
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -169,7 +169,6 @@ const ConnectButton = ({
         if (error) {
           return;
         }
-        console.log(result, "fetch balance result");
         setAccountBalances(result.balances, result.pagination);
         calculateAssetBalance(result.balances);
         calculatePoolBalance(result.balances);
