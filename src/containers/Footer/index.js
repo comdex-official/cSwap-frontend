@@ -1,11 +1,14 @@
 import React from "react";
 import { SvgIcon } from "../../components/common";
+import { HOSTED_ON_TEXT } from "../../constants/common";
 import "./index.scss";
 
 const Footer = () => {
   return (
     <div className="footer">
-      <div className="footer-text">Hosted on Akash Network</div>
+      {HOSTED_ON_TEXT ? (
+        <div className="footer-text"> {HOSTED_ON_TEXT}</div>
+      ) : null}
       <div className="social-icons">
         <a
           aria-label="Twitter"
