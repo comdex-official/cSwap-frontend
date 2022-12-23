@@ -6,7 +6,10 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import { ValidateInputNumber } from "../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -32,11 +35,7 @@ import {
   getExponent,
   marketPrice
 } from "../../utils/number";
-import {
-  toDecimals,
-  uniqueLiquidityPairDenoms,
-  uniqueQuoteDenomsForBase
-} from "../../utils/string";
+import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
 import "./index.scss";
@@ -74,13 +73,14 @@ const Swap = ({
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
   assetMap,
-  assetDenomMap,
   assetsInProgress,
 }) => {
   const [validationError, setValidationError] = useState();
-  const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
+  const [pairsMapping, setPairsMapping] = useState({});
+  const [outputOptions, setoutputOptions] = useState([]);
+  const [inputOptions, setinputOptions] = useState([]);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -104,6 +104,20 @@ const Swap = ({
   }, [pools, pairs]);
 
   useEffect(() => {
+    if (pairs?.list?.length) {
+      setPairsMapping(getPairMappings(pairs?.list));
+    }
+  }, [pairs]);
+
+  useEffect(() => {
+    setoutputOptions(pairsMapping[offerCoin?.denom]);
+  }, [offerCoin?.denom, pairsMapping]);
+
+  useEffect(() => {
+    setinputOptions(Object.keys(pairsMapping));
+  }, [pairsMapping]);
+
+  useEffect(() => {
     fetchPairs(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
@@ -123,16 +137,6 @@ const Swap = ({
       setOfferCoinDenom("");
       setDemandCoinDenom("");
     };
-  }, []);
-
-  useEffect(() => {
-    queryLiquidityPairs((error, result) => {
-      if (error) {
-        return;
-      }
-
-      setLiquidityPairs(result?.pairs);
-    });
   }, []);
 
   useEffect(() => {
@@ -223,6 +227,11 @@ const Swap = ({
         (item) => item.pairId.toNumber() === selectedPair?.id.toNumber()
       )[0];
 
+      if (selectedPair?.baseCoinDenom !== denomIn) {
+        setReverse(true);
+      } else {
+        setReverse(false);
+      }
       setPool(selectedPool);
       setPoolBalance(selectedPool?.balances);
     } else {
@@ -287,11 +296,7 @@ const Swap = ({
   };
 
   const handleDemandCoinDenomChange = (value) => {
-    if (offerCoin?.denom === value) {
-      handleSwapChange();
-    } else {
-      setDemandCoinDenom(value);
-    }
+    setDemandCoinDenom(value);
 
     if (isLimitOrder) {
       setLimitPrice(0);
@@ -303,17 +308,15 @@ const Swap = ({
   };
 
   const handleOfferCoinDenomChange = (value) => {
-    if (demandCoin?.denom === value) {
-      handleSwapChange();
-    } else {
-      setOfferCoinDenom(value);
-    }
+    setOfferCoinDenom(value);
+
+    setDemandCoinDenom(pairsMapping[value]?.[0]);
 
     if (isLimitOrder) {
       setLimitPrice(0);
       setPriceValidationError();
     }
-    updatePoolDetails(value, demandCoin?.denom);
+    updatePoolDetails(value, pairsMapping[value]?.[0]);
   };
 
   const availableBalance = getDenomBalance(balances, offerCoin?.denom) || 0;
@@ -364,10 +367,9 @@ const Swap = ({
   };
 
   const handleSwapChange = () => {
-    const demandCoinDenom = demandCoin?.denom;
-    const offerCoinDenom = offerCoin?.denom;
-    setDemandCoinDenom(offerCoinDenom);
-    setOfferCoinDenom(demandCoinDenom);
+    setOfferCoinDenom(demandCoin?.denom);
+    setDemandCoinDenom(offerCoin?.denom);
+
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
     setLimitPrice(0);
@@ -444,7 +446,7 @@ const Swap = ({
 
     if (pair?.lastPrice) {
       setPriceValidationError(
-        ValidateInputNumber(
+        ValidatePriceInputNumber(
           Number(price),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
@@ -460,25 +462,6 @@ const Swap = ({
     setLimitOrderToggle(value);
     resetValues();
   };
-
-  const inOptions = uniqueLiquidityPairDenoms(
-    liquidityPairs,
-    !reverse ? "in" : "out"
-  );
-
-  let inputOptions = inOptions?.filter(
-    (item) => item === assetDenomMap?.[item]?.denom
-  );
-
-  const outOptions = uniqueQuoteDenomsForBase(
-    liquidityPairs,
-    !reverse ? "in" : "out",
-    offerCoin?.denom
-  );
-
-  let outputOptions = outOptions?.filter(
-    (item) => item === assetDenomMap?.[item]?.denom
-  );
 
   const handleRefreshDetails = () => {
     setLimitPrice(0);
@@ -533,9 +516,11 @@ const Swap = ({
   };
 
   const priceRange = (lastPrice, maxPriceLimitRatio, decimal) => {
-    return `${(lastPrice - maxPriceLimitRatio * lastPrice) / decimal} - ${
-      (lastPrice + maxPriceLimitRatio * lastPrice) / decimal
-    }`;
+    return `${((lastPrice - maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
+      comdex?.coinDecimals
+    )} - ${((lastPrice + maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
+      comdex?.coinDecimals
+    )}`;
   };
 
   const SettingPopup = (
@@ -569,6 +554,12 @@ const Swap = ({
     </div>
   );
 
+  console.log(
+    "this one",
+    isLimitOrder ? !Number(limitPrice) || priceValidationError?.message : false,
+    limitPrice,
+    priceValidationError
+  );
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
@@ -605,12 +596,12 @@ const Swap = ({
                     <CustomSelect
                       loading={assetsInProgress}
                       value={
-                        offerCoin?.denom && outputOptions.length > 0
+                        offerCoin?.denom && outputOptions?.length > 0
                           ? offerCoin?.denom
                           : null
                       }
                       onChange={handleOfferCoinDenomChange}
-                      list={inputOptions.length > 0 ? inputOptions : null}
+                      list={inputOptions?.length > 0 ? inputOptions : null}
                     />
                   </div>
                 </div>
@@ -663,12 +654,12 @@ const Swap = ({
                       <CustomSelect
                         loading={assetsInProgress}
                         value={
-                          demandCoin?.denom && outputOptions.length > 0
+                          demandCoin?.denom && outputOptions?.length > 0
                             ? demandCoin?.denom
                             : null
                         }
                         onChange={handleDemandCoinDenomChange}
-                        list={outputOptions.length > 0 ? outputOptions : null}
+                        list={outputOptions?.length > 0 ? outputOptions : null}
                       />
                     </div>
                   </div>
@@ -753,12 +744,14 @@ const Swap = ({
                       <div className="assets-select-wrapper mt-2">
                         <CustomSelect
                           value={
-                            demandCoin?.denom && outputOptions.length > 0
+                            demandCoin?.denom && outputOptions?.length > 0
                               ? demandCoin?.denom
                               : null
                           }
                           onChange={handleDemandCoinDenomChange}
-                          list={outputOptions.length > 0 ? outputOptions : null}
+                          list={
+                            outputOptions?.length > 0 ? outputOptions : null
+                          }
                         />
                       </div>
                     </div>

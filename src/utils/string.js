@@ -220,3 +220,21 @@ export const stringTagParser = (input) => {
   });
   return output;
 };
+
+export const getPairMappings = (pairs) => {
+  const pairsMapping = {};
+  if (pairs?.length) {
+    for (let pair of pairs) {
+      if (!pairsMapping[pair.baseCoinDenom]) {
+        pairsMapping[pair.baseCoinDenom] = [];
+      }
+      if (!pairsMapping[pair.quoteCoinDenom]) {
+        pairsMapping[pair.quoteCoinDenom] = [];
+      }
+      pairsMapping[pair.baseCoinDenom].push(pair.quoteCoinDenom);
+      pairsMapping[pair.quoteCoinDenom].push(pair.baseCoinDenom);
+    }
+  }
+
+  return pairsMapping;
+};
