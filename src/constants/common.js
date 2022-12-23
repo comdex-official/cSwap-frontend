@@ -6,3 +6,4 @@ export const MAX_SLIPPAGE_TOLERANCE = 3;
 
 export const APP_ID = Number(process.env.REACT_APP_APP_ID);
 export const MASTER_POOL_ID = Number(process.env.REACT_APP_APP_MASTER_POOL_ID);
+export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT
