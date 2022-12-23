@@ -6,7 +6,10 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
-import { ValidateInputNumber } from "../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber
+} from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
@@ -70,11 +73,9 @@ const Swap = ({
   baseCoinPoolPrice,
   setBaseCoinPoolPrice,
   assetMap,
-  assetDenomMap,
   assetsInProgress,
 }) => {
   const [validationError, setValidationError] = useState();
-  const [liquidityPairs, setLiquidityPairs] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
   const [pairsMapping, setPairsMapping] = useState({});
@@ -136,16 +137,6 @@ const Swap = ({
       setOfferCoinDenom("");
       setDemandCoinDenom("");
     };
-  }, []);
-
-  useEffect(() => {
-    queryLiquidityPairs((error, result) => {
-      if (error) {
-        return;
-      }
-
-      setLiquidityPairs(result?.pairs);
-    });
   }, []);
 
   useEffect(() => {
@@ -238,9 +229,8 @@ const Swap = ({
 
       if (selectedPair?.baseCoinDenom !== denomIn) {
         setReverse(true);
-      }
-      else{
-        setReverse(false)
+      } else {
+        setReverse(false);
       }
       setPool(selectedPool);
       setPoolBalance(selectedPool?.balances);
@@ -456,7 +446,7 @@ const Swap = ({
 
     if (pair?.lastPrice) {
       setPriceValidationError(
-        ValidateInputNumber(
+        ValidatePriceInputNumber(
           Number(price),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
@@ -526,9 +516,11 @@ const Swap = ({
   };
 
   const priceRange = (lastPrice, maxPriceLimitRatio, decimal) => {
-    return `${(lastPrice - maxPriceLimitRatio * lastPrice) / decimal} - ${
-      (lastPrice + maxPriceLimitRatio * lastPrice) / decimal
-    }`;
+    return `${((lastPrice - maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
+      comdex?.coinDecimals
+    )} - ${((lastPrice + maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
+      comdex?.coinDecimals
+    )}`;
   };
 
   const SettingPopup = (
@@ -562,6 +554,12 @@ const Swap = ({
     </div>
   );
 
+  console.log(
+    "this one",
+    isLimitOrder ? !Number(limitPrice) || priceValidationError?.message : false,
+    limitPrice,
+    priceValidationError
+  );
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">

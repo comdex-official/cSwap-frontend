@@ -33,7 +33,6 @@ const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
       {list &&
         list.map((record) => {
           const item = record?.denom ? record?.denom : record;
-
           return (
             <Option key={item} value={item}>
               <div className="select-inner">
