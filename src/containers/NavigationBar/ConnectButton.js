@@ -33,8 +33,6 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-import websocket from 'websocket';
 
 const ConnectButton = ({
   setAccountAddress,
@@ -95,11 +93,11 @@ const ConnectButton = ({
       };
 
       ws.onclose = () => {
-        console.log("Connection Closed! 0");
+        //TODO: handle socket close
       };
 
       ws.onerror = (error) => {
-        console.log(error, "WS Error");
+        //TODO: handle socket error
       };
     }
   }, [address]);
