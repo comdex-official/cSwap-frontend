@@ -1,7 +1,7 @@
 import { Button, message } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   setBaseCoinPoolPrice,
@@ -314,7 +314,7 @@ const Deposit = ({
     }
   };
 
-  const showFirstCoinValue = () => {
+  const showFirstCoinValue = useCallback(() => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
     const demandCoinPrice = marketPrice(markets, pair?.quoteCoinDenom);
     const total = price * demandCoinPrice * firstInput;
@@ -322,9 +322,9 @@ const Deposit = ({
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  };
+  }, [markets, baseCoinPoolPrice, firstInput, pair?.quoteCoinDenom, reverse]);
 
-  const showSecondCoinValue = () => {
+  const showSecondCoinValue = useCallback(() => {
     const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
     const oralcePrice = marketPrice(markets, pair?.baseCoinDenom);
     const total = price * oralcePrice * secondInput;
@@ -332,7 +332,7 @@ const Deposit = ({
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  };
+  }, [markets, baseCoinPoolPrice, secondInput, pair?.baseCoinDenom, reverse]);
 
   return (
     <div className="common-card">
