@@ -2,7 +2,7 @@ import { message, Tabs } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
 import { Col, Row } from "../../components/common";
@@ -92,65 +92,72 @@ const Balances = ({
     0
   );
 
-  const getTotalValue = () => {
+  const getTotalValue = useCallback(() => {
     const total = Number(assetBalance) + Number(totalFarmBalance);
     return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
-  };
+  }, [assetBalance, totalFarmBalance]);
 
-  const getUserLiquidity = (pool) => {
-    if (address) {
-      queryPoolSoftLocks(address, pool?.id, (error, result) => {
-        if (error) {
-          return;
-        }
-
-        const availablePoolToken =
-          getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-
-        const activeSoftLock = result?.activePoolCoin;
-        const queuedSoftLocks = result?.queuedPoolCoin;
-
-        const queuedAmounts =
-          queuedSoftLocks &&
-          queuedSoftLocks.length > 0 &&
-          queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-        const userLockedAmount =
-          Number(
-            queuedAmounts?.length > 0 &&
-              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-          ) + Number(activeSoftLock?.amount) || 0;
-
-        const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
-        queryPoolCoinDeserialize(pool?.id, totalPoolToken, (error, result) => {
+  const getUserLiquidity = useCallback(
+    (pool) => {
+      if (address) {
+        queryPoolSoftLocks(address, pool?.id, (error, result) => {
           if (error) {
-            message.error(error);
             return;
           }
 
-          const providedTokens = result?.coins;
-          const totalLiquidityInDollar =
-            Number(
-              amountConversion(
-                providedTokens?.[0]?.amount,
-                assetMap[providedTokens?.[0]?.denom]?.decimals
-              )
-            ) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(
-              amountConversion(
-                providedTokens?.[1]?.amount,
-                assetMap[providedTokens?.[1]?.denom]?.decimals
-              )
-            ) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
+          const availablePoolToken =
+            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-          if (totalLiquidityInDollar) {
-            setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
-          }
+          const activeSoftLock = result?.activePoolCoin;
+          const queuedSoftLocks = result?.queuedPoolCoin;
+
+          const queuedAmounts =
+            queuedSoftLocks &&
+            queuedSoftLocks.length > 0 &&
+            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+          const userLockedAmount =
+            Number(
+              queuedAmounts?.length > 0 &&
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+            ) + Number(activeSoftLock?.amount) || 0;
+
+          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+          queryPoolCoinDeserialize(
+            pool?.id,
+            totalPoolToken,
+            (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              const providedTokens = result?.coins;
+              const totalLiquidityInDollar =
+                Number(
+                  amountConversion(
+                    providedTokens?.[0]?.amount,
+                    assetMap[providedTokens?.[0]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
+                Number(
+                  amountConversion(
+                    providedTokens?.[1]?.amount,
+                    assetMap[providedTokens?.[1]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[1]?.denom);
+
+              if (totalLiquidityInDollar) {
+                setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
+              }
+            }
+          );
         });
-      });
-    }
-  };
+      }
+    },
+    [assetMap, address, markets, balances, setUserLiquidityInPools]
+  );
 
   const Options = {
     chart: {
