@@ -3,7 +3,7 @@ import { decode } from "js-base64";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import {
   setAccountAddress,
   setAccountBalances,
@@ -12,7 +12,11 @@ import {
   setPoolBalance,
   showAccountConnectModal
 } from "../../actions/account";
-import { setAppAssets, setAssets, setAssetsInPrgoress } from "../../actions/asset";
+import {
+  setAppAssets,
+  setAssets,
+  setAssetsInPrgoress
+} from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
@@ -55,23 +59,22 @@ const ConnectButton = ({
   setAssetsInPrgoress,
   assetDenomMap,
 }) => {
-  const dispatch = useDispatch();
-
+  
   const subscription = {
-    "jsonrpc": "2.0",
-    "method": "subscribe",
-    "id": "0",
-    "params": {
-      "query": `coin_spent.spender='${address}'`
+    jsonrpc: "2.0",
+    method: "subscribe",
+    id: "0",
+    params: {
+      query: `coin_spent.spender='${address}'`,
     },
   };
   const subscription2 = {
-    "jsonrpc": "2.0",
-    "method": "subscribe",
-    "id": "0",
-    "params": {
-      "query": `coin_received.receiver='${address}'`
-    }
+    jsonrpc: "2.0",
+    method: "subscribe",
+    id: "0",
+    params: {
+      query: `coin_received.receiver='${address}'`,
+    },
   };
 
   useEffect(() => {
@@ -102,7 +105,6 @@ const ConnectButton = ({
     }
   }, [address]);
 
-
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
@@ -126,9 +128,12 @@ const ConnectButton = ({
     );
   }, []);
 
-  const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
-  };
+  const getPrice = useCallback(
+    (denom) => {
+      return marketPrice(markets, denom) || 0;
+    },
+    [markets]
+  );
 
   const calculateAssetBalance = useCallback(
     (balances) => {
@@ -143,16 +148,13 @@ const ConnectButton = ({
       const value = assetBalances.map((item) => {
         return (
           getPrice(item.denom) *
-          amountConversion(
-            item.amount,
-            assetMap[item?.denom]?.decimals
-          )
+          amountConversion(item.amount, assetMap[item?.denom]?.decimals)
         );
       });
 
       setAssetBalance(Lodash.sum(value));
     },
-    [getPrice, setAssetBalance]
+    [getPrice, setAssetBalance, assetMap]
   );
 
   const calculatePoolBalance = useCallback(() => {
@@ -179,11 +181,11 @@ const ConnectButton = ({
     if (address) {
       fetchBalances(address);
     }
-  }, [address, refreshBalance, markets]);
+  }, [address, refreshBalance, markets, fetchBalances]);
 
   useEffect(() => {
     calculateAssetBalance(balances);
-  }, [balances, markets]);
+  }, [balances, calculateAssetBalance]);
 
   useEffect(() => {
     fetchPoolIncentives();
