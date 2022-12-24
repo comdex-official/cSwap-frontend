@@ -93,11 +93,11 @@ const ConnectButton = ({
       };
 
       ws.onclose = () => {
-        //TODO: handle socket close
+        console.log("Connection Closed! 0");
       };
 
       ws.onerror = (error) => {
-        //TODO: handle socket error
+        console.log(error, "WS Error");
       };
     }
   }, [address]);
