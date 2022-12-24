@@ -33,8 +33,6 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-import websocket from 'websocket';
 
 const ConnectButton = ({
   setAccountAddress,

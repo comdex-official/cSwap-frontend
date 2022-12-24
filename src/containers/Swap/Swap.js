@@ -554,12 +554,6 @@ const Swap = ({
     </div>
   );
 
-  console.log(
-    "this one",
-    isLimitOrder ? !Number(limitPrice) || priceValidationError?.message : false,
-    limitPrice,
-    priceValidationError
-  );
   return (
     <div className="app-content-wrapper cswap-section">
       <div className="app-content-small">
