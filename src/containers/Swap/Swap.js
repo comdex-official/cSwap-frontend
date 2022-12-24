@@ -5,35 +5,35 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { comdex } from "../../config/network";
+import { comdex, harbor } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber
+  ValidatePriceInputNumber,
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   decimalConversion,
   getExponent,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -110,11 +110,21 @@ const Swap = ({
   }, [pairs]);
 
   useEffect(() => {
-    setoutputOptions(pairsMapping[offerCoin?.denom]);
+    let options = pairsMapping[offerCoin?.denom]?.filter(
+      (item) => item !== harbor?.coinMinimalDenom
+    );
+    //filtering out harbor from options
+
+    setoutputOptions(options);
   }, [offerCoin?.denom, pairsMapping]);
 
   useEffect(() => {
-    setinputOptions(Object.keys(pairsMapping));
+    let options = Object.keys(pairsMapping)?.filter(
+      (item) => item !== harbor?.coinMinimalDenom
+    );
+    //filtering out harbor from options
+
+    setinputOptions(options);
   }, [pairsMapping]);
 
   useEffect(() => {
