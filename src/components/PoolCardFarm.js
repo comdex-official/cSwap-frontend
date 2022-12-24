@@ -1,6 +1,6 @@
 import { message } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
@@ -9,13 +9,13 @@ import ShowAPR from "../containers/Farm/ShowAPR";
 import {
   queryLiquidityPair,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../services/liquidity/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance,
+  getDenomBalance
 } from "../utils/coin";
 import { commaSeparator, marketPrice } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
@@ -53,17 +53,20 @@ const PoolCardFarm = ({
     }
   }, [pool, address, markets]);
 
-  const calculatePoolLiquidity = (poolBalance) => {
-    if (poolBalance && poolBalance.length > 0) {
-      const values = poolBalance.map(
-        (item) =>
-          Number(
-            amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
-          ) * marketPrice(markets, item?.denom)
-      );
-      return values?.reduce((prev, next) => prev + next, 0); // returning sum value
-    } else return 0;
-  };
+  const calculatePoolLiquidity = useCallback(
+    (poolBalance) => {
+      if (poolBalance && poolBalance.length > 0) {
+        const values = poolBalance.map(
+          (item) =>
+            Number(
+              amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+            ) * marketPrice(markets, item?.denom)
+        );
+        return values?.reduce((prev, next) => prev + next, 0); // returning sum value
+      } else return 0;
+    },
+    [markets, assetMap]
+  );
 
   const TotalPoolLiquidity = commaSeparatorWithRounding(
     calculatePoolLiquidity(pool?.balances),
@@ -144,9 +147,7 @@ const PoolCardFarm = ({
           <div className="card-svg-icon-container">
             <div className="card-svgicon card-svgicon-1">
               <div className="card-svgicon-inner">
-                <SvgIcon
-                  name={iconNameFromDenom(pair?.baseCoinDenom)}
-                />{" "}
+                <SvgIcon name={iconNameFromDenom(pair?.baseCoinDenom)} />{" "}
               </div>
             </div>
             <div className="card-svgicon  card-svgicon-2">
