@@ -14,10 +14,10 @@ const getIbcDenomsMap = () => {
 };
 
 export const comdex = {
-  chainId: "comdex-1",
+  chainId: process.env.REACT_APP_CHAIN_ID,
   chainName: process.env.REACT_APP_CHAIN_NAME,
-  rpc: "https://rpc.comdex.one",
-  rest: "https://rest.comdex.one",
+  rpc: process.env.REACT_APP_RPC,
+  rest: process.env.REACT_APP_REST,
   explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
   walletUrlForStaking: process.env.REACT_APP_COMDEX_STAKING_URL,
   networkTag: process.env.REACT_APP_NETWORK_TAG,
