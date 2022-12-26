@@ -318,9 +318,9 @@ const Assets = ({
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(item?.coinMinimalDenom)} />
+                <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} />
               </div>{" "}
-              {denomConversion(item?.coinMinimalDenom)}{" "}
+              {denomConversion(item?.ibcDenomHash)}{" "}
             </div>
           </>
         ),
