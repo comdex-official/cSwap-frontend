@@ -1,8 +1,23 @@
+import AssetList from "../config/ibc_assets.json";
+
+const getIbcDenomsMap = () => {
+  let myMap = {};
+
+  for (let i = 0; i < AssetList?.tokens?.length; i++) {
+    if (myMap[AssetList?.tokens[i].coinMinimDenom] === undefined) {
+      myMap[AssetList?.tokens[i].coinMinimalDenom] =
+        AssetList?.tokens[i]?.ibcDenomHash;
+    }
+  }
+
+  return myMap;
+};
+
 export const comdex = {
-  chainId: process.env.REACT_APP_CHAIN_ID,
+  chainId: "comdex-1",
   chainName: process.env.REACT_APP_CHAIN_NAME,
-  rpc: process.env.REACT_APP_RPC,
-  rest: process.env.REACT_APP_REST,
+  rpc: "https://rpc.comdex.one",
+  rest: "https://rest.comdex.one",
   explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
   walletUrlForStaking: process.env.REACT_APP_COMDEX_STAKING_URL,
   networkTag: process.env.REACT_APP_NETWORK_TAG,
@@ -25,15 +40,7 @@ export const harbor = {
   coinDecimals: 6,
 };
 
-export const ibcDenoms = {
-  uatom: process.env.REACT_APP_ATOM_IBC_DENOM,
-  uosmo: process.env.REACT_APP_OSMO_IBC_DENOM,
-  uusdc: process.env.REACT_APP_USDC_IBC_DENOM,
-  "weth-wei": process.env.REACT_APP_WETH_IBC_DENOM,
-  ujuno: process.env.REACT_APP_JUNO_IBC_DENOM,
-  "wbtc-satoshi": process.env.REACT_APP_WBTC_IBC_DENOM,
-  stuatom: process.env.REACT_APP_STATOM_IBC_DENOM,
-};
+export const ibcDenoms = getIbcDenomsMap() || {};
 
 export const tokenCoinGeckoIds = [
   "cosmos",
