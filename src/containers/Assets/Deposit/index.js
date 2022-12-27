@@ -16,7 +16,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -125,8 +125,6 @@ const Deposit = ({
       fee: { amount: [{ denom: chain.denom, amount: "25000" }], gas: "200000" },
       memo: "",
     };
-
-    console.log("the tx", data);
 
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
       if (error) {

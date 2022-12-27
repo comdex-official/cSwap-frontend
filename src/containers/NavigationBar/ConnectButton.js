@@ -1,8 +1,8 @@
 import { Button, Dropdown, message } from "antd";
-import { decode } from "js-base64";
+import { decode, encode } from "js-base64";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   setAccountAddress,
@@ -25,7 +25,7 @@ import { cmst, comdex, harbor } from "../../config/network";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
-import { fetchKeplrAccountName } from "../../services/keplr";
+import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import {
   fetchAllTokens,
   queryLiquidityParams,
@@ -59,7 +59,8 @@ const ConnectButton = ({
   setAssetsInPrgoress,
   assetDenomMap,
 }) => {
-  
+  const [addressFromLocal, setAddressFromLocal] = useState();
+
   const subscription = {
     jsonrpc: "2.0",
     method: "subscribe",
@@ -76,6 +77,29 @@ const ConnectButton = ({
       query: `coin_received.receiver='${address}'`,
     },
   };
+
+  useEffect(() => {
+    let addressAlreadyExist = localStorage.getItem("ac");
+    addressAlreadyExist = decode(addressAlreadyExist);
+    setAddressFromLocal(addressAlreadyExist);
+  }, []);
+
+  useEffect(() => {
+    if (addressFromLocal) {
+      initializeChain((error, account) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setAccountAddress(account.address);
+        fetchKeplrAccountName().then((name) => {
+          setAccountName(name);
+        });
+        localStorage.setItem("ac", encode(account.address));
+        localStorage.setItem("loginType", "keplr");
+      });
+    }
+  }, [addressFromLocal]);
 
   useEffect(() => {
     if (address) {
