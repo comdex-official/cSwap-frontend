@@ -1,6 +1,6 @@
 import { Button, Form, message, Modal, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchProofHeight } from "../../../actions/asset";
 import { Col, Row, SvgIcon } from "../../../components/common";
@@ -16,7 +16,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -50,7 +50,16 @@ const Deposit = ({
     );
   };
 
+  useEffect(() => {
+    initialize();
+  }, [address]);
+
   const showModal = () => {
+    initialize();
+    setIsModalOpen(true);
+  };
+
+  const initialize = () => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
         message.error(error);
@@ -80,7 +89,6 @@ const Deposit = ({
         setProofHeight(data);
       });
     });
-    setIsModalOpen(true);
   };
 
   const signIBCTx = () => {
@@ -117,6 +125,8 @@ const Deposit = ({
       fee: { amount: [{ denom: chain.denom, amount: "25000" }], gas: "200000" },
       memo: "",
     };
+
+    console.log("the tx", data);
 
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
       if (error) {
