@@ -1,6 +1,6 @@
 import { Button, Form, message, Modal } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchProofHeight } from "../../../actions/asset";
 import { Col, Row, SvgIcon } from "../../../components/common";
@@ -41,7 +41,16 @@ const Withdraw = ({
     setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
   };
 
+  useEffect(() => {
+    initialize();
+  }, [address]);
+
   const showModal = () => {
+    initialize();
+    setIsModalOpen(true);
+  };
+
+  const initialize = () => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
         message.error(error);
@@ -58,7 +67,6 @@ const Withdraw = ({
         }
       );
     });
-    setIsModalOpen(true);
   };
 
   const signIBCTx = () => {
