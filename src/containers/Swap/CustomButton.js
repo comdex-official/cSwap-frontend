@@ -13,7 +13,7 @@ import {
   convertScientificNumberIntoDecimal,
   denomConversion,
   getAmount,
-  orderPriceConversion,
+  orderPriceConversion
 } from "../../utils/coin";
 import { getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
@@ -54,9 +54,9 @@ const CustomButton = ({
     );
   };
 
-  const calculateBuyAmount = (userInput) => {
+  const calculateBuyAmount = () => {
     const price = isLimitOrder ? limitPrice : priceWithOutConversion();
-    const amount = Number(userInput) / price;
+    const amount = Number(offerCoin?.amount) / price;
 
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
@@ -77,8 +77,6 @@ const CustomButton = ({
 
   const getMessage = (isLimitOrder) => {
     const price = calculateOrderPrice();
-    let userInput = Number(offerCoin?.amount) - Number(offerCoin?.fee);
-    // including swap fee in user input amount.
 
     return {
       typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
@@ -95,7 +93,7 @@ const CustomButton = ({
         offerCoin: {
           denom: offerCoin?.denom,
           amount: getAmount(
-            Number(userInput) + Number(offerCoin?.fee),
+            Number(offerCoin?.amount) + Number(offerCoin?.fee),
             assetMap[offerCoin?.denom]?.decimals
           ),
         },
@@ -115,8 +113,8 @@ const CustomButton = ({
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
-            ? getAmount(userInput, assetMap[offerCoin?.denom]?.decimals)
-            : calculateBuyAmount(userInput),
+            ? getAmount(offerCoin?.amount, assetMap[offerCoin?.denom]?.decimals)
+            : calculateBuyAmount(),
       },
     };
   };
