@@ -91,7 +91,7 @@ const Farm = ({
             />
           </div>
 
-          <div className="farm-heading mb-5">
+          <div className="farm-heading farm-headingtimer mb-5">
             <p>
               {" "}
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
