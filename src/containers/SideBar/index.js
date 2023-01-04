@@ -27,10 +27,6 @@ const SideBar = () => {
     }
   };
 
-  const onTabClick = () =>{
-    setIsOpen(true);
-  }
-
   return (
     <>
       <Layout
@@ -74,7 +70,7 @@ const SideBar = () => {
             </div>
             <Scrollbars>
               <div className="side_bar_inner">
-                <Tabs onClick={onTabClick} />
+                <Tabs onClick={toggle} />
               </div>
             </Scrollbars>
             <Footer />
