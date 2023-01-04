@@ -1,6 +1,21 @@
-import { comdex, ibcDenoms } from "../config/network";
+import AssetList from "../config/ibc_assets.json";
+import { comdex } from "../config/network";
 import { commaSeparator, getExponent } from "./number";
-import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
+import { lowercaseFirstLetter } from "./string";
+
+const getDenomToDisplaySymbolMap = () => {
+  let myMap = {};
+
+  for (let i = 0; i < AssetList?.tokens?.length; i++) {
+    if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
+      myMap[AssetList?.tokens[i].ibcDenomHash] = AssetList?.tokens[i]?.symbol;
+    }
+  }
+
+  return myMap;
+};
+
+let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 
 export const getAmount = (selectedAmount, decimal) =>
   (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
@@ -59,16 +74,8 @@ export const orderPriceReverseConversion = (amount) => {
 };
 
 export const denomConversion = (denom) => {
-  if (denom === "weth-wei" || denom === ibcDenoms["weth-wei"]) {
-    return "WETH";
-  }
-
-  if (denom === "wbtc-satoshi" || denom === ibcDenoms["wbtc-satoshi"]) {
-    return "WBTC";
-  }
-
-  if (denom === "stuatom" || denom === ibcDenoms["stuatom"]) {
-    return "stATOM";
+  if (denomToDisplaySymbol[denom]) {
+    return denomToDisplaySymbol[denom];
   }
 
   if (denom && denom.substr(0, 1) === "u") {
@@ -86,14 +93,6 @@ export const denomConversion = (denom) => {
       denom.substr(1, denom.length) &&
       denom.substr(1, denom.length).toUpperCase()
     );
-  } else {
-    if (denom && denom.substr(0, 3) === "ibc") {
-      const voucherDenom = ibcDenomToDenom(denom);
-
-      return voucherDenom.substr(1, voucherDenom.length).toUpperCase();
-    }
-
-    return denom;
   }
 };
 

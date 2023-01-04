@@ -1,6 +1,22 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
+import AssetList from "../config/ibc_assets.json";
 import { comdex, ibcDenoms } from "../config/network";
 import { getExponent } from "./number";
+
+const getIbcDenomToDenomMap = () => {
+  let myMap = {};
+
+  for (let i = 0; i < AssetList?.tokens?.length; i++) {
+    if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
+      myMap[AssetList?.tokens[i].ibcDenomHash] =
+        AssetList?.tokens[i]?.coinMinimalDenom;
+    }
+  }
+
+  return myMap;
+};
+
+let ibcDenomToDenomMap = getIbcDenomToDenomMap();
 
 const encoding = require("@cosmjs/encoding");
 
@@ -10,85 +26,19 @@ export const decode = (hash) =>
 export const generateHash = (txBytes) =>
   encoding.toHex(sha256(txBytes)).toUpperCase();
 
-export const ibcDenomToDenom = (key) => {
-  switch (key) {
-    case ibcDenoms["uatom"]:
-      return "uatom";
-    case ibcDenoms["uosmo"]:
-      return "uosmo";
-    case ibcDenoms["uusdc"]:
-      return "uusdc";
-    case ibcDenoms["weth-wei"]:
-      return "WETH";
-    case ibcDenoms["ujuno"]:
-      return "ujuno";
-    case ibcDenoms["wbtc-satoshi"]:
-      return "wbtc-satoshi";
-    case ibcDenoms["stuatom"]:
-      return "stuatom";
-    default:
-      return "";
-  }
-};
-
-export const denomToSymbol = (key) => {
-  switch (key) {
-    case "uatom":
-    case ibcDenoms["uatom"]:
-      return "ATOM";
-    case "udvpn":
-      return "DVPN";
-    case "uosmo":
-    case ibcDenoms["uosmo"]:
-      return "OSMO";
-    case "ucmdx":
-      return "CMDX";
-    case "uusdc":
-      return "USDC";
-    case "weth-wei":
-      return "WETH";
-    default:
-      return "cosmos";
-  }
-};
-
-export const minimalDenomToDenom = (key) => {
-  switch (key) {
-    case "uatom":
-    case ibcDenoms["uatom"]:
-      return "atom";
-    case "udvpn":
-      return "dvpn";
-    case "uosmo":
-    case ibcDenoms["uosmo"]:
-      return "osmo";
-    case "ucmdx":
-      return "cmdx";
-    default:
-      return "";
-  }
-};
+export const ibcDenomToDenom = (key) => ibcDenomToDenomMap?.[key];
 
 const iconMap = {
-  ucgold: "gold-icon",
-  ucsilver: "silver-icon",
-  ucoil: "crude-oil",
-  uatom: "atom-icon",
-  [ibcDenoms["uatom"]]: "atom-icon",
   ucmdx: "comdex-icon",
-  uosmo: "osmosis-icon",
-  [ibcDenoms["uosmo"]]: "osmosis-icon",
   ucmst: "cmst-icon",
   uharbor: "harbor-icon",
-  uusdc: "usdc-icon",
+  // taking coinMinimalDenom to match ibc denom and fetch icon.
+  [ibcDenoms["uatom"]]: "atom-icon",
+  [ibcDenoms["uosmo"]]: "osmosis-icon",
   [ibcDenoms["uusdc"]]: "usdc-icon",
-  "weth-wei": "weth-icon",
   [ibcDenoms["weth-wei"]]: "weth-icon",
-  ujuno: "juno-icon",
   [ibcDenoms["ujuno"]]: "juno-icon",
-  "wbtc-satoshi": "wbtc-icon",
   [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
-  stuatom: "statom-icon",
   [ibcDenoms["stuatom"]]: "statom-icon",
 };
 

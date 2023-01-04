@@ -11,6 +11,7 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { comdex } from "../config/network";
 import { makeHdPath } from "../utils/string";
 import { customAminoTypes } from "./aminoConverter";
+import { strideAccountParser } from "./parser";
 import { myRegistry } from "./registry";
 
 const aminoTypes = new AminoTypes(customAminoTypes);
@@ -157,7 +158,11 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       window.getOfflineSignerOnlyAmino(config.chainId);
     const client = await SigningStargateClient.connectWithSigner(
       config.rpc,
-      offlineSigner
+      offlineSigner,
+      {
+        accountParser: strideAccountParser,
+
+      }
     );
 
     client
