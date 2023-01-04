@@ -329,6 +329,11 @@
   font-size: 1.388rem;
   margin-bottom: 0;
   font-weight: 500;
+  &.farm-headingtimer{
+    @media screen and (max-width:540px) {
+      margin-top: 40px;
+    }
+  }
 }
 
 .farm-pool-list {
