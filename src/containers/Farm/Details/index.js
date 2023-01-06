@@ -266,7 +266,6 @@ const FarmDetails = ({
     },
   ];
 
-  console.log("the pair", pair);
   return (
     <Row>
       <Col md="6">
