@@ -3,6 +3,7 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
+import { setPair } from "../actions/asset";
 import { setUserLiquidityInPools } from "../actions/liquidity";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
@@ -33,15 +34,16 @@ const PoolCardFarm = ({
   rewardsMap,
   parent,
   assetMap,
+  setPair,
 }) => {
-  const [pair, setPair] = useState();
+  const [poolPair, setPoolPair] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (pool?.pairId) {
       queryLiquidityPair(pool?.pairId, (error, result) => {
         if (!error) {
-          setPair(result?.pair);
+          setPoolPair(result?.pair);
         }
       });
     }
@@ -74,9 +76,9 @@ const PoolCardFarm = ({
   );
 
   const showPairDenoms = () => {
-    if (pair?.baseCoinDenom) {
-      return `${denomConversion(pair?.baseCoinDenom)}/${denomConversion(
-        pair?.quoteCoinDenom
+    if (poolPair?.baseCoinDenom) {
+      return `${denomConversion(poolPair?.baseCoinDenom)}/${denomConversion(
+        poolPair?.quoteCoinDenom
       )}`;
     }
   };
@@ -137,22 +139,24 @@ const PoolCardFarm = ({
     }
   };
 
+  const handleNavigate = () => {
+    setPair(poolPair);
+    navigate(`/farm/${pool.id && pool.id.toNumber()}`);
+  };
+
   return (
-    <div
-      className="poolcard-two"
-      onClick={() => navigate(`/farm/${pool.id && pool.id.toNumber()}`)}
-    >
+    <div className="poolcard-two" onClick={() => handleNavigate()}>
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
             <div className="card-svgicon card-svgicon-1">
               <div className="card-svgicon-inner">
-                <SvgIcon name={iconNameFromDenom(pair?.baseCoinDenom)} />{" "}
+                <SvgIcon name={iconNameFromDenom(poolPair?.baseCoinDenom)} />{" "}
               </div>
             </div>
             <div className="card-svgicon  card-svgicon-2">
               <div className="card-svgicon-inner">
-                <SvgIcon name={iconNameFromDenom(pair?.quoteCoinDenom)} />{" "}
+                <SvgIcon name={iconNameFromDenom(poolPair?.quoteCoinDenom)} />{" "}
               </div>
             </div>
             <h3>{showPairDenoms()}</h3>
@@ -203,6 +207,7 @@ const PoolCardFarm = ({
 };
 
 PoolCardFarm.propTypes = {
+  setPair: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
@@ -244,6 +249,7 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setUserLiquidityInPools,
+  setPair,
 };
 
 export default connect(stateToProps, actionsToProps)(PoolCardFarm);
