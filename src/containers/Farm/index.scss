@@ -329,8 +329,8 @@
   font-size: 1.388rem;
   margin-bottom: 0;
   font-weight: 500;
-  &.farm-headingtimer{
-    @media screen and (max-width:540px) {
+  &.farm-headingtimer {
+    @media screen and (max-width: 540px) {
       margin-top: 40px;
     }
   }
@@ -438,6 +438,11 @@
             color: $white;
           }
         }
+        .percent-box-parent {
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+        }
         .percent-box {
           border: 1px solid $text-color-light;
           color: $text-color-light;
@@ -445,7 +450,7 @@
           font-size: $font-size-sm + 1;
           border-radius: 5px;
           padding: 1px 4px;
-          width: fit-content;
+          width: 100%;
           span {
             display: flex;
             align-items: center;
@@ -700,7 +705,6 @@
     line-height: 13px;
     border-radius: 10px;
     font-weight: 400;
-
 
     .dark-mode & {
       background: $background-dark1 !important;

@@ -70,15 +70,45 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
       );
     } else {
       return Object.keys(list)?.map((key) => (
-        <div key={uuid()}>
-          <span className="ml-1">
-            {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
-            {commaSeparator(
-              (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
-            )}
-            % {list[key]?.master_pool ? "- Master Pool" : "- External"}
-          </span>
-        </div>
+        <>
+          {list[key]?.master_pool ? (
+            <Tooltip
+              title={
+                <>
+                  Providing liquidity only in master pool makes you eligible for the external APR on Master pool.
+                  To be eligible to Earn ‘Master pool’ APR and equal amount of liquidity has to be provided in any of the child pools.
+                  <a href="https://docs.cswap.one/farming-rewards" target="_blank">Read more</a> about the mechanism here.
+                </>
+              }
+              overlayClassName="comdex-tooltip"
+            >
+              <div key={uuid()} className="percent-box">
+                <span className="ml-1">
+                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {commaSeparator(
+                    (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
+                  )}
+                  % {list[key]?.master_pool ? "- Master Pool" : "- External"}
+                </span>
+
+              </div>
+            </Tooltip>
+
+          ) : (
+
+            <div key={uuid()} className="percent-box">
+              <span className="ml-1">
+                {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                {commaSeparator(
+                  (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
+                )}
+                % {list[key]?.master_pool ? "- Master Pool" : "- External"}
+              </span>
+
+            </div>
+
+          )
+          }</>
       ));
     }
   };
