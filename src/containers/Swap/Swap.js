@@ -88,14 +88,12 @@ const Swap = ({
       (item) => item.id.toNumber === firstPool?.pairId.toNumber
     )[0];
 
-    if (poolPair?.id) {
-      updatePoolDetails(poolPair?.baseCoinDenom, poolPair?.quoteCoinDenom);
-    }
-
     if (!offerCoin?.denom && !demandCoin?.denom && poolPair?.id) {
       setOfferCoinDenom(poolPair?.quoteCoinDenom);
       setDemandCoinDenom(poolPair?.baseCoinDenom);
+      updatePoolDetails(poolPair?.quoteCoinDenom, poolPair?.baseCoinDenom);
     }
+
     resetValues();
   }, [pools, pairs]);
 
