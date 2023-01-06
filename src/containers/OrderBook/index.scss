@@ -4,6 +4,9 @@
 .orderbook-wrapper{
   display: flex;
   font-family: 'Red Hat Display', sans-serif;
+  @media screen and (max-width:1300px) {
+    flex-flow: wrap;
+  }
   .order-tables{
     .ant-table{
       background: none;
@@ -41,6 +44,9 @@
   }
   .orderbook-col1{
     width: 55%;
+    @media screen and (max-width:1300px) {
+      width: 100%;
+    }
     .chart-card{
       background: $background-light;
       padding: 1px;
@@ -192,6 +198,14 @@
   .orderbook-col2{
     width: 24%;
     margin: 0 22px;
+    @media screen and (max-width:1300px) {
+      width: 45%;
+      margin: 2rem 5% 0 0;
+    }
+    @media screen and (max-width:576px) {
+      width: 100%;
+      margin: 2rem 0 0 0;
+    }
     .order-card{
       background: $background-light;
       padding: 1px;
@@ -241,6 +255,14 @@
   }
   .orderbook-col3{
     width: 31%;
+    @media screen and (max-width:1300px) {
+      width: 50%;
+      margin-top: 2rem;
+    }
+    @media screen and (max-width:576px) {
+      width: 100%;
+      margin: 2rem 0 0 0;
+    }
     .spot-card{
       background: $background-light;
       padding: 1px;

@@ -394,7 +394,7 @@ const OrderBook = ({}) => {
               items={tabItemsBottom}
             />
             <div>
-              <Table className="order-tables" dataSource={orderTabledataSource} columns={ordersTablecolumns} pagination={false} />
+              <Table scroll={{ x: '100%' }}className="order-tables" dataSource={orderTabledataSource} columns={ordersTablecolumns} pagination={false} />
             </div>
           </div>
 
