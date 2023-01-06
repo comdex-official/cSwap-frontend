@@ -108,8 +108,6 @@ const FarmDetails = ({
     if (id) {
       fetchPool(id);
     }
-
-    setPair({});
   }, []);
 
   const fetchPool = () => {
