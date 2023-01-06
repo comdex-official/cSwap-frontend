@@ -108,8 +108,6 @@ const FarmDetails = ({
     if (id) {
       fetchPool(id);
     }
-
-    setPair({});
   }, []);
 
   const fetchPool = () => {
@@ -268,6 +266,7 @@ const FarmDetails = ({
     },
   ];
 
+  console.log("the pair", pair);
   return (
     <Row>
       <Col md="6">
