@@ -230,6 +230,13 @@
         .right-action{
           color: #CDFE43;
           font-size: 12px;
+          display: flex;
+          align-items: center;
+          .icon {
+            fill: #CDFE43;
+            width: 10px;
+            margin-left: 5px;
+          }
         }
       }
       .card-body {

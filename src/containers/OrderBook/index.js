@@ -403,7 +403,7 @@ const OrderBook = ({}) => {
           <div className="order-card">
             <div className="card-header">
               <h4>Order Book</h4>
-              <div className="right-action">0.001</div>
+              <div className="right-action">0.001 <SvgIcon name='arrow-down' viewbox='0 0 19.244 10.483' /></div>
             </div>
             <div className="card-body">
               <Table className="order-tables" dataSource={dataSource} columns={columns} pagination={false} />
