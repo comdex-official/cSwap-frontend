@@ -4,7 +4,6 @@ import FarmDetails from "./containers/Farm/Details";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
 import Balances from "./containers/MyHome";
-import OrderBook from "./containers/OrderBook";
 import Swap from "./containers/Swap";
 
 const routes = [
@@ -35,10 +34,6 @@ const routes = [
   {
     path: "/farm/:id",
     element: <FarmDetails />,
-  },
-  {
-    path: "/orderbook",
-    element: <OrderBook />,
   },
 ];
 
