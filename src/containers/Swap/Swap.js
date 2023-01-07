@@ -8,32 +8,32 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex, harbor } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber,
+  ValidatePriceInputNumber
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList,
+  queryPoolsList
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import {
   decimalConversion,
   getExponent,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -88,18 +88,12 @@ const Swap = ({
       (item) => item.id.toNumber === firstPool?.pairId.toNumber
     )[0];
 
-    if (!offerCoin?.denom && poolPair?.id) {
-      setOfferCoinDenom(poolPair?.baseCoinDenom);
-    }
-    if (!demandCoin?.denom && poolPair?.id) {
-      setDemandCoinDenom(poolPair?.quoteCoinDenom);
-    }
-
-    if (poolPair?.id) {
-      updatePoolDetails(poolPair?.baseCoinDenom, poolPair?.quoteCoinDenom);
+    if (!offerCoin?.denom && !demandCoin?.denom && poolPair?.id) {
+      setOfferCoinDenom(poolPair?.quoteCoinDenom);
+      setDemandCoinDenom(poolPair?.baseCoinDenom);
+      updatePoolDetails(poolPair?.quoteCoinDenom, poolPair?.baseCoinDenom);
     }
 
-    setReverse(false);
     resetValues();
   }, [pools, pairs]);
 
