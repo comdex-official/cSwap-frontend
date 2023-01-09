@@ -40,6 +40,7 @@ const iconMap = {
   [ibcDenoms["ujuno"]]: "juno-icon",
   [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
   [ibcDenoms["stuatom"]]: "statom-icon",
+  [ibcDenoms["wmatic-wei"]]: "wmatic-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
