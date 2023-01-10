@@ -285,7 +285,6 @@ const ConnectButton = ({
 
   const items = [{ label: <ConnectModal />, key: "item-1" }];
 
-  console.log("the tag", NETWORK_TAG);
   return (
     <>
       {address ? (
