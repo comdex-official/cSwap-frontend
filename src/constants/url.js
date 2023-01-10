@@ -1,1 +1,3 @@
-export const API_URL = process.env.REACT_APP_API_URL;
+import { envConfig } from "../config/envConfig";
+
+export const API_URL = envConfig?.apiUrl;

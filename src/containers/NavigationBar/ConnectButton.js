@@ -105,7 +105,7 @@ const ConnectButton = ({
 
   useEffect(() => {
     if (address) {
-      let ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_API_URL}`);
+      let ws = new WebSocket(`${comdex?.webSocketApiUrl}`);
 
       ws.onopen = () => {
         ws.send(JSON.stringify(subscription));
