@@ -26,7 +26,6 @@ export const comdex = {
   coinDecimals: envConfig?.coinDecimals,
   prefix: envConfig?.prefix,
   coinType: envConfig?.coinType,
-  networkTag: envConfig?.networkTag,
   webSocketApiUrl: envConfig?.webSocketApiUrl,
 };
 

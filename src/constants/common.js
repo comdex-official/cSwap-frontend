@@ -10,4 +10,5 @@ let app = process.env.REACT_APP_APP;
 
 export const APP_ID = Number(envConfig?.[app]?.appId);
 export const MASTER_POOL_ID = Number(envConfig?.[app]?.masterPoolId);
+export const NETWORK_TAG = envConfig?.[app]?.networkTag;
 export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT;
