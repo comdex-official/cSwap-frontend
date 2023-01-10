@@ -1,9 +1,13 @@
+import { envConfig } from "../config/envConfig";
+
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 export const DEFAULT_FEE = 100000;
 export const DOLLAR_DECIMALS = 2;
 export const MAX_SLIPPAGE_TOLERANCE = 3;
 
-export const APP_ID = Number(process.env.REACT_APP_APP_ID);
-export const MASTER_POOL_ID = Number(process.env.REACT_APP_APP_MASTER_POOL_ID);
-export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT
+let app = process.env.REACT_APP_APP;
+
+export const APP_ID = Number(envConfig?.[app]?.appId);
+export const MASTER_POOL_ID = Number(envConfig?.[app]?.masterPoolId);
+export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT;
