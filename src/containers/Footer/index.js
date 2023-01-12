@@ -33,7 +33,7 @@ const Footer = () => {
           title="Discord"
           target="_blank"
           rel="noreferrer"
-          href="https://bit.ly/ComdexOfficialDiscord"
+          href="https://discord.gg/gC7eftryXx"
         >
           <SvgIcon name="discord" viewbox="0 0 29.539 22.155" />
         </a>
