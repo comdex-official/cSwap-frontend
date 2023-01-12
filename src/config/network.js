@@ -1,4 +1,5 @@
 import AssetList from "../config/ibc_assets.json";
+import { envConfig } from "./envConfig";
 
 const getIbcDenomsMap = () => {
   let myMap = {};
@@ -14,18 +15,18 @@ const getIbcDenomsMap = () => {
 };
 
 export const comdex = {
-  chainId: process.env.REACT_APP_CHAIN_ID,
-  chainName: process.env.REACT_APP_CHAIN_NAME,
-  rpc: process.env.REACT_APP_RPC,
-  rest: process.env.REACT_APP_REST,
-  explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
-  walletUrlForStaking: process.env.REACT_APP_COMDEX_STAKING_URL,
-  networkTag: process.env.REACT_APP_NETWORK_TAG,
-  coinDenom: "CMDX",
-  coinMinimalDenom: "ucmdx",
-  coinDecimals: 6,
-  prefix: "comdex",
-  coinType: 118,
+  chainId: envConfig?.chainId,
+  chainName: envConfig?.chainName,
+  rpc: envConfig?.rpc,
+  rest: envConfig?.rest,
+  explorerUrlToTx: envConfig?.explorerUrlToTx,
+  walletUrlForStaking: envConfig?.walletUrlForStaking,
+  coinDenom: envConfig?.coinDenom,
+  coinMinimalDenom: envConfig?.coinMinimalDenom,
+  coinDecimals: envConfig?.coinDecimals,
+  prefix: envConfig?.prefix,
+  coinType: envConfig?.coinType,
+  webSocketApiUrl: envConfig?.webSocketApiUrl,
 };
 
 export const cmst = {

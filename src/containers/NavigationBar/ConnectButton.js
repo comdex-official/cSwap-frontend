@@ -22,7 +22,11 @@ import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
 import { cmst, comdex, harbor } from "../../config/network";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  NETWORK_TAG
+} from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
@@ -105,7 +109,7 @@ const ConnectButton = ({
 
   useEffect(() => {
     if (address) {
-      let ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_API_URL}`);
+      let ws = new WebSocket(`${comdex?.webSocketApiUrl}`);
 
       ws.onopen = () => {
         ws.send(JSON.stringify(subscription));
@@ -287,7 +291,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="testnet" /> {comdex?.networkTag || "Testnet"}
+              <SvgIcon name="testnet" /> {NETWORK_TAG || "Testnet"}
             </div>
           </div>
           <DisConnectModal />
