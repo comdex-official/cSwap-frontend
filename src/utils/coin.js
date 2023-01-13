@@ -17,10 +17,16 @@ const getDenomToDisplaySymbolMap = () => {
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 
-export const getAmount = (selectedAmount, decimal) =>
-  (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
-    .toFixed(0)
-    .toString();
+export const getAmount = (selectedAmount, decimal) => {
+  let result =
+    Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
+
+  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+    Number(result)?.toFixed(0)?.toString()
+  );
+
+  return amountWithoutScientificNumber;
+};
 
 export const amountConversionWithComma = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
