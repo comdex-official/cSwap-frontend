@@ -47,3 +47,13 @@ export const getExponent = (number) => {
 
   return count;
 };
+
+export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
+  return (
+    1 /
+    (1 -
+      (1 / 2) *
+        (Math.sqrt(minimumPrice / currentPrice) +
+          Math.sqrt(currentPrice / maximumPrice)))
+  );
+};

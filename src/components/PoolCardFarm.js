@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, Slider } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
@@ -16,10 +16,16 @@ import {
   denomConversion,
   getDenomBalance
 } from "../utils/coin";
-import { commaSeparator, marketPrice } from "../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  getAMP,
+  marketPrice
+} from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
 import { SvgIcon } from "./common";
+import TooltipIcon from "./TooltipIcon";
 
 const PoolCardFarm = ({
   lang,
@@ -196,6 +202,74 @@ const PoolCardFarm = ({
               )}
               %
             </div>
+          </div>
+        </div>
+        <div className="card-bottom">
+          <div className="cardbottom-row">
+            <label>Type</label>
+            <p className="mr-2">
+              {pool?.type === 2
+                ? "Ranged Pool"
+                : pool?.type === 1
+                ? "Basic Pool"
+                : "Not Specifiled"}
+              {pool?.type === 2 ? (
+                <TooltipIcon
+                  text={
+                    <>
+                      <div>
+                        <label>In range</label>
+                        <p>
+                          <Slider
+                            className="comdex-slider-alt"
+                            value={Number(decimalConversion(pool?.price))}
+                            max={Number(decimalConversion(pool?.maxPrice))}
+                            min={Number(decimalConversion(pool?.minPrice))}
+                            disabled
+                            tooltip={{ open: false }}
+                          />
+                        </p>
+                      </div>
+                      <div>
+                        <label>Current Price</label>
+                        <p>
+                          {Number(decimalConversion(pool?.price))?.toFixed(
+                            DOLLAR_DECIMALS
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <label>Min Price</label>
+                        <p>
+                          {Number(decimalConversion(pool?.minPrice))?.toFixed(
+                            DOLLAR_DECIMALS
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <label>Max Price</label>
+                        <p>
+                          {Number(decimalConversion(pool?.maxPrice))?.toFixed(
+                            DOLLAR_DECIMALS
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <label>AMP</label>
+                        <p>
+                          {getAMP(
+                            Number(decimalConversion(pool?.price)),
+                            Number(decimalConversion(pool?.minPrice)),
+                            Number(decimalConversion(pool?.maxPrice))
+                          )?.toFixed(DOLLAR_DECIMALS)}
+                        </p>
+                      </div>
+                    </>
+                  }
+                  overlayClassName="comdex-tooltip"
+                />
+              ) : null}
+            </p>
           </div>
         </div>
       </div>
