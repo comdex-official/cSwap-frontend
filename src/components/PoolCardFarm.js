@@ -1,14 +1,12 @@
 import { message } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { setPair } from "../actions/asset";
 import { setUserLiquidityInPools } from "../actions/liquidity";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
-  queryLiquidityPair,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks
 } from "../services/liquidity/query";
@@ -34,31 +32,13 @@ const PoolCardFarm = ({
   rewardsMap,
   parent,
   assetMap,
-  setPair,
 }) => {
-  const [poolPair, setPoolPair] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (pool?.pairId) {
-      queryLiquidityPair(pool?.pairId, (error, result) => {
-        if (!error) {
-          setPoolPair(result?.pair);
-        }
-      });
-    }
-  }, [pool]);
-
-  useEffect(() => {
-    if (pool?.id && address) {
-      getUserLiquidity(pool);
-    }
-  }, [pool, address, markets]);
 
   const calculatePoolLiquidity = useCallback(
     (poolBalance) => {
-      if (poolBalance && poolBalance.length > 0) {
-        const values = poolBalance.map(
+      if (poolBalance && Object.values(poolBalance)?.length) {
+        const values = Object.values(poolBalance).map(
           (item) =>
             Number(
               amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
@@ -76,71 +56,83 @@ const PoolCardFarm = ({
   );
 
   const showPairDenoms = () => {
-    if (poolPair?.baseCoinDenom) {
-      return `${denomConversion(poolPair?.baseCoinDenom)}/${denomConversion(
-        poolPair?.quoteCoinDenom
-      )}`;
+    if (pool?.balances?.baseCoin?.denom) {
+      return `${denomConversion(
+        pool?.balances?.baseCoin?.denom
+      )}/${denomConversion(pool?.balances?.quoteCoin?.denom)}`;
     }
   };
 
-  const getUserLiquidity = (pool) => {
-    if (address) {
-      queryPoolSoftLocks(address, pool?.id, (error, result) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-
-        const availablePoolToken =
-          getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-
-        const activeSoftLock = result?.activePoolCoin;
-        const queuedSoftLocks = result?.queuedPoolCoin;
-
-        const queuedAmounts =
-          queuedSoftLocks &&
-          queuedSoftLocks.length > 0 &&
-          queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-        const userLockedAmount =
-          Number(
-            queuedAmounts?.length > 0 &&
-              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-          ) + Number(activeSoftLock?.amount) || 0;
-
-        const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
-        queryPoolCoinDeserialize(pool?.id, totalPoolToken, (error, result) => {
+  const getUserLiquidity = useCallback(
+    (pool) => {
+      if (address) {
+        queryPoolSoftLocks(address, pool?.id, (error, result) => {
           if (error) {
             message.error(error);
             return;
           }
 
-          const providedTokens = result?.coins;
-          const totalLiquidityInDollar =
-            Number(
-              amountConversion(
-                providedTokens?.[0]?.amount,
-                assetMap[providedTokens?.[0]?.denom]?.decimals
-              )
-            ) *
-              marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(
-              amountConversion(
-                providedTokens?.[1]?.amount,
-                assetMap[providedTokens?.[1]?.denom]?.decimals
-              )
-            ) *
-              marketPrice(markets, providedTokens?.[1]?.denom);
+          const availablePoolToken =
+            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-          if (totalLiquidityInDollar) {
-            setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
-          }
+          const activeSoftLock = result?.activePoolCoin;
+          const queuedSoftLocks = result?.queuedPoolCoin;
+
+          const queuedAmounts =
+            queuedSoftLocks &&
+            queuedSoftLocks.length > 0 &&
+            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+          const userLockedAmount =
+            Number(
+              queuedAmounts?.length > 0 &&
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+            ) + Number(activeSoftLock?.amount) || 0;
+
+          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+          queryPoolCoinDeserialize(
+            pool?.id,
+            totalPoolToken,
+            (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              const providedTokens = result?.coins;
+              const totalLiquidityInDollar =
+                Number(
+                  amountConversion(
+                    providedTokens?.[0]?.amount,
+                    assetMap[providedTokens?.[0]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
+                Number(
+                  amountConversion(
+                    providedTokens?.[1]?.amount,
+                    assetMap[providedTokens?.[1]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[1]?.denom);
+
+              if (totalLiquidityInDollar) {
+                setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
+              }
+            }
+          );
         });
-      });
+      }
+    },
+    [address, assetMap, balances, markets, setUserLiquidityInPools]
+  );
+
+  useEffect(() => {
+    if (pool?.id) {
+      getUserLiquidity(pool);
     }
-  };
+  }, [pool, getUserLiquidity]);
 
   const handleNavigate = () => {
-    setPair(poolPair);
     navigate(`/farm/${pool.id && pool.id.toNumber()}`);
   };
 
@@ -151,12 +143,16 @@ const PoolCardFarm = ({
           <div className="card-svg-icon-container">
             <div className="card-svgicon card-svgicon-1">
               <div className="card-svgicon-inner">
-                <SvgIcon name={iconNameFromDenom(poolPair?.baseCoinDenom)} />{" "}
+                <SvgIcon
+                  name={iconNameFromDenom(pool?.balances?.baseCoin?.denom)}
+                />{" "}
               </div>
             </div>
             <div className="card-svgicon  card-svgicon-2">
               <div className="card-svgicon-inner">
-                <SvgIcon name={iconNameFromDenom(poolPair?.quoteCoinDenom)} />{" "}
+                <SvgIcon
+                  name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
+                />{" "}
               </div>
             </div>
             <h3>{showPairDenoms()}</h3>
@@ -207,7 +203,6 @@ const PoolCardFarm = ({
 };
 
 PoolCardFarm.propTypes = {
-  setPair: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
@@ -249,7 +244,6 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setUserLiquidityInPools,
-  setPair,
 };
 
 export default connect(stateToProps, actionsToProps)(PoolCardFarm);

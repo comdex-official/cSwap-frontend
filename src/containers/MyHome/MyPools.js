@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import {
   setFirstReserveCoinDenom,
   setPools,
-  setSecondReserveCoinDenom
+  setSecondReserveCoinDenom,
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
@@ -14,7 +14,7 @@ import TooltipIcon from "../../components/TooltipIcon";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
@@ -46,7 +46,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       true,
       false
     );
-  }, []);
+  }, [setPools]);
 
   const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
     pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))

@@ -9,13 +9,12 @@ import {
   setAccountBalances,
   setAccountName,
   setAssetBalance,
-  setPoolBalance,
-  showAccountConnectModal
+  showAccountConnectModal,
 } from "../../actions/account";
 import {
   setAppAssets,
   setAssets,
-  setAssetsInPrgoress
+  setAssetsInPrgoress,
 } from "../../actions/asset";
 import { setPoolIncentives } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
@@ -25,7 +24,7 @@ import { cmst, comdex, harbor } from "../../config/network";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  NETWORK_TAG
+  NETWORK_TAG,
 } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
@@ -33,7 +32,7 @@ import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import {
   fetchAllTokens,
   queryLiquidityParams,
-  queryPoolIncentives
+  queryPoolIncentives,
 } from "../../services/liquidity/query";
 import { fetchRestPrices } from "../../services/oracle/query";
 import { amountConversion } from "../../utils/coin";
@@ -48,11 +47,9 @@ const ConnectButton = ({
   setAccountBalances,
   lang,
   setAssetBalance,
-  setPoolBalance,
   markets,
   refreshBalance,
   setMarkets,
-  poolBalances,
   setAccountName,
   setPoolIncentives,
   setParams,
@@ -105,7 +102,7 @@ const ConnectButton = ({
         localStorage.setItem("loginType", "keplr");
       });
     }
-  }, [addressFromLocal]);
+  }, [addressFromLocal, setAccountAddress, setAccountName]);
 
   useEffect(() => {
     if (address) {
@@ -146,17 +143,7 @@ const ConnectButton = ({
         setAccountName(name);
       });
     }
-  }, [address, refreshBalance]);
-
-  useEffect(() => {
-    fetchPrices();
-    fetchAssets(
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE * 2, // taking 20 records
-      true,
-      false
-    );
-  }, []);
+  }, [address, refreshBalance, setAccountAddress, setAccountName]);
 
   const getPrice = useCallback(
     (denom) => {
@@ -187,12 +174,6 @@ const ConnectButton = ({
     [getPrice, setAssetBalance, assetMap]
   );
 
-  const calculatePoolBalance = useCallback(() => {
-    const sum = Lodash.sumBy(poolBalances);
-
-    setPoolBalance(Number(sum * 10 ** 6));
-  }, [poolBalances, setPoolBalance]);
-
   const fetchBalances = useCallback(
     (address) => {
       queryAllBalances(address, (error, result) => {
@@ -201,10 +182,9 @@ const ConnectButton = ({
         }
         setAccountBalances(result.balances, result.pagination);
         calculateAssetBalance(result.balances);
-        calculatePoolBalance(result.balances);
       });
     },
-    [calculateAssetBalance, setAccountBalances, calculatePoolBalance]
+    [calculateAssetBalance, setAccountBalances]
   );
 
   useEffect(() => {
@@ -216,11 +196,6 @@ const ConnectButton = ({
   useEffect(() => {
     calculateAssetBalance(balances);
   }, [balances, calculateAssetBalance]);
-
-  useEffect(() => {
-    fetchPoolIncentives();
-    fetchParams();
-  }, []);
 
   useEffect(() => {
     if (!Object.keys(assetDenomMap)?.length) {
@@ -235,9 +210,9 @@ const ConnectButton = ({
         }
       });
     }
-  }, [setAppAssets, assetDenomMap]);
+  }, [setAppAssets, assetDenomMap, setAssetsInPrgoress]);
 
-  const fetchPrices = () => {
+  const fetchPrices = useCallback(() => {
     fetchRestPrices((error, result) => {
       if (error) {
         message.error(error);
@@ -246,20 +221,33 @@ const ConnectButton = ({
 
       setMarkets(result.data);
     });
-  };
+  }, [setMarkets]);
 
-  const fetchAssets = (offset, limit, countTotal, reverse) => {
-    queryAssets(offset, limit, countTotal, reverse, (error, data) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
+  const fetchAssets = useCallback(
+    (offset, limit, countTotal, reverse) => {
+      queryAssets(offset, limit, countTotal, reverse, (error, data) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
 
-      setAssets(data.assets);
-    });
-  };
+        setAssets(data.assets);
+      });
+    },
+    [setAssets]
+  );
 
-  const fetchParams = () => {
+  useEffect(() => {
+    fetchPrices();
+    fetchAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE * 2, // taking 20 records
+      true,
+      false
+    );
+  }, [fetchAssets, fetchPrices]);
+
+  const fetchParams = useCallback(() => {
     queryLiquidityParams((error, result) => {
       if (error) {
         message.error(error);
@@ -270,9 +258,9 @@ const ConnectButton = ({
         setParams(result?.params);
       }
     });
-  };
+  }, [setParams]);
 
-  const fetchPoolIncentives = () => {
+  const fetchPoolIncentives = useCallback(() => {
     queryPoolIncentives((error, result) => {
       if (error) {
         message.error(error);
@@ -281,7 +269,12 @@ const ConnectButton = ({
 
       setPoolIncentives(result?.poolIncentives);
     });
-  };
+  }, [setPoolIncentives]);
+
+  useEffect(() => {
+    fetchPoolIncentives();
+    fetchParams();
+  }, [fetchParams, fetchPoolIncentives]);
 
   const items = [{ label: <ConnectModal />, key: "item-1" }];
 
@@ -327,7 +320,6 @@ ConnectButton.propTypes = {
   setAppAssets: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
-  setPoolBalance: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
@@ -339,7 +331,6 @@ ConnectButton.propTypes = {
     })
   ),
   markets: PropTypes.object,
-  poolBalances: PropTypes.array,
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({
@@ -362,7 +353,6 @@ const stateToProps = (state) => {
     show: state.account.showModal,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
-    poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
     assetMap: state.asset.map,
@@ -374,7 +364,6 @@ const actionsToProps = {
   showAccountConnectModal,
   setAccountAddress,
   setAccountBalances,
-  setPoolBalance,
   setAssetBalance,
   setMarkets,
   setAccountName,

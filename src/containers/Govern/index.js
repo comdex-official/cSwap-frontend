@@ -1,6 +1,6 @@
 import { Button, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setAllProposals, setProposals } from "../../actions/govern";
@@ -17,11 +17,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
   const [inProgress, setInProgress] = useState(false);
 
-  useEffect(() => {
-    fetchAllProposals();
-  }, []);
-
-  const fetchAllProposals = () => {
+  const fetchAllProposals = useCallback(() => {
     setInProgress(true);
     fetchRestProposals((error, result) => {
       setInProgress(false);
@@ -33,7 +29,11 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
       setProposals(result?.proposals?.reverse());
       setAllProposals(result?.proposals);
     });
-  };
+  }, [setAllProposals, setProposals]);
+
+  useEffect(() => {
+    fetchAllProposals();
+  }, [fetchAllProposals]);
 
   const filterAllProposal = (value) => {
     let allFilteredProposal =

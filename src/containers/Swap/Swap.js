@@ -184,25 +184,21 @@ const Swap = ({
   };
 
   useEffect(() => {
-    if (pool?.balances?.length > 0) {
-      const baseCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.baseCoinDenom
-      )?.amount;
-      const quoteCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.quoteCoinDenom
-      )?.amount;
+    if (pool?.balances?.baseCoin?.denom) {
+      const baseCoinBalanceInPool = pool?.balances?.baseCoin?.amount || 0;
+      const quoteCoinBalanceInPool = pool?.balances?.quoteCoin?.amount || 0;
 
       const baseCoinPoolPrice =
         Number(
           amountConversion(
             quoteCoinBalanceInPool,
-            assetMap[pair?.quoteCoinDenom]?.decimals
+            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
           )
         ) /
         Number(
           amountConversion(
             baseCoinBalanceInPool,
-            assetMap[pair?.baseCoinDenom]?.decimals
+            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
           )
         );
 
@@ -215,7 +211,7 @@ const Swap = ({
         Number(baseCoinPoolPriceWithoutConversion)
       );
     }
-  }, [pool]);
+  }, [pool, assetMap, setBaseCoinPoolPrice]);
 
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(
@@ -252,9 +248,11 @@ const Swap = ({
   };
 
   const handleOfferCoinAmountChange = (value) => {
-    const selectedAsset = poolBalance.filter(
-      (item) => item?.denom === offerCoin?.denom
-    )[0];
+    const selectedAsset =
+      poolBalance &&
+      Object.values(poolBalance).filter(
+        (item) => item?.denom === offerCoin?.denom
+      )[0];
 
     const assetVolume =
       selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);

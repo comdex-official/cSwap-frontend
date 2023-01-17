@@ -10,7 +10,7 @@ import {
   setPoolBalance,
   setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
-import { setComplete, setReverse } from "../../../../actions/swap";
+import { setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
@@ -43,7 +43,6 @@ const Deposit = ({
   reverse,
   setReverse,
   markets,
-  setComplete,
   pair,
   refreshData,
   updateBalance,
@@ -57,61 +56,42 @@ const Deposit = ({
   const [inputValidationError, setInputValidationError] = useState();
   const [outputValidationError, setOutputValidationError] = useState();
 
-  useEffect(() => {
-    setComplete(false);
-    setReverse(false);
-  }, []);
+  const firstAssetAvailableBalance =
+    getDenomBalance(balances, pool?.balances?.baseCoin?.denom) || 0;
+
+  const secondAssetAvailableBalance =
+    getDenomBalance(balances, pool?.balances?.quoteCoin?.denom) || 0;
+
+  const getOutputPrice = useCallback(() => {
+    return reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
+  }, [baseCoinPoolPrice, reverse]);
 
   useEffect(() => {
-    if (pool?.balances?.length > 0 && pair?.id) {
-      const baseCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.baseCoinDenom
-      )?.amount;
-      const quoteCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.quoteCoinDenom
-      )?.amount;
+    setReverse(false);
+  }, [setReverse]);
+
+  useEffect(() => {
+    if (pool?.balances?.baseCoin?.denom) {
+      const baseCoinBalanceInPool = pool?.balances?.baseCoin?.amount || 0;
+      const quoteCoinBalanceInPool = pool?.balances?.quoteCoin?.amount || 0;
 
       const baseCoinPoolPrice =
         Number(
           amountConversion(
             quoteCoinBalanceInPool,
-            assetMap[pair?.quoteCoinDenom]?.decimals
+            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
           )
         ) /
         Number(
           amountConversion(
             baseCoinBalanceInPool,
-            assetMap[pair?.baseCoinDenom]?.decimals
+            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
           )
         );
 
       setBaseCoinPoolPrice(Number(baseCoinPoolPrice));
     }
-  }, [pool, pair]);
-
-  useEffect(() => {
-    if (firstInput) {
-      const numberOfTokens = (firstInput * getOutputPrice()).toFixed(
-        assetMap[pair?.quoteCoinDenom]?.decimals
-      );
-
-      setOutputValidationError(
-        ValidateInputNumber(
-          Number(
-            getAmount(numberOfTokens, assetMap[pair?.quoteCoinDenom]?.decimals)
-          ),
-          secondAssetAvailableBalance,
-          "macro"
-        )
-      );
-
-      isFinite(Number(numberOfTokens)) && setSecondInput(numberOfTokens);
-    }
-  }, [baseCoinPoolPrice]);
-
-  const getOutputPrice = () => {
-    return reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
-  };
+  }, [pool, assetMap, setBaseCoinPoolPrice]);
 
   const getInputPrice = () => {
     return reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
@@ -125,20 +105,25 @@ const Deposit = ({
   };
 
   const handleFirstInputChange = (value) => {
-    value = toDecimals(value, assetMap[pair?.baseCoinDenom]?.decimals)
+    value = toDecimals(
+      value,
+      assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+    )
       .toString()
       .trim();
 
     setInputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value, assetMap[pair?.baseCoinDenom]?.decimals)),
+        Number(
+          getAmount(value, assetMap[pool?.balances?.baseCoin?.denom]?.decimals)
+        ),
         firstAssetAvailableBalance,
         "macro"
       )
     );
 
     const numberOfTokens = (value * getOutputPrice()).toFixed(
-      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+      getExponent(assetMap[pool?.balances?.quoteCoin?.denom]?.decimals)
     );
 
     setFirstInput(value);
@@ -146,7 +131,10 @@ const Deposit = ({
     setOutputValidationError(
       ValidateInputNumber(
         Number(
-          getAmount(numberOfTokens, assetMap[pair?.quoteCoinDenom]?.decimals)
+          getAmount(
+            numberOfTokens,
+            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+          )
         ),
         secondAssetAvailableBalance,
         "macro"
@@ -156,20 +144,25 @@ const Deposit = ({
   };
 
   const handleSecondInputChange = (value) => {
-    value = toDecimals(value, assetMap[pair?.quoteCoinDenom]?.decimals)
+    value = toDecimals(
+      value,
+      assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+    )
       .toString()
       .trim();
 
     setOutputValidationError(
       ValidateInputNumber(
-        Number(getAmount(value, assetMap[pair?.quoteCoinDenom]?.decimals)),
+        Number(
+          getAmount(value, assetMap[pool?.balances?.quoteCoin?.denom]?.decimals)
+        ),
         secondAssetAvailableBalance,
         "macro"
       )
     );
 
     const numberOfTokens = (value * getInputPrice()).toFixed(
-      getExponent(assetMap[pair?.baseCoinDenom]?.decimals)
+      getExponent(assetMap[pool?.balances?.baseCoin?.denom]?.decimals)
     );
 
     setSecondInput(value);
@@ -177,7 +170,10 @@ const Deposit = ({
     setInputValidationError(
       ValidateInputNumber(
         Number(
-          getAmount(numberOfTokens, assetMap[pair?.baseCoinDenom]?.decimals)
+          getAmount(
+            numberOfTokens,
+            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+          )
         ),
         firstAssetAvailableBalance,
         "macro"
@@ -187,25 +183,22 @@ const Deposit = ({
     isFinite(Number(numberOfTokens)) && setFirstInput(numberOfTokens);
   };
 
-  const firstAssetAvailableBalance =
-    getDenomBalance(balances, pair?.baseCoinDenom) || 0;
-
-  const secondAssetAvailableBalance =
-    getDenomBalance(balances, pair?.quoteCoinDenom) || 0;
-
   const handleClick = () => {
     setInProgress(true);
 
     const deposits = [
       {
-        denom: pair?.baseCoinDenom,
-        amount: getAmount(firstInput, assetMap[pair?.baseCoinDenom]?.decimals),
+        denom: pool?.balances?.baseCoin?.denom,
+        amount: getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        ),
       },
       {
-        denom: pair?.quoteCoinDenom,
+        denom: pool?.balances?.quoteCoin?.denom,
         amount: getAmount(
           secondInput,
-          assetMap[pair?.quoteCoinDenom]?.decimals
+          assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
         ),
       },
     ];
@@ -242,7 +235,6 @@ const Deposit = ({
           return;
         }
 
-        setComplete(true);
         resetValues();
         message.success(
           <Snack
@@ -255,8 +247,8 @@ const Deposit = ({
   };
 
   const showOfferCoinSpotPrice = () => {
-    const denomIn = denomConversion(pair?.baseCoinDenom);
-    const denomOut = denomConversion(pair?.quoteCoinDenom);
+    const denomIn = denomConversion(pool?.balances?.baseCoin?.denom);
+    const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
 
     return `1 ${denomIn || ""} = ${Number(
@@ -265,13 +257,13 @@ const Deposit = ({
   };
 
   const showDemandCoinSpotPrice = () => {
-    const denomIn = denomConversion(pair?.baseCoinDenom);
-    const denomOut = denomConversion(pair?.quoteCoinDenom);
+    const denomIn = denomConversion(pool?.balances?.baseCoin?.denom);
+    const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
     const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
 
     return `1 ${denomOut || ""} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(6)} ${denomIn || ""}`;
+    ).toFixed(comdex?.coinDecimals)} ${denomIn || ""}`;
   };
 
   const handleFirstInputMax = (max) => {
@@ -279,7 +271,7 @@ const Deposit = ({
       Number(
         getAmount(
           max * getOutputPrice(),
-          assetMap[pair?.quoteCoinDenom]?.decimals
+          assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
         )
       ) < Number(secondAssetAvailableBalance)
     ) {
@@ -288,7 +280,7 @@ const Deposit = ({
       return handleSecondInputChange(
         amountConversion(
           secondAssetAvailableBalance,
-          assetMap[pair?.quoteCoinDenom]?.decimals
+          assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
         )
       );
     }
@@ -299,7 +291,7 @@ const Deposit = ({
       Number(
         getAmount(
           max * getInputPrice(),
-          assetMap[pair?.baseCoinDenom]?.decimals
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
         )
       ) < Number(firstAssetAvailableBalance)
     ) {
@@ -308,7 +300,7 @@ const Deposit = ({
       return handleFirstInputChange(
         amountConversion(
           firstAssetAvailableBalance,
-          assetMap[pair?.baseCoinDenom]?.decimals
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
         )
       );
     }
@@ -316,23 +308,38 @@ const Deposit = ({
 
   const showFirstCoinValue = useCallback(() => {
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const demandCoinPrice = marketPrice(markets, pair?.quoteCoinDenom);
+    const demandCoinPrice = marketPrice(
+      markets,
+      pool?.balances?.quoteCoin?.denom
+    );
     const total = price * demandCoinPrice * firstInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  }, [markets, baseCoinPoolPrice, firstInput, pair?.quoteCoinDenom, reverse]);
+  }, [
+    markets,
+    baseCoinPoolPrice,
+    firstInput,
+    pool?.balances?.quoteCoin?.denom,
+    reverse,
+  ]);
 
   const showSecondCoinValue = useCallback(() => {
     const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
-    const oralcePrice = marketPrice(markets, pair?.baseCoinDenom);
+    const oralcePrice = marketPrice(markets, pool?.balances?.baseCoin?.denom);
     const total = price * oralcePrice * secondInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  }, [markets, baseCoinPoolPrice, secondInput, pair?.baseCoinDenom, reverse]);
+  }, [
+    markets,
+    baseCoinPoolPrice,
+    secondInput,
+    pool?.balances?.baseCoin?.denom,
+    reverse,
+  ]);
 
   return (
     <div className="common-card">
@@ -340,7 +347,8 @@ const Deposit = ({
         <div className="assets-select-card">
           <div className="assets-left">
             <label className="leftlabel">
-              {variables[lang].provide} {denomConversion(pair?.baseCoinDenom)}
+              {variables[lang].provide}{" "}
+              {denomConversion(pool?.balances?.baseCoin?.denom)}
             </label>
             <div className="assets-select-wrapper">
               {/* Icon Container Start  */}
@@ -348,11 +356,15 @@ const Deposit = ({
                 <div className="select-inner">
                   <div className="svg-icon">
                     <div className="svg-icon-inner">
-                      <SvgIcon name={iconNameFromDenom(pair?.baseCoinDenom)} />
+                      <SvgIcon
+                        name={iconNameFromDenom(
+                          pool?.balances?.baseCoin?.denom
+                        )}
+                      />
                     </div>
                   </div>
                   <div className="name">
-                    {denomConversion(pair?.baseCoinDenom)}
+                    {denomConversion(pool?.balances?.baseCoin?.denom)}
                   </div>
                 </div>
               </div>
@@ -366,24 +378,24 @@ const Deposit = ({
                 {" "}
                 {amountConversionWithComma(
                   firstAssetAvailableBalance,
-                  assetMap[pair?.baseCoinDenom]?.decimals
+                  assetMap[pool?.balances?.baseCoin?.denom]?.decimals
                 )}{" "}
-                {denomConversion(pair?.baseCoinDenom)}
+                {denomConversion(pool?.balances?.baseCoin?.denom)}
               </span>
               <div className="maxhalf">
                 <Button
                   className="active"
                   onClick={() =>
                     handleFirstInputMax(
-                      pair?.baseCoinDenom === comdex?.coinDenom &&
+                      pool?.balances?.baseCoin?.denom === comdex?.coinDenom &&
                         Number(firstAssetAvailableBalance) > DEFAULT_FEE
                         ? amountConversion(
                             firstAssetAvailableBalance - DEFAULT_FEE,
-                            assetMap[pair?.baseCoinDenom]?.decimals
+                            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
                           )
                         : amountConversion(
                             firstAssetAvailableBalance,
-                            assetMap[pair?.baseCoinDenom]?.decimals
+                            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
                           )
                     )
                   }
@@ -406,7 +418,8 @@ const Deposit = ({
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
-              {variables[lang].provide} {denomConversion(pair?.quoteCoinDenom)}{" "}
+              {variables[lang].provide}{" "}
+              {denomConversion(pool?.balances?.quoteCoin?.denom)}{" "}
             </label>
             <div className="assets-select-wrapper">
               {/* Icon Container Start */}
@@ -414,11 +427,15 @@ const Deposit = ({
                 <div className="select-inner">
                   <div className="svg-icon">
                     <div className="svg-icon-inner">
-                      <SvgIcon name={iconNameFromDenom(pair?.quoteCoinDenom)} />
+                      <SvgIcon
+                        name={iconNameFromDenom(
+                          pool?.balances?.quoteCoin?.denom
+                        )}
+                      />
                     </div>
                   </div>
                   <div className="name">
-                    {denomConversion(pair?.quoteCoinDenom)}
+                    {denomConversion(pool?.balances?.quoteCoin?.denom)}
                   </div>
                 </div>
               </div>
@@ -431,24 +448,24 @@ const Deposit = ({
               <span className="ml-1">
                 {amountConversionWithComma(
                   secondAssetAvailableBalance,
-                  assetMap[pair?.quoteCoinDenom]?.decimals
+                  assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
                 )}{" "}
-                {denomConversion(pair?.quoteCoinDenom)}
+                {denomConversion(pool?.balances?.quoteCoin?.denom)}
               </span>
               <div className="maxhalf">
                 <Button
                   className="active"
                   onClick={() =>
                     handleSecondInputMax(
-                      pair?.quoteCoinDenom === comdex?.coinDenom &&
+                      pool?.balances?.quoteCoin?.denom === comdex?.coinDenom &&
                         Number(secondAssetAvailableBalance) > DEFAULT_FEE
                         ? amountConversion(
                             secondAssetAvailableBalance - DEFAULT_FEE,
-                            assetMap[pair?.quoteCoinDenom]?.decimals
+                            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
                           )
                         : amountConversion(
                             secondAssetAvailableBalance,
-                            assetMap[pair?.quoteCoinDenom]?.decimals
+                            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
                           )
                     )
                   }
@@ -501,7 +518,6 @@ const Deposit = ({
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshData: PropTypes.func.isRequired,
-  setComplete: PropTypes.func.isRequired,
   setFirstReserveCoinDenom: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
@@ -583,7 +599,6 @@ const actionsToProps = {
   setPool,
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
-  setComplete,
   setBaseCoinPoolPrice,
   setReverse,
 };

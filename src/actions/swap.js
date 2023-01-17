@@ -1,5 +1,4 @@
 import {
-  COMPLETE_SET,
   DEMAND_COIN_AMOUNT_SET,
   DEMAND_COIN_DENOM_SET,
   LIMIT_ORDER_TOGGLE_SET,
@@ -45,14 +44,6 @@ export const setReverse = (value) => {
   return {
     type: REVERSE_SET,
     value,
-  };
-};
-
-export const setComplete = (value, data) => {
-  return {
-    type: COMPLETE_SET,
-    value,
-    data,
   };
 };
 

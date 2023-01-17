@@ -44,7 +44,9 @@ const iconMap = {
 };
 
 export const iconNameFromDenom = (denom) => {
-  return iconMap[denom];
+  if (denom) {
+    return iconMap[denom];
+  }
 };
 
 export const orderStatusText = (key) => {

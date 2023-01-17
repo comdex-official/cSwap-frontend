@@ -1,9 +1,8 @@
 import { Button, message } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
@@ -24,7 +23,6 @@ const CustomButton = ({
   address,
   name,
   isDisabled,
-  setComplete,
   validationError,
   lang,
   refreshBalance,
@@ -43,10 +41,6 @@ const CustomButton = ({
   const dispatch = useDispatch();
 
   const poolPrice = Number(baseCoinPoolPriceWithoutConversion);
-
-  useEffect(() => {
-    setComplete(false);
-  }, []);
 
   const priceWithOutConversion = () => {
     return (
@@ -180,7 +174,6 @@ const CustomButton = ({
           return;
         }
 
-        setComplete(true);
         updateValues();
         refreshDetails();
         message.success(
@@ -231,7 +224,6 @@ const CustomButton = ({
 CustomButton.propTypes = {
   refreshDetails: PropTypes.func.isRequired,
   refreshBalance: PropTypes.number.isRequired,
-  setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -279,8 +271,4 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-  setComplete,
-};
-
-export default connect(stateToProps, actionsToProps)(CustomButton);
+export default connect(stateToProps)(CustomButton);

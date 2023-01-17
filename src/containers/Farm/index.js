@@ -1,6 +1,6 @@
 import { message, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { setPools } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
@@ -28,6 +28,22 @@ const Farm = ({
 
   const dispatch = useDispatch();
 
+  const fetchPools = useCallback(
+    (offset, limit, countTotal, reverse) => {
+      setInProgress(true);
+      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setPools(result.pools);
+      });
+    },
+    [setPools]
+  );
+
   useEffect(() => {
     fetchPools(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
@@ -35,7 +51,7 @@ const Farm = ({
       true,
       false
     );
-  }, []);
+  }, [fetchPools]);
 
   const updatePools = () => {
     fetchPools(
@@ -44,19 +60,6 @@ const Farm = ({
       true,
       false
     );
-  };
-
-  const fetchPools = (offset, limit, countTotal, reverse) => {
-    setInProgress(true);
-    queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setPools(result.pools);
-    });
   };
 
   const handleBalanceRefresh = () => {
@@ -104,7 +107,7 @@ const Farm = ({
               ) : null}
             </p>
           </div>
-          
+
           {userPools?.length > 0 ? (
             <div className="pools-bottom-section mb-5">
               <div className="farm-heading">My Pools</div>
@@ -136,19 +139,17 @@ const Farm = ({
             <Row>
               <Col>
                 <div className="pool-card-section">
-                  {pools?.length > 0
-                    ? pools?.map((item, index) => {
-                        if (masterPoolMap?.[item?.id]?.poolId) {
-                          return (
-                            <PoolCardFarm
-                              key={item?.id}
-                              pool={item}
-                              poolIndex={index}
-                              lang={lang}
-                            />
-                          );
-                        }
-                      })
+                  {pools?.length
+                    ? pools
+                        .filter((item) => masterPoolMap?.[item?.id]?.poolId)
+                        .map((item, index) => (
+                          <PoolCardFarm
+                            key={item?.id}
+                            pool={item}
+                            poolIndex={index}
+                            lang={lang}
+                          />
+                        ))
                     : null}
                 </div>
               </Col>
@@ -159,19 +160,17 @@ const Farm = ({
             <Row>
               <Col>
                 <div className="pool-card-section">
-                  {pools?.length > 0
-                    ? pools.map((item, index) => {
-                        if (!masterPoolMap?.[item?.id]?.poolId) {
-                          return (
-                            <PoolCardFarm
-                              key={item?.id}
-                              pool={item}
-                              poolIndex={index}
-                              lang={lang}
-                            />
-                          );
-                        }
-                      })
+                  {pools?.length
+                    ? pools
+                        .filter((item) => !masterPoolMap?.[item?.id]?.poolId)
+                        .map((item, index) => (
+                          <PoolCardFarm
+                            key={item?.id}
+                            pool={item}
+                            poolIndex={index}
+                            lang={lang}
+                          />
+                        ))
                     : null}
                 </div>
               </Col>
