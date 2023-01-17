@@ -27,8 +27,10 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   }, [setPoolRewards]);
 
   useEffect(() => {
-    getAPRs();
-  }, [getAPRs]);
+    if (!rewardsMap?.[pool?.id?.toNumber()]) {
+      getAPRs();
+    }
+  }, [getAPRs]); // not including other dependencies as its going infinite loop.
 
   const showIndividualAPR = (list) => {
     if (list?.length > 2) {

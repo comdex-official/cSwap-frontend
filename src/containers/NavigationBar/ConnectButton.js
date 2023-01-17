@@ -9,14 +9,14 @@ import {
   setAccountBalances,
   setAccountName,
   setAssetBalance,
-  showAccountConnectModal,
+  showAccountConnectModal
 } from "../../actions/account";
 import {
   setAppAssets,
   setAssets,
-  setAssetsInPrgoress,
+  setAssetsInPrgoress
 } from "../../actions/asset";
-import { setPoolIncentives } from "../../actions/liquidity";
+import { setPoolIncentives, setPoolRewards } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { setParams } from "../../actions/swap";
 import { SvgIcon } from "../../components/common";
@@ -24,15 +24,16 @@ import { cmst, comdex, harbor } from "../../config/network";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  NETWORK_TAG,
+  NETWORK_TAG
 } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import {
   fetchAllTokens,
+  fetchRestAPRs,
   queryLiquidityParams,
-  queryPoolIncentives,
+  queryPoolIncentives
 } from "../../services/liquidity/query";
 import { fetchRestPrices } from "../../services/oracle/query";
 import { amountConversion } from "../../utils/coin";
@@ -52,6 +53,7 @@ const ConnectButton = ({
   setMarkets,
   setAccountName,
   setPoolIncentives,
+  setPoolRewards,
   setParams,
   balances,
   setAssets,
@@ -271,10 +273,22 @@ const ConnectButton = ({
     });
   }, [setPoolIncentives]);
 
+  const getAPRs = useCallback(() => {
+    fetchRestAPRs((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setPoolRewards(result?.data);
+    });
+  }, [setPoolRewards]);
+
   useEffect(() => {
     fetchPoolIncentives();
     fetchParams();
-  }, [fetchParams, fetchPoolIncentives]);
+    getAPRs();
+  }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
   const items = [{ label: <ConnectModal />, key: "item-1" }];
 
@@ -321,6 +335,7 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
   setPoolIncentives: PropTypes.func.isRequired,
+  setPoolRewards: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
@@ -368,6 +383,7 @@ const actionsToProps = {
   setMarkets,
   setAccountName,
   setPoolIncentives,
+  setPoolRewards,
   setParams,
   setAssets,
   setAppAssets,
