@@ -5,13 +5,12 @@ import { connect, useDispatch } from "react-redux";
 import MediaQuery from "react-responsive";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { setPair } from "../../../actions/asset";
 import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
   setSpotPrice,
-  setUserLiquidityInPools
+  setUserLiquidityInPools,
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -20,14 +19,14 @@ import { queryAllBalances } from "../../../services/bank/query";
 import {
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -58,7 +57,6 @@ const FarmDetails = ({
   setFetchBalanceInProgress,
   setSpotPrice,
   refreshBalance,
-  setPair,
   markets,
   balances,
   setUserLiquidityInPools,
@@ -113,10 +111,10 @@ const FarmDetails = ({
   }, [id, setPool]);
 
   useEffect(() => {
-    if (id) {
+    if (id && !pool?.id) {
       fetchPool(id);
     }
-  }, [id, fetchPool]);
+  }, [id, fetchPool, pool?.id]);
 
   const fetchProvidedCoins = useCallback(() => {
     queryPoolCoinDeserialize(
@@ -426,7 +424,6 @@ const FarmDetails = ({
 FarmDetails.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setFetchBalanceInProgress: PropTypes.func.isRequired,
-  setPair: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
@@ -477,7 +474,6 @@ const actionsToProps = {
   setPoolBalance,
   setFetchBalanceInProgress,
   setSpotPrice,
-  setPair,
   setUserLiquidityInPools,
 };
 
