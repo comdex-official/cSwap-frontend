@@ -45,13 +45,15 @@ const Farm = ({
   );
 
   useEffect(() => {
-    fetchPools(
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, [fetchPools]);
+    if (!pools?.length) {
+      fetchPools(
+        (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+        DEFAULT_PAGE_SIZE,
+        true,
+        false
+      );
+    }
+  }, [fetchPools, pools?.length]);
 
   const updatePools = () => {
     fetchPools(
