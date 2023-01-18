@@ -9,10 +9,12 @@ import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
   amountConversion,
+  convertScientificNumberIntoDecimal,
   denomConversion,
   getAmount,
-  orderPriceConversion,
+  orderPriceConversion
 } from "../../utils/coin";
+import { getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -71,7 +73,7 @@ const CustomButton = ({
     const price = calculateOrderPrice();
 
     return {
-      typeUrl: "/comdex.liquidity.v1beta1.MsgMarketOrder",
+      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
       value: {
         orderer: address,
         orderLifespan: isLimitOrder
@@ -90,18 +92,18 @@ const CustomButton = ({
           ),
         },
         demandCoinDenom: demandCoin?.denom,
-        // price: isLimitOrder
-        //   ? orderPriceConversion(
-        //       limitPrice *
-        //         10 **
-        //           Math.abs(
-        //             getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-        //               getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-        //           )
-        //     )
-        //   : convertScientificNumberIntoDecimal(
-        //       Number(price).toFixed(0)
-        //     ).toString(),
+        price: isLimitOrder
+          ? orderPriceConversion(
+              limitPrice *
+                10 **
+                  Math.abs(
+                    getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                  )
+            )
+          : convertScientificNumberIntoDecimal(
+              Number(price).toFixed(0)
+            ).toString(),
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
