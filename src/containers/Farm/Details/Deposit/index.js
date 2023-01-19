@@ -22,6 +22,7 @@ import {
   DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { fetchExchangeRateValue } from "../../../../services/liquidity/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
@@ -71,27 +72,14 @@ const Deposit = ({
   }, [setReverse]);
 
   useEffect(() => {
-    if (pool?.balances?.baseCoin?.denom) {
-      const baseCoinBalanceInPool = pool?.balances?.baseCoin?.amount || 0;
-      const quoteCoinBalanceInPool = pool?.balances?.quoteCoin?.amount || 0;
+    fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+      if (error) return;
 
-      const baseCoinPoolPrice =
-        Number(
-          amountConversion(
-            quoteCoinBalanceInPool,
-            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
-          )
-        ) /
-        Number(
-          amountConversion(
-            baseCoinBalanceInPool,
-            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
-          )
-        );
-
-      setBaseCoinPoolPrice(Number(baseCoinPoolPrice));
-    }
-  }, [pool, assetMap, setBaseCoinPoolPrice]);
+      if (result?.pairs[0]?.base_price) {
+        setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
+      }
+    });
+  }, [pair, setBaseCoinPoolPrice]);
 
   const getInputPrice = () => {
     return reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;

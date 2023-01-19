@@ -11,7 +11,7 @@ import {
   amountConversion,
   denomConversion,
   getAmount,
-  orderPriceConversion
+  orderPriceConversion,
 } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
 import variables from "../../utils/variables";
@@ -55,6 +55,16 @@ const CustomButton = ({
     const amount =
       (Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice;
 
+    console.log(
+      "lastprice",
+      decimalConversion(pair?.lastPrice),
+      "limitprice",
+      decimalConversion(params?.maxPriceLimitRatio),
+      "maxprice",
+      maxPrice,
+      "amount",
+      amount
+    );
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
 
@@ -90,7 +100,7 @@ const CustomButton = ({
         offerCoin: {
           denom: offerCoin?.denom,
           amount: getAmount(
-            Number(offerCoin?.amount) + Number(offerCoin?.fee),
+            Number(offerCoin?.amount),
             assetMap[offerCoin?.denom]?.decimals
           ),
         },
@@ -98,7 +108,10 @@ const CustomButton = ({
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
-            ? getAmount(offerCoin?.amount, assetMap[offerCoin?.denom]?.decimals)
+            ? getAmount(
+                Number(offerCoin?.amount) - Number(offerCoin?.fee),
+                assetMap[offerCoin?.denom]?.decimals
+              )
             : calculateBuyAmount(),
       },
     };

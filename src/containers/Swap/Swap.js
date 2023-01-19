@@ -8,32 +8,34 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex, harbor } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber,
+  ValidatePriceInputNumber
 } from "../../config/_validation";
 import {
+  APP_ID,
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE,
+  MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
+  fetchExchangeRateValue,
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList,
+  queryPoolsList
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../utils/coin";
 import {
   decimalConversion,
   getExponent,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -184,34 +186,14 @@ const Swap = ({
   };
 
   useEffect(() => {
-    if (pool?.balances?.baseCoin?.denom) {
-      const baseCoinBalanceInPool = pool?.balances?.baseCoin?.amount || 0;
-      const quoteCoinBalanceInPool = pool?.balances?.quoteCoin?.amount || 0;
+    fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+      if (error) return;
 
-      const baseCoinPoolPrice =
-        Number(
-          amountConversion(
-            quoteCoinBalanceInPool,
-            assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
-          )
-        ) /
-        Number(
-          amountConversion(
-            baseCoinBalanceInPool,
-            assetMap[pool?.balances?.baseCoin?.denom]?.decimals
-          )
-        );
-
-      const baseCoinPoolPriceWithoutConversion = Number(
-        quoteCoinBalanceInPool / baseCoinBalanceInPool
-      ).toFixed(comdex?.coinDecimals);
-
-      setBaseCoinPoolPrice(
-        Number(baseCoinPoolPrice),
-        Number(baseCoinPoolPriceWithoutConversion)
-      );
-    }
-  }, [pool, assetMap, setBaseCoinPoolPrice]);
+      if (result?.pairs[0]?.base_price) {
+        setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
+      }
+    });
+  }, [pair, setBaseCoinPoolPrice]);
 
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(
