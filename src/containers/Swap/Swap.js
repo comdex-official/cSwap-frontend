@@ -8,32 +8,32 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex, harbor } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber
+  ValidatePriceInputNumber,
 } from "../../config/_validation";
 import {
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   decimalConversion,
   getExponent,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -270,7 +270,7 @@ const Swap = ({
         100
     );
 
-    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate)) + 0.001; // adding 0.001 (0.1%) to existing swap fee rate for safer side to avoid offer coin insufficient error in case fractional calculation errors.
+    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
 
     setValidationError(
