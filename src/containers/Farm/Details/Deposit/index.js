@@ -72,13 +72,15 @@ const Deposit = ({
   }, [setReverse]);
 
   useEffect(() => {
-    fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
-      if (error) return;
+    if (pair?.id) {
+      fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+        if (error) return;
 
-      if (result?.pairs[0]?.base_price) {
-        setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
-      }
-    });
+        if (result?.pairs[0]?.base_price) {
+          setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
+        }
+      });
+    }
   }, [pair, setBaseCoinPoolPrice]);
 
   const getInputPrice = () => {

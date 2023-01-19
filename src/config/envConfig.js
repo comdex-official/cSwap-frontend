@@ -1,6 +1,6 @@
 export const envConfig = {
-  rpc: "http://46.166.172.252:26657",
-  rest: "http://46.166.172.252:1317",
+  rpc: "https://rpool-rpc.comdex.one",
+  rest: "https://rpool-rest.comdex.one",
   chainId: "test-1",
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
