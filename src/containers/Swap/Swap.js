@@ -318,10 +318,7 @@ const Swap = ({
   };
 
   const showOfferCoinValue = () => {
-    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-
-    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
-    const total = price * demandCoinPrice * offerCoin?.amount;
+    const total = marketPrice(markets, offerCoin?.denom) * offerCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
@@ -329,9 +326,7 @@ const Swap = ({
   };
 
   const showDemandCoinValue = () => {
-    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
-    const offerCoinPrice = marketPrice(markets, offerCoin?.denom);
-    const total = price * offerCoinPrice * demandCoin?.amount;
+    const total = marketPrice(markets, demandCoin?.denom) * demandCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS

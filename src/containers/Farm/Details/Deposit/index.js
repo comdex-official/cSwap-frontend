@@ -295,39 +295,22 @@ const Deposit = ({
   };
 
   const showFirstCoinValue = useCallback(() => {
-    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-    const demandCoinPrice = marketPrice(
-      markets,
-      pool?.balances?.quoteCoin?.denom
-    );
-    const total = price * demandCoinPrice * firstInput;
+    const total =
+      marketPrice(markets, pool?.balances?.baseCoin?.denom) * firstInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  }, [
-    markets,
-    baseCoinPoolPrice,
-    firstInput,
-    pool?.balances?.quoteCoin?.denom,
-    reverse,
-  ]);
+  }, [markets, firstInput, pool?.balances?.baseCoin?.denom]);
 
   const showSecondCoinValue = useCallback(() => {
-    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
-    const oralcePrice = marketPrice(markets, pool?.balances?.baseCoin?.denom);
-    const total = price * oralcePrice * secondInput;
+    const total =
+      marketPrice(markets, pool?.balances?.quoteCoin?.denom) * secondInput;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
     )}`;
-  }, [
-    markets,
-    baseCoinPoolPrice,
-    secondInput,
-    pool?.balances?.baseCoin?.denom,
-    reverse,
-  ]);
+  }, [markets, secondInput, pool?.balances?.quoteCoin?.denom]);
 
   return (
     <div className="common-card">
