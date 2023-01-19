@@ -9,12 +9,11 @@ import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
   amountConversion,
-  convertScientificNumberIntoDecimal,
   denomConversion,
   getAmount,
   orderPriceConversion
 } from "../../utils/coin";
-import { getExponent } from "../../utils/number";
+import { decimalConversion } from "../../utils/number";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -36,6 +35,7 @@ const CustomButton = ({
   orderLifespan,
   assetMap,
   baseCoinPoolPriceWithoutConversion,
+  params,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
@@ -49,8 +49,11 @@ const CustomButton = ({
   };
 
   const calculateBuyAmount = () => {
-    const price = isLimitOrder ? limitPrice : priceWithOutConversion();
-    const amount = Number(offerCoin?.amount) / price;
+    let maxPrice =
+      Number(decimalConversion(pair?.lastPrice)) *
+      (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
+    const amount =
+      (Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice;
 
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
@@ -73,7 +76,7 @@ const CustomButton = ({
     const price = calculateOrderPrice();
 
     return {
-      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+      typeUrl: "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
         orderLifespan: isLimitOrder
@@ -92,18 +95,6 @@ const CustomButton = ({
           ),
         },
         demandCoinDenom: demandCoin?.denom,
-        price: isLimitOrder
-          ? orderPriceConversion(
-              limitPrice *
-                10 **
-                  Math.abs(
-                    getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-                  )
-            )
-          : convertScientificNumberIntoDecimal(
-              Number(price).toFixed(0)
-            ).toString(),
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2

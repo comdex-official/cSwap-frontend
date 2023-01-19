@@ -819,6 +819,7 @@ const Swap = ({
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  params={params}
                   orderLifespan={orderLifespan}
                   refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}

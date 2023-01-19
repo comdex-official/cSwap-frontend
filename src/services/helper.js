@@ -40,6 +40,7 @@ export const KeplrWallet = async (chainID = comdex.chainId) => {
 };
 
 export const signAndBroadcastTransaction = (transaction, address, callback) => {
+  console.log('the transaction', transaction)
   if (localStorage.getItem("loginType") === "ledger") {
     return TransactionWithLedger(transaction, address, callback);
   }
