@@ -1,7 +1,12 @@
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
 import { DEFAULT_FEE } from "../constants/common";
+
+const httpBatch = new HttpBatchClient(comdex?.rpc, {
+  batchSizeLimit: 50,
+  dispatchInterval: 500,
+});
 
 export const getTypeURL = (key) => {
   switch (key) {
@@ -78,7 +83,7 @@ const txSearchParams = (recipientAddress, pageNumber, pageSize, type) => {
 };
 
 export const fetchTxHistory = (address, pageNumber, pageSize, callback) => {
-  Tendermint34Client.connect(comdex?.rpc)
+  Tendermint34Client.create(httpBatch)
     .then((tendermintClient) => {
       tendermintClient
         .txSearch(
@@ -97,14 +102,14 @@ export const fetchTxHistory = (address, pageNumber, pageSize, callback) => {
 };
 
 export const getTransactionTimeFromHeight = async (height) => {
-  const tmClient = await Tendermint34Client.connect(comdex?.rpc);
+  const tmClient = await Tendermint34Client.create(httpBatch);
   const block = await tmClient.block(height);
 
   return block?.block?.header?.time;
 };
 
 export const fetchTxHash = (hash, callback) => {
-  Tendermint34Client.connect(comdex?.rpc)
+  Tendermint34Client.create(httpBatch)
     .then((tendermintClient) => {
       tendermintClient
         .tx({ hash })
