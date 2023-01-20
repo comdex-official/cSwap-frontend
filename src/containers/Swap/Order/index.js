@@ -191,7 +191,8 @@ const Order = ({ lang, assetMap }) => {
           columns={openOrderColumns}
           dataSource={openOrdersData}
           pagination={false}
-          className="custom-table "
+          className="custom-table"
+          scroll={{ x: "100%" }}
           locale={{ emptyText: <NoDataIcon /> }}
         />
       ),
