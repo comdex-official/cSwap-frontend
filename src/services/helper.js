@@ -5,7 +5,7 @@ import {
   QueryClient,
   SigningStargateClient
 } from "@cosmjs/stargate";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { comdex } from "../config/network";
@@ -21,7 +21,12 @@ export const createQueryClient = (callback) => {
 };
 
 export const newQueryClientRPC = (rpc, callback) => {
-  Tendermint34Client.connect(rpc)
+  const httpBatch = new HttpBatchClient(rpc, {
+    batchSizeLimit: 50,
+    dispatchInterval: 500,
+  });
+
+  Tendermint34Client.create(httpBatch)
     .then((tendermintClient) => {
       const queryClient = new QueryClient(tendermintClient);
       const rpcClient = createProtobufRpcClient(queryClient);
@@ -161,7 +166,6 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       offlineSigner,
       {
         accountParser: strideAccountParser,
-
       }
     );
 
