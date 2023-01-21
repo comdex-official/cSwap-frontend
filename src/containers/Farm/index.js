@@ -199,6 +199,10 @@ const Farm = ({
               </Col>
             </Row>
           </div>
+          <div className="farm-bottom-info">
+            <SvgIcon name='error-icon' viewbox='0 0 24.036 21.784' />
+            Users need to farm for 24 hours in order to be eligible for rewards
+          </div>
         </>
       )}
     </div>
