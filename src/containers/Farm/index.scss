@@ -425,6 +425,8 @@
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;
+          margin-bottom: 5px;
+          display: inline-block;
           .dark-mode & {
             color: $text-color-light;
           }
@@ -741,5 +743,38 @@
     height: 20px;
     border-radius: 15px;
     margin: 3px 5px 3px 0;
+  }
+}
+
+.farmtab-right-action{
+  display: flex;
+  align-items: center;
+  .ant-input-affix-wrapper{
+    border: 1px solid $border-dark;
+    background: none;
+    border-radius: 30px;
+    margin-left: 15px;
+    height: 39px;
+    padding: 4px 18px;
+    &:hover {
+      border-color: $border-light;
+    }
+    input {
+      background: none;
+      font-weight: normal;
+      .dark-mode & {
+        color: $white;
+      }
+      &::placeholder {
+        color: #303950;
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+    .ant-input-suffix{
+      .icon {
+        fill: $border-dark;
+      }
+    }
   }
 }
