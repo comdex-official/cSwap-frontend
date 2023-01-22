@@ -144,7 +144,8 @@ const PoolCardFarm = ({
   };
 
   return (
-    <div className="poolcard-two" onClick={() => handleNavigate()}>
+    // please add and remove 'ranged-card' class for Ranged
+    <div className="poolcard-two ranged-card" onClick={() => handleNavigate()}>
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">

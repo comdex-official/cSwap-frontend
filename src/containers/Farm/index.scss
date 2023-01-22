@@ -360,6 +360,12 @@
     border: 1px solid $border-dark;
     box-shadow: $box-shadow-inner-dark;
   }
+  &.ranged-card{
+    background: $primary-gradient !important;
+    .poolcard-two-inner{
+      background: $background-dark1;
+    }
+  }
   .poolcard-two-inner {
     cursor: pointer;
     border-radius: $base-border-radius;
@@ -432,7 +438,7 @@
           margin-right: 10px;
         }
         .card-svgicon-2 {
-          margin-right: 10px;
+          margin-left: -18px;
         }
         .card-svgicon {
           width: 40px;
@@ -535,7 +541,7 @@
   }
   &:hover .poolcard-two-inner {
     .dark-mode & {
-      background: $background-dark1;
+      background: #06122E;
     }
   }
 }
