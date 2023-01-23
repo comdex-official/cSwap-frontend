@@ -168,12 +168,19 @@ const PoolCardFarm = ({
           <div className="text-center">
             <div className="ranged-box">
               <div className="ranged-box-inner">
-                Ranged
+                {pool?.type === 2 ? "Ranged" : pool?.type === 1 ? "Basic" : ""}
               </div>
             </div>
-            <div className="percent-box">
-              x21.09
-            </div>
+            {pool?.type === 2 ? (
+              <div className="percent-box">
+                x
+                {getAMP(
+                  Number(decimalConversion(pool?.price)),
+                  Number(decimalConversion(pool?.minPrice)),
+                  Number(decimalConversion(pool?.maxPrice))
+                )?.toFixed(DOLLAR_DECIMALS)}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="card-bottom pb-0">
