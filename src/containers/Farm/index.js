@@ -25,8 +25,24 @@ const Farm = ({
   incentivesMap,
 }) => {
   const [inProgress, setInProgress] = useState(false);
-
+  const [displayPools, setDisplayPools] = useState([]);
+  const [filterValue, setFilterValue] = useState("3");
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (filterValue !== "3") {
+      let filteredPools = pools.filter(
+        (item) => item.type === Number(filterValue)
+      );
+      setDisplayPools(filteredPools);
+    } else {
+      setDisplayPools(pools);
+    }
+  }, [pools, filterValue]);
+
+  const onChange = (key) => {
+    setFilterValue(key);
+  };
 
   const fetchPools = useCallback(
     (offset, limit, countTotal, reverse) => {
@@ -72,7 +88,7 @@ const Farm = ({
   };
 
   const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    pools?.find(
+    displayPools?.find(
       (pool) =>
         pool?.id?.toNumber() === Number(poolKey) &&
         Number(userLiquidityInPools[poolKey]) > 0
@@ -83,16 +99,16 @@ const Farm = ({
 
   const tabItems = [
     {
-      key: '1',
-      label: 'All',
+      key: "3",
+      label: "All",
     },
     {
-      key: '2',
-      label: 'Basic',
+      key: "1",
+      label: "Basic",
     },
     {
-      key: '3',
-      label: 'Ranged',
+      key: "2",
+      label: "Ranged",
     },
   ];
 
@@ -104,7 +120,6 @@ const Farm = ({
         </div>
       ) : (
         <>
-
           <div className="farm-heading farm-headingtimer mb-4 pb-2">
             <p>
               {" "}
@@ -120,15 +135,25 @@ const Farm = ({
           </div>
 
           <div className="mb-4">
-            <Tabs defaultActiveKey="1" items={tabItems} className="comdex-tabs" tabBarExtraContent={
-              <div className="farmtab-right-action">
-                <CreatePool
-                  refreshData={updatePools}
-                  refreshBalance={handleBalanceRefresh}
-                />
-                <Input placeholder="Search Pools.." suffix={<SvgIcon name='search' viewbox='0 0 18 18' />} />
-              </div>
-            } />
+            <Tabs
+              defaultActiveKey="1"
+              items={tabItems}
+              activeKey={filterValue}
+              onChange={onChange}
+              className="comdex-tabs"
+              tabBarExtraContent={
+                <div className="farmtab-right-action">
+                  <CreatePool
+                    refreshData={updatePools}
+                    refreshBalance={handleBalanceRefresh}
+                  />
+                  <Input
+                    placeholder="Search Pools.."
+                    suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+                  />
+                </div>
+              }
+            />
           </div>
 
           {userPools?.length > 0 ? (
@@ -157,34 +182,36 @@ const Farm = ({
               </Row>
             </div>
           ) : null}
+          {Number(filterValue) === 2 ? null : (
+            <div className="pools-upper-section mb-5">
+              <div className="farm-heading">Master Pools</div>
+              <Row>
+                <Col>
+                  <div className="pool-card-section">
+                    {displayPools?.length
+                      ? displayPools
+                          .filter((item) => masterPoolMap?.[item?.id]?.poolId)
+                          .map((item, index) => (
+                            <PoolCardFarm
+                              key={item?.id}
+                              pool={item}
+                              poolIndex={index}
+                              lang={lang}
+                            />
+                          ))
+                      : null}
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          )}
           <div className="pools-upper-section">
-            <div className="farm-heading">Master Pools</div>
-            <Row>
-              <Col>
-                <div className="pool-card-section">
-                  {pools?.length
-                    ? pools
-                        .filter((item) => masterPoolMap?.[item?.id]?.poolId)
-                        .map((item, index) => (
-                          <PoolCardFarm
-                            key={item?.id}
-                            pool={item}
-                            poolIndex={index}
-                            lang={lang}
-                          />
-                        ))
-                    : null}
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <div className="pools-upper-section mt-5">
             <div className="farm-heading">Child Pools</div>
             <Row>
               <Col>
                 <div className="pool-card-section">
-                  {pools?.length
-                    ? pools
+                  {displayPools?.length
+                    ? displayPools
                         .filter((item) => !masterPoolMap?.[item?.id]?.poolId)
                         .map((item, index) => (
                           <PoolCardFarm
@@ -200,7 +227,7 @@ const Farm = ({
             </Row>
           </div>
           <div className="farm-bottom-info">
-            <SvgIcon name='error-icon' viewbox='0 0 24.036 21.784' />
+            <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
             Users need to farm for 24 hours in order to be eligible for rewards
           </div>
         </>

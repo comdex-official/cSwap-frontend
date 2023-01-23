@@ -11,7 +11,7 @@ import {
   amountConversion,
   denomConversion,
   getAmount,
-  orderPriceConversion,
+  orderPriceConversion
 } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
 import variables from "../../utils/variables";
