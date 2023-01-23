@@ -144,7 +144,8 @@ const PoolCardFarm = ({
   };
 
   return (
-    <div className="poolcard-two" onClick={() => handleNavigate()}>
+    // please add and remove 'ranged-card' class for Ranged
+    <div className="poolcard-two ranged-card" onClick={() => handleNavigate()}>
       <div className="poolcard-two-inner">
         <div className="card-upper">
           <div className="card-svg-icon-container">
@@ -155,7 +156,7 @@ const PoolCardFarm = ({
                 />{" "}
               </div>
             </div>
-            <div className="card-svgicon  card-svgicon-2">
+            <div className="card-svgicon card-svgicon-2">
               <div className="card-svgicon-inner">
                 <SvgIcon
                   name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
@@ -164,8 +165,18 @@ const PoolCardFarm = ({
             </div>
             <h3>{showPairDenoms()}</h3>
           </div>
+          <div className="text-center">
+            <div className="ranged-box">
+              <div className="ranged-box-inner">
+                Ranged
+              </div>
+            </div>
+            <div className="percent-box">
+              x21.09
+            </div>
+          </div>
         </div>
-        <div className="card-bottom">
+        <div className="card-bottom pb-0">
           <div className="d-flex flex-column">
             <div className="cardbottom-row">
               <label>{variables[lang].poolLiquidity}</label>

@@ -1,9 +1,9 @@
-import { message, Spin } from "antd";
+import { Input, message, Spin, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { setPools } from "../../actions/liquidity";
-import { Col, Row } from "../../components/common";
+import { Col, Row, SvgIcon } from "../../components/common";
 import PoolCardFarm from "../../components/PoolCardFarm";
 import Timer from "../../components/Timer";
 import {
@@ -81,6 +81,21 @@ const Farm = ({
 
   const userPools = rawUserPools.filter((item) => item); // removes undefined values from array
 
+  const tabItems = [
+    {
+      key: '1',
+      label: 'All',
+    },
+    {
+      key: '2',
+      label: 'Basic',
+    },
+    {
+      key: '3',
+      label: 'Ranged',
+    },
+  ];
+
   return (
     <div className="app-content-wrapper">
       {inProgress && !pools?.length ? (
@@ -89,14 +104,8 @@ const Farm = ({
         </div>
       ) : (
         <>
-          <div className="create-pool-main-container text-right mb-n3">
-            <CreatePool
-              refreshData={updatePools}
-              refreshBalance={handleBalanceRefresh}
-            />
-          </div>
 
-          <div className="farm-heading farm-headingtimer mb-5">
+          <div className="farm-heading farm-headingtimer mb-4 pb-2">
             <p>
               {" "}
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
@@ -108,6 +117,18 @@ const Farm = ({
                 />
               ) : null}
             </p>
+          </div>
+
+          <div className="mb-4">
+            <Tabs defaultActiveKey="1" items={tabItems} className="comdex-tabs" tabBarExtraContent={
+              <div className="farmtab-right-action">
+                <CreatePool
+                  refreshData={updatePools}
+                  refreshBalance={handleBalanceRefresh}
+                />
+                <Input placeholder="Search Pools.." suffix={<SvgIcon name='search' viewbox='0 0 18 18' />} />
+              </div>
+            } />
           </div>
 
           {userPools?.length > 0 ? (
@@ -177,6 +198,10 @@ const Farm = ({
                 </div>
               </Col>
             </Row>
+          </div>
+          <div className="farm-bottom-info">
+            <SvgIcon name='error-icon' viewbox='0 0 24.036 21.784' />
+            Users need to farm for 24 hours in order to be eligible for rewards
           </div>
         </>
       )}

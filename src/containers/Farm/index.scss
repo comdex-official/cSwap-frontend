@@ -360,6 +360,12 @@
     border: 1px solid $border-dark;
     box-shadow: $box-shadow-inner-dark;
   }
+  &.ranged-card{
+    background: $primary-gradient !important;
+    .poolcard-two-inner{
+      background: $background-dark1;
+    }
+  }
   .poolcard-two-inner {
     cursor: pointer;
     border-radius: $base-border-radius;
@@ -370,6 +376,52 @@
       justify-content: space-between;
       margin-bottom: 15px;
       padding: 10px 20px 0 20px;
+
+      .ranged-box{
+          width: 80px;
+          height: 28px;
+          border-radius: 4px;
+          background: $primary-gradient;
+          padding: 1px;
+          text-align: center;
+          font-size: $font-size-sm;
+          line-height: 20px;
+          margin-top: 15px;
+          .ranged-box-inner {
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            border-radius: 4px;
+            background: $background-light;
+            .dark-mode & {
+              background: $background-dark1;
+            }
+            .icon {
+              width: 100%;
+              height: 100%;
+              fill: $text-color-label-dark;
+              border-radius: 50%;
+              .dark-mode & {
+                fill: $white;
+              }
+            }
+          }
+      }
+
+      .percent-box {
+        border: 1px solid $text-color-light;
+        color: $text-color-light;
+        background: rgba($color: $text-color-light, $alpha: 0.2);
+        font-size: $font-size-sm + 1;
+        border-radius: 4px;
+        padding: 2px 8px;
+        min-width: 70px;
+        height: 26px;
+        line-height: 20px;
+        text-align: center;
+        margin: 8px auto 0 auto;
+        display: inline-block;
+      }
 
       h3 {
         margin-bottom: 0;
@@ -386,7 +438,7 @@
           margin-right: 10px;
         }
         .card-svgicon-2 {
-          margin-right: 10px;
+          margin-left: -18px;
         }
         .card-svgicon {
           width: 40px;
@@ -425,6 +477,8 @@
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;
+          margin-bottom: 5px;
+          display: inline-block;
           .dark-mode & {
             color: $text-color-light;
           }
@@ -443,7 +497,7 @@
           color: $text-color-light;
           background: rgba($color: $text-color-light, $alpha: 0.2);
           font-size: $font-size-sm + 1;
-          border-radius: 5px;
+          border-radius: 4px;
           padding: 1px 4px;
           width: fit-content;
           span {
@@ -487,7 +541,7 @@
   }
   &:hover .poolcard-two-inner {
     .dark-mode & {
-      background: $background-dark1;
+      background: #06122E;
     }
   }
 }
@@ -741,5 +795,50 @@
     height: 20px;
     border-radius: 15px;
     margin: 3px 5px 3px 0;
+  }
+}
+
+.farmtab-right-action{
+  display: flex;
+  align-items: center;
+  .ant-input-affix-wrapper{
+    border: 1px solid $border-dark;
+    background: none;
+    border-radius: 30px;
+    margin-left: 15px;
+    height: 39px;
+    padding: 4px 18px;
+    &:hover {
+      border-color: $border-light;
+    }
+    input {
+      background: none;
+      font-weight: normal;
+      .dark-mode & {
+        color: $white;
+      }
+      &::placeholder {
+        color: #303950;
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+    .ant-input-suffix{
+      .icon {
+        fill: $border-dark;
+      }
+    }
+  }
+}
+
+.farm-bottom-info{
+  color: $secondary-color;
+  margin-top: 38px;
+  display: flex;
+  align-items: center;
+  .icon {
+    fill: $secondary-color;
+    margin-right: 8px;
+    width: 20px;
   }
 }
