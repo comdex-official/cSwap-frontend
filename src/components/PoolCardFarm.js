@@ -133,10 +133,10 @@ const PoolCardFarm = ({
 
   useEffect(() => {
     // fetching user liquidity for my pools.
-    if (pool?.id && parent === "user" && !userLiquidityInPools[pool?.id]) {
+    if (pool?.id && !userLiquidityInPools[pool?.id]) {
       getUserLiquidity(pool);
     }
-  }, [pool, getUserLiquidity, parent, userLiquidityInPools]);
+  }, [pool, getUserLiquidity, userLiquidityInPools]);
 
   const handleNavigate = () => {
     navigate(`/farm/${pool.id && pool.id.toNumber()}`);
