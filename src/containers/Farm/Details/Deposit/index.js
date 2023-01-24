@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button, message, Slider, SliderMarks } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
@@ -35,6 +35,13 @@ import { getExponent, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
+
+const marks = {
+  0: '0',
+  25: '25',
+  75: '75',
+  100: '100'
+};
 
 const Deposit = ({
   lang,
@@ -328,7 +335,8 @@ const Deposit = ({
   return (
     <div className="common-card">
       <div className="farm-content-card">
-        <div className="assets-select-card">
+        <Slider className='farm-slider' tooltipVisible={false} defaultValue={60} marks={marks} />
+        <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
               {variables[lang].provide}{" "}
