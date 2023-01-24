@@ -9,7 +9,7 @@ import Timer from "../../components/Timer";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  MASTER_POOL_ID,
+  MASTER_POOL_ID
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
@@ -30,16 +30,23 @@ const Farm = ({
   const [filterValue, setFilterValue] = useState("3");
   const dispatch = useDispatch();
 
+  const updateFilteredData = useCallback(
+    (filterValue) => {
+      if (filterValue !== "3") {
+        let filteredPools = pools.filter(
+          (item) => item.type === Number(filterValue)
+        );
+        setDisplayPools(filteredPools);
+      } else {
+        setDisplayPools(pools);
+      }
+    },
+    [pools]
+  );
+
   useEffect(() => {
-    if (filterValue !== "3") {
-      let filteredPools = pools.filter(
-        (item) => item.type === Number(filterValue)
-      );
-      setDisplayPools(filteredPools);
-    } else {
-      setDisplayPools(pools);
-    }
-  }, [pools, filterValue]);
+    updateFilteredData(filterValue);
+  }, [pools, filterValue, updateFilteredData]);
 
   const onChange = (key) => {
     setFilterValue(key);
@@ -131,10 +138,7 @@ const Farm = ({
 
       setDisplayPools(resultsObj);
     } else {
-      let filteredPools = pools.filter(
-        (item) => item.type === Number(filterValue)
-      );
-      setDisplayPools(filteredPools);
+      updateFilteredData(filterValue);
     }
   };
 
@@ -226,7 +230,7 @@ const Farm = ({
                               lang={lang}
                             />
                           ))
-                      : null}
+                      : "No pools found"}
                   </div>
                 </Col>
               </Row>
@@ -248,7 +252,7 @@ const Farm = ({
                             lang={lang}
                           />
                         ))
-                    : null}
+                    : "No pools found"}
                 </div>
               </Col>
             </Row>
