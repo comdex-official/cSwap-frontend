@@ -1,4 +1,4 @@
-import { message, Slider } from "antd";
+import { message } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
@@ -25,7 +25,6 @@ import {
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
 import { SvgIcon } from "./common";
-import TooltipIcon from "./TooltipIcon";
 
 const PoolCardFarm = ({
   lang,
@@ -134,10 +133,10 @@ const PoolCardFarm = ({
 
   useEffect(() => {
     // fetching user liquidity for my pools.
-    if (pool?.id && parent === "user" && !userLiquidityInPools[pool?.id]) {
+    if (pool?.id && !userLiquidityInPools[pool?.id]) {
       getUserLiquidity(pool);
     }
-  }, [pool, getUserLiquidity, parent, userLiquidityInPools]);
+  }, [pool, getUserLiquidity, userLiquidityInPools]);
 
   const handleNavigate = () => {
     navigate(`/farm/${pool.id && pool.id.toNumber()}`);
@@ -222,7 +221,8 @@ const PoolCardFarm = ({
             </div>
           </div>
         </div>
-        <div className="card-bottom">
+        {/* use below value for showing pool type and tooltip info */}
+        {/* <div className="card-bottom">
           <div className="cardbottom-row">
             <label>Type</label>
             <p className="mr-2">
@@ -289,7 +289,7 @@ const PoolCardFarm = ({
               ) : null}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

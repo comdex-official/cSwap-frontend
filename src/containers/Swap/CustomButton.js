@@ -13,7 +13,7 @@ import {
   getAmount,
   orderPriceConversion
 } from "../../utils/coin";
-import { decimalConversion } from "../../utils/number";
+import { decimalConversion, getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -53,17 +53,20 @@ const CustomButton = ({
       Number(decimalConversion(pair?.lastPrice)) *
       (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
     const amount =
-      (Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice;
+      ((Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice) *
+      10 **
+        Math.abs(
+          getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+        );
 
     console.log(
-      "lastprice",
-      decimalConversion(pair?.lastPrice),
-      "limitprice",
-      decimalConversion(params?.maxPriceLimitRatio),
-      "maxprice",
-      maxPrice,
-      "amount",
-      amount
+      "buy amount",
+      amount,
+      getAmount(amount, assetMap[demandCoin?.denom]?.decimals),
+      Number(offerCoin?.amount),
+      Number(offerCoin?.fee),
+      maxPrice
     );
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
@@ -85,8 +88,10 @@ const CustomButton = ({
   const getMessage = (isLimitOrder) => {
     const price = calculateOrderPrice();
 
-    return {
-      typeUrl: "/comdex.liquidity.v1beta1.MsgMarketOrder",
+    let data = {
+      typeUrl: isLimitOrder
+        ? "/comdex.liquidity.v1beta1.MsgLimitOrder"
+        : "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
         orderLifespan: isLimitOrder
@@ -115,6 +120,18 @@ const CustomButton = ({
             : calculateBuyAmount(),
       },
     };
+
+    if (isLimitOrder) {
+      data.value.price = orderPriceConversion(
+        limitPrice *
+          10 **
+            Math.abs(
+              getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+            )
+      );
+    }
+    return data;
   };
 
   const handleSwap = () => {

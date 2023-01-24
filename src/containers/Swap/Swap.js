@@ -436,7 +436,12 @@ const Swap = ({
     if (pair?.lastPrice) {
       setPriceValidationError(
         ValidatePriceInputNumber(
-          Number(price),
+          Number(price) *
+            10 **
+              Math.abs(
+                getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                  getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+              ),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
         )

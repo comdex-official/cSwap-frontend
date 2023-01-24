@@ -12,6 +12,7 @@ import {
   MASTER_POOL_ID
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
+import { denomConversion } from "../../utils/coin";
 import CreatePool from "./CreatePool";
 import "./index.scss";
 
@@ -34,16 +35,23 @@ const Farm = ({
     seteligibleDisclaimer(false);
   }
 
+  const updateFilteredData = useCallback(
+    (filterValue) => {
+      if (filterValue !== "3") {
+        let filteredPools = pools.filter(
+          (item) => item.type === Number(filterValue)
+        );
+        setDisplayPools(filteredPools);
+      } else {
+        setDisplayPools(pools);
+      }
+    },
+    [pools]
+  );
+
   useEffect(() => {
-    if (filterValue !== "3") {
-      let filteredPools = pools.filter(
-        (item) => item.type === Number(filterValue)
-      );
-      setDisplayPools(filteredPools);
-    } else {
-      setDisplayPools(pools);
-    }
-  }, [pools, filterValue]);
+    updateFilteredData(filterValue);
+  }, [pools, filterValue, updateFilteredData]);
 
   const onChange = (key) => {
     setFilterValue(key);
@@ -117,6 +125,27 @@ const Farm = ({
     },
   ];
 
+  const onSearchChange = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj = displayPools.filter((pool) => {
+        return (
+          denomConversion(pool?.balances?.baseCoin?.denom)
+            .toLowerCase()
+            .match(new RegExp(searchTerm, "g")) ||
+          denomConversion(pool?.balances?.quoteCoin?.denom)
+            .toLowerCase()
+            .match(new RegExp(searchTerm, "g")) ||
+          String(pool.id?.toNumber()).match(new RegExp(searchTerm, "g"))
+        );
+      });
+
+      setDisplayPools(resultsObj);
+    } else {
+      updateFilteredData(filterValue);
+    }
+  };
+
   return (
     <div className="app-content-wrapper">
       {inProgress && !pools?.length ? (
@@ -161,6 +190,7 @@ const Farm = ({
                   />
                   <Input
                     placeholder="Search Pools.."
+                    onChange={(event) => onSearchChange(event.target.value)}
                     suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
                   />
                 </div>
@@ -211,7 +241,7 @@ const Farm = ({
                               lang={lang}
                             />
                           ))
-                      : null}
+                      : "No pools found"}
                   </div>
                 </Col>
               </Row>
@@ -233,7 +263,7 @@ const Farm = ({
                             lang={lang}
                           />
                         ))
-                    : null}
+                    : "No pools found"}
                 </div>
               </Col>
             </Row>
