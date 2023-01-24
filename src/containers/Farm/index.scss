@@ -361,12 +361,17 @@
     box-shadow: $box-shadow-inner-dark;
   }
   &.ranged-card{
+    background:  linear-gradient(180deg, #FE4350 0%, #123C73 100%);
+    border: 0;
+    padding: 2px;
     .dark-mode & {
-      background: $primary-gradient !important;
+      background:  linear-gradient(180deg, #FE4350 0%, #123C73 100%);
+      box-shadow: none;
     }
     .poolcard-two-inner{
       .dark-mode & {
         background: $background-dark1;
+        box-shadow: inset 7px 7px 16px 1px #262B38;
       }
     }
   }
@@ -835,14 +840,37 @@
   }
 }
 
-.farm-bottom-info{
-  color: $secondary-color;
+.farm-disclaimer-info{
+  color: #EA6262;
   margin-top: 38px;
   display: flex;
   align-items: center;
+  position: absolute;
+  z-index: 999;
+  top: -50px;
+  height: 60px;
+  background: $background-dark1;
+  padding: 0 20px 0 30px;
+  border-radius: 16px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  max-width: 630px;
   .icon {
-    fill: $secondary-color;
+    fill: #EA6262;
     margin-right: 8px;
     width: 20px;
+  }
+  .close-icon {
+    fill: #747474;
+    stroke: $background-dark1;
+    stroke-width: 2px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 5px;
+    width: 18px;
+    &:hover {
+      fill: $secondary-color;
+    }
   }
 }

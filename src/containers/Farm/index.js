@@ -28,6 +28,11 @@ const Farm = ({
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState("3");
   const dispatch = useDispatch();
+  const [eligibleDisclaimer, seteligibleDisclaimer] = useState(true)
+
+  const closeDisclaimer = () => {
+    seteligibleDisclaimer(false);
+  }
 
   useEffect(() => {
     if (filterValue !== "3") {
@@ -120,6 +125,13 @@ const Farm = ({
         </div>
       ) : (
         <>
+          {eligibleDisclaimer &&
+            <div className="farm-disclaimer-info">
+              <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
+              Users need to farm for 24 hours in order to be eligible for rewards
+              <SvgIcon className='close-icon' onClick={closeDisclaimer} name='close' viewbox='0 0 19 19' />
+            </div>
+          }
           <div className="farm-heading farm-headingtimer mb-4 pb-2">
             <p>
               {" "}
@@ -225,10 +237,6 @@ const Farm = ({
                 </div>
               </Col>
             </Row>
-          </div>
-          <div className="farm-bottom-info">
-            <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
-            Users need to farm for 24 hours in order to be eligible for rewards
           </div>
         </>
       )}
