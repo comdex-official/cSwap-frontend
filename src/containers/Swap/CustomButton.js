@@ -53,8 +53,21 @@ const CustomButton = ({
       Number(decimalConversion(pair?.lastPrice)) *
       (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
     const amount =
-      (Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice;
+      ((Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice) *
+      10 **
+        Math.abs(
+          getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+        );
 
+    console.log(
+      "buy amount",
+      amount,
+      getAmount(amount, assetMap[demandCoin?.denom]?.decimals),
+      Number(offerCoin?.amount),
+      Number(offerCoin?.fee),
+      maxPrice
+    );
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
 

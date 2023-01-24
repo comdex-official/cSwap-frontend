@@ -121,7 +121,6 @@ const Farm = ({
   ];
 
   const onSearchChange = (searchKey) => {
-    console.log("Change:", searchKey);
     const searchTerm = searchKey.trim().toLowerCase();
     if (searchTerm) {
       let resultsObj = displayPools.filter((pool) => {
