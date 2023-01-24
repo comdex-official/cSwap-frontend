@@ -44,7 +44,6 @@ const Deposit = ({
   reverse,
   setReverse,
   markets,
-  pair,
   refreshData,
   updateBalance,
   baseCoinPoolPrice,
@@ -72,16 +71,28 @@ const Deposit = ({
   }, [setReverse]);
 
   useEffect(() => {
-    if (pair?.id) {
-      fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+    if (pool?.pairId) {
+      fetchExchangeRateValue(APP_ID, pool?.pairId, (error, result) => {
         if (error) return;
-
+        
         if (result?.pairs[0]?.base_price) {
-          setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
+          setBaseCoinPoolPrice(
+            Number(result?.pairs[0]?.base_price) /
+              10 **
+                Math.abs(
+                  getExponent(
+                    assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+                  ) -
+                    getExponent(
+                      assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+                    )
+                ),
+            result?.pairs[0]?.base_price
+          );
         }
       });
     }
-  }, [pair, setBaseCoinPoolPrice]);
+  }, [pool, setBaseCoinPoolPrice, assetMap]);
 
   const getInputPrice = () => {
     return reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;

@@ -191,11 +191,19 @@ const Swap = ({
         if (error) return;
 
         if (result?.pairs[0]?.base_price) {
-          setBaseCoinPoolPrice(result?.pairs[0]?.base_price);
+          setBaseCoinPoolPrice(
+            Number(result?.pairs[0]?.base_price) /
+              10 **
+                Math.abs(
+                  getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                    getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                ),
+            result?.pairs[0]?.base_price
+          );
         }
       });
     }
-  }, [pair, setBaseCoinPoolPrice]);
+  }, [pair, setBaseCoinPoolPrice, assetMap]);
 
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(

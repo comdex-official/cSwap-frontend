@@ -10,7 +10,7 @@ import {
   setPool,
   setPoolBalance,
   setSpotPrice,
-  setUserLiquidityInPools,
+  setUserLiquidityInPools
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -19,14 +19,14 @@ import { queryAllBalances } from "../../../services/bank/query";
 import {
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks,
+  queryPoolSoftLocks
 } from "../../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -111,10 +111,10 @@ const FarmDetails = ({
   }, [id, setPool]);
 
   useEffect(() => {
-    if (id && !pool?.id) {
+    if (id) {
       fetchPool(id);
     }
-  }, [id, fetchPool, pool?.id]);
+  }, [id, fetchPool]);
 
   const fetchProvidedCoins = useCallback(() => {
     queryPoolCoinDeserialize(
