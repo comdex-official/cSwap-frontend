@@ -1,8 +1,8 @@
-import { Button, Input, message, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setPools } from "../../actions/liquidity";
+import { setPools, setShowEligibleDisclaimer } from "../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../components/common";
 import PoolCardFarm from "../../components/PoolCardFarm";
 import Timer from "../../components/Timer";
@@ -18,10 +18,21 @@ import "./index.scss";
 
 const MasterPoolsContent = [
   <div>
-    Providing liquidity only in Master pool makes you eligible for the External APR on Master pool. To be eligible to Earn ‘Master pool’ APR an equal amount of liquidity has to be provided in any of the child pools.
-Read more about the mechanism <a aria-label="here" target="_blank" rel="noreferrer" href="https://docs.cswap.one/farming-rewards"> here </a>
-  </div>
-]
+    Providing liquidity only in Master pool makes you eligible for the External
+    APR on Master pool. To be eligible to Earn ‘Master pool’ APR an equal amount
+    of liquidity has to be provided in any of the child pools. Read more about
+    the mechanism{" "}
+    <a
+      aria-label="here"
+      target="_blank"
+      rel="noreferrer"
+      href="https://docs.cswap.one/farming-rewards"
+    >
+      {" "}
+      here{" "}
+    </a>
+  </div>,
+];
 
 const Farm = ({
   setPools,
@@ -31,16 +42,17 @@ const Farm = ({
   masterPoolMap,
   userLiquidityInPools,
   incentivesMap,
+  setShowEligibleDisclaimer,
+  showEligibleDisclaimer,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState("3");
   const dispatch = useDispatch();
-  const [eligibleDisclaimer, seteligibleDisclaimer] = useState(true)
 
   const closeDisclaimer = () => {
-    seteligibleDisclaimer(false);
-  }
+    setShowEligibleDisclaimer(false);
+  };
 
   const [isSetOnScroll, setOnScroll] = useState(false);
   useEffect(() => {
@@ -170,13 +182,25 @@ const Farm = ({
         </div>
       ) : (
         <>
-          {eligibleDisclaimer &&
-            <div className={isSetOnScroll ? "farm-disclaimer-info" : "fixedHeaderOnScroll farm-disclaimer-info"}>
+          {showEligibleDisclaimer && (
+            <div
+              className={
+                isSetOnScroll
+                  ? "farm-disclaimer-info"
+                  : "fixedHeaderOnScroll farm-disclaimer-info"
+              }
+            >
               <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
-              Users need to farm for 24 hours in order to be eligible for rewards
-              <SvgIcon className='close-icon' onClick={closeDisclaimer} name='close' viewbox='0 0 19 19' />
+              Users need to farm for 24 hours in order to be eligible for
+              rewards
+              <SvgIcon
+                className="close-icon"
+                onClick={closeDisclaimer}
+                name="close"
+                viewbox="0 0 19 19"
+              />
             </div>
-          }
+          )}
           <div className="farm-heading farm-headingtimer mb-4 pb-2">
             <p>
               {" "}
@@ -242,7 +266,17 @@ const Farm = ({
           ) : null}
           {Number(filterValue) === 2 ? null : (
             <div className="pools-upper-section mb-5">
-              <div className="farm-heading">Master Pools <Tooltip className="masterpool-tooltip-icon" placement="bottom" overlayClassName="masterpool-tooltip" title={MasterPoolsContent}><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip></div>
+              <div className="farm-heading">
+                Master Pools{" "}
+                <Tooltip
+                  className="masterpool-tooltip-icon"
+                  placement="right"
+                  overlayClassName="masterpool-tooltip"
+                  title={MasterPoolsContent}
+                >
+                  <SvgIcon name="info-icon" viewbox="0 0 9 9" />
+                </Tooltip>
+              </div>
               <Row>
                 <Col>
                   <div className="pool-card-section">
@@ -294,6 +328,8 @@ Farm.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
   setPools: PropTypes.func.isRequired,
+  setShowEligibleDisclaimer: PropTypes.func.isRequired,
+  showEligibleDisclaimer: PropTypes.bool.isRequired,
   incentivesMap: PropTypes.object,
   masterPoolMap: PropTypes.object,
   pools: PropTypes.arrayOf(
@@ -319,11 +355,13 @@ const stateToProps = (state) => {
     masterPoolMap: state.liquidity.masterPoolMap,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     incentivesMap: state.liquidity.incentivesMap,
+    showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
   };
 };
 
 const actionsToProps = {
   setPools,
+  setShowEligibleDisclaimer,
 };
 
 export default connect(stateToProps, actionsToProps)(Farm);

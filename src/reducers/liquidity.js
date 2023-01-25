@@ -14,6 +14,7 @@ import {
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
+  SHOW_ELIGIBLE_DISCLAIMER_SET,
   SPOT_PRICE_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET
@@ -214,6 +215,14 @@ const rewardsMap = (state = {}, action) => {
   return state;
 };
 
+const showEligibleDisclaimer = (state = true, action) => {
+  if (action.type === SHOW_ELIGIBLE_DISCLAIMER_SET) {
+    return action.value;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -235,4 +244,5 @@ export default combineReducers({
   incentivesMap,
   farmedTokensDollarValue,
   rewardsMap,
+  showEligibleDisclaimer,
 });
