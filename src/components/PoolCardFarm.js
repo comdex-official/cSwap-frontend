@@ -172,9 +172,19 @@ const PoolCardFarm = ({
                 {pool?.type === 2 ? (
                   <Tooltip
                     overlayClassName="ranged-tooltip ranged-tooltip-small"
-                    title={<RangeTooltipContent value={Number(decimalConversion(pool?.price))}
-                    max={Number(decimalConversion(pool?.maxPrice))}
-                    min={Number(decimalConversion(pool?.minPrice))}/>}
+                    title={
+                      <RangeTooltipContent
+                        price={Number(decimalConversion(pool?.price)).toFixed(
+                          DOLLAR_DECIMALS
+                        )}
+                        max={Number(decimalConversion(pool?.maxPrice)).toFixed(
+                          DOLLAR_DECIMALS
+                        )}
+                        min={Number(decimalConversion(pool?.minPrice)).toFixed(
+                          DOLLAR_DECIMALS
+                        )}
+                      />
+                    }
                     placement="bottom"
                   >
                     <SvgIcon name="info-icon" viewbox="0 0 9 9" />

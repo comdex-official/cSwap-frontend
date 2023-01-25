@@ -1,11 +1,15 @@
 import { Slider } from "antd";
+import { DOLLAR_DECIMALS } from "../constants/common";
+import { getAMP } from "../utils/number";
 import { Col, Row } from "./common";
 
-const RangeTooltipContent = ({ min, max, value }) => {
+const RangeTooltipContent = ({ min, max, price }) => {
   const marks = {
     0: min,
     100: max,
   };
+
+  let amp = getAMP(price, min, max)?.toFixed(DOLLAR_DECIMALS);
 
   return (
     <div>
@@ -17,34 +21,34 @@ const RangeTooltipContent = ({ min, max, value }) => {
           <Slider
             className="farm-slider farm-slider-small"
             tooltip={{ open: false }}
-            value={value}
-            defaultValue={value}
+            value={2.01}
+            defaultValue={price}
             marks={marks}
           />
         </Col>
       </Row>
       <Row>
-        <Col>Min Prize</Col>
+        <Col>Min Price</Col>
         <Col>
-          <span className="mr-2">:</span> 0.98
+          <span className="mr-2">:</span> {min}
         </Col>
       </Row>
       <Row>
         <Col>Max Price</Col>
         <Col>
-          <span className="mr-2">:</span> 1.02
+          <span className="mr-2">:</span> {max}
         </Col>
       </Row>
       <Row>
         <Col>Current Price</Col>
         <Col>
-          <span className="mr-2">:</span> 1.02
+          <span className="mr-2">:</span> {price}
         </Col>
       </Row>
       <Row>
         <Col>AMP</Col>
         <Col>
-          <span className="mr-2">:</span> x40
+          <span className="mr-2">:</span> {amp ? `x${amp}` : ""}
         </Col>
       </Row>
     </div>
