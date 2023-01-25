@@ -1,4 +1,4 @@
-import { Button, Input, message, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -242,7 +242,7 @@ const Farm = ({
           ) : null}
           {Number(filterValue) === 2 ? null : (
             <div className="pools-upper-section mb-5">
-              <div className="farm-heading">Master Pools <Tooltip className="masterpool-tooltip-icon" placement="bottom" overlayClassName="masterpool-tooltip" title={MasterPoolsContent}><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip></div>
+              <div className="farm-heading">Master Pools <Tooltip className="masterpool-tooltip-icon" placement="right" overlayClassName="masterpool-tooltip" title={MasterPoolsContent}><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip></div>
               <Row>
                 <Col>
                   <div className="pool-card-section">
