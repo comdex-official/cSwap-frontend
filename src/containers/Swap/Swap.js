@@ -678,7 +678,7 @@ const Swap = ({
                     </div>
                     <div className="assets-right swap-assets-right">
                       <div className="label-right">
-                        {variables[lang].pool_price}:
+                        {variables[lang].base_price}:
                         <span
                           className="ml-1 cursor-pointer"
                           onClick={() =>

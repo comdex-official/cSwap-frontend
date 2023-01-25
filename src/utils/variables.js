@@ -160,7 +160,7 @@ const variables = {
     // Swap Page
     limit_order: "Limit Order",
     pay: "Pay",
-    pool_price: "Pool Price",
+    base_price: "Base Price",
     at_price: "At",
     you_get: "And get",
     balance: "Balance",
