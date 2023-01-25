@@ -212,6 +212,7 @@
     }
     .ant-slider-handle{
       margin-top: -8px;
+      width: 15px;
       &::after {
         display: none;
       }
@@ -254,6 +255,21 @@
       }
     }
   }
+  &.farm-slider-small {
+    margin-bottom: 12px;
+    .ant-slider-step{
+      .ant-slider-dot{
+        height: 20px;
+        width: 4px;
+      }
+    }
+    .ant-slider-mark-text{
+      display: none;
+    }
+    .ant-slider-rail{
+      height: 6px;
+    }
+  }
 }
 
 .farmrange-title{
@@ -262,6 +278,7 @@
   align-items: center;
   font-weight: 500;
   line-height: 1.2;
+  margin-bottom: 1.8rem;
   .dark-mode & {
     color: $white;
   }
@@ -301,6 +318,14 @@
       }
     }
   }
+  &.ranged-tooltip-small{
+    .ant-tooltip-inner{
+      padding: 10px 20px 25px 25px;
+      .row {
+        font-size: $font-size-base;
+      }
+    }
+  }
 }
 
 .masterpool-tooltip{
@@ -327,6 +352,23 @@
   }
 }
 
-.farm-slidertooltip{
-  
+.ant-tooltip-open {
+  &.ant-slider-tooltip{
+    padding: 0;
+    .ant-tooltip-open-inner{
+      background: none;
+      padding: 0;
+      height: 18px;
+      min-height: 18px;
+      text-align: center;
+    }
+    .ant-tooltip-open-arrow {
+      display: none;
+    }
+  }
+}
+
+.farm-rang-slider{
+  max-width: 80%;
+  margin: auto;
 }

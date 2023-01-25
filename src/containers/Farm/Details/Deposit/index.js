@@ -356,10 +356,12 @@ const Deposit = ({
   return (
     <div className="common-card">
       <div className="farm-content-card">
-        <div className="farmrange-title">
-          Range <Tooltip overlayClassName="ranged-tooltip" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
+        <div className="farm-rang-slider">
+          <div className="farmrange-title">
+            Range <Tooltip overlayClassName="ranged-tooltip" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
+          </div>
+          <Slider className='farm-slider' tooltip={{ open: true, prefixCls: 'ant-tooltip-open' }} defaultValue={50} marks={marks} />
         </div>
-        <Slider className='farm-slider' tooltip={{ open: true }} defaultValue={50} marks={marks} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
