@@ -270,7 +270,7 @@ const Farm = ({
                 Master Pools{" "}
                 <Tooltip
                   className="masterpool-tooltip-icon"
-                  placement="right"
+                  placement="bottomLeft"
                   overlayClassName="masterpool-tooltip"
                   title={MasterPoolsContent}
                 >
