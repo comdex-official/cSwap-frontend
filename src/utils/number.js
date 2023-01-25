@@ -28,8 +28,8 @@ export const decimalConversion = (data) => {
 
 export const marketPrice = (array, denom) => {
   // Remove: below if condition for testing local purpose
-  if(denom === "weth-wei"){
-    return 1450
+  if (denom === "weth-wei") {
+    return 1450;
   }
   if (array?.[denom]?.price && array?.[denom]?.price !== "-") {
     return array?.[denom]?.price;
@@ -61,3 +61,10 @@ export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
           Math.sqrt(currentPrice / maximumPrice)))
   );
 };
+
+export const rangeToPercentage = (min, max, input) =>{
+  console.log('the range', Number(((input - min) * 100) / (max - min))?.toFixed(0))
+  
+  return Number(((input - min) * 100) / (max - min))?.toFixed(0);
+}
+

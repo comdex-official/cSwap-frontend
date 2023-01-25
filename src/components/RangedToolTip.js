@@ -1,6 +1,6 @@
 import { Slider } from "antd";
 import { DOLLAR_DECIMALS } from "../constants/common";
-import { getAMP } from "../utils/number";
+import { getAMP, rangeToPercentage } from "../utils/number";
 import { Col, Row } from "./common";
 
 const RangeTooltipContent = ({ min, max, price }) => {
@@ -21,8 +21,7 @@ const RangeTooltipContent = ({ min, max, price }) => {
           <Slider
             className="farm-slider farm-slider-small"
             tooltip={{ open: false }}
-            value={2.01}
-            defaultValue={price}
+            value={rangeToPercentage(min, max, price)}
             marks={marks}
           />
         </Col>

@@ -35,18 +35,12 @@ import {
 import {
   decimalConversion,
   getExponent,
-  marketPrice
+  marketPrice,
+  rangeToPercentage
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
-
-const marks = {
-  0: " ",
-  25: "0.98",
-  75: "1.02",
-  100: " ",
-};
 
 const Deposit = ({
   lang,
@@ -62,6 +56,11 @@ const Deposit = ({
   setBaseCoinPoolPrice,
   assetMap,
 }) => {
+  const marks = {
+    0: Number(decimalConversion(pool?.minPrice)).toFixed(DOLLAR_DECIMALS),
+    100: Number(decimalConversion(pool?.maxPrice)).toFixed(DOLLAR_DECIMALS),
+  };
+
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
   const [inProgress, setInProgress] = useState(false);
@@ -337,6 +336,14 @@ const Deposit = ({
     )}`;
   }, [markets, secondInput, pool?.balances?.quoteCoin?.denom]);
 
+  console.log(
+    "this range",
+    rangeToPercentage(
+      Number(decimalConversion(pool?.minPrice)),
+      Number(decimalConversion(pool?.maxPrice)),
+      Number(decimalConversion(pool?.price))
+    )
+  );
   return (
     <div className="common-card">
       <div className="farm-content-card">
@@ -366,7 +373,11 @@ const Deposit = ({
           <Slider
             className="farm-slider"
             tooltip={{ open: true, prefixCls: "ant-tooltip-open" }}
-            defaultValue={50}
+            value={rangeToPercentage(
+              Number(decimalConversion(pool?.minPrice)),
+              Number(decimalConversion(pool?.maxPrice)),
+              Number(decimalConversion(pool?.price))
+            )}
             marks={marks}
           />
         </div>
