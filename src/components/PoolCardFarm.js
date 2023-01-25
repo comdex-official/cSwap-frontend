@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
@@ -24,7 +24,28 @@ import {
 } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
-import { SvgIcon } from "./common";
+import { SvgIcon, Row, Col } from "./common";
+
+const RangeTooltipContent = [
+  <div>
+    <Row>
+      <Col>Pool Price</Col>
+      <Col><span className="mr-2">:</span> 123.45</Col>
+    </Row>
+    <Row>
+      <Col>Min Prize</Col>
+      <Col><span className="mr-2">:</span>  20.00</Col>
+    </Row>
+    <Row>
+      <Col>Max Price</Col>
+      <Col><span className="mr-2">:</span>  200.00</Col>
+    </Row>
+    <Row>
+      <Col>AMP</Col>
+      <Col><span className="mr-2">:</span>  x50</Col>
+    </Row>
+  </div>
+]
 
 const PoolCardFarm = ({
   lang,
@@ -168,6 +189,7 @@ const PoolCardFarm = ({
             <div className="ranged-box">
               <div className="ranged-box-inner">
                 {pool?.type === 2 ? "Ranged" : pool?.type === 1 ? "Basic" : ""}
+                Ranged <Tooltip overlayClassName="ranged-tooltip" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
               </div>
             </div>
             {pool?.type === 2 ? (
@@ -182,7 +204,7 @@ const PoolCardFarm = ({
             ) : null}
           </div>
         </div>
-        <div className="card-bottom pb-0">
+        <div className="card-bottom">
           <div className="d-flex flex-column">
             <div className="cardbottom-row">
               <label>{variables[lang].poolLiquidity}</label>

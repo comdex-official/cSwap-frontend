@@ -37,10 +37,10 @@ import variables from "../../../../utils/variables";
 import Info from "../../Info";
 
 const marks = {
-  0: '0',
-  25: '25',
-  75: '75',
-  100: '100'
+  0: ' ',
+  25: '0.98',
+  75: '1.02',
+  100: ' '
 };
 
 const RangeTooltipContent = [
@@ -359,7 +359,7 @@ const Deposit = ({
         <div className="farmrange-title">
           Range <Tooltip overlayClassName="ranged-tooltip" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
         </div>
-        <Slider className='farm-slider' tooltipVisible={false} defaultValue={60} marks={marks} />
+        <Slider className='farm-slider' tooltip={{ open: true }} defaultValue={50} marks={marks} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">

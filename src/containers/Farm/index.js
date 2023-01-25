@@ -1,4 +1,4 @@
-import { Input, message, Spin, Tabs } from "antd";
+import { Button, Input, message, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -15,6 +15,13 @@ import { queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
 import CreatePool from "./CreatePool";
 import "./index.scss";
+
+const MasterPoolsContent = [
+  <div>
+    Providing liquidity only in Master pool makes you eligible for the External APR on Master pool. To be eligible to Earn ‘Master pool’ APR an equal amount of liquidity has to be provided in any of the child pools.
+Read more about the mechanism <a aria-label="here" target="_blank" rel="noreferrer" href="https://docs.cswap.one/farming-rewards"> here </a>
+  </div>
+]
 
 const Farm = ({
   setPools,
@@ -226,7 +233,7 @@ const Farm = ({
           ) : null}
           {Number(filterValue) === 2 ? null : (
             <div className="pools-upper-section mb-5">
-              <div className="farm-heading">Master Pools</div>
+              <div className="farm-heading">Master Pools <Tooltip className="masterpool-tooltip-icon" placement="bottom" overlayClassName="masterpool-tooltip" title={MasterPoolsContent}><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip></div>
               <Row>
                 <Col>
                   <div className="pool-card-section">
