@@ -336,16 +336,7 @@ const Deposit = ({
     )}`;
   }, [markets, secondInput, pool?.balances?.quoteCoin?.denom]);
 
-  console.log(
-    "this range",
-    rangeToPercentage(
-      Number(decimalConversion(pool?.minPrice)),
-      Number(decimalConversion(pool?.maxPrice)),
-      Number(decimalConversion(pool?.price))
-    )
-  );
-
-  console.log("pool");
+  console.log("pool", pool?.id);
   return (
     <div className="common-card">
       <div className="farm-content-card">
