@@ -366,7 +366,7 @@ const Deposit = ({
             </div>
             <Slider
               className="farm-slider"
-              tooltip={{ open: true, prefixCls: "ant-tooltip-open" }}
+              tooltip={{ open: false, prefixCls: "ant-tooltip-open" }}
               value={rangeToPercentage(
                 Number(decimalConversion(pool?.minPrice)),
                 Number(decimalConversion(pool?.maxPrice)),

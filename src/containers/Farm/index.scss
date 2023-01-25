@@ -902,12 +902,30 @@
   right: 0;
   max-width: 630px;
   background: $background-light;
+  &.fixedHeaderOnScroll{
+    position: fixed;
+    z-index: 99999;
+    top: 24px;
+    @media screen and (max-width:576px) {
+      top: 54px;
+    }
+  }
   @media screen and (max-width:1540px) {
     font-size: $font-size-base;
     max-width: 550px;
     height: 45px;
     top: -58px;
     padding: 0 16px 0 20px;
+  }
+  @media screen and (max-width:991px) {
+    font-size: $font-size-sm - 1;
+    max-width: 50%;
+  }
+  @media screen and (max-width:767px) {
+    max-width: 40%;
+  }
+  @media screen and (max-width:576px) {
+    max-width: 90%;
   }
   .dark-mode & {
     background: $background-dark1;
