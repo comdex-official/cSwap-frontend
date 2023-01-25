@@ -42,6 +42,15 @@ const Farm = ({
     seteligibleDisclaimer(false);
   }
 
+  const [isSetOnScroll, setOnScroll] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setOnScroll(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const updateFilteredData = useCallback(
     (filterValue) => {
       if (filterValue !== "3") {
@@ -162,7 +171,7 @@ const Farm = ({
       ) : (
         <>
           {eligibleDisclaimer &&
-            <div className="farm-disclaimer-info">
+            <div className={isSetOnScroll ? "farm-disclaimer-info" : "fixedHeaderOnScroll farm-disclaimer-info"}>
               <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
               Users need to farm for 24 hours in order to be eligible for rewards
               <SvgIcon className='close-icon' onClick={closeDisclaimer} name='close' viewbox='0 0 19 19' />
