@@ -1,4 +1,4 @@
-import { message, Tooltip, Slider } from "antd";
+import { message, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
@@ -24,41 +24,8 @@ import {
 } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
-import { SvgIcon, Row, Col } from "./common";
-
-const marks = {
-  0: ' ',
-  25: '0.98',
-  75: '1.02',
-  100: ' '
-};
-
-const RangeTooltipContent = [
-  <div>
-    <Row>
-      <Col>
-        <div className="text-center"><small>In Range</small></div>
-        <Slider className='farm-slider farm-slider-small' tooltip={{ open: false }} defaultValue={50} marks={marks} />
-      </Col>
-    </Row>
-    <Row>
-      <Col>Min Prize</Col>
-      <Col><span className="mr-2">:</span> 0.98</Col>
-    </Row>
-    <Row>
-      <Col>Max Price</Col>
-      <Col><span className="mr-2">:</span>  1.02</Col>
-    </Row>
-    <Row>
-      <Col>Current Price</Col>
-      <Col><span className="mr-2">:</span>  1.02</Col>
-    </Row>
-    <Row>
-      <Col>AMP</Col>
-      <Col><span className="mr-2">:</span>  x40</Col>
-    </Row>
-  </div>
-]
+import { SvgIcon } from "./common";
+import RangeTooltipContent from "./RangedToolTip";
 
 const PoolCardFarm = ({
   lang,
@@ -202,7 +169,17 @@ const PoolCardFarm = ({
             <div className="ranged-box">
               <div className="ranged-box-inner">
                 {pool?.type === 2 ? "Ranged" : pool?.type === 1 ? "Basic" : ""}
-                Ranged <Tooltip overlayClassName="ranged-tooltip ranged-tooltip-small" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
+                {pool?.type === 2 ? (
+                  <Tooltip
+                    overlayClassName="ranged-tooltip ranged-tooltip-small"
+                    title={<RangeTooltipContent value={Number(decimalConversion(pool?.price))}
+                    max={Number(decimalConversion(pool?.maxPrice))}
+                    min={Number(decimalConversion(pool?.minPrice))}/>}
+                    placement="bottom"
+                  >
+                    <SvgIcon name="info-icon" viewbox="0 0 9 9" />
+                  </Tooltip>
+                ) : null}
               </div>
             </div>
             {pool?.type === 2 ? (
