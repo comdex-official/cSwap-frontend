@@ -361,12 +361,18 @@
     box-shadow: $box-shadow-inner-dark;
   }
   &.ranged-card{
+    background:  linear-gradient(180deg, #FE4350 0%, #123C73 100%);
+    border: 0;
+    padding: 2px;
     .dark-mode & {
-      background: $primary-gradient !important;
+      background:  linear-gradient(180deg, #FE4350 0%, #123C73 100%);
+      box-shadow: none;
     }
     .poolcard-two-inner{
+      background: $background-light;
       .dark-mode & {
         background: $background-dark1;
+        box-shadow: inset 7px 7px 16px 1px #262B38;
       }
     }
   }
@@ -397,16 +403,19 @@
             padding: 4px;
             border-radius: 4px;
             background: $background-light;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             .dark-mode & {
               background: $background-dark1;
             }
             .icon {
-              width: 100%;
-              height: 100%;
+              width: 13px;
+              height: 13px;
               fill: $text-color-label-dark;
-              border-radius: 50%;
+              margin-left: 7px;
               .dark-mode & {
-                fill: $white;
+                fill: #B8B8B8;
               }
             }
           }
@@ -500,9 +509,9 @@
           border: 1px solid $text-color-light;
           color: $text-color-light;
           background: rgba($color: $text-color-light, $alpha: 0.2);
-          font-size: $font-size-sm + 1;
+          font-size: $font-size-sm;
           border-radius: 4px;
-          padding: 1px 4px;
+          padding: 1px 8px 1px 4px;
           width: fit-content;
           span {
             display: flex;
@@ -835,14 +844,49 @@
   }
 }
 
-.farm-bottom-info{
-  color: $secondary-color;
+.farm-disclaimer-info{
+  color: #EA6262;
   margin-top: 38px;
   display: flex;
   align-items: center;
+  position: absolute;
+  z-index: 999;
+  top: -50px;
+  height: 60px;
+  padding: 0 20px 0 30px;
+  border-radius: 16px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  max-width: 630px;
+  background: $background-light;
+  .dark-mode & {
+    background: $background-dark1;
+  }
   .icon {
-    fill: $secondary-color;
+    fill: #EA6262;
     margin-right: 8px;
     width: 20px;
+  }
+  .close-icon {
+    fill: #747474;
+    stroke: $white;
+    stroke-width: 2px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 5px;
+    width: 18px;
+    .dark-mode & {
+      stroke: $background-dark1;
+    }
+    &:hover {
+      fill: $secondary-color;
+    }
+  }
+}
+
+.masterpool-tooltip-icon{
+  .dark-mode & {
+    fill: #B8B8B8;
   }
 }

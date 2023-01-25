@@ -1,4 +1,4 @@
-import { Button, message, Slider, SliderMarks } from "antd";
+import { Button, message, Slider, SliderMarks, Tooltip } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import {
   setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setReverse } from "../../../../actions/swap";
-import { Row, SvgIcon } from "../../../../components/common";
+import { Row, Col, SvgIcon } from "../../../../components/common";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import { comdex } from "../../../../config/network";
@@ -37,11 +37,32 @@ import variables from "../../../../utils/variables";
 import Info from "../../Info";
 
 const marks = {
-  0: '0',
-  25: '25',
-  75: '75',
-  100: '100'
+  0: ' ',
+  25: '0.98',
+  75: '1.02',
+  100: ' '
 };
+
+const RangeTooltipContent = [
+  <div>
+    <Row>
+      <Col>Pool Price</Col>
+      <Col><span className="mr-2">:</span> 123.45</Col>
+    </Row>
+    <Row>
+      <Col>Min Prize</Col>
+      <Col><span className="mr-2">:</span>  20.00</Col>
+    </Row>
+    <Row>
+      <Col>Max Price</Col>
+      <Col><span className="mr-2">:</span>  200.00</Col>
+    </Row>
+    <Row>
+      <Col>AMP</Col>
+      <Col><span className="mr-2">:</span>  x50</Col>
+    </Row>
+  </div>
+]
 
 const Deposit = ({
   lang,
@@ -335,7 +356,12 @@ const Deposit = ({
   return (
     <div className="common-card">
       <div className="farm-content-card">
-        <Slider className='farm-slider' tooltipVisible={false} defaultValue={60} marks={marks} />
+        <div className="farm-rang-slider">
+          <div className="farmrange-title">
+            Range <Tooltip overlayClassName="ranged-tooltip" title={RangeTooltipContent} placement='bottom'><SvgIcon name='info-icon' viewbox='0 0 9 9' /></Tooltip>
+          </div>
+          <Slider className='farm-slider' tooltip={{ open: true, prefixCls: 'ant-tooltip-open' }} defaultValue={50} marks={marks} />
+        </div>
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
