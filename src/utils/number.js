@@ -62,9 +62,5 @@ export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
   );
 };
 
-export const rangeToPercentage = (min, max, input) =>{
-  console.log('the range', Number(((input - min) * 100) / (max - min))?.toFixed(0))
-  
-  return Number(((input - min) * 100) / (max - min))?.toFixed(0);
-}
-
+export const rangeToPercentage = (min, max, input) =>
+  Number(((input - min) * 100) / (max - min))?.toFixed(0);
