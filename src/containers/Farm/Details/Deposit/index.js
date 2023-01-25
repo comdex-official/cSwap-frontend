@@ -344,43 +344,47 @@ const Deposit = ({
       Number(decimalConversion(pool?.price))
     )
   );
+
+  console.log("pool");
   return (
     <div className="common-card">
       <div className="farm-content-card">
-        <div className="farm-rang-slider">
-          <div className="farmrange-title">
-            Range{" "}
-            <Tooltip
-              overlayClassName="ranged-tooltip"
-              title={
-                <RangeTooltipContent
-                  price={Number(decimalConversion(pool?.price)).toFixed(
-                    DOLLAR_DECIMALS
-                  )}
-                  max={Number(decimalConversion(pool?.maxPrice)).toFixed(
-                    DOLLAR_DECIMALS
-                  )}
-                  min={Number(decimalConversion(pool?.minPrice)).toFixed(
-                    DOLLAR_DECIMALS
-                  )}
-                />
-              }
-              placement="bottom"
-            >
-              <SvgIcon name="info-icon" viewbox="0 0 9 9" />
-            </Tooltip>
+        {pool?.type === 2 ? (
+          <div className="farm-rang-slider">
+            <div className="farmrange-title">
+              Range{" "}
+              <Tooltip
+                overlayClassName="ranged-tooltip"
+                title={
+                  <RangeTooltipContent
+                    price={Number(decimalConversion(pool?.price)).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                    max={Number(decimalConversion(pool?.maxPrice)).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                    min={Number(decimalConversion(pool?.minPrice)).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                  />
+                }
+                placement="bottom"
+              >
+                <SvgIcon name="info-icon" viewbox="0 0 9 9" />
+              </Tooltip>
+            </div>
+            <Slider
+              className="farm-slider"
+              tooltip={{ open: true, prefixCls: "ant-tooltip-open" }}
+              value={rangeToPercentage(
+                Number(decimalConversion(pool?.minPrice)),
+                Number(decimalConversion(pool?.maxPrice)),
+                Number(decimalConversion(pool?.price))
+              )}
+              marks={marks}
+            />
           </div>
-          <Slider
-            className="farm-slider"
-            tooltip={{ open: true, prefixCls: "ant-tooltip-open" }}
-            value={rangeToPercentage(
-              Number(decimalConversion(pool?.minPrice)),
-              Number(decimalConversion(pool?.maxPrice)),
-              Number(decimalConversion(pool?.price))
-            )}
-            marks={marks}
-          />
-        </div>
+        ) : null}
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">

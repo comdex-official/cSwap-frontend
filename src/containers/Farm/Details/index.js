@@ -218,6 +218,7 @@ const FarmDetails = ({
       key: "1",
       children: (
         <Deposit
+          poolType={pool?.type === 2 ? "ranged" : "basic"}
           refreshData={queryPoolBalance}
           updateBalance={handleBalanceRefresh}
         />
