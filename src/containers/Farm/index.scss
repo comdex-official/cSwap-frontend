@@ -851,7 +851,7 @@
   align-items: center;
   position: absolute;
   z-index: 999;
-  top: -50px;
+  top: -55px;
   height: 60px;
   padding: 0 20px 0 30px;
   border-radius: 16px;
@@ -860,6 +860,13 @@
   right: 0;
   max-width: 630px;
   background: $background-light;
+  @media screen and (max-width:1540px) {
+    font-size: $font-size-base;
+    max-width: 550px;
+    height: 45px;
+    top: -58px;
+    padding: 0 16px 0 20px;
+  }
   .dark-mode & {
     background: $background-dark1;
   }
@@ -867,6 +874,9 @@
     fill: #EA6262;
     margin-right: 8px;
     width: 20px;
+    @media screen and (max-width:1540px) {
+      width: 16px;
+    }
   }
   .close-icon {
     fill: #747474;
@@ -876,6 +886,9 @@
     margin-left: auto;
     margin-right: 5px;
     width: 18px;
+    @media screen and (max-width:1540px) {
+      width: 15px;
+    }
     .dark-mode & {
       stroke: $background-dark1;
     }
