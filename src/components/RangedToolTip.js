@@ -3,7 +3,7 @@ import { DOLLAR_DECIMALS } from "../constants/common";
 import { getAMP, rangeToPercentage } from "../utils/number";
 import { Col, Row } from "./common";
 
-const RangeTooltipContent = ({ min, max, price }) => {
+const RangeTooltipContent = ({ min, max, price, parent }) => {
   const marks = {
     0: min,
     100: max,
@@ -13,19 +13,21 @@ const RangeTooltipContent = ({ min, max, price }) => {
 
   return (
     <div>
-      <Row>
-        <Col>
-          <div className="text-center">
-            <small>In Range</small>
-          </div>
-          <Slider
-            className="farm-slider farm-slider-small"
-            tooltip={{ open: false }}
-            value={rangeToPercentage(min, max, price)}
-            marks={marks}
-          />
-        </Col>
-      </Row>
+      {parent === "pool" ? (
+        <Row>
+          <Col>
+            <div className="text-center">
+              <small>In Range</small>
+            </div>
+            <Slider
+              className="farm-slider farm-slider-small"
+              tooltip={{ open: false }}
+              value={rangeToPercentage(min, max, price)}
+              marks={marks}
+            />
+          </Col>
+        </Row>
+      ) : null}
       <Row>
         <Col>Min Price</Col>
         <Col>

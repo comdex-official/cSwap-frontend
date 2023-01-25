@@ -174,6 +174,7 @@ const PoolCardFarm = ({
                     overlayClassName="ranged-tooltip ranged-tooltip-small"
                     title={
                       <RangeTooltipContent
+                        parent={"pool"}
                         price={Number(decimalConversion(pool?.price)).toFixed(
                           DOLLAR_DECIMALS
                         )}
