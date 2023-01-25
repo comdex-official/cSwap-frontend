@@ -1,4 +1,4 @@
-import { Button, message, Table } from "antd";
+import { Button, Input, message, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
@@ -365,6 +365,17 @@ const Assets = ({
             </Col>
           </Row>
         )}
+        <Row>
+          <Col className='assets-search-section'>
+            <div>
+              Hide 0 Balances <Switch />
+            </div>
+            <Input
+              placeholder="Search Asset.."
+              suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <Table

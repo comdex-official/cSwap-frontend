@@ -172,6 +172,7 @@
 .ant-slider{
   &.farm-slider{
     margin-bottom: 45px;
+    pointer-events: none;
     .ant-slider-mark-text{
       margin-top: 13px;
       .dark-mode & {
