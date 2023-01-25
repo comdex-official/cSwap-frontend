@@ -268,7 +268,7 @@
         width: 100%;
         transform: translateY(-50%);
         background: rgb(3,11,30);
-        background: linear-gradient(270deg, #030B1E 0%, #FFFFFF 46.7%, #030B1E 98.53%);
+        background: linear-gradient(270deg, #FFFFFF 0%, #FFFFFF 46.7%, #FFFFFF 98.53%);
         .dark-mode & {
           background: rgb(3,11,30);
           background: linear-gradient(270deg, #030B1E 0%, #FFFFFF 46.7%, #030B1E 98.53%);
@@ -330,11 +330,11 @@
   }
   .ant-tooltip-inner{
     background: $background-light;
-    padding: 25px 35px;
+    padding: 25px 28px;
     border-radius: 5;
     box-shadow: $box-shadow-inner-light;
     position: relative;
-    min-width: 250px;
+    min-width: 260px;
     .dark-mode & {
       background: $background-dark1;
       border: 1px solid $border-dark;
@@ -342,7 +342,11 @@
     }
     .row {
       padding-bottom: 10px;
-      font-size: $font-size-lg;
+      font-size: $font-size-base;
+      color: $text-color-dark2;
+      .dark-mode & {
+        color: $white;
+      }
       @media screen and (max-width:1540px) {
         font-size: $font-size-sm + 1;
       }
@@ -364,6 +368,9 @@
 .masterpool-tooltip{
   width: 500px;
   max-width: 80%;
+  @media screen and (max-width:1540px) {
+    width: 350px;
+  }
   .ant-tooltip-arrow{
     display: none;
   }
@@ -374,6 +381,10 @@
     border-radius: 4px;
     color: $tooltip-color-dark;
     font-weight: 500;
+    @media screen and (max-width:1540px) {
+      font-size: $font-size-sm - 1;
+      padding: 10px 12px;
+    }
     .dark-mode & {
       background: #ECECEC;
       border: 1px solid #ECECEC;
