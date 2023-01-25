@@ -516,10 +516,11 @@
     }
     .card-bottom {
       padding: 10px 20px 20px 20px;
-      display: flex;
+      width: 100%;
       justify-content: space-between;
       .cardbottom-row {
-        padding: 4px 10px 0 0;
+        padding: 0;
+        width: 100%;
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;

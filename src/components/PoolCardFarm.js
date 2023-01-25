@@ -24,7 +24,7 @@ import {
 } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
-import { SvgIcon } from "./common";
+import { SvgIcon, Row, Col } from "./common";
 import RangeTooltipContent from "./RangedToolTip";
 
 const PoolCardFarm = ({
@@ -206,43 +206,49 @@ const PoolCardFarm = ({
           </div>
         </div>
         <div className="card-bottom">
-          <div className="d-flex flex-column">
-            <div className="cardbottom-row">
-              <label>{variables[lang].poolLiquidity}</label>
-              <p>{`$${TotalPoolLiquidity}`}</p>
-            </div>
-            <div className="cardbottom-row">
-              {parent === "user" ? (
-                <>
-                  <label>My Liquidity</label>
-                  <p>
-                    $
-                    {commaSeparator(
-                      Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                        DOLLAR_DECIMALS
-                      )
-                    )}
-                  </p>
-                </>
-              ) : null}
-            </div>
-          </div>
-          <div className="cardbottom-row">
-            <label>{variables[lang].apr}</label>
-            <div className="percent-box">
-              <ShowAPR pool={pool} isSwapFee={true} />
-            </div>
-            <div className="swap-apr mt-1">
-              Swap APR -{" "}
-              {commaSeparator(
-                Number(
-                  rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
-                    ?.apr || 0
-                ).toFixed(DOLLAR_DECIMALS)
-              )}
-              %
-            </div>
-          </div>
+          <Row>
+            <Col xs="5">
+              <div className="d-flex flex-column">
+                <div className="cardbottom-row">
+                  <label>{variables[lang].poolLiquidity}</label>
+                  <p>{`$${TotalPoolLiquidity}`}</p>
+                </div>
+                <div className="cardbottom-row">
+                  {parent === "user" ? (
+                    <>
+                      <label>My Liquidity</label>
+                      <p>
+                        $
+                        {commaSeparator(
+                          Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                            DOLLAR_DECIMALS
+                          )
+                        )}
+                      </p>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+            </Col>
+            <Col xs="7">
+              <div className="cardbottom-row">
+                <label>{variables[lang].apr}</label>
+                <div className="percent-box">
+                  <ShowAPR pool={pool} isSwapFee={true} />
+                </div>
+                <div className="swap-apr mt-1">
+                  Swap APR -{" "}
+                  {commaSeparator(
+                    Number(
+                      rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
+                        ?.apr || 0
+                    ).toFixed(DOLLAR_DECIMALS)
+                  )}
+                  %
+                </div>
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>
