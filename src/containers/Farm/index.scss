@@ -423,9 +423,9 @@
               fill: $text-color-label-dark;
               margin-left: 7px;
               @media screen and (max-width:1540px){
-                width: 11px;
-                height: 11px;
-                margin-left: 6px;
+                width: 10px;
+                height: 10px;
+                margin-left: 5px;
               }
               .dark-mode & {
                 fill: #B8B8B8;
@@ -448,17 +448,23 @@
         margin: 8px auto 0 auto;
         display: inline-block;
         @media screen and (max-width:1540px){
-          font-size: $font-size-sm;
+          font-size: $font-size-sm - 1;
           min-width: 65px;
           padding: 2px 6px;
+          height: 23px;
+          line-height: 17px;
         }
       }
 
       h3 {
         margin-bottom: 0;
         font-size: 1.45rem;
+        margin-left: 10px;
         @media screen and (max-width:1540px){
           font-size: 1rem;
+        }
+        @media screen and (max-width:1300px){
+          font-size: 0.9rem;
         }
         .dark-mode & {
           color: $white;
@@ -512,7 +518,7 @@
       display: flex;
       justify-content: space-between;
       .cardbottom-row {
-        padding: 4px 15px 0 0;
+        padding: 4px 10px 0 0;
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;
@@ -935,8 +941,8 @@
 
 .masterpool-tooltip-icon{
   @media screen and (max-width:1540px) {
-    max-width: 14px;
-    max-height: 14px;
+    max-width: 12px;
+    max-height: 12px;
   }
   .dark-mode & {
     fill: #B8B8B8;
