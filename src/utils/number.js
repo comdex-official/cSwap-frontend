@@ -27,6 +27,10 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (array, denom) => {
+  // Remove: below if condition for testing local purpose
+  if (denom === "weth-wei") {
+    return 1450;
+  }
   if (array?.[denom]?.price && array?.[denom]?.price !== "-") {
     return array?.[denom]?.price;
   }
