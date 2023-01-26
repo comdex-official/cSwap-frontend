@@ -188,7 +188,10 @@ const Swap = ({
   useEffect(() => {
     if (pair?.id) {
       fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
-        if (error) return;
+        if (error) {
+          setBaseCoinPoolPrice(0, 0);
+          return;
+        }
 
         if (result?.pairs[0]?.base_price) {
           setBaseCoinPoolPrice(
