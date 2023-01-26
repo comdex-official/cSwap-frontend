@@ -336,7 +336,6 @@ const Deposit = ({
     )}`;
   }, [markets, secondInput, pool?.balances?.quoteCoin?.denom]);
 
-  console.log("pool", pool?.id);
   return (
     <div className="common-card">
       <div className="farm-content-card">
