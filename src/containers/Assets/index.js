@@ -37,6 +37,7 @@ const Assets = ({
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
+  const [searchKey, setSearchKey] = useState();
 
   const dispatch = useDispatch();
 
@@ -51,6 +52,10 @@ const Assets = ({
 
   const handleHideSwitchChange = (value) => {
     setHideToggle(value);
+  };
+
+  const onSearchChange = (searchKey) => {
+    setSearchKey(searchKey.trim().toLowerCase());
   };
 
   const updatePrices = () => {
@@ -350,6 +355,14 @@ const Assets = ({
     ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
     : allTableData;
 
+  tableData = searchKey
+    ? tableData.filter((item) => {
+        return denomConversion(item?.amount?.denom)
+          .toLowerCase()
+          .match(new RegExp(searchKey, "g"));
+      })
+    : tableData;
+
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
@@ -387,6 +400,7 @@ const Assets = ({
             </div>
             <Input
               placeholder="Search Asset.."
+              onChange={(event) => onSearchChange(event.target.value)}
               suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
             />
           </Col>
