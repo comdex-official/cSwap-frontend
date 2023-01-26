@@ -60,14 +60,6 @@ const CustomButton = ({
             getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
         );
 
-    console.log(
-      "buy amount",
-      amount,
-      getAmount(amount, assetMap[demandCoin?.denom]?.decimals),
-      Number(offerCoin?.amount),
-      Number(offerCoin?.fee),
-      maxPrice
-    );
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
 
