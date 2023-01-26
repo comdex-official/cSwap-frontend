@@ -84,7 +84,10 @@ const Deposit = ({
   useEffect(() => {
     if (pool?.pairId) {
       fetchExchangeRateValue(APP_ID, pool?.pairId, (error, result) => {
-        if (error) return;
+        if (error) {
+          setBaseCoinPoolPrice(0, 0);
+          return;
+        }
 
         if (result?.pairs[0]?.base_price) {
           setBaseCoinPoolPrice(

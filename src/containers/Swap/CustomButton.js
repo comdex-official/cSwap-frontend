@@ -148,8 +148,9 @@ const CustomButton = ({
 
         if (!isLimitOrder && result?.rawLog && !result?.code) {
           let parsedData = JSON.parse(result?.rawLog)?.[0];
+
           let order = parsedData?.events?.find(
-            (item) => item?.type === "limit_order"
+            (item) => item?.type === "market_order"
           );
           let orderId = order?.attributes?.find(
             (item) => item?.key === "order_id"
