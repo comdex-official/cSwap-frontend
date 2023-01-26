@@ -2266,7 +2266,7 @@
   resolved "https://registry.yarnpkg.com/@keplr-wallet/router/-/router-0.11.35.tgz#ac70a93349a9f63813486f0b292c20e89aca84f8"
   integrity sha512-n2sQ1pDynrwndh3OkyfwMiz/DjGl7L1rJ1tQumXB2Ni+gxUH2N8u6qBZYDNqhOBuli0+hBivdxNrpBwTXguguA==
 
-"@keplr-wallet/stores@^0.11.20":
+"@keplr-wallet/stores@^0.11.35":
   version "0.11.35"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/stores/-/stores-0.11.35.tgz#c60a472f12ebbea763728519a19f134346f0c5d0"
   integrity sha512-lC27QXjdXw9RtR4HkLO2ERPiKm65o6q4P4DwAsegVFY9c7O2B5nW16yy9glZ7sD0QfvGKCFHBkaSSf2UxoO3bw==
