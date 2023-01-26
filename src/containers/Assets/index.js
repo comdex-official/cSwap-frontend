@@ -1,4 +1,4 @@
-import { Button, message, Table } from "antd";
+import { Button, Input, message, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
@@ -36,6 +36,7 @@ const Assets = ({
   assetDenomMap,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
+  const [isHideToggleOn, setHideToggle] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -46,6 +47,10 @@ const Assets = ({
     });
 
     updatePrices();
+  };
+
+  const handleHideSwitchChange = (value) => {
+    setHideToggle(value);
   };
 
   const updatePrices = () => {
@@ -189,10 +194,12 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    const value = getPrice(ibcBalance?.denom) * amountConversion(
-      ibcBalance?.amount,
-      assetMap[ibcBalance?.denom]?.decimals
-    )
+    const value =
+      getPrice(ibcBalance?.denom) *
+      amountConversion(
+        ibcBalance?.amount,
+        assetMap[ibcBalance?.denom]?.decimals
+      );
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
@@ -337,7 +344,11 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentChainData, tableIBCData);
+  let allTableData = Lodash.concat(currentChainData, tableIBCData);
+
+  let tableData = isHideToggleOn
+    ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
+    : allTableData;
 
   return (
     <div className="app-content-wrapper">
@@ -365,6 +376,21 @@ const Assets = ({
             </Col>
           </Row>
         )}
+        <Row>
+          <Col className="assets-search-section">
+            <div>
+              Hide 0 Balances{" "}
+              <Switch
+                onChange={(value) => handleHideSwitchChange(value)}
+                checked={isHideToggleOn}
+              />
+            </div>
+            <Input
+              placeholder="Search Asset.."
+              suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <Table
