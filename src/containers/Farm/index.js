@@ -158,11 +158,9 @@ const Farm = ({
     if (searchTerm) {
       let resultsObj = displayPools.filter((pool) => {
         return (
-          denomConversion(pool?.balances?.baseCoin?.denom)
-            .toLowerCase()
+          denomConversion(pool?.balances?.baseCoin?.denom)?.toLowerCase()
             .match(new RegExp(searchTerm, "g")) ||
-          denomConversion(pool?.balances?.quoteCoin?.denom)
-            .toLowerCase()
+          denomConversion(pool?.balances?.quoteCoin?.denom)?.toLowerCase()
             .match(new RegExp(searchTerm, "g")) ||
           String(pool.id?.toNumber()).match(new RegExp(searchTerm, "g"))
         );
