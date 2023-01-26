@@ -80,7 +80,7 @@ const FarmDetails = ({
   const userLockedPoolTokens =
     Number(
       queuedAmounts?.length > 0 &&
-        queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+      queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
     ) + Number(activeSoftLock?.amount) || 0;
 
   const fetchSoftLock = useCallback(() => {
@@ -275,7 +275,7 @@ const FarmDetails = ({
           </div>
         </MediaQuery>
         <div className="farm-content-card-right">
-          <h3 className="mt-2 mb-2">Pool Details</h3>
+          <h3 className="mt-2 mb-2">Pool Details #{pool?.id?.toNumber()}</h3>
           <Row>
             <Col sm="6">
               <div className="pool-details-upper">

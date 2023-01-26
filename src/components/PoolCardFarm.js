@@ -91,7 +91,7 @@ const PoolCardFarm = ({
           const userLockedAmount =
             Number(
               queuedAmounts?.length > 0 &&
-                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
             ) + Number(activeSoftLock?.amount) || 0;
 
           const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
@@ -112,14 +112,14 @@ const PoolCardFarm = ({
                     assetMap[providedTokens?.[0]?.denom]?.decimals
                   )
                 ) *
-                  marketPrice(markets, providedTokens?.[0]?.denom) +
+                marketPrice(markets, providedTokens?.[0]?.denom) +
                 Number(
                   amountConversion(
                     providedTokens?.[1]?.amount,
                     assetMap[providedTokens?.[1]?.denom]?.decimals
                   )
                 ) *
-                  marketPrice(markets, providedTokens?.[1]?.denom);
+                marketPrice(markets, providedTokens?.[1]?.denom);
 
               if (totalLiquidityInDollar) {
                 setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -163,7 +163,12 @@ const PoolCardFarm = ({
                 />{" "}
               </div>
             </div>
-            <h3>{showPairDenoms()}</h3>
+            <div >
+              <div>
+                <h3>{showPairDenoms()}</h3>
+              </div>
+              <p className="pool-id">Pool #{pool?.id?.toNumber()}</p>
+            </div>
           </div>
           <div className="text-center">
             <div className="ranged-box">
