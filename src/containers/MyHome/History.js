@@ -1,7 +1,7 @@
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setTransactionHistory } from "../../actions/account";
 import { Col, Row } from "../../components/common";
@@ -37,7 +37,7 @@ const columns = [
     dataIndex: "transactionHash",
     key: "txHash",
     width: 300,
-    align: "right"
+    align: "right",
   },
 ];
 
@@ -46,28 +46,29 @@ const History = ({ address, setTransactionHistory, history }) => {
   const [pageNumber, setpageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
+  const getTransactions = useCallback(
+    (address, pageNumber, pageSize) => {
+      setInProgress(true);
+      fetchTxHistory(address, pageNumber, pageSize, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setTransactionHistory(result.txs, result.totalCount);
+      });
+    },
+    [setTransactionHistory]
+  );
+
   useEffect(() => {
     getTransactions(address, pageNumber, pageSize);
-  }, []);
-
-  const getTransactions = (address, pageNumber, pageSize) => {
-    setInProgress(true);
-    fetchTxHistory(address, pageNumber, pageSize, (error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setTransactionHistory(result.txs, result.totalCount);
-    });
-  };
+  }, [address, getTransactions, pageNumber, pageSize]);
 
   const tableData =
-    history &&
-    history.list &&
-    history.list.length > 0 &&
-    history.list.map((item, index) => {
+    history?.list?.length &&
+    history?.list?.map((item, index) => {
       const decodedTransaction = decodeTxRaw(item.tx);
       const hash = generateHash(item.tx);
 
@@ -95,9 +96,7 @@ const History = ({ address, setTransactionHistory, history }) => {
             <Copy text={hash} />
           </div>
         ),
-        msgType: abbreviateMessage(
-          decodedTransaction.body.messages
-        ),
+        msgType: abbreviateMessage(decodedTransaction.body.messages),
         date: item?.height,
         height: item.height,
       };
@@ -126,7 +125,7 @@ const History = ({ address, setTransactionHistory, history }) => {
               }}
               total={history && history.count}
               onChange={(event) => handleChange(event)}
-              locale={{emptyText: <NoDataIcon />}}
+              locale={{ emptyText: <NoDataIcon /> }}
               scroll={{ x: "100%" }}
             />
           </div>

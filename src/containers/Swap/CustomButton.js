@@ -1,21 +1,19 @@
 import { Button, message } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setComplete } from "../../actions/swap";
 import Snack from "../../components/common/Snack";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
 import {
   amountConversion,
-  convertScientificNumberIntoDecimal,
   denomConversion,
   getAmount,
   orderPriceConversion
 } from "../../utils/coin";
-import { getExponent } from "../../utils/number";
+import { decimalConversion, getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
 
 const CustomButton = ({
@@ -24,7 +22,6 @@ const CustomButton = ({
   address,
   name,
   isDisabled,
-  setComplete,
   validationError,
   lang,
   refreshBalance,
@@ -38,15 +35,12 @@ const CustomButton = ({
   orderLifespan,
   assetMap,
   baseCoinPoolPriceWithoutConversion,
+  params,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const dispatch = useDispatch();
 
   const poolPrice = Number(baseCoinPoolPriceWithoutConversion);
-
-  useEffect(() => {
-    setComplete(false);
-  }, []);
 
   const priceWithOutConversion = () => {
     return (
@@ -55,9 +49,25 @@ const CustomButton = ({
   };
 
   const calculateBuyAmount = () => {
-    const price = isLimitOrder ? limitPrice : priceWithOutConversion();
-    const amount = Number(offerCoin?.amount) / price;
+    let maxPrice =
+      Number(decimalConversion(pair?.lastPrice)) *
+      (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
+    const amount =
+      ((Number(offerCoin?.amount) - Number(offerCoin?.fee)) / maxPrice) *
+      10 **
+        Math.abs(
+          getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+        );
 
+    console.log(
+      "buy amount",
+      amount,
+      getAmount(amount, assetMap[demandCoin?.denom]?.decimals),
+      Number(offerCoin?.amount),
+      Number(offerCoin?.fee),
+      maxPrice
+    );
     return getAmount(amount, assetMap[demandCoin?.denom]?.decimals);
   };
 
@@ -78,8 +88,10 @@ const CustomButton = ({
   const getMessage = (isLimitOrder) => {
     const price = calculateOrderPrice();
 
-    return {
-      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+    let data = {
+      typeUrl: isLimitOrder
+        ? "/comdex.liquidity.v1beta1.MsgLimitOrder"
+        : "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
         orderLifespan: isLimitOrder
@@ -93,30 +105,33 @@ const CustomButton = ({
         offerCoin: {
           denom: offerCoin?.denom,
           amount: getAmount(
-            Number(offerCoin?.amount) + Number(offerCoin?.fee),
+            Number(offerCoin?.amount),
             assetMap[offerCoin?.denom]?.decimals
           ),
         },
         demandCoinDenom: demandCoin?.denom,
-        price: isLimitOrder
-          ? orderPriceConversion(
-              limitPrice *
-                10 **
-                  Math.abs(
-                    getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                      getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-                  )
-            )
-          : convertScientificNumberIntoDecimal(
-              Number(price).toFixed(0)
-            ).toString(),
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
         amount:
           orderDirection === 2
-            ? getAmount(offerCoin?.amount, assetMap[offerCoin?.denom]?.decimals)
+            ? getAmount(
+                Number(offerCoin?.amount) - Number(offerCoin?.fee),
+                assetMap[offerCoin?.denom]?.decimals
+              )
             : calculateBuyAmount(),
       },
     };
+
+    if (isLimitOrder) {
+      data.value.price = orderPriceConversion(
+        limitPrice *
+          10 **
+            Math.abs(
+              getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+            )
+      );
+    }
+    return data;
   };
 
   const handleSwap = () => {
@@ -180,7 +195,6 @@ const CustomButton = ({
           return;
         }
 
-        setComplete(true);
         updateValues();
         refreshDetails();
         message.success(
@@ -231,7 +245,6 @@ const CustomButton = ({
 CustomButton.propTypes = {
   refreshDetails: PropTypes.func.isRequired,
   refreshBalance: PropTypes.number.isRequired,
-  setComplete: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -279,8 +292,4 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-  setComplete,
-};
-
-export default connect(stateToProps, actionsToProps)(CustomButton);
+export default connect(stateToProps)(CustomButton);

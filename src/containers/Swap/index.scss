@@ -215,6 +215,9 @@
 
 .note-text {
   color: $text-color-light2;
+  @media screen and (max-width:1540px) {
+    font-size: $font-size-base;
+  }
   .dark-mode & {
     color: $text-color-light;
   }

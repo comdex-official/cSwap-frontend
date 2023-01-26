@@ -1,6 +1,6 @@
 import { message, Skeleton, Tooltip } from "antd";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import uuid from "react-uuid";
 import { setPoolRewards } from "../../actions/liquidity";
@@ -13,22 +13,24 @@ import { iconNameFromDenom } from "../../utils/string";
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
 
+  const getAPRs = useCallback(() => {
+    setIsFetchingAPR(true);
+    fetchRestAPRs((error, result) => {
+      setIsFetchingAPR(false);
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setPoolRewards(result?.data);
+    });
+  }, [setPoolRewards]);
+
   useEffect(() => {
-    const getAPRs = () => {
-      setIsFetchingAPR(true);
-      fetchRestAPRs((error, result) => {
-        setIsFetchingAPR(false);
-        if (error) {
-          message.error(error);
-          return;
-        }
-
-        setPoolRewards(result?.data);
-      });
-    };
-
-    getAPRs();
-  }, [pool, setPoolRewards]);
+    if (!rewardsMap?.[pool?.id?.toNumber()]) {
+      getAPRs();
+    }
+  }, [getAPRs]); // not including other dependencies as its going infinite loop.
 
   const showIndividualAPR = (list) => {
     if (list?.length > 2) {
