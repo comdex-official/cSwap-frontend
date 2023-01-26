@@ -69,7 +69,7 @@ const Deposit = ({
           setBalanceInProgress(false);
 
           if (error) return;
-
+          
           setAvailableBalance(result?.balance);
         }
       );
@@ -303,7 +303,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
-                          assetMap[availableBalance?.denom]?.decimals
+                          assetMap[chain?.ibcDenomHash]?.decimals
                         )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
@@ -316,11 +316,11 @@ const Deposit = ({
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                               : amountConversion(
                                   availableBalance?.amount,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                           );
                         }}
