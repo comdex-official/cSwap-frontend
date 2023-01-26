@@ -83,8 +83,10 @@ const Deposit = ({
   }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
 
   useEffect(() => {
-    initialize();
-  }, [address, initialize]);
+    if (isOpen) {
+      initialize();
+    }
+  }, [address, initialize, isOpen]);
 
   const showModal = () => {
     initialize();
