@@ -977,3 +977,14 @@
     fill: #b8b8b8;
   }
 }
+
+.farm-details-tab{
+  .ant-tabs-nav{
+    @media screen and (max-width:590px) {
+      display: block;
+      .ant-tabs-extra-content{
+        margin-top: 15px;
+      }
+    }
+  }
+}

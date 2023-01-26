@@ -219,7 +219,7 @@ const Farm = ({
               items={tabItems}
               activeKey={filterValue}
               onChange={onChange}
-              className="comdex-tabs"
+              className="comdex-tabs farm-details-tab"
               tabBarExtraContent={
                 <div className="farmtab-right-action">
                   <CreatePool
