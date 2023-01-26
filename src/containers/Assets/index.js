@@ -358,10 +358,14 @@ const Assets = ({
   tableData = searchKey
     ? tableData.filter((item) => {
         return denomConversion(item?.amount?.denom)
-          .toLowerCase()
+          ?.toLowerCase()
           .match(new RegExp(searchKey, "g"));
       })
     : tableData;
+
+  let balanceExists = allTableData?.find(
+    (item) => Number(item?.noOfTokens) > 0
+  );
 
   return (
     <div className="app-content-wrapper">
@@ -394,6 +398,7 @@ const Assets = ({
             <div>
               Hide 0 Balances{" "}
               <Switch
+                disabled={!balanceExists}
                 onChange={(value) => handleHideSwitchChange(value)}
                 checked={isHideToggleOn}
               />
