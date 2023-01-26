@@ -80,11 +80,6 @@ export const orderPriceReverseConversion = (amount) => {
 };
 
 export const denomConversion = (denom) => {
-  // Remove: below if for local testing
-  if (denom === "weth-wei") {
-    return "WETH";
-  }
-
   if (denomToDisplaySymbol[denom]) {
     return denomToDisplaySymbol[denom];
   }
