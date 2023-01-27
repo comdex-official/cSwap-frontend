@@ -9,7 +9,7 @@ import Timer from "../../components/Timer";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  MASTER_POOL_ID
+  MASTER_POOL_ID,
 } from "../../constants/common";
 import { queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
@@ -102,14 +102,12 @@ const Farm = ({
   );
 
   useEffect(() => {
-    if (!pools?.length) {
-      fetchPools(
-        (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-        DEFAULT_PAGE_SIZE,
-        true,
-        false
-      );
-    }
+    fetchPools(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false
+    );
   }, [fetchPools, pools?.length]);
 
   const updatePools = () => {
@@ -158,9 +156,11 @@ const Farm = ({
     if (searchTerm) {
       let resultsObj = displayPools.filter((pool) => {
         return (
-          denomConversion(pool?.balances?.baseCoin?.denom)?.toLowerCase()
+          denomConversion(pool?.balances?.baseCoin?.denom)
+            ?.toLowerCase()
             .match(new RegExp(searchTerm, "g")) ||
-          denomConversion(pool?.balances?.quoteCoin?.denom)?.toLowerCase()
+          denomConversion(pool?.balances?.quoteCoin?.denom)
+            ?.toLowerCase()
             .match(new RegExp(searchTerm, "g")) ||
           String(pool.id?.toNumber()).match(new RegExp(searchTerm, "g"))
         );

@@ -173,11 +173,10 @@ const PoolCardFarm = ({
           <div className="text-center">
             <div className="ranged-box">
               <div className="ranged-box-inner">
-                {pool?.type === 2 ? "Ranged" : pool?.type === 1 ? "Basic" : ""}
-                {pool?.type === 2 ? (
-                  <Tooltip
-                    overlayClassName="ranged-tooltip ranged-tooltip-small"
-                    title={
+                <Tooltip
+                  overlayClassName="ranged-tooltip ranged-tooltip-small"
+                  title={
+                    pool?.type === 2 ? (
                       <RangeTooltipContent
                         parent={"pool"}
                         price={Number(decimalConversion(pool?.price)).toFixed(
@@ -190,12 +189,19 @@ const PoolCardFarm = ({
                           PRICE_DECIMALS
                         )}
                       />
-                    }
-                    placement="bottom"
-                  >
+                    ) : null
+                  }
+                  placement="bottom"
+                >
+                  {pool?.type === 2
+                    ? "Ranged"
+                    : pool?.type === 1
+                    ? "Basic"
+                    : ""}
+                  {pool?.type === 2 ? (
                     <SvgIcon name="info-icon" viewbox="0 0 9 9" />
-                  </Tooltip>
-                ) : null}
+                  ) : null}
+                </Tooltip>
               </div>
             </div>
             {pool?.type === 2 ? (

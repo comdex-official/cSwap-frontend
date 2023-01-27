@@ -346,7 +346,10 @@ const Deposit = ({
         {pool?.type === 2 ? (
           <div className="farm-rang-slider">
             <div className="farmrange-title">
-              Range{" "}
+              {Number(pool?.price) > Number(pool?.minPrice) &&
+              Number(pool?.price) < Number(pool?.maxPrice)
+                ? "In range"
+                : "Out of range"}
               <Tooltip
                 overlayClassName="ranged-tooltip"
                 title={
