@@ -20,7 +20,8 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
+  PRICE_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { fetchExchangeRateValue } from "../../../../services/liquidity/query";
@@ -351,13 +352,13 @@ const Deposit = ({
                 title={
                   <RangeTooltipContent
                     price={Number(decimalConversion(pool?.price)).toFixed(
-                      DOLLAR_DECIMALS
+                      PRICE_DECIMALS
                     )}
                     max={Number(decimalConversion(pool?.maxPrice)).toFixed(
-                      DOLLAR_DECIMALS
+                      PRICE_DECIMALS
                     )}
                     min={Number(decimalConversion(pool?.minPrice)).toFixed(
-                      DOLLAR_DECIMALS
+                      PRICE_DECIMALS
                     )}
                   />
                 }
