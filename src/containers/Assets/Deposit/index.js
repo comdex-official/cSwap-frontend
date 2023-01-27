@@ -1,6 +1,6 @@
 import { Button, Form, message, Modal, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchProofHeight } from "../../../actions/asset";
 import { Col, Row, SvgIcon } from "../../../components/common";
@@ -50,16 +50,7 @@ const Deposit = ({
     );
   };
 
-  useEffect(() => {
-    initialize();
-  }, [address]);
-
-  const showModal = () => {
-    initialize();
-    setIsModalOpen(true);
-  };
-
-  const initialize = () => {
+  const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
         message.error(error);
@@ -78,7 +69,7 @@ const Deposit = ({
           setBalanceInProgress(false);
 
           if (error) return;
-
+          
           setAvailableBalance(result?.balance);
         }
       );
@@ -89,6 +80,17 @@ const Deposit = ({
         setProofHeight(data);
       });
     });
+  }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
+
+  useEffect(() => {
+    if (isOpen) {
+      initialize();
+    }
+  }, [address, initialize, isOpen]);
+
+  const showModal = () => {
+    initialize();
+    setIsModalOpen(true);
   };
 
   const signIBCTx = () => {
@@ -303,7 +305,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
-                          assetMap[availableBalance?.denom]?.decimals
+                          assetMap[chain?.ibcDenomHash]?.decimals
                         )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
@@ -316,11 +318,11 @@ const Deposit = ({
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                               : amountConversion(
                                   availableBalance?.amount,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                           );
                         }}
