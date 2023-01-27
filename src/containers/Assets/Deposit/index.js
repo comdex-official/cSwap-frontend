@@ -69,7 +69,7 @@ const Deposit = ({
           setBalanceInProgress(false);
 
           if (error) return;
-
+          
           setAvailableBalance(result?.balance);
         }
       );
@@ -83,8 +83,10 @@ const Deposit = ({
   }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
 
   useEffect(() => {
-    initialize();
-  }, [address, initialize]);
+    if (isOpen) {
+      initialize();
+    }
+  }, [address, initialize, isOpen]);
 
   const showModal = () => {
     initialize();
@@ -303,7 +305,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
-                          assetMap[availableBalance?.denom]?.decimals
+                          assetMap[chain?.ibcDenomHash]?.decimals
                         )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
@@ -316,11 +318,11 @@ const Deposit = ({
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                               : amountConversion(
                                   availableBalance?.amount,
-                                  assetMap[availableBalance?.denom]?.decimals
+                                  assetMap[chain?.ibcDenomHash]?.decimals
                                 )
                           );
                         }}

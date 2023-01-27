@@ -61,8 +61,10 @@ const Withdraw = ({
   }, [chain?.chainInfo, chain?.sourceChannelId]);
 
   useEffect(() => {
-    initialize();
-  }, [address, initialize]);
+    if (isModalOpen) {
+      initialize();
+    }
+  }, [address, initialize, isModalOpen]);
 
   const showModal = () => {
     initialize();
