@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
-import { DOLLAR_DECIMALS } from "../constants/common";
+import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
   queryPoolCoinDeserialize,
@@ -24,7 +24,7 @@ import {
 } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
-import { SvgIcon, Row, Col } from "./common";
+import { Col, Row, SvgIcon } from "./common";
 import RangeTooltipContent from "./RangedToolTip";
 
 const PoolCardFarm = ({
@@ -91,7 +91,7 @@ const PoolCardFarm = ({
           const userLockedAmount =
             Number(
               queuedAmounts?.length > 0 &&
-              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
             ) + Number(activeSoftLock?.amount) || 0;
 
           const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
@@ -112,14 +112,14 @@ const PoolCardFarm = ({
                     assetMap[providedTokens?.[0]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[0]?.denom) +
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
                 Number(
                   amountConversion(
                     providedTokens?.[1]?.amount,
                     assetMap[providedTokens?.[1]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[1]?.denom);
+                  marketPrice(markets, providedTokens?.[1]?.denom);
 
               if (totalLiquidityInDollar) {
                 setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
@@ -163,7 +163,7 @@ const PoolCardFarm = ({
                 />{" "}
               </div>
             </div>
-            <div >
+            <div>
               <div>
                 <h3>{showPairDenoms()}</h3>
               </div>
@@ -173,29 +173,35 @@ const PoolCardFarm = ({
           <div className="text-center">
             <div className="ranged-box">
               <div className="ranged-box-inner">
-                {pool?.type === 2 ? "Ranged" : pool?.type === 1 ? "Basic" : ""}
-                {pool?.type === 2 ? (
-                  <Tooltip
-                    overlayClassName="ranged-tooltip ranged-tooltip-small"
-                    title={
+                <Tooltip
+                  overlayClassName="ranged-tooltip ranged-tooltip-small"
+                  title={
+                    pool?.type === 2 ? (
                       <RangeTooltipContent
                         parent={"pool"}
                         price={Number(decimalConversion(pool?.price)).toFixed(
-                          DOLLAR_DECIMALS
+                          PRICE_DECIMALS
                         )}
                         max={Number(decimalConversion(pool?.maxPrice)).toFixed(
-                          DOLLAR_DECIMALS
+                          PRICE_DECIMALS
                         )}
                         min={Number(decimalConversion(pool?.minPrice)).toFixed(
-                          DOLLAR_DECIMALS
+                          PRICE_DECIMALS
                         )}
                       />
-                    }
-                    placement="bottom"
-                  >
+                    ) : null
+                  }
+                  placement="bottom"
+                >
+                  {pool?.type === 2
+                    ? "Ranged"
+                    : pool?.type === 1
+                    ? "Basic"
+                    : ""}
+                  {pool?.type === 2 ? (
                     <SvgIcon name="info-icon" viewbox="0 0 9 9" />
-                  </Tooltip>
-                ) : null}
+                  ) : null}
+                </Tooltip>
               </div>
             </div>
             {pool?.type === 2 ? (
