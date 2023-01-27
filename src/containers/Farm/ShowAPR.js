@@ -41,10 +41,11 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
               {index < 2 ? (
                 <span className="ml-1">
                   {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {list[key]?.master_pool ? "Master Pool - " : "External - "}
                   {commaSeparator(
                     (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
                   )}
-                  % {list[key]?.master_pool ? "- Master Pool" : "- External"}
+                  %
                 </span>
               ) : (
                 ""
@@ -59,8 +60,8 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
                 <div key={uuid()}>
                   <span className="ml-1">
                     {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                    {list[key]?.master_pool ? "Master Pool - " : "External - "}
                     {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
-                    {list[key]?.master_pool ? "- Master Pool" : "- External"}
                   </span>
                 </div>
               ))}
@@ -75,10 +76,11 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
         <div key={uuid()}>
           <span className="ml-1">
             {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+            {list[key]?.master_pool ? "Master Pool - " : "External - "}
             {commaSeparator(
               (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
             )}
-            % {list[key]?.master_pool ? "- Master Pool" : "- External"}
+            %
           </span>
         </div>
       ));
