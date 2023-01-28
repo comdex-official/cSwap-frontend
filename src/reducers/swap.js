@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
 import {
-  CAUTION_NOTICE_VALUES_SET,
-  COMPLETE_SET,
-  DEFAULT_SLIPPAGE_TOLERANCE,
+  CAUTION_NOTICE_VALUES_SET, DEFAULT_SLIPPAGE_TOLERANCE,
   DEMAND_COIN_AMOUNT_SET,
   DEMAND_COIN_DENOM_SET,
   LIMIT_ORDER_TOGGLE_SET,
@@ -109,14 +107,6 @@ const reverse = (state = false, action) => {
   return state;
 };
 
-const isComplete = (state = false, action) => {
-  if (action.type === COMPLETE_SET) {
-    return action.value || false;
-  }
-
-  return state;
-};
-
 // considering the value in percentage
 const slippage = (state = 0, action) => {
   if (action.type === SLIPPAGE_SET) {
@@ -162,7 +152,6 @@ export default combineReducers({
   demandCoin,
   offerCoin,
   reverse,
-  isComplete,
   slippage,
   params,
   slippageTolerance,

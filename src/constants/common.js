@@ -5,6 +5,7 @@ export const DEFAULT_PAGE_SIZE = 10;
 export const DEFAULT_FEE = 100000;
 export const DOLLAR_DECIMALS = 2;
 export const MAX_SLIPPAGE_TOLERANCE = 3;
+export const PRICE_DECIMALS = 4;
 
 let app = process.env.REACT_APP_APP;
 
