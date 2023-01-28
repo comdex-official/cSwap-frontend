@@ -50,19 +50,20 @@ const Withdraw = ({
       setDestinationAddress(account?.address);
       fetchProofHeight(
         chain.chainInfo?.rest,
-        chain.sourceChannelId,
+        chain.destChannelId,
         (error, data) => {
           if (error) return;
-
           setProofHeight(data);
         }
       );
     });
-  }, [chain?.chainInfo, chain?.sourceChannelId]);
+  }, [chain?.chainInfo, chain?.destChannelId]);
 
   useEffect(() => {
-    initialize();
-  }, [address, initialize]);
+    if (isModalOpen) {
+      initialize();
+    }
+  }, [address, initialize, isModalOpen]);
 
   const showModal = () => {
     initialize();
