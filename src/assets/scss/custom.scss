@@ -561,19 +561,19 @@ button {
 }
 
 .ant-switch {
-  background: #B1B1B1 !important;
+  background: #f9c8c8 !important;
 
   &:hover {
     opacity: 0.8;
   }
 
   .dark-mode & {
-    background: #B1B1B1 !important;
+    background: #4A1818 !important;
   }
 
   .ant-switch-handle {
     &:before {
-      background: #FFFFFF;
+      background: #FD424F;
     }
   }
 
@@ -581,6 +581,11 @@ button {
     background: $secondary-color !important;
     .dark-mode & {
       background:$secondary-color !important;
+    }
+    .ant-switch-handle {
+      &:before {
+        background:$white;
+      }
     }
   }
 }
