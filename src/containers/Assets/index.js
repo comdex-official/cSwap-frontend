@@ -1,7 +1,7 @@
 import { Button, Input, message, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
@@ -50,7 +50,12 @@ const Assets = ({
     updatePrices();
   };
 
+  useEffect(() => {
+    setHideToggle(localStorage.getItem("hideToggle") === "true");
+  }, []);
+
   const handleHideSwitchChange = (value) => {
+    localStorage.setItem("hideToggle", value);
     setHideToggle(value);
   };
 

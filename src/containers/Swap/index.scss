@@ -82,22 +82,22 @@
       border: 1px solid $border-dark;
       box-shadow: $box-shadow-inner-dark;
     }
-    .ant-switch-handle {
-      &::before {
-        background: $secondary-color;
-      }
-    }
-    .ant-switch-checked:focus {
-      box-shadow: none;
-    }
-    .ant-switch-checked {
-      background-color: $red;
-      .ant-switch-handle {
-        &::before {
-          background: $white;
-        }
-      }
-    }
+    // .ant-switch-handle {
+    //   &::before {
+    //     background: $secondary-color;
+    //   }
+    // }
+    // .ant-switch-checked:focus {
+    //   box-shadow: none;
+    // }
+    // .ant-switch-checked {
+    //   background-color: $red;
+    //   .ant-switch-handle {
+    //     &::before {
+    //       background: $white;
+    //     }
+    //   }
+    // }
     .setting-popover {
       position: absolute;
       right: 15px;
