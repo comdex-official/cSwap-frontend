@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { ACCOUNT_NAME_SET } from "../constants/account";
 import {
   BASE_COIN_POOL_PRICE_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
@@ -19,6 +20,7 @@ import {
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET
 } from "../constants/liquidity";
+
 
 const pool = (
   state = {
@@ -154,6 +156,10 @@ const userLiquidityInDollar = (state = 0, action) => {
 };
 
 const userLiquidityInPools = (state = {}, action) => {
+  if (action?.type === ACCOUNT_NAME_SET) {
+    return {};
+  }
+
   if (action.type === USER_LIQUIDITY_IN_POOLS_SET && action?.poolId) {
     return {
       ...state,
