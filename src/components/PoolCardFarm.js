@@ -120,24 +120,21 @@ const PoolCardFarm = ({
                   )
                 ) *
                   marketPrice(markets, providedTokens?.[1]?.denom);
-
-              if (totalLiquidityInDollar) {
-                setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
-              }
+              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
           );
         });
       }
     },
-    [address, assetMap, balances, markets, setUserLiquidityInPools]
+    [address, assetMap, balances, markets]
   );
 
   useEffect(() => {
     // fetching user liquidity for my pools.
-    if (pool?.id && !userLiquidityInPools[pool?.id]) {
+    if (pool?.id) {
       getUserLiquidity(pool);
     }
-  }, [pool, getUserLiquidity, userLiquidityInPools]);
+  }, [pool, getUserLiquidity]);
 
   const handleNavigate = () => {
     navigate(`/farm/${pool.id && pool.id.toNumber()}`);

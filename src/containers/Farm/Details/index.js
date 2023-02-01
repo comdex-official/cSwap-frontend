@@ -80,7 +80,7 @@ const FarmDetails = ({
   const userLockedPoolTokens =
     Number(
       queuedAmounts?.length > 0 &&
-      queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+        queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
     ) + Number(activeSoftLock?.amount) || 0;
 
   const fetchSoftLock = useCallback(() => {
@@ -203,14 +203,9 @@ const FarmDetails = ({
     let totalUserPoolLiquidity = Number(calculatePoolLiquidity(providedTokens));
 
     if (pool?.id) {
-      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity);
+      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity || 0);
     }
-  }, [
-    pool?.id,
-    providedTokens,
-    calculatePoolLiquidity,
-    setUserLiquidityInPools,
-  ]);
+  }, [pool?.id, providedTokens, calculatePoolLiquidity]);
 
   const tabItems = [
     {

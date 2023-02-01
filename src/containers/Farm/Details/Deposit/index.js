@@ -4,11 +4,10 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
-  setBaseCoinPoolPrice,
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom
+  setSecondReserveCoinDenom,
 } from "../../../../actions/liquidity";
 import { setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -21,23 +20,22 @@ import {
   APP_ID,
   DEFAULT_FEE,
   DOLLAR_DECIMALS,
-  PRICE_DECIMALS
+  PRICE_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
-import { fetchExchangeRateValue } from "../../../../services/liquidity/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   decimalConversion,
   getExponent,
   marketPrice,
-  rangeToPercentage
+  rangeToPercentage,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -53,8 +51,6 @@ const Deposit = ({
   markets,
   refreshData,
   updateBalance,
-  baseCoinPoolPrice,
-  setBaseCoinPoolPrice,
   assetMap,
 }) => {
   const marks = {
@@ -68,6 +64,8 @@ const Deposit = ({
   const [inputValidationError, setInputValidationError] = useState();
   const [outputValidationError, setOutputValidationError] = useState();
 
+  const poolPrice = decimalConversion(pool?.price);
+
   const firstAssetAvailableBalance =
     getDenomBalance(balances, pool?.balances?.baseCoin?.denom) || 0;
 
@@ -75,42 +73,15 @@ const Deposit = ({
     getDenomBalance(balances, pool?.balances?.quoteCoin?.denom) || 0;
 
   const getOutputPrice = useCallback(() => {
-    return reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice; // calculating price from pool
-  }, [baseCoinPoolPrice, reverse]);
+    return reverse ? 1 / poolPrice : poolPrice; // calculating price from pool
+  }, [poolPrice, reverse]);
 
   useEffect(() => {
     setReverse(false);
   }, [setReverse]);
 
-  useEffect(() => {
-    if (pool?.pairId) {
-      fetchExchangeRateValue(APP_ID, pool?.pairId, (error, result) => {
-        if (error) {
-          setBaseCoinPoolPrice(0, 0);
-          return;
-        }
-
-        if (result?.pairs[0]?.base_price) {
-          setBaseCoinPoolPrice(
-            Number(result?.pairs[0]?.base_price) /
-              10 **
-                Math.abs(
-                  getExponent(
-                    assetMap[pool?.balances?.baseCoin?.denom]?.decimals
-                  ) -
-                    getExponent(
-                      assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
-                    )
-                ),
-            result?.pairs[0]?.base_price
-          );
-        }
-      });
-    }
-  }, [pool, setBaseCoinPoolPrice, assetMap]);
-
   const getInputPrice = () => {
-    return reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    return reverse ? poolPrice : 1 / poolPrice;
   };
 
   const resetValues = () => {
@@ -265,7 +236,7 @@ const Deposit = ({
   const showOfferCoinSpotPrice = () => {
     const denomIn = denomConversion(pool?.balances?.baseCoin?.denom);
     const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
-    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
+    const price = reverse ? 1 / poolPrice : poolPrice;
 
     return `1 ${denomIn || ""} = ${Number(
       price && isFinite(price) ? price : 0
@@ -275,7 +246,7 @@ const Deposit = ({
   const showDemandCoinSpotPrice = () => {
     const denomIn = denomConversion(pool?.balances?.baseCoin?.denom);
     const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
-    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
+    const price = reverse ? poolPrice : 1 / poolPrice;
 
     return `1 ${denomOut || ""} = ${Number(
       price && isFinite(price) ? price : 0
@@ -561,11 +532,9 @@ Deposit.propTypes = {
   setPool: PropTypes.func.isRequired,
   setReverse: PropTypes.func.isRequired,
   setSecondReserveCoinDenom: PropTypes.func.isRequired,
-  setBaseCoinPoolPrice: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  baseCoinPoolPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -622,7 +591,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     reverse: state.swap.reverse,
     markets: state.oracle.market.list,
-    baseCoinPoolPrice: state.liquidity.baseCoinPoolPrice,
     balances: state.account.balances.list,
     firstReserveCoinDenom: state.liquidity.firstReserveCoinDenom,
     secondReserveCoinDenom: state.liquidity.secondReserveCoinDenom,
@@ -637,7 +605,6 @@ const actionsToProps = {
   setPool,
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
-  setBaseCoinPoolPrice,
   setReverse,
 };
 

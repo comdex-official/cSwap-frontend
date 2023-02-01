@@ -19,9 +19,15 @@ import PoolCardRow from "./MyPoolRow";
 const MyPools = ({ pools, lang, userLiquidityInPools }) => {
   const navigate = useNavigate();
 
-  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find(
+      (pool) =>
+        pool?.id?.toNumber() === Number(poolKey) &&
+        Number(userLiquidityInPools[poolKey]) > 0
+    )
   );
+
+  const userPools = rawUserPools.filter((item) => item);
 
   const columns = [
     {
@@ -30,7 +36,7 @@ const MyPools = ({ pools, lang, userLiquidityInPools }) => {
       key: "assetpair",
       align: "center",
       width: 200,
-      render: (pool) => <PoolCardRow key={pool.id} pool={pool} lang={lang} />,
+      render: (pool) => <PoolCardRow key={pool?.id} pool={pool} lang={lang} />,
     },
     {
       title: "APR",
@@ -86,7 +92,7 @@ const MyPools = ({ pools, lang, userLiquidityInPools }) => {
         key: index,
         assetpair: item,
         position: userLiquidityInPools[item?.id],
-        reward: item.reward,
+        reward: item?.reward,
         apr: item,
         action: item,
       };

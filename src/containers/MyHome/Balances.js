@@ -104,15 +104,13 @@ const Balances = ({
                 ) *
                   marketPrice(markets, providedTokens?.[1]?.denom);
 
-              if (totalLiquidityInDollar) {
-                setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
-              }
+              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
           );
         });
       }
     },
-    [assetMap, address, markets, balances, setUserLiquidityInPools]
+    [assetMap, address, markets, balances]
   );
 
   const fetchPools = useCallback(
@@ -143,14 +141,13 @@ const Balances = ({
   );
 
   useEffect(() => {
-    setUserLiquidityInPools();
     fetchPools(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
       true,
       false
     );
-  }, [markets, balances, fetchPools, setUserLiquidityInPools]);
+  }, [markets, balances, fetchPools]);
 
   const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
     (a, b) => a + b,
