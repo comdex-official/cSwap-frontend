@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { comdex, harbor } from "../../config/network";
+import { comdex, harbor, ibcDenoms } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -114,7 +114,7 @@ const Swap = ({
 
   useEffect(() => {
     let options = Object.keys(pairsMapping)?.filter(
-      (item) => item !== harbor?.coinMinimalDenom
+      (item) => item !== harbor?.coinMinimalDenom && item !== ibcDenoms?.acanto
     );
     //filtering out harbor from options
 
