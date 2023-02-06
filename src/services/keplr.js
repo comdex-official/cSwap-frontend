@@ -59,11 +59,16 @@ export const getChainConfig = (chain = comdex) => {
         coinMinimalDenom: chain?.coinMinimalDenom,
         coinDecimals: chain?.coinDecimals,
         coinGeckoId: chain?.coinGeckoId,
-        gasPriceStep: chain?.gasPriceStep,
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
       },
     ],
     coinType: chain?.coinType,
     features: chain?.features,
+    
   };
 };
 
