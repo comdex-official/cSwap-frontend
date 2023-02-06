@@ -400,14 +400,16 @@ const Assets = ({
         )}
         <Row>
           <Col className="assets-search-section">
-            <div className="text">
-              Hide 0 Balances{" "}
-              <Switch
-                disabled={!balanceExists}
-                onChange={(value) => handleHideSwitchChange(value)}
-                checked={isHideToggleOn}
-              />
-            </div>
+            {parent && parent === "portfolio" ? null : (
+              <div className="text">
+                Hide 0 Balances{" "}
+                <Switch
+                  disabled={!balanceExists}
+                  onChange={(value) => handleHideSwitchChange(value)}
+                  checked={isHideToggleOn}
+                />
+              </div>
+            )}
             <Input
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
