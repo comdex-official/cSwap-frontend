@@ -9,13 +9,18 @@ import {
   OUT_ASSET_SET,
   PAIRS_SET,
   PAIR_ID_SET,
-  PAIR_SET,
+  PAIR_SET
 } from "../constants/asset";
 
 export const setPairs = (list, pagination) => {
+  // Remove expired pairs from ui.
+  let activePairs = list.filter(
+    (item) => item?.id?.toNumber() !== 22 && item?.id?.toNumber() !== 23
+  );
+
   return {
     type: PAIRS_SET,
-    list,
+    list: activePairs,
     pagination,
   };
 };
