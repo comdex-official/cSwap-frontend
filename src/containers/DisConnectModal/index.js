@@ -158,7 +158,6 @@ DisConnectModal.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  poolBalance: PropTypes.number,
   show: PropTypes.bool,
 };
 
@@ -168,7 +167,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     balances: state.account.balances.list,
     show: state.account.showModal,
-    poolBalance: state.account.balances.pool,
     name: state.account.name,
   };
 };

@@ -73,12 +73,26 @@
         padding-right: 10%;
         line-height: 1.2;
 
+        .ant-btn {
+          @media screen and (max-width:1540px) {
+            padding: 0 15px;
+            height: 30px;
+            line-height: 30px;
+            font-size: $font-size-base - 1;
+          }
+        }
+
         h3 {
           font-size: 20px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           margin-bottom: 8px;
+
+          @media screen and (max-width:1540px) {
+            font-size: 17px;
+            margin-bottom: 6px;
+          }
 
           .dark-mode & {
             color: $white;
@@ -363,22 +377,26 @@
 
 .ant-btn {
   .passed-circle {
-    width: 5px;
-    height: 5px;
     border-radius: 5px;
     background: $success-color;
     width: 11px;
     height: 11px;
     margin-right: 3px;
+    @media screen and (max-width:1540px) {
+      width: 8px;
+      height: 8px;
+    }
   }
   .failed-circle {
-    width: 5px;
-    height: 5px;
     border-radius: 5px;
     background: $error-color;
     width: 11px;
     height: 11px;
     margin-right: 3px;
+    @media screen and (max-width:1540px) {
+      width: 8px;
+      height: 8px;
+    }
   }
   .warning-circle {
     width: 5px;
@@ -388,5 +406,9 @@
     width: 11px;
     height: 11px;
     margin-right: 3px;
+    @media screen and (max-width:1540px) {
+      width: 8px;
+      height: 8px;
+    }
   }
 }

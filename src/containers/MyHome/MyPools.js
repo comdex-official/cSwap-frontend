@@ -1,56 +1,33 @@
-import { Button, message, Table } from "antd";
+import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   setFirstReserveCoinDenom,
-  setPools,
   setSecondReserveCoinDenom
 } from "../../actions/liquidity";
 import { Col, Row } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import TooltipIcon from "../../components/TooltipIcon";
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
-} from "../../constants/common";
-import { queryPoolsList } from "../../services/liquidity/query";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import { commaSeparator } from "../../utils/number";
 import ShowAPR from "../Farm/ShowAPR";
 import "./index.scss";
 import PoolCardRow from "./MyPoolRow";
 
-const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
-  const [inProgress, setInProgress] = useState(false);
+const MyPools = ({ pools, lang, userLiquidityInPools }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPools = (offset, limit, countTotal, reverse) => {
-      setInProgress(true);
-      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-        setInProgress(false);
-        if (error) {
-          message.error(error);
-          return;
-        }
-
-        setPools(result.pools);
-      });
-    };
-
-    fetchPools(
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, []);
-
-  const userPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    pools?.find((pool) => pool?.id?.toNumber() === Number(poolKey))
+  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    pools?.find(
+      (pool) =>
+        pool?.id?.toNumber() === Number(poolKey) &&
+        Number(userLiquidityInPools[poolKey]) > 0
+    )
   );
+
+  const userPools = rawUserPools.filter((item) => item);
 
   const columns = [
     {
@@ -59,7 +36,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
       key: "assetpair",
       align: "center",
       width: 200,
-      render: (pool) => <PoolCardRow key={pool.id} pool={pool} lang={lang} />,
+      render: (pool) => <PoolCardRow key={pool?.id} pool={pool} lang={lang} />,
     },
     {
       title: "APR",
@@ -115,7 +92,7 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
         key: index,
         assetpair: item,
         position: userLiquidityInPools[item?.id],
-        reward: item.reward,
+        reward: item?.reward,
         apr: item,
         action: item,
       };
@@ -127,7 +104,6 @@ const MyPools = ({ setPools, pools, lang, userLiquidityInPools }) => {
         <Col>
           <Table
             className="custom-table farm-table"
-            loading={inProgress}
             dataSource={tableData}
             columns={columns}
             pagination={false}
@@ -177,7 +153,6 @@ const stateToProps = (state) => {
 };
 
 const actionsToProps = {
-  setPools,
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
 };

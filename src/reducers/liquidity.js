@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { ACCOUNT_NAME_SET } from "../constants/account";
 import {
   BASE_COIN_POOL_PRICE_SET,
   FARMED_TOKENS_DOLLAR_VALUE,
@@ -14,10 +15,12 @@ import {
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
+  SHOW_ELIGIBLE_DISCLAIMER_SET,
   SPOT_PRICE_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET
 } from "../constants/liquidity";
+
 
 const pool = (
   state = {
@@ -153,6 +156,10 @@ const userLiquidityInDollar = (state = 0, action) => {
 };
 
 const userLiquidityInPools = (state = {}, action) => {
+  if (action?.type === ACCOUNT_NAME_SET) {
+    return {};
+  }
+
   if (action.type === USER_LIQUIDITY_IN_POOLS_SET && action?.poolId) {
     return {
       ...state,
@@ -214,6 +221,14 @@ const rewardsMap = (state = {}, action) => {
   return state;
 };
 
+const showEligibleDisclaimer = (state = true, action) => {
+  if (action.type === SHOW_ELIGIBLE_DISCLAIMER_SET) {
+    return action.value;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -235,4 +250,5 @@ export default combineReducers({
   incentivesMap,
   farmedTokensDollarValue,
   rewardsMap,
+  showEligibleDisclaimer,
 });

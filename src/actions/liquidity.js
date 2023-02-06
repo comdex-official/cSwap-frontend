@@ -14,7 +14,8 @@ import {
   SECOND_RESERVE_COIN_DENOM_SET,
   SPOT_PRICE_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
-  USER_LIQUIDITY_IN_POOLS_SET
+  USER_LIQUIDITY_IN_POOLS_SET,
+  SHOW_ELIGIBLE_DISCLAIMER_SET,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -106,7 +107,8 @@ export const setUserLiquidityInPools = (poolId, value) => {
 };
 
 export const setPoolIncentives = (list) => {
-  let rewardMap = {}, incentivesMap = {};
+  let rewardMap = {},
+    incentivesMap = {};
 
   for (let i = 0; i < list.length; i++) {
     if (incentivesMap[list[i].poolId] === undefined) {
@@ -179,6 +181,13 @@ export const setFarmedTokensDollarValue = (poolId, value) => {
 export const setPoolRewards = (value) => {
   return {
     type: POOL_REWARDS_SET,
+    value,
+  };
+};
+
+export const setShowEligibleDisclaimer = (value) => {
+  return {
+    type: SHOW_ELIGIBLE_DISCLAIMER_SET,
     value,
   };
 };

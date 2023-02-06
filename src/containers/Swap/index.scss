@@ -82,22 +82,22 @@
       border: 1px solid $border-dark;
       box-shadow: $box-shadow-inner-dark;
     }
-    .ant-switch-handle {
-      &::before {
-        background: $secondary-color;
-      }
-    }
-    .ant-switch-checked:focus {
-      box-shadow: none;
-    }
-    .ant-switch-checked {
-      background-color: $red;
-      .ant-switch-handle {
-        &::before {
-          background: $white;
-        }
-      }
-    }
+    // .ant-switch-handle {
+    //   &::before {
+    //     background: $secondary-color;
+    //   }
+    // }
+    // .ant-switch-checked:focus {
+    //   box-shadow: none;
+    // }
+    // .ant-switch-checked {
+    //   background-color: $red;
+    //   .ant-switch-handle {
+    //     &::before {
+    //       background: $white;
+    //     }
+    //   }
+    // }
     .setting-popover {
       position: absolute;
       right: 15px;
@@ -215,6 +215,9 @@
 
 .note-text {
   color: $text-color-light2;
+  @media screen and (max-width:1540px) {
+    font-size: $font-size-base;
+  }
   .dark-mode & {
     color: $text-color-light;
   }

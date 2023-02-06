@@ -11,6 +11,7 @@ import {
   ValidatePriceInputNumber
 } from "../../config/_validation";
 import {
+  APP_ID,
   DEFAULT_FEE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
@@ -18,6 +19,7 @@ import {
   MAX_SLIPPAGE_TOLERANCE
 } from "../../constants/common";
 import {
+  fetchExchangeRateValue,
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
@@ -184,38 +186,27 @@ const Swap = ({
   };
 
   useEffect(() => {
-    if (pool?.balances?.length > 0) {
-      const baseCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.baseCoinDenom
-      )?.amount;
-      const quoteCoinBalanceInPool = pool?.balances?.find(
-        (item) => item.denom === pair?.quoteCoinDenom
-      )?.amount;
+    if (pair?.id) {
+      fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+        if (error) {
+          setBaseCoinPoolPrice(0, 0);
+          return;
+        }
 
-      const baseCoinPoolPrice =
-        Number(
-          amountConversion(
-            quoteCoinBalanceInPool,
-            assetMap[pair?.quoteCoinDenom]?.decimals
-          )
-        ) /
-        Number(
-          amountConversion(
-            baseCoinBalanceInPool,
-            assetMap[pair?.baseCoinDenom]?.decimals
-          )
-        );
-
-      const baseCoinPoolPriceWithoutConversion = Number(
-        quoteCoinBalanceInPool / baseCoinBalanceInPool
-      ).toFixed(comdex?.coinDecimals);
-
-      setBaseCoinPoolPrice(
-        Number(baseCoinPoolPrice),
-        Number(baseCoinPoolPriceWithoutConversion)
-      );
+        if (result?.pairs[0]?.base_price) {
+          setBaseCoinPoolPrice(
+            Number(result?.pairs[0]?.base_price) /
+              10 **
+                Math.abs(
+                  getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                    getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                ),
+            result?.pairs[0]?.base_price
+          );
+        }
+      });
     }
-  }, [pool]);
+  }, [pair, setBaseCoinPoolPrice, assetMap]);
 
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(
@@ -252,9 +243,11 @@ const Swap = ({
   };
 
   const handleOfferCoinAmountChange = (value) => {
-    const selectedAsset = poolBalance.filter(
-      (item) => item?.denom === offerCoin?.denom
-    )[0];
+    const selectedAsset =
+      poolBalance &&
+      Object.values(poolBalance).filter(
+        (item) => item?.denom === offerCoin?.denom
+      )[0];
 
     const assetVolume =
       selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
@@ -272,7 +265,7 @@ const Swap = ({
         100
     );
 
-    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate)) + 0.001; // adding 0.001 (0.1%) to existing swap fee rate for safer side to avoid offer coin insufficient error in case fractional calculation errors.
+    let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
 
     setValidationError(
@@ -338,10 +331,7 @@ const Swap = ({
   };
 
   const showOfferCoinValue = () => {
-    const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
-
-    const demandCoinPrice = marketPrice(markets, demandCoin?.denom);
-    const total = price * demandCoinPrice * offerCoin?.amount;
+    const total = marketPrice(markets, offerCoin?.denom) * offerCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
@@ -349,9 +339,7 @@ const Swap = ({
   };
 
   const showDemandCoinValue = () => {
-    const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
-    const offerCoinPrice = marketPrice(markets, offerCoin?.denom);
-    const total = price * offerCoinPrice * demandCoin?.amount;
+    const total = marketPrice(markets, demandCoin?.denom) * demandCoin?.amount;
 
     return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
       DOLLAR_DECIMALS
@@ -451,7 +439,12 @@ const Swap = ({
     if (pair?.lastPrice) {
       setPriceValidationError(
         ValidatePriceInputNumber(
-          Number(price),
+          Number(price) *
+            10 **
+              Math.abs(
+                getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+                  getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+              ),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
         )
@@ -688,7 +681,7 @@ const Swap = ({
                     </div>
                     <div className="assets-right swap-assets-right">
                       <div className="label-right">
-                        {variables[lang].pool_price}:
+                        {variables[lang].base_price}:
                         <span
                           className="ml-1 cursor-pointer"
                           onClick={() =>
@@ -821,6 +814,7 @@ const Swap = ({
                   limitPrice={limitPrice}
                   lang={lang}
                   pair={pair}
+                  params={params}
                   orderLifespan={orderLifespan}
                   refreshDetails={handleRefreshDetails}
                   orderDirection={reverse ? 1 : 2}

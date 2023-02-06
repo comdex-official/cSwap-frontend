@@ -137,13 +137,17 @@ button {
 
     .content {
       max-width: 100%;
-      padding: 20px 45px 0;
+      padding: 20px 100px 0;
       margin: 0 auto;
       width: 100%;
       display: flex;
       flex-direction: column;
       flex: 0 1 100%;
       transition: none;
+
+      @media screen and (max-width:1540px){
+        padding: 20px 80px 0;
+      }
 
       @media screen and (max-width: 1120px) {
         padding-left: 15px;
@@ -534,16 +538,7 @@ button {
 }
 
 .ant-switch {
-  background: rgba(0, 0, 0, 0.25);
-  .dark-mode & {
-    background: #2b2b2b;
-  }
-
-  .ant-switch-handle {
-    &:before {
-      background: $primary-color;
-    }
-  }
+  
 
   &.ant-switch-small {
     height: 16px;
@@ -560,6 +555,36 @@ button {
     &.ant-switch-checked {
       .ant-switch-handle {
         left: calc(100% - 15px);
+      }
+    }
+  }
+}
+
+.ant-switch {
+  background: #f9c8c8 !important;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  .dark-mode & {
+    background: #4A1818 !important;
+  }
+
+  .ant-switch-handle {
+    &:before {
+      background: #FD424F;
+    }
+  }
+
+  &.ant-switch-checked {
+    background: $secondary-color !important;
+    .dark-mode & {
+      background:$secondary-color !important;
+    }
+    .ant-switch-handle {
+      &:before {
+        background:$white;
       }
     }
   }
@@ -1162,10 +1187,16 @@ button {
 
       &::-webkit-placeholder {
         color: $text-color-dark2;
+         .dark-mode &{
+          color: white;
+        }
       }
 
       &::placeholder {
         color: $text-color-dark2;
+        .dark-mode &{
+          color: white;
+        }
       }
 
       &::-webkit-inner-spin-button {
@@ -1326,6 +1357,12 @@ button {
       color: $text-color-label-dark;
     }
   }
+     &::placeholder {
+        color: $text-color-dark2;
+        .dark-mode &{
+          color: white;
+        }
+      }
 }
 
 .card-bottom-details {
@@ -1503,6 +1540,10 @@ button {
     max-width: 160px;
     line-height: 1.4;
     font-size: 1.2rem;
+    @media screen and (max-width:1540px) {
+      font-size: 1.05rem;
+      max-width: 140px;
+    }
   }
   .timer-count{
     display: flex;
@@ -1518,8 +1559,12 @@ button {
         overflow: hidden;
         padding: 1px;
         margin-bottom: 5px;
+        @media screen and (max-width:1540px) {
+          width: 40px;
+          height: 40px;
+        }
         .cols-inner{
-          background: #0E1D38;
+          background: $background-light;
           position: relative;
           height: 100%;
           border-radius: 5px;
@@ -1528,16 +1573,25 @@ button {
           display: flex;
           align-items: center;
           justify-content: center;
+          .dark-mode & {
+            background: #0E1D38;
+          }
+          @media screen and (max-width:1540px) {
+            font-size: 1.4rem;
+          }
           &::after {
             content: ' ';
             position: absolute;
             width: 100%;
             height: 50%;
-            background: rgba(#070F20, 0.5);
+            background: rgba(#070F20, 0.1);
             bottom: 0;
             left: 0;
             right: 0;
             border-radius:0 0 5px 5px;
+            .dark-mode & {
+              background: rgba(#070F20, 0.5);
+            }
           }
         }
       }
@@ -1546,6 +1600,9 @@ button {
         font-size: $font-size-sm - 1;
         text-transform: uppercase;
         font-weight: lighter;
+        @media screen and (max-width:1540px) {
+          font-size: $font-size-sm - 2;
+        }
       }
     }
   }
