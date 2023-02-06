@@ -400,7 +400,7 @@ const Assets = ({
         )}
         <Row>
           <Col className="assets-search-section">
-            <div>
+            <div className="text">
               Hide 0 Balances{" "}
               <Switch
                 disabled={!balanceExists}
