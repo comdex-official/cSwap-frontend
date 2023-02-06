@@ -256,7 +256,7 @@ const Deposit = ({
   return (
     <>
       <Button type="primary" size="small" onClick={showModal}>
-        {variables[lang].deposit}
+        {variables[lang].deposit} <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
         className="asstedepositw-modal"
