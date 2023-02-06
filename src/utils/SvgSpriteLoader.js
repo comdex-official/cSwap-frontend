@@ -39,9 +39,8 @@ const SvgSprite = (props) => {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: svg }}
-      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${
-        isErrored ? "svgInline--errored" : ""
-      }`}
+      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${isErrored ? "svgInline--errored" : ""
+        }`}
     />
   );
 };
