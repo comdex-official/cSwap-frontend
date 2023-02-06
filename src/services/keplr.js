@@ -6,7 +6,6 @@ import {
 } from "@keplr-wallet/stores";
 import { cmst, comdex, harbor } from "../config/network";
 
-
 const getCurrencies = (chain) => {
   if (chain?.rpc === comdex?.rpc) {
     return [
@@ -68,6 +67,8 @@ export const getChainConfig = (chain = comdex) => {
       },
     ],
     coinType: chain?.coinType,
+    features: chain?.features,
+    
   };
 };
 
