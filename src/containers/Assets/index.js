@@ -213,6 +213,7 @@ const Assets = ({
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
+      symbol: token?.symbol,
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
@@ -252,6 +253,7 @@ const Assets = ({
   let currentChainData = [
     {
       key: comdex.chainId,
+      symbol: comdex?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -275,6 +277,7 @@ const Assets = ({
     },
     {
       key: cmst.coinMinimalDenom,
+      symbol: cmst?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -298,6 +301,7 @@ const Assets = ({
     },
     {
       key: harbor.coinMinimalDenom,
+      symbol: harbor?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -331,6 +335,7 @@ const Assets = ({
     ibcBalances.map((item) => {
       return {
         key: item?.coinMinimalDenom,
+        symbol: item?.symbol,
         asset: (
           <>
             <div className="assets-withicon">
@@ -361,10 +366,8 @@ const Assets = ({
     : allTableData;
 
   tableData = searchKey
-    ? tableData.filter((item) => {
-        return denomConversion(item?.amount?.denom)
-          ?.toLowerCase()
-          .match(new RegExp(searchKey, "g"));
+    ? tableData?.filter((item) => {
+        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
       })
     : tableData;
 
