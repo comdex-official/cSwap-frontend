@@ -7,7 +7,7 @@ import {
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom,
+  setSecondReserveCoinDenom
 } from "../../../../actions/liquidity";
 import { setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -20,7 +20,7 @@ import {
   APP_ID,
   DEFAULT_FEE,
   DOLLAR_DECIMALS,
-  PRICE_DECIMALS,
+  PRICE_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
@@ -29,13 +29,13 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
 import {
   decimalConversion,
   getExponent,
   marketPrice,
-  rangeToPercentage,
+  rangeToPercentage
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -64,7 +64,15 @@ const Deposit = ({
   const [inputValidationError, setInputValidationError] = useState();
   const [outputValidationError, setOutputValidationError] = useState();
 
-  const poolPrice = decimalConversion(pool?.price);
+  const normalPrice = decimalConversion(pool?.price);
+
+  let poolPrice =
+    Number(normalPrice) /
+    10 **
+      Math.abs(
+        getExponent(assetMap[pool?.balances?.baseCoin?.denom]?.decimals) -
+          getExponent(assetMap[pool?.balances?.quoteCoin?.denom]?.decimals)
+      );
 
   const firstAssetAvailableBalance =
     getDenomBalance(balances, pool?.balances?.baseCoin?.denom) || 0;
