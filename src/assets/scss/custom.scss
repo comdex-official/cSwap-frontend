@@ -561,14 +561,14 @@ button {
 }
 
 .ant-switch {
-  background: #f9c8c8 !important;
+  background: #898989 !important;
 
   &:hover {
     opacity: 0.8;
   }
 
   .dark-mode & {
-    background: #4A1818 !important;
+    background: #898989 !important;
   }
 
   .ant-switch-handle {
@@ -578,9 +578,9 @@ button {
   }
 
   &.ant-switch-checked {
-    background: $secondary-color !important;
+    background: #FF4350 !important;
     .dark-mode & {
-      background:$secondary-color !important;
+      background: #FF4350 !important;
     }
     .ant-switch-handle {
       &:before {
