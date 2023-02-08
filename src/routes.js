@@ -5,6 +5,7 @@ import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
 import Balances from "./containers/MyHome";
 import Swap from "./containers/Swap";
+import OrderBook from "./containers/OrderBook";
 
 const routes = [
   {
@@ -34,6 +35,10 @@ const routes = [
   {
     path: "/farm/:id",
     element: <FarmDetails />,
+  },
+  {
+    path: "/orderbook",
+    element: <OrderBook />,
   },
 ];
 
