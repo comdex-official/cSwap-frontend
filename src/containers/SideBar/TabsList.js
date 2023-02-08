@@ -34,4 +34,11 @@ export const tabsList = [
     route: "portfolio",
     index: 4,
   },
+  {
+    name: "Order Book",
+    value: "orderbook",
+    langKey: "OrderBook",
+    route: "orderbook",
+    index: 5,
+  },
 ];
