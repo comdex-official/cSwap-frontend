@@ -49,6 +49,7 @@ const iconMap = {
   [ibcDenoms["acanto"]]: "canto-icon",
   [ibcDenoms["uakt"]]: "akt-icon",
   [ibcDenoms["uxprt"]]: "xprt-icon",
+  [ibcDenoms["stuosmo"]]: "stosmo-icon",
 };
 
 export const iconNameFromDenom = (denom) => {

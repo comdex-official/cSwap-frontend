@@ -362,10 +362,7 @@ const FarmDetails = ({
           <h3 className="mt-2 mb-2">Your Details</h3>
           <Row className="pool-details-list">
             <Col sm="4" className="mb-3">
-              <label>
-                My Amount
-                <TooltipIcon text="Total Liquidity of the current pool" />
-              </label>
+              <label>My Amount</label>
               <p>
                 {" "}
                 {pool?.balances?.baseCoin?.denom &&
