@@ -20,6 +20,10 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
     handleConnectToWallet();
   });
 
+  window.addEventListener("leap_keystorechange", () => {
+    handleConnectToWallet();
+  });
+
   const handleConnectToWallet = () => {
     let walletType = localStorage.getItem("loginType");
 
