@@ -986,10 +986,16 @@
         margin-top: 15px;
       }
     }
+    .ant-tabs-nav-operations{
+      @media screen and (max-width:767px) {
+        display: none;
+      } 
+    }
     .ant-tabs-nav-list{
       @media screen and (max-width:767px) {
         width: 100%;
         transform: translate(0) !important;
+        margin-bottom: 8px;
       }
     }
   }
