@@ -297,7 +297,7 @@ const ConnectButton = ({
   return (
     <>
       {address ? (
-        <div className="connected_div">
+        <div className="connected_div" id="topRightToogle">
           <div className="connected_left">
             <div className="testnet-top">
               <SvgIcon name="testnet" /> {NETWORK_TAG || "Testnet"}
@@ -306,12 +306,13 @@ const ConnectButton = ({
           <DisConnectModal />
         </div>
       ) : (
-        <div>
+        <div id="topRightToogle">
           <Dropdown
             menu={{ items }}
             placement="bottomRight"
             trigger={["click"]}
             overlayClassName="dropconnect-overlay"
+            getPopupContainer={() => document.getElementById('topRightToogle')}
           >
             <Button shape="round" type="primary">
               {variables[lang].connect}
