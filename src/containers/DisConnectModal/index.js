@@ -48,7 +48,7 @@ const DisConnectModal = ({
   const items = [
     {
       label: (
-        <div className="wallet-connect-dropdown">
+        <div className="wallet-connect-dropdown text-left">
           <div className="wallet-connect-upper">
             <span />
             <div>
@@ -98,6 +98,7 @@ const DisConnectModal = ({
         menu={{ items }}
         trigger={["click"]}
         overlayClassName="dropconnect-overlay"
+        getPopupContainer={() => document.getElementById('topRightToogle')}
       >
         <div className="connected_button">
           {" "}
