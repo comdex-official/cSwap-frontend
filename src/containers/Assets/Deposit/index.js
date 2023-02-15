@@ -314,15 +314,17 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            availableBalance?.amount > DEFAULT_FEE
-                              ? amountConversion(
-                                availableBalance?.amount - DEFAULT_FEE,
-                                assetMap[chain?.ibcDenomHash]?.decimals
-                              )
-                              : amountConversion(
-                                availableBalance?.amount,
-                                assetMap[chain?.ibcDenomHash]?.decimals
-                              )
+                            address ?
+                              availableBalance?.amount > DEFAULT_FEE
+                                ? amountConversion(
+                                  availableBalance?.amount - DEFAULT_FEE,
+                                  assetMap[chain?.ibcDenomHash]?.decimals
+                                )
+                                : amountConversion(
+                                  availableBalance?.amount,
+                                  assetMap[chain?.ibcDenomHash]?.decimals
+                                )
+                              : 0
                           );
                         }}
                       >
