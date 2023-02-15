@@ -300,7 +300,7 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(availableBalance &&
+                      {(address && availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -316,13 +316,13 @@ const Deposit = ({
                           setAmount(
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                availableBalance?.amount - DEFAULT_FEE,
+                                assetMap[chain?.ibcDenomHash]?.decimals
+                              )
                               : amountConversion(
-                                  availableBalance?.amount,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                availableBalance?.amount,
+                                assetMap[chain?.ibcDenomHash]?.decimals
+                              )
                           );
                         }}
                       >
