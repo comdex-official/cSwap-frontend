@@ -90,8 +90,10 @@ const ConnectButton = ({
   }, []);
 
   useEffect(() => {
+    let walletType = localStorage.getItem("loginType");
+
     if (addressFromLocal) {
-      initializeChain((error, account) => {
+      initializeChain(walletType, (error, account) => {
         if (error) {
           message.error(error);
           return;
@@ -101,7 +103,7 @@ const ConnectButton = ({
           setAccountName(name);
         });
         localStorage.setItem("ac", encode(account.address));
-        localStorage.setItem("loginType", "keplr");
+        localStorage.setItem("loginType", walletType || "keplr");
       });
     }
   }, [addressFromLocal, setAccountAddress, setAccountName]);
@@ -243,7 +245,7 @@ const ConnectButton = ({
     fetchPrices();
     fetchAssets(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE * 2, // taking 20 records
+      DEFAULT_PAGE_SIZE * 10, // taking 100 records
       true,
       false
     );
@@ -295,7 +297,7 @@ const ConnectButton = ({
   return (
     <>
       {address ? (
-        <div className="connected_div">
+        <div className="connected_div" id="topRightToogle">
           <div className="connected_left">
             <div className="testnet-top">
               <SvgIcon name="testnet" /> {NETWORK_TAG || "Testnet"}
@@ -304,12 +306,13 @@ const ConnectButton = ({
           <DisConnectModal />
         </div>
       ) : (
-        <div>
+        <div id="topRightToogle">
           <Dropdown
             menu={{ items }}
             placement="bottomRight"
             trigger={["click"]}
             overlayClassName="dropconnect-overlay"
+            getPopupContainer={() => document.getElementById('topRightToogle')}
           >
             <Button shape="round" type="primary">
               {variables[lang].connect}

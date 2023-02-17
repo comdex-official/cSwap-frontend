@@ -26,6 +26,7 @@ export const comdex = {
   coinDecimals: envConfig?.coinDecimals,
   prefix: envConfig?.prefix,
   coinType: envConfig?.coinType,
+  symbol: envConfig?.symbol,
   webSocketApiUrl: envConfig?.webSocketApiUrl,
 };
 
@@ -33,12 +34,14 @@ export const cmst = {
   coinDenom: "CMST",
   coinMinimalDenom: "ucmst",
   coinDecimals: 6,
+  symbol: "CMST",
 };
 
 export const harbor = {
   coinDenom: "HARBOR",
   coinMinimalDenom: "uharbor",
   coinDecimals: 6,
+  symbol: "HARBOR",
 };
 
 export const ibcDenoms = getIbcDenomsMap() || {};
