@@ -183,7 +183,7 @@ const GovernDetails = ({
       ),
     },
   ];
-console.log('get votes', getVotes)
+
   const Options = {
     chart: {
       type: "pie",
