@@ -168,7 +168,7 @@ button {
         flex-direction: column;
         flex: 0 1 100%;
         position: relative;
-        z-index: 10;
+        z-index: 2;
 
         .app-content-small {
           width: 100%;
@@ -580,7 +580,7 @@ button {
   &.ant-switch-checked {
     background: #FF4350 !important;
     .dark-mode & {
-      background: #FF4350 !important;
+      background:#FF4350 !important;
     }
     .ant-switch-handle {
       &:before {
