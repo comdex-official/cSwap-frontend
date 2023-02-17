@@ -44,7 +44,14 @@ const iconMap = {
   [ibcDenoms["dai-wei"]]: "dai-icon",
   [ibcDenoms["aevmos"]]: "evmos-icon",
   [ibcDenoms["wbnb-wei"]]: "wbnb-icon",
-  "weth-wei" : "weth-icon" // remove: this before pushing to devnet/testnet only for testing
+  "weth-wei": "weth-icon", // remove: this before pushing to devnet/testnet only for testing
+  [ibcDenoms["uluna"]]: "luna2-icon",
+  [ibcDenoms["acanto"]]: "canto-icon",
+  [ibcDenoms["uakt"]]: "akt-icon",
+  [ibcDenoms["uxprt"]]: "xprt-icon",
+  [ibcDenoms["stuosmo"]]: "stosmo-icon",
+  [ibcDenoms["wftm-wei"]]: "wfmt-icon",
+  [ibcDenoms["umntl"]]: "mntl-icon",
 };
 
 export const iconNameFromDenom = (denom) => {

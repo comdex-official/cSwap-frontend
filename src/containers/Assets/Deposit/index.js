@@ -53,7 +53,6 @@ const Deposit = ({
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
-        message.error(error);
         setInProgress(false);
         return;
       }
@@ -69,7 +68,7 @@ const Deposit = ({
           setBalanceInProgress(false);
 
           if (error) return;
-          
+
           setAvailableBalance(result?.balance);
         }
       );
@@ -301,7 +300,7 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(availableBalance &&
+                      {(address && availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -315,15 +314,17 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            availableBalance?.amount > DEFAULT_FEE
-                              ? amountConversion(
+                            address ?
+                              availableBalance?.amount > DEFAULT_FEE
+                                ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
-                              : amountConversion(
+                                : amountConversion(
                                   availableBalance?.amount,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
+                              : 0
                           );
                         }}
                       >
