@@ -202,6 +202,11 @@ const Deposit = ({
   };
 
   const signIBCTx = () => {
+    if (!proofHeight?.revision_height) {
+      message.error("Unable to get the latest block height");
+      return;
+    }
+
     if (chain?.chainInfo?.features?.includes("eth-address-gen")) {
       // handle evm based token deposits
       return handleEvmIBC();
@@ -209,11 +214,6 @@ const Deposit = ({
 
     setInProgress(true);
 
-    if (!proofHeight?.revision_height) {
-      message.error("Unable to get the latest block height");
-      setInProgress(false);
-      return;
-    }
     const data = {
       msg: {
         typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
