@@ -1,4 +1,11 @@
+import { createTxRaw } from "@tharsis/proto";
+import {
+  generateEndpointBroadcast,
+  generatePostBodyBroadcast
+} from "@tharsis/provider/dist/rest/broadcast";
+import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
+import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -69,7 +76,7 @@ const Deposit = ({
           setBalanceInProgress(false);
 
           if (error) return;
-          
+
           setAvailableBalance(result?.balance);
         }
       );
@@ -91,6 +98,115 @@ const Deposit = ({
   const showModal = () => {
     initialize();
     setIsModalOpen(true);
+  };
+
+  const handleEvmIBC = async () => {
+    try {
+      const timeout = Math.floor(new Date().getTime() / 1000) + 600;
+      const timeoutTimestampNanoseconds =
+        Long.fromNumber(timeout).multiply(1_000_000_000);
+
+      const ibcMsg = {
+        receiver: address,
+        sender: sourceAddress,
+        sourceChannel: chain.destChannelId,
+        sourcePort: "transfer",
+        timeoutTimestamp: String(timeoutTimestampNanoseconds),
+        amount: getAmount(amount, assetMap[chain?.coinMinimalDenom]?.decimals),
+        denom: chain?.coinMinimalDenom,
+        revisionNumber: Number(proofHeight.revision_number),
+        revisionHeight: Number(proofHeight.revision_height) + 100,
+      };
+      const chainInfoForMsg = {
+        chainId: comdex.chainId || 0,
+        cosmosChainId: chain.chainInfo?.chainId,
+      };
+      console.log("debug ibc msg", ibcMsg);
+
+  
+      let accountResult = {
+        account: {
+          "@type": "/ethermint.types.v1.EthAccount",
+          base_account: {
+            address: "evmos1sqy25ltqdn7thu9q4pa3cxl5r3engh5laz9q5r",
+            pub_key: {
+              "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
+              key: "AuncPVdLOQcuwLLAY8uD18Q90eRrQ+j7tBux6O3hzPNu",
+            },
+            account_number: "2052588",
+            sequence: "66",
+          },
+          code_hash:
+            "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+        },
+      };
+
+      console.log("debug account result", accountResult);
+
+      const sender = {
+        accountAddress: accountResult.account.base_account.address,
+        sequence: accountResult.account.base_account.sequence,
+        accountNumber: accountResult.account.base_account.account_number,
+        pubkey: accountResult.account.base_account.pub_key?.key || "",
+      };
+
+      const fee = {
+        amount: "20",
+        denom: chain.chainInfo?.coinMinimalDenom,
+        gas: "200000",
+      };
+
+      const transferMsg = createTxIBCMsgTransfer(
+        chainInfoForMsg,
+        sender,
+        fee,
+        "ibc_transfer",
+        ibcMsg
+      );
+
+      console.log("debug evm transfer message", transferMsg);
+
+      const sign = await window?.keplr?.signDirect(
+        chain.chainInfo?.chainId,
+        sourceAddress,
+        {
+          bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+          authInfoBytes: transferMsg.signDirect.authInfo.serializeBinary(),
+          chainId: chainInfoForMsg.cosmosChainId,
+          accountNumber: new Long(sender.accountNumber),
+        },
+        // @ts-expect-error the types are not updated on Keplr side
+        { isEthereum: true }
+      );
+      console.log("debug evm sign", sign);
+
+      if (sign !== undefined) {
+        let rawTx = createTxRaw(
+          sign.signed.bodyBytes,
+          sign.signed.authInfoBytes,
+          [new Uint8Array(Buffer.from(sign.signature.signature, "base64"))]
+        );
+
+        // Broadcast it
+        const postOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: generatePostBodyBroadcast(rawTx),
+        };
+        try {
+          let broadcastPost = await fetch(
+            `${chain.chainInfo?.rest}/${generateEndpointBroadcast()}`,
+            postOptions
+          );
+          let response = await broadcastPost.json();
+          console.log("debug popout transaction successfully", response);
+        } catch (e) {
+          console.error("debug popout transaction error", e);
+        }
+      }
+    } catch (e) {
+      console.log("debug evm transfer error", e);
+    }
   };
 
   const signIBCTx = () => {
@@ -354,7 +470,7 @@ const Deposit = ({
                   validationError?.message
                 }
                 className="btn-filled modal-btn"
-                onClick={signIBCTx}
+                onClick={handleEvmIBC}
               >
                 {variables[lang].deposit}
               </Button>
