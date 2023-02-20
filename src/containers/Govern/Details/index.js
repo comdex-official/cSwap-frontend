@@ -112,7 +112,7 @@ const GovernDetails = ({
         }
       });
     }
-  }, [id]);
+  }, [id, setProposal, setProposer, setProposalTally]);
 
   const fetchVote = useCallback(() => {
     queryUserVote(address, proposal?.proposal_id, (error, result) => {
@@ -130,12 +130,6 @@ const GovernDetails = ({
     }
   }, [address, id, proposal, fetchVote]);
 
-  useEffect(() => {
-    if (proposalTally?.yes) {
-      calculateVotes();
-    }
-  }, [proposalTallyMap]);
-
   const calculateTotalValue = () => {
     let yes = Number(proposalTally?.yes);
     let no = Number(proposalTally?.no);
@@ -149,19 +143,7 @@ const GovernDetails = ({
     return totalValue;
   };
 
-  const dataVote = [
-    {
-      title: "Total Vote",
-      counts: (
-        <>
-          {calculateTotalValue() || "0"}{" "}
-          {denomConversion(comdex?.coinMinimalDenom)}
-        </>
-      ),
-    },
-  ];
-
-  const calculateVotes = () => {
+  const calculateVotes = useCallback(() => {
     let yes = Number(proposalTally?.yes);
     let no = Number(proposalTally?.no);
     let veto = Number(proposalTally?.no_with_veto);
@@ -182,7 +164,25 @@ const GovernDetails = ({
       veto: veto || 0,
       abstain: abstain || 0,
     });
-  };
+  }, [proposalTally]);
+
+  useEffect(() => {
+    if (proposalTally?.yes) {
+      calculateVotes();
+    }
+  }, [proposalTallyMap, calculateVotes, proposalTally?.yes]);
+
+  const dataVote = [
+    {
+      title: "Total Vote",
+      counts: (
+        <>
+          {calculateTotalValue() || "0"}{" "}
+          {denomConversion(comdex?.coinMinimalDenom)}
+        </>
+      ),
+    },
+  ];
 
   const Options = {
     chart: {

@@ -1,7 +1,7 @@
-import { Button, message, Table } from "antd";
+import { Button, Input, message, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
@@ -36,6 +36,8 @@ const Assets = ({
   assetDenomMap,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
+  const [isHideToggleOn, setHideToggle] = useState(false);
+  const [searchKey, setSearchKey] = useState();
 
   const dispatch = useDispatch();
 
@@ -46,6 +48,19 @@ const Assets = ({
     });
 
     updatePrices();
+  };
+
+  useEffect(() => {
+    setHideToggle(localStorage.getItem("hideToggle") === "true");
+  }, []);
+
+  const handleHideSwitchChange = (value) => {
+    localStorage.setItem("hideToggle", value);
+    setHideToggle(value);
+  };
+
+  const onSearchChange = (searchKey) => {
+    setSearchKey(searchKey.trim().toLowerCase());
   };
 
   const updatePrices = () => {
@@ -189,13 +204,16 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    const value = getPrice(ibcBalance?.denom) * amountConversion(
-      ibcBalance?.amount,
-      assetMap[ibcBalance?.denom]?.decimals
-    )
+    const value =
+      getPrice(ibcBalance?.denom) *
+      amountConversion(
+        ibcBalance?.amount,
+        assetMap[ibcBalance?.denom]?.decimals
+      );
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
+      symbol: token?.symbol,
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
@@ -235,6 +253,7 @@ const Assets = ({
   let currentChainData = [
     {
       key: comdex.chainId,
+      symbol: comdex?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -258,6 +277,7 @@ const Assets = ({
     },
     {
       key: cmst.coinMinimalDenom,
+      symbol: cmst?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -281,6 +301,7 @@ const Assets = ({
     },
     {
       key: harbor.coinMinimalDenom,
+      symbol: harbor?.symbol,
       asset: (
         <>
           <div className="assets-withicon">
@@ -314,6 +335,7 @@ const Assets = ({
     ibcBalances.map((item) => {
       return {
         key: item?.coinMinimalDenom,
+        symbol: item?.symbol,
         asset: (
           <>
             <div className="assets-withicon">
@@ -337,7 +359,21 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentChainData, tableIBCData);
+  let allTableData = Lodash.concat(currentChainData, tableIBCData);
+
+  let tableData = isHideToggleOn
+    ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
+    : allTableData;
+
+  tableData = searchKey
+    ? tableData?.filter((item) => {
+        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
+      })
+    : tableData;
+
+  let balanceExists = allTableData?.find(
+    (item) => Number(item?.noOfTokens) > 0
+  );
 
   return (
     <div className="app-content-wrapper">
@@ -365,6 +401,25 @@ const Assets = ({
             </Col>
           </Row>
         )}
+        <Row>
+          <Col className="assets-search-section">
+            {parent && parent === "portfolio" ? null : (
+              <div className="text">
+                Hide 0 Balances{" "}
+                <Switch
+                  disabled={!balanceExists}
+                  onChange={(value) => handleHideSwitchChange(value)}
+                  checked={isHideToggleOn}
+                />
+              </div>
+            )}
+            <Input
+              placeholder="Search Asset.."
+              onChange={(event) => onSearchChange(event.target.value)}
+              suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <Table

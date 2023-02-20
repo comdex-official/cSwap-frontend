@@ -53,50 +53,6 @@ const Balances = ({
     }
   }, [tab]);
 
-  useEffect(() => {
-    setUserLiquidityInPools();
-    fetchPools(
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, [markets, balances]);
-
-  const fetchPools = (offset, limit, countTotal, reverse) => {
-    queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setPools(result.pools, result.pagination);
-
-      const userPools = result?.pools;
-
-      if (
-        balances &&
-        balances.length > 0 &&
-        userPools &&
-        userPools.length > 0
-      ) {
-        userPools.forEach((item) => {
-          return getUserLiquidity(item);
-        });
-      }
-    });
-  };
-
-  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
-    (a, b) => a + b,
-    0
-  );
-
-  const getTotalValue = useCallback(() => {
-    const total = Number(assetBalance) + Number(totalFarmBalance);
-    return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
-  }, [assetBalance, totalFarmBalance]);
-
   const getUserLiquidity = useCallback(
     (pool) => {
       if (address) {
@@ -148,16 +104,60 @@ const Balances = ({
                 ) *
                   marketPrice(markets, providedTokens?.[1]?.denom);
 
-              if (totalLiquidityInDollar) {
-                setUserLiquidityInPools(pool?.id, totalLiquidityInDollar);
-              }
+              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
           );
         });
       }
     },
-    [assetMap, address, markets, balances, setUserLiquidityInPools]
+    [assetMap, address, markets, balances]
   );
+
+  const fetchPools = useCallback(
+    (offset, limit, countTotal, reverse) => {
+      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setPools(result.pools, result.pagination);
+
+        const userPools = result?.pools;
+
+        if (
+          balances &&
+          balances.length > 0 &&
+          userPools &&
+          userPools.length > 0
+        ) {
+          userPools.forEach((item) => {
+            return getUserLiquidity(item);
+          });
+        }
+      });
+    },
+    [balances, getUserLiquidity, setPools]
+  );
+
+  useEffect(() => {
+    fetchPools(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false
+    );
+  }, [markets, balances, fetchPools]);
+
+  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
+    (a, b) => a + b,
+    0
+  );
+
+  const getTotalValue = useCallback(() => {
+    const total = Number(assetBalance) + Number(totalFarmBalance);
+    return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
+  }, [assetBalance, totalFarmBalance]);
 
   const Options = {
     chart: {

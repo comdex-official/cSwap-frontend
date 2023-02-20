@@ -1,7 +1,7 @@
 @import "../../assets/scss/variables.scss";
 
 .top_bar {
-  padding: 20px 25px;
+  padding: 20px 45px 20px 25px;
   text-align: right;
   display: flex;
   flex-direction: row;
@@ -9,15 +9,19 @@
   justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 9;
   margin-left: auto;
   width: 100%;
+  &.fixedHeaderOnScroll {
+    z-index: 99;
+  }
   @media screen and (max-width: 991px) {
     padding: 15px;
     z-index: 99;
     width: 100%;
     &.fixedHeaderOnScroll {
       background: #DEE8F2;
+      z-index: 99;
       .dark-mode & {
         background: $background-dark1
       }

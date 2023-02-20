@@ -329,8 +329,11 @@
   font-size: 1.388rem;
   margin-bottom: 0;
   font-weight: 500;
-  &.farm-headingtimer{
-    @media screen and (max-width:540px) {
+  @media screen and (max-width: 1540px) {
+    font-size: 1.1rem;
+  }
+  &.farm-headingtimer {
+    @media screen and (max-width: 540px) {
       margin-top: 40px;
     }
   }
@@ -360,6 +363,27 @@
     border: 1px solid $border-dark;
     box-shadow: $box-shadow-inner-dark;
   }
+  &.ranged-card {
+    background: linear-gradient(180deg, #fe4350 0%, #123c73 100%);
+    border: 0;
+    padding: 2px;
+    .dark-mode & {
+      background: linear-gradient(180deg, #fe4350 0%, #123c73 100%);
+      box-shadow: none;
+    }
+    .poolcard-two-inner {
+      background: $background-light;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      width: 100%;
+      .dark-mode & {
+        background: $background-dark1;
+        box-shadow: inset 7px 7px 16px 1px #262b38;
+      }
+    }
+  }
   .poolcard-two-inner {
     cursor: pointer;
     border-radius: $base-border-radius;
@@ -371,9 +395,83 @@
       margin-bottom: 15px;
       padding: 10px 20px 0 20px;
 
+      .ranged-box {
+        width: 80px;
+        height: 28px;
+        border-radius: 4px;
+        background: $primary-gradient;
+        padding: 1px;
+        text-align: center;
+        font-size: $font-size-sm;
+        line-height: 20px;
+        margin-top: 15px;
+        @media screen and (max-width: 1540px) {
+          width: 70px;
+          font-size: $font-size-sm - 1;
+          height: 24px;
+        }
+        .ranged-box-inner {
+          width: 100%;
+          height: 100%;
+          padding: 4px;
+          border-radius: 4px;
+          background: $background-light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .dark-mode & {
+            background: $background-dark1;
+          }
+          .icon {
+            width: 13px;
+            height: 13px;
+            fill: $text-color-label-dark;
+            margin-left: 7px;
+            @media screen and (max-width: 1540px) {
+              width: 10px;
+              height: 10px;
+              margin-left: 5px;
+            }
+            .dark-mode & {
+              fill: #b8b8b8;
+            }
+          }
+        }
+      }
+
+      .percent-box {
+        border: 1px solid $text-color-light;
+        color: $text-color-light;
+        background: rgba($color: $text-color-light, $alpha: 0.2);
+        font-size: $font-size-sm + 1;
+        border-radius: 4px;
+        padding: 2px 8px;
+        min-width: 70px;
+        height: 26px;
+        line-height: 20px;
+        text-align: center;
+        margin: 8px auto 0 auto;
+        display: inline-block;
+        @media screen and (max-width: 1540px) {
+          font-size: $font-size-sm - 1;
+          min-width: 65px;
+          padding: 2px 6px;
+          height: 21px;
+          line-height: 15px;
+          margin: 6px auto 0 auto;
+        }
+      }
+
       h3 {
         margin-bottom: 0;
         font-size: 1.45rem;
+        margin-left: 10px;
+        @media screen and (max-width: 1540px) {
+          font-size: 1rem;
+        }
+        @media screen and (max-width: 1300px) {
+          font-size: 0.9rem;
+        }
         .dark-mode & {
           color: $white;
         }
@@ -386,7 +484,7 @@
           margin-right: 10px;
         }
         .card-svgicon-2 {
-          margin-right: 10px;
+          margin-left: -18px;
         }
         .card-svgicon {
           width: 40px;
@@ -394,6 +492,11 @@
           border-radius: 40px;
           background: $primary-gradient;
           padding: 1px;
+          @media screen and (max-width: 1540px) {
+            width: 32px;
+            height: 32px;
+            border-radius: 32px;
+          }
           .card-svgicon-inner {
             width: 100%;
             height: 100%;
@@ -414,17 +517,25 @@
             }
           }
         }
+        .pool-id {
+          padding-left: 10px;
+          font-size: 12px;
+          padding-top: 5px;
+        }
       }
     }
     .card-bottom {
       padding: 10px 20px 20px 20px;
-      display: flex;
+      width: 100%;
       justify-content: space-between;
       .cardbottom-row {
-        padding: 4px 15px 0 0;
+        padding: 0;
+        width: 100%;
         label {
           color: $text-color-light2;
           font-size: $font-size-sm;
+          margin-bottom: 5px;
+          display: inline-block;
           .dark-mode & {
             color: $text-color-light;
           }
@@ -442,10 +553,13 @@
           border: 1px solid $text-color-light;
           color: $text-color-light;
           background: rgba($color: $text-color-light, $alpha: 0.2);
-          font-size: $font-size-sm + 1;
-          border-radius: 5px;
-          padding: 1px 4px;
+          font-size: $font-size-sm;
+          border-radius: 4px;
+          padding: 1px 8px 1px 4px;
           width: fit-content;
+          @media screen and (max-width: 1540px) {
+            font-size: $font-size-sm - 1;
+          }
           span {
             display: flex;
             align-items: center;
@@ -456,6 +570,12 @@
             height: 20px;
             border-radius: 15px;
             margin: 3px 5px 3px 0;
+            @media screen and (max-width: 1540px) {
+              width: 15px;
+              height: 15px;
+              border-radius: 16px;
+              min-width: 15px;
+            }
           }
           .view-all-farm-apr {
             cursor: pointer;
@@ -487,7 +607,7 @@
   }
   &:hover .poolcard-two-inner {
     .dark-mode & {
-      background: $background-dark1;
+      background: #06122e;
     }
   }
 }
@@ -701,7 +821,6 @@
     border-radius: 10px;
     font-weight: 400;
 
-
     .dark-mode & {
       background: $background-dark1 !important;
       color: $tooltip-color-dark;
@@ -741,5 +860,131 @@
     height: 20px;
     border-radius: 15px;
     margin: 3px 5px 3px 0;
+  }
+}
+
+.farmtab-right-action {
+  display: flex;
+  align-items: center;
+  .ant-input-affix-wrapper {
+    border: 1px solid $border-dark;
+    background: none;
+    border-radius: 30px;
+    margin-left: 15px;
+    height: 39px;
+    padding: 4px 18px;
+    &:hover {
+      border-color: $border-light;
+    }
+    input {
+      background: none;
+      font-weight: normal;
+      .dark-mode & {
+        color: $white;
+      }
+      &::placeholder {
+        color: #303950;
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+    .ant-input-suffix {
+      .icon {
+        fill: $border-dark;
+      }
+    }
+  }
+}
+
+.farm-disclaimer-info {
+  color: #ea6262;
+  margin-top: 38px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 999;
+  top: -55px;
+  height: 60px;
+  padding: 0 20px 0 30px;
+  border-radius: 16px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  max-width: 630px;
+  background: $background-light;
+  &.fixedHeaderOnScroll {
+    position: fixed;
+    z-index: 99999;
+    top: 24px;
+    @media screen and (max-width: 576px) {
+      top: 54px;
+    }
+  }
+  @media screen and (max-width: 1540px) {
+    font-size: $font-size-base;
+    max-width: 550px;
+    height: 45px;
+    top: -58px;
+    padding: 0 16px 0 20px;
+  }
+  @media screen and (max-width: 991px) {
+    font-size: $font-size-sm - 1;
+    max-width: 50%;
+  }
+  @media screen and (max-width: 767px) {
+    max-width: 40%;
+  }
+  @media screen and (max-width: 576px) {
+    max-width: 90%;
+  }
+  .dark-mode & {
+    background: $background-dark1;
+  }
+  .icon {
+    fill: #ea6262;
+    margin-right: 8px;
+    width: 20px;
+    @media screen and (max-width: 1540px) {
+      width: 15px;
+    }
+  }
+  .close-icon {
+    fill: #747474;
+    stroke: $white;
+    stroke-width: 2px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 5px;
+    width: 18px;
+    @media screen and (max-width: 1540px) {
+      width: 15px;
+    }
+    .dark-mode & {
+      stroke: $background-dark1;
+    }
+    &:hover {
+      fill: $secondary-color;
+    }
+  }
+}
+
+.masterpool-tooltip-icon {
+  @media screen and (max-width: 1540px) {
+    max-width: 12px;
+    max-height: 12px;
+  }
+  .dark-mode & {
+    fill: #b8b8b8;
+  }
+}
+
+.farm-details-tabmain{
+  .ant-tabs-nav{
+    @media screen and (max-width:590px) {
+      display: block;
+      .ant-tabs-extra-content{
+        margin-top: 15px;
+      }
+    }
   }
 }
