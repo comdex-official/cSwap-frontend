@@ -1,4 +1,5 @@
 import { createTxRaw } from "@tharsis/proto";
+import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
   generatePostBodyBroadcast
@@ -60,6 +61,7 @@ const Deposit = ({
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
+        message.error(error);
         setInProgress(false);
         return;
       }
@@ -111,7 +113,7 @@ const Deposit = ({
         sourceChannel: chain.destChannelId,
         sourcePort: "transfer",
         timeoutTimestamp: String(timeoutTimestampNanoseconds),
-        amount: getAmount(amount, assetMap[chain?.coinMinimalDenom]?.decimals),
+        amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals),
         denom: chain?.coinMinimalDenom,
         revisionNumber: Number(proofHeight.revision_number),
         revisionHeight: Number(proofHeight.revision_height) + 100,
@@ -120,25 +122,30 @@ const Deposit = ({
         chainId: comdex.chainId || 0,
         cosmosChainId: chain.chainInfo?.chainId,
       };
+
+      let accountResponse = await fetch(
+        `${chain.chainInfo?.rest}${generateEndpointAccount(sourceAddress)}`
+      );
+      let accountResult = await accountResponse.json();
+
       console.log("debug ibc msg", ibcMsg);
 
-  
-      let accountResult = {
-        account: {
-          "@type": "/ethermint.types.v1.EthAccount",
-          base_account: {
-            address: "evmos1sqy25ltqdn7thu9q4pa3cxl5r3engh5laz9q5r",
-            pub_key: {
-              "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
-              key: "AuncPVdLOQcuwLLAY8uD18Q90eRrQ+j7tBux6O3hzPNu",
-            },
-            account_number: "2052588",
-            sequence: "66",
-          },
-          code_hash:
-            "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-        },
-      };
+      // let accountResult = {
+      //   account: {
+      //     "@type": "/ethermint.types.v1.EthAccount",
+      //     base_account: {
+      //       address: "evmos1sqy25ltqdn7thu9q4pa3cxl5r3engh5laz9q5r",
+      //       pub_key: {
+      //         "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
+      //         key: "AuncPVdLOQcuwLLAY8uD18Q90eRrQ+j7tBux6O3hzPNu",
+      //       },
+      //       account_number: "2052588",
+      //       sequence: "66",
+      //     },
+      //     code_hash:
+      //       "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      //   },
+      // };
 
       console.log("debug account result", accountResult);
 
@@ -198,13 +205,30 @@ const Deposit = ({
             postOptions
           );
           let response = await broadcastPost.json();
-          console.log("debug popout transaction successfully", response);
+          console.log(
+            "debug popout transaction successfully",
+            response.tx_response?.txhash
+          );
+
+          if (response.tx_response?.txhash) {
+            message.loading(
+              "Transaction Broadcasting, Waiting for transaction to be included in the block"
+            );
+
+            handleHash(response.tx_response?.txhash);
+          }
         } catch (e) {
           console.error("debug popout transaction error", e);
+
+          resetValues();
+          return;
         }
       }
     } catch (e) {
       console.log("debug evm transfer error", e);
+
+      resetValues();
+      return;
     }
   };
 
@@ -416,7 +440,7 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(address && availableBalance &&
+                      {(availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -430,17 +454,15 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            address ?
-                              availableBalance?.amount > DEFAULT_FEE
-                                ? amountConversion(
+                            availableBalance?.amount > DEFAULT_FEE
+                              ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
-                                : amountConversion(
+                              : amountConversion(
                                   availableBalance?.amount,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
-                              : 0
                           );
                         }}
                       >
