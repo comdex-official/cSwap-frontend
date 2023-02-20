@@ -61,7 +61,6 @@ const Deposit = ({
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
-        message.error(error);
         setInProgress(false);
         return;
       }
