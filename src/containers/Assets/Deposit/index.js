@@ -414,7 +414,8 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(availableBalance &&
+                      {(address &&
+                        availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
