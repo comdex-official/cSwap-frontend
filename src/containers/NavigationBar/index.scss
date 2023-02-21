@@ -40,10 +40,29 @@
       box-shadow: $box-shadow-inner-dark;
     }
   }
+  .ant-btn {
+    &.faucet-btn {
+      margin-left: auto !important;
+      margin-right: 10px !important;
+      color: $secondary-color !important;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      .icon {
+        fill: $secondary-color;
+        margin-right: 5px;
+      }
+      &:hover, &:focus {
+        color: $white !important;
+        .icon {
+          fill: $white;
+        }
+      }
+    }
+  }
   .theme-toogle {
     display: flex;
     align-items: center;
-    margin-left: auto;
     padding-right: 12px;
     .theme-icons {
       padding: 0 10px;

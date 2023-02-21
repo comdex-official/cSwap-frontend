@@ -1,0 +1,59 @@
+@import "../../assets/scss/variables.scss";
+
+.faucet-card {
+  background: $background-light;
+  padding: 1px;
+  border-radius: $base-border-radius;
+  box-shadow: $box-shadow-inner-light;
+  border: 1px solid transparent;
+  padding: 3rem 5rem;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  @media screen and (max-width:767px) {
+    padding: 2.5rem 2rem;
+  }
+  .dark-mode & {
+    background: $background-dark1;
+    border: 1px solid $border-dark;
+    box-shadow: $box-shadow-inner-dark;
+  }
+  h1{
+    font-size: 2.6rem;
+    margin-bottom: 0.5rem;
+  }
+  p {
+    font-size: 1.3rem;
+  }
+  .ant-input {
+    height: 64px;
+    border-radius: 15px;
+    border: 0;
+    font-size: 1.3rem;
+    padding: 0 20px;
+    box-shadow: $box-shadow-inner-light;
+
+    .dark-mode & {
+      background: $background-dark2;
+      color: $white;
+      box-shadow: $box-shadow-input-dark;
+      &::placeholder {
+        color: $text-color-label-dark2;
+      }
+      &::-webkit-placeholder {
+        color: $white;
+      }
+      &::-moz-placeholder {
+        color: $white;
+      }
+    }
+  }
+  .ant-btn {
+    font-size: $font-size-lg + 2;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 40px;
+    border-radius: 50px;
+  }
+}

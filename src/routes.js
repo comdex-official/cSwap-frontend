@@ -1,6 +1,7 @@
 import Assets from "./containers/Assets";
 import Farm from "./containers/Farm";
 import FarmDetails from "./containers/Farm/Details";
+import Faucet from "./containers/Faucet";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
 import Balances from "./containers/MyHome";
@@ -34,6 +35,10 @@ const routes = [
   {
     path: "/farm/:id",
     element: <FarmDetails />,
+  },
+  {
+    path: "/faucet",
+    element: <Faucet />,
   },
 ];
 
