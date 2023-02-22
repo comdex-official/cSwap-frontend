@@ -10,7 +10,7 @@ import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
@@ -104,8 +104,7 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            $
-            {commaSeparator(Number(price?.value || 0).toFixed(DOLLAR_DECIMALS))}
+            ${commaSeparator(Number(price?.value || 0).toFixed(PRICE_DECIMALS))}
           </p>
         </>
       ),
