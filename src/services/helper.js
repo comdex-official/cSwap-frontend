@@ -71,6 +71,7 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
   SigningStargateClient.connectWithSigner(comdex.rpc, offlineSigner, {
     registry: myRegistry,
     aminoTypes: aminoTypes,
+    preferNoSetFee: true,
   })
     .then((client) => {
       client
@@ -146,7 +147,7 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
   const cosmJS = await SigningStargateClient.connectWithSigner(
     comdex.rpc,
     wallet,
-    { registry: myRegistry, aminoTypes: aminoTypes }
+    { registry: myRegistry, aminoTypes: aminoTypes, preferNoSetFee: true }
   );
 
   const { accountNumber, sequence } = await cosmJS.getSequence(signerAddress);
@@ -184,6 +185,7 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       offlineSigner,
       {
         accountParser: strideAccountParser,
+        preferNoSetFee: true,
       }
     );
 
