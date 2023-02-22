@@ -10,15 +10,19 @@ import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
-import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
-import { commaSeparator, marketPrice } from "../../utils/number";
+import {
+  commaSeparator,
+  formateNumberDecimalsAuto,
+  marketPrice,
+} from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
 import Deposit from "./Deposit";
@@ -104,7 +108,7 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            ${commaSeparator(Number(price?.value || 0).toFixed(PRICE_DECIMALS))}
+            {formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
           </p>
         </>
       ),
