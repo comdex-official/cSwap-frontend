@@ -16,12 +16,12 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion,
+  denomConversion
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -108,7 +108,7 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            {formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
+            ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
           </p>
         </>
       ),
