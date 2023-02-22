@@ -164,7 +164,7 @@ const GovernDetails = ({
       veto: veto || 0,
       abstain: abstain || 0,
     });
-  }, [getVotes, proposalTally]);
+  }, [proposalTally]);
 
   useEffect(() => {
     if (proposalTally?.yes) {
