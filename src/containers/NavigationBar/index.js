@@ -1,7 +1,9 @@
-import "./index.scss";
-import ConnectButton from "./ConnectButton";
-import React, { useState, useEffect } from "react";
+import { Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { SvgIcon } from "../../components/common";
 import ThemeToggle from "../../components/Theme/themeToggle";
+import ConnectButton from "./ConnectButton";
+import "./index.scss";
 
 const NavigationBar = () => {
   const [isSetOnScroll, setOnScroll] = useState(false);
@@ -15,8 +17,8 @@ const NavigationBar = () => {
 
   return (
     <nav className={isSetOnScroll ? "top_bar fixedHeaderOnScroll" : "top_bar"}>
+      <Button type="primary" className="faucet-btn" onClick={() => window.open("https://faucet.comdex.one/")}><SvgIcon name='faucet-icon' viewbox='0 0 23 24' /> Faucet</Button>
       <ThemeToggle />
-
       <div className="connect-button">
         <ConnectButton />
       </div>
