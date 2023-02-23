@@ -54,6 +54,8 @@ const iconMap = {
   [ibcDenoms["umntl"]]: "mntl-icon",
   [ibcDenoms["shib-wei"]]: "shib-icon",
   [ibcDenoms["uhuahua"]]: "huahua-icon",
+  [ibcDenoms["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]]:
+  "gusdc-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
