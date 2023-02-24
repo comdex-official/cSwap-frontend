@@ -249,21 +249,20 @@ const Swap = ({
         (item) => item?.denom === offerCoin?.denom
       )[0];
 
-    const assetVolume =
-      selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
+    // const assetVolume =
+    //   selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
 
-    // (input_number / (input token share in pool + input_number))*100
-    setSlippage(
-      (Number(value) /
-        (Number(
-          amountConversion(
-            assetVolume,
-            assetMap[selectedAsset?.denom]?.decimals
-          )
-        ) +
-          Number(value))) *
-        100
-    );
+    // setSlippage(
+    //   (Number(value) /
+    //     (Number(
+    //       amountConversion(
+    //         assetVolume,
+    //         assetMap[selectedAsset?.denom]?.decimals
+    //       )
+    //     ) +
+    //       Number(value))) *
+    //     100
+    // );
 
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
@@ -288,8 +287,27 @@ const Swap = ({
   };
 
   const calculateDemandCoinAmount = (price, input) => {
-    const amount = price * input;
-    setDemandCoinAmount(amount.toFixed(6));
+    const expectedOutAmount = price * input;
+    setDemandCoinAmount(expectedOutAmount.toFixed(6));
+
+    // slippage = (1 - (expected_token_out / (token_in * last_traded_price)));
+
+    let slippage =
+      1 -
+      (Number(expectedOutAmount) /
+        (Number(input) * Number(decimalConversion(pair?.lastPrice))));
+
+    console.log(
+      "expected",
+      expectedOutAmount,
+      "offer",
+      input,
+      "last price",
+      Number(decimalConversion(pair?.lastPrice)),
+      "slippage",
+      slippage
+    );
+    setSlippage(slippage);
   };
 
   const handleDemandCoinDenomChange = (value) => {
