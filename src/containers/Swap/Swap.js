@@ -292,10 +292,39 @@ const Swap = ({
 
     // slippage = (1 - (expected_token_out / (token_in * last_traded_price)));
 
+    let { priceRangeMin, priceRangeMax } = priceRangeValues(
+      Number(decimalConversion(pair?.lastPrice)),
+      Number(decimalConversion(params?.maxPriceLimitRatio)),
+
+      10 **
+        Math.abs(
+          getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+        )
+    );
+
+    let midPrice = (Number(priceRangeMin) + Number(priceRangeMax)) / 2;
+    let tradePrice = expectedOutAmount / midPrice;
+
+    let tradeLastPrice = Number(decimalConversion(pair?.lastPrice));
+    let priceImpact = (tradePrice - tradeLastPrice) / tradeLastPrice;
+
+    console.log(
+      "the values",
+      priceRangeMin,
+      priceRangeMax,
+      midPrice,
+      tradePrice
+    );
+    let adjustPriceImpact = priceImpact;
+
+    let finalSlippage = Math.abs((adjustPriceImpact - 1) * 100).toFixed(
+      comdex?.coinDecimals
+    );
     let slippage =
       1 -
-      (Number(expectedOutAmount) /
-        (Number(input) * Number(decimalConversion(pair?.lastPrice))));
+      Number(expectedOutAmount) /
+        (Number(input) * Number(decimalConversion(pair?.lastPrice)));
 
     console.log(
       "expected",
@@ -305,9 +334,10 @@ const Swap = ({
       "last price",
       Number(decimalConversion(pair?.lastPrice)),
       "slippage",
-      slippage
+      slippage,
+      finalSlippage
     );
-    setSlippage(slippage);
+    setSlippage(finalSlippage);
   };
 
   const handleDemandCoinDenomChange = (value) => {
@@ -536,6 +566,19 @@ const Swap = ({
     )} - ${((lastPrice + maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
       comdex?.coinDecimals
     )}`;
+  };
+
+  const priceRangeValues = (lastPrice, maxPriceLimitRatio, decimal) => {
+    let priceRangeMin = (
+      (lastPrice - maxPriceLimitRatio * lastPrice) /
+      decimal
+    )?.toFixed(comdex?.coinDecimals);
+
+    let priceRangeMax = (
+      (lastPrice + maxPriceLimitRatio * lastPrice) /
+      decimal
+    )?.toFixed(comdex?.coinDecimals);
+    return { priceRangeMin, priceRangeMax };
   };
 
   const SettingPopup = (
