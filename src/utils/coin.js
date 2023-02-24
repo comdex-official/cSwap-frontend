@@ -33,9 +33,7 @@ export const amountConversionWithComma = (amount, decimals) => {
 
   const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return commaSeparator(
-    result.toFixed(getExponent(decimals) || comdex.coinDecimals)
-  );
+  return commaSeparator(result.toFixed(comdex.coinDecimals));
 };
 
 export const commaSeparatorWithRounding = (amount, round) => {
