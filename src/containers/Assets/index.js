@@ -18,7 +18,11 @@ import {
   commaSeparatorWithRounding,
   denomConversion
 } from "../../utils/coin";
-import { commaSeparator, marketPrice } from "../../utils/number";
+import {
+  commaSeparator,
+  formateNumberDecimalsAuto,
+  marketPrice
+} from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
 import Deposit from "./Deposit";
@@ -104,8 +108,7 @@ const Assets = ({
       render: (price) => (
         <>
           <p className="text-left">
-            $
-            {commaSeparator(Number(price?.value || 0).toFixed(DOLLAR_DECIMALS))}
+            ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
           </p>
         </>
       ),
