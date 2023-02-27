@@ -17,11 +17,17 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   const route = location.pathname && location.pathname.split("/")[1];
 
   window.addEventListener("keplr_keystorechange", () => {
-    handleConnectToKeplr();
+    handleConnectToWallet();
   });
 
-  const handleConnectToKeplr = () => {
-    initializeChain((error, account) => {
+  window.addEventListener("leap_keystorechange", () => {
+    handleConnectToWallet();
+  });
+
+  const handleConnectToWallet = () => {
+    let walletType = localStorage.getItem("loginType");
+
+    initializeChain(walletType, (error, account) => {
       if (error) {
         message.error(error);
         return;
@@ -33,7 +39,7 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
 
       setAccountAddress(account.address);
       localStorage.setItem("ac", encode(account.address));
-      localStorage.setItem("loginType", "keplr");
+      localStorage.setItem("loginType", walletType || "keplr");
     });
   };
 

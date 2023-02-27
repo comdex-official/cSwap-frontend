@@ -2,7 +2,7 @@ import { createTxRaw } from "@tharsis/proto";
 import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
-  generatePostBodyBroadcast
+  generatePostBodyBroadcast,
 } from "@tharsis/provider/dist/rest/broadcast";
 import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
@@ -24,7 +24,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -150,17 +150,34 @@ const Deposit = ({
         ibcMsg
       );
 
-      const sign = await window?.keplr?.signDirect(
-        chain.chainInfo?.chainId,
-        sourceAddress,
-        {
-          bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-          authInfoBytes: transferMsg.signDirect.authInfo.serializeBinary(),
-          chainId: chainInfoForMsg.cosmosChainId,
-          accountNumber: new Long(sender.accountNumber),
-        },
-        { isEthereum: true }
-      );
+      let walletType = localStorage.getItem("loginType");
+
+      const sign =
+        walletType === "keplr"
+          ? await window?.keplr?.signDirect(
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            )
+          : await window?.leap?.signDirect(
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            );
 
       if (sign !== undefined) {
         let rawTx = createTxRaw(
@@ -368,7 +385,7 @@ const Deposit = ({
   return (
     <>
       <Button type="primary" size="small" onClick={showModal}>
-        {variables[lang].deposit}
+        {variables[lang].deposit} <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
         className="asstedepositw-modal"

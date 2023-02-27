@@ -38,8 +38,16 @@ export const newQueryClientRPC = (rpc, callback) => {
 };
 
 export const KeplrWallet = async (chainID = comdex.chainId) => {
-  await window.keplr.enable(chainID);
-  const offlineSigner = await window.getOfflineSignerAuto(chainID);
+  let walletType = localStorage.getItem("loginType");
+
+  walletType === "keplr"
+    ? await window.keplr.enable(chainID)
+    : await window.leap.enable(chainID);
+
+  const offlineSigner =
+    walletType === "keplr"
+      ? window.getOfflineSigner(chainID)
+      : window?.leap?.getOfflineSigner(chainID);
   const accounts = await offlineSigner.getAccounts();
   return [offlineSigner, accounts];
 };
@@ -63,6 +71,7 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
   SigningStargateClient.connectWithSigner(comdex.rpc, offlineSigner, {
     registry: myRegistry,
     aminoTypes: aminoTypes,
+    preferNoSetFee: true,
   })
     .then((client) => {
       client
@@ -138,7 +147,7 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
   const cosmJS = await SigningStargateClient.connectWithSigner(
     comdex.rpc,
     wallet,
-    { registry: myRegistry, aminoTypes: aminoTypes }
+    { registry: myRegistry, aminoTypes: aminoTypes, preferNoSetFee: true }
   );
 
   const { accountNumber, sequence } = await cosmJS.getSequence(signerAddress);
@@ -157,15 +166,26 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
 
 export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
-    (await window.keplr) && window.keplr.enable(config.chainId);
+    let walletType = localStorage.getItem("loginType");
+
+    (walletType === "keplr" ? await window.keplr : await window.wallet) &&
+    walletType === "keplr"
+      ? window.keplr.enable(config.chainId)
+      : window.leap.enable(config.chainId);
+
     const offlineSigner =
-      window.getOfflineSignerOnlyAmino &&
-      window.getOfflineSignerOnlyAmino(config.chainId);
+      walletType === "keplr"
+        ? window.getOfflineSignerOnlyAmino &&
+          window.getOfflineSignerOnlyAmino(config.chainId)
+        : window?.leap?.getOfflineSignerOnlyAmino &&
+          window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
+
     const client = await SigningStargateClient.connectWithSigner(
       config.rpc,
       offlineSigner,
       {
         accountParser: strideAccountParser,
+        preferNoSetFee: true,
       }
     );
 
