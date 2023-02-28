@@ -90,7 +90,7 @@ const Deposit = ({
   }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
 
   useEffect(() => {
-    if (isOpen && address) {
+    if (isOpen) {
       initialize();
     }
   }, [address, initialize, isOpen]);
