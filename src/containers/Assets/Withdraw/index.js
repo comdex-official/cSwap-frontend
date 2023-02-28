@@ -66,6 +66,11 @@ const Withdraw = ({
   }, [address, initialize, isModalOpen]);
 
   const showModal = () => {
+    if (!address) {
+      message.info("Please connect your wallet");
+      return;
+    }
+
     initialize();
     setIsModalOpen(true);
   };
