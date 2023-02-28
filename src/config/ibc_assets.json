@@ -31,7 +31,7 @@
       "prefix": "osmo",
       "channel": "channel-1498",
       "comdexChannel": "channel-0",
-      "ibcDenomHash": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+      "ibcDenomHash": "ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1",
       "logoURI": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/osmo.svg",
       "coinGeckoId": "osmosis",
       "explorerUrlToTx": "https://bigdipper.testnet.osmo.mp20.net/transactions/{txHash}"

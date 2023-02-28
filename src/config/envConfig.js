@@ -1,6 +1,6 @@
 export const envConfig = {
-  rpc: "https://devnet.rpc.comdex.one",
-  rest: "https://devnet.rest.comdex.one",
+  rpc: "http://65.21.176.33:26657",
+  rest: "http://65.21.176.33:1317",
   chainId: "test-1",
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
@@ -9,15 +9,15 @@ export const envConfig = {
   coinType: 118,
   chainName: "Comdex Test Chain",
   explorerUrlToTx: "https://dev-explorer.comdex.one/transactions/{txHash}",
-  apiUrl: "https://test-stat.comdex.one",
+  apiUrl: "http://65.21.176.33:8000",
   comdexStakingUrl: "https://comdex.omniflix.co/stake",
   webSocketApiUrl: "wss://rpc.comdex.one/websocket",
 
   cSwap: {
     title: "cSwap Exchange",
     websiteUrl: "https://devnet.cswap.one",
-    appId: 1,
-    masterPoolId: 1,
+    appId: 2,
+    masterPoolId: 2,
     networkTag: "Devnet",
   },
 };
