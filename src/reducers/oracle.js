@@ -19,7 +19,7 @@ const market = (
   return state;
 };
 
-const lpPrices = (
+const lpPrice = (
   state = {
     list: [],
   },
@@ -37,5 +37,5 @@ const lpPrices = (
 
 export default combineReducers({
   market,
-  lpPrices,
+  lpPrice,
 });

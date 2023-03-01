@@ -1,4 +1,4 @@
-import { Button, Input, message, Switch, Table } from "antd";
+import { Button, Input, message, Switch, Table, Tabs } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
@@ -12,7 +12,10 @@ import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
-import { fetchRestLPPrices, fetchRestPrices } from "../../services/oracle/query";
+import {
+  fetchRestLPPrices,
+  fetchRestPrices
+} from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
@@ -39,13 +42,26 @@ const Assets = ({
   assetMap,
   assetDenomMap,
   setMarkets,
-  setLPPrices
+  setLPPrices,
+  lpPrices,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
+  const [filterValue, setFilterValue] = useState("1");
 
   const dispatch = useDispatch();
+
+  const tabItems = [
+    {
+      key: "1",
+      label: "Assets",
+    },
+    {
+      key: "2",
+      label: "LP Tokens",
+    },
+  ];
 
   const handleBalanceRefresh = () => {
     dispatch({
@@ -85,7 +101,7 @@ const Assets = ({
     });
   };
 
-  const getLpPrices = ()=> {
+  const getLpPrices = () => {
     fetchRestLPPrices((error, result) => {
       setPricesInProgress(false);
 
@@ -96,8 +112,8 @@ const Assets = ({
 
       setLPPrices(result.data);
     });
-  }
-  
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -394,6 +410,40 @@ const Assets = ({
     (item) => Number(item?.noOfTokens) > 0
   );
 
+  const tableLpTokensData =
+    lpPrices &&
+    lpPrices.map((item) => {
+      return {
+        key: item?.asset_details?.base_asset?.symbol,
+        symbol: item?.asset_details?.base_asset?.symbol,
+        asset: (
+          <>
+            <div className="assets-withicon">
+              <div className="assets-icon">
+                <SvgIcon
+                  name={iconNameFromDenom(
+                    item?.asset_details?.base_asset?.denom
+                  )}
+                />
+              </div>{" "}
+              {denomConversion(item?.asset_details?.base_asset?.denom)}{" "}
+            </div>
+          </>
+        ),
+        noOfTokens: Number(item?.balance?.amount || 0)?.toFixed(
+          comdex?.coinDecimals
+        ),
+        price: { value: item?.price},
+        amount: item.balance,
+      };
+    });
+
+  console.log("lp price", lpPrices);
+
+  const onChange = (key) => {
+    setFilterValue(key);
+  };
+
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
@@ -421,6 +471,15 @@ const Assets = ({
           </Row>
         )}
         <Row>
+          <div className="mt-4">
+            <Tabs
+              defaultActiveKey="1"
+              items={tabItems}
+              activeKey={filterValue}
+              onChange={onChange}
+              className="comdex-tabs farm-details-tabmain"
+            />
+          </div>
           <Col className="assets-search-section">
             {parent && parent === "portfolio" ? null : (
               <div className="text">
@@ -441,15 +500,27 @@ const Assets = ({
         </Row>
         <Row>
           <Col>
-            <Table
-              className="custom-table assets-table"
-              dataSource={tableData}
-              columns={columns}
-              loading={pricesInProgress}
-              pagination={false}
-              scroll={{ x: "100%" }}
-              locale={{ emptyText: <NoDataIcon /> }}
-            />
+            {filterValue === "1" ? (
+              <Table
+                className="custom-table assets-table"
+                dataSource={tableData}
+                columns={columns}
+                loading={pricesInProgress}
+                pagination={false}
+                scroll={{ x: "100%" }}
+                locale={{ emptyText: <NoDataIcon /> }}
+              />
+            ) : (
+              <Table
+                className="custom-table assets-table"
+                dataSource={tableLpTokensData}
+                columns={columns}
+                loading={pricesInProgress}
+                pagination={false}
+                scroll={{ x: "100%" }}
+                locale={{ emptyText: <NoDataIcon /> }}
+              />
+            )}
           </Col>
         </Row>
       </div>
@@ -472,6 +543,7 @@ Assets.propTypes = {
     })
   ),
   markets: PropTypes.object,
+  lpPrices: PropTypes.object,
   refreshBalance: PropTypes.number.isRequired,
 };
 
@@ -481,6 +553,7 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    lpPrices: state.oracle.lpPrice.list,
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
     assetDenomMap: state.asset.appAssetMap,
