@@ -4984,9 +4984,9 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-comdex-codec@comdex-official/proto-codecs#development:
+comdex-codec@comdex-official/proto-codecs#lp-prices-js-proto:
   version "0.1.0"
-  resolved "https://codeload.github.com/comdex-official/proto-codecs/tar.gz/49b6c5d61d61241ad8fe909ebf9e61cefce64592"
+  resolved "https://codeload.github.com/comdex-official/proto-codecs/tar.gz/c448f1abc7eb8049a6b0ba46e6a2fa7464692183"
   dependencies:
     "@vercel/ncc" "^0.29.1"
     protobufjs "^6.11.3"
