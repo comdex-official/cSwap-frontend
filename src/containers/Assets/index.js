@@ -5,14 +5,14 @@ import React, { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
-import { setMarkets } from "../../actions/oracle";
+import { setLPPrices, setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
-import { fetchRestPrices } from "../../services/oracle/query";
+import { fetchRestLPPrices, fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
@@ -38,6 +38,8 @@ const Assets = ({
   refreshBalance,
   assetMap,
   assetDenomMap,
+  setMarkets,
+  setLPPrices
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
@@ -56,6 +58,7 @@ const Assets = ({
 
   useEffect(() => {
     setHideToggle(localStorage.getItem("hideToggle") === "true");
+    getLpPrices();
   }, []);
 
   const handleHideSwitchChange = (value) => {
@@ -82,6 +85,19 @@ const Assets = ({
     });
   };
 
+  const getLpPrices = ()=> {
+    fetchRestLPPrices((error, result) => {
+      setPricesInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setLPPrices(result.data);
+    });
+  }
+  
   const columns = [
     {
       title: "Asset",
@@ -445,6 +461,7 @@ Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
+  setLPPrices: PropTypes.func.isRequired,
   assetBalance: PropTypes.number,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
@@ -473,6 +490,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setAccountBalances,
   setMarkets,
+  setLPPrices,
 };
 
 export default connect(stateToProps, actionsToProps)(Assets);

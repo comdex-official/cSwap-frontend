@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { MARKET_LIST_SET } from "../constants/oracle";
+import { LP_PRICES_SET, MARKET_LIST_SET } from "../constants/oracle";
 
 const market = (
   state = {
@@ -19,6 +19,23 @@ const market = (
   return state;
 };
 
+const lpPrices = (
+  state = {
+    list: [],
+  },
+  action
+) => {
+  if (action.type === LP_PRICES_SET) {
+    return {
+      ...state,
+      list: action?.list,
+    };
+  }
+
+  return state;
+};
+
 export default combineReducers({
   market,
+  lpPrices,
 });
