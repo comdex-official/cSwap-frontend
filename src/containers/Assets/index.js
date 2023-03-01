@@ -31,6 +31,7 @@ import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
 import Deposit from "./Deposit";
 import "./index.scss";
+import LPAsssets from "./LPAassets";
 import Withdraw from "./Withdraw";
 
 const Assets = ({
@@ -531,6 +532,7 @@ const Assets = ({
     setFilterValue(key);
   };
 
+  console.log("this is", tableLpTokensData);
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
@@ -598,15 +600,7 @@ const Assets = ({
                 locale={{ emptyText: <NoDataIcon /> }}
               />
             ) : (
-              <Table
-                className="custom-table assets-table"
-                dataSource={tableLpTokensData}
-                columns={lpColumns}
-                loading={pricesInProgress}
-                pagination={false}
-                scroll={{ x: "100%" }}
-                locale={{ emptyText: <NoDataIcon /> }}
-              />
+              <LPAsssets colums={lpColumns} data={tableLpTokensData} />
             )}
           </Col>
         </Row>
