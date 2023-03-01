@@ -4,6 +4,7 @@ import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { setAccountBalances } from "../../actions/account";
 import { setLPPrices, setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
@@ -49,6 +50,7 @@ const Assets = ({
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
   const [filterValue, setFilterValue] = useState("1");
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -223,6 +225,75 @@ const Assets = ({
           );
         }
       },
+    },
+  ];
+
+  const lpColumns = [
+    {
+      title: "Base Asset",
+      dataIndex: "baseAsset",
+      key: "baseAsset",
+    },
+    {
+      title: "Quote Asset",
+      dataIndex: "quoteAsset",
+      key: "quoteAsset",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      align: "left",
+      width: 150,
+      render: (price) => (
+        <>
+          <p className="text-left">
+            ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
+          </p>
+        </>
+      ),
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      align: "left",
+      render: (amount) => (
+        <>
+          <p>${commaSeparator(Number(amount || 0).toFixed(DOLLAR_DECIMALS))}</p>
+        </>
+      ),
+    },
+    {
+      title: "Farm",
+      dataIndex: "farm",
+      key: "farm",
+      align: "left",
+      // width: 210,
+      render: (item) => (
+        <Button
+          type="primary"
+          onClick={() => navigate(`/farm/${Number(item?.pool_id)}/#farm`)}
+          size="small"
+        >
+          Farm
+        </Button>
+      ),
+    },
+    {
+      title: "Unfarm",
+      dataIndex: "unfarm",
+      key: "unfarm",
+      width: 110,
+      render: (item) => (
+        <Button
+          type="primary"
+          onClick={() => navigate(`/farm/${Number(item?.pool_id)}/#unfarm`)}
+          size="small"
+        >
+          Unfarm
+        </Button>
+      ),
     },
   ];
 
@@ -410,13 +481,18 @@ const Assets = ({
     (item) => Number(item?.noOfTokens) > 0
   );
 
+  const getLpAmount = (token) => {
+    const lpAmount = balances.filter((item) => item.denom === token?.denom);
+    return (lpAmount[0]?.amount / 10 ** token?.exponent) * token?.price || 0;
+  };
+
   const tableLpTokensData =
     lpPrices &&
     lpPrices.map((item) => {
       return {
         key: item?.asset_details?.base_asset?.symbol,
         symbol: item?.asset_details?.base_asset?.symbol,
-        asset: (
+        baseAsset: (
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
@@ -430,15 +506,26 @@ const Assets = ({
             </div>
           </>
         ),
-        noOfTokens: Number(item?.balance?.amount || 0)?.toFixed(
-          comdex?.coinDecimals
+        quoteAsset: (
+          <>
+            <div className="assets-withicon">
+              <div className="assets-icon">
+                <SvgIcon
+                  name={iconNameFromDenom(
+                    item?.asset_details?.quote_asset?.denom
+                  )}
+                />
+              </div>{" "}
+              {denomConversion(item?.asset_details?.quote_asset?.denom)}{" "}
+            </div>
+          </>
         ),
-        price: { value: item?.price},
-        amount: item.balance,
+        price: { value: item?.price },
+        amount: getLpAmount(item),
+        farm: item,
+        unFarm: item,
       };
     });
-
-  console.log("lp price", lpPrices);
 
   const onChange = (key) => {
     setFilterValue(key);
@@ -514,7 +601,7 @@ const Assets = ({
               <Table
                 className="custom-table assets-table"
                 dataSource={tableLpTokensData}
-                columns={columns}
+                columns={lpColumns}
                 loading={pricesInProgress}
                 pagination={false}
                 scroll={{ x: "100%" }}
