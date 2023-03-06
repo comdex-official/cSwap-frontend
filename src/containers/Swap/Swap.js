@@ -88,6 +88,7 @@ const Swap = ({
   const [pairsMapping, setPairsMapping] = useState({});
   const [outputOptions, setoutputOptions] = useState([]);
   const [inputOptions, setinputOptions] = useState([]);
+  const [isFinalSlippage, setFinalSlippage] = useState(false);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -188,6 +189,7 @@ const Swap = ({
     setValidationError();
     setLimitPrice(0);
     setSlippage(0);
+    setFinalSlippage(false);
   };
 
   useEffect(() => {
@@ -272,7 +274,7 @@ const Swap = ({
           100
       );
     }
-    
+
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
 
@@ -306,11 +308,11 @@ const Swap = ({
 
       let baseAmount = Number(pool?.balances?.baseCoin?.amount);
       let quoteAmount = Number(pool?.balances?.quoteCoin?.amount);
-      
+
       // Rx: quoteAmount, Ry: BaseAmount
       const currentPrice = Number(decimalConversion(pool?.price)); // for slippage calculation this is current price.
 
-      const [newRx, newRy] = getNewRangedPoolRatio(
+      const [newRx, newRy, final] = getNewRangedPoolRatio(
         quoteAmount,
         baseAmount,
         reverse ? "buy" : "sell",
@@ -324,10 +326,11 @@ const Swap = ({
         minPrice,
         maxPrice
       );
-      
+
       const slippage = calculateSlippage(currentPrice, newPrice);
 
       setSlippage(slippage);
+      setFinalSlippage(final);
     }
   };
 
@@ -405,6 +408,7 @@ const Swap = ({
     setDemandCoinAmount(0);
     setLimitPrice(0);
     setSlippage(0);
+    setFinalSlippage(false);
     setReverse(!reverse);
   };
 
@@ -505,6 +509,7 @@ const Swap = ({
     fetchPair();
     fetchPool();
     setSlippage(0);
+    setFinalSlippage(false);
   };
 
   useEffect(() => {
@@ -828,6 +833,7 @@ const Swap = ({
                             : "text-right"
                         }
                       >
+                        {pool?.type === 2 && isFinalSlippage ? ">" : ""}
                         {Number(slippage)?.toFixed(comdex.coinDecimals)}%
                       </Col>
                     </Row>
