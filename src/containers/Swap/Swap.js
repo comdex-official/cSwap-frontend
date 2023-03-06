@@ -301,29 +301,18 @@ const Swap = ({
 
     // calculating slippage for ranged pools.
     if (pool?.type === 2) {
-      let { minPrice, maxPrice } = priceRangeValues(
-        Number(decimalConversion(pair?.lastPrice)),
-        Number(decimalConversion(params?.maxPriceLimitRatio)),
-
-        10 **
-          Math.abs(
-            getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-              getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-          )
-      );
+      let minPrice = Number(decimalConversion(pool?.minPrice));
+      let maxPrice = Number(decimalConversion(pool?.maxPrice));
 
       let baseAmount = Number(pool?.balances?.baseCoin?.amount);
       let quoteAmount = Number(pool?.balances?.quoteCoin?.amount);
-      const currentPrice = calculateRangedPoolPrice(
-        baseAmount,
-        quoteAmount,
-        Number(minPrice),
-        Number(maxPrice)
-      );
+      
+      // Rx: quoteAmount, Ry: BaseAmount
+      const currentPrice = Number(decimalConversion(pool?.price)); // for slippage calculation this is current price.
 
       const [newRx, newRy] = getNewRangedPoolRatio(
-        baseAmount,
         quoteAmount,
+        baseAmount,
         reverse ? "buy" : "sell",
         currentPrice,
         Number(getAmount(input, assetMap[offerCoin?.denom]?.decimals))
@@ -335,6 +324,7 @@ const Swap = ({
         minPrice,
         maxPrice
       );
+      
       const slippage = calculateSlippage(currentPrice, newPrice);
 
       setSlippage(slippage);

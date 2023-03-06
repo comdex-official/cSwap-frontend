@@ -47,7 +47,7 @@ export const calculateRangedPoolPrice = (rx, ry, minPrice, maxPrice) => {
 
     const transX = sqrtK * sqrtM;
     const transY = sqrtK / sqrtL;
-    const price = ((rx + transX) / (ry + transY)).toFixed(5);
+    const price = ((rx + transX) / (ry + transY));
     return price;
 }
 
