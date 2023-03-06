@@ -37,6 +37,11 @@ import {
   getExponent,
   marketPrice
 } from "../../utils/number";
+import {
+  calculateRangedPoolPrice,
+  calculateSlippage,
+  getNewRangedPoolRatio
+} from "../../utils/slippage";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -249,21 +254,25 @@ const Swap = ({
         (item) => item?.denom === offerCoin?.denom
       )[0];
 
-    // const assetVolume =
-    //   selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
+    // calculating slippage for non ranged pools.
 
-    // setSlippage(
-    //   (Number(value) /
-    //     (Number(
-    //       amountConversion(
-    //         assetVolume,
-    //         assetMap[selectedAsset?.denom]?.decimals
-    //       )
-    //     ) +
-    //       Number(value))) *
-    //     100
-    // );
+    if (pool?.type !== 2) {
+      const assetVolume =
+        selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
 
+      setSlippage(
+        (Number(value) /
+          (Number(
+            amountConversion(
+              assetVolume,
+              assetMap[selectedAsset?.denom]?.decimals
+            )
+          ) +
+            Number(value))) *
+          100
+      );
+    }
+    
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
 
@@ -290,54 +299,46 @@ const Swap = ({
     const expectedOutAmount = price * input;
     setDemandCoinAmount(expectedOutAmount.toFixed(6));
 
-    // slippage = (1 - (expected_token_out / (token_in * last_traded_price)));
+    // calculating slippage for ranged pools.
+    if (pool?.type === 2) {
+      let { minPrice, maxPrice } = priceRangeValues(
+        Number(decimalConversion(pair?.lastPrice)),
+        Number(decimalConversion(params?.maxPriceLimitRatio)),
 
-    let { priceRangeMin, priceRangeMax } = priceRangeValues(
-      Number(decimalConversion(pair?.lastPrice)),
-      Number(decimalConversion(params?.maxPriceLimitRatio)),
+        10 **
+          Math.abs(
+            getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+              getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+          )
+      );
 
-      10 **
-        Math.abs(
-          getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-        )
-    );
+      let baseAmount = Number(pool?.balances?.baseCoin?.amount);
+      let quoteAmount = Number(pool?.balances?.quoteCoin?.amount);
+      const currentPrice = calculateRangedPoolPrice(
+        baseAmount,
+        quoteAmount,
+        Number(minPrice),
+        Number(maxPrice)
+      );
 
-    let midPrice = (Number(priceRangeMin) + Number(priceRangeMax)) / 2;
-    let tradePrice = expectedOutAmount / midPrice;
+      const [newRx, newRy] = getNewRangedPoolRatio(
+        baseAmount,
+        quoteAmount,
+        reverse ? "buy" : "sell",
+        currentPrice,
+        Number(getAmount(input, assetMap[offerCoin?.denom]?.decimals))
+      );
 
-    let tradeLastPrice = Number(decimalConversion(pair?.lastPrice));
-    let priceImpact = (tradePrice - tradeLastPrice) / tradeLastPrice;
+      const newPrice = calculateRangedPoolPrice(
+        newRx,
+        newRy,
+        minPrice,
+        maxPrice
+      );
+      const slippage = calculateSlippage(currentPrice, newPrice);
 
-    console.log(
-      "the values",
-      priceRangeMin,
-      priceRangeMax,
-      midPrice,
-      tradePrice
-    );
-    let adjustPriceImpact = priceImpact;
-
-    let finalSlippage = Math.abs((adjustPriceImpact - 1) * 100).toFixed(
-      comdex?.coinDecimals
-    );
-    let slippage =
-      1 -
-      Number(expectedOutAmount) /
-        (Number(input) * Number(decimalConversion(pair?.lastPrice)));
-
-    console.log(
-      "expected",
-      expectedOutAmount,
-      "offer",
-      input,
-      "last price",
-      Number(decimalConversion(pair?.lastPrice)),
-      "slippage",
-      slippage,
-      finalSlippage
-    );
-    setSlippage(finalSlippage);
+      setSlippage(slippage);
+    }
   };
 
   const handleDemandCoinDenomChange = (value) => {
@@ -413,6 +414,7 @@ const Swap = ({
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
     setLimitPrice(0);
+    setSlippage(0);
     setReverse(!reverse);
   };
 
@@ -569,16 +571,11 @@ const Swap = ({
   };
 
   const priceRangeValues = (lastPrice, maxPriceLimitRatio, decimal) => {
-    let priceRangeMin = (
-      (lastPrice - maxPriceLimitRatio * lastPrice) /
-      decimal
-    )?.toFixed(comdex?.coinDecimals);
+    let minPrice = (lastPrice - maxPriceLimitRatio * lastPrice) / decimal;
 
-    let priceRangeMax = (
-      (lastPrice + maxPriceLimitRatio * lastPrice) /
-      decimal
-    )?.toFixed(comdex?.coinDecimals);
-    return { priceRangeMin, priceRangeMax };
+    let maxPrice = (lastPrice + maxPriceLimitRatio * lastPrice) / decimal;
+
+    return { minPrice, maxPrice };
   };
 
   const SettingPopup = (
