@@ -146,6 +146,7 @@ const LPAsssets = ({
       return {
         key: item?.asset_details?.base_asset?.symbol,
         baseSymbol: item?.asset_details?.base_asset?.symbol,
+        quoteSymbol: item?.asset_details?.quote_asset?.symbol,
         pair: (
           <>
             <div className="assets-withicon">
@@ -188,7 +189,6 @@ const LPAsssets = ({
       ? tableData?.filter((item) => getLpAmount(item) > 0)
       : tableData;
 
-  console.log("the data", tableData);
   return (
     <Table
       className="custom-table assets-table"
