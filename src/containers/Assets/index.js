@@ -16,12 +16,12 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -57,7 +57,7 @@ const Assets = ({
     },
     {
       key: "2",
-      label: "LP Tokens",
+      label: "LF Tokens",
     },
   ];
 

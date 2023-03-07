@@ -27,14 +27,30 @@ const LPAsssets = ({
 
   const lpColumns = [
     {
-      title: "Base Asset",
-      dataIndex: "baseAsset",
-      key: "baseAsset",
+      title: "Pool Id",
+      dataIndex: "poolId",
+      key: "asset",
+      render: (value) => (
+        <>
+          <p>#{value}</p>
+        </>
+      ),
     },
     {
-      title: "Quote Asset",
-      dataIndex: "quoteAsset",
-      key: "quoteAsset",
+      title: "Liquidity Farming Pair",
+      dataIndex: "pair",
+      key: "pair",
+    },
+    {
+      title: "No. of Tokens",
+      dataIndex: "noOfTokens",
+      key: "noOfTokens",
+      align: "left",
+      render: (tokens) => (
+        <>
+          <p>{commaSeparator(Number(tokens || 0))}</p>
+        </>
+      ),
     },
     {
       title: "Price",
@@ -110,14 +126,27 @@ const LPAsssets = ({
     return (lpAmount[0]?.amount / 10 ** token?.exponent) * token?.price || 0;
   };
 
+  const getLpTokens = (token) => {
+    const lpAmount = balances.filter((item) => item.denom === token?.denom);
+    return lpAmount[0]?.amount / 10 ** token?.exponent;
+  };
+
+  const showPairDenoms = (item) => {
+    console.log("the item", item);
+    if (item?.asset_details?.base_asset?.denom) {
+      return `${denomConversion(
+        item?.asset_details?.base_asset?.denom
+      )}/${denomConversion(item?.asset_details?.quote_asset?.denom)}`;
+    }
+  };
+
   let tableData =
     lpPrices &&
     lpPrices.map((item) => {
       return {
         key: item?.asset_details?.base_asset?.symbol,
         baseSymbol: item?.asset_details?.base_asset?.symbol,
-        quoteSymbol: item?.asset_details?.base_asset?.symbol,
-        baseAsset: (
+        pair: (
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
@@ -127,27 +156,15 @@ const LPAsssets = ({
                   )}
                 />
               </div>{" "}
-              {denomConversion(item?.asset_details?.base_asset?.denom)}{" "}
+              {showPairDenoms(item)}
             </div>
           </>
         ),
-        quoteAsset: (
-          <>
-            <div className="assets-withicon">
-              <div className="assets-icon">
-                <SvgIcon
-                  name={iconNameFromDenom(
-                    item?.asset_details?.quote_asset?.denom
-                  )}
-                />
-              </div>{" "}
-              {denomConversion(item?.asset_details?.quote_asset?.denom)}{" "}
-            </div>
-          </>
-        ),
+        poolId: item?.pool_id,
         price: item?.price,
         amount: getLpAmount(item),
         exponent: item?.exponent,
+        noOfTokens: getLpTokens(item),
         denom: item?.denom,
         farm: item,
         unfarm: item,
