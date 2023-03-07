@@ -326,9 +326,11 @@ const Deposit = ({
           <div className="farm-rang-slider">
             <div className="farmrange-title">
               {Number(pool?.price) > Number(pool?.minPrice) &&
-              Number(pool?.price) < Number(pool?.maxPrice)
-                ? "In range"
-                : "Out of range"}
+              Number(pool?.price) < Number(pool?.maxPrice) ? (
+                <span className="success-color">In range</span>
+              ) : (
+                <span className="warn-color">Out of range</span>
+              )}
               <Tooltip
                 overlayClassName="ranged-tooltip"
                 title={
@@ -404,7 +406,8 @@ const Deposit = ({
                   className="active"
                   onClick={() =>
                     handleFirstInputMax(
-                      pool?.balances?.baseCoin?.denom === comdex?.coinMinimalDenom &&
+                      pool?.balances?.baseCoin?.denom ===
+                        comdex?.coinMinimalDenom &&
                         Number(firstAssetAvailableBalance) > DEFAULT_FEE
                         ? amountConversion(
                             firstAssetAvailableBalance - DEFAULT_FEE,
