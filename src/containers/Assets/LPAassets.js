@@ -27,7 +27,7 @@ const LPAsssets = ({
 
   const lpColumns = [
     {
-      title: "Pool Id",
+      title: "Pool ID",
       dataIndex: "poolId",
       key: "asset",
       render: (value) => (
