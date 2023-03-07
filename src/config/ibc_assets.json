@@ -46,7 +46,7 @@
       "coinType": 118,
       "channel": "channel-62",
       "comdexChannel": "channel-18",
-      "ibcDenomHash": "ibc/EF8A76D0FD3F3F45D8DB7FEBFCF921206DF58CA41493ED16D69BF7B4E061C60C",
+      "ibcDenomHash": "ibc/96CF88731A06654F8510473865C75200005B81A2A9FECB90389034F787015CA3",
       "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/uausdc L@3x.png",
       "coinGeckoId": "axlusdc",
       "depositUrlOverride": "https://testnet.satellite.money/?source=ethereum&destination=comdex&asset_denom=uausdc&destination_address=",
@@ -62,11 +62,26 @@
       "coinType": 118,
       "channel": "channel-62",
       "comdexChannel": "channel-18",
-      "ibcDenomHash": "ibc/A99459944FD67B5711735B4B4D3FE30BA45328E94D437C78E47CA8DEFA781E49",
+      "ibcDenomHash": "ibc/065AD21492A7749E283A37AC469426562F988B7BA59712C0C545F381865A66BA",
       "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/weth-wei L@3x.png",
       "coinGeckoId": "axlweth",
       "depositUrlOverride": "https://testnet.satellite.money/?source=ethereum&destination=comdex&asset_denom=weth-wei&destination_address=",
       "withdrawUrlOverride": "https://testnet.satellite.money/?source=comdex&destination=ethereum&asset_denom=weth-wei&destination_address="
+    },
+    {
+      "chainId": "stride-1",
+      "chainName": "Stride",
+      "coinDenom": "stake",
+      "coinMinimalDenom": "stake",
+      "symbol": "STAKE",
+      "coinDecimals": 6,
+      "coinType": 118,
+      "channel": "channel-62",
+      "comdexChannel": "channel-18",
+      "ibcDenomHash": "stake",
+      "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.png",
+      "coinGeckoId": "stake",
+      "explorerUrlToTx": "https://explorer.theta-testnet.polypore.xyz/transactions/{txHash}"
     }
   ]
 }
