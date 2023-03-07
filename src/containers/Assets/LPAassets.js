@@ -45,7 +45,7 @@ const LPAsssets = ({
       title: "No. of Tokens",
       dataIndex: "noOfTokens",
       key: "noOfTokens",
-      align: "left",
+      // align: "center",
       render: (tokens) => (
         <>
           <p>{commaSeparator(Number(tokens || 0))}</p>
@@ -157,6 +157,13 @@ const LPAsssets = ({
                   )}
                 />
               </div>{" "}
+              <div className="assets-icon asset-icon-reverse" style={{ marginLeft: "-18px" }}>
+                <SvgIcon
+                  name={iconNameFromDenom(
+                    item?.asset_details?.quote_asset?.denom
+                  )}
+                />
+              </div>{" "}
               {showPairDenoms(item)}
             </div>
           </>
@@ -175,13 +182,13 @@ const LPAsssets = ({
   tableData =
     searchKey && activeKey === "2"
       ? tableData?.filter((item) => {
-          return (
-            item?.baseSymbol
-              ?.toLowerCase()
-              .includes(searchKey?.toLowerCase()) ||
-            item?.quoteSymbol?.toLowerCase().includes(searchKey?.toLowerCase())
-          );
-        })
+        return (
+          item?.baseSymbol
+            ?.toLowerCase()
+            .includes(searchKey?.toLowerCase()) ||
+          item?.quoteSymbol?.toLowerCase().includes(searchKey?.toLowerCase())
+        );
+      })
       : tableData;
 
   tableData =
