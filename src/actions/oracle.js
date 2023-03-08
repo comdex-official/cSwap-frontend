@@ -1,4 +1,4 @@
-import { MARKET_LIST_SET } from "../constants/oracle";
+import { LP_PRICES_SET, MARKET_LIST_SET } from "../constants/oracle";
 
 export const setMarkets = (list, pagination) => {
 
@@ -10,6 +10,15 @@ export const setMarkets = (list, pagination) => {
   return {
     type: MARKET_LIST_SET,
     list: priceMap,
+    pagination,
+  };
+};
+
+
+export const setLPPrices = (list, pagination) => {
+  return {
+    type: LP_PRICES_SET,
+    list,
     pagination,
   };
 };

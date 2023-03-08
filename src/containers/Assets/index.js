@@ -1,11 +1,11 @@
-import { Button, Input, message, Switch, Table } from "antd";
+import { Button, Input, message, Switch, Table, Tabs } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
-import { setMarkets } from "../../actions/oracle";
+import { setLPPrices, setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
@@ -16,17 +16,18 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
 import Deposit from "./Deposit";
 import "./index.scss";
+import LPAsssets from "./LPAassets";
 import Withdraw from "./Withdraw";
 
 const Assets = ({
@@ -38,12 +39,27 @@ const Assets = ({
   refreshBalance,
   assetMap,
   assetDenomMap,
+  setMarkets,
+  setLPPrices,
+  lpPrices,
 }) => {
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
+  const [filterValue, setFilterValue] = useState("1");
 
   const dispatch = useDispatch();
+
+  const tabItems = [
+    {
+      key: "1",
+      label: "Assets",
+    },
+    {
+      key: "2",
+      label: "LF Tokens",
+    },
+  ];
 
   const handleBalanceRefresh = () => {
     dispatch({
@@ -364,19 +380,25 @@ const Assets = ({
 
   let allTableData = Lodash.concat(currentChainData, tableIBCData);
 
-  let tableData = isHideToggleOn
-    ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
-    : allTableData;
+  let tableData =
+    isHideToggleOn && filterValue === "1"
+      ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
+      : allTableData;
 
-  tableData = searchKey
-    ? tableData?.filter((item) => {
-        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
-      })
-    : tableData;
+  tableData =
+    searchKey && filterValue === "1"
+      ? tableData?.filter((item) => {
+          return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
+        })
+      : tableData;
 
   let balanceExists = allTableData?.find(
     (item) => Number(item?.noOfTokens) > 0
   );
+
+  const onChange = (key) => {
+    setFilterValue(key);
+  };
 
   return (
     <div className="app-content-wrapper">
@@ -405,6 +427,15 @@ const Assets = ({
           </Row>
         )}
         <Row>
+          <div className="mt-4">
+            <Tabs
+              defaultActiveKey="1"
+              items={tabItems}
+              activeKey={filterValue}
+              onChange={onChange}
+              className="comdex-tabs farm-details-tabmain"
+            />
+          </div>
           <Col className="assets-search-section">
             {parent && parent === "portfolio" ? null : (
               <div className="text">
@@ -425,15 +456,23 @@ const Assets = ({
         </Row>
         <Row>
           <Col>
-            <Table
-              className="custom-table assets-table"
-              dataSource={tableData}
-              columns={columns}
-              loading={pricesInProgress}
-              pagination={false}
-              scroll={{ x: "100%" }}
-              locale={{ emptyText: <NoDataIcon /> }}
-            />
+            {filterValue === "1" ? (
+              <Table
+                className="custom-table assets-table"
+                dataSource={tableData}
+                columns={columns}
+                loading={pricesInProgress}
+                pagination={false}
+                scroll={{ x: "100%" }}
+                locale={{ emptyText: <NoDataIcon /> }}
+              />
+            ) : (
+              <LPAsssets
+                isHideToggleOn={isHideToggleOn}
+                searchKey={searchKey}
+                activeKey={filterValue}
+              />
+            )}
           </Col>
         </Row>
       </div>
@@ -445,6 +484,7 @@ Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
+  setLPPrices: PropTypes.func.isRequired,
   assetBalance: PropTypes.number,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
@@ -455,6 +495,7 @@ Assets.propTypes = {
     })
   ),
   markets: PropTypes.object,
+  lpPrices: PropTypes.object,
   refreshBalance: PropTypes.number.isRequired,
 };
 
@@ -464,6 +505,7 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    lpPrices: state.oracle.lpPrice.list,
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
     assetDenomMap: state.asset.appAssetMap,
@@ -473,6 +515,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setAccountBalances,
   setMarkets,
+  setLPPrices,
 };
 
 export default connect(stateToProps, actionsToProps)(Assets);
