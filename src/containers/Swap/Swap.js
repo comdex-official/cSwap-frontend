@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { comdex, harbor } from "../../config/network";
+import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -106,21 +106,11 @@ const Swap = ({
   }, [pairs]);
 
   useEffect(() => {
-    let options = pairsMapping[offerCoin?.denom]?.filter(
-      (item) => item !== harbor?.coinMinimalDenom
-    );
-    //filtering out harbor from options
-
-    setoutputOptions(options);
+    setoutputOptions(pairsMapping[offerCoin?.denom]);
   }, [offerCoin?.denom, pairsMapping]);
 
   useEffect(() => {
-    let options = Object.keys(pairsMapping)?.filter(
-      (item) => item !== harbor?.coinMinimalDenom
-    );
-    //filtering out harbor from options
-
-    setinputOptions(options);
+    setinputOptions(Object.keys(pairsMapping));
   }, [pairsMapping]);
 
   useEffect(() => {
