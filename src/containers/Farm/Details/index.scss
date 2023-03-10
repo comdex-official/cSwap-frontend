@@ -447,3 +447,11 @@
   max-width: 80%;
   margin: auto;
 }
+
+.success-color {
+  color: $success-color;
+}
+
+.warn-color {
+  color: $error-color;
+}
