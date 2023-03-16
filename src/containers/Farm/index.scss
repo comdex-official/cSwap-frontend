@@ -901,9 +901,8 @@
   margin-top: 38px;
   display: flex;
   align-items: center;
-  position: absolute;
+  position: initial;
   z-index: 999;
-  top: -55px;
   height: 60px;
   padding: 0 20px 0 30px;
   border-radius: 16px;
@@ -911,20 +910,15 @@
   left: 0;
   right: 0;
   max-width: 630px;
+  margin-top: -42px;
   background: $background-light;
   &.fixedHeaderOnScroll {
-    position: fixed;
-    z-index: 99999;
-    top: 24px;
-    @media screen and (max-width: 576px) {
-      top: 54px;
-    }
+    position: initial;
   }
   @media screen and (max-width: 1540px) {
     font-size: $font-size-base;
     max-width: 550px;
     height: 45px;
-    top: -58px;
     padding: 0 16px 0 20px;
   }
   @media screen and (max-width: 1280px) {
@@ -936,9 +930,9 @@
     font-size: $font-size-sm - 1;
   }
   @media screen and (max-width: 840px) {
-    position: inherit !important;
-    top: -15px !important;
     max-width: 90%;
+    margin-top: -32px;
+    margin-bottom: 15px;
   }
   @media screen and (max-width: 576px) {
     max-width: 90%;
@@ -959,7 +953,7 @@
     stroke: $white;
     stroke-width: 2px;
     cursor: pointer;
-    margin-left: auto;
+    margin-left: 10px;
     margin-right: 5px;
     width: 18px;
     @media screen and (max-width: 1540px) {
