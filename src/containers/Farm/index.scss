@@ -334,7 +334,7 @@
   }
   &.farm-headingtimer {
     @media screen and (max-width: 540px) {
-      margin-top: 40px;
+      margin-top: 10px;
     }
   }
 }
@@ -927,12 +927,18 @@
     top: -58px;
     padding: 0 16px 0 20px;
   }
+  @media screen and (max-width: 1280px) {
+    font-size: $font-size-sm - 1;
+    max-width: 266px;
+    padding: 0 16px 0 14px;
+  }
   @media screen and (max-width: 991px) {
     font-size: $font-size-sm - 1;
-    max-width: 50%;
   }
-  @media screen and (max-width: 767px) {
-    max-width: 40%;
+  @media screen and (max-width: 840px) {
+    position: inherit !important;
+    top: -15px !important;
+    max-width: 90%;
   }
   @media screen and (max-width: 576px) {
     max-width: 90%;
