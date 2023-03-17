@@ -2,7 +2,7 @@ import { createTxRaw } from "@tharsis/proto";
 import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
-  generatePostBodyBroadcast,
+  generatePostBodyBroadcast
 } from "@tharsis/provider/dist/rest/broadcast";
 import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
@@ -24,7 +24,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -96,6 +96,11 @@ const Deposit = ({
   }, [address, initialize, isOpen]);
 
   const showModal = () => {
+    if (!address) {
+      message.info("Please connect your wallet");
+      return;
+    }
+
     initialize();
     setIsModalOpen(true);
   };
