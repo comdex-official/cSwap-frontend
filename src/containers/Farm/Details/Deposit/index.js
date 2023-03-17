@@ -326,7 +326,7 @@ const Deposit = ({
           <div className="farm-rang-slider">
             <div className="farmrange-title">
               {Number(pool?.price) > Number(pool?.minPrice) &&
-              Number(pool?.price) < Number(pool?.maxPrice) ? (
+                Number(pool?.price) < Number(pool?.maxPrice) ? (
                 <span className="success-color">In range</span>
               ) : (
                 <span className="warn-color">Out of range</span>
