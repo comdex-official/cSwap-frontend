@@ -406,7 +406,8 @@ const Deposit = ({
                   className="active"
                   onClick={() =>
                     handleFirstInputMax(
-                      pool?.balances?.baseCoin?.denom === comdex?.coinMinimalDenom &&
+                      pool?.balances?.baseCoin?.denom ===
+                        comdex?.coinMinimalDenom &&
                         Number(firstAssetAvailableBalance) > DEFAULT_FEE
                         ? amountConversion(
                             firstAssetAvailableBalance - DEFAULT_FEE,

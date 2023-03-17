@@ -54,7 +54,7 @@ const UnFarm = ({
             /** soft_lock_coin specifies coins to stake */
             unfarmingPoolCoin: {
               amount: Number(amount).toFixed(0).toString(),
-              denom: pool?.poolCoinDenom,
+              denom: pool?.farmCoin?.denom,
             },
           },
         },
