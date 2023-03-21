@@ -427,7 +427,7 @@ const Assets = ({
           </Row>
         )}
         <Row>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <Tabs
               defaultActiveKey="1"
               items={tabItems}
@@ -435,7 +435,7 @@ const Assets = ({
               onChange={onChange}
               className="comdex-tabs farm-details-tabmain"
             />
-          </div>
+          </div> */}
           <Col className="assets-search-section">
             {parent && parent === "portfolio" ? null : (
               <div className="text">
@@ -456,7 +456,7 @@ const Assets = ({
         </Row>
         <Row>
           <Col>
-            {filterValue === "1" ? (
+            {/* {filterValue === "1" ? ( */}
               <Table
                 className="custom-table assets-table"
                 dataSource={tableData}
@@ -466,13 +466,13 @@ const Assets = ({
                 scroll={{ x: "100%" }}
                 locale={{ emptyText: <NoDataIcon /> }}
               />
-            ) : (
+            {/* ) : (
               <LPAsssets
                 isHideToggleOn={isHideToggleOn}
                 searchKey={searchKey}
                 activeKey={filterValue}
               />
-            )}
+            )} */}
           </Col>
         </Row>
       </div>
