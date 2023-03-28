@@ -1,13 +1,28 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, Table, Tabs } from "antd";
+import { Button, Select, Table, Tabs } from "antd";
+import React, { useEffect, useRef, useState } from 'react';
 import { SvgIcon } from "../../components/common";
+import { fetchRestPairs } from "../../services/liquidity/query";
 import Buy from "./Buy";
-import Sell from "./Sell";
 import "./index.scss";
+import Sell from "./Sell";
+
 
 let tvScriptLoadingPromise;
 
 const OrderBook = ({}) => {
+  const [pairs, setPairs] = useState();
+  const [selectedPair, setSelectedPair] = useState();
+  
+  useEffect(()=> {
+    fetchRestPairs((error, pairs)=>{
+      if(error) {
+        return
+      };
+
+      setPairs(pairs?.data)
+      
+    })
+  })
   const dataSource = [
     {
       key: '1',
@@ -354,13 +369,27 @@ const OrderBook = ({}) => {
     []
   );
 
+  const handlePairChange = (value)=> {
+    setSelectedPair(value);
+  }
   return  (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
         <div className="orderbook-col1">
           <div className="chart-card">
             <div className="card-header">
-              <div className="left-head"><SvgIcon name='swap' viewbox='0 0 30 30' />CMDX/CMST</div>
+              {/* <div className="left-head"><SvgIcon name='swap' viewbox='0 0 30 30' />CMDX/CMST</div> */}
+              <Select
+              onChange={handlePairChange}
+              value={selectedPair || null}
+              options={pairs?.map((item)=> {
+                return {
+                  value: item?.pair_symbol,
+                label: item?.pair_symbol}
+              }
+              )
+              }
+              />
               <ul>
                 <li>
                   <label>+1.319%</label>

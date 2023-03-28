@@ -9,7 +9,7 @@ export const envConfig = {
   coinType: 118,
   chainName: "Comdex Test Chain",
   explorerUrlToTx: "https://dev-explorer.comdex.one/transactions/{txHash}",
-  apiUrl: "https://test-stat.comdex.one",
+  apiUrl: "https://stat.comdex.one",
   comdexStakingUrl: "https://comdex.omniflix.co/stake",
   webSocketApiUrl: "wss://rpc.comdex.one/websocket",
 
