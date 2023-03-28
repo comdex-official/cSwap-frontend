@@ -16,7 +16,7 @@
     "@tharsis/proto": "^0.1.20",
     "@tharsis/provider": "^0.2.4",
     "@tharsis/transactions": "^0.2.6",
-    "antd": "^5.2.3",
+    "antd": "^5.3.3",
     "babel-plugin-import": "^1.13.0",
     "bignumber.js": "^9.0.2",
     "browserify": "^17.0.0",
