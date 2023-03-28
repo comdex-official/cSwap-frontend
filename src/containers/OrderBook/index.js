@@ -1,7 +1,9 @@
 import { Button, Select, Table, Tabs } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import { SvgIcon } from "../../components/common";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestPairs } from "../../services/liquidity/query";
+import { commaSeparator, formatNumber } from '../../utils/number';
 import Buy from "./Buy";
 import "./index.scss";
 import Sell from "./Sell";
@@ -370,8 +372,11 @@ const OrderBook = ({}) => {
   );
 
   const handlePairChange = (value)=> {
-    setSelectedPair(value);
+    console.log('the selected pair', value, pairs?.find((item)=> item?.pair_id===value))
+    setSelectedPair(pairs?.find((item)=> item?.pair_id===value));
   }
+  console.log('the pairs', pairs, selectedPair)
+
   return  (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
@@ -381,10 +386,10 @@ const OrderBook = ({}) => {
               {/* <div className="left-head"><SvgIcon name='swap' viewbox='0 0 30 30' />CMDX/CMST</div> */}
               <Select
               onChange={handlePairChange}
-              value={selectedPair || null}
+              value={selectedPair?.pair_id || null}
               options={pairs?.map((item)=> {
                 return {
-                  value: item?.pair_symbol,
+                  value: item?.pair_id,
                 label: item?.pair_symbol}
               }
               )
@@ -396,8 +401,8 @@ const OrderBook = ({}) => {
                   <p>=190345</p>
                 </li>
                 <li>
-                  <label>24h Change</label>
-                  <p>+0.09%</p>
+                  <label>24h Volume</label>
+                  <p>{commaSeparator(formatNumber(Number(selectedPair?.total_volume_24h || 0).toFixed(DOLLAR_DECIMALS)))}</p>
                 </li>
                 <li>
                   <label>24h High</label>

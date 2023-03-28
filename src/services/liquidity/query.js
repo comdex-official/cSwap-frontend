@@ -275,3 +275,14 @@ export const fetchRestPairs = (callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRestPair = (pairId, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/pairs/${pairId}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
