@@ -23,7 +23,7 @@
     "classnames": "^2.3.1",
     "coingecko-api": "^1.0.10",
     "comdex-codec": "comdex-official/proto-codecs#development",
-    "cosmjs-types": "^0.5.0",
+    "cosmjs-types": "^0.7.1",
     "highcharts": "^10.3.2",
     "highcharts-react-official": "^3.2.0",
     "js-base64": "^3.7.5",
