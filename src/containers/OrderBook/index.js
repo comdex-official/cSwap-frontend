@@ -1,8 +1,8 @@
 import { Button, Select, Table, Tabs } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import { SvgIcon } from "../../components/common";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { fetchRestPairs } from "../../services/liquidity/query";
+import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
+import { fetchExchangeRateValue, fetchRestPairs } from "../../services/liquidity/query";
 import { commaSeparator, formatNumber } from '../../utils/number';
 import Buy from "./Buy";
 import "./index.scss";
@@ -25,6 +25,21 @@ const OrderBook = ({}) => {
       
     })
   })
+
+  useEffect(() => {
+    console.log('this is selected', selectedPair)
+    if (selectedPair?.pair_id) {
+      fetchExchangeRateValue(APP_ID, selectedPair?.pair_id, (error, result) => {
+        if (error) {
+          console.log('the error is', error)
+          return;
+        }
+
+        console.log('result', result)
+      });
+    }
+  }, [selectedPair]);
+
   const dataSource = [
     {
       key: '1',
@@ -372,10 +387,8 @@ const OrderBook = ({}) => {
   );
 
   const handlePairChange = (value)=> {
-    console.log('the selected pair', value, pairs?.find((item)=> item?.pair_id===value))
     setSelectedPair(pairs?.find((item)=> item?.pair_id===value));
   }
-  console.log('the pairs', pairs, selectedPair)
 
   return  (
     <div className="app-content-wrapper">
