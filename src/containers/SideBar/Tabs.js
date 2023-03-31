@@ -79,14 +79,14 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
           );
         })}
         <li
-          key={"info"}
+          key={"stats"}
           className={"tab "}
-          value={"info"}
+          value={"stats"}
           onClick={() => window.open("https://info.cswap.one")}
         >
           <div className="tab-inner">
-            <SvgIcon name={"info"} />
-            Info
+            <SvgIcon name={"stats"} />
+            Stats
           </div>
         </li>
       </ul>
