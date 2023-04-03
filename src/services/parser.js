@@ -2,14 +2,14 @@ import { Uint64 } from "@cosmjs/math";
 import { decodePubkey } from "@cosmjs/proto-signing";
 import { assert } from "@cosmjs/utils";
 import {
-    BaseAccount,
-    ModuleAccount
+  BaseAccount,
+  ModuleAccount
 } from "cosmjs-types/cosmos/auth/v1beta1/auth";
 import {
-    BaseVestingAccount,
-    ContinuousVestingAccount,
-    DelayedVestingAccount,
-    PeriodicVestingAccount
+  BaseVestingAccount,
+  ContinuousVestingAccount,
+  DelayedVestingAccount,
+  PeriodicVestingAccount
 } from "cosmjs-types/cosmos/vesting/v1beta1/vesting";
 import { stride } from "stridejs/module/codegen";
 
@@ -32,7 +32,6 @@ export const strideAccountParser = (input) => {
   const { typeUrl, value } = input;
   switch (typeUrl) {
     // auth
-
     case "/cosmos.auth.v1beta1.BaseAccount":
       return accountFromBaseAccount(BaseAccount.decode(value));
     case "/stride.vesting.StridePeriodicVestingAccount": {

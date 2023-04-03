@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import MediaQuery from "react-responsive";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import {
   setFetchBalanceInProgress,
@@ -29,7 +29,7 @@ import {
   getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
-import { iconNameFromDenom } from "../../../utils/string";
+import { decode, iconNameFromDenom } from "../../../utils/string";
 import "../index.scss";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
@@ -67,6 +67,10 @@ const FarmDetails = ({
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
+  const [activeKey, setActiveKey] = useState("1");
+
+  const location = useLocation();
+  const type = decode(location.hash);
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -94,6 +98,15 @@ const FarmDetails = ({
     });
   }, [address, pool?.id]);
 
+  useEffect(() => {
+    if (type && type === "farm") {
+      setActiveKey("3");
+    }
+    if (type && type === "unfarm") {
+      setActiveKey("4");
+    }
+  }, []);
+  
   useEffect(() => {
     if (address && pool?.id) {
       fetchSoftLock();
@@ -258,6 +271,8 @@ const FarmDetails = ({
         <Tabs
           className="comdex-tabs farm-modal-tab farm-details-tab"
           tabBarExtraContent={operations}
+          onChange={setActiveKey}
+          activeKey={activeKey}
           items={tabItems}
         />
       </Col>
@@ -362,10 +377,7 @@ const FarmDetails = ({
           <h3 className="mt-2 mb-2">Your Details</h3>
           <Row className="pool-details-list">
             <Col sm="4" className="mb-3">
-              <label>
-                My Amount
-                <TooltipIcon text="Total Liquidity of the current pool" />
-              </label>
+              <label>My Amount</label>
               <p>
                 {" "}
                 {pool?.balances?.baseCoin?.denom &&

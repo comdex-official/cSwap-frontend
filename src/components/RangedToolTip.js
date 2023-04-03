@@ -18,7 +18,11 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           <Col>
             <div className="text-center">
               <small>
-                {price > min && price < max ? "In range" : "Out of range"}
+                {price > min && price < max ? (
+                  <span className="success-color">In range</span>
+                ) : (
+                  <span className="warn-color">Out of range</span>
+                )}
               </small>
             </div>
             <Slider

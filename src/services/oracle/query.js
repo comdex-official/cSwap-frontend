@@ -11,3 +11,14 @@ export const fetchRestPrices = (callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRestLPPrices = (callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/lp/prices`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};

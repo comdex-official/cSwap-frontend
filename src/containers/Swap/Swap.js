@@ -5,7 +5,7 @@ import CustomSwitch from "../../components/common/CustomSwitch";
 import CustomInput from "../../components/CustomInput";
 import CustomSelect from "../../components/CustomSelect";
 import TooltipIcon from "../../components/TooltipIcon";
-import { comdex, harbor } from "../../config/network";
+import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber
@@ -37,6 +37,11 @@ import {
   getExponent,
   marketPrice
 } from "../../utils/number";
+import {
+  calculateRangedPoolPrice,
+  calculateSlippage,
+  getNewRangedPoolRatio
+} from "../../utils/slippage";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
 import CustomButton from "./CustomButton";
@@ -83,6 +88,7 @@ const Swap = ({
   const [pairsMapping, setPairsMapping] = useState({});
   const [outputOptions, setoutputOptions] = useState([]);
   const [inputOptions, setinputOptions] = useState([]);
+  const [isFinalSlippage, setFinalSlippage] = useState(false);
 
   useEffect(() => {
     const firstPool = pools[0];
@@ -106,21 +112,11 @@ const Swap = ({
   }, [pairs]);
 
   useEffect(() => {
-    let options = pairsMapping[offerCoin?.denom]?.filter(
-      (item) => item !== harbor?.coinMinimalDenom
-    );
-    //filtering out harbor from options
-
-    setoutputOptions(options);
+    setoutputOptions(pairsMapping[offerCoin?.denom]);
   }, [offerCoin?.denom, pairsMapping]);
 
   useEffect(() => {
-    let options = Object.keys(pairsMapping)?.filter(
-      (item) => item !== harbor?.coinMinimalDenom
-    );
-    //filtering out harbor from options
-
-    setinputOptions(options);
+    setinputOptions(Object.keys(pairsMapping));
   }, [pairsMapping]);
 
   useEffect(() => {
@@ -183,6 +179,7 @@ const Swap = ({
     setValidationError();
     setLimitPrice(0);
     setSlippage(0);
+    setFinalSlippage(false);
   };
 
   useEffect(() => {
@@ -249,21 +246,24 @@ const Swap = ({
         (item) => item?.denom === offerCoin?.denom
       )[0];
 
-    const assetVolume =
-      selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
+    // calculating slippage for non ranged pools.
 
-    // (input_number / (input token share in pool + input_number))*100
-    setSlippage(
-      (Number(value) /
-        (Number(
-          amountConversion(
-            assetVolume,
-            assetMap[selectedAsset?.denom]?.decimals
-          )
-        ) +
-          Number(value))) *
-        100
-    );
+    if (pool?.type !== 2) {
+      const assetVolume =
+        selectedAsset && selectedAsset.amount && Number(selectedAsset.amount);
+
+      setSlippage(
+        (Number(value) /
+          (Number(
+            amountConversion(
+              assetVolume,
+              assetMap[selectedAsset?.denom]?.decimals
+            )
+          ) +
+            Number(value))) *
+          100
+      );
+    }
 
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = value * swapFeeRate;
@@ -288,8 +288,40 @@ const Swap = ({
   };
 
   const calculateDemandCoinAmount = (price, input) => {
-    const amount = price * input;
-    setDemandCoinAmount(amount.toFixed(6));
+    const expectedOutAmount = price * input;
+    setDemandCoinAmount(expectedOutAmount.toFixed(6));
+
+    // calculating slippage for ranged pools.
+    if (pool?.type === 2) {
+      let minPrice = Number(decimalConversion(pool?.minPrice));
+      let maxPrice = Number(decimalConversion(pool?.maxPrice));
+
+      let baseAmount = Number(pool?.balances?.baseCoin?.amount);
+      let quoteAmount = Number(pool?.balances?.quoteCoin?.amount);
+
+      // Rx: quoteAmount, Ry: BaseAmount
+      const currentPrice = Number(decimalConversion(pool?.price)); // for slippage calculation this is current price.
+
+      const [newRx, newRy, final] = getNewRangedPoolRatio(
+        quoteAmount,
+        baseAmount,
+        reverse ? "buy" : "sell",
+        currentPrice,
+        Number(getAmount(input, assetMap[offerCoin?.denom]?.decimals))
+      );
+
+      const newPrice = calculateRangedPoolPrice(
+        newRx,
+        newRy,
+        minPrice,
+        maxPrice
+      );
+
+      const slippage = calculateSlippage(currentPrice, newPrice);
+
+      setSlippage(slippage);
+      setFinalSlippage(final);
+    }
   };
 
   const handleDemandCoinDenomChange = (value) => {
@@ -365,6 +397,8 @@ const Swap = ({
     setOfferCoinAmount(0);
     setDemandCoinAmount(0);
     setLimitPrice(0);
+    setSlippage(0);
+    setFinalSlippage(false);
     setReverse(!reverse);
   };
 
@@ -465,6 +499,7 @@ const Swap = ({
     fetchPair();
     fetchPool();
     setSlippage(0);
+    setFinalSlippage(false);
   };
 
   useEffect(() => {
@@ -518,6 +553,14 @@ const Swap = ({
     )} - ${((lastPrice + maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
       comdex?.coinDecimals
     )}`;
+  };
+
+  const priceRangeValues = (lastPrice, maxPriceLimitRatio, decimal) => {
+    let minPrice = (lastPrice - maxPriceLimitRatio * lastPrice) / decimal;
+
+    let maxPrice = (lastPrice + maxPriceLimitRatio * lastPrice) / decimal;
+
+    return { minPrice, maxPrice };
   };
 
   const SettingPopup = (
@@ -780,6 +823,7 @@ const Swap = ({
                             : "text-right"
                         }
                       >
+                        {pool?.type === 2 && isFinalSlippage ? ">" : ""}
                         {Number(slippage)?.toFixed(comdex.coinDecimals)}%
                       </Col>
                     </Row>

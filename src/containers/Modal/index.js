@@ -21,10 +21,10 @@ const ConnectModal = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
-  const handleConnectToKeplr = () => {
+  const handleConnectToWallet = (walletType) => {
     setInProgress(true);
 
-    initializeChain((error, account) => {
+    initializeChain(walletType, (error, account) => {
       setInProgress(false);
       if (error) {
         message.error(error);
@@ -37,7 +37,7 @@ const ConnectModal = ({
       });
 
       localStorage.setItem("ac", encode(account.address));
-      localStorage.setItem("loginType", "keplr");
+      localStorage.setItem("loginType", walletType || "keplr");
       showAccountConnectModal(false);
     });
   };
@@ -49,8 +49,19 @@ const ConnectModal = ({
           <h3 className="text-center">{variables[lang].connect_wallet}</h3>
         </div>
         <div className="mb-2 mt-3">
-          <div className="wallet-links" onClick={handleConnectToKeplr}>
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet("keplr")}
+          >
             <span>{variables[lang].keplr_wallet}</span>{" "}
+          </div>
+        </div>
+        <div className="mb-2">
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet("leap")}
+          >
+            <span>{variables[lang].leap_wallet}</span>{" "}
           </div>
         </div>
         <div className="wallet-links">

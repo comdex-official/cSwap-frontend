@@ -19,6 +19,7 @@ const variables = {
     connected: "Connected",
     connect_wallet: "Connect Wallet",
     keplr_wallet: "Keplr Wallet",
+    leap_wallet: "Leap Cosmos Wallet",
     balance_wallet: "Balance",
     address_wallet: "Address",
     disconnect: "Disconnect",
