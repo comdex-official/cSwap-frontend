@@ -34,12 +34,6 @@ const Buy = ({ pair, balances, markets, address, params }) => {
     );
   }, [pair]);
 
-  console.log(
-    "the amount converted",
-    amount,
-    getAmount(Number(amount), 10 ** pair?.quote_coin_exponent)
-  );
-
   const calculateBuyAmount = () => {
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
     const offerCoinFee = amount * swapFeeRate;
@@ -51,14 +45,6 @@ const Buy = ({ pair, balances, markets, address, params }) => {
       ((Number(total) - Number(offerCoinFee)) / maxPrice) *
       10 ** Math.abs(pair?.base_coin_exponent - pair?.quote_coin_exponent);
 
-    console.log(
-      "the buy amount",
-      pair,
-      buyAmount,
-      total,
-      offerCoinFee,
-      maxPrice
-    );
     return getAmount(buyAmount, 10 ** pair?.base_coin_exponent);
   };
 
@@ -111,21 +97,21 @@ const Buy = ({ pair, balances, markets, address, params }) => {
           return;
         }
 
+        console.log("the result", result);
         if (result?.code) {
           message.info(result?.rawLog);
           return;
         }
-
-        // updateValues();
-        // refreshDetails();
-        // message.success(
-        //   <Snack
-        //     message={variables[lang].tx_success}
-        //     hash={result?.transactionHash}
-        //   />
-        // );
+        message.success("Transaction success");
+        updateValues();
       }
     );
+  };
+
+  const updateValues = () => {
+    setPrice();
+    setAmount();
+    setTotal();
   };
 
   const handlePriceChange = (value) => {
@@ -143,13 +129,6 @@ const Buy = ({ pair, balances, markets, address, params }) => {
   };
 
   const quoteBalance = getDenomBalance(balances, pair?.quote_coin_denom);
-
-  console.log(
-    "the quote balance",
-    quoteBalance,
-    balances,
-    pair?.quote_coin_denom
-  );
 
   const getBalanceValue = () => {
     return (

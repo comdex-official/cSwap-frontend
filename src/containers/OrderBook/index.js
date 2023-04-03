@@ -417,7 +417,6 @@ const OrderBook = ({ markets, balances }) => {
         <div className="orderbook-col1">
           <div className="chart-card">
             <div className="card-header">
-              {/* <div className="left-head"><SvgIcon name='swap' viewbox='0 0 30 30' />CMDX/CMST</div> */}
               <Select
                 onChange={handlePairChange}
                 value={selectedPair?.pair_id || null}
@@ -581,7 +580,5 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
   };
 };
-
-const actionsToProps = {};
 
 export default connect(stateToProps)(OrderBook);
