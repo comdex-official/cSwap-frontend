@@ -18,10 +18,9 @@ import Buy from "./Buy";
 import "./index.scss";
 import Sell from "./Sell";
 
-
 let tvScriptLoadingPromise;
 
-const OrderBook = ({markets}) => {
+const OrderBook = ({ markets, balances }) => {
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
 
@@ -33,7 +32,7 @@ const OrderBook = ({markets}) => {
 
       setPairs(pairs?.data);
     });
-  });
+  },[]);
 
   useEffect(() => {
     console.log("this is selected", selectedPair);
@@ -48,6 +47,12 @@ const OrderBook = ({markets}) => {
       });
     }
   }, [selectedPair]);
+
+  useEffect(() => {
+    if (pairs?.length) {
+      setSelectedPair(pairs[0]);
+    }
+  }, [pairs]);
 
   const dataSource = [
     {
@@ -325,12 +330,12 @@ const OrderBook = ({markets}) => {
     {
       label: "Buy",
       key: "1",
-      children: <Buy />,
+      children: <Buy pair={selectedPair} balances={balances} markets={markets} />,
     },
     {
       label: "Sell",
       key: "2",
-      children: <Sell />,
+      children: <Sell pair={selectedPair} balances={balances} markets={markets}/>,
     },
   ];
 
@@ -441,12 +446,24 @@ const OrderBook = ({markets}) => {
                   </p>
                 </li>
                 <li>
-                  <label>24h High</label>
-                  <p>1.1797</p>
+                  <label>24h High Price</label>
+                  <p>
+                    {commaSeparator(
+                      formateNumberDecimalsAuto({
+                        price: selectedPair?.base_coin_price || 0,
+                      })
+                    )}
+                  </p>
                 </li>
                 <li>
-                  <label>24h Low</label>
-                  <p>1.1786</p>
+                  <label>24h Low Price</label>
+                  <p>
+                    {commaSeparator(
+                      formateNumberDecimalsAuto({
+                        price: selectedPair?.base_coin_price || 0,
+                      })
+                    )}
+                  </p>
                 </li>
               </ul>
             </div>
@@ -487,19 +504,22 @@ const OrderBook = ({markets}) => {
               />
             </div>
             <div className="header-bottom">
-            {commaSeparator(
-                  formateNumberDecimalsAuto({
-                    price: selectedPair?.base_coin_price || 0,
-                  })
-                )}{" "}
+              {commaSeparator(
+                formateNumberDecimalsAuto({
+                  price: selectedPair?.base_coin_price || 0,
+                })
+              )}{" "}
               <span>
                 $
                 {formateNumberDecimalsAuto({
-                  price: Number(commaSeparator(
-                    formateNumberDecimalsAuto({
-                      price: selectedPair?.base_coin_price || 0,
-                    })
-                  )) * marketPrice(markets, selectedPair?.base_coin_denom)
+                  price:
+                    Number(
+                      commaSeparator(
+                        formateNumberDecimalsAuto({
+                          price: selectedPair?.base_coin_price || 0,
+                        })
+                      )
+                    ) * marketPrice(markets, selectedPair?.base_coin_denom),
                 })}
               </span>
             </div>
@@ -546,16 +566,22 @@ const OrderBook = ({markets}) => {
 };
 
 OrderBook.propTypes = {
-   markets: PropTypes.object,
+  markets: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     markets: state.oracle.market.list,
+    balances: state.account.balances.list,
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps)(OrderBook);
