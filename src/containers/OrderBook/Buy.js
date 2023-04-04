@@ -29,7 +29,7 @@ const Buy = ({ pair, balances, markets, address, params }) => {
   useEffect(() => {
     setPrice(
       formateNumberDecimalsAuto({
-        price: pair?.base_coin_price || 0,
+        price: pair?.price || 0,
       })
     );
   }, [pair]);
@@ -39,7 +39,7 @@ const Buy = ({ pair, balances, markets, address, params }) => {
     const offerCoinFee = amount * swapFeeRate;
 
     let maxPrice =
-      Number(pair?.base_coin_price) *
+      Number(pair?.price) *
       (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
     const buyAmount =
       ((Number(total) - Number(offerCoinFee)) / maxPrice) *
@@ -126,7 +126,7 @@ const Buy = ({ pair, balances, markets, address, params }) => {
   const handleAmountPercentage = (value) => {
     let AmountPercentage = (value / 100) * amountConversion(quoteBalance);
     setTotal(AmountPercentage || 0);
-    setAmount(AmountPercentage * pair?.base_coin_price);
+    setAmount(AmountPercentage * pair?.price);
   };
 
   const quoteBalance = getDenomBalance(balances, pair?.quote_coin_denom);
@@ -169,7 +169,7 @@ const Buy = ({ pair, balances, markets, address, params }) => {
                 1 /
                 10 **
                   formateNumberDecimalsAuto({
-                    price: pair?.base_coin_price || 0,
+                    price: pair?.price || 0,
                   })
                     .toString()
                     ?.split(".")[1]?.length

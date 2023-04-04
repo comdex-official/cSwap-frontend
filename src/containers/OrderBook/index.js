@@ -1,28 +1,40 @@
-import { Button, Select, Table, Tabs } from "antd";
+import { Button, message, Select, Table, Tabs } from "antd";
+import Long from "long";
+import moment from "moment";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
+import { setOrders } from "../../actions/order";
 import { SvgIcon } from "../../components/common";
+import NoDataIcon from "../../components/common/NoDataIcon";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
 import {
   fetchExchangeRateValue,
-  fetchRestPairs
+  fetchRestPairs,
+  queryUserOrders
 } from "../../services/liquidity/query";
+import {
+  amountConversion,
+  denomConversion,
+  orderPriceReverseConversion
+} from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   formatNumber,
   marketPrice
 } from "../../utils/number";
+import { orderStatusText } from "../../utils/string";
 import Buy from "./Buy";
 import "./index.scss";
 import Sell from "./Sell";
 
 let tvScriptLoadingPromise;
 
-const OrderBook = ({ markets, balances }) => {
+const OrderBook = ({ markets, balances, assetMap, address }) => {
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
+  const [myOrders, setMyOrders] = useState([]);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
@@ -32,7 +44,7 @@ const OrderBook = ({ markets, balances }) => {
 
       setPairs(pairs?.data);
     });
-  },[]);
+  }, []);
 
   useEffect(() => {
     console.log("this is selected", selectedPair);
@@ -53,6 +65,27 @@ const OrderBook = ({ markets, balances }) => {
       setSelectedPair(pairs[0]);
     }
   }, [pairs]);
+
+  useEffect(() => {
+    fetchOrders(address);
+    let intervalId = setInterval(() => fetchOrders(address), 10000);
+
+    return () => clearInterval(intervalId);
+  }, [address]);
+
+  const fetchOrders = async (address) => {
+    if (address) {
+      queryUserOrders(Long.fromNumber(0), address, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setOrders(result?.orders);
+        setMyOrders(result?.orders);
+      });
+    }
+  };
 
   const dataSource = [
     {
@@ -254,55 +287,6 @@ const OrderBook = ({ markets, balances }) => {
     },
   ];
 
-  const ordersTablecolumns = [
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Remaining Time",
-      dataIndex: "remaining_time",
-      key: "remaining_time",
-    },
-    {
-      title: "Pair",
-      dataIndex: "pair",
-      key: "pair",
-    },
-    {
-      title: "Direction",
-      dataIndex: "direction",
-      key: "direction",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Filled",
-      dataIndex: "filled",
-      key: "filled",
-    },
-    {
-      title: "Order ID",
-      dataIndex: "order_id",
-      key: "order_id",
-    },
-    {
-      title: <Button className="cancel-all-btn">Cancel All</Button>,
-      dataIndex: "cancel_all",
-      key: "cancel_all",
-      align: "right",
-      render: () => (
-        <Button type="primary" size="small">
-          Cancel
-        </Button>
-      ),
-    },
-  ];
-
   const orderTabledataSource = [
     {
       key: "1",
@@ -330,31 +314,16 @@ const OrderBook = ({ markets, balances }) => {
     {
       label: "Buy",
       key: "1",
-      children: <Buy pair={selectedPair} balances={balances} markets={markets} />,
+      children: (
+        <Buy pair={selectedPair} balances={balances} markets={markets} />
+      ),
     },
     {
       label: "Sell",
       key: "2",
-      children: <Sell pair={selectedPair} balances={balances} markets={markets}/>,
-    },
-  ];
-
-  const tabItemsBottom = [
-    {
-      label: "Open Order (0)",
-      key: "1",
-    },
-    {
-      label: "Open Order (0)",
-      key: "2",
-    },
-    {
-      label: "Trade History",
-      key: "3",
-    },
-    {
-      label: "Funds",
-      key: "4",
+      children: (
+        <Sell pair={selectedPair} balances={balances} markets={markets} />
+      ),
     },
   ];
 
@@ -411,6 +380,120 @@ const OrderBook = ({ markets, balances }) => {
 
   console.log("selected pair", selectedPair);
 
+  const ordersTablecolumns = [
+    {
+      title: "Order ID",
+      dataIndex: "order_id",
+      key: "order_id",
+    },
+    {
+      title: "Expire Time",
+      dataIndex: "expire_time",
+      key: "expire_time",
+    },
+    {
+      title: "Pair",
+      dataIndex: "pair",
+      key: "pair",
+    },
+    {
+      title: "Direction",
+      dataIndex: "direction",
+      key: "direction",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: <Button className="cancel-all-btn">Cancel All</Button>,
+      dataIndex: "cancel_all",
+      key: "cancel_all",
+      align: "right",
+      render: () => (
+        <Button type="primary" size="small">
+          Cancel
+        </Button>
+      ),
+    },
+  ];
+
+  const openOrdersData =
+    myOrders.length > 0 &&
+    myOrders.map((item, index) => {
+      return {
+        key: index,
+        id: item?.id ? item?.id?.toNumber() : "",
+        expire_time: item?.expireAt
+          ? moment(item.expireAt).format("MMM DD, YYYY HH:mm")
+          : "",
+        direction: item?.direction === 1 ? "BUY" : "SELL",
+        pair:
+          item?.direction === 1
+            ? `${denomConversion(item?.receivedCoin?.denom)}/${denomConversion(
+                item?.offerCoin?.denom
+              )}`
+            : `${denomConversion(item?.offerCoin?.denom)}/${denomConversion(
+                item?.receivedCoin?.denom
+              )}`,
+        offered_coin: item?.offerCoin
+          ? `${amountConversion(
+              item?.offerCoin?.amount,
+              assetMap[item?.offerCoin?.denom]?.decimals
+            )} ${denomConversion(item?.offerCoin?.denom)}`
+          : "",
+        trade_amount: item?.amount ? amountConversion(item?.amount) : 0,
+        price: item?.price ? orderPriceReverseConversion(item.price) : 0,
+        received: item?.receivedCoin
+          ? `${amountConversion(
+              item?.receivedCoin?.amount,
+              assetMap[item?.receivedCoin?.denom]?.decimals
+            )} ${denomConversion(item?.receivedCoin?.denom)}`
+          : "",
+        remaining: item?.remainingOfferCoin
+          ? `${amountConversion(
+              item?.remainingOfferCoin?.amount,
+              assetMap[item?.remainingOfferCoin?.denom]?.decimals
+            )} ${denomConversion(item?.remainingOfferCoin?.denom)}`
+          : "",
+        order_id: item?.id?.toNumber(),
+        status: item?.status ? orderStatusText(item.status) : "",
+        action: item,
+      };
+    });
+
+  console.log("the orders", myOrders);
+  const tabItemsBottom = [
+    {
+      label: "Open Order (0)",
+      key: "1",
+      children: (
+        <Table
+          scroll={{ x: "100%" }}
+          className="order-tables"
+          dataSource={openOrdersData}
+          columns={ordersTablecolumns}
+          pagination={false}
+          locale={{ emptyText: <NoDataIcon /> }}
+        />
+      ),
+    },
+    {
+      label: "Trade History",
+      key: "2",
+    },
+    {
+      label: "Funds",
+      key: "3",
+    },
+  ];
+
   return (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
@@ -449,7 +532,7 @@ const OrderBook = ({ markets, balances }) => {
                   <p>
                     {commaSeparator(
                       formateNumberDecimalsAuto({
-                        price: selectedPair?.base_coin_price || 0,
+                        price: selectedPair?.high || 0,
                       })
                     )}
                   </p>
@@ -459,7 +542,7 @@ const OrderBook = ({ markets, balances }) => {
                   <p>
                     {commaSeparator(
                       formateNumberDecimalsAuto({
-                        price: selectedPair?.base_coin_price || 0,
+                        price: selectedPair?.low || 0,
                       })
                     )}
                   </p>
@@ -475,15 +558,6 @@ const OrderBook = ({ markets, balances }) => {
 
           <div className="bottom-area">
             <Tabs className="comdex-tabs" type="card" items={tabItemsBottom} />
-            <div>
-              <Table
-                scroll={{ x: "100%" }}
-                className="order-tables"
-                dataSource={orderTabledataSource}
-                columns={ordersTablecolumns}
-                pagination={false}
-              />
-            </div>
           </div>
         </div>
         <div className="orderbook-col2">
@@ -505,7 +579,7 @@ const OrderBook = ({ markets, balances }) => {
             <div className="header-bottom">
               {commaSeparator(
                 formateNumberDecimalsAuto({
-                  price: selectedPair?.base_coin_price || 0,
+                  price: selectedPair?.price || 0,
                 })
               )}{" "}
               <span>
@@ -515,7 +589,7 @@ const OrderBook = ({ markets, balances }) => {
                     Number(
                       commaSeparator(
                         formateNumberDecimalsAuto({
-                          price: selectedPair?.base_coin_price || 0,
+                          price: selectedPair?.price || 0,
                         })
                       )
                     ) * marketPrice(markets, selectedPair?.base_coin_denom),
@@ -565,6 +639,8 @@ const OrderBook = ({ markets, balances }) => {
 };
 
 OrderBook.propTypes = {
+  address: PropTypes.string,
+  assetMap: PropTypes.object,
   markets: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -576,8 +652,10 @@ OrderBook.propTypes = {
 
 const stateToProps = (state) => {
   return {
+    address: state.account.address,
     markets: state.oracle.market.list,
     balances: state.account.balances.list,
+    assetMap: state.asset.map,
   };
 };
 
