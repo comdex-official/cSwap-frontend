@@ -37,7 +37,7 @@ export const tabsList = [
   {
     name: "Order Book",
     value: "orderbook",
-    langKey: "OrderBook",
+    langKey: "orderbook",
     route: "orderbook",
     index: 5,
   },

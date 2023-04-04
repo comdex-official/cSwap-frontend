@@ -117,6 +117,7 @@ const Buy = ({ pair, balances, markets, address, params }) => {
   const handlePriceChange = (value) => {
     setPrice(value);
   };
+  
   const handleAmountChange = (value) => {
     setAmount(value);
     setTotal(value * price);

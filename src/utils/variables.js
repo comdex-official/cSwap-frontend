@@ -13,6 +13,7 @@ const variables = {
     govern: "Govern",
     auction: "Auction",
     more: "More",
+    orderbook: "Order Book",
 
     // Connect account
     connect: "Connect",
