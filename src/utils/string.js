@@ -211,3 +211,14 @@ export const getPairMappings = (pairs) => {
 
   return pairsMapping;
 };
+
+export const errorMessageMappingParser = (message) => {
+  var str = message;
+
+  var truncatedString = str?.match(/ibc\/\w{64}/g);
+  
+  for (var i = 0; i < truncatedString?.length; i++) {
+    str = str.replace(truncatedString[i], " " + `${ibcDenomToDenom(truncatedString[i])}`);
+  }
+  return str;
+}

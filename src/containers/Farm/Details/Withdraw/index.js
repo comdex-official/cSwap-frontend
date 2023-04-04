@@ -12,11 +12,12 @@ import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
 import PoolTokenValue from "../PoolTokenValue";
+import { errorMessageMappingParser } from "../../../../utils/string";
 
 const marks = {
   0: "0",
@@ -84,7 +85,7 @@ const Remove = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
