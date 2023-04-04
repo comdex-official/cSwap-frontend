@@ -47,15 +47,11 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
   }, []);
 
   useEffect(() => {
-    console.log("this is selected", selectedPair);
     if (selectedPair?.pair_id) {
       fetchExchangeRateValue(APP_ID, selectedPair?.pair_id, (error, result) => {
         if (error) {
-          console.log("the error is", error);
           return;
         }
-
-        console.log("result", result);
       });
     }
   }, [selectedPair]);
@@ -378,8 +374,6 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
   };
 
-  console.log("selected pair", selectedPair);
-
   const ordersTablecolumns = [
     {
       title: "Order ID",
@@ -405,6 +399,11 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       title: "Price",
       dataIndex: "price",
       key: "price",
+    },
+    {
+      title: "Amount",
+      dataIndex: "trade_amount",
+      key: "trade_amount",
     },
     {
       title: "Status",
@@ -468,7 +467,6 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       };
     });
 
-  console.log("the orders", myOrders);
   const tabItemsBottom = [
     {
       label: "Open Order (0)",

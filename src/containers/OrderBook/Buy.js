@@ -97,7 +97,6 @@ const Buy = ({ pair, balances, markets, address, params }) => {
           return;
         }
 
-        console.log("the result", result);
         if (result?.code) {
           message.info(result?.rawLog);
           return;
@@ -116,8 +115,9 @@ const Buy = ({ pair, balances, markets, address, params }) => {
 
   const handlePriceChange = (value) => {
     setPrice(value);
+    setTotal(amount * price);
   };
-  
+
   const handleAmountChange = (value) => {
     setAmount(value);
     setTotal(value * price);
