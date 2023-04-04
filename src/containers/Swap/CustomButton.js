@@ -11,10 +11,11 @@ import {
   amountConversion,
   denomConversion,
   getAmount,
-  orderPriceConversion
+  orderPriceConversion,
 } from "../../utils/coin";
 import { decimalConversion, getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
+import { errorMessageMappingParser } from "../../utils/string";
 
 const CustomButton = ({
   offerCoin,
@@ -184,7 +185,7 @@ const CustomButton = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 

@@ -9,6 +9,7 @@ import CustomInput from "../../../../components/CustomInput";
 import { APP_ID } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
+import { errorMessageMappingParser } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
 import PoolTokenValue from "../PoolTokenValue";
@@ -73,7 +74,7 @@ const Farm = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 

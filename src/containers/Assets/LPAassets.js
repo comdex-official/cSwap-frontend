@@ -132,7 +132,6 @@ const LPAsssets = ({
   };
 
   const showPairDenoms = (item) => {
-    console.log("the item", item);
     if (item?.asset_details?.base_asset?.denom) {
       return `${denomConversion(
         item?.asset_details?.base_asset?.denom
