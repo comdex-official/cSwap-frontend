@@ -75,7 +75,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     let intervalId = setInterval(() => fetchOrders(), 10000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [selectedPair]);
 
   const fetchUserOrders = async (address) => {
     if (address) {
@@ -105,13 +105,13 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
 
   const columns = [
     {
-      title: "Price (CMST)",
+      title: `Price (CMST)`,
       dataIndex: "price",
       key: "price",
       className: "text-red",
     },
     {
-      title: "Amount (CMDX)",
+      title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
       dataIndex: "amount",
       key: "amount",
       align: "right",
@@ -126,7 +126,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       className: "text-green",
     },
     {
-      title: "Amount (CMDX)",
+      title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
       dataIndex: "amount",
       key: "amount",
       align: "right",
@@ -479,6 +479,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     },
   ];
 
+  console.log('selected pair', selectedPair)
   return (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
