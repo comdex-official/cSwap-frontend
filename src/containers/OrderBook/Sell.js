@@ -21,7 +21,7 @@ import {
 import "./index.scss";
 import OrderType from "./OrderType";
 
-const Sell = ({ pair, balances, markets, address, params }) => {
+const Sell = ({ pair, balances, markets, address, params, type }) => {
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
   const [total, setTotal] = useState(0);
@@ -41,10 +41,13 @@ const Sell = ({ pair, balances, markets, address, params }) => {
 
   const getMessage = () => {
     let data = {
-      typeUrl: "/comdex.liquidity.v1beta1.MsgLimitOrder",
+      typeUrl:
+        type === "limit"
+          ? "/comdex.liquidity.v1beta1.MsgLimitOrder"
+          : "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
-        orderLifespan: { seconds: 21600, nanos: 0 },
+        orderLifespan: type === "limit" ? { seconds: 21600, nanos: 0 } : "0",
         pairId: Long.fromNumber(pair?.pair_id),
         appId: Long.fromNumber(APP_ID),
         direction: 2,
@@ -62,11 +65,12 @@ const Sell = ({ pair, balances, markets, address, params }) => {
         ),
       },
     };
-
-    data.value.price = orderPriceConversion(
-      price *
-        10 ** Math.abs(pair?.base_coin_exponent - pair?.quote_coin_exponent)
-    );
+    if (type === "limit") {
+      data.value.price = orderPriceConversion(
+        price *
+          10 ** Math.abs(pair?.base_coin_exponent - pair?.quote_coin_exponent)
+      );
+    }
 
     return data;
   };
@@ -150,21 +154,25 @@ const Sell = ({ pair, balances, markets, address, params }) => {
         <div className="price-dtl">
           <div className="price-dtl-row">
             <label>Price</label>
-            <Input
-              type={"number"}
-              value={price}
-              step={
-                1 /
-                10 **
-                  formateNumberDecimalsAuto({
-                    price: pair?.price || 0,
-                  })
-                    .toString()
-                    ?.split(".")[1]?.length
-              }
-              placeholder="0"
-              onChange={(event) => handlePriceChange(event.target.value)}
-            />
+            {type === "market" ? (
+              <div className="market-text">Market Price</div>
+            ) : (
+              <Input
+                type={"number"}
+                value={price}
+                step={
+                  1 /
+                  10 **
+                    formateNumberDecimalsAuto({
+                      price: pair?.price || 0,
+                    })
+                      .toString()
+                      ?.split(".")[1]?.length
+                }
+                placeholder="0"
+                onChange={(event) => handlePriceChange(event.target.value)}
+              />
+            )}
           </div>
           <div className="price-dtl-row">
             <label>Amount</label>
@@ -182,20 +190,22 @@ const Sell = ({ pair, balances, markets, address, params }) => {
             <Button onClick={() => handleAmountPercentage(100)}>100%</Button>
           </div>
         </div>
-        <Row className="total-row">
-          <Col className="total-title">Total</Col>
-          <Col className="total-right">
-            <p>
-              {formateNumberDecimalsAuto({
-                price: total || 0,
-              })}{" "}
-              {denomConversion(pair?.quote_coin_denom)}
-            </p>
-            <label>
-              =${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
-            </label>
-          </Col>
-        </Row>
+        {type === "market" ? null : (
+          <Row className="total-row">
+            <Col className="total-title">Total</Col>
+            <Col className="total-right">
+              <p>
+                {formateNumberDecimalsAuto({
+                  price: total || 0,
+                })}{" "}
+                {denomConversion(pair?.quote_coin_denom)}
+              </p>
+              <label>
+                =${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+              </label>
+            </Col>
+          </Row>
+        )}
         <Row className="mt-4 pt-2">
           <Col>
             <Button type="primary" size="large" block>
@@ -223,16 +233,14 @@ const Sell = ({ pair, balances, markets, address, params }) => {
 
 Sell.propTypes = {
   address: PropTypes.string,
-  params: PropTypes.shape({
-    swapFeeRate: PropTypes.string,
-    maxPriceLimitRatio: PropTypes.string,
-  }),
+  type: PropTypes.string,
 };
 
 const stateToProps = (state) => {
   return {
     address: state.account.address,
     params: state.swap.params,
+    type: state.order.type,
   };
 };
 
