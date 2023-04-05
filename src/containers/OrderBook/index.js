@@ -4,13 +4,13 @@ import moment from "moment";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { setOrders } from "../../actions/order";
 import { SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
 import {
   fetchExchangeRateValue,
   fetchRestPairs,
+  queryOrders,
   queryUserOrders
 } from "../../services/liquidity/query";
 import {
@@ -35,6 +35,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
   const [myOrders, setMyOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
@@ -63,13 +64,20 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
   }, [pairs]);
 
   useEffect(() => {
-    fetchOrders(address);
-    let intervalId = setInterval(() => fetchOrders(address), 10000);
+    fetchUserOrders(address);
+    let intervalId = setInterval(() => fetchUserOrders(address), 10000);
 
     return () => clearInterval(intervalId);
   }, [address]);
 
-  const fetchOrders = async (address) => {
+  useEffect(() => {
+    fetchOrders();
+    let intervalId = setInterval(() => fetchOrders(), 10000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const fetchUserOrders = async (address) => {
     if (address) {
       queryUserOrders(Long.fromNumber(0), address, (error, result) => {
         if (error) {
@@ -77,39 +85,23 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
           return;
         }
 
-        setOrders(result?.orders);
         setMyOrders(result?.orders);
       });
     }
   };
 
-  const dataSource = [
-    {
-      key: "1",
-      price: "$100.00",
-      agamount: "$855.00",
-    },
-    {
-      key: "2",
-      price: "$200.00",
-      agamount: "$2,500.00",
-    },
-    {
-      key: "3",
-      price: "$55.00",
-      agamount: "$680.00",
-    },
-    {
-      key: "4",
-      price: "$75.00",
-      agamount: "$349.00",
-    },
-    {
-      key: "52",
-      price: "$5.00",
-      agamount: "$96.00",
-    },
-  ];
+  const fetchOrders = async () => {
+    if (selectedPair?.pair_id) {
+      queryOrders(Long.fromNumber(selectedPair?.pair_id), (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setOrders(result?.orders);
+      });
+    }
+  };
 
   const columns = [
     {
@@ -119,38 +111,10 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       className: "text-red",
     },
     {
-      title: "AgAmount (CMDX)",
-      dataIndex: "agamount",
-      key: "agamount",
+      title: "Amount (CMDX)",
+      dataIndex: "amount",
+      key: "amount",
       align: "right",
-    },
-  ];
-
-  const dataSource2 = [
-    {
-      key: "1",
-      price: "$100.00",
-      agamount: "$855.00",
-    },
-    {
-      key: "2",
-      price: "$200.00",
-      agamount: "$2,500.00",
-    },
-    {
-      key: "3",
-      price: "$55.00",
-      agamount: "$680.00",
-    },
-    {
-      key: "4",
-      price: "$75.00",
-      agamount: "$349.00",
-    },
-    {
-      key: "52",
-      price: "$5.00",
-      agamount: "$96.00",
     },
   ];
 
@@ -162,9 +126,9 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       className: "text-green",
     },
     {
-      title: "AgAmount (CMDX)",
-      dataIndex: "agamount",
-      key: "agamount",
+      title: "Amount (CMDX)",
+      dataIndex: "amount",
+      key: "amount",
       align: "right",
     },
   ];
@@ -422,7 +386,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       ),
     },
   ];
-
+  
   const openOrdersData =
     myOrders.length > 0 &&
     myOrders.map((item, index) => {
@@ -464,6 +428,29 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
         order_id: item?.id?.toNumber(),
         status: item?.status ? orderStatusText(item.status) : "",
         action: item,
+      };
+    });
+
+  let buyOrders = orders?.filter((item) => item.direction === 1);
+  let sellOrders= orders?.filter((item) => item.direction === 2);
+
+  const dataSource =
+    sellOrders.length &&
+    sellOrders.map((item, index) => {
+      return {
+        key: item?.id,
+        amount: item?.amount ? amountConversion(item?.amount) : 0,
+        price: item?.price ? orderPriceReverseConversion(item.price) : 0,
+      };
+    });
+
+  const dataSource2 =
+    buyOrders.length &&
+    buyOrders.map((item, index) => {
+      return {
+        key: item?.id,
+        amount: item?.amount ? amountConversion(item?.amount) : 0,
+        price: item?.price ? orderPriceReverseConversion(item.price) : 0,
       };
     });
 

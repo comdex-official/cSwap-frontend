@@ -66,6 +66,25 @@ export const queryUserOrders = (pairId, address, callback) => {
   });
 };
 
+export const queryOrders = (pairId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .Orders({
+        pairId,
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryOrder = (orderId, pairId, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
