@@ -3,7 +3,7 @@ import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row } from "../../components/common";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import {
@@ -19,6 +19,7 @@ import {
   marketPrice
 } from "../../utils/number";
 import "./index.scss";
+import OrderType from "./OrderType";
 
 const Sell = ({ pair, balances, markets, address, params }) => {
   const [price, setPrice] = useState();
@@ -132,12 +133,7 @@ const Sell = ({ pair, balances, markets, address, params }) => {
   return (
     <>
       <div className="spot-card-dtl">
-        <div className="dtl-header">
-          <div>
-            Limit <label>Market</label>
-          </div>
-          <SvgIcon name="info-icon-alt" viewbox="0 0 26 26" />
-        </div>
+        <OrderType />
         <div className="avai-balance-dtl">
           <p>Available Balance</p>
           <h4>
