@@ -6,36 +6,42 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
+import Snack from "../../components/common/Snack";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
+import { signAndBroadcastTransaction } from "../../services/helper";
 import {
   fetchExchangeRateValue,
   fetchRestPairs,
   queryOrders,
-  queryUserOrders
+  queryUserOrders,
 } from "../../services/liquidity/query";
+import { defaultFee } from "../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  orderPriceReverseConversion
+  orderPriceReverseConversion,
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   formatNumber,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
-import { orderStatusText } from "../../utils/string";
+import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
+import variables from "../../utils/variables";
 import Buy from "./Buy";
 import "./index.scss";
 import Sell from "./Sell";
 
 let tvScriptLoadingPromise;
 
-const OrderBook = ({ markets, balances, assetMap, address }) => {
+const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
   const [myOrders, setMyOrders] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [order, setOrder] = useState();
+  const [cancelInProgress, setCancelInProgress] = useState(false);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
@@ -64,7 +70,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
   }, [pairs]);
 
   useEffect(() => {
-    fetchUserOrders(address);
+    fetchUserOrders(address, selectedPair?.pair_id);
     let intervalId = setInterval(
       () => fetchUserOrders(address, selectedPair?.pair_id),
       10000
@@ -74,7 +80,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
   }, [address, selectedPair?.pair_id]);
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(selectedPair);
     let intervalId = setInterval(() => fetchOrders(selectedPair), 10000);
 
     return () => clearInterval(intervalId);
@@ -318,6 +324,48 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
   };
 
+  const handleCancel = (order) => {
+    setOrder(order);
+    setCancelInProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgCancelOrder",
+          value: {
+            orderer: address.toString(),
+            appId: Long.fromNumber(APP_ID),
+            pairId: order?.pairId,
+            orderId: order?.id,
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setCancelInProgress(false);
+
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.code) {
+          message.info(errorMessageMappingParser(result?.rawLog));
+          return;
+        }
+
+        fetchOrders(selectedPair);
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
+
   const ordersTablecolumns = [
     {
       title: "Order ID",
@@ -355,12 +403,18 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       key: "status",
     },
     {
-      title: <Button className="cancel-all-btn">Cancel All</Button>,
-      dataIndex: "cancel_all",
-      key: "cancel_all",
+      title: "Action",
+      dataIndex: "cancel",
+      key: "cancel",
       align: "right",
-      render: () => (
-        <Button type="primary" size="small">
+      render: (item) => (
+        <Button
+          type="primary"
+          loading={order?.id === item?.id && cancelInProgress}
+          onClick={() => handleCancel(item)}
+          className="btn-filled"
+          size="small"
+        >
           Cancel
         </Button>
       ),
@@ -407,7 +461,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
           : "",
         order_id: item?.id?.toNumber(),
         status: item?.status ? orderStatusText(item.status) : "",
-        action: item,
+        cancel: item,
       };
     });
 
@@ -461,7 +515,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       key: "2",
     },
   ];
-  
+
   return (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
@@ -609,6 +663,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
 OrderBook.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  lang: PropTypes.string,
   markets: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -624,6 +679,7 @@ const stateToProps = (state) => {
     markets: state.oracle.market.list,
     balances: state.account.balances.list,
     assetMap: state.asset.map,
+    lang: state.language,
   };
 };
 
