@@ -15,7 +15,10 @@ import {
   denomConversion,
   orderPriceReverseConversion
 } from "../../../utils/coin";
-import { orderStatusText } from "../../../utils/string";
+import {
+  errorMessageMappingParser,
+  orderStatusText
+} from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.css";
 
@@ -73,7 +76,7 @@ const Order = ({ lang, assetMap }) => {
           return;
         }
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 

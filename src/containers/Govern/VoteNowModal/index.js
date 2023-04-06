@@ -7,6 +7,7 @@ import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
+import { errorMessageMappingParser } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.scss";
 
@@ -45,7 +46,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 

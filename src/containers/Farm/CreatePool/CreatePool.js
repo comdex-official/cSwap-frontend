@@ -26,6 +26,7 @@ import {
   getDenomBalance
 } from "../../../utils/coin";
 import {
+  errorMessageMappingParser,
   iconNameFromDenom,
   toDecimals,
   uniqueLiquidityPairDenoms,
@@ -174,7 +175,7 @@ const CreatePoolModal = ({
             return;
           }
           if (result?.code) {
-            message.info(result?.rawLog);
+            message.info(errorMessageMappingParser(result?.rawLog));
             return;
           }
 
