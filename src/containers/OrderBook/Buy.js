@@ -216,11 +216,6 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
         )}
         <Row className="mt-4 pt-2">
           <Col>
-            <Button type="primary" size="large" block>
-              Reset
-            </Button>
-          </Col>
-          <Col>
             <Button
               type="primary"
               className="btn-filled"

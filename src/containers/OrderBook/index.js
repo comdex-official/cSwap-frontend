@@ -65,21 +65,24 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
 
   useEffect(() => {
     fetchUserOrders(address);
-    let intervalId = setInterval(() => fetchUserOrders(address), 10000);
+    let intervalId = setInterval(
+      () => fetchUserOrders(address, selectedPair?.pair_id),
+      10000
+    );
 
     return () => clearInterval(intervalId);
-  }, [address]);
+  }, [address, selectedPair?.pair_id]);
 
   useEffect(() => {
     fetchOrders();
-    let intervalId = setInterval(() => fetchOrders(), 10000);
+    let intervalId = setInterval(() => fetchOrders(selectedPair), 10000);
 
     return () => clearInterval(intervalId);
   }, [selectedPair]);
 
-  const fetchUserOrders = async (address) => {
-    if (address) {
-      queryUserOrders(Long.fromNumber(0), address, (error, result) => {
+  const fetchUserOrders = async (address, pairId) => {
+    if (address && pairId) {
+      queryUserOrders(Long.fromNumber(pairId), address, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -90,9 +93,9 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     }
   };
 
-  const fetchOrders = async () => {
-    if (selectedPair?.pair_id) {
-      queryOrders(Long.fromNumber(selectedPair?.pair_id), (error, result) => {
+  const fetchOrders = async (pair) => {
+    if (pair?.pair_id) {
+      queryOrders(Long.fromNumber(pair?.pair_id), (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -247,29 +250,6 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     },
   ];
 
-  const orderTabledataSource = [
-    {
-      key: "1",
-      date: "06/01/2023",
-      remaining_time: "11:12:13",
-      pair: "2",
-      direction: "LF",
-      price: "$120",
-      filled: "Yes",
-      order_id: "$855.00",
-    },
-    {
-      key: "2",
-      date: "06/01/2023",
-      remaining_time: "11:12:13",
-      pair: "2",
-      direction: "LF",
-      price: "$120",
-      filled: "Yes",
-      order_id: "$855.00",
-    },
-  ];
-
   const tabItems = [
     {
       label: "Buy",
@@ -386,7 +366,7 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       ),
     },
   ];
-  
+
   const openOrdersData =
     myOrders.length > 0 &&
     myOrders.map((item, index) => {
@@ -432,7 +412,14 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
     });
 
   let buyOrders = orders?.filter((item) => item.direction === 1);
-  let sellOrders= orders?.filter((item) => item.direction === 2);
+  buyOrders = buyOrders.sort((a, b) => {
+    return b.price - a.price; // sort descending.
+  });
+
+  let sellOrders = orders?.filter((item) => item.direction === 2);
+  sellOrders = sellOrders.sort((a, b) => {
+    return b.price - a.price; // sort descending.
+  });
 
   const dataSource =
     sellOrders.length &&
@@ -473,13 +460,8 @@ const OrderBook = ({ markets, balances, assetMap, address }) => {
       label: "Trade History",
       key: "2",
     },
-    {
-      label: "Funds",
-      key: "3",
-    },
   ];
-
-  console.log('selected pair', selectedPair)
+  
   return (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
