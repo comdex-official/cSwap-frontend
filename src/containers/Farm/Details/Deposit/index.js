@@ -7,7 +7,7 @@ import {
   setFirstReserveCoinDenom,
   setPool,
   setPoolBalance,
-  setSecondReserveCoinDenom
+  setSecondReserveCoinDenom,
 } from "../../../../actions/liquidity";
 import { setReverse } from "../../../../actions/swap";
 import { Row, SvgIcon } from "../../../../components/common";
@@ -20,7 +20,7 @@ import {
   APP_ID,
   DEFAULT_FEE,
   DOLLAR_DECIMALS,
-  PRICE_DECIMALS
+  PRICE_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
@@ -29,15 +29,19 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   decimalConversion,
   getExponent,
   marketPrice,
-  rangeToPercentage
+  rangeToPercentage,
 } from "../../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals,
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
 
@@ -226,7 +230,7 @@ const Deposit = ({
           return;
         }
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
@@ -326,7 +330,7 @@ const Deposit = ({
           <div className="farm-rang-slider">
             <div className="farmrange-title">
               {Number(pool?.price) > Number(pool?.minPrice) &&
-                Number(pool?.price) < Number(pool?.maxPrice) ? (
+              Number(pool?.price) < Number(pool?.maxPrice) ? (
                 <span className="success-color">In range</span>
               ) : (
                 <span className="warn-color">Out of range</span>
