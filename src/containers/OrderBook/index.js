@@ -114,7 +114,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
 
   const columns = [
     {
-      title: `Price (CMST)`,
+      title: `Price (${denomConversion(selectedPair?.quote_coin_denom)})`,
       dataIndex: "price",
       key: "price",
       className: "text-red",
@@ -534,8 +534,22 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
               />
               <ul>
                 <li>
-                  <label>+1.319%</label>
-                  <p>=190345</p>
+                  <label>{commaSeparator(
+                      formateNumberDecimalsAuto({
+                        price: selectedPair?.price || 0,
+                      })
+                  )}</label>
+                  <p>=$
+                    {formateNumberDecimalsAuto({
+                      price:
+                          Number(
+                              commaSeparator(
+                                  formateNumberDecimalsAuto({
+                                    price: selectedPair?.price || 0,
+                                  })
+                              )
+                          ) * marketPrice(markets, selectedPair?.base_coin_denom),
+                    })}</p>
                 </li>
                 <li>
                   <label>24h Volume</label>
