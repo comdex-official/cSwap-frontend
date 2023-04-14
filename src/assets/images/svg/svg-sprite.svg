@@ -1695,7 +1695,7 @@ z"/>
         <path id="SVGID_1_" d="M0 0h560v560H0z"/>
         </defs>
         <clipPath id="SVGID_00000174567011551755581780000006687475920563968183_">
-        <use xlink:href="#SVGID_1_" style="overflow:visible"/>
+        <use style="overflow:visible"/>
         </clipPath>
         <g style="clip-path:url(#SVGID_00000174567011551755581780000006687475920563968183_)">
         <path d="M280 560c155.2 0 280-124.8 280-280S435.2 0 280 0 0 124.8 0 280s124.8 280 280 280z" fill="#2775ca"/>

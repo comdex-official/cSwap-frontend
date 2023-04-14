@@ -13,23 +13,24 @@ import {
   fetchExchangeRateValue,
   fetchRestPairs,
   queryOrders,
-  queryUserOrders,
+  queryUserOrders
 } from "../../services/liquidity/query";
 import { defaultFee } from "../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  orderPriceReverseConversion,
+  orderPriceReverseConversion
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   formatNumber,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
 import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
 import variables from "../../utils/variables";
 import Buy from "./Buy";
+import Datafeed from "./datafeed.js";
 import "./index.scss";
 import Sell from "./Sell";
 
@@ -296,15 +297,20 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
     return () => (onLoadScriptRef.current = null);
 
     function createWidget() {
+      const timezone = window.Intl
+        ? window.Intl.DateTimeFormat().resolvedOptions().timeZone
+        : "Etc/UTC";
+
       if (
         document.getElementById("tradingview_6964b") &&
         "TradingView" in window
       ) {
         new window.TradingView.widget({
           autosize: true,
-          symbol: "NASDAQ:AAPL",
-          interval: "D",
-          timezone: "Etc/UTC",
+          // symbol: "NASDAQ:AAPL",
+          // interval: "D",
+          timezone: timezone,
+
           theme: "dark",
           show_popup_button: true,
           popup_width: "1000",
@@ -315,6 +321,35 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
           enable_publishing: false,
           allow_symbol_change: true,
           container_id: "tradingview_6964b",
+          // symbol: 'Bitfinex:BTC/USD', // default symbol
+          interval: "1D", // default interval
+          fullscreen: true, // displays the chart in the fullscreen mode
+          datafeed: Datafeed,
+          library_path: `${
+            window.location ? window.location.origin : ""
+          }/chart/charting_library/`,
+          loading_screen: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          disabled_features: [
+            "volume_force_overlay",
+            "header_compare",
+            "header_interval_dialog_button",
+            "show_interval_dialog_on_key_press",
+            "header_symbol_search",
+            "header_saveload",
+          ],
+          enabled_features: [
+            'move_logo_to_main_pane',
+            'hide_last_na_study_output',
+            'clear_bars_on_series_error',
+            'dont_show_boolean_study_arguments',
+            'narrow_chart_enabled',
+            'side_toolbar_in_fullscreen_mode',
+            'save_chart_properties_to_local_storage',
+            'use_localstorage_for_settings'
+          ],
+          favorites: {
+            intervals: ['5', '15', '60', 'D'],
+          }
         });
       }
     }
@@ -516,6 +551,8 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
     },
   ];
 
+  console.log("the feed", Datafeed);
+
   return (
     <div className="app-content-wrapper">
       <div className="orderbook-wrapper">
@@ -534,22 +571,26 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
               />
               <ul>
                 <li>
-                  <label>{commaSeparator(
+                  <label>
+                    {commaSeparator(
                       formateNumberDecimalsAuto({
                         price: selectedPair?.price || 0,
                       })
-                  )}</label>
-                  <p>=$
+                    )}
+                  </label>
+                  <p>
+                    =$
                     {formateNumberDecimalsAuto({
                       price:
-                          Number(
-                              commaSeparator(
-                                  formateNumberDecimalsAuto({
-                                    price: selectedPair?.price || 0,
-                                  })
-                              )
-                          ) * marketPrice(markets, selectedPair?.base_coin_denom),
-                    })}</p>
+                        Number(
+                          commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: selectedPair?.price || 0,
+                            })
+                          )
+                        ) * marketPrice(markets, selectedPair?.base_coin_denom),
+                    })}
+                  </p>
                 </li>
                 <li>
                   <label>24h Volume</label>
