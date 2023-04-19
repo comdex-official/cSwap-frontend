@@ -1,4 +1,4 @@
-import { Button, List, message } from "antd";
+import { Button, List } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
@@ -58,11 +58,15 @@ const GovernDetails = ({
   const data = [
     {
       title: "Voting Starts",
-      counts: formatTime(proposal?.voting_start_time) || "--/--/--",
+      counts: proposal?.voting_start_time
+        ? formatTime(proposal?.voting_start_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Voting Ends",
-      counts: formatTime(proposal?.voting_end_time) || "--/--/--",
+      counts: proposal?.voting_end_time
+        ? formatTime(proposal?.voting_end_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Proposer",
@@ -73,7 +77,9 @@ const GovernDetails = ({
               <span className="mr-1">{truncateString(proposer, 6, 6)}</span>
               <Copy text={proposer} />
             </>
-          ) : null}
+          ) : (
+            "------"
+          )}
         </div>
       ),
     },
@@ -83,7 +89,6 @@ const GovernDetails = ({
     if (id) {
       fetchRestProposal(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -91,7 +96,6 @@ const GovernDetails = ({
       });
       fetchRestProposalTally(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -100,7 +104,6 @@ const GovernDetails = ({
 
       fetchRestProposer(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -302,27 +305,29 @@ const GovernDetails = ({
           <div className="composite-card govern-card2 earn-deposite-card h-100">
             <Row>
               <Col>
-                <h3>#{proposal?.proposal_id || id}</h3>
+                <h3>#{proposal?.proposal_id || "-"}</h3>
               </Col>
               <Col className="text-right">
-                <Button type="primary">
-                  <span
-                    className={
-                      proposalStatusMap[proposal?.status] === "Rejected" ||
-                      proposalStatusMap[proposal?.status] === "Failed"
-                        ? "failed-circle"
-                        : proposalStatusMap[proposal?.status] === "Passed"
-                        ? "passed-circle"
-                        : "warning-circle"
-                    }
-                  ></span>
-                  {proposalStatusMap[proposal?.status]}
-                </Button>
+                {proposalStatusMap[proposal?.status] ? (
+                  <Button type="primary">
+                    <span
+                      className={
+                        proposalStatusMap[proposal?.status] === "Rejected" ||
+                        proposalStatusMap[proposal?.status] === "Failed"
+                          ? "failed-circle"
+                          : proposalStatusMap[proposal?.status] === "Passed"
+                          ? "passed-circle"
+                          : "warning-circle"
+                      }
+                    ></span>
+                    {proposalStatusMap[proposal?.status]}
+                  </Button>
+                ) : null}
               </Col>
             </Row>
             <Row>
               <Col>
-                <h3>{proposal?.content?.title}</h3>
+                <h3>{proposal?.content?.title || "------"}</h3>
                 <div className="description-row">
                   <p>
                     {stringTagParser(proposal?.content?.description || " ")}{" "}
