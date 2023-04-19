@@ -1,4 +1,4 @@
-import { Button, Input, message, Switch, Table, Tabs } from "antd";
+import { Button, Input, message, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
 import { setLPPrices, setMarkets } from "../../actions/oracle";
 import { Col, Row, SvgIcon } from "../../components/common";
+import IconFromDenom from "../../components/common/IconFromDenom";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -16,18 +17,16 @@ import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion,
+  denomConversion
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
-  marketPrice,
+  marketPrice
 } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
 import variables from "../../utils/variables";
 import Deposit from "./Deposit";
 import "./index.scss";
-import LPAsssets from "./LPAassets";
 import Withdraw from "./Withdraw";
 
 const Assets = ({
@@ -277,7 +276,7 @@ const Assets = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(comdex?.coinMinimalDenom)} />
+              <IconFromDenom denom={comdex?.coinMinimalDenom} />
             </div>{" "}
             {denomConversion(comdex?.coinMinimalDenom)}{" "}
           </div>
@@ -301,7 +300,7 @@ const Assets = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(cmst?.coinMinimalDenom)} />
+              <IconFromDenom denom={cmst?.coinMinimalDenom} />
             </div>{" "}
             {denomConversion(cmst?.coinMinimalDenom)}{" "}
           </div>
@@ -325,7 +324,7 @@ const Assets = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(harbor?.coinMinimalDenom)} />
+              <IconFromDenom denom={harbor?.coinMinimalDenom} />
             </div>{" "}
             {denomConversion(harbor?.coinMinimalDenom)}{" "}
           </div>
@@ -358,9 +357,7 @@ const Assets = ({
         asset: (
           <>
             <div className="assets-withicon">
-              <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} />
-              </div>{" "}
+              <IconFromDenom denom={item?.ibcDenomHash} />
               {denomConversion(item?.ibcDenomHash)}{" "}
             </div>
           </>
@@ -457,15 +454,15 @@ const Assets = ({
         <Row>
           <Col>
             {/* {filterValue === "1" ? ( */}
-              <Table
-                className="custom-table assets-table"
-                dataSource={tableData}
-                columns={columns}
-                loading={pricesInProgress}
-                pagination={false}
-                scroll={{ x: "100%" }}
-                locale={{ emptyText: <NoDataIcon /> }}
-              />
+            <Table
+              className="custom-table assets-table"
+              dataSource={tableData}
+              columns={columns}
+              loading={pricesInProgress}
+              pagination={false}
+              scroll={{ x: "100%" }}
+              locale={{ emptyText: <NoDataIcon /> }}
+            />
             {/* ) : (
               <LPAsssets
                 isHideToggleOn={isHideToggleOn}

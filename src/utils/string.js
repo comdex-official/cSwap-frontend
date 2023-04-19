@@ -13,6 +13,7 @@ const getIbcDenomToDenomMap = () => {
     }
   }
 
+  console.log("the mapped denom", myMap);
   return myMap;
 };
 
@@ -55,7 +56,7 @@ const iconMap = {
   [ibcDenoms["shib-wei"]]: "shib-icon",
   [ibcDenoms["uhuahua"]]: "huahua-icon",
   [ibcDenoms["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]]:
-  "gusdc-icon",
+    "gusdc-icon",
   [ibcDenoms["stkATOM"]]: "stkatom-icon",
   [ibcDenoms["gravity0x6B175474E89094C44Da98b954EedeAC495271d0F"]]: "gdai-icon",
   [ibcDenoms["stujuno"]]: "stujuno-icon",
@@ -64,10 +65,13 @@ const iconMap = {
 };
 
 export const iconNameFromDenom = (denom) => {
+  console.log("the denoms", denom);
   if (denom) {
     return iconMap[denom];
   }
 };
+
+
 
 export const orderStatusText = (key) => {
   switch (key) {
@@ -216,9 +220,12 @@ export const errorMessageMappingParser = (message) => {
   var str = message;
 
   var truncatedString = str?.match(/ibc\/\w{64}/g);
-  
+
   for (var i = 0; i < truncatedString?.length; i++) {
-    str = str.replace(truncatedString[i], " " + `${ibcDenomToDenom(truncatedString[i])}`);
+    str = str.replace(
+      truncatedString[i],
+      " " + `${ibcDenomToDenom(truncatedString[i])}`
+    );
   }
   return str;
-}
+};

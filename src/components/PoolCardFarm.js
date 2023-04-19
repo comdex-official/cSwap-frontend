@@ -8,24 +8,24 @@ import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../services/liquidity/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
   getAMP,
-  marketPrice
+  marketPrice,
 } from "../utils/number";
-import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
 import { Col, Row, SvgIcon } from "./common";
 import RangeTooltipContent from "./RangedToolTip";
+import IconFromDenom from "./common/IconFromDenom";
 
 const PoolCardFarm = ({
   lang,
@@ -148,16 +148,12 @@ const PoolCardFarm = ({
           <div className="card-svg-icon-container">
             <div className="card-svgicon card-svgicon-1">
               <div className="card-svgicon-inner">
-                <SvgIcon
-                  name={iconNameFromDenom(pool?.balances?.baseCoin?.denom)}
-                />{" "}
+                <IconFromDenom denom={pool?.balances?.baseCoin?.denom} />
               </div>
             </div>
             <div className="card-svgicon card-svgicon-2">
               <div className="card-svgicon-inner">
-                <SvgIcon
-                  name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
-                />{" "}
+                <IconFromDenom denom={pool?.balances?.quoteCoin?.denom} />
               </div>
             </div>
             <div>
