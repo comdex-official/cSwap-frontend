@@ -7,8 +7,8 @@ const IconFromDenom = ({ denom, tokenImages }) => {
     <img
       src={tokenImages[denom]?.coinImageUrl}
       alt={denomConversion(denom || "")}
-      width={40}
-      height={40}
+      width={30}
+      height={30}
     />
   ) : (
     <img src="" alt="" width={40} height={40} />
