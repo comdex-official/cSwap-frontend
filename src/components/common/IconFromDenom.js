@@ -1,11 +1,12 @@
 import * as PropTypes from "prop-types";
-import TokenImages from "../../config/tokens.json";
+import { connect } from "react-redux";
+import { denomConversion } from "../../utils/coin";
 
-const IconFromDenom = ({ denom }) => {
-  return TokenImages[denom]?.coinImageUrl ? (
+const IconFromDenom = ({ denom, tokenImages }) => {
+  return tokenImages[denom]?.coinImageUrl ? (
     <img
-      src={TokenImages[denom]?.coinImageUrl}
-      alt={denom}
+      src={tokenImages[denom]?.coinImageUrl}
+      alt={denomConversion(denom || "")}
       width={40}
       height={40}
     />
@@ -17,6 +18,13 @@ const IconFromDenom = ({ denom }) => {
 
 IconFromDenom.propTypes = {
   denom: PropTypes.string,
+  tokenImages: PropTypes.array,
 };
 
-export default IconFromDenom;
+const stateToProps = (state) => {
+  return {
+    tokenImages: state.asset.tokenImages,
+  };
+};
+
+export default connect(stateToProps)(IconFromDenom);

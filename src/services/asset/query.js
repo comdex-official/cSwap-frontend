@@ -1,3 +1,4 @@
+import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
@@ -48,4 +49,15 @@ export const queryAssets = (offset, limit, countTotal, reverse, callback) => {
         callback(error?.message);
       });
   });
+};
+
+export const fetchExternalTokens = (callback) => {
+  axios
+      .get(`https://svg-sprite-cswap.s3.ap-southeast-1.amazonaws.com/tokens.json`)
+      .then((result) => {
+        callback(null, result?.data);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
 };

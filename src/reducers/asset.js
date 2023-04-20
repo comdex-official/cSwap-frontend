@@ -8,7 +8,7 @@ import {
   OUT_AMOUNT_SET,
   OUT_ASSET_SET,
   PAIRS_SET,
-  PAIR_ID_SET, PAIR_SET
+  PAIR_ID_SET, PAIR_SET, TOKEN_IMAGES_SET
 } from "../constants/asset";
 
 const pairs = (
@@ -119,6 +119,14 @@ const outAmount = (state = 0, action) => {
   return state;
 };
 
+const tokenImages = (state = [], action) => {
+  if (action.type === TOKEN_IMAGES_SET) {
+    return action.list || [];
+  }
+
+  return state;
+};
+
 const collateralRatio = (state = 150, action) => {
   if (action.type === COLLATERAL_RATIO_SET) {
     return action.value || 0;
@@ -139,4 +147,5 @@ export default combineReducers({
   collateralRatio,
   map,
   appAssetMap,
+  tokenImages,
 });

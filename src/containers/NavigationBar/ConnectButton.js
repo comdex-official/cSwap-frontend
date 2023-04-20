@@ -14,7 +14,8 @@ import {
 import {
   setAppAssets,
   setAssets,
-  setAssetsInPrgoress
+  setAssetsInPrgoress,
+  setTokenImages
 } from "../../actions/asset";
 import { setPoolIncentives, setPoolRewards } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
@@ -26,7 +27,7 @@ import {
   DEFAULT_PAGE_SIZE,
   NETWORK_TAG
 } from "../../constants/common";
-import { queryAssets } from "../../services/asset/query";
+import { fetchExternalTokens, queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import {
@@ -61,6 +62,7 @@ const ConnectButton = ({
   assetMap,
   setAssetsInPrgoress,
   assetDenomMap,
+  setTokenImages,
 }) => {
   const [addressFromLocal, setAddressFromLocal] = useState();
 
@@ -80,6 +82,14 @@ const ConnectButton = ({
       query: `coin_received.receiver='${address}'`,
     },
   };
+
+  useEffect(() => {
+    fetchExternalTokens((error, result) => {
+      if (error) return;
+
+      setTokenImages(result);
+    });
+  }, []);
 
   useEffect(() => {
     let addressAlreadyExist = localStorage.getItem("ac");
@@ -312,7 +322,7 @@ const ConnectButton = ({
             placement="bottomRight"
             trigger={["click"]}
             overlayClassName="dropconnect-overlay"
-            getPopupContainer={() => document.getElementById('topRightToogle')}
+            getPopupContainer={() => document.getElementById("topRightToogle")}
           >
             <Button shape="round" type="primary">
               {variables[lang].connect}
@@ -391,6 +401,7 @@ const actionsToProps = {
   setAssets,
   setAppAssets,
   setAssetsInPrgoress,
+  setTokenImages,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

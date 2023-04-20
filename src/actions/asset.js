@@ -9,7 +9,8 @@ import {
   OUT_ASSET_SET,
   PAIRS_SET,
   PAIR_ID_SET,
-  PAIR_SET
+  PAIR_SET,
+  TOKEN_IMAGES_SET,
 } from "../constants/asset";
 
 export const setPairs = (list, pagination) => {
@@ -93,6 +94,13 @@ export const setAssetsInPrgoress = (value) => {
   return {
     type: ASSETS_IN_PROGRESS_SET,
     value,
+  };
+};
+
+export const setTokenImages = (list) => {
+  return {
+    type: TOKEN_IMAGES_SET,
+    list,
   };
 };
 
