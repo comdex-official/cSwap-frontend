@@ -27,13 +27,13 @@ import {
 } from "../../../utils/coin";
 import {
   errorMessageMappingParser,
-  iconNameFromDenom,
   toDecimals,
   uniqueLiquidityPairDenoms,
   uniqueQuoteDenomsForBase
 } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.scss";
+import IconFromDenom from "../../../components/common/IconFromDenom";
 
 const CreatePoolModal = ({
   openPoolModal,
@@ -308,10 +308,7 @@ const CreatePoolModal = ({
                       <div className="header-left circle-icon">
                         <div className="icon-circle">
                           <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(baseToken)}
-                              viewbox="0 0 26.229 14"
-                            />
+                            <IconFromDenom denom={baseToken}/>
                           </div>
                         </div>
                       </div>
@@ -366,10 +363,7 @@ const CreatePoolModal = ({
                       <div className="header-left circle-icon">
                         <div className="icon-circle">
                           <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(quoteToken)}
-                              viewbox="0 0 26.229 14"
-                            />
+                            <IconFromDenom denom={quoteToken}/>
                           </div>
                         </div>
                       </div>
@@ -431,10 +425,7 @@ const CreatePoolModal = ({
                       <div className="header-left circle-icon">
                         <div className="icon-circle">
                           <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(baseToken)}
-                              viewbox="0 0 26.229 14"
-                            />
+                            <IconFromDenom denom={baseToken}/>
                           </div>
                         </div>
                       </div>
@@ -464,10 +455,7 @@ const CreatePoolModal = ({
                       <div className="header-left circle-icon">
                         <div className="icon-circle">
                           <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(quoteToken)}
-                              viewbox="0 0 26.229 14"
-                            />
+                            <IconFromDenom denom={quoteToken}/>
                           </div>
                         </div>
                       </div>

@@ -1,15 +1,14 @@
 import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setLPPrices } from "../../actions/oracle";
-import { SvgIcon } from "../../components/common";
+import IconFromDenom from "../../components/common/IconFromDenom";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestLPPrices } from "../../services/oracle/query";
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator, formateNumberDecimalsAuto } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
 
 const LPAsssets = ({
   balances,
@@ -150,18 +149,10 @@ const LPAsssets = ({
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
-                <SvgIcon
-                  name={iconNameFromDenom(
-                    item?.asset_details?.base_asset?.denom
-                  )}
-                />
+                <IconFromDenom denom={item?.asset_details?.base_asset?.denom}/>
               </div>{" "}
               <div className="assets-icon asset-icon-reverse" style={{ marginLeft: "-18px" }}>
-                <SvgIcon
-                  name={iconNameFromDenom(
-                    item?.asset_details?.quote_asset?.denom
-                  )}
-                />
+                <IconFromDenom denom={item?.asset_details?.quote_asset?.denom}/>
               </div>{" "}
               {showPairDenoms(item)}
             </div>

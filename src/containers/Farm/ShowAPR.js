@@ -1,14 +1,13 @@
 import { message, Skeleton, Tooltip } from "antd";
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import uuid from "react-uuid";
 import { setPoolRewards } from "../../actions/liquidity";
-import SvgIcon from "../../components/common/svg-icon/svg-icon";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { fetchRestAPRs } from "../../services/liquidity/query";
 import { commaSeparator } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
+import IconFromDenom from "../../components/common/IconFromDenom";
 
 const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
@@ -40,7 +39,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
             <div key={uuid()}>
               {index < 2 ? (
                 <span className="ml-1">
-                  {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                  {<IconFromDenom denom={list[key]?.denom} />}
                   {list[key]?.master_pool ? "Master Pool - " : "External - "}
                   {commaSeparator(
                     (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
@@ -59,7 +58,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
               title={Object.keys(list)?.map((key) => (
                 <div key={uuid()}>
                   <span className="ml-1">
-                    {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+                    {<IconFromDenom denom={list[key]?.denom} />}
                     {list[key]?.master_pool ? "Master Pool - " : "External - "}
                     {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
                   </span>
@@ -75,7 +74,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards }) => {
       return Object.keys(list)?.map((key) => (
         <div key={uuid()}>
           <span className="ml-1">
-            {<SvgIcon name={iconNameFromDenom(list[key]?.denom)} />}
+            {<IconFromDenom denom={list[key]?.denom} />}
             {list[key]?.master_pool ? "Master Pool - " : "External - "}
             {commaSeparator(
               (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)

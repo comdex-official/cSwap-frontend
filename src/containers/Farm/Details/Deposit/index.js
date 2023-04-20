@@ -39,11 +39,11 @@ import {
 } from "../../../../utils/number";
 import {
   errorMessageMappingParser,
-  iconNameFromDenom,
   toDecimals,
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import Info from "../../Info";
+import IconFromDenom from "../../../../components/common/IconFromDenom";
 
 const Deposit = ({
   lang,
@@ -379,11 +379,7 @@ const Deposit = ({
                 <div className="select-inner">
                   <div className="svg-icon">
                     <div className="svg-icon-inner">
-                      <SvgIcon
-                        name={iconNameFromDenom(
-                          pool?.balances?.baseCoin?.denom
-                        )}
-                      />
+                      <IconFromDenom denom={pool?.balances?.baseCoin?.denom} />
                     </div>
                   </div>
                   <div className="name">
@@ -451,11 +447,7 @@ const Deposit = ({
                 <div className="select-inner">
                   <div className="svg-icon">
                     <div className="svg-icon-inner">
-                      <SvgIcon
-                        name={iconNameFromDenom(
-                          pool?.balances?.quoteCoin?.denom
-                        )}
-                      />
+                      <IconFromDenom denom={pool?.balances?.quoteCoin?.denom} />
                     </div>
                   </div>
                   <div className="name">

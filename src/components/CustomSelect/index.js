@@ -2,9 +2,9 @@ import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import React from "react";
 import { denomConversion } from "../../utils/coin";
-import { iconNameFromDenom } from "../../utils/string";
 import { SvgIcon } from "../common";
 import NoDataIcon from "../common/NoDataIcon";
+import IconFromDenom from "../common/IconFromDenom";
 
 const Option = Select.Option;
 
@@ -38,7 +38,7 @@ const CustomSelect = ({ value, onChange, list, loading, disabled }) => {
               <div className="select-inner">
                 <div className="svg-icon">
                   <div className="svg-icon-inner swap-svg-icon-inner">
-                    <SvgIcon name={iconNameFromDenom(item)} />
+                    <IconFromDenom denom={item}/>
                   </div>
                 </div>
                 <div className="name">{denomConversion(item)}</div>

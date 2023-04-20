@@ -1,6 +1,6 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
 import AssetList from "../config/ibc_assets.json";
-import { comdex, ibcDenoms } from "../config/network";
+import { comdex } from "../config/network";
 import { getExponent } from "./number";
 
 const getIbcDenomToDenomMap = () => {
@@ -27,49 +27,6 @@ export const generateHash = (txBytes) =>
   encoding.toHex(sha256(txBytes)).toUpperCase();
 
 export const ibcDenomToDenom = (key) => ibcDenomToDenomMap?.[key];
-
-const iconMap = {
-  ucmdx: "comdex-icon",
-  ucmst: "cmst-icon",
-  uharbor: "harbor-icon",
-  // taking coinMinimalDenom to match ibc denom and fetch icon.
-  [ibcDenoms["uatom"]]: "atom-icon",
-  [ibcDenoms["uosmo"]]: "osmosis-icon",
-  [ibcDenoms["uusdc"]]: "usdc-icon",
-  [ibcDenoms["weth-wei"]]: "weth-icon",
-  [ibcDenoms["ujuno"]]: "juno-icon",
-  [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
-  [ibcDenoms["stuatom"]]: "statom-icon",
-  [ibcDenoms["wmatic-wei"]]: "wmatic-icon",
-  [ibcDenoms["dai-wei"]]: "dai-icon",
-  [ibcDenoms["aevmos"]]: "evmos-icon",
-  [ibcDenoms["wbnb-wei"]]: "wbnb-icon",
-  "weth-wei": "weth-icon", // remove: this before pushing to devnet/testnet only for testing
-  [ibcDenoms["uluna"]]: "luna2-icon",
-  [ibcDenoms["acanto"]]: "canto-icon",
-  [ibcDenoms["uakt"]]: "akt-icon",
-  [ibcDenoms["uxprt"]]: "xprt-icon",
-  [ibcDenoms["stuosmo"]]: "stosmo-icon",
-  [ibcDenoms["wftm-wei"]]: "wfmt-icon",
-  [ibcDenoms["umntl"]]: "mntl-icon",
-  [ibcDenoms["shib-wei"]]: "shib-icon",
-  [ibcDenoms["uhuahua"]]: "huahua-icon",
-  [ibcDenoms["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]]:
-    "gusdc-icon",
-  [ibcDenoms["stkATOM"]]: "stkatom-icon",
-  [ibcDenoms["gravity0x6B175474E89094C44Da98b954EedeAC495271d0F"]]: "gdai-icon",
-  [ibcDenoms["stujuno"]]: "stujuno-icon",
-  [ibcDenoms["stuluna"]]: "stuluna-icon",
-  [ibcDenoms["stevmos"]]: "stevmos-icon",
-};
-
-export const iconNameFromDenom = (denom) => {
-  if (denom) {
-    return iconMap[denom];
-  }
-};
-
-
 
 export const orderStatusText = (key) => {
   switch (key) {

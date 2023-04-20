@@ -12,7 +12,8 @@ import {
   setSpotPrice,
   setUserLiquidityInPools
 } from "../../../actions/liquidity";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row } from "../../../components/common";
+import IconFromDenom from "../../../components/common/IconFromDenom";
 import TooltipIcon from "../../../components/TooltipIcon";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAllBalances } from "../../../services/bank/query";
@@ -29,7 +30,7 @@ import {
   getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
-import { decode, iconNameFromDenom } from "../../../utils/string";
+import { decode } from "../../../utils/string";
 import "../index.scss";
 import ShowAPR from "../ShowAPR";
 import Deposit from "./Deposit";
@@ -106,7 +107,7 @@ const FarmDetails = ({
       setActiveKey("4");
     }
   }, []);
-  
+
   useEffect(() => {
     if (address && pool?.id) {
       fetchSoftLock();
@@ -291,9 +292,7 @@ const FarmDetails = ({
               <div className="pool-details-upper">
                 <div className="pool-details-icon">
                   <div className="pool-details-icon-inner">
-                    <SvgIcon
-                      name={iconNameFromDenom(pool?.balances?.baseCoin?.denom)}
-                    />
+                    <IconFromDenom denom={pool?.balances?.baseCoin?.denom} />
                   </div>
                 </div>
                 <div className="pool-details-dlt">
@@ -308,9 +307,7 @@ const FarmDetails = ({
               <div className="pool-details-upper">
                 <div className="pool-details-icon">
                   <div className="pool-details-icon-inner">
-                    <SvgIcon
-                      name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
-                    />
+                    <IconFromDenom denom={pool?.balances?.quoteCoin?.denom} />
                   </div>
                 </div>
                 <div className="pool-details-dlt">
