@@ -160,6 +160,7 @@ export const setPoolIncentives = (list) => {
     map[obj?.poolId] = obj;
     return map;
   }, {});
+  
 
   return {
     type: POOL_INCENTIVES_SET,

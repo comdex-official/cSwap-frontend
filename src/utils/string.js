@@ -13,7 +13,6 @@ const getIbcDenomToDenomMap = () => {
     }
   }
 
-  console.log("the mapped denom", myMap);
   return myMap;
 };
 
@@ -65,7 +64,6 @@ const iconMap = {
 };
 
 export const iconNameFromDenom = (denom) => {
-  console.log("the denoms", denom);
   if (denom) {
     return iconMap[denom];
   }
