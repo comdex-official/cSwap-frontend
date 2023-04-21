@@ -17,7 +17,23 @@ const NavigationBar = () => {
 
   return (
     <nav className={isSetOnScroll ? "top_bar fixedHeaderOnScroll" : "top_bar"}>
-      <Button type="primary" className="faucet-btn" onClick={() => window.open("https://faucet.comdex.one/")}><SvgIcon name='faucet-icon' viewbox='0 0 23 24' /> Faucet</Button>
+      <div className="connect-button">
+        <Button
+          type="primary"
+          className="faucet-btn"
+          onClick={() => window.open("https://transit.comdex.one")}
+        >
+          <SvgIcon name="bridge-icon" />
+          Bridge
+        </Button>
+        <Button
+          type="primary"
+          className="faucet-btn"
+          onClick={() => window.open("https://faucet.comdex.one/")}
+        >
+          <SvgIcon name="faucet-icon" viewbox="0 0 23 24" /> Faucet
+        </Button>
+      </div>
       <ThemeToggle />
       <div className="connect-button">
         <ConnectButton />
