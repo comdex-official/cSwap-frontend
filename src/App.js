@@ -7,22 +7,22 @@ import Router from "./Router";
 import SvgSprite from "./utils/SvgSpriteLoader";
 
 message.config({
-  maxCount: 2,
+	maxCount: 2,
 });
 
 const App = () => {
-  return (
-    <>
-      <SvgSprite url={svgFile} />
-      <div className="main_wrapper">
-        <SideBar />
-        <div className="main-container">
-          <NavigationBar />
-          <Router />
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<SvgSprite url={svgFile} />
+			<div className='main_wrapper'>
+				{/* <SideBar /> */}
+				<div className='main-container'>
+					<NavigationBar />
+					<Router />
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default App;
