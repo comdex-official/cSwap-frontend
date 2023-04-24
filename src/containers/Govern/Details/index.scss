@@ -1,156 +1,195 @@
 @import "../../../assets/scss/variables.scss";
 
-.composite-card {
-  .card-header{
-    font-weight: 400;
-    margin-bottom: 10px;
-  }
-  &.govern-card2 {
-    padding: 26px;
-    .description-row {
-      max-height: 165px;
-      overflow-y: auto;
-    }
+
+.govern-card2 {
+  background: $primary-gradient;
+  border: 2px solid #303950;
+  border-radius: $base-border-radius;
+  padding: 3.5rem;
+  margin-bottom: 1.5rem;
+  height: 100%;
+
+  &.description-card {
     h3 {
       margin-bottom: 8px;
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
+      font-size: 1.7rem;
+      font-weight: 700;
     }
 
-    h2 {
-      .dark-mode & {
-        color: $white;
-      }
+    h4 {
+      color: $white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
     }
 
-    .govern-dlt-card {
+    p {
+      font-size: 1.2rem;
+    }
+  }
+
+  .govern-dlt-card {
+
+    .govern-dlt-upper {
       display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-      .govern-dlt-chart {
-        width: 40%;
-      }
+    .govern-dlt-chart {
+      width: 50%;
+    }
 
-      .govern-dlt-right {
-        width: 60%;
+    .vote-lists {
+      list-style-type: none;
+      padding-left: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+      margin-top: 28px;
 
-        .ant-list {
-          .ant-list-item {
-            margin: 5px 0;
-            color: $text-color-dark2;
-            border-left: 1px solid$success-color;
-            padding-left: 15px;
+      li {
+        display: flex;
+        align-items: flex-start;
+        line-height: 1;
 
-            .dark-mode & {
-              color: $white;
-            }
+        .icon {
+          width: 12px;
+          height: 12px;
+          min-width: 12px;
+          border-radius: 2px;
+          margin-right: 10px;
+        }
 
-            p {
-              margin-bottom: 0;
-              font-size: $font-size-base;
-            }
+        label {
+          line-height: 1;
+          font-size: 1.4em;
+          font-weight: 400;
+        }
 
-            h3 {
-              margin-bottom: 0;
-              font-size: 1.5rem;
-              font-weight: 600;
-              line-height: 1;
-              margin-top: 8px;
+        p {
+          margin-bottom: 0;
+          font-size: 1.6rem;
+          font-weight: 700;
+          margin-top: 8px;
+        }
 
-              .dark-mode & {
-                color: $white;
-              }
-            }
+        .legand {
+          width: 20px;
+          height: 20px;
+          min-width: 20px;
+          border-radius: 3px;
+          display: inline-block;
+          margin-right: 10px;
+        }
+
+        &:nth-child(1) {
+          .legand {
+            background: #FF4350;
           }
         }
 
-        .vote-lists {
-          list-style-type: none;
-          padding-left: 0;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-gap: 20px;
-          margin-top: 28px;
+        &:nth-child(2) {
+          .legand {
+            background: #DC7F86;
+          }
+        }
 
-          li {
-            display: flex;
-            align-items: flex-start;
-            line-height: 1;
-
-            .icon {
-              width: 12px;
-              height: 12px;
-              min-width: 12px;
-              border-radius: 2px;
-              margin-right: 10px;
-            }
-
-            label {
-              line-height: 1;
-            }
-
-            p {
-              margin-bottom: 0;
-              font-size: 19px;
-              font-weight: 500;
-              margin-top: 8px;
-            }
-            &:nth-child(1) {
-              .icon {
-                fill: #003f9a;
-                .dark-mode & {
-                  fill: #2561b0;
-                }
-              }
-            }
-            &:nth-child(2) {
-              .icon {
-                fill: #2871cc;
-                .dark-mode & {
-                  fill: #3879ce;
-                }
-              }
-            }
-            &:nth-child(3) {
-              .icon {
-                fill: #5099f4;
-                .dark-mode & {
-                  fill: #1a4f94;
-                }
-              }
-            }
-
-            &:nth-child(4) {
-              .icon {
-                fill: #78c1ff;
-                .dark-mode & {
-                  fill: #123c73;
-                }
-              }
-            }
+        &:nth-child(3) {
+          .legand {
+            background: #81808F;
           }
         }
       }
     }
-    .user-vote-container {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      .vote_msg {
+
+    .governdlt-right-inner {
+      margin: 5px 0;
+      color: $text-color-dark2;
+      border-left: 4px solid $secondary-color;
+      padding-left: 15px;
+      color: $white;
+      font-weight: $font-family;
+
+      p {
+        margin-bottom: 15px;
+        font-size: $font-size-base + 1;
+      }
+
+      h3 {
+        margin-bottom: 0;
+        font-size: 1.5rem;
         font-weight: 600;
-        font-size: 15px;
-        text-transform: capitalize;
+        line-height: 1;
+        margin-top: 8px;
+        color: $white;
       }
     }
-  }
-  .address_with_copy {
-    display: flex;
-    align-items: center;
+
+    .govern-dlt-right {
+      width: 60%;
+    }
   }
 
-  .votes-chart {
-    .highcharts-empty-series {
-      fill: #787f9e;
+  .user-vote-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .vote_msg {
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.address_with_copy {
+  display: flex;
+  align-items: center;
+}
+
+.votes-chart {
+  .highcharts-empty-series {
+    fill: #787f9e;
+  }
+}
+
+.governdtl-card-upper {
+  background: $primary-gradient;
+  border: 2px solid #303950;
+  border-radius: $base-border-radius;
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.5rem;
+
+  .ant-list-item {
+    margin-bottom: 0 !important;
+    padding-left: 1rem;
+    font-family: $font-family;
+
+    p {
+      color: $white;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.8;
+      border-left: 6px solid $secondary-color;
+      padding-left: 1rem;
+    }
+
+    h3 {
+      color: $white;
+      font-weight: 700;
+      font-size: 1.8rem;
+      line-height: 1;
+      margin-top: 0.6rem;
+      padding-left: 1rem;
+    }
+
+    .address_with_copy {
+      display: flex;
+      align-items: center;
+      margin-left: 5px;
     }
   }
 }

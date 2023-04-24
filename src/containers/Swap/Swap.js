@@ -604,23 +604,25 @@ const Swap = ({
                 isLimitOrder ? "cswap-content toggle_active" : "cswap-content "
               }
             >
-              <CustomSwitch
-                onChange={(value) => handleLimitSwitchChange(value)}
-                name="Limit Order"
-                isChecked={isLimitOrder}
-              />
+              <div className="d-flex align-items-center justify-content-between mb-3 px-4">
+                <CustomSwitch
+                  onChange={(value) => handleLimitSwitchChange(value)}
+                  name="Limit Order"
+                  isChecked={isLimitOrder}
+                />
 
-              {isLimitOrder ? (
-                <Popover
-                  className="setting-popover"
-                  content={SettingPopup}
-                  placement="bottomRight"
-                  overlayClassName="cmdx-popver"
-                  trigger="click"
-                >
-                  <SvgIcon name="setting" viewbox="0 0 33 33" />
-                </Popover>
-              ) : null}
+                {isLimitOrder ? (
+                  <Popover
+                    className="setting-popover"
+                    content={SettingPopup}
+                    placement="bottomRight"
+                    overlayClassName="cmdx-popver"
+                    trigger="click"
+                  >
+                    <SvgIcon name="setting" viewbox="0 0 33 33" />
+                  </Popover>
+                ) : null}
+              </div>
               <div className="assets-select-card">
                 <div className="assets-left">
                   <label className="leftlabel">
@@ -812,7 +814,7 @@ const Swap = ({
               <Row>
                 <Col sm="10" className="mt-3 mx-auto card-bottom-details">
                   {!isLimitOrder ? (
-                    <Row className="mt-1">
+                    <Row className="mt-2">
                       <Col>
                         <label>{variables[lang].estimated_slippage}</label>
                       </Col>
@@ -828,11 +830,10 @@ const Swap = ({
                       </Col>
                     </Row>
                   ) : null}
-                  <Row className="mt-1">
+                  <Row className="mt-3">
                     <Col>
                       <label>
                         {isLimitOrder ? "Trade Fee" : variables[lang].swap_fee}{" "}
-                        <TooltipIcon text={variables[lang].tooltip_tx_fee} />
                       </label>
                     </Col>
                     <Col className="text-right">
@@ -841,17 +842,17 @@ const Swap = ({
                       %
                     </Col>
                   </Row>
+                  {!isLimitOrder ? (
+                    <Row className="mt-3">
+                      <Col className="text-left note-text">
+                        <label>
+                          Note: The requested swap could be completed fully, partially, or canceled due to price limiting and to maintain pool stability.
+                        </label>
+                      </Col>
+                    </Row>
+                  ) : null}
                 </Col>
               </Row>
-              {!isLimitOrder ? (
-                <Row className="mt-3">
-                  <Col className="text-left note-text">
-                    Note: The requested swap could be completed fully,
-                    partially, or canceled due to price limiting and to maintain
-                    pool stability.
-                  </Col>
-                </Row>
-              ) : null}
               <div className="assets-form-btn">
                 <CustomButton
                   isLimitOrder={isLimitOrder}

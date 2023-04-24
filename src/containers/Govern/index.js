@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Spin, List, Progress } from "antd";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -12,6 +12,21 @@ import { proposalStatusMap } from "../../utils/string";
 import "./index.scss";
 
 const { Option } = Select;
+
+const data = [
+  {
+    title: "Total Staked",
+    counts: '312.45',
+  },
+  {
+    title: "Total Proposals",
+    counts: '7',
+  },
+  {
+    title: "Average Participation",
+    counts: '50.12%',
+  },
+];
 
 const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
@@ -57,15 +72,46 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         <>
           <Row>
             <Col>
+              <div className="govern-upper-card">
+                <div className="myhome-upper-left w-100">
+                  <List
+                    grid={{
+                      gutter: 16,
+                      xs: 1,
+                      sm: 2,
+                      md: 3,
+                      lg: 3,
+                      xl: 3,
+                      xxl: 3,
+                    }}
+                    dataSource={data}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <div>
+                          <p>{item?.title}</p>
+                          <h3>{item?.counts}</h3>
+                        </div>
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <div className="comdex-card govern-card">
                 <div className="governcard-head">
+                  <Button type="primary" className="px-4">
+                    New Proposal
+                  </Button>
                   <a
                     aria-label="Twitter"
                     target="_blank"
                     rel="noreferrer"
                     href="https://forum.comdex.one"
                   >
-                    <Button type="secondary" className="px-5">
+                    <Button type="primary" className="px-5">
                       Forum
                     </Button>
                   </a>
@@ -101,9 +147,9 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                           }
                         >
                           <div className="left-section">
-                            <h3>
+                            <h3 className="d-flex align-items-center">
                               #{item?.proposal_id}
-                              <Button type="primary" className="ml-1">
+                              <Button className="ml-3">
                                 <span
                                   className={
                                     proposalStatusMap[item?.status] ===
@@ -119,7 +165,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                 {proposalStatusMap[item?.status]}
                               </Button>
                             </h3>
-                            <h3>{item?.content?.title}</h3>
+                            <p>{item?.content?.title}</p>
                             <p>{item?.content?.description} </p>
                           </div>
                           <div className="right-section">
@@ -137,6 +183,17 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                   {formatTime(item?.voting_end_time) ||
                                     "--/--/--"}
                                 </p>
+                              </Col>
+                              <Col sm="6" className="right-col">
+                                <label>Duration :</label>
+                                <p>
+                                  3 days
+                                </p>
+                              </Col>
+                            </Row>
+                            <Row className='mt-2'>
+                              <Col>
+                                <Progress percent={70} success={{ percent: 45 }} />
                               </Col>
                             </Row>
                           </div>

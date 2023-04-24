@@ -1,4 +1,4 @@
-import { Input, message, Spin, Tabs, Tooltip } from "antd";
+import { Button, Input, message, Select, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -15,6 +15,9 @@ import { queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
 import CreatePool from "./CreatePool";
 import "./index.scss";
+import { Link } from "react-router-dom";
+
+import cardBg from '../../assets/images/card-bg.jpg'
 
 const MasterPoolsContent = [
   <div>
@@ -138,16 +141,20 @@ const Farm = ({
 
   const tabItems = [
     {
-      key: "3",
+      key: "1",
       label: "All",
     },
     {
-      key: "1",
+      key: "2",
       label: "Basic",
     },
     {
-      key: "2",
+      key: "3",
       label: "Ranged",
+    },
+    {
+      key: "4",
+      label: "My Pools",
     },
   ];
 
@@ -180,39 +187,39 @@ const Farm = ({
         </div>
       ) : (
         <>
-          {showEligibleDisclaimer && (
-            <div
-              className={
-                isSetOnScroll
-                  ? "farm-disclaimer-info"
-                  : "fixedHeaderOnScroll farm-disclaimer-info"
-              }
-            >
-              <SvgIcon name="error-icon" viewbox="0 0 24.036 21.784" />
-              Users need to farm for 24 hours in order to be eligible for
-              rewards
-              <SvgIcon
-                className="close-icon"
-                onClick={closeDisclaimer}
-                name="close"
-                viewbox="0 0 19 19"
-              />
-            </div>
-          )}
-          <div className="farm-heading farm-headingtimer mb-4 pb-2">
-            <p>
-              {" "}
-              {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
-                <Timer
-                  text={"Reward distribution in "}
-                  expiryTimestamp={
-                    incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
-                  }
-                />
-              ) : null}
-            </p>
+          <div className="farmupper-row">
+            <Row>
+              <Col md='6'>
+                <div className="farm-upper-card" style={{ backgroundImage: `url(${cardBg})`}}>
+                  <div className="upper-card-inner">
+                    <h1>cSwap v2 Live</h1>
+                    <p>
+                      <div>Supercharge Your LP Earnings with boosted rewards on cSwap.</div>
+                      <Link to='/'>learn more</Link>
+                    </p>
+                  </div>
+                </div>
+              </Col>
+              <Col md='6'>
+                <div className="farm-upper-card farm-upper-card2" style={{ backgroundImage: `url(${cardBg})`}}>
+                  <div className="upper-card-inner">
+                    <h2>How it works?</h2>
+                    <div className="inner-card-row">
+                      <div className="inner-card">
+                        <h2>STEP 1</h2>
+                        <p>Provide liquidity in the Master pool</p>
+                        <Button className="mt-2" type="primary">Go to Pool</Button>
+                      </div>
+                      <div className="inner-card">
+                        <h2>STEP 2</h2>
+                        <p>Deposit Equal value of assets in Child Pool or pools as your Master Pool to earn boosted rewards</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
           </div>
-
           <div className="mb-4">
             <Tabs
               defaultActiveKey="1"
@@ -221,24 +228,32 @@ const Farm = ({
               onChange={onChange}
               className="comdex-tabs farm-details-tabmain"
               tabBarExtraContent={
-                <div className="farmtab-right-action">
-                  <CreatePool
-                    refreshData={updatePools}
-                    refreshBalance={handleBalanceRefresh}
-                  />
-                  <Input
-                    placeholder="Search Pools.."
-                    onChange={(event) => onSearchChange(event.target.value)}
-                    suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-                  />
-                </div>
+                <>
+                  <div>&nbsp;</div>
+                  <div className="farmtab-right-action">
+                    <Select
+                      defaultValue="apr"
+                      suffixIcon={<SvgIcon name='filter' viewbox='0 0 13.579 13.385' />}
+                      options={[
+                        { value: 'apr', label: 'APR' },
+                        { value: 'mypools', label: 'My Pools' },
+                        { value: 'datecreated', label: 'Date Created' },
+                        { value: 'poolliquidity', label: 'Pool Liquidity' },
+                      ]}
+                    />
+                    <Input
+                      placeholder="Search Pools.."
+                      onChange={(event) => onSearchChange(event.target.value)}
+                      suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+                    />
+                  </div>
+                </>
               }
             />
           </div>
 
           {userPools?.length > 0 ? (
             <div className="pools-bottom-section mb-5">
-              <div className="farm-heading">My Pools</div>
               <Row>
                 <Col sm="12">
                   <div className="pool-card-section">
@@ -264,17 +279,6 @@ const Farm = ({
           ) : null}
           {Number(filterValue) === 2 ? null : (
             <div className="pools-upper-section mb-5">
-              <div className="farm-heading">
-                Master Pools{" "}
-                <Tooltip
-                  className="masterpool-tooltip-icon"
-                  placement="bottomLeft"
-                  overlayClassName="masterpool-tooltip"
-                  title={MasterPoolsContent}
-                >
-                  <SvgIcon name="info-icon" viewbox="0 0 9 9" />
-                </Tooltip>
-              </div>
               <Row>
                 <Col>
                   <div className="pool-card-section">
@@ -295,27 +299,6 @@ const Farm = ({
               </Row>
             </div>
           )}
-          <div className="pools-upper-section">
-            <div className="farm-heading">Child Pools</div>
-            <Row>
-              <Col>
-                <div className="pool-card-section">
-                  {displayPools?.length
-                    ? displayPools
-                        .filter((item) => !masterPoolMap?.[item?.id]?.poolId)
-                        .map((item, index) => (
-                          <PoolCardFarm
-                            key={item?.id}
-                            pool={item}
-                            poolIndex={index}
-                            lang={lang}
-                          />
-                        ))
-                    : "No pools found"}
-                </div>
-              </Col>
-            </Row>
-          </div>
         </>
       )}
     </div>

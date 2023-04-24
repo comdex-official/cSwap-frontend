@@ -72,36 +72,18 @@
     background: $background-light;
     padding: 35px;
     border-radius: $base-border-radius + 5;
-    box-shadow: $box-shadow-inner-light;
     position: relative;
+    background: $background-dark1;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #030B1E 0%, rgba(3, 11, 30, 0.71) 100%);
+    border: 2px solid #303950;
+    border-radius: 20px;
+
     @media screen and (max-width: 767px) {
       padding: 35px 20px;
     }
-    .dark-mode & {
-      background: $background-dark1;
-      border: 1px solid $border-dark;
-      box-shadow: $box-shadow-inner-dark;
-    }
-    // .ant-switch-handle {
-    //   &::before {
-    //     background: $secondary-color;
-    //   }
-    // }
-    // .ant-switch-checked:focus {
-    //   box-shadow: none;
-    // }
-    // .ant-switch-checked {
-    //   background-color: $red;
-    //   .ant-switch-handle {
-    //     &::before {
-    //       background: $white;
-    //     }
-    //   }
-    // }
+
     .setting-popover {
-      position: absolute;
-      right: 15px;
-      top: 37px;
       width: 20px;
       fill: #354774;
       cursor: pointer;
@@ -167,29 +149,23 @@
   .ant-btn:nth-child(1) {
     background: $secondary-color;
     span {
-      color: #fff !important ;
-      background: $secondary-color;
-      .dark-mode & {
-        color: $white;
-      }
+      color: #fff;
     }
   }
-}
-.maxhalf {
   .ant-btn:nth-child(2) {
-    background: $white;
+    background: #0F2048;
     span {
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
     }
   }
 }
+
 
 .pool_price_section {
   min-height: 80px !important;
   .assets-select-wrapper {
     margin-top: 10px;
+    font-weight: 700;
   }
   .swap-assets-right .ant-input {
     margin-top: 8px !important;
@@ -214,12 +190,10 @@
 }
 
 .note-text {
-  color: $text-color-light2;
+  font-weight: 500;
+  margin-top: 1rem;
   @media screen and (max-width:1540px) {
     font-size: $font-size-base;
-  }
-  .dark-mode & {
-    color: $text-color-light;
   }
 }
 

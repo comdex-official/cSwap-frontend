@@ -70,7 +70,6 @@ const MyPools = ({ pools, lang, userLiquidityInPools }) => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      align: "right",
       width: 100,
       render: (item) => (
         <Button

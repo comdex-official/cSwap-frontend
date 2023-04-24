@@ -12,69 +12,35 @@ body {
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   -moz-font-smoothing: antialiased !important;
-  color: $text-color-dark;
+  color: $white;
   font-feature-settings: normal !important;
   font-variant: normal !important;
-  font-weight: 300;
-  background: $body-background-light;
   height: auto !important;
   margin: 0;
   padding: 0;
-
-  &::before {
-    background: $sidebar-bg-light;
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-  }
-
-  &.dark-mode {
-    background: $body-background-dark;
-    color: $white;
-
-    &::before {
-      background: radial-gradient(
-        66.64% 66.79% at 3.9% 4.23%,
-        #16375c 0%,
-        #040516 100%
-      );
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    &::after {
-      background: radial-gradient(
-        66.64% 66.79% at 113.9% 104.23%,
-        rgba(254, 67, 80, 0.6) 0.56%,
-        rgba(4, 5, 23, 0) 96.15%
-      );
-      content: "";
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
+  background: url('../images/body-bg.jpg');
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 body.sidebar-open {
   overflow: hidden;
 }
 
-h1, h2, h3, h4, h5, h6{
+#root {
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
-p{
+p {
   margin: 0;
 }
 
@@ -82,15 +48,13 @@ label,
 button {
   user-select: none;
 }
+
 .icon {
   width: 16px;
   height: auto;
-  fill: $text-color-dark;
   transition: fill 0.3s;
+  fill: $text-color-light;
 
-  &.dark-mode {
-    fill: $text-color-light;
-  }
 
   &.icon-white {
     fill: $text-color-light;
@@ -113,11 +77,11 @@ button {
 .main_wrapper {
   display: flex;
   min-height: 100vh;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
 
   .main-container {
-    width: 80vw;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -126,7 +90,7 @@ button {
     z-index: 1;
 
     .sidebar-open {
-      & ~ .content {
+      &~.content {
         max-width: calc(100% - 270px);
 
         @media screen and (max-width: 991px) {
@@ -137,7 +101,7 @@ button {
 
     .content {
       max-width: 100%;
-      padding: 20px 100px 0;
+      padding: 130px 100px 0;
       margin: 0 auto;
       width: 100%;
       display: flex;
@@ -145,7 +109,7 @@ button {
       flex: 0 1 100%;
       transition: none;
 
-      @media screen and (max-width:1540px){
+      @media screen and (max-width:1540px) {
         padding: 20px 80px 0;
       }
 
@@ -172,7 +136,7 @@ button {
 
         .app-content-small {
           width: 100%;
-          max-width: 540px;
+          max-width: 700px;
           margin: auto;
         }
       }
@@ -184,15 +148,11 @@ button {
   .ant-tooltip-arrow {
     .ant-tooltip-arrow-content {
       background: $tooltip-bg-light;
-
-      .dark-mode & {
-        background: $tooltip-bg-light;
-      }
     }
   }
 
   .ant-tooltip-inner {
-    background-color: $tooltip-bg-light !important;
+    background-color: $dark-color;
     color: $tooltip-color-dark;
     font-size: $font-size-sm;
     min-height: 18px;
@@ -200,90 +160,65 @@ button {
     line-height: 13px;
     border-radius: 3px !important;
     font-weight: 400;
-
-    .dark-mode & {
-      background-color: $dark-color;
-      color: $tooltip-color-dark;
-    }
   }
 }
 
 .ant-btn {
-  border: 0;
   font-size: $font-size-base;
   padding: 0 22px;
-  color: $white;
-  background: $btn-bg-dark;
-  border-radius: $base-border-radius;
   cursor: pointer;
   transition: all 300ms ease-in-out;
   height: 36px;
   line-height: 36px;
   font-weight: normal;
+  font-family: $font-family;
+  font-weight: 600;
+  background-color: transparent;
+  margin: 0 auto;
+  color: $white;
+  border-radius: 20px;
+  border: 1px solid $secondary-color;
+  transition: all 300ms ease-in-out;
 
-  &:not(.ant-btn-round) {
-    border-radius: 0;
+  &:hover:not(&[disabled]),
+  &:active,
+  &:focus {
+    background-color: $secondary-color;
+    color: $white;
+    border-color: $secondary-color;
   }
 
-  a{
-    color: $text-color-dark2;
-    .dark-mode & {
-      color: $white;
-    }
+  &[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+    border-color: $secondary-color;
+    background-color: none;
+    color: $white;
+  }
+
+  a {
+    color: $white;
   }
 
   .icon {
-    fill: $text-color-dark2;
-    .dark-mode & {
-      fill: $white;
-    }
+    fill: $white;
   }
 
-  &.ant-btn-primary,
-  &.ant-btn-primary-success {
-    cursor: pointer;
-    background-color: transparent;
-    margin: 0 auto;
-    color: $text-color-dark2;
-    border-radius: 20px;
-    border: 1px solid $secondary-color;
-    transition: all 300ms ease-in-out;
-
-    .dark-mode & {
-      color: $white;
-    }
+  &.ant-btn-primary {
+    background-color: $secondary-color;
+    color: $white;
 
     &:hover:not(&[disabled]),
     &:active,
     &:focus {
-      background-color: $secondary-color;
+      background-color: $secondary-color-hover;
       color: $white;
-      border-color: $secondary-color;
+      border-color: $secondary-color-hover;
     }
 
     &[disabled] {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
-      border-color: $secondary-color;
-      background-color: $secondary-color;
-    }
-
-    &.btn-filled {
-      background-color: $secondary-color;
-      color: $white;
-
-      &:hover:not(&[disabled]),
-      &:active,
-      &:focus {
-        background-color: $secondary-color-hover;
-        color: $white;
-        border-color: $secondary-color-hover;
-      }
-
-      &[disabled] {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
     }
   }
 
@@ -292,6 +227,7 @@ button {
     border-color: $secondary-btn-color;
     color: $white;
     border-radius: 40px;
+
     &:hover,
     &:active,
     &:focus {
@@ -313,6 +249,7 @@ button {
     height: 42px;
     line-height: 42px;
     font-size: $font-size-lg;
+    border-radius: 42px;
   }
 
   &.success-btn {
@@ -320,6 +257,7 @@ button {
     border-color: $success-color;
     color: $white;
     padding: 0 15px;
+
     &:hover,
     &:focus {
       background: $success-color;
@@ -333,6 +271,7 @@ button {
     background: #232726;
     color: $white;
     border-color: #232726;
+
     &:hover,
     &:focus {
       background: #232726;
@@ -353,6 +292,7 @@ button {
       background: #5d6a82;
       height: 5px;
     }
+
     .ant-slider-track {
       background: #13a356;
       height: 5px;
@@ -365,9 +305,11 @@ button {
       height: 14px;
       border-radius: 14px;
       margin-top: -1px;
+
       &:after {
         display: none;
       }
+
       @media screen and (max-width: 991px) {
         display: block;
       }
@@ -384,12 +326,15 @@ button {
         &.ant-slider-dot-active {
           background: #13a356;
         }
+
         &:first-child {
           margin-left: 0;
         }
+
         &:nth-child(2) {
           margin-left: -1px;
         }
+
         &:last-child {
           margin-left: -1px;
         }
@@ -402,13 +347,11 @@ button {
       span {
         font-size: $font-size-sm - 2;
         font-weight: 300;
-
-        .dark-mode & {
-          color: $white;
-        }
+        color: $white;
       }
     }
   }
+
   &.borrow-comdex-slider {
     .ant-slider-mark {
       top: -19px;
@@ -416,38 +359,44 @@ button {
       span {
         font-size: $font-size-sm - 2;
         font-weight: 300;
+        color: $white;
 
-        .dark-mode & {
-          color: $white;
-        }
       }
+
       span:nth-child(2) {
         left: 27% !important;
       }
+
       span:nth-child(3) {
         left: 43% !important;
       }
     }
+
     &.red-track {
       .ant-slider-track {
         background: $secondary-color;
       }
+
       .ant-slider-handle {
         border-color: $secondary-color !important;
       }
     }
+
     &.orange-track {
       .ant-slider-track {
         background: orange;
       }
+
       .ant-slider-handle {
         border-color: orange !important;
       }
     }
+
     &.green-track {
       .ant-slider-track {
         background: $success-color;
       }
+
       .ant-slider-handle {
         border-color: $success-color !important;
       }
@@ -471,9 +420,6 @@ button {
       justify-content: center;
       color: $white;
 
-      .dark-mode & {
-        color: $white;
-      }
     }
   }
 }
@@ -491,7 +437,7 @@ button {
 
       .ant-tabs-nav-list {
         border-radius: 20px;
-        border: 1px solid $border-dark;
+        border: 1px solid #C5CBDB;
         padding: 5px;
 
         .ant-tabs-ink-bar {
@@ -502,20 +448,18 @@ button {
           width: 100%;
           text-align: center;
           color: $secondary-color;
-          font-weight: 300;
-          font-size: $font-size-base - 2;
+          font-weight: 500;
+          font-size: $font-size-base;
           margin-left: 0;
           padding: 4px 18px;
           border-radius: 20px;
           background: none;
           border: 0;
+          font-family: $font-family;
+
           .ant-tabs-tab-btn {
             width: 100%;
-            color: $text-color-dark2;
-
-            .dark-mode & {
-              color: $white;
-            }
+            color: $white;
           }
 
           &:hover {
@@ -538,7 +482,6 @@ button {
 }
 
 .ant-switch {
-  
 
   &.ant-switch-small {
     height: 16px;
@@ -561,30 +504,26 @@ button {
 }
 
 .ant-switch {
-  background: #898989 !important;
+  background: #0D2459;
 
-  &:hover {
-    opacity: 0.8;
-  }
-
-  .dark-mode & {
-    background: #898989 !important;
+  &:not(.ant-switch-disabled) {
+    &:hover {
+      background: darken(#0D2459, 2);
+    }
   }
 
   .ant-switch-handle {
     &:before {
-      background: #FD424F;
+      background: $white;
     }
   }
 
   &.ant-switch-checked {
     background: #FF4350 !important;
-    .dark-mode & {
-      background:#FF4350 !important;
-    }
+
     .ant-switch-handle {
       &:before {
-        background:$white;
+        background: $white;
       }
     }
   }
@@ -610,15 +549,12 @@ button {
 
 .details-text-small {
   color: $text-color-dark;
-
-  .dark-mode & {
-    color: $text-color-dark;
-  }
 }
 
 .custom-table {
   .ant-table {
     background: none;
+    font-family: $font-family;
 
     .ant-table-content {
       table {
@@ -632,74 +568,55 @@ button {
               font-weight: 400;
               border: 0;
               padding: 10px 15px 0 15px;
-              font-size: $font-size-sm + 3;
-              color: $dark-color;
-              text-align: left !important;
+              font-size: $font-size-lg + 1;
+              color: $white;
+
               &::before {
                 display: none;
               }
-              .dark-mode & {
-                color: $text-color-light;
-              }
             }
-            th:nth-child(1) {
-              text-align: left !important;
-            }
-            th:last-child {
-              text-align: right !important;
-            }
+
           }
         }
 
         .ant-table-tbody {
           .ant-table-placeholder {
             .ant-empty {
-              .dark-mode & {
-                color: $text-color-light;
-              }
+              color: $text-color-light;
             }
           }
+
           tr {
             border-radius: 15px;
+            background: rgba(#000000, 0.4);
+            box-shadow: 0px 4px 14px 3px rgba(128, 99, 138, 0.1);
 
             td {
               .ant-btn-sm {
                 padding: 0 22px;
               }
 
-              color: $text-color-light2;
+              color: $white;
               border-top: 1px solid;
               border-bottom: 1px solid;
               border-left: 0;
               border-right: 0;
               padding: 8px 15px;
-              font-size: $font-size-lg - 1;
               line-height: 1;
               border-color: transparent;
               background: none;
               text-align: left;
-              &:last-child {
-                text-align: right !important;
-              }
+              font-size: $font-size-lg +2;
+              border-color: rgba(255, 255, 255, 0.3);
+
               &:first-child {
                 border-radius: 15px 0 0 15px !important;
-
-                .dark-mode & {
-                  border-left: 1px solid $border-dark;
-                }
+                border-left: 1px solid rgba(255, 255, 255, 0.3);
               }
 
               &:last-child {
                 border-radius: 0 15px 15px 0 !important;
-
-                .dark-mode & {
-                  border-right: 1px solid $border-dark;
-                }
-              }
-
-              .dark-mode & {
-                color: $white;
-                border-color: $border-dark;
+                border-right: 1px solid rgba(255, 255, 255, 0.3);
               }
             }
 
@@ -712,63 +629,29 @@ button {
             small {
               font-size: $font-size-sm;
               line-height: 1;
-
-              .dark-mode & {
-                color: $text-color-light;
-              }
+              color: $text-color-light;
             }
 
-            &:nth-child(odd) {
-              background: $background-light;
-              box-shadow: $box-shadow-inner-light;
-
-              .dark-mode & {
-                background: $background-dark1;
-                box-shadow: none;
-              }
-              &:hover {
-                box-shadow: $box-shadow-inner-light;
-
-                .dark-mode & {
-                  box-shadow: $box-shadow-inner-dark;
-                }
-              }
-            }
-
-            &:nth-child(even) {
-              background: $background-light;
-              box-shadow: $box-shadow-inner-light;
-
-              .dark-mode & {
-                background: $background-dark2;
-                box-shadow: none;
-              }
-              &:hover {
-                box-shadow: $box-shadow-inner-light-hover;
-
-                .dark-mode & {
-                  box-shadow: $box-shadow-inner-dark;
-                }
-              }
-            }
           }
         }
       }
     }
-    &.ant-table-empty{
+
+    &.ant-table-empty {
       box-sizing: border-box;
+
       .ant-table-tbody {
         overflow: hidden !important;
+
         tr {
-          td:last-child {
+          td.ant-table-cell:last-child {
             border-radius: 15px !important;
             padding: 0 !important;
             margin: 0 !important;
-            .dark-mode & {
-              border-radius: 15px !important;
-            }
+
           }
-          .ant-table-expanded-row-fixed{
+
+          .ant-table-expanded-row-fixed {
             overflow: hidden;
             width: 100%;
           }
@@ -791,11 +674,9 @@ button {
     }
 
     .icon {
-      fill: $secondary-color;
+      fill: $white;
       width: 12px;
-      .dark-mode & {
-        fill: $white;
-      }
+
     }
   }
 
@@ -806,24 +687,16 @@ button {
     .ant-modal-title {
       font-size: 1.3rem;
       font-weight: 300;
-
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
     }
   }
 
   .ant-modal-content {
     border-radius: 15px;
     padding: 50px 30px;
-    background: $background-light;
-    box-shadow: $box-shadow-inner-light;
-
-    .dark-mode & {
-      background: $background-dark1;
-      box-shadow: $box-shadow-inner-dark;
-      border: 2px solid $border-dark;
-    }
+    background: $background-dark1;
+    box-shadow: $box-shadow-inner-dark;
+    border: 2px solid $border-dark;
 
     .modal-btn {
       height: 38px;
@@ -834,19 +707,16 @@ button {
 }
 
 .ant-modal-mask {
-  .dark-mode & {
-    background: rgba(0, 0, 0, 0.8);
-  }
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .ant-form {
   .ant-form-item {
     .ant-form-item-label {
       width: 50%;
+
       label {
-        .dark-mode & {
-          color: $text-color-label-dark;
-        }
+        color: $text-color-label-dark;
       }
     }
 
@@ -855,20 +725,20 @@ button {
         height: 50px;
         border-radius: 15px;
         border: 0;
+        background: $background-dark2;
+        color: $white;
+        box-shadow: $box-shadow-input-dark;
 
-        .dark-mode & {
-          background: $background-dark2;
+        &::placeholder {
           color: $white;
-          box-shadow: $box-shadow-input-dark;
-          &::placeholder {
-            color: $white;
-          }
-          &::-webkit-placeholder {
-            color: $white;
-          }
-          &::-moz-placeholder {
-            color: $white;
-          }
+        }
+
+        &::-webkit-placeholder {
+          color: $white;
+        }
+
+        &::-moz-placeholder {
+          color: $white;
         }
       }
     }
@@ -878,9 +748,11 @@ button {
 .assets-select-wrapper {
   position: relative;
   margin-top: 10px;
+  font-weight: 7000;
 
   .ant-select {
     background: none;
+    font-family: $font-family;
 
     &.assets-select {
       .ant-select-selection-placeholder {
@@ -891,10 +763,8 @@ button {
           display: flex;
           align-items: center;
           font-size: $font-size-lg + 1;
-
-          .dark-mode & {
-            color: $white;
-          }
+          color: $white;
+          font-weight: 700;
 
           .circle-icon {
             width: 40px;
@@ -905,13 +775,10 @@ button {
             margin-right: 12px;
 
             .circle-icon-inner {
-              background: $white;
+              background: $background-dark1;
               width: 100%;
               height: 100%;
               border-radius: 100%;
-              .dark-mode & {
-                background: $background-dark1;
-              }
             }
           }
         }
@@ -920,31 +787,29 @@ button {
       .ant-select-selector {
         background: none !important;
         border: 0 !important;
-        height: 40px;
+        height: 45px;
         min-width: 150px;
         padding-left: 0;
         box-shadow: none !important;
+        font-family: $font-family;
 
         .ant-select-selection-item {
           display: flex;
           align-items: center;
-          color: $text-color-dark2;
-
-          .dark-mode & {
-            color: $white;
-          }
+          color: $white;
 
           .select-inner {
             display: flex;
             align-items: center;
+            font-weight: 700;
 
             .svg-icon {
-              width: 40px;
-              height: 40px;
-              border-radius: 40px;
-              background: $primary-gradient;
+              width: 45px;
+              height: 45px;
+              border-radius: 45px;
+              background: $primary-gradient-2;
               padding: 1px;
-              margin-right: 15px;
+              margin-right: 10px;
 
               .svg-icon-inner {
                 width: 100%;
@@ -953,11 +818,9 @@ button {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 6px;
-                background: $white;
-                .dark-mode & {
-                  background: $background-dark1;
-                }
+                padding: 4px;
+                background: $background-dark1;
+
                 .icon {
                   width: 100%;
                   height: 100%;
@@ -965,18 +828,17 @@ button {
                   border-radius: 50%;
                 }
               }
-              .swap-svg-icon-inner{
-                .icon{
+
+              .swap-svg-icon-inner {
+                .icon {
                   border-radius: 50%;
                 }
               }
             }
 
             .name {
-              .dark-mode & {
-                color: $white;
-                font-size: $font-size-lg + 1;
-              }
+              color: $white;
+              font-size: $font-size-lg + 1;
             }
           }
         }
@@ -1011,55 +873,49 @@ button {
 
 .ant-select-dropdown {
   border-radius: 10px;
-  .dark-mode & {
-    background: $background-dark2;
-  }
+  background: $background-dark2;
+
+
   .ant-select-item-empty {
-    .dark-mode & {
-      .ant-empty-description {
-        color: $white;
-      }
+    .ant-empty-description {
+      color: $white;
     }
   }
+
   .ant-select-item {
     .ant-select-item-option-content {
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
+
     }
+
     &.ant-select-item-option-selected,
     &.ant-select-item-option-active,
     &:hover {
-      background: $background-light2;
+      background: $background-select-hover-dark;
       font-weight: normal;
       color: $secondary-color;
 
-      .dark-mode & {
-        background: $background-select-hover-dark;
-      }
     }
   }
 }
 
 .ant-select-dropdown {
   &.asset-select-dropdown {
-    background: $background-light2;
+    background: $background-dark2;
     border-radius: 4px;
 
-    .dark-mode & {
-      background: $background-dark2;
-    }
+
 
     .ant-select-item {
       .ant-select-item-option-content {
-        .dark-mode & {
-          color: $white;
-        }
+        color: $white;
       }
 
       .select-inner {
         display: flex;
         align-items: center;
+        font-family: $font-family;
+        font-weight: 700;
 
         .svg-icon {
           width: 32px;
@@ -1073,15 +929,11 @@ button {
           .svg-icon-inner {
             width: 100%;
             height: 100%;
-            background: $background-light2;
+            background: $background-dark1;
             border-radius: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            .dark-mode & {
-              background: $background-dark1;
-            }
 
             .icon {
               width: 22px;
@@ -1092,44 +944,38 @@ button {
         }
 
         .name {
-          .dark-mode & {
-            color: $white;
-            font-size: $font-size-lg + 1;
-          }
+          color: $white;
+          font-size: $font-size-lg + 1;
         }
       }
 
       &.ant-select-item-option-selected,
       &.ant-select-item-option-active {
-        background: $background-light;
+        background: $background-select-hover-dark;
         font-weight: normal;
+      }
+    }
+  }
 
-        .dark-mode & {
-          background: $background-select-hover-dark;
+  &.swap-asset-select-dropdown {
+    .ant-select-item {
+      .select-inner {
+        .svg-icon {
+          .svg-icon-inner {
+            .icon {
+              border-radius: 50%;
+            }
+          }
         }
       }
     }
   }
-  &.swap-asset-select-dropdown{
-    .ant-select-item {
-      .select-inner {
-        .svg-icon{
-             .svg-icon-inner {
-               .icon{
-                 border-radius: 50%;
-               }
-             }
-        }
-    }
-  }
-}
 }
 
 .assets-select-card {
-  background: $assets-bg-light;
-  padding: 10px 25px;
+  background: #101B2F;
+  padding: 20px 30px;
   border-radius: $base-border-radius;
-  box-shadow: $box-shadow-inner-light;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -1139,41 +985,30 @@ button {
     display: block;
   }
 
-  .dark-mode & {
-    background: $background-dark2;
-    box-shadow: $box-shadow-inner-dark;
-  }
-
   .assets-left {
     .leftlabel {
       margin-bottom: 8px;
-      color: $text-color-dark2;
+      color: #ACBFDB;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-
-      .dark-mode & {
-        color: $text-color-label-dark;
-      }
+      font-weight: 600;
     }
   }
 
   .assets-right {
     text-align: right;
+    color: #ACBFDB;
 
     @media screen and (max-width: 480px) {
       margin-top: 15px;
     }
 
-    .dark-mode & {
-      color: $text-color-label-dark;
-    }
-
     .ant-input {
       border: 0;
       background: none;
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       line-height: 1;
       margin-top: 8px;
       text-align: right;
@@ -1182,21 +1017,17 @@ button {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      color: $text-color-dark2;
+      color: $white;
       padding-right: 0;
+      font-weight: 500;
+      font-family: $font-family;
 
       &::-webkit-placeholder {
-        color: $text-color-dark2;
-         .dark-mode &{
-          color: white;
-        }
+        color: $white;
       }
 
       &::placeholder {
-        color: $text-color-dark2;
-        .dark-mode &{
-          color: white;
-        }
+        color: $white;
       }
 
       &::-webkit-inner-spin-button {
@@ -1213,17 +1044,6 @@ button {
         -moz-appearance: textfield;
       }
 
-      .dark-mode & {
-        color: $white;
-
-        &::-webkit-placeholder {
-          color: $white;
-        }
-
-        &::placeholder {
-          color: $white;
-        }
-      }
     }
 
     .label-right {
@@ -1243,30 +1063,24 @@ button {
         margin-left: 4px;
 
         .ant-btn {
-          font-size: $font-size-sm - 1;
-          padding: 1px 0;
+          font-size: $font-size-sm;
+          padding: 2px 3px;
           margin-left: 4px;
           line-height: 1;
           text-align: center;
-          width: 30px;
-          height: 15px;
+          width: 38px;
+          height: 18px;
           border: 0;
           cursor: pointer;
-          border-radius: 2px;
-          .dark-mode & {
-            background: #132239;
-            color: $white;
-          }
+          border-radius: 4px;
+          color: $white;
+          background: #132239;
 
           &.active {
-            .dark-mode & {
-              background: $secondary-color;
-            }
+            background: $secondary-color;
 
             span {
-              .dark-mode & {
-                color: $white;
-              }
+              color: $white;
             }
           }
         }
@@ -1278,18 +1092,12 @@ button {
       line-height: 1;
       margin-top: 8px;
       margin-bottom: 0;
-
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
     }
 
     small {
       display: block;
-
-      .dark-mode & {
-        color: $text-color-light;
-      }
+      color: #ACBFDB;
     }
   }
 }
@@ -1333,15 +1141,11 @@ button {
     .ant-popover-inner {
       padding: 6px 10px;
       border-radius: $base-border-radius - 5;
-      box-shadow: $box-shadow-inner-light;
+      background: $background-popover;
+      box-shadow: $box-shadow-dark;
 
-      .dark-mode & {
-        background: $background-popover;
-        box-shadow: $box-shadow-dark;
-
-        .ant-popover-inner-content {
-          color: $text-color-label-dark;
-        }
+      .ant-popover-inner-content {
+        color: $text-color-label-dark;
       }
     }
   }
@@ -1350,35 +1154,23 @@ button {
 .ant-input {
   &.input-cmdx {
     text-align: right;
-
-    .dark-mode & {
-      background: $background-input-dark;
-      border-color: $border-input-light;
-      color: $text-color-label-dark;
-    }
+    background: $background-input-dark;
+    border-color: $border-input-light;
+    color: $text-color-label-dark;
   }
-     &::placeholder {
-        color: $text-color-dark2;
-        .dark-mode &{
-          color: white;
-        }
-      }
+
+  &::placeholder {
+    color: $white;
+  }
 }
 
 .card-bottom-details {
-  font-size: $font-size-sm;
-  color: $text-color-dark2;
-
-  .dark-mode & {
-    color: $white;
-  }
+  font-size: $font-size-base;
+  color: $white;
+  font-weight: 600;
 
   label {
-    color: $text-color-light2;
-
-    .dark-mode & {
-      color: $text-color-light;
-    }
+    color: #80ACCE;
   }
 }
 
@@ -1388,16 +1180,10 @@ button {
   max-width: 230px;
   min-width: 230px;
   width: 100%;
-  background: $background-light;
-  border-radius: $base-border-radius - 5;
-  box-shadow: $box-shadow-inner-light;
-
-  .dark-mode & {
-    background: $background-dark1;
-    box-shadow: $box-shadow-inner-dark;
-    border-color: $border-dark;
-    color: $white;
-  }
+  background: $background-dark1;
+  box-shadow: $box-shadow-inner-dark;
+  border-color: $border-dark;
+  color: $white;
 
   .wallet-connect-upper {
     display: flex;
@@ -1405,11 +1191,11 @@ button {
     justify-content: center;
     font-size: $font-size-sm;
     margin-bottom: 10px;
+
     .text-center {
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
     }
+
     span {
       width: 10px;
       height: 10px;
@@ -1431,26 +1217,25 @@ button {
     }
   }
 }
+
 .comdex-steps,
 .ant-steps-horizontal:not(.ant-steps-label-vertical) {
   .ant-steps-item {
     padding-left: 5px !important;
+
     &.ant-steps-item-finish,
     &.ant-steps-item-active {
       .ant-steps-item-container {
         .ant-steps-item-icon {
           border-color: $secondary-color;
           background: $secondary-color;
-          .dark-mode & {
-            color: $text-color-light;
-          }
+          color: $text-color-light;
+
           .ant-steps-icon {
             color: $white;
-            .dark-mode & {
-              color: $white;
-            }
           }
         }
+
         .ant-steps-item-content {
           .ant-steps-item-title {
             &::after {
@@ -1461,6 +1246,7 @@ button {
       }
     }
   }
+
   .ant-steps-item-title::after {
     position: absolute;
     top: 16px;
@@ -1470,35 +1256,32 @@ button {
     background: #f0f0f0;
     content: "";
   }
+
   .ant-steps-item-wait .ant-steps-item-icon {
-    background: $background-light;
+    background: $background-dark1;
     border-color: $secondary-color;
-    .dark-mode & {
-      background: $background-dark1;
-    }
+
     .ant-steps-icon {
-      color: $text-color-dark2;
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
     }
   }
+
   .ant-steps-item-process {
     .ant-steps-item-container {
       .ant-steps-item-icon {
-        background: $background-light;
+        background: $secondary-color;
         border-color: $secondary-color;
-        .dark-mode & {
-          background: $secondary-color;
-        }
+
       }
     }
   }
 }
+
 .back-btn-container {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
+
   .back-btn {
     padding: 0 25px;
   }
@@ -1520,12 +1303,14 @@ button {
   background-color: none;
 }
 
-.dropconnect-overlay{
+.dropconnect-overlay {
   padding: 0;
-  .ant-dropdown-menu{
+
+  .ant-dropdown-menu {
     padding: 0;
     background: none;
-    .ant-dropdown-menu-item{
+
+    .ant-dropdown-menu-item {
       padding: 0;
       cursor: default;
       background: none !important;
@@ -1533,38 +1318,44 @@ button {
   }
 }
 
-.timer-main{
+.timer-main {
   display: flex;
   align-items: center;
-  .left-text{
+
+  .left-text {
     max-width: 160px;
     line-height: 1.4;
     font-size: 1.2rem;
+
     @media screen and (max-width:1540px) {
       font-size: 1.05rem;
       max-width: 140px;
     }
   }
-  .timer-count{
+
+  .timer-count {
     display: flex;
     align-items: center;
-    .cols{
+
+    .cols {
       padding: 0 5px;
-      .cols-card{
-        background: rgb(28,57,92);
-        background: linear-gradient(135deg, rgba(28,57,92,1) 0%, rgba(74,87,108,1) 46%, rgba(40,47,65,1) 100%);
+
+      .cols-card {
+        background: rgb(28, 57, 92);
+        background: linear-gradient(135deg, rgba(28, 57, 92, 1) 0%, rgba(74, 87, 108, 1) 46%, rgba(40, 47, 65, 1) 100%);
         width: 46px;
         height: 46px;
         border-radius: 5px;
         overflow: hidden;
         padding: 1px;
         margin-bottom: 5px;
+
         @media screen and (max-width:1540px) {
           width: 40px;
           height: 40px;
         }
-        .cols-inner{
-          background: $background-light;
+
+        .cols-inner {
           position: relative;
           height: 100%;
           border-radius: 5px;
@@ -1573,33 +1364,33 @@ button {
           display: flex;
           align-items: center;
           justify-content: center;
-          .dark-mode & {
-            background: #0E1D38;
-          }
+          background: #0E1D38;
+
           @media screen and (max-width:1540px) {
             font-size: 1.4rem;
           }
+
           &::after {
             content: ' ';
             position: absolute;
             width: 100%;
             height: 50%;
-            background: rgba(#070F20, 0.1);
+            background: rgba(#070F20, 0.5);
             bottom: 0;
             left: 0;
             right: 0;
-            border-radius:0 0 5px 5px;
-            .dark-mode & {
-              background: rgba(#070F20, 0.5);
-            }
+            border-radius: 0 0 5px 5px;
+
           }
         }
       }
-      .label{
+
+      .label {
         color: $text-color-light2;
         font-size: $font-size-sm - 1;
         text-transform: uppercase;
         font-weight: lighter;
+
         @media screen and (max-width:1540px) {
           font-size: $font-size-sm - 2;
         }

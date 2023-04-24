@@ -111,7 +111,7 @@ const Assets = ({
       align: "left",
       render: (tokens) => (
         <>
-          <p>{commaSeparator(Number(tokens || 0))}</p>
+          {commaSeparator(Number(tokens || 0))}
         </>
       ),
     },
@@ -123,9 +123,7 @@ const Assets = ({
       width: 150,
       render: (price) => (
         <>
-          <p className="text-left">
-            ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
-          </p>
+          ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
         </>
       ),
     },
@@ -136,12 +134,10 @@ const Assets = ({
       align: "left",
       render: (amount) => (
         <>
-          <p>
             $
             {commaSeparator(
               Number(amount?.value || 0).toFixed(DOLLAR_DECIMALS)
             )}
-          </p>
         </>
       ),
     },
@@ -149,8 +145,7 @@ const Assets = ({
       title: "IBC Deposit",
       dataIndex: "ibcdeposit",
       key: "ibcdeposit",
-      align: "left",
-      // width: 210,
+      align: 'center',
       render: (value) => {
         if (value) {
           return value?.depositUrlOverride ? (
@@ -181,7 +176,8 @@ const Assets = ({
       title: "IBC Withdraw",
       dataIndex: "ibcwithdraw",
       key: "ibcwithdraw",
-      width: 110,
+      width: 220,
+      align: 'center',
       render: (value) => {
         if (value) {
           return value?.withdrawUrlOverride ? (
@@ -410,7 +406,7 @@ const Assets = ({
                 <div>
                   <h2>{variables[lang].comdex_assets}</h2>
                 </div>
-                <div>
+                <div className="head-right">
                   <span>{variables[lang].total_asset_balance}</span>{" "}
                   {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
                   {variables[lang].USD}
@@ -426,18 +422,9 @@ const Assets = ({
             </Col>
           </Row>
         )}
-        <Row>
-          {/* <div className="mt-4">
-            <Tabs
-              defaultActiveKey="1"
-              items={tabItems}
-              activeKey={filterValue}
-              onChange={onChange}
-              className="comdex-tabs farm-details-tabmain"
-            />
-          </div> */}
-          <Col className="assets-search-section">
-            {parent && parent === "portfolio" ? null : (
+        {parent && parent !== "assets" ? null : (
+          <Row className='mt-4 pt-2 mb-2'>
+            <Col className="assets-search-section">
               <div className="text">
                 Hide 0 Balances{" "}
                 <Switch
@@ -446,17 +433,16 @@ const Assets = ({
                   checked={isHideToggleOn}
                 />
               </div>
-            )}
-            <Input
-              placeholder="Search Asset.."
-              onChange={(event) => onSearchChange(event.target.value)}
-              suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-            />
-          </Col>
-        </Row>
+              <Input
+                placeholder="Search Asset.."
+                onChange={(event) => onSearchChange(event.target.value)}
+                suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+              />
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
-            {/* {filterValue === "1" ? ( */}
               <Table
                 className="custom-table assets-table"
                 dataSource={tableData}
@@ -466,13 +452,6 @@ const Assets = ({
                 scroll={{ x: "100%" }}
                 locale={{ emptyText: <NoDataIcon /> }}
               />
-            {/* ) : (
-              <LPAsssets
-                isHideToggleOn={isHideToggleOn}
-                searchKey={searchKey}
-                activeKey={filterValue}
-              />
-            )} */}
           </Col>
         </Row>
       </div>

@@ -20,6 +20,59 @@
   }
 }
 
+.farmupper-row {
+  margin-bottom: 1.5rem;
+  .farm-upper-card {
+    padding: 3rem;
+    border-radius: 20px;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-size: cover;
+    h1{
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      a {
+        color: #929FE1;
+        text-decoration: none;
+        margin-top: 0.6rem;
+        display: inline-block;
+      }
+    }
+    &.farm-upper-card2 {
+      padding: 1.3rem 2.2rem;
+      h2{
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+      }
+      .inner-card-row {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+        .inner-card{
+          background: rgba(255, 255, 255, 0.02);
+          backdrop-filter: blur(2px);
+          border-radius: 10px;
+          border: 1px solid #FE435032;
+          padding: 1rem;
+          p{
+            font-size: $font-size-base;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  }
+}
+
 .farm-content-card-right {
   background: $background-light;
   padding: 15px 35px;
@@ -354,86 +407,49 @@
 }
 
 .poolcard-two {
-  background: $background-light;
-  padding: 1px;
+  background: $primary-gradient;
   border-radius: $base-border-radius;
-  box-shadow: $box-shadow-inner-light;
-  .dark-mode & {
-    background: $background-dark1;
-    border: 1px solid $border-dark;
-    box-shadow: $box-shadow-inner-dark;
-  }
-  &.ranged-card {
-    background: linear-gradient(180deg, #fe4350 0%, #123c73 100%);
-    border: 0;
-    padding: 2px;
-    .dark-mode & {
-      background: linear-gradient(180deg, #fe4350 0%, #123c73 100%);
-      box-shadow: none;
-    }
-    .poolcard-two-inner {
-      background: $background-light;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      width: 100%;
-      .dark-mode & {
-        background: $background-dark1;
-        box-shadow: inset 7px 7px 16px 1px #262b38;
-      }
-    }
-  }
+  border: 2px solid #303950;
+  
   .poolcard-two-inner {
     cursor: pointer;
     border-radius: $base-border-radius;
     height: 100%;
+    padding: 15px 10px;
     .card-upper {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 15px;
       padding: 10px 20px 0 20px;
 
-      .ranged-box {
-        width: 80px;
-        height: 28px;
-        border-radius: 4px;
-        background: $primary-gradient;
-        padding: 1px;
-        text-align: center;
-        font-size: $font-size-sm;
-        line-height: 20px;
-        margin-top: 15px;
-        @media screen and (max-width: 1540px) {
-          width: 70px;
-          font-size: $font-size-sm - 1;
-          height: 24px;
-        }
-        .ranged-box-inner {
-          width: 100%;
-          height: 100%;
-          padding: 4px;
-          border-radius: 4px;
-          background: $background-light;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          .dark-mode & {
-            background: $background-dark1;
+      .upper-right {
+        text-align: right;
+        .tags {
+          font-weight: 700;
+          padding: 2px;
+          display: inline-block;
+          margin-left: 8px;
+          margin-bottom: 0.8rem;
+          .tag-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 41px;
+            padding: 5px 18px;
+            font-size: $font-size-sm;
           }
-          .icon {
-            width: 13px;
-            height: 13px;
-            fill: $text-color-label-dark;
-            margin-left: 7px;
-            @media screen and (max-width: 1540px) {
-              width: 10px;
-              height: 10px;
-              margin-left: 5px;
+          &.tag1 {
+            background: linear-gradient(99.28deg, #73AED2 -18.16%, #5E68C0 116.84%);
+            border-radius: 41px;
+            .tag-inner {
+              background: #132339;
             }
-            .dark-mode & {
-              fill: #b8b8b8;
+          }
+          &.tag2 {
+            background: linear-gradient(95.24deg, #70F0AF -5.75%, #3FBB7C 110.25%);
+            border-radius: 41px;
+            .tag-inner {
+              background: #132339;
             }
           }
         }
@@ -465,21 +481,23 @@
       h3 {
         margin-bottom: 0;
         font-size: 1.45rem;
-        margin-left: 10px;
+        margin-left: 0;
+        color: $white;
         @media screen and (max-width: 1540px) {
           font-size: 1rem;
         }
         @media screen and (max-width: 1300px) {
           font-size: 0.9rem;
         }
-        .dark-mode & {
-          color: $white;
-        }
+      
       }
-      .card-svg-icon-container {
-        display: flex;
-        align-items: center;
+      .card-icon-container {
         margin-top: 0.5rem;
+        .card-icon-container-inner {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
         .card-svgicon-1 {
           margin-right: 10px;
         }
@@ -487,9 +505,9 @@
           margin-left: -18px;
         }
         .card-svgicon {
-          width: 40px;
-          height: 40px;
-          border-radius: 40px;
+          width: 48px;
+          height: 48px;
+          border-radius: 48px;
           background: $primary-gradient;
           padding: 1px;
           @media screen and (max-width: 1540px) {
@@ -518,7 +536,7 @@
           }
         }
         .pool-id {
-          padding-left: 10px;
+          padding-left: 0;
           font-size: 12px;
           padding-top: 5px;
         }
@@ -528,16 +546,66 @@
       padding: 10px 20px 20px 20px;
       width: 100%;
       justify-content: space-between;
-      .cardbottom-row {
-        padding: 0;
-        width: 100%;
-        label {
-          color: $text-color-light2;
+      .tags {
+        font-weight: 700;
+        padding: 2px;
+        display: inline-block;
+        margin-left: 8px;
+        margin-bottom: 0.8rem;
+        .tag-inner {
+          width: 100%;
+          height: 100%;
+          border-radius: 41px;
+          padding: 6px 18px;
           font-size: $font-size-sm;
+        }
+        &.tag1 {
+          background: linear-gradient(99.28deg, #73AED2 -18.16%, #5E68C0 116.84%);
+          border-radius: 41px;
+          .tag-inner {
+            background: #132339;
+          }
+        }
+        &.tag2 {
+          background: linear-gradient(95.24deg, #70F0AF -5.75%, #3FBB7C 110.25%);
+          border-radius: 41px;
+          .tag-inner {
+            background: #132339;
+          }
+        }
+      }
+      .showdetails-btn {
+        border: 0;
+        color: #BEC9F8;
+        font-weight: 500;
+        background: none;
+      }
+      .cardbottom-row {
+        font-size: $font-size-lg + 1;
+        font-weight: 600;
+        padding: 8px 0;
+        .icon-text {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          font-weight: 600;
+          &:not(:first-child) {
+            margin-top: 8px;
+          }
+          .icon {
+            width: 25px;
+            height: 25px;
+            margin-right: 4px;
+          }
+        }
+        label {
+          color: #B1D2E5;
           margin-bottom: 5px;
-          display: inline-block;
-          .dark-mode & {
-            color: $text-color-light;
+          font-weight: 600;
+          .upto-text {
+            color: $success-color;
+            font-weight: 800;
+            margin-left: 5px;
           }
         }
         p {
@@ -592,31 +660,13 @@
     }
   }
 
-  &:hover {
-    box-shadow: 10px 10px 30px rgba(174, 174, 192, 0.4),
-      -10px -10px 30px rgba(255, 255, 255, 0.7),
-      inset 10px 10px 10px rgba(255, 255, 255, 0.25),
-      inset -10px -10px 10px rgba(174, 174, 192, 0.25);
-
-    .dark-mode & {
-      box-shadow: 0 -1px 13px 6px #1d2336, inset 0 4px 4px rgba(0, 0, 0, 0.25);
-    }
-    .dark-mode & {
-      background: $primary-gradient-2 !important;
-    }
-  }
-  &:hover .poolcard-two-inner {
-    .dark-mode & {
-      background: #06122e;
-    }
-  }
 }
 
 .pool-card-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
-  margin-top: 21px;
+  margin-top: 2px;
   @media screen and (max-width: 1240px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -646,14 +696,10 @@
         h3 {
           margin-bottom: 0;
           font-weight: 300;
-          .dark-mode & {
-            color: $text-color-label-dark;
-          }
+          color: $text-color-label-dark;
         }
         .card-svg-icon-container {
           display: flex;
-          .card-svgicon-1 {
-          }
           .card-svgicon-2 {
             margin-left: -10px;
           }
@@ -684,49 +730,7 @@
           }
         }
       }
-      .card-bottom {
-        padding: 10px 20px 20px 20px;
-        .cardbottom-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 4px 0;
-          label {
-            color: $text-color-light2;
-            font-size: $font-size-sm;
-            .dark-mode & {
-              color: $text-color-light;
-            }
-          }
-          p {
-            font-size: $font-size-base;
-            margin-bottom: 0;
-            color: $text-color-dark2;
-            .dark-mode & {
-              color: $white;
-            }
-          }
-        }
-      }
-    }
-
-    &:hover {
-      box-shadow: 10px 10px 30px rgba(174, 174, 192, 0.4),
-        -10px -10px 30px rgba(255, 255, 255, 0.7),
-        inset 10px 10px 10px rgba(255, 255, 255, 0.25),
-        inset -10px -10px 10px rgba(174, 174, 192, 0.25);
-
-      .dark-mode & {
-        box-shadow: 0 -1px 13px 6px #1d2336, inset 0 4px 4px rgba(0, 0, 0, 0.25);
-      }
-      .dark-mode & {
-        background: $primary-gradient-2 !important;
-      }
-    }
-    &:hover .dashboard-card-inner {
-      .dark-mode & {
-        background: $background-dark1;
-      }
+     
     }
   }
   .dashboard-card-inner {
@@ -763,11 +767,10 @@
       }
     }
     .card-bottom {
-      padding-bottom: 4px;
+      padding-bottom: 10px 20px 0 20px;
       .cardbottom-row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         padding: 4px 0;
         label {
           color: $text-color-light;
@@ -866,24 +869,44 @@
 .farmtab-right-action {
   display: flex;
   align-items: center;
+  .ant-select {
+    flex-direction: column-reverse;
+    min-width: 140px;
+    .ant-select-selector {
+      background: none;
+      height: 40px;
+      border-radius: 40px;
+      font-family: $font-family;
+      text-align: center;
+      .ant-select-selection-item {
+        line-height: 40px;
+        color: $white;
+      }
+    }
+    .ant-select-arrow {
+      .icon {
+        width: 12px;
+        fill: $white;
+      }
+    }
+  }
   .ant-input-affix-wrapper {
-    border: 1px solid $border-dark;
-    background: none;
+    border: 1px solid #C5CBDB;
     border-radius: 30px;
     margin-left: 15px;
     height: 39px;
     padding: 4px 18px;
+    background: none;
     &:hover {
       border-color: $border-light;
     }
     input {
       background: none;
       font-weight: normal;
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
+      font-family: $font-family;
       &::placeholder {
-        color: #303950;
+        color: #C5CBDB;
         opacity: 1;
         font-weight: 500;
       }
@@ -980,6 +1003,12 @@
 
 .farm-details-tabmain{
   .ant-tabs-nav{
+    .ant-tabs-extra-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 346px);
+    }
     @media screen and (max-width:590px) {
       display: block;
       .ant-tabs-extra-content{

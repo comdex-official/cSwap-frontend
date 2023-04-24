@@ -1,24 +1,42 @@
 @import "../../assets/scss/variables.scss";
 
-.govern-card {
-  background: $background-light;
-  padding: 1px;
+.govern-upper-card {
+  background: $primary-gradient;
+  border: 2px solid #303950;
   border-radius: $base-border-radius;
-  box-shadow: $box-shadow-inner-light;
-  border: 1px solid transparent;
-  .dark-mode & {
-    background: $background-dark1;
-    border: 1px solid $border-dark;
-    box-shadow: $box-shadow-inner-dark;
+  padding: 1.5rem 2.5rem;
+  margin-bottom: 1.5rem;
+  .ant-list-item {
+    border-left: 6px solid $secondary-color;
+    margin-bottom: 0 !important;
+    padding-left: 1rem;
+    font-family: $font-family;
+    p {
+      color: $white;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.1;
+    }
+    h3 {
+      color: $white;
+      font-weight: 700;
+      font-size: 37px;
+      line-height: 1;
+      margin-top: 0.6rem;
+    }
   }
+}
+
+.govern-card {
+  background: $primary-gradient;
+  padding: 1px 1.8rem;
+  border-radius: $base-border-radius;
+  border: 2px solid #303950;
+  
   .governcard-head {
     padding: 18px;
     text-align: center;
-    border-bottom: 1px solid rgba($text-color-light, 0.4);
-
-    .dark-mode & {
-      border-bottom: 1px solid rgba($text-color-light, 0.2);
-    }
+    border-bottom: 1px solid rgba($white, 0.3);
 
     .filter-select {
       .ant-select-arrow {
@@ -50,22 +68,15 @@
     .governlist-row {
       display: flex;
       padding: 20px 40px 20px;
-      border-bottom: 1px solid rgba($text-color-light, 0.4);
+      border-bottom: 1px solid rgba($white, 0.3);
       cursor: pointer;
       transition: all ease-in 0.1s;
       &:hover {
-        background: $body-background-light;
-        .dark-mode & {
-          background: $body-background-dark;
-        }
+        background: $primary-gradient;
       }
 
       &:last-child {
         border: 0;
-      }
-
-      .dark-mode & {
-        border-bottom: 1px solid rgba($text-color-light, 0.2);
       }
 
       .left-section {
@@ -83,25 +94,27 @@
         }
 
         h3 {
-          font-size: 20px;
+          font-size: 24px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           margin-bottom: 8px;
+          color: $white;
+          font-weight: 700;
 
           @media screen and (max-width:1540px) {
             font-size: 17px;
             margin-bottom: 6px;
           }
 
-          .dark-mode & {
-            color: $white;
-          }
         }
         p {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          font-size: 1.3rem;
+          margin: 0.5rem 0;
+          font-weight: 600;
           a {
             font-size: $font-size-sm;
             color: $text-color-light;
@@ -124,6 +137,7 @@
         }
 
         .right-col {
+          padding: 8px 15px;
           &:last-child {
             p {
               margin-bottom: 0;
@@ -137,18 +151,18 @@
           }
 
           .ant-progress-inner {
-            background: rgba(79, 177, 255, 0.34);
+            background: rgba(#9A9A9A, 0.50);
             height: 15px;
             overflow: inherit;
 
             .ant-progress-bg {
-              background: #f9535e;
+              background: #FAB7BC;
               min-height: 100%;
               position: relative;
               border-radius: 20px 0 0 20px;
             }
             .ant-progress-success-bg {
-              background: $secondary-btn-color;
+              background: $secondary-color;
               min-height: 100%;
               border-radius: 20px 0 0 20px;
             }
@@ -158,19 +172,16 @@
         label {
           margin-bottom: 5px;
           display: block;
-          .dark-mode & {
-            color: $text-color-light;
-          }
+          color: $white;
+          font-weight: 400;
         }
 
         p {
           font-weight: bold;
           font-size: 17px;
           margin-bottom: 6px;
+          color: $white;
 
-          .dark-mode & {
-            color: $white;
-          }
         }
       }
 

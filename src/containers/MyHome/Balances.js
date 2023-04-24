@@ -1,11 +1,11 @@
-import { message, Tabs } from "antd";
+import { Input, message, Tabs } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
-import { Col, Row } from "../../components/common";
+import { Col, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/TooltipIcon";
 import {
   DEFAULT_PAGE_NUMBER,
@@ -29,6 +29,10 @@ import Assets from "../Assets";
 import History from "./History";
 import "./index.scss";
 import MyPools from "./MyPools";
+
+const operations = <div className="assets-search-section">
+  <Input placeholder="Search Asset.." suffix={<SvgIcon name="search" viewbox="0 0 18 18" />} />
+</div>;
 
 const Balances = ({
   lang,
@@ -163,7 +167,7 @@ const Balances = ({
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 160,
+      height: 210,
     },
     credits: {
       enabled: false,
@@ -186,7 +190,7 @@ const Balances = ({
       pie: {
         showInLegend: false,
         size: "130%",
-        innerSize: "80%",
+        innerSize: "75%",
         borderWidth: 0,
         dataLabels: {
           enabled: false,
@@ -276,50 +280,39 @@ const Balances = ({
                   )}{" "}
                 </div>
                 <div className="MyHome-upper-right">
-                  <Row className="mb-2">
-                    <Col>
-                      <label>
+                  <Row>
+                    <Col xs="12" md="6" lg="4" className='colums'>
+                      <label className="stats-label">
                         {variables[lang].tv}{" "}
-                        <TooltipIcon
-                          text={variables[lang].tooltip_total_value}
-                        />
                       </label>
                       <h2>
                         {getTotalValue()} {variables[lang].USD}
                       </h2>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col xs="12" md="12" lg="6">
+                    <Col xs="12" md="6" lg="4" className='colums'>
                       <label className="stats-label">
                         <div className="rect-shape shape-asset-bal" />{" "}
                         {variables[lang].asset_balance}{" "}
-                        <TooltipIcon
-                          text={variables[lang].tooltip_total_asset}
-                        />
                       </label>
-                      <h3>
+                      <h2>
                         {commaSeparatorWithRounding(
                           assetBalance,
                           DOLLAR_DECIMALS
                         )}{" "}
                         {variables[lang].USD}
-                      </h3>
+                      </h2>
                     </Col>
-                    <Col xs="12" md="12" lg="6">
+                    <Col xs="12" md="6" lg="4" className='colums'>
                       <label className="stats-label">
                         <div className="rect-shape shape-farm-bal" />{" "}
                         {variables[lang].farm_balance}{" "}
-                        <TooltipIcon
-                          text={variables[lang].tooltip_total_farm}
-                        />
                       </label>
-                      <h3>
+                      <h2>
                         {commaSeparator(
                           Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
                         )}{" "}
                         {variables[lang].USD}
-                      </h3>
+                      </h2>
                     </Col>
                   </Row>
                 </div>
@@ -330,6 +323,7 @@ const Balances = ({
             <Col>
               <div className="myhome-bottom">
                 <Tabs
+                  tabBarExtraContent={operations}
                   className="comdex-tabs"
                   onChange={setActiveKey}
                   activeKey={activeKey}

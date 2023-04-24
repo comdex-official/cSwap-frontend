@@ -1,0 +1,564 @@
+@import "../../assets/scss/variables.scss";
+
+.orderbook-wrapper {
+  display: flex;
+  font-family: $font-family;
+
+  @media screen and (max-width:1300px) {
+    flex-flow: wrap;
+  }
+
+  .order-tables {
+    .ant-table {
+      background: none;
+      font-family: $font-family;
+
+      .ant-table-thead {
+        tr {
+          th {
+            background: none;
+            color: $white;
+            padding: 3px 5px;
+            font-size: 11px;
+            font-weight: 500;
+            border: 0;
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .ant-table-tbody {
+        background: $primary-gradient;
+        border: 2px solid #303950;
+        border-radius: $base-border-radius;
+        tr {
+          td {
+            background: none;
+            padding: 3px 5px;
+            color: $white;
+            border: 0;
+
+            &.text-red {
+              color: #FF7B51;
+            }
+
+            &.text-green {
+              color: #3FF4BE;
+            }
+
+            .ant-btn {
+              border: 0;
+              font-size: 14px;
+              color: $secondary-color;
+              font-weight: 500;
+              &:hover {
+                background: none;
+                border: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+    &.order-tables1 {
+      .ant-table {
+        .ant-table-thead {
+          .ant-table-cell {
+            padding: 6px 16px;
+          } 
+        }
+      .ant-table-tbody {
+        position: relative;
+        background: none;
+        &::before {
+          content: ' ';
+          display: block;
+          width: 100%;
+          height: 100%;
+          background: $primary-gradient;
+          position: absolute;
+          border-radius: 20px;
+        }
+        .ant-table-cell {
+          padding: 6px 16px;
+        }
+      }
+    }
+    }
+    &.order-tables2 {
+      .ant-table {
+        font-size: $font-size-sm;
+        .ant-table-tbody {
+          background: #050E24;
+        }
+      }
+    }
+    &.order-tables3 {
+      .ant-table {
+        font-size: $font-size-sm;
+        .ant-table-tbody {
+          background: none;
+        }
+      }
+    }
+  }
+
+  .orderbook-col1 {
+    width: 55%;
+
+    @media screen and (max-width:1300px) {
+      width: 100%;
+    }
+
+    .chart-card {
+      background: $primary-gradient;
+      border: 2px solid #303950;
+      border-radius: $base-border-radius;
+      padding: 0;
+      margin-bottom: 1.5rem;
+
+      .card-header {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid $border-dark;
+        font-weight: 700;
+
+        .left-head {
+          font-size: $font-size-lg + 2;
+          display: flex;
+          align-items: center;
+          font-weight: 500;
+
+          .icon {
+            width: 18px;
+            margin-right: 8px;
+            fill: $white;
+          }
+        }
+
+        ul {
+          list-style-type: none;
+          margin-bottom: 0;
+          width: 100%;
+          margin-left: 22px;
+
+          li {
+            display: inline-block;
+            width: 25%;
+
+            label {
+              margin-bottom: 6px;
+              display: block;
+              font-size: $font-size-sm;
+              color: #73AED2;
+              font-weight: 400;
+            }
+  
+            p {
+              margin-bottom: 0;
+              font-weight: 700;
+              color: $white;
+              font-size: $font-size-base;
+            }
+
+            &.high-col {
+              p {
+                color: $success-color;
+              }
+            }
+
+            &.low-col {
+              p {
+                color: $secondary-color;
+              }
+            }
+
+          }
+        }
+      }
+
+      .card-body {
+        padding: 20px 0 20px 20px;
+      }
+    }
+
+    .bottom-area {
+      margin-top: 20px;
+
+      .order-tables {
+        margin-top: 10px;
+
+        .ant-table {
+          .ant-table-thead {
+            tr {
+              th {
+                font-size: $font-size-base;
+                font-weight: 500;
+              }
+            }
+          }
+
+          .ant-table-body {
+            tr {
+              td {
+                font-size: $font-size-base;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+      }
+
+      .ant-tabs {
+        &.comdex-tabs {
+          .ant-tabs-nav {
+            width: 100%;
+            &::before {
+              display: none;
+            }
+
+            .ant-tabs-nav-wrap {
+              width: 100%;
+              display: block !important;
+              border: 0;
+
+              .ant-tabs-nav-list {
+                border-radius: 40px;
+                width: 100%;
+
+                .ant-tabs-tab-btn {
+                  font-size: $font-size-lg + 1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .orderbook-col2 {
+    width: 24%;
+    margin: 0 22px;
+
+    @media screen and (max-width:1300px) {
+      width: 45%;
+      margin: 2rem 5% 0 0;
+    }
+
+    @media screen and (max-width:576px) {
+      width: 100%;
+      margin: 2rem 0 0 0;
+    }
+
+    .order-card {
+      background: $primary-gradient;
+      border: 2px solid #303950;
+      border-radius: $base-border-radius;
+      padding: 0;
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid $border-dark;
+        font-size: 13px;
+        font-weight: 700;
+        width: calc(100% - 28px);
+        margin: auto;
+
+        .right-action {
+          color: #CDFE43;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+
+          .icon {
+            fill: #CDFE43;
+            width: 10px;
+            margin-left: 5px;
+          }
+        }
+      }
+
+      .card-body {
+        padding: 10px 15px;
+      }
+
+      .header-bottom {
+        border-bottom: 1px solid $border-dark;
+        border-top: 1px solid $border-dark;
+        padding: 12px 15px;
+        font-size: 12px;
+        font-weight: 700;
+
+        span {
+          font-size: 10px;
+          color: $text-color-light;
+          margin-left: 10px;
+          font-weight: normal;
+        }
+      }
+
+      .card-body-bottom {
+        padding: 10px 15px;
+      }
+    }
+  }
+
+  .orderbook-col3 {
+    width: 31%;
+
+    @media screen and (max-width:1300px) {
+      width: 50%;
+      margin-top: 2rem;
+    }
+
+    @media screen and (max-width:576px) {
+      width: 100%;
+      margin: 2rem 0 0 0;
+    }
+
+    .spot-card {
+      background: $primary-gradient;
+      border: 2px solid #303950;
+      border-radius: $base-border-radius;
+      padding: 0;
+
+      .card-header {
+        padding: 14px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid $border-dark;
+        font-weight: 700;
+
+        svg {
+          fill: $white;
+          width: 18px;
+        }
+      }
+
+      .card-body {
+        padding: 30px 15px 38px 15px;
+
+        .ant-tabs {
+          &.comdex-tabs {
+            .ant-tabs-nav {
+              width: 100%;
+
+              .ant-tabs-nav-wrap {
+                width: 100%;
+                display: block !important;
+
+                .ant-tabs-nav-list {
+                  border-radius: 40px;
+                  width: 100%;
+
+                  .ant-tabs-tab-btn {
+                    font-size: $font-size-lg + 2;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.spot-card-dtl {
+  font-weight: 500;
+
+  .dtl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $secondary-color;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 10px;
+    border-bottom: 1px solid transparent;
+    font-size: $font-size-sm;
+    margin-top: 5px;
+    border-bottom: 1px solid $border-dark;
+    font-family: $font-family;
+
+    label {
+      color: #7491A6;
+      margin-right: 1.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0;
+      cursor: pointer;
+      &.active {
+        color: $secondary-color;
+      }
+    }
+
+    .icon {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  .avai-balance-dtl {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px 38px 10px;
+    border-bottom: 1px solid $border-dark;
+    p {
+      font-weight: 400;
+      color: $white;
+      font-size: $font-size-lg + 4;
+    }
+
+    h4 {
+      color: $white;
+      font-size: $font-size-lg + 4;
+      font-weight: 700;
+    }
+
+    label {
+      font-size: $font-size-base;
+      color: $text-color-light;
+    }
+  }
+
+  .price-dtl {
+    border-bottom: 1px solid transparent;
+    padding: 15px 10px;
+    border-bottom: 1px solid $border-dark;
+    font-family: $font-family;
+
+    .balance-text {
+      text-align: right;
+      color: $white;
+      font-size: $font-size-sm;
+      padding-right: 1rem;
+      margin-bottom: -5px;
+    }
+
+    .price-dtl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 16px 0;
+
+      label {
+        width: 100px;
+        font-weight: 400;
+        font-size: $font-size-lg;
+        color: $white;
+
+      }
+
+      .ant-input-affix-wrapper {
+        background-color: #1F2A45;
+        border: 0;
+        border-radius: 4px;
+        font-size: 14px;
+        height: 50px;
+        padding: 4px 15px;
+
+        .ant-input {
+          text-align: right;
+          background: none;
+          font-weight: 700;
+          color: $white;
+        }
+
+        .ant-input-suffix {
+          margin-left: 8px;
+          font-weight: 400;
+          color: $white;
+        }
+      }
+    }
+
+    .btn-row {
+      text-align: right;
+      padding-top: 0.4rem;
+
+      .ant-btn {
+        padding: 0 12px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 11px;
+        border-radius: 4px;
+        margin-left: 10px;
+        border: 1px solid #293656;
+        color: #EAEAEA;
+      }
+    }
+  }
+
+  .total-row {
+    padding: 22px;
+    border-bottom: 1px solid $border-dark;
+    font-family: $font-family;
+
+    .total-title {
+      font-weight: 400;
+      color: $white;
+    }
+
+    .total-right {
+      text-align: right;
+
+      p {
+        margin-bottom: 0;
+        font-size: $font-size-lg;
+        font-weight: 700;
+        color: $white;
+      }
+
+      label {
+        font-weight: 500;
+        font-size: $font-size-lg;
+        color: $text-color-light;
+      }
+    }
+  }
+}
+
+.tradingview-widget-container {
+  #tradingview_6964b {
+    height: 500px;
+  }
+}
+
+.tradingview-widget-copyright {
+  display: none !important;
+}
+
+.ant-tabs {
+  &.comdex-tabs-light {
+    .ant-tabs-nav {
+      margin-bottom: 0.2rem;
+      &::before {
+        display: none !important;
+      }
+      .ant-tabs-nav-wrap {
+        
+        .ant-tabs-tab {
+          background: none;
+          border: 0;
+          color: rgba($white, 0.4);
+          font-family: $font-family;
+          &.ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

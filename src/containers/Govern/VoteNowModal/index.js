@@ -68,8 +68,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   return (
     <>
       <Button
-        type="primary"
-        className="btn-filled mb-n4"
+        className="mb-n4"
         onClick={showModal}
         loading={inProgress}
         disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}

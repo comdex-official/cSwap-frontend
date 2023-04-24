@@ -1,6 +1,6 @@
-import { message, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserLiquidityInPools } from "../actions/liquidity";
@@ -140,123 +140,131 @@ const PoolCardFarm = ({
     navigate(`/farm/${pool.id && pool.id.toNumber()}`);
   };
 
+  const[showDtl,setShowDtl]=useState(false);
+
+  const onClickShowDtl = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowDtl(!showDtl);
+  }
+
   return (
-    // please add and remove 'ranged-card' class for Ranged
-    <div className="poolcard-two ranged-card" onClick={() => handleNavigate()}>
+    <div className="poolcard-two ranged-card">
       <div className="poolcard-two-inner">
         <div className="card-upper">
-          <div className="card-svg-icon-container">
-            <div className="card-svgicon card-svgicon-1">
-              <div className="card-svgicon-inner">
-                <SvgIcon
-                  name={iconNameFromDenom(pool?.balances?.baseCoin?.denom)}
-                />{" "}
+          <div className="card-icon-container">
+            <div className="card-icon-container-inner">
+              <div className="card-svgicon card-svgicon-1">
+                <div className="card-svgicon-inner">
+                  <SvgIcon
+                    name={iconNameFromDenom(pool?.balances?.baseCoin?.denom)}
+                  />{" "}
+                </div>
               </div>
-            </div>
-            <div className="card-svgicon card-svgicon-2">
-              <div className="card-svgicon-inner">
-                <SvgIcon
-                  name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
-                />{" "}
+              <div className="card-svgicon card-svgicon-2">
+                <div className="card-svgicon-inner">
+                  <SvgIcon
+                    name={iconNameFromDenom(pool?.balances?.quoteCoin?.denom)}
+                  />{" "}
+                </div>
               </div>
             </div>
             <div>
-              <div>
-                <h3>{showPairDenoms()}</h3>
-              </div>
+              <h3>{showPairDenoms()}</h3>
               <p className="pool-id">Pool #{pool?.id?.toNumber()}</p>
             </div>
           </div>
-          <div className="text-center">
-            <div className="ranged-box">
-              <div className="ranged-box-inner">
-                <Tooltip
-                  overlayClassName="ranged-tooltip ranged-tooltip-small"
-                  title={
-                    pool?.type === 2 ? (
-                      <RangeTooltipContent
-                        parent={"pool"}
-                        price={Number(decimalConversion(pool?.price)).toFixed(
-                          PRICE_DECIMALS
-                        )}
-                        max={Number(decimalConversion(pool?.maxPrice)).toFixed(
-                          PRICE_DECIMALS
-                        )}
-                        min={Number(decimalConversion(pool?.minPrice)).toFixed(
-                          PRICE_DECIMALS
-                        )}
-                      />
-                    ) : null
-                  }
-                  placement="bottom"
-                >
-                  {pool?.type === 2
-                    ? "Ranged"
-                    : pool?.type === 1
-                    ? "Basic"
-                    : ""}
-                  {pool?.type === 2 ? (
-                    <SvgIcon name="info-icon" viewbox="0 0 9 9" />
-                  ) : null}
-                </Tooltip>
+          <div className="upper-right">
+            <div className="tags tag1">
+              <div className="tag-inner">
+                Basic
               </div>
             </div>
-            {pool?.type === 2 ? (
-              <div className="percent-box">
-                x
-                {getAMP(
-                  Number(decimalConversion(pool?.price)),
-                  Number(decimalConversion(pool?.minPrice)),
-                  Number(decimalConversion(pool?.maxPrice))
-                )?.toFixed(DOLLAR_DECIMALS)}
+            <div className="tags tag2">
+              <div className="tag-inner">
+                Master Pool
               </div>
-            ) : null}
+            </div>
+            <div>
+              <div className="tags tag1">
+                <div className="tag-inner">
+                  External Incentives
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="card-bottom">
-          <Row>
-            <Col xs="5">
-              <div className="d-flex flex-column">
-                <div className="cardbottom-row">
-                  <label>{variables[lang].poolLiquidity}</label>
-                  <p>{`$${TotalPoolLiquidity}`}</p>
-                </div>
-                <div className="cardbottom-row">
-                  {parent === "user" ? (
-                    <>
-                      <label>My Liquidity</label>
-                      <p>
-                        $
-                        {commaSeparator(
-                          Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                            DOLLAR_DECIMALS
-                          )
-                        )}
-                      </p>
-                    </>
-                  ) : null}
-                </div>
-              </div>
+          <Row className='cardbottom-row align-items-center'>
+            <Col>
+              <label>APR</label>
             </Col>
-            <Col xs="7">
-              <div className="cardbottom-row">
-                <label>{variables[lang].apr}</label>
-                <div className="percent-box">
-                  <ShowAPR pool={pool} isSwapFee={true} />
-                </div>
-                <div className="swap-apr mt-1">
-                  Swap APR -{" "}
-                  {commaSeparator(
-                    Number(
-                      rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
-                        ?.apr || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}
-                  %
+            <Col className='text-right'>
+              <Tooltip title='Total APR (incl. MP Rewards): 54.45% *Base APR (CMDX yield only): 11.02% *Swap Fees APR: 3.43% *Available MP Boost: Up to +40% for providing liquidity in the Master Pool'>
+                14.45%
+              </Tooltip>
+              <div className="tags tag2">
+                <div className="tag-inner">
+                  Upto 54.45%
                 </div>
               </div>
             </Col>
           </Row>
+          <Row className='cardbottom-row align-items-center mt-2'>
+            <Col>
+              <label>Total Liquidity</label>
+            </Col>
+            <Col className='text-right'>
+              $117,402,993
+            </Col>
+          </Row>
+          <Row className='cardbottom-row align-items-center mt-2'>
+            <Col>
+              <label>MP Boost <span className="upto-text"><Tooltip title='Provide equivalent liquidity in the Master pool to earn boost'>Upto +40%</Tooltip></span></label>
+            </Col>
+            <Col className='text-right'>
+              <Button type="primary">Go to Pool</Button>
+            </Col>
+          </Row>
+          <Row className='py-3 text-center'>
+            <Col>
+              <Button className="px-5" type="primary">Add Liquidity</Button>
+            </Col>
+          </Row>
+          <Row>
+            <Button className="showdetails-btn" type="text" onClick={onClickShowDtl}>Show Details</Button>
+          </Row>
+          {showDtl ?
+            <div>
+              <Row className='cardbottom-row align-items-center mt-2'>
+                <Col sm='8'>
+                  <label>Estimated rewards earned per day</label>
+                </Col>
+                <Col sm='4' className='text-right'>
+                  <div className="icon-text"><SvgIcon name='comdex-icon' /> 0.000000</div>
+                  <div className="icon-text"><SvgIcon name='cmst-icon' /> 0.000000</div>
+                </Col>
+              </Row>
+              <Row className='cardbottom-row align-items-center mt-2'>
+                <Col sm='8'>
+                  <label>CMDX/CMST LP Farmed</label>
+                </Col>
+                <Col sm='4' className='text-right'>
+                  $50.000
+                </Col>
+              </Row>
+              <Row className='cardbottom-row align-items-center mt-2'>
+                <Col sm='8'>
+                  <label>CMDX/ATOM LP Farmed <small>(Master Pool)</small></label>
+                </Col>
+                <Col sm='4' className='text-right'>
+                  $150.000
+                </Col>
+              </Row>
+            </div>
+            :
+            null
+          }
         </div>
       </div>
     </div>

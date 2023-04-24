@@ -9,11 +9,6 @@
   @media screen and (max-width: 767px) {
     padding: 35px 20px;
   }
-  .dark-mode & {
-    background: $background-dark1;
-    border: 1px solid $border-dark;
-    box-shadow: $box-shadow-inner-dark;
-  }
 }
 
 .pool-details-list {
@@ -28,13 +23,14 @@
 
 .ant-btn {
   &.back-btn {
-    border: 1px solid #303950;
-    color: #303950;
+    border: 1px solid #6B758D;
+    color: $white;
     background: none;
-    border-radius: 30px !important;
+    border-radius: 40px !important;
     font-weight: normal;
-    height: 32px;
+    height: 40px;
     line-height: 100%;
+    padding: 0 35px;
     .dark-mode & {
       color: $white;
     }

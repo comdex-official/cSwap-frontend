@@ -2,46 +2,41 @@
 
 .assets-section {
   .assets-head {
-    background: $background-light;
-    padding: 15px 25px;
-    border-radius: $base-border-radius;
+    padding: 20px 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1rem;
     box-shadow: $box-shadow-inner-light;
-    color: $text-color-dark2;
-
-    .dark-mode & {
-      background: $background-dark1;
-      border: 1px solid $border-dark;
-      box-shadow: none;
-      color: $white;
-    }
+    color: $white;
+    background: rgba(#000000, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 4px 14px 3px rgba(128, 99, 138, 0.1);
+    border-radius: 20px;
 
     @media screen and (max-width: 540px) {
       display: block;
     }
 
     h2 {
-      font-weight: 300;
+      font-weight: 600;
       margin-bottom: 0;
-      font-size: 1.5rem;
-      color: $text-color-dark2;
+      font-size: 1.7rem;
+      color: $white;
       margin-top: 0;
-
-      .dark-mode & {
-        color: $white;
-      }
     }
 
-    span {
-      color: $text-color-light2;
-      margin-right: 10px;
-      font-size: 0.9rem;
-
-      .dark-mode & {
+    .head-right {
+      font-weight: 400;
+      font-size: 1.6rem;
+      .asset-reload-btn {
+        svg {
+          width: 19px;
+          height: 19px;
+        }
+      }
+      span {
         color: white;
+        margin-right: 10px;
       }
     }
   }
@@ -113,28 +108,6 @@
         }
       }
     }
-
-    .ant-table {
-      .ant-table-content {
-        table {
-          .ant-table-thead {
-            tr {
-              th {
-                font-size: 12px;
-              }
-            }
-          }
-
-          .ant-table-tbody {
-            tr {
-              td:nth-child(3) {
-                // text-align: center !important;
-              }
-            }
-          }
-        }
-      }
-    }
   }
 
   .assets-maxhalf {
@@ -192,8 +165,6 @@
 
 .assets-search-section {
   text-align: right;
-  margin-top: 30px;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -209,7 +180,7 @@
   }
 
   .ant-input-affix-wrapper {
-    border: 1px solid $border-dark;
+    border: 1px solid #C5CBDB;
     background: none;
     border-radius: 30px;
     margin-left: 25px;
@@ -217,34 +188,31 @@
     padding: 4px 18px;
     max-width: 260px;
 
+    &:hover {
+      border: 1px solid darken(#C5CBDB, 3);
+    }
+
     @media screen and (max-width: 576px) {
       margin-top: 1.2rem;
       max-width: 100%;
       margin-left: 0;
     }
 
-    &:hover {
-      border-color: $border-light;
-    }
-
     input {
       background: none;
       font-weight: normal;
-
-      .dark-mode & {
-        color: $white;
-      }
+      color: $white;
 
       &::placeholder {
-        color: #303950;
+        color: #C5CBDB;
         opacity: 1;
-        font-weight: 500;
+        font-weight: 400;
       }
     }
 
     .ant-input-suffix {
       .icon {
-        fill: $border-dark;
+        fill: #C5CBDB;
       }
     }
   }

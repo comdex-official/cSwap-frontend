@@ -3,7 +3,7 @@ import React from "react";
 
 const CustomSwitch = ({isChecked, onChange, name}) => {
     return(
-        <div className="mb-2">
+        <div className="d-flex align-items-center">
             <Switch
                 title="switch"
                 checked={isChecked}

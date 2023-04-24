@@ -172,23 +172,11 @@ const GovernDetails = ({
     }
   }, [proposalTallyMap, calculateVotes, proposalTally?.yes]);
 
-  const dataVote = [
-    {
-      title: "Total Vote",
-      counts: (
-        <>
-          {calculateTotalValue() || "0"}{" "}
-          {denomConversion(comdex?.coinMinimalDenom)}
-        </>
-      ),
-    },
-  ];
-
   const Options = {
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 180,
+      height: 260,
       margin: 5,
     },
     credits: {
@@ -210,7 +198,7 @@ const GovernDetails = ({
     plotOptions: {
       pie: {
         showInLegend: false,
-        size: "120%",
+        size: "110%",
         innerSize: "75%",
         borderWidth: 0,
         className: "votes-chart",
@@ -235,22 +223,17 @@ const GovernDetails = ({
           {
             name: "Yes",
             y: Number(getVotes?.yes || 0),
-            color: "#52B788",
+            color: "#FF4350",
           },
           {
             name: "No",
             y: Number(getVotes?.no || 0),
-            color: "#F76872",
-          },
-          {
-            name: "No With Veto",
-            y: Number(getVotes?.veto || 0),
-            color: "#AACBB9",
+            color: "#DC7F86",
           },
           {
             name: "Abstain",
             y: Number(getVotes?.abstain || 0),
-            color: "#6A7B6C",
+            color: "#81808F",
           },
         ],
       },
@@ -270,9 +253,7 @@ const GovernDetails = ({
       </Row>
       <Row>
         <Col>
-          <div className="composite-card myhome-upper earn-deposite-card d-block">
-            <div className="card-header">PROPOSAL DETAILS</div>
-            <div className="myhome-upper-left w-100">
+          <div className="governdtl-card-upper d-block">
               <List
                 grid={{
                   gutter: 16,
@@ -293,19 +274,18 @@ const GovernDetails = ({
                   </List.Item>
                 )}
               />
-            </div>
           </div>
         </Col>
       </Row>
       <Row>
         <Col md="6">
-          <div className="composite-card govern-card2 earn-deposite-card h-100">
+          <div className="govern-card2 description-card h-100">
             <Row>
               <Col>
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <Button type="primary">
+                <Button>
                   <span
                     className={
                       proposalStatusMap[proposal?.status] === "Rejected" ||
@@ -322,18 +302,16 @@ const GovernDetails = ({
             </Row>
             <Row>
               <Col>
-                <h3>{proposal?.content?.title}</h3>
-                <div className="description-row">
-                  <p>
-                    {stringTagParser(proposal?.content?.description || " ")}{" "}
-                  </p>
-                </div>
+                <h4>{proposal?.content?.title}</h4>
+                <p>
+                  {stringTagParser(proposal?.content?.description || " ")}{" "}
+                </p>
               </Col>
             </Row>
           </div>
         </Col>
         <Col md="6">
-          <div className="composite-card govern-card2 earn-deposite-card">
+          <div className="govern-card2">
             <Row>
               {address && proposalOptionMap[votedOption] ? (
                 <div className="user-vote-container">
@@ -359,59 +337,43 @@ const GovernDetails = ({
             <Row>
               <Col>
                 <div className="govern-dlt-card">
-                  <div className="govern-dlt-chart">
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={Options}
-                    />
+                  <div className="govern-dlt-upper">
+                    <div className="govern-dlt-chart">
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={Options}
+                      />
+                    </div>
+                    <div className="govern-dlt-right">
+                      <div className="governdlt-right-inner">
+                        <p>Total Vote</p>
+                        <h3 className="count">{calculateTotalValue() || "0"}{" "} {denomConversion(comdex?.coinMinimalDenom)}</h3>
+                      </div>
+                    </div>
                   </div>
-                  <div className="govern-dlt-right">
-                    <List
-                      grid={{
-                        gutter: 16,
-                        xs: 1,
-                      }}
-                      dataSource={dataVote}
-                      renderItem={(item) => (
-                        <List.Item>
-                          <div>
-                            <p>{item.title}</p>
-                            <h3 className="count">{item.counts}</h3>
-                          </div>
-                        </List.Item>
-                      )}
-                    />
-                    <ul className="vote-lists">
-                      <li>
-                        <SvgIcon name="rectangle" viewbox="0 0 34 34" />
-                        <div>
-                          <label>Yes</label>
-                          <p>{Number(getVotes?.yes || "0.00")}%</p>
-                        </div>
-                      </li>
-                      <li>
-                        <SvgIcon name="rectangle" viewbox="0 0 34 34" />
-                        <div>
-                          <label>No</label>
-                          <p>{Number(getVotes?.no || "0.00")}%</p>
-                        </div>
-                      </li>
-                      <li>
-                        <SvgIcon name="rectangle" viewbox="0 0 34 34" />
-                        <div>
-                          <label>No With Veto </label>
-                          <p>{Number(getVotes?.veto || "0.00")}%</p>
-                        </div>
-                      </li>
-                      <li>
-                        <SvgIcon name="rectangle" viewbox="0 0 34 34" />
-                        <div>
-                          <label>Abstain</label>
-                          <p>{Number(getVotes?.abstain || "0.00")}%</p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
+                  <ul className="vote-lists">
+                    <li>
+                      <div className="legand"></div>
+                      <div>
+                        <label>Yes</label>
+                        <p>{Number(getVotes?.yes || "0.00")}%</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="legand"></div>
+                      <div>
+                        <label>No</label>
+                        <p>{Number(getVotes?.no || "0.00")}%</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="legand"></div>
+                      <div>
+                        <label>Abstain</label>
+                        <p>{Number(getVotes?.abstain || "0.00")}%</p>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
               </Col>
             </Row>

@@ -37,7 +37,6 @@ const columns = [
     dataIndex: "transactionHash",
     key: "txHash",
     width: 300,
-    align: "right",
   },
 ];
 
