@@ -1,2 +1,0 @@
-export const MARKET_LIST_SET = "MARKET_LIST_SET";
-export const LP_PRICES_SET = "LP_PRICES_SET";
