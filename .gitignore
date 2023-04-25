@@ -25,3 +25,7 @@ yarn-error.log*
 .idea/
 .vscode/
 .github/
+
+.vscode/settings.json
+public/charting_library/
+public/datafeeds/
