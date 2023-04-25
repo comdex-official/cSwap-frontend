@@ -74,7 +74,7 @@ git clone https://github.com/comdex-official/cSwap-frontend.git
 After clone install the node modules:
 
 ```sh
-yarn install
+yarn
 ```
 
 To start the Next Server locally:
