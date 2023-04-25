@@ -4,6 +4,7 @@ import moment from "moment";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
+import { widget } from '../../charting_library';
 import { SvgIcon } from "../../components/common";
 import NoDataIcon from "../../components/common/NoDataIcon";
 import Snack from "../../components/common/Snack";
@@ -33,6 +34,7 @@ import Buy from "./Buy";
 import Datafeed from "./datafeed.js";
 import "./index.scss";
 import Sell from "./Sell";
+import TradingViewChart from "./TradingViewChart";
 
 let tvScriptLoadingPromise;
 
@@ -275,15 +277,23 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   ];
 
   const onLoadScriptRef = useRef();
+
+  function getParameterByName(name) {
+    name = "";
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec("");
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
   useEffect(() => {
     onLoadScriptRef.current = createWidget;
 
     if (!tvScriptLoadingPromise) {
       tvScriptLoadingPromise = new Promise((resolve) => {
         const script = document.createElement("script");
-        script.id = "tradingview-widget-loading-script";
-        script.src = "https://s3.tradingview.com/tv.js";
-        script.type = "text/javascript";
+        script.id = "tradingview_6964b";
+        script.src = "/public/charting_library/charting_library.standalone.js";
+        script.type = "text/jsx";
         script.onload = resolve;
 
         document.head.appendChild(script);
@@ -297,6 +307,12 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
     return () => (onLoadScriptRef.current = null);
 
     function createWidget() {
+      var datafeedUrl = "https://demo-feed-data.tradingview.com";
+				var customDataUrl = getParameterByName('dataUrl');
+				if (customDataUrl !== "") {
+					datafeedUrl = customDataUrl.startsWith('https://') ? customDataUrl : `https://${customDataUrl}`;
+				}
+
       const timezone = window.Intl
         ? window.Intl.DateTimeFormat().resolvedOptions().timeZone
         : "Etc/UTC";
@@ -305,52 +321,59 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
         document.getElementById("tradingview_6964b") &&
         "TradingView" in window
       ) {
-        new window.TradingView.widget({
-          autosize: true,
-          // symbol: "NASDAQ:AAPL",
-          // interval: "D",
-          timezone: timezone,
-
-          theme: "dark",
-          show_popup_button: true,
-          popup_width: "1000",
-          popup_height: "650",
-          style: "1",
-          locale: "en",
-          toolbar_bg: "#f1f3f6",
-          enable_publishing: false,
-          allow_symbol_change: true,
-          container_id: "tradingview_6964b",
-          // symbol: 'Bitfinex:BTC/USD', // default symbol
-          interval: "1D", // default interval
+        window.tvWidget = new widget({
+          symbol: 'Bitfinex:BTC/USD', // default symbol
+          interval: '1D', // default interval
           fullscreen: true, // displays the chart in the fullscreen mode
+          container: 'tradingview_6964b',
           datafeed: Datafeed,
-          library_path: `${
-            window.location ? window.location.origin : ""
-          }/chart/charting_library/`,
-          loading_screen: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-          disabled_features: [
-            "volume_force_overlay",
-            "header_compare",
-            "header_interval_dialog_button",
-            "show_interval_dialog_on_key_press",
-            "header_symbol_search",
-            "header_saveload",
-          ],
-          enabled_features: [
-            'move_logo_to_main_pane',
-            'hide_last_na_study_output',
-            'clear_bars_on_series_error',
-            'dont_show_boolean_study_arguments',
-            'narrow_chart_enabled',
-            'side_toolbar_in_fullscreen_mode',
-            'save_chart_properties_to_local_storage',
-            'use_localstorage_for_settings'
-          ],
-          favorites: {
-            intervals: ['5', '15', '60', 'D'],
-          }
+          library_path: 'src/charting_library/',
         });
+
+      //   new window.TradingView.widget({
+      //     autosize: true,
+      //     symbol: "NASDAQ:AAPL",
+      //     // interval: "D",
+      //     timezone: timezone,
+
+      //     theme: "dark",
+      //     show_popup_button: true,
+      //     popup_width: "1000",
+      //     popup_height: "650",
+      //     style: "1",
+      //     locale: "en",
+      //     toolbar_bg: "#f1f3f6",
+      //     enable_publishing: false,
+      //     allow_symbol_change: true,
+      //     container: "tradingview_6964b",
+      //     // symbol: 'Bitfinex:BTC/USD', // default symbol
+      //     interval: "1D", // default interval
+      //     fullscreen: true, // displays the chart in the fullscreen mode
+      //     datafeed: Datafeed,
+      //     library_path: "src/charting_library/",
+      //     loading_screen: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+      //     disabled_features: [
+      //       "volume_force_overlay",
+      //       "header_compare",
+      //       "header_interval_dialog_button",
+      //       "show_interval_dialog_on_key_press",
+      //       "header_symbol_search",
+      //       "header_saveload",
+      //     ],
+      //     enabled_features: [
+      //       'move_logo_to_main_pane',
+      //       'hide_last_na_study_output',
+      //       'clear_bars_on_series_error',
+      //       'dont_show_boolean_study_arguments',
+      //       'narrow_chart_enabled',
+      //       'side_toolbar_in_fullscreen_mode',
+      //       'save_chart_properties_to_local_storage',
+      //       'use_localstorage_for_settings'
+      //     ],
+      //     favorites: {
+      //       intervals: ['5', '15', '60', 'D'],
+      //     }
+      //   });
       }
     }
   }, []);
@@ -626,11 +649,13 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                 </li>
               </ul>
             </div>
-            <div className="card-body">
+            {/* <div className="card-body">
               <div className="tradingview-widget-container">
                 <div id="tradingview_6964b" />
               </div>
-            </div>
+            </div> */}
+                      <TradingViewChart />
+
           </div>
 
           <div className="bottom-area">
