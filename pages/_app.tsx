@@ -1,6 +1,14 @@
-import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+import '../styles/global.scss';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const Layout = dynamic(() => import('@/modules/layout/Layout'));
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }

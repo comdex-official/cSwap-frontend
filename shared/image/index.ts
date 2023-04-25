@@ -1,0 +1,10 @@
+//import
+import Logo_Dark from '../../public/assets/images/cSwap-light-logo.svg';
+import Logo_Light from '../../public/assets/images/cSwap-dark-logo.svg';
+import C_Logo from '../../public/assets/images/c-logo.svg';
+import Faucet from '../../public/assets/images/faucet.svg';
+import Harbor from '../../public/assets/images/harbur.svg';
+import Comodo from '../../public/assets/images/comodo.svg';
+
+// exports
+export { Logo_Light, Logo_Dark, C_Logo, Faucet, Harbor, Comodo };
