@@ -6,6 +6,8 @@
 .pnp.js
 .next
 .github
+.yarn
+dist
 
 # testing
 /coverage
