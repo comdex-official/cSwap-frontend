@@ -90,6 +90,10 @@
   background: $red;
   border-radius: 23px;
   margin-right: 10px;
+  cursor: pointer;
+  & > * {
+    pointer-events: none;
+  }
 
   @media screen and (max-width: $XL) {
     width: 140px;
@@ -132,6 +136,10 @@
   padding: 10px 20px;
   width: 155px;
   margin-right: 10px;
+  cursor: pointer;
+  & > * {
+    pointer-events: none;
+  }
 
   @media screen and (max-width: $XL) {
     width: 150px;

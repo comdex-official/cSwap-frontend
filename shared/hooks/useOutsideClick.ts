@@ -1,53 +1,49 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react';
 
 interface useOutsideClickProps {
-  node: any // reference to top level node / element in the collapsible component.
-  isOpen: boolean
-  onOutsideClick: (data?: any) => void
-  onInsideClick?: (data?: any) => void
+  node: any; // reference to top level node / element in the collapsible component.
+  isOpen: boolean;
+  ids?: string[];
+  onOutsideClick: (data?: any) => void;
 }
 
-const noop = () => null
-
-const useOutsideClick = ({ node, onOutsideClick, onInsideClick, isOpen }: useOutsideClickProps) => {
-  onInsideClick = onInsideClick || noop
-
+const useOutsideClick = ({
+  node,
+  onOutsideClick,
+  ids = [],
+  isOpen,
+}: useOutsideClickProps) => {
   const handleClick = useCallback(
     (e: any) => {
-      const current: any = !!node && !!node.current ? node.current : null
-      if (!current) return
+      const current: any = !!node && !!node.current ? node.current : null;
+      if (!current) return;
 
-      if (current.contains(e.target)) {
-        // inside click
-        onInsideClick && onInsideClick()
-        return
+      if (e.target && !current.contains(e.target)) {
+        if (!ids?.includes(e.target.id)) {
+          onOutsideClick();
+        }
+        console.log(e.target.id);
       }
-      // outside click
-      onOutsideClick()
     },
-    [node, onInsideClick, onOutsideClick],
-  )
+    [node, ids, onOutsideClick]
+  );
 
   const attachDocumentEventListener = useCallback(
     () => document.addEventListener('mousedown', handleClick),
-    [handleClick],
-  )
+    [handleClick]
+  );
   const removeDocumentEventListener = useCallback(
     () => document.removeEventListener('mousedown', handleClick),
-    [handleClick],
-  )
+    [handleClick]
+  );
 
   useEffect(() => {
-    if (isOpen) {
-      attachDocumentEventListener()
-    } else {
-      removeDocumentEventListener()
-    }
+    attachDocumentEventListener();
 
     return () => {
-      removeDocumentEventListener()
-    }
-  }, [isOpen, attachDocumentEventListener, removeDocumentEventListener])
-}
+      removeDocumentEventListener();
+    };
+  }, [isOpen, attachDocumentEventListener, removeDocumentEventListener]);
+};
 
-export default useOutsideClick
+export default useOutsideClick;

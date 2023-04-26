@@ -41,19 +41,22 @@ const Header = () => {
   useOutsideClick({
     isOpen: isOpen.cSwap,
     node: cSwapRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, cSwap: !isOpen.cSwap }),
+    ids: ['cSwap'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, cSwap: false }),
   });
 
   useOutsideClick({
     isOpen: isOpen.wallet,
     node: walletRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, wallet: !isOpen.wallet }),
+    ids: ['wallet'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, wallet: false }),
   });
 
   useOutsideClick({
     isOpen: isOpen.dot,
     node: dotRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, dot: !isOpen.dot }),
+    ids: ['dot'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, dot: false }),
   });
 
   return (
@@ -94,6 +97,7 @@ const Header = () => {
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
             <div
+              id="cSwap"
               className={styles.header__cSwap}
               onClick={() => setIsOpen({ ...isOpen, cSwap: !isOpen.cSwap })}
             >
@@ -130,6 +134,7 @@ const Header = () => {
               </div>
             </div>
             <div
+              id="wallet"
               className={styles.header__wallet}
               onClick={() => setIsOpen({ ...isOpen, wallet: !isOpen.wallet })}
             >
@@ -142,9 +147,11 @@ const Header = () => {
               </div>
             </div>
             <Icon
+              id="dot"
               className={`bi bi-three-dots-vertical ${
                 theme === 'dark' ? styles.icon_dark : styles.icon_light
               }`}
+              size={'2rem'}
               onClick={() => setIsOpen({ ...isOpen, dot: !isOpen.dot })}
             />
 
