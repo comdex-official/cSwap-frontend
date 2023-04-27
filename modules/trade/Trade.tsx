@@ -7,6 +7,7 @@ import styles from './Trade.module.scss';
 import TradeCard from './TradeCard';
 import BridgeCard from '../bridge/BridgeCard';
 import FarmCard from '../farm/FarmCard';
+import Assets from '../assets/Assets';
 
 interface Props {}
 
@@ -31,6 +32,8 @@ const Trade = (props: Props) => {
       {/* <BridgeCard /> */}
 
       {/* <FarmCard /> */}
+
+      {/* <Assets /> */}
     </>
   );
 };
