@@ -3,7 +3,7 @@ import styles from './Trade.module.scss';
 import { Icon } from '@/shared/image/Icon';
 import { NextImage } from '@/shared/image/NextImage';
 import { ATOM, Arrow, CMDS } from '@/shared/image';
-import Toggle from '@/shared/components/toggle/toggle';
+import Toggle from '@/shared/components/toggle/Toggle';
 import { useRef, useState } from 'react';
 import { OrderData, TradeFooterData } from './Data';
 import useOutsideClick from '@/shared/hooks/useOutsideClick';

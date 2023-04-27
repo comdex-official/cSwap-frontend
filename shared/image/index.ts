@@ -8,6 +8,9 @@ import Comodo from '../../public/assets/images/comodo.svg';
 import ATOM from '../../public/assets/images/atom.svg';
 import CMDS from '../../public/assets/images/cmds.svg';
 import Arrow from '../../public/assets/images/arrow.svg';
+import Current from '../../public/assets/images/current.svg';
+import Pyramid from '../../public/assets/images/piramid.svg';
+import Cup from '../../public/assets/images/cup.svg';
 
 // exports
 export {
@@ -20,4 +23,7 @@ export {
   ATOM,
   CMDS,
   Arrow,
+  Current,
+  Pyramid,
+  Cup,
 };

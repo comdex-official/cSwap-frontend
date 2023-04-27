@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import styles from './Trade.module.scss';
 import TradeCard from './TradeCard';
 import BridgeCard from '../bridge/BridgeCard';
+import FarmCard from '../farm/FarmCard';
 
 interface Props {}
 
@@ -28,6 +29,8 @@ const Trade = (props: Props) => {
 
       {/* <TradeCard /> */}
       {/* <BridgeCard /> */}
+
+      {/* <FarmCard /> */}
     </>
   );
 };
