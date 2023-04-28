@@ -1,4 +1,3 @@
-import Card from '@/shared/components/card/Card';
 import styles from './Trade.module.scss';
 import { Icon } from '@/shared/image/Icon';
 import { NextImage } from '@/shared/image/NextImage';
@@ -7,9 +6,11 @@ import Toggle from '@/shared/components/toggle/Toggle';
 import { useRef, useState } from 'react';
 import { OrderData, TradeFooterData } from './Data';
 import useOutsideClick from '@/shared/hooks/useOutsideClick';
+import dynamic from 'next/dynamic';
 
+const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface TradeCardProps {
-  theme?: string;
+  theme: string;
 }
 
 const TradeCard = ({ theme }: TradeCardProps) => {
@@ -77,6 +78,7 @@ const TradeCard = ({ theme }: TradeCardProps) => {
               {toggleValue && (
                 <Icon
                   className={`bi bi-gear-fill`}
+                  size={'1.2rem'}
                   onClick={() =>
                     setIsOpen({ ...isOpen, setting: !isOpen.setting })
                   }
@@ -101,12 +103,14 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {OrderData.map((item) => (
+                    {OrderData.map((item, i) => (
                       <div
                         key={item.id}
                         className={`${
                           styles.settings__dropdown__footer__title
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                        } ${i === 2 && styles.active} ${
+                          theme === 'dark' ? styles.dark : styles.light
+                        }`}
                       >
                         {item.name}
                       </div>
@@ -170,7 +174,12 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                       setIsOpen({ ...isOpen, tokenFrom: !isOpen?.tokenFrom })
                     }
                   >
-                    <NextImage src={ATOM} alt="Logo_Dark" />
+                    <div className={`${styles.tradeCard__logo__wrap}`}>
+                      <div className={`${styles.tradeCard__logo}`}>
+                        <NextImage src={ATOM} alt="Logo_Dark" />
+                      </div>
+                    </div>
+
                     <div
                       className={`${
                         styles.tradeCard__body__left__item__details__title
@@ -260,7 +269,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                         setIsOpen({ ...isOpen, tokenTo: !isOpen?.tokenTo })
                       }
                     >
-                      <NextImage src={CMDS} alt="Logo_Dark" />
+                      <div className={`${styles.tradeCard__logo__wrap}`}>
+                        <div className={`${styles.tradeCard__logo}`}>
+                          <NextImage src={CMDS} alt="Logo_Dark" />
+                        </div>
+                      </div>
                       <div
                         className={`${
                           styles.tradeCard__body__left__item__details__title
@@ -348,7 +361,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                         setIsOpen({ ...isOpen, tokenGet: !isOpen?.tokenGet })
                       }
                     >
-                      <NextImage src={CMDS} alt="Logo_Dark" />
+                      <div className={`${styles.tradeCard__logo__wrap}`}>
+                        <div className={`${styles.tradeCard__logo}`}>
+                          <NextImage src={CMDS} alt="Logo_Dark" />
+                        </div>
+                      </div>
                       <div
                         className={`${
                           styles.tradeCard__body__left__item__details__title

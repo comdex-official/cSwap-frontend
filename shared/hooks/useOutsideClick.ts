@@ -1,17 +1,16 @@
 import { useCallback, useEffect } from 'react';
 
 interface useOutsideClickProps {
-  node: any; // reference to top level node / element in the collapsible component.
-  isOpen: boolean;
+  node: any;
+  isOpen?: boolean;
   ids?: string[];
-  onOutsideClick: (data?: any) => void;
+  onOutsideClick: () => void;
 }
 
 const useOutsideClick = ({
   node,
   onOutsideClick,
   ids = [],
-  isOpen,
 }: useOutsideClickProps) => {
   const handleClick = useCallback(
     (e: any) => {
@@ -43,7 +42,7 @@ const useOutsideClick = ({
     return () => {
       removeDocumentEventListener();
     };
-  }, [isOpen, attachDocumentEventListener, removeDocumentEventListener]);
+  }, [attachDocumentEventListener, removeDocumentEventListener]);
 };
 
 export default useOutsideClick;

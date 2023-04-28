@@ -1,9 +1,6 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import Trade from '@/modules/trade/Trade';
+import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'] });
+const Trade = dynamic(() => import('@/modules/trade/Trade'));
 
 export default function Home() {
   return (

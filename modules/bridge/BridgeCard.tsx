@@ -1,13 +1,15 @@
-import Card from '@/shared/components/card/Card';
 import styles from './Bridge.module.scss';
 import { NextImage } from '@/shared/image/NextImage';
 import { ATOM, Arrow, CMDS } from '@/shared/image';
 import { Icon } from '@/shared/image/Icon';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AxelarData, GravityData, IBCData, TabData } from './Data';
+import useOutsideClick from '@/shared/hooks/useOutsideClick';
+import dynamic from 'next/dynamic';
 
+const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface BridgeCardProps {
-  theme?: string;
+  theme: string;
 }
 
 const BridgeCard = ({ theme }: BridgeCardProps) => {
@@ -18,6 +20,36 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
   };
 
   const hasTargetName = TabData.find((person) => person.name === activeTab);
+
+  const [isOpen, setIsOpen] = useState({
+    tokenFrom: false,
+    tokenTo: false,
+    tokenGet: false,
+  });
+
+  const tokenFromRef = useRef<any>();
+  const tokenToRef = useRef<any>();
+  const tokenGetRef = useRef<any>();
+
+  useOutsideClick({
+    node: tokenFromRef,
+    ids: ['tokenFrom'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, tokenFrom: false }),
+  });
+
+  useOutsideClick({
+    node: tokenToRef,
+    ids: ['tokenTo'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, tokenTo: false }),
+  });
+
+  useOutsideClick({
+    node: tokenGetRef,
+    ids: ['tokenGet'],
+    onOutsideClick: () => setIsOpen({ ...isOpen, tokenGet: false }),
+  });
+
+  console.log({ isOpen });
 
   return (
     <div className={styles.bridgeCard__wrap}>
@@ -47,33 +79,52 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
 
           {hasTargetName?.id === 0 && (
             <div className={styles.bridgeCard__body}>
-              <div
-                className={`${styles.bridgeCard__body__item} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
+              <div className={styles.settings__dropdown}>
                 <div
-                  className={`${styles.bridgeCard__body__item__title} ${
+                  id={'tokenFrom'}
+                  className={`${styles.bridgeCard__body__item} ${
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
+                  onClick={() =>
+                    setIsOpen({ ...isOpen, tokenFrom: !isOpen?.tokenFrom })
+                  }
                 >
-                  {'From'}
-                </div>
-                <div
-                  className={`${styles.bridgeCard__body__item__details} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <NextImage src={ATOM} alt="Logo_Dark" />
                   <div
-                    className={`${
-                      styles.bridgeCard__body__item__details__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.bridgeCard__body__item__title} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
                   >
-                    {'JUNO'}
+                    {'From'}
                   </div>
-                  <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  <div
+                    className={`${styles.bridgeCard__body__item__details} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className={`${styles.bridgeCard__logo__wrap}`}>
+                      <div className={`${styles.bridgeCard__logo}`}>
+                        <NextImage src={ATOM} alt="Logo_Dark" />
+                      </div>
+                    </div>
+                    <div
+                      className={`${
+                        styles.bridgeCard__body__item__details__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      {'JUNO'}
+                    </div>
+                    <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  </div>
                 </div>
+
+                {isOpen.tokenFrom && (
+                  <div
+                    className={styles.token__dropdown__child}
+                    ref={tokenFromRef}
+                  >
+                    <h4>Loading...</h4>
+                  </div>
+                )}
               </div>
 
               <div
@@ -84,62 +135,99 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                 <NextImage src={Arrow} alt="Logo_Dark" />
               </div>
 
-              <div
-                className={`${styles.bridgeCard__body__item} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
+              <div className={styles.settings__dropdown}>
                 <div
-                  className={`${styles.bridgeCard__body__item__title} ${
+                  id={'tokenTo'}
+                  className={`${styles.bridgeCard__body__item} ${
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
+                  onClick={() =>
+                    setIsOpen({ ...isOpen, tokenTo: !isOpen?.tokenTo })
+                  }
                 >
-                  {'To'}
-                </div>
-                <div
-                  className={`${styles.bridgeCard__body__item__details} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <NextImage src={CMDS} alt="Logo_Dark" />
                   <div
-                    className={`${
-                      styles.bridgeCard__body__item__details__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.bridgeCard__body__item__title} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
                   >
-                    {'COMDEX'}
+                    {'To'}
                   </div>
-                  <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  <div
+                    className={`${styles.bridgeCard__body__item__details} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className={`${styles.bridgeCard__logo__wrap}`}>
+                      <div className={`${styles.bridgeCard__logo}`}>
+                        <NextImage src={CMDS} alt="Logo_Dark" />
+                      </div>
+                    </div>
+                    <div
+                      className={`${
+                        styles.bridgeCard__body__item__details__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      {'COMDEX'}
+                    </div>
+                    <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  </div>
                 </div>
+                {isOpen.tokenTo && (
+                  <div
+                    className={styles.token__dropdown__child}
+                    ref={tokenToRef}
+                  >
+                    <h4>Loading...</h4>
+                  </div>
+                )}
               </div>
 
-              <div
-                className={`${styles.bridgeCard__body__item__footer} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
+              <div className={styles.settings__dropdown}>
                 <div
-                  className={`${
-                    styles.bridgeCard__body__item__details__title
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
-                >
-                  {'0.00000'}
-                </div>
-                <div
-                  className={`${styles.bridgeCard__body__item__details} ${
+                  id="tokenGet"
+                  className={`${styles.bridgeCard__body__item__footer} ${
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
+                  onClick={() =>
+                    setIsOpen({ ...isOpen, tokenGet: !isOpen?.tokenGet })
+                  }
                 >
-                  <NextImage src={CMDS} alt="Logo_Dark" />
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title
                     } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
-                    {'JUNO'}
+                    {'0.00000'}
                   </div>
-                  <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  <div
+                    className={`${styles.bridgeCard__body__item__details} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className={`${styles.bridgeCard__logo__wrap}`}>
+                      <div className={`${styles.bridgeCard__logo}`}>
+                        <NextImage src={CMDS} alt="Logo_Dark" />
+                      </div>
+                    </div>
+                    <div
+                      className={`${
+                        styles.bridgeCard__body__item__details__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      {'JUNO'}
+                    </div>
+                    <Icon className={`bi bi-chevron-down`} size={'1.2rem'} />
+                  </div>
                 </div>
+
+                {isOpen.tokenGet && (
+                  <div
+                    className={styles.token__dropdown__child2}
+                    ref={tokenGetRef}
+                  >
+                    <h4>Loading...</h4>
+                  </div>
+                )}
               </div>
 
               <div className={styles.bridgeCard__footer}>
@@ -187,7 +275,11 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  <NextImage src={ATOM} alt="Logo_Dark" />
+                  <div className={`${styles.bridgeCard__logo__wrap}`}>
+                    <div className={`${styles.bridgeCard__logo}`}>
+                      <NextImage src={ATOM} alt="Logo_Dark" />
+                    </div>
+                  </div>
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title
@@ -224,7 +316,11 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  <NextImage src={CMDS} alt="Logo_Dark" />
+                  <div className={`${styles.bridgeCard__logo__wrap}`}>
+                    <div className={`${styles.bridgeCard__logo}`}>
+                      <NextImage src={CMDS} alt="Logo_Dark" />
+                    </div>
+                  </div>
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title
@@ -253,7 +349,11 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  <NextImage src={CMDS} alt="Logo_Dark" />
+                  <div className={`${styles.bridgeCard__logo__wrap}`}>
+                    <div className={`${styles.bridgeCard__logo}`}>
+                      <NextImage src={CMDS} alt="Logo_Dark" />
+                    </div>
+                  </div>
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title
@@ -303,7 +403,11 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  <NextImage src={ATOM} alt="Logo_Dark" />
+                  <div className={`${styles.bridgeCard__logo__wrap}`}>
+                    <div className={`${styles.bridgeCard__logo}`}>
+                      <NextImage src={ATOM} alt="Logo_Dark" />
+                    </div>
+                  </div>
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title
@@ -334,7 +438,11 @@ const BridgeCard = ({ theme }: BridgeCardProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  <NextImage src={CMDS} alt="Logo_Dark" />
+                  <div className={`${styles.bridgeCard__logo__wrap}`}>
+                    <div className={`${styles.bridgeCard__logo}`}>
+                      <NextImage src={CMDS} alt="Logo_Dark" />
+                    </div>
+                  </div>
                   <div
                     className={`${
                       styles.bridgeCard__body__item__details__title

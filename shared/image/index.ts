@@ -12,6 +12,7 @@ import Current from '../../public/assets/images/current.svg';
 import Pyramid from '../../public/assets/images/piramid.svg';
 import Cup from '../../public/assets/images/cup.svg';
 import ArrowRight from '../../public/assets/images/arrow-right.svg';
+import No_Data from '../../public/assets/images/no_data.svg';
 
 // exports
 export {
@@ -28,4 +29,5 @@ export {
   Pyramid,
   Cup,
   ArrowRight,
+  No_Data,
 };

@@ -1,40 +1,16 @@
-import Card from '@/shared/components/card/Card';
-import Header from '@/shared/components/header/Header';
-import Search from '@/shared/components/search/Search';
-import Tab from '@/shared/components/tab/Tab';
-import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import styles from './Trade.module.scss';
-import TradeCard from './TradeCard';
-import BridgeCard from '../bridge/BridgeCard';
-import FarmCard from '../farm/FarmCard';
-import Assets from '../assets/Assets';
+import { useAppSelector } from '@/shared/hooks/useAppSelector';
 
-interface Props {}
+const TradeCard = dynamic(() => import('@/modules/trade/TradeCard'));
 
-const Trade = (props: Props) => {
-  // const [active, setActive] = useState('All');
-
-  // const handleActive = (item: string) => {
-  //   setActive(item);
-  // };
+const Trade = () => {
+  const theme = useAppSelector((state) => state.theme.theme);
 
   return (
-    <>
-      <Header />
-      {/* <Search /> */}
-      {/* <Tab
-        data={['All', 'Basic', 'Ranged', 'MyPools']}
-        active={active}
-        handleActive={handleActive}
-      /> */}
-
-      {/* <TradeCard /> */}
-      {/* <BridgeCard /> */}
-
-      {/* <FarmCard /> */}
-
-      {/* <Assets /> */}
-    </>
+    <div className={styles.trade__wrap}>
+      <TradeCard theme={theme} />
+    </div>
   );
 };
 

@@ -1,0 +1,33 @@
+.progress_bar {
+  width: 200px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  position: relative;
+}
+
+.progress {
+  width: 200px;
+  height: 280px;
+  z-index: 1;
+}
+
+.progress .track,
+.progress .fill {
+  fill: rgba(0, 0, 0, 0);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transform: rotate(90deg) translate(0px, -80px);
+}
+
+.progress .track {
+  stroke: #81808f;
+}
+
+.progress .fill {
+  stroke-dasharray: 219.99078369140625;
+  stroke-dashoffset: -219.99078369140625;
+  transition: stroke-dashoffset 1s;
+}

@@ -1,247 +1,85 @@
-import Table from '@/shared/components/table/Table';
-import { ArrowRight, CMDS } from '@/shared/image';
+import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import styles from './Assets.module.scss';
-import { NextImage } from '@/shared/image/NextImage';
+import dynamic from 'next/dynamic';
+import { Icon } from '@/shared/image/Icon';
+import { useState } from 'react';
 
-interface AssetsProps {
-  theme?: string;
-}
+const AssetTable = dynamic(() => import('@/modules/assets/AssetTable'));
+const Toggle = dynamic(() => import('@/shared/components/toggle/Toggle'));
+const Search = dynamic(() => import('@/shared/components/search/Search'));
 
-type AssetsColumnProps = {
-  Header: string;
-  accessor: string;
-  Cell: ({ row, value }: any) => void;
-};
+const Assets = () => {
+  const theme = useAppSelector((state) => state.theme.theme);
 
-type AssetsDataProps = {
-  Asset: string;
-  Image: string;
-  Tokens: number | string;
-  Price: number | string;
-  Amount: number | string;
-  IBCDeposit: boolean;
-  IBCWithdraw: boolean;
-};
+  const [toggleValue, setToggleValue] = useState<boolean>(false);
 
-const Assets = ({ theme }: AssetsProps) => {
-  const COLUMNS: AssetsColumnProps[] = [
-    {
-      Header: 'Asset',
-      accessor: 'Asset',
-      Cell: ({ row, value }: any) => (
-        <div
-          className={`${styles.assets__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-        >
-          <div
-            className={`${styles.assets__logo__wrap} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
-          >
-            <div
-              className={`${styles.assets__logo} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <NextImage src={row?.original?.Image} alt="Image" />
-            </div>
-          </div>
-          <div
-            className={`${styles.assets__title} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
-          >
-            {value}
-          </div>
-        </div>
-      ),
-    },
-    {
-      Header: 'No. of Tokens',
-      accessor: 'Tokens',
-      Cell: ({ value }: any) => (
-        <div
-          className={`${styles.all__title__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-        >
-          {value}
-        </div>
-      ),
-    },
-    {
-      Header: 'Price',
-      accessor: 'Price',
-      Cell: ({ value }: any) => (
-        <div
-          className={`${styles.all__title__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-        >
-          ${value}
-        </div>
-      ),
-    },
-    {
-      Header: 'Amount',
-      accessor: 'Amount',
-      Cell: ({ value }: any) => (
-        <div
-          className={`${styles.all__title__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-        >
-          ${value}
-        </div>
-      ),
-    },
-    {
-      Header: 'IBC Deposit',
-      accessor: 'IBCDeposit',
-      Cell: ({ value }: any) => (
-        <>
-          {value ? (
-            <div
-              className={`${styles.ibc__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.ibc__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'Deposit'}
-              </div>
-              <NextImage src={ArrowRight} alt="Arrow" />
-            </div>
-          ) : null}
-        </>
-      ),
-    },
-    {
-      Header: 'IBC Withdraw',
-      accessor: 'IBCWithdraw',
-      Cell: ({ value }: any) => (
-        <>
-          {value ? (
-            <div
-              className={`${styles.ibc__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.ibc__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'Withdraw'}
-              </div>
-              <NextImage src={ArrowRight} alt="Arrow" />
-            </div>
-          ) : null}
-        </>
-      ),
-    },
-  ];
-
-  const DATA: AssetsDataProps[] = [
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: false,
-      IBCWithdraw: false,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: false,
-      IBCWithdraw: false,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: false,
-      IBCWithdraw: false,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: true,
-      IBCWithdraw: true,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: true,
-      IBCWithdraw: true,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: true,
-      IBCWithdraw: true,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: true,
-      IBCWithdraw: true,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: true,
-      IBCWithdraw: true,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: false,
-      IBCWithdraw: false,
-    },
-    {
-      Asset: 'CMDX',
-      Image: CMDS,
-      Tokens: 0,
-      Price: 0.0547,
-      Amount: 0.0,
-      IBCDeposit: false,
-      IBCWithdraw: false,
-    },
-  ];
+  const handleToggleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToggleValue(e.target.checked);
+  };
 
   return (
-    <div>
-      <Table columns={COLUMNS} data={DATA} />
+    <div
+      className={`${styles.assets__wrap} ${
+        theme === 'dark' ? styles.dark : styles.light
+      }`}
+    >
+      <div
+        className={`${styles.assets__main} ${
+          theme === 'dark' ? styles.dark : styles.light
+        }`}
+      >
+        <div
+          className={`${styles.assets__head__wrap} ${
+            theme === 'dark' ? styles.dark : styles.light
+          }`}
+        >
+          <div
+            className={`${styles.assets__head__left__title} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            {'Assets'}
+          </div>
+          <div
+            className={`${styles.assets__head__right__title} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            {'Total Asset Balance:  139.6 USD'}
+            <Icon className="bi bi-arrow-clockwise" />
+          </div>
+        </div>
+
+        <div
+          className={`${styles.assets__body__wrap} ${
+            theme === 'dark' ? styles.dark : styles.light
+          }`}
+        >
+          <div
+            className={`${styles.assets__toggle} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            <span>{'Hide 0 Balances'}</span>
+            <Toggle handleToggleValue={handleToggleValue} />
+          </div>
+          <div
+            className={`${styles.assets__search} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            <Search theme={theme} type={2} placeHolder="Search Asset.." />
+          </div>
+        </div>
+
+        <div
+          className={`${styles.assets__table} ${
+            theme === 'dark' ? styles.dark : styles.light
+          }`}
+        >
+          <AssetTable theme={theme} />
+        </div>
+      </div>
     </div>
   );
 };

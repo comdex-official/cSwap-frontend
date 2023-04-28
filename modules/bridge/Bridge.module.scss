@@ -1,13 +1,18 @@
-.bridgeCard__wrap {
+.bridge__wrap {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.bridgeCard__wrap {
+  width: 100%;
   margin: 20px;
+  max-width: 764px;
 }
 
 .bridgeCard__main {
   padding: 10px 0px;
-  width: 764px;
 }
 
 .bridgeCard__title {
@@ -57,6 +62,34 @@
   margin: 10px 0px;
 }
 
+.bridgeCard__logo__wrap {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+}
+
+.bridgeCard__logo {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
 .bridgeCard__body__item {
   display: flex;
   justify-content: space-between;
@@ -64,6 +97,10 @@
   background: #101b2f;
   border-radius: 20px;
   padding: 20px;
+
+  & > * {
+    pointer-events: none;
+  }
 
   i {
     color: #516285;
@@ -94,7 +131,7 @@
 
   i {
     color: #516285;
-    margin-left: 20px;
+    margin-left: 45px;
 
     &.light {
     }
@@ -179,7 +216,7 @@
     border-radius: 54px;
     border: none;
     outline: none;
-    padding: 15px 60px;
+    padding: 15px 70px;
     font-weight: 500;
     font-size: 24px;
     line-height: 29px;
@@ -222,4 +259,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.settings__dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.token__dropdown__child {
+  position: absolute;
+  top: 72px;
+  right: 20px;
+  width: 182px;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border: 2px solid #303950;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+  z-index: 999999;
+}
+
+.token__dropdown__child2 {
+  position: absolute;
+  top: 72px;
+  left: 20px;
+  width: 182px;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border: 2px solid #303950;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+  z-index: 999999;
 }

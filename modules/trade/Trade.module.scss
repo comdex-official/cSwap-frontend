@@ -1,13 +1,18 @@
-.tradeCard__wrap {
+.trade__wrap {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.tradeCard__wrap {
+  width: 100%;
   margin: 20px;
+  max-width: 764px;
 }
 
 .tradeCard__main {
   padding: 10px 0px;
-  width: 764px;
 }
 
 .tradeCard__head {
@@ -124,6 +129,34 @@
   font-size: 18px;
   line-height: 22px;
   color: #acbfdb;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__logo__wrap {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+}
+
+.tradeCard__logo {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
 
   &.light {
   }
@@ -267,6 +300,9 @@
   line-height: 15px;
   text-align: center;
   color: #ffffff;
+  background: #0f2048;
+  border-radius: 5px;
+  padding: 5px 10px;
 
   &.light {
   }
@@ -338,7 +374,7 @@
     border-radius: 54px;
     border: none;
     outline: none;
-    padding: 5px 60px;
+    padding: 5px 80px;
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
@@ -385,14 +421,22 @@
   .settings__dropdown__footer {
     display: flex;
     align-items: center;
+    margin-top: 10px;
   }
 
   .settings__dropdown__footer__title {
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
-    margin-right: 25px;
+
+    margin-right: 18px;
     color: #ffffff;
+
+    &.active {
+      background: #303950;
+      border-radius: 2px;
+      padding: 5px 10px;
+    }
 
     &.light {
     }
@@ -402,6 +446,11 @@
   }
 
   .settings__dropdown__input {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #ffffff;
+
     input {
       width: 79px;
       border: 1px solid #303950;
@@ -446,4 +495,5 @@
   border: 2px solid #303950;
   border-radius: 10px;
   padding: 10px;
+  color: #ffffff;
 }

@@ -75,7 +75,7 @@ const Header = () => {
         </div>
 
         <div className={styles.header__left}>
-          <div className={styles.header__logo}>
+          <div className={styles.header__logo} onClick={() => router.push('/')}>
             {theme === 'dark' ? (
               <NextImage src={Logo_Dark} alt="Logo_Dark" />
             ) : (
