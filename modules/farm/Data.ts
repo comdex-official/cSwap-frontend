@@ -1,37 +1,55 @@
-export type RightDataProps = {
-  image: string;
+export type CustomDataProps = {
+  id: number;
   value: string;
 };
 
-export type OrderDataProps = {
-  id: number;
-  leftData: string;
-  rightData: RightDataProps[] | string;
-};
-
-export const FarmFooterData: OrderDataProps[] = [
+export const FarmCustomData: CustomDataProps[] = [
   {
     id: 0,
-    leftData: 'Estimated rewards earned per day',
-    rightData: [
-      {
-        image: '',
-        value: '0.000000',
-      },
-      {
-        image: '',
-        value: '0.000000',
-      },
-    ],
+    value: 'S',
   },
   {
     id: 1,
-    leftData: 'CMDX/CMST LP Farmed',
-    rightData: '$50.000',
+    value: 'S',
   },
   {
     id: 2,
-    leftData: 'CMDX/ATOM LP Farmed (Master Pool)',
-    rightData: '$150.000',
+    value: 'S',
+  },
+  {
+    id: 3,
+    value: 'S',
+  },
+  {
+    id: 4,
+    value: 'S',
+  },
+  {
+    id: 5,
+    value: 'S',
+  },
+  {
+    id: 6,
+    value: 'S',
+  },
+  {
+    id: 7,
+    value: 'S',
+  },
+  {
+    id: 8,
+    value: 'S',
+  },
+  {
+    id: 9,
+    value: 'S',
+  },
+  {
+    id: 10,
+    value: 'S',
+  },
+  {
+    id: 11,
+    value: 'S',
   },
 ];

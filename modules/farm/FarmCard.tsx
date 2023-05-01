@@ -1,12 +1,13 @@
-import Card from '@/shared/components/card/Card';
 import { Icon } from '@/shared/image/Icon';
 import { NextImage } from '@/shared/image/NextImage';
 import { useState } from 'react';
 import styles from './Farm.module.scss';
 import { ATOM, CMDS, Cup, Current, Pyramid } from '@/shared/image';
+import dynamic from 'next/dynamic';
 
+const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface FarmCardProps {
-  theme?: string;
+  theme: string;
 }
 
 const FarmCard = ({ theme }: FarmCardProps) => {

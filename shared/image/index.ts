@@ -13,6 +13,7 @@ import Pyramid from '../../public/assets/images/piramid.svg';
 import Cup from '../../public/assets/images/cup.svg';
 import ArrowRight from '../../public/assets/images/arrow-right.svg';
 import No_Data from '../../public/assets/images/no_data.svg';
+import Slider from '../../public/assets/images/slider.svg';
 
 // exports
 export {
@@ -30,4 +31,5 @@ export {
   Cup,
   ArrowRight,
   No_Data,
+  Slider
 };

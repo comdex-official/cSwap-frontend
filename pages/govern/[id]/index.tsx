@@ -1,11 +1,11 @@
 import dynamic from 'next/dynamic';
 
-const Govern = dynamic(() => import('@/modules/govern/Govern'));
+const GovernView = dynamic(() => import('@/modules/govern/GovernView'));
 
 export default function GovernPage() {
   return (
     <>
-      <Govern />
+      <GovernView />
     </>
   );
 }

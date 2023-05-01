@@ -1,7 +1,11 @@
 import dynamic from 'next/dynamic';
 
-const OrderBook = dynamic(() => import('@/modules/assets/Assets'));
+const OrderBook = dynamic(() => import('@/modules/orderBook/OrderBook'));
 
 export default function AssetsPage() {
-  return <>{/* <OrderBook /> */}</>;
+  return (
+    <>
+      <OrderBook />
+    </>
+  );
 }
