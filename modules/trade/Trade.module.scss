@@ -1,3 +1,5 @@
+@import '../../styles/globalVariable.scss';
+
 .trade__wrap {
   display: flex;
   justify-content: center;
@@ -7,8 +9,8 @@
 
 .tradeCard__wrap {
   width: 100%;
-  margin: 20px;
-  max-width: 764px;
+  margin-top: 45px;
+  max-width: 650px;
 }
 
 .tradeCard__main {
@@ -44,6 +46,14 @@
     text-align: center;
     color: #ffffff;
 
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+
     &.light {
     }
 
@@ -58,9 +68,8 @@
   align-items: center;
   background: #101b2f;
   border-radius: 20px;
-  padding: 0px 20px;
+  padding: 10px 20px;
   margin: 20px 0px;
-  height: 150px;
 }
 
 .tradeCard__body__left {
@@ -74,7 +83,7 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .tradeCard__body__main {
@@ -89,6 +98,14 @@
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
 
   &.light {
   }
@@ -130,6 +147,14 @@
   line-height: 22px;
   color: #acbfdb;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
   &.light {
   }
 
@@ -143,6 +168,11 @@
   height: 42px;
   width: 42px;
   padding: 1px;
+
+  @media screen and (max-width: $XS) {
+    height: 38px;
+    width: 38px;
+  }
 }
 
 .tradeCard__logo {
@@ -156,6 +186,11 @@
   img {
     height: 30px;
     width: 30px;
+
+    @media screen and (max-width: $XS) {
+      height: 25px;
+      width: 25px;
+    }
   }
 
   &.light {
@@ -171,6 +206,14 @@
   line-height: 28px;
   color: #ffffff;
   margin: 0px 10px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 14px;
+  }
 
   &.light {
   }
@@ -191,13 +234,21 @@
 }
 
 .tradeCard__body__right__el2 {
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   font-weight: 500;
   font-size: 32px;
   line-height: 39px;
   text-align: right;
   color: #ffffff;
   opacity: 0.5;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 27px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 24px;
+  }
 
   &.light {
   }
@@ -216,6 +267,14 @@
   line-height: 28px;
   color: #ffffff;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 14px;
+  }
+
   &.light {
   }
 
@@ -224,12 +283,19 @@
 }
 
 .tradeCard__body__right__el3 {
-  margin-bottom: 10px;
   font-weight: 600;
   font-size: 12px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
 
   &.light {
   }
@@ -244,6 +310,13 @@
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
 
   &.light {
   }
@@ -258,6 +331,14 @@
   line-height: 20px;
   text-align: right;
   color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
 
   &.light {
   }
@@ -287,6 +368,14 @@
   text-align: center;
   color: #ffffff;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
   &.light {
   }
 
@@ -303,6 +392,13 @@
   background: #0f2048;
   border-radius: 5px;
   padding: 5px 10px;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
 
   &.light {
   }
@@ -331,6 +427,14 @@
   width: 90%;
   color: #80acce;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
   &.light {
   }
 
@@ -345,6 +449,14 @@
   color: #80acce;
   margin-bottom: 10px;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
   &.light {
   }
 
@@ -357,6 +469,14 @@
   font-size: 16px;
   line-height: 20px;
   text-align: right;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
 
   &.light {
     color: #ffffff;
@@ -379,9 +499,17 @@
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
-    margin: 10px 0px;
+    margin-top: 20px;
     text-align: center;
     color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
 
     &.light {
     }
@@ -399,11 +527,12 @@
     position: absolute;
     top: 30px;
     right: -15px;
-    width: 330px;
+    width: auto;
     background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
     border: 2px solid #303950;
     border-radius: 10px;
     padding: 10px;
+    z-index: 999999;
   }
 
   .settings__dropdown__title {
@@ -411,6 +540,14 @@
     font-size: 16px;
     line-height: 20px;
     color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 11px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
 
     &.light {
     }
@@ -423,15 +560,22 @@
     display: flex;
     align-items: center;
     margin-top: 10px;
+    gap: 18px;
   }
 
   .settings__dropdown__footer__title {
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
-
-    margin-right: 18px;
     color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 8px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 6px;
+    }
 
     &.active {
       background: #303950;
@@ -447,10 +591,21 @@
   }
 
   .settings__dropdown__input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-weight: 600;
     font-size: 14px;
     line-height: 17px;
     color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 9px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 7px;
+    }
 
     input {
       width: 79px;
@@ -462,6 +617,14 @@
       background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
       text-align: center;
       color: #ffffff;
+
+      @media screen and (max-width: $XXL) {
+        font-size: 8px;
+      }
+
+      @media screen and (max-width: $XS) {
+        font-size: 6px;
+      }
 
       &.light {
       }
@@ -482,6 +645,14 @@
         line-height: 16px;
         text-align: center;
         color: #ffffff;
+
+        @media screen and (max-width: $XXL) {
+          font-size: 8px;
+        }
+
+        @media screen and (max-width: $XS) {
+          font-size: 6px;
+        }
       }
     }
   }
