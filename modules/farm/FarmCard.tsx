@@ -2,7 +2,7 @@ import { Icon } from '@/shared/image/Icon';
 import { NextImage } from '@/shared/image/NextImage';
 import { useState } from 'react';
 import styles from './Farm.module.scss';
-import { ATOM, CMDS, Cup, Current, Pyramid } from '@/shared/image';
+import { ATOM, CMDS, Cup, Current, Pyramid, Ranged } from '@/shared/image';
 import dynamic from 'next/dynamic';
 
 const Card = dynamic(() => import('@/shared/components/card/Card'));
@@ -104,6 +104,16 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                   >
                     {'Basic'}
                   </div>
+                  {false && (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__ranged__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Ranged} alt="Pool" />
+                      {'Ranged'}
+                    </div>
+                  )}
                 </div>
                 <div
                   className={`${styles.farmCard__element__right__pool} ${
@@ -118,6 +128,17 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                     <NextImage src={Pyramid} alt="Logo" />
                     {'Master Pool'}
                   </div>
+
+                  {false && (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {'MP Boost'}
+                    </div>
+                  )}
                 </div>
               </div>
               <div

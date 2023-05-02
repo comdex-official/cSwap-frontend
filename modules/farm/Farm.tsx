@@ -212,9 +212,13 @@ const Farm = () => {
           }`}
         >
           {listView ? (
-            <>
-              <FarmTable />
-            </>
+            <div
+              className={`${styles.farm__table__wrap} ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <FarmTable theme={theme} />
+            </div>
           ) : (
             <div
               className={`${styles.farm__footer__card__wrap} ${

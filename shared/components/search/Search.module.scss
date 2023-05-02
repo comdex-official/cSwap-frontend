@@ -14,6 +14,14 @@
     padding: 8px 20px;
     width: 100%;
 
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
+
     &.light {
       color: $inputColor1;
 
@@ -29,6 +37,14 @@
         font-size: 18px;
         line-height: 24px;
         color: $inputColor1;
+
+        @media screen and (max-width: $XXL) {
+          font-size: 13px;
+        }
+
+        @media screen and (max-width: $XS) {
+          font-size: 8px;
+        }
       }
     }
 
@@ -47,13 +63,21 @@
         font-size: 18px;
         line-height: 24px;
         color: $inputColor1;
+
+        @media screen and (max-width: $XXL) {
+          font-size: 13px;
+        }
+
+        @media screen and (max-width: $XS) {
+          font-size: 8px;
+        }
       }
     }
   }
 
   .search__icon1 {
     position: absolute;
-    top: 18px;
+    top: 12px;
     right: 25px;
 
     &.icon_dark {
@@ -75,6 +99,14 @@
     padding: 8px 20px;
     width: 100%;
 
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
+
     &.light {
       color: $inputColor2;
 
@@ -90,6 +122,14 @@
         font-size: 18px;
         line-height: 24px;
         color: $inputColor2;
+
+        @media screen and (max-width: $XXL) {
+          font-size: 13px;
+        }
+
+        @media screen and (max-width: $XS) {
+          font-size: 8px;
+        }
       }
     }
 
@@ -108,6 +148,14 @@
         font-size: 18px;
         line-height: 24px;
         color: $inputColor2;
+
+        @media screen and (max-width: $XXL) {
+          font-size: 13px;
+        }
+
+        @media screen and (max-width: $XS) {
+          font-size: 8px;
+        }
       }
     }
   }
