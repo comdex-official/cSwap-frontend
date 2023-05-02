@@ -20,7 +20,7 @@
     #0071ff33 160deg,
     transparent 360deg
   );
-  --secondary-glow: radial-gradient(
+  --primary-glow: radial-gradient(
     rgba(255, 255, 255, 1),
     rgba(255, 255, 255, 0)
   );
@@ -55,7 +55,7 @@
     --background-end-rgb: 0, 0, 0;
 
     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-    --secondary-glow: linear-gradient(
+    --primary-glow: linear-gradient(
       to bottom right,
       rgba(1, 65, 255, 0),
       rgba(1, 65, 255, 0),
@@ -143,4 +143,155 @@ a {
 
 .custom-icon path {
   fill: currentColor;
+}
+
+// Govern CSS
+
+.govern_ant_list_class {
+  margin-top: 3rem;
+  background: $primary-background;
+  border: 1px solid $border-color;
+  border-radius: $base-border-radius;
+  padding: 10px 0;
+  .ant-spin-nested-loading {
+    padding: 1rem 3rem;
+    .ant-spin-container {
+      .ant-row {
+        row-gap: 10px;
+        div {
+          .ant-col {
+            .ant-list-item {
+              margin-block-end: 0;
+              border-left: 3px solid $primary-color;
+              div {
+                margin-left: 13px;
+                color: white;
+                p {
+                }
+                h3 {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Highchart Emplty data
+.highchart_chart {
+  .highcharts-empty-series {
+    fill: #c0c0c0;
+  }
+}
+
+// Ant Button
+
+.ant-btn {
+  border: 0;
+  font-size: $font-size-base;
+  padding: 0 22px;
+  color: $white;
+  background: $btn-bg-dark;
+  border-radius: $base-border-radius;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+  height: 36px;
+  line-height: 36px;
+
+  &:not(.ant-btn-round) {
+    border-radius: 0;
+  }
+
+  &.ant-btn-primary,
+  &.ant-btn-primary-success {
+    cursor: pointer;
+    background-color: transparent;
+    margin: 0;
+    color: black;
+    border-radius: 20px;
+    border: 1px solid $primary-color;
+    transition: all 300ms ease-in-out;
+
+    .dark-mode & {
+      color: $white;
+    }
+
+    &:hover:not(&[disabled]),
+    &:active,
+    &:focus {
+      background-color: $primary-color;
+      color: $white;
+      border-color: $primary-color;
+    }
+
+    &[disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+      border-color: $primary-color;
+      background-color: $primary-color;
+    }
+
+    &.btn-filled {
+      background-color: $primary-color;
+      color: $white;
+      text-transform: capitalize;
+      &:hover:not(&[disabled]),
+      &:active,
+      &:focus {
+        background-color: rgba($primary-color, 0.3);
+        color: $white;
+        border-color: rgba($primary-color, 0.3);
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &.ant-btn-sm {
+    height: 28px;
+    padding: 0 15px;
+    line-height: 100%;
+    font-size: $font-size-sm - 1;
+    font-weight: 300;
+  }
+
+  &.ant-btn-lg {
+    padding: 0 22px;
+    height: 42px;
+    line-height: 42px;
+    font-size: $font-size-lg;
+    font-weight: 300;
+  }
+
+  &.success-btn {
+    background: $success-color;
+    border-color: $success-color;
+    color: $white;
+    padding: 0 15px;
+    &:hover,
+    &:focus {
+      background: $success-color;
+      border-color: $success-color;
+      color: $white;
+      opacity: 0.8;
+    }
+  }
+
+  &.dark-btn {
+    background: #232726;
+    color: $white;
+    border-color: #232726;
+    &:hover,
+    &:focus {
+      background: #232726;
+      color: $white;
+      border-color: #232726;
+      opacity: 0.8;
+    }
+  }
 }
