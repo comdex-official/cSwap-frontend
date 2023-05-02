@@ -32,6 +32,14 @@
   line-height: 20px;
   text-align: center;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 9px;
+  }
+
   &.light {
     color: $white;
   }
