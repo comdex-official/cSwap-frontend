@@ -37,18 +37,25 @@ const Portfolio = () => {
           }`}
         >
           <div
-            className={`${styles.portfolio__element__wrap} ${
+            className={`${styles.portfolio__header__element__wrap} ${
               theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
-              className={`${styles.portfolio__element__title} ${
+              className={`${styles.portfolio__element__wrap} ${
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {'137.87 USD'}
+              <div
+                className={`${styles.portfolio__element__title} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
+                {'137.87 USD'}
+              </div>
             </div>
           </div>
+
           <div
             className={`${styles.portfolio__element} ${
               theme === 'dark' ? styles.dark : styles.light

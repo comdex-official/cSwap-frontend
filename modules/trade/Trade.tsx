@@ -8,9 +8,11 @@ const Trade = () => {
   const theme = useAppSelector((state) => state.theme.theme);
 
   return (
-    <div className={styles.trade__wrap}>
-      <TradeCard theme={theme} />
-    </div>
+    <>
+      <div className={styles.trade__wrap}>
+        <TradeCard theme={theme} />
+      </div>
+    </>
   );
 };
 
