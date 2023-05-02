@@ -1,5 +1,11 @@
+@import '../../styles/globalVariable.scss';
+
 .assets__wrap {
   padding: 40px 80px;
+
+  @media screen and (max-width: $XS) {
+    padding: 20px;
+  }
 }
 
 .assets__main {
@@ -16,6 +22,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (max-width: $M) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .assets__head__left__title {
@@ -23,6 +34,14 @@
   font-size: 36px;
   line-height: 44px;
   color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 31px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 26px;
+  }
 }
 
 .assets__head__right__title {
@@ -31,10 +50,20 @@
   line-height: 37px;
   color: #ffffff;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 25px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 20px;
+  }
+
   i {
     color: #ffffff;
-    transform: rotate(74.61deg);
     margin-left: 10px;
+    &::before {
+      transform: rotate(50deg);
+    }
   }
 }
 
@@ -42,7 +71,14 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin: 20px 0px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+
+  @media screen and (max-width: $S) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
 }
 
 .assets__toggle {
@@ -54,12 +90,21 @@
   display: flex;
   align-items: center;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
   span {
     margin-right: 10px;
   }
 }
 
 .assets__search {
+  // min-width: 265px;
 }
 
 .assets__table__wrap {
@@ -102,6 +147,14 @@
   line-height: 27px;
   color: #ffffff;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
   &.light {
   }
 
@@ -114,6 +167,14 @@
   font-size: 25px;
   line-height: 30px;
   color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 20px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 15px;
+  }
 
   &.light {
   }
@@ -143,9 +204,21 @@
   line-height: 22px;
   color: #ffffff;
 
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
   &.light {
   }
 
   &.dark {
   }
+}
+
+.assets__table {
+  overflow: auto;
 }
