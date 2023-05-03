@@ -1,6 +1,8 @@
 @import '../../styles/globalVariable.scss';
 
 .assets__wrap {
+  max-width: 1500px;
+  margin: auto;
   padding: 40px 80px;
 
   @media screen and (max-width: $XS) {

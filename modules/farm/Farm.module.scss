@@ -1,6 +1,8 @@
 @import '../../styles/globalVariable.scss';
 
 .farm__wrap {
+  max-width: 1500px;
+  margin: auto;
   padding: 40px 80px;
 
   @media screen and (max-width: $XS) {
@@ -281,7 +283,6 @@
   i {
     color: #ffffff;
     opacity: 0.5;
-    height: 28px;
 
     &:first-child {
       margin-right: 10px;

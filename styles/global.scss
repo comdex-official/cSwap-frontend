@@ -295,3 +295,26 @@ a {
     }
   }
 }
+
+.modal__wrap {
+  max-width: 650px;
+
+  .ant-modal-content {
+    background-color: #030b1e;
+    border-radius: 15px;
+    .ant-modal-header {
+      background-color: #030b1e;
+      .ant-modal-title {
+        color: #ffffff;
+      }
+    }
+
+    .ant-modal-close-x {
+      color: #ffffff;
+    }
+
+    .ant-modal-footer {
+      display: none;
+    }
+  }
+}

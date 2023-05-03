@@ -1,10 +1,19 @@
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { Icon } from '@/shared/image/Icon';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './OrderBook.module.scss';
 import dynamic from 'next/dynamic';
 import { NextImage } from '@/shared/image/NextImage';
 import { Slider } from '@/shared/image';
+import { OrderCustomData, OrderCustomData2 } from './Data';
+
+const SymbolOverviewNoSSR = dynamic(
+  () =>
+    import('react-ts-tradingview-widgets').then((w) => w.AdvancedRealTimeChart),
+  {
+    ssr: false,
+  }
+);
 
 const Tab = dynamic(() => import('@/shared/components/tab/Tab'));
 const OrderbookTable = dynamic(
@@ -39,10 +48,133 @@ const OrderBook = () => {
           }`}
         >
           <div
-            className={`${styles.orderbook__trading__view} ${
+            className={`${styles.orderbook__trading__view}  ${
               theme === 'dark' ? styles.dark : styles.light
             }`}
-          ></div>
+          >
+            <div
+              className={`${styles.orderbook__trading__header}  ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <div
+                className={`${styles.orderbook__trading__element}  ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
+                <NextImage src={''} alt="" />
+                <div
+                  className={`${styles.orderbook__trading__title}  ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
+                  {'CMDX/CMST'}
+                </div>
+                <Icon className={'bi bi-chevron-down'} />
+              </div>
+              <div
+                className={`${styles.orderbook__trading__element} ${
+                  styles.element__child
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.orderbook__trading__element__title} ${
+                    styles.header
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'Price'}
+                </div>
+                <div
+                  className={`${styles.orderbook__trading__element__title}  ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
+                  {'$123,487'}
+                </div>
+              </div>
+              <div
+                className={`${styles.orderbook__trading__element} ${
+                  styles.element__child
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.orderbook__trading__element__title} ${
+                    styles.header
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'24h Volume'}
+                </div>
+                <div
+                  className={`${styles.orderbook__trading__element__title}  ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
+                  {'$123,487'}
+                </div>
+              </div>
+              <div
+                className={`${styles.orderbook__trading__element} ${
+                  styles.element__child
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.orderbook__trading__element__title} ${
+                    styles.header
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'24h High'}
+                </div>
+                <div
+                  className={`${styles.orderbook__trading__element__title}  ${
+                    styles.profit
+                  }  ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'$133,342'}
+                </div>
+              </div>
+              <div
+                className={`${styles.orderbook__trading__element} ${
+                  styles.element__child
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.orderbook__trading__element__title} ${
+                    styles.header
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'24h Low'}
+                </div>
+                <div
+                  className={`${styles.orderbook__trading__element__title} ${
+                    styles.loos
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                >
+                  {'$102,342'}
+                </div>
+              </div>
+            </div>
+            <div
+              className={`${styles.orderbook__trading__part} ${styles.loos} ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <SymbolOverviewNoSSR
+                theme="dark"
+                autosize={true}
+                height={'100%'}
+                width={'100%'}
+                locale="en"
+                symbol={'NASDAQ:AAPL'}
+                interval="D"
+                timezone="Etc/UTC"
+                style="1"
+                toolbar_bg="#f1f3f6"
+                enable_publishing={false}
+                allow_symbol_change={true}
+                container_id="tradingview_05075"
+              ></SymbolOverviewNoSSR>
+            </div>
+          </div>
           <div
             className={`${styles.orderbook__table__view} ${
               theme === 'dark' ? styles.dark : styles.light
@@ -128,11 +260,12 @@ const OrderBook = () => {
                 </div>
               </div>
 
-              {true && (
+              {OrderCustomData.map((item) => (
                 <div
                   className={`${styles.orderbook__lower__head} ${
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
+                  key={item.id}
                 >
                   <div
                     className={`${
@@ -151,7 +284,7 @@ const OrderBook = () => {
                     {'$855.00'}
                   </div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
 
@@ -180,11 +313,12 @@ const OrderBook = () => {
               styles.lower
             } ${theme === 'dark' ? styles.dark : styles.light}`}
           >
-            {true && (
+            {OrderCustomData.map((item) => (
               <div
                 className={`${styles.orderbook__lower__head} ${
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
+                key={item.id}
               >
                 <div
                   className={`${styles.orderbook__lower__table__head__title}  ${
@@ -201,7 +335,7 @@ const OrderBook = () => {
                   {'$855.00'}
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -256,11 +390,12 @@ const OrderBook = () => {
               </div>
             </div>
 
-            {true && (
+            {OrderCustomData2.map((item) => (
               <div
                 className={`${styles.orderbook__lower__head} ${styles.lower}  ${
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
+                key={item.id}
               >
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
@@ -284,7 +419,7 @@ const OrderBook = () => {
                   {'18:49:44'}
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
 
