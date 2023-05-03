@@ -2,6 +2,8 @@ import styles from './Portfolio.module.scss';
 import { useState } from 'react';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import dynamic from 'next/dynamic';
+import { HighchartsReact } from 'highcharts-react-official';
+import Highcharts from 'highcharts';
 
 const PortfolioTable = dynamic(
   () => import('@/modules/portfolio/PortfollioTable')
@@ -19,6 +21,73 @@ const Portfolio = () => {
   };
 
   const TabData = ['Assets', 'Liquidity', 'History'];
+
+  const Options = {
+    chart: {
+      type: 'pie',
+      backgroundColor: null,
+      height: 220,
+      width: 220,
+      margin: 5,
+    },
+    credits: {
+      enabled: false,
+    },
+    title: {
+      text: '137.87 USD',
+      verticalAlign: 'middle',
+      floating: true,
+      style: {
+        fontSize: '36px',
+        fontWeight: '600',
+        fontFamily: 'Montserrat',
+        color: '#FFFFFF',
+      },
+    },
+    subtitle: {
+      floating: true,
+      style: {
+        fontSize: '25px',
+        fontWeight: '500',
+        fontFamily: 'Lexend Deca',
+        color: '#fff',
+      },
+      y: 70,
+    },
+    plotOptions: {
+      pie: {
+        showInLegend: false,
+        size: '100%',
+        innerSize: '75%',
+        borderWidth: 0,
+        className: 'highchart_chart',
+        dataLabels: {
+          enabled: false,
+          distance: -14,
+          style: {
+            fontsize: 50,
+          },
+        },
+      },
+    },
+    series: [
+      {
+        states: {
+          hover: {
+            enabled: true,
+          },
+        },
+        name: '',
+        data: [
+          {
+            name: 'Asset Balance',
+            y: 13.52,
+            color: '#1E3B6F',
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <div
@@ -41,7 +110,8 @@ const Portfolio = () => {
               theme === 'dark' ? styles.dark : styles.light
             }`}
           >
-            <div
+            <HighchartsReact highcharts={Highcharts} options={Options} />
+            {/* <div
               className={`${styles.portfolio__element__wrap} ${
                 theme === 'dark' ? styles.dark : styles.light
               }`}
@@ -53,7 +123,7 @@ const Portfolio = () => {
               >
                 {'137.87 USD'}
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div

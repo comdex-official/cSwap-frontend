@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRef, useState } from 'react';
 import useOutsideClick from '@/shared/hooks/useOutsideClick';
 import Sidebar from '../sidebar/Sidebar';
+import { Modal } from 'antd';
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -59,6 +60,25 @@ const Header = () => {
     onOutsideClick: () => setIsOpen({ ...isOpen, dot: false }),
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    console.log('====================================');
+    console.log('DJJDJJF');
+    console.log('====================================');
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  console.log({ isModalOpen });
+
   return (
     <div className={styles.header__wrap}>
       <div className={styles.header__main}>
@@ -82,17 +102,38 @@ const Header = () => {
               <NextImage src={Logo_Light} alt="Logo_Dark" />
             )}
           </div>
-          {HeaderData.map((item) => (
+          {HeaderData.map((item, i) => (
             <div
               key={item.id}
               className={`${styles.header__left__element} ${
                 theme === 'dark' ? styles.dark : styles.light
               } ${isActive(item.route) ? styles.active : ''}`}
             >
-              <Link href={item.route}>{item.name}</Link>
+              <Link
+                href={i === 6 ? '' : item.route}
+                onClick={() => i === 6 && showModal()}
+              >
+                {item.name}
+              </Link>
             </div>
           ))}
         </div>
+
+        <Modal
+          className={'modal__wrap'}
+          title="Bridge"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <iframe
+            src="https://dev-transit.comdex.one/"
+            frameBorder="0"
+            width={'100%'}
+            height={'580px'}
+            style={{ borderRadius: '10px', background: '#030b1e' }}
+          ></iframe>
+        </Modal>
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
