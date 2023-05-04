@@ -101,7 +101,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  background: url('../public/assets/images/background.svg');
+  // background: url('../public/assets/images/background.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -300,10 +300,17 @@ a {
   max-width: 650px;
 
   .ant-modal-content {
-    background-color: #030b1e;
-    border-radius: 15px;
+    background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+    border: 2px solid #303950;
+    border-radius: 20px;
+
     .ant-modal-header {
-      background-color: #030b1e;
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+
       .ant-modal-title {
         color: #ffffff;
       }
@@ -316,5 +323,83 @@ a {
     .ant-modal-footer {
       display: none;
     }
+  }
+}
+
+.ant-modal-wrap {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.ant-modal {
+  width: 100% !important;
+  max-width: 520px !important;
+}
+
+.ant-slider {
+  .ant-slider-rail {
+    background: #d9d9d9 !important;
+    border-radius: 23px !important;
+
+    &:hover {
+      background: #d9d9d9 !important;
+      border-radius: 23px !important;
+    }
+  }
+
+  .ant-slider-track {
+    background: #ff4350 !important;
+    border: 1px solid #ff4350 !important;
+    color: #ff4350 !important;
+    box-shadow: 0 0 0 2px #ff4350 !important;
+    &:hover {
+      background: #ff4350 !important;
+      border: 1px solid #ff4350 !important;
+      color: #ff4350 !important;
+      box-shadow: 0 0 0 2px #ff4350 !important;
+    }
+  }
+
+  .ant-slider-step {
+    display: none;
+  }
+
+  .ant-slider-handle {
+    &::after {
+      background: #ff4350 !important;
+      border: 1px solid #ff4350 !important;
+      color: #ff4350 !important;
+      box-shadow: 0 0 0 2px #ff4350 !important;
+    }
+  }
+}
+
+.ant-input-number {
+  border: none !important;
+  .ant-input-number-input-wrap {
+    input {
+      text-align: center !important;
+      font-weight: 400 !important;
+      font-size: 17px !important;
+      line-height: 21px !important;
+      /* identical to box height */
+
+      color: #ffffff !important;
+
+      &:active {
+        border: none !important;
+        outline: none !important;
+      }
+      &:focus {
+        border: none !important;
+        outline: none !important;
+      }
+    }
+    border: none !important;
+    background: #102044 !important;
+    border-radius: 4px !important;
+  }
+
+  .ant-input-number-handler-wrap {
+    display: none;
   }
 }

@@ -125,3 +125,151 @@
 .portfolio__table {
   overflow: auto;
 }
+
+.portfolio__table__asset {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.farmCard__element__left__logo__wrap {
+  display: flex;
+  align-items: center;
+}
+
+.farmCard__element__left__logo {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+
+  &.first {
+    margin-right: -10px;
+    z-index: 1;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__logo__main {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__title {
+  font-weight: 700;
+  font-size: 20.5509px;
+  line-height: 25px;
+  color: #ffffff;
+  margin-top: 10px;
+
+  &.tableActive {
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.portfolio__table__apr {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+}
+
+.portfolio__table__liquidity {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+}
+
+.farmCard__buttonWrap {
+  margin: 15px 0px;
+
+  button {
+    cursor: pointer;
+    background: #fe4350;
+    border-radius: 54px;
+    padding: 5px 25px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    border: none;
+    outline: none;
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
