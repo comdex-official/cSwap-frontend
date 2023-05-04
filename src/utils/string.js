@@ -55,12 +55,13 @@ const iconMap = {
   [ibcDenoms["shib-wei"]]: "shib-icon",
   [ibcDenoms["uhuahua"]]: "huahua-icon",
   [ibcDenoms["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]]:
-  "gusdc-icon",
+    "gusdc-icon",
   [ibcDenoms["stkATOM"]]: "stkatom-icon",
   [ibcDenoms["gravity0x6B175474E89094C44Da98b954EedeAC495271d0F"]]: "gdai-icon",
   [ibcDenoms["stujuno"]]: "stujuno-icon",
   [ibcDenoms["stuluna"]]: "stuluna-icon",
   [ibcDenoms["stevmos"]]: "stevmos-icon",
+  [ibcDenoms["arb-wei"]]: "arb-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
@@ -109,12 +110,12 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal) =>
   value.indexOf(".") >= 0
     ? value.substr(0, value.indexOf(".")) +
-      value.substr(
-        value.indexOf("."),
-        Number(decimal)
-          ? Number(getExponent(decimal)) + 1
-          : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
-      )
+    value.substr(
+      value.indexOf("."),
+      Number(decimal)
+        ? Number(getExponent(decimal)) + 1
+        : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
+    )
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -132,8 +133,8 @@ export const uniqueLiquidityPairDenoms = (list, type) => {
     ...new Set(
       list && list.length > 0
         ? list.map((item) =>
-            type === "in" ? item.baseCoinDenom : item.quoteCoinDenom
-          )
+          type === "in" ? item.baseCoinDenom : item.quoteCoinDenom
+        )
         : []
     ),
   ];
@@ -143,10 +144,10 @@ export const uniqueQuoteDenomsForBase = (list, type, denom) => {
   const quoteList =
     list && list.length > 0
       ? list.filter((item) =>
-          type === "in"
-            ? item.baseCoinDenom === denom
-            : item.quoteCoinDenom === denom
-        )
+        type === "in"
+          ? item.baseCoinDenom === denom
+          : item.quoteCoinDenom === denom
+      )
       : [];
 
   const quoteMap = quoteList.map((item) =>
@@ -216,7 +217,7 @@ export const errorMessageMappingParser = (message) => {
   var str = message;
 
   var truncatedString = str?.match(/ibc\/\w{64}/g);
-  
+
   for (var i = 0; i < truncatedString?.length; i++) {
     str = str.replace(truncatedString[i], " " + `${ibcDenomToDenom(truncatedString[i])}`);
   }
