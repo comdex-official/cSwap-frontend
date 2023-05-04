@@ -4,6 +4,8 @@ import { useState } from 'react';
 import styles from './Farm.module.scss';
 import { ATOM, CMDS, Cup, Current, Pyramid, Ranged } from '@/shared/image';
 import dynamic from 'next/dynamic';
+import { Modal } from 'antd';
+import Liquidity from './Liquidity';
 
 const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface FarmCardProps {
@@ -12,6 +14,20 @@ interface FarmCardProps {
 
 const FarmCard = ({ theme }: FarmCardProps) => {
   const [showMoreData, setshowMoreData] = useState<boolean>(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div
@@ -257,7 +273,7 @@ const FarmCard = ({ theme }: FarmCardProps) => {
               theme === 'dark' ? styles.dark : styles.light
             }`}
           >
-            <button>Add Liquidity</button>
+            <button onClick={() => showModal()}>Add Liquidity</button>
           </div>
 
           <div
@@ -363,6 +379,15 @@ const FarmCard = ({ theme }: FarmCardProps) => {
               </div>
             </div>
           )}
+
+          <Modal
+            className={'modal__wrap'}
+            title="Liquidity"
+            open={isModalOpen}
+            onCancel={handleCancel}
+          >
+            <Liquidity theme={theme} />
+          </Modal>
         </div>
       </Card>
     </div>

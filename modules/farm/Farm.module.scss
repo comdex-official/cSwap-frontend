@@ -732,7 +732,9 @@
 .farmCard__buttonWrap {
   text-align: center;
   margin: 15px 0px;
+
   button {
+    cursor: pointer;
     background: #fe4350;
     border-radius: 54px;
     padding: 5px 25px;
@@ -899,4 +901,560 @@
   display: flex;
   align-items: center;
   gap: 60px;
+}
+
+.liquidityCard__wrap {
+  padding: 10px;
+}
+
+.liquidityCard__tab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+.liquidityCard__tab__wrap {
+  width: 100%;
+  max-width: 250px;
+}
+
+.liquidityCard__trade__pair {
+  background: #fe4350;
+  box-shadow: 0px 4px 12px rgba(254, 67, 80, 0.25);
+  border-radius: 57px;
+  padding: 6px 20px;
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 10px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+}
+
+.tradeCard__body__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #101b2f;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 20px 0px;
+}
+
+.tradeCard__body__left {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tradeCard__body__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tradeCard__body__left__title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el1 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tradeCard__body__right__el1__title {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: right;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+
+  span {
+    color: #fe4350;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.tradeCard__body__right__el1__description {
+  margin: 0px 6px;
+  background: #fe4350;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el1__footer {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #ffffff;
+  background: #0f2048;
+  border-radius: 5px;
+  padding: 5px 10px;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tradeCard__body__left__item__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  i {
+    color: #3a4b6d;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.tradeCard__logo__wrap {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+
+  @media screen and (max-width: $XS) {
+    height: 38px;
+    width: 38px;
+  }
+}
+
+.tradeCard__logo {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+
+    @media screen and (max-width: $XS) {
+      height: 25px;
+      width: 25px;
+    }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__left__item__details__title {
+  font-weight: 700;
+  font-size: 22.7191px;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0px 10px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 14px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el2 {
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: right;
+  color: #ffffff;
+  opacity: 0.5;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 27px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 24px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+
+  &.limit__order {
+    opacity: 1;
+  }
+}
+
+.tradeCard__body__right__el3 {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el4 {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #acbfdb;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.liquidityCard__pool__details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.liquidityCard__pool__title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #ffffff;
+
+  &.title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
+
+  &.semiTitle {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #acbfdb;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+}
+
+.liquidityCard__pool__details__wrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+.liquidityCard__pool__footer__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+.liquidityCard__pool__element {
+  display: flex;
+  flex-direction: column;
+}
+.liquidityCard__pool__footer__details__wrap {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.tradeCard__button__wrap {
+  text-align: center;
+
+  button {
+    background: #fe4350;
+    border-radius: 54px;
+    border: none;
+    outline: none;
+    padding: 5px 80px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 20px;
+    text-align: center;
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.liquidityCard__pool__withdraw__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  border-bottom: 2px solid #202e50;
+}
+
+.liquidityCard__pool__withdraw__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  /* identical to box height */
+
+  color: #acbfdb;
+
+  margin-top: 10px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+}
+
+.liquidityCard__pool__input {
+  width: 100%;
+  color: #ffffff;
+}
+
+.liquidityCard__pool__input__box {
+  background: #102044;
+  border-radius: 4px;
+  padding: 10px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 21px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+}
+
+.liquidityCard__pool__withdraw__footer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.liquidityCard__pool__withdraw__element {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liquidityCard__pool__withdraw__element__title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-align: right;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
+  &.title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #acbfdb;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
 }

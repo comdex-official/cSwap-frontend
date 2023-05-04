@@ -63,9 +63,6 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    console.log('====================================');
-    console.log('DJJDJJF');
-    console.log('====================================');
     setIsModalOpen(true);
   };
 
@@ -76,8 +73,6 @@ const Header = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  console.log({ isModalOpen });
 
   return (
     <div className={styles.header__wrap}>

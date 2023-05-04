@@ -1,4 +1,5 @@
 //import
+import BackGround from '../../public/assets/images/background.svg';
 import Logo_Dark from '../../public/assets/images/cSwap-light-logo.svg';
 import Logo_Light from '../../public/assets/images/cSwap-dark-logo.svg';
 import C_Logo from '../../public/assets/images/c-logo.svg';
@@ -18,6 +19,7 @@ import Ranged from '../../public/assets/images/ranged.svg';
 
 // exports
 export {
+  BackGround,
   Logo_Light,
   Logo_Dark,
   C_Logo,
