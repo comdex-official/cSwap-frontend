@@ -165,13 +165,13 @@
 .tradeCard__logo__wrap {
   background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
-  height: 42px;
-  width: 42px;
+  height: 38px;
+  width: 38px;
   padding: 1px;
 
   @media screen and (max-width: $XS) {
-    height: 38px;
-    width: 38px;
+    height: 33px;
+    width: 33px;
   }
 }
 
@@ -184,12 +184,12 @@
   align-items: center;
 
   img {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 
     @media screen and (max-width: $XS) {
-      height: 25px;
-      width: 25px;
+      height: 20px;
+      width: 20px;
     }
   }
 
@@ -522,51 +522,95 @@
 .settings__dropdown {
   position: relative;
   cursor: pointer;
+}
 
-  .settings__dropdown__child {
-    position: absolute;
-    top: 30px;
-    right: -15px;
-    width: auto;
-    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-    border: 2px solid #303950;
-    border-radius: 10px;
-    padding: 10px;
-    z-index: 999999;
+.settings__dropdown__child {
+  width: auto;
+  padding: 10px;
+  color: #ffffff;
+}
+
+.settings__dropdown__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
   }
 
-  .settings__dropdown__title {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 20px;
-    color: #ffffff;
-
-    @media screen and (max-width: $XXL) {
-      font-size: 11px;
-    }
-
-    @media screen and (max-width: $XS) {
-      font-size: 8px;
-    }
-
-    &.light {
-    }
-
-    &.dark {
-    }
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
   }
 
-  .settings__dropdown__footer {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    gap: 18px;
+  &.light {
   }
 
-  .settings__dropdown__footer__title {
+  &.dark {
+  }
+}
+
+.settings__dropdown__footer {
+  display: flex !important;
+  align-items: center !important;
+  margin-top: 10px !important;
+  gap: 18px !important;
+}
+
+.settings__dropdown__footer__title {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 8px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 6px;
+  }
+
+  &.active {
+    background: #303950;
+    border-radius: 2px;
+    padding: 5px 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.settings__dropdown__input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 9px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 7px;
+  }
+
+  input {
+    width: 79px;
+    border: 1px solid #303950;
+    border-radius: 2px;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
+    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+    text-align: center;
     color: #ffffff;
 
     @media screen and (max-width: $XXL) {
@@ -577,44 +621,23 @@
       font-size: 6px;
     }
 
-    &.active {
-      background: #303950;
-      border-radius: 2px;
-      padding: 5px 10px;
-    }
-
     &.light {
     }
 
     &.dark {
     }
-  }
 
-  .settings__dropdown__input {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    color: #ffffff;
-
-    @media screen and (max-width: $XXL) {
-      font-size: 9px;
-    }
-
-    @media screen and (max-width: $XS) {
-      font-size: 7px;
-    }
-
-    input {
-      width: 79px;
+    &:focus {
       border: 1px solid #303950;
-      border-radius: 2px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      outline: none;
+    }
+
+    &::placeholder {
       font-weight: 500;
       font-size: 13px;
       line-height: 16px;
-      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
       text-align: center;
       color: #ffffff;
 
@@ -625,47 +648,13 @@
       @media screen and (max-width: $XS) {
         font-size: 6px;
       }
-
-      &.light {
-      }
-
-      &.dark {
-      }
-
-      &:focus {
-        border: 1px solid #303950;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        outline: none;
-      }
-
-      &::placeholder {
-        font-weight: 500;
-        font-size: 13px;
-        line-height: 16px;
-        text-align: center;
-        color: #ffffff;
-
-        @media screen and (max-width: $XXL) {
-          font-size: 8px;
-        }
-
-        @media screen and (max-width: $XS) {
-          font-size: 6px;
-        }
-      }
     }
   }
 }
 
 .token__dropdown__child {
-  position: absolute;
-  top: 50px;
-  right: -8px;
   width: 160px;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  border: 2px solid #303950;
-  border-radius: 10px;
+  text-align: center;
   padding: 10px;
   color: #ffffff;
 }

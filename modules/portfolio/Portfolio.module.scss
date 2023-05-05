@@ -140,13 +140,18 @@
 .farmCard__element__left__logo {
   background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
-  height: 42px;
-  width: 42px;
+  height: 38px;
+  width: 38px;
   padding: 1px;
 
   &.first {
     margin-right: -10px;
     z-index: 1;
+  }
+
+  @media screen and (max-width: $XS) {
+    height: 33px;
+    width: 33px;
   }
 
   &.light {
@@ -165,8 +170,13 @@
   align-items: center;
 
   img {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
+
+    @media screen and (max-width: $XS) {
+      height: 20px;
+      width: 20px;
+    }
   }
 
   &.light {
