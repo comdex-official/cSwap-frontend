@@ -335,7 +335,7 @@
   grid-template-columns: repeat(3, 1fr);
   column-gap: 1rem;
   row-gap: 1rem;
-  @media screen and (max-width: $XL) {
+  @media screen and (max-width: $L) {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -356,7 +356,7 @@
 }
 
 .farmCard__main {
-  padding: 10px 0px;
+  padding: 5px 0px;
 }
 
 .farmCard__element {
@@ -379,9 +379,14 @@
 .farmCard__element__left__logo {
   background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
-  height: 42px;
-  width: 42px;
+  height: 38px;
+  width: 38px;
   padding: 1px;
+
+  @media screen and (max-width: $XS) {
+    height: 33px;
+    width: 33px;
+  }
 
   &.first {
     margin-right: -10px;
@@ -404,8 +409,13 @@
   align-items: center;
 
   img {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
+
+    @media screen and (max-width: $XS) {
+      height: 20px;
+      width: 20px;
+    }
   }
 
   &.light {
@@ -1112,13 +1122,13 @@
 .tradeCard__logo__wrap {
   background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
-  height: 42px;
-  width: 42px;
+  height: 38px;
+  width: 38px;
   padding: 1px;
 
   @media screen and (max-width: $XS) {
-    height: 38px;
-    width: 38px;
+    height: 33px;
+    width: 33px;
   }
 }
 
@@ -1131,12 +1141,12 @@
   align-items: center;
 
   img {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 
     @media screen and (max-width: $XS) {
-      height: 25px;
-      width: 25px;
+      height: 20px;
+      width: 20px;
     }
   }
 

@@ -98,15 +98,25 @@
 }
 
 .orderbook__trading__part {
-  height: 85%;
-  padding: 15px;
-  a,
-  span {
-    display: none;
-  }
+  height: 87%;
+  iframe {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 
-  #tradingview_widget_wrapper {
-    display: none;
+    .feature-no-touch {
+      .chart-page {
+        border: none !important;
+      }
+    }
+
+    html {
+      padding: 0px 10px !important;
+      background: black !important;
+
+      body {
+        border: none !important;
+      }
+    }
   }
 }
 
@@ -618,10 +628,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 
   &.element__child {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0px;
   }
 
   i {

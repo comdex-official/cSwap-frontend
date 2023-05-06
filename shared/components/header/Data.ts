@@ -1,14 +1,12 @@
+import { Discord, Git, Info, Medium, Telegram, Twitter } from "@/shared/image";
+
+
 type HeaderDataProps = {
   id: number;
   name: string;
   route: string;
 };
 
-type cSwapDropdownDataProps = {
-  id: number;
-  name: string;
-  icon: string;
-};
 
 type DotDropdownDataProps = {
   id: number;
@@ -54,48 +52,35 @@ export const HeaderData: HeaderDataProps[] = [
   },
 ];
 
-export const cSwapDropdownData: cSwapDropdownDataProps[] = [
-  {
-    id: 0,
-    name: 'HARBOR',
-    icon: '',
-  },
-  {
-    id: 1,
-    name: 'COMMODO',
-    icon: '',
-  },
-];
-
 export const DotDropdownData: DotDropdownDataProps[] = [
   {
     id: 0,
     name: 'Discord',
-    icon: 'bi bi-discord',
+    icon: Discord,
   },
   {
     id: 1,
     name: 'Github',
-    icon: 'bi bi-github',
+    icon: Git,
   },
   {
     id: 1,
     name: 'Telegram',
-    icon: 'bi bi-telegram',
+    icon: Telegram,
   },
   {
     id: 1,
     name: 'Twitter',
-    icon: 'bi bi-twitter',
+    icon: Twitter,
   },
   {
     id: 1,
     name: 'Medium',
-    icon: '',
+    icon: Medium,
   },
   {
     id: 1,
     name: 'Info',
-    icon: 'bi bi-info-circle-fill',
+    icon: Info,
   },
 ];

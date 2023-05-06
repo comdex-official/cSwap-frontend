@@ -3,10 +3,11 @@ import { Icon } from '@/shared/image/Icon';
 import { NextImage } from '@/shared/image/NextImage';
 import { ATOM, Arrow, CMDS } from '@/shared/image';
 import Toggle from '@/shared/components/toggle/Toggle';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { OrderData, TradeFooterData } from './Data';
-import useOutsideClick from '@/shared/hooks/useOutsideClick';
 import dynamic from 'next/dynamic';
+import CustomInput from '@/shared/components/CustomInput/Input';
+import MyDropdown from '@/shared/components/dropDown/Dropdown';
 
 const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface TradeCardProps {
@@ -20,41 +21,56 @@ const TradeCard = ({ theme }: TradeCardProps) => {
     setToggleValue(e.target.checked);
   };
 
-  const [isOpen, setIsOpen] = useState({
-    setting: false,
-    tokenFrom: false,
-    tokenTo: false,
-    tokenGet: false,
-  });
+  const items = [
+    {
+      key: '1',
+      label: (
+        <div className={styles.token__dropdown__child}>
+          <h4>Loading...</h4>
+        </div>
+      ),
+    },
+  ];
 
-  const settingRef = useRef<any>();
-  const tokenFromRef = useRef<any>();
-  const tokenToRef = useRef<any>();
-  const tokenGetRef = useRef<any>();
-
-  useOutsideClick({
-    isOpen: isOpen.setting,
-    node: settingRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, setting: false }),
-  });
-
-  useOutsideClick({
-    isOpen: isOpen?.tokenFrom,
-    node: tokenFromRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, tokenFrom: false }),
-  });
-
-  useOutsideClick({
-    isOpen: isOpen?.tokenTo,
-    node: tokenToRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, tokenTo: false }),
-  });
-
-  useOutsideClick({
-    isOpen: isOpen?.tokenGet,
-    node: tokenGetRef,
-    onOutsideClick: () => setIsOpen({ ...isOpen, tokenGet: false }),
-  });
+  const settingItems = [
+    {
+      key: '1',
+      label: (
+        <div className={styles.settings__dropdown__child}>
+          <div
+            className={`${styles.settings__dropdown__title} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            {'Limit Order Lifespan'}
+          </div>
+          <div
+            className={`${styles.settings__dropdown__footer} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            {OrderData.map((item, i) => (
+              <div
+                key={item.id}
+                className={`${styles.settings__dropdown__footer__title} ${
+                  i === 2 && styles.active
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
+              >
+                {item.name}
+              </div>
+            ))}
+            <div
+              className={`${styles.settings__dropdown__input} ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <input type="text" /> {'s'}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className={styles.tradeCard__wrap}>
@@ -74,56 +90,13 @@ const TradeCard = ({ theme }: TradeCardProps) => {
               <span>{'Limit Order'}</span>
             </div>
 
-            <div className={styles.settings__dropdown} ref={settingRef}>
+            <div className={styles.settings__dropdown}>
               {toggleValue && (
-                <Icon
-                  className={`bi bi-gear-fill`}
-                  size={'1.2rem'}
-                  onClick={() =>
-                    setIsOpen({ ...isOpen, setting: !isOpen.setting })
-                  }
-                />
-              )}
-
-              {isOpen.setting && (
-                <div
-                  className={`${styles.settings__dropdown__child} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${styles.settings__dropdown__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                  >
-                    {'Limit Order Lifespan'}
+                <MyDropdown items={settingItems} placement={'bottomRight'}>
+                  <div>
+                    <Icon className={`bi bi-gear-fill`} size={'1.2rem'} />
                   </div>
-                  <div
-                    className={`${styles.settings__dropdown__footer} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                  >
-                    {OrderData.map((item, i) => (
-                      <div
-                        key={item.id}
-                        className={`${
-                          styles.settings__dropdown__footer__title
-                        } ${i === 2 && styles.active} ${
-                          theme === 'dark' ? styles.dark : styles.light
-                        }`}
-                      >
-                        {item.name}
-                      </div>
-                    ))}
-                    <div
-                      className={`${styles.settings__dropdown__input} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      <input type="text" /> {'s'}
-                    </div>
-                  </div>
-                </div>
+                </MyDropdown>
               )}
             </div>
           </div>
@@ -165,14 +138,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
               </div>
 
               <div className={styles.tradeCard__body__right}>
-                <div className={styles.settings__dropdown} ref={tokenFromRef}>
+                <MyDropdown items={items} placement={'bottomLeft'}>
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details
                     } ${theme === 'dark' ? styles.dark : styles.light}`}
-                    onClick={() =>
-                      setIsOpen({ ...isOpen, tokenFrom: !isOpen?.tokenFrom })
-                    }
                   >
                     <div className={`${styles.tradeCard__logo__wrap}`}>
                       <div className={`${styles.tradeCard__logo}`}>
@@ -189,21 +159,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                     </div>
                     <Icon className={`bi bi-chevron-down`} />
                   </div>
-
-                  {isOpen.tokenFrom && (
-                    <div className={styles.token__dropdown__child}>
-                      <h4>Loading...</h4>
-                    </div>
-                  )}
-                </div>
+                </MyDropdown>
 
                 <div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el2} ${
-                      toggleValue ? styles.limit__order : ''
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    {'0.00000'}
+                  <div>
+                    <CustomInput value={'0.00000'} />
                   </div>
                   <div
                     className={`${styles.tradeCard__body__right__el3} ${
@@ -260,14 +220,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                     {'ATOM/CMDX'}
                   </div>
                 ) : (
-                  <div className={styles.settings__dropdown} ref={tokenToRef}>
+                  <MyDropdown items={items} placement={'bottomLeft'}>
                     <div
                       className={`${
                         styles.tradeCard__body__left__item__details
                       } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      onClick={() =>
-                        setIsOpen({ ...isOpen, tokenTo: !isOpen?.tokenTo })
-                      }
                     >
                       <div className={`${styles.tradeCard__logo__wrap}`}>
                         <div className={`${styles.tradeCard__logo}`}>
@@ -283,24 +240,14 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                       </div>
                       <Icon className={`bi bi-chevron-down`} />
                     </div>
-
-                    {isOpen.tokenTo && (
-                      <div className={styles.token__dropdown__child}>
-                        <h4>Loading...</h4>
-                      </div>
-                    )}
-                  </div>
+                  </MyDropdown>
                 )}
 
                 <div>
                   {toggleValue ? (
                     <>
-                      <div
-                        className={`${styles.tradeCard__body__right__el2} ${
-                          toggleValue ? styles.limit__order : ''
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      >
-                        {'0.00000'}
+                      <div>
+                        <CustomInput value={'0.00000'} />
                       </div>
                       <div
                         className={`${styles.tradeCard__body__limit__body} ${
@@ -313,12 +260,8 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                     </>
                   ) : (
                     <>
-                      <div
-                        className={`${styles.tradeCard__body__right__el2} ${
-                          toggleValue ? styles.limit__order : ''
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      >
-                        {'0.00000'}
+                      <div>
+                        <CustomInput value={'0.00000'} />
                       </div>
                       <div
                         className={`${styles.tradeCard__body__right__el3} ${
@@ -352,14 +295,11 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                   {'And Get'}
                 </div>
                 <div className={styles.tradeCard__body__right}>
-                  <div className={styles.settings__dropdown} ref={tokenGetRef}>
+                  <MyDropdown items={items} placement={'bottomLeft'}>
                     <div
                       className={`${
                         styles.tradeCard__body__left__item__details
                       } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      onClick={() =>
-                        setIsOpen({ ...isOpen, tokenGet: !isOpen?.tokenGet })
-                      }
                     >
                       <div className={`${styles.tradeCard__logo__wrap}`}>
                         <div className={`${styles.tradeCard__logo}`}>
@@ -375,19 +315,10 @@ const TradeCard = ({ theme }: TradeCardProps) => {
                       </div>
                       <Icon className={`bi bi-chevron-down`} />
                     </div>
+                  </MyDropdown>
 
-                    {isOpen.tokenGet && (
-                      <div className={styles.token__dropdown__child}>
-                        <h4>Loading...</h4>
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el2} ${
-                      toggleValue ? styles.limit__order : ''
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    {'0.00000'}
+                  <div>
+                    <CustomInput value={'0.00000'} />
                   </div>
                 </div>
               </div>
