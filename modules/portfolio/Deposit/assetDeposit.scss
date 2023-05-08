@@ -1,0 +1,53 @@
+// @import '../../../styles/globalVariable.scss';
+
+.ant-message-notice-content {
+  background-color: #0c1424 !important;
+  color: #fff;
+}
+
+.assets-maxhalf {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: pointer;
+  .ant-btn {
+    font-size: 11px;
+    border-radius: 1px;
+    padding: 1px 0;
+    margin-left: 4px;
+    line-height: 1;
+    text-align: center;
+    width: 30px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    .dark-mode & {
+      background: #132239;
+      color: white;
+    }
+
+    &.active {
+      background: #fe4350;
+      border-radius: 2px;
+      .dark-mode & {
+        background: #fe4350;
+      }
+
+      span {
+        color: #fff !important;
+        .dark-mode & {
+          color: white;
+        }
+      }
+    }
+  }
+}
+.assets-input-box {
+  input {
+    background: #f4f5f7;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+  }
+}

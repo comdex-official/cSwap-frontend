@@ -24,6 +24,7 @@ import { message, Modal } from 'antd';
 import { fetchKeplrAccountName, initializeChain } from "../../../services/keplr";
 import { decode, encode } from "js-base64";
 import { queryAllBalances } from "../../../services/bank/query";
+import { queryAssets } from "../../../services/asset/query";
 import {
   setAccountAddress,
   setAccountBalances,
@@ -31,21 +32,43 @@ import {
   setAssetBalance,
   showAccountConnectModal
 } from "../../../logic/redux/account/account";
+import {
+  fetchAllTokens,
+  fetchRestAPRs,
+  queryLiquidityParams,
+  queryPoolIncentives
+} from "../../../services/liquidity/query";
+import {
+  setAppAssets,
+  setAssets,
+  setAssetsInPrgoress
+} from "../../../logic/redux/asset";
+import { fetchRestPrices } from "../../../services/oracle/query";
+import { setMarkets } from "../../../logic/redux/oracle";
 // import { useState } from 'react';
 // import Sidebar from '../sidebar/Sidebar';
 // import { Modal } from 'antd';
 import MyDropdown from '../dropDown/Dropdown';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/constants/common";
 
 interface HeaderProps {
   setAccountAddress: any;
   setAccountBalances: any;
   address: String,
+  setMarkets: any,
+  setAssets: any,
+  setAppAssets: any
+  assetDenomMap: object
 }
 
 const Header = ({
   setAccountAddress,
   address,
   setAccountBalances,
+  setMarkets,
+  setAssets,
+  setAppAssets,
+  assetDenomMap
 }: HeaderProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
@@ -124,6 +147,50 @@ const Header = ({
     []
   );
 
+  const fetchPrices = useCallback(() => {
+    fetchRestPrices((error: any, result: any) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      console.log(result, "Market data");
+
+      setMarkets(result.data);
+    });
+  }, [setMarkets]);
+
+  const fetchAssets = useCallback(
+    (offset: number, limit: number, countTotal: boolean, reverse: boolean) => {
+      queryAssets(offset, limit, countTotal, reverse, (error: any, data: any) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setAssets(data.assets);
+      });
+    },
+    [setAssets]
+  );
+
+  useEffect(() => {
+    if (!Object.keys(assetDenomMap)?.length) {
+      setAssetsInPrgoress(true);
+      fetchAllTokens((error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        console.log(result, "asset all token");
+
+
+        if (result?.data?.length) {
+          setAppAssets(result?.data);
+        }
+      });
+    }
+  }, [setAppAssets, assetDenomMap, setAssetsInPrgoress]);
+
   useEffect(() => {
     console.log(address, "address");
     if (address) {
@@ -132,6 +199,18 @@ const Header = ({
     }
     // }, [address, refreshBalance, markets, fetchBalances]);
   }, [address, fetchBalances]);
+
+  useEffect(() => {
+    fetchPrices();
+    fetchAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE * 10, // taking 100 records
+      true,
+      false
+    );
+  }, [fetchAssets, fetchPrices]);
+  // }, [fetchPrices]);
+
   const cswapItems = [
     {
       key: '1',
@@ -312,15 +391,15 @@ Header.propTypes = {
   // setAccountName: PropTypes.func.isRequired,
   // setAssetBalance: PropTypes.func.isRequired,
   // setAssetsInPrgoress: PropTypes.func.isRequired,
-  // setAssets: PropTypes.func.isRequired,
+  setAssets: PropTypes.func.isRequired,
   // setAppAssets: PropTypes.func.isRequired,
-  // setMarkets: PropTypes.func.isRequired,
+  setMarkets: PropTypes.func.isRequired,
   // setParams: PropTypes.func.isRequired,
   // setPoolIncentives: PropTypes.func.isRequired,
   // setPoolRewards: PropTypes.func.isRequired,
   address: PropTypes.string,
   // assetMap: PropTypes.object,
-  // assetDenomMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   // balances: PropTypes.arrayOf(
   //   PropTypes.shape({
   //     denom: PropTypes.string.isRequired,
@@ -353,7 +432,7 @@ const stateToProps = (state: any) => {
     // pools: state.liquidity.pool.list,
     // balances: state.account.balances.list,
     // assetMap: state.asset.map,
-    // assetDenomMap: state.asset._.assetDenomMap,
+    assetDenomMap: state.account.asset._.assetDenomMap,
   };
 };
 
@@ -362,13 +441,13 @@ const actionsToProps = {
   setAccountAddress,
   setAccountBalances,
   // setAssetBalance,
-  // setMarkets,
+  setMarkets,
   // setAccountName,
   // setPoolIncentives,
   // setPoolRewards,
   // setParams,
-  // setAssets,
-  // setAppAssets,
+  setAssets,
+  setAppAssets,
   // setAssetsInPrgoress,
 };
 

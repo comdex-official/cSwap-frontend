@@ -25,13 +25,14 @@ $background-dark1: #211d34;
 $background-dark2: #3c324c;
 $background-light: #ffffff;
 $background-light2: #f2f2f2;
-
+$background-input-dark: #0c1424;
 
 $border-color: #303950;
 $border-color-base: rgba(255, 255, 255, 0.7); // major border color
 $base-border-radius: 10px;
 // Colors
 
+$dark-color: #040517;
 $primary-color-hover: #28292a;
 $primary-color-light: #232231;
 $success-color: #00ce8e; // success state color
@@ -49,9 +50,20 @@ $font-size-xlg: $font-size-base + 4px; //18px
 $font-size-lg: $font-size-base + 2px; //16px
 $font-size-sm: $font-size-base - 2px; //12px
 
-// Box shadow 
+// Box shadow
 $box-shadow-inner-light: 3px 3px 10px rgba(174, 174, 192, 0.4),
   -8px -8px 12px rgba(174, 174, 192, 0.25);
 
 $box-shadow-inner-light-hover: 3px 3px 10px rgba(174, 174, 192, 0.4),
   inset -8px -8px 12px rgba(174, 174, 192, 0.25);
+$box-shadow-inner-dark: inset 5px 5px 12px 1px #262b38;
+$box-shadow-input-dark: inset 0 4px 12px 6px #1d2330;
+$box-shadow-dark: inset 0 4px 16px 6px #1d2330;
+
+// Text color
+$text-color-light: #73aed2;
+$text-color-dark: #585873;
+$text-color-label-dark: #acbfdb;
+$text-color-dark2: #03253e;
+$text-color-light2: #747f86;
+$text-color-label-dark2: #2d3748;

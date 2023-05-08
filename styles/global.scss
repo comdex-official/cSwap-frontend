@@ -584,3 +584,168 @@ a {
     }
   }
 }
+
+.custom-table {
+  .ant-table {
+    background: none;
+
+    .ant-table-content {
+      table {
+        border-collapse: separate;
+        border-spacing: 0 0.65em;
+
+        .ant-table-thead {
+          tr {
+            th {
+              background: none;
+              font-weight: 400;
+              border: 0;
+              padding: 10px 15px 0 15px;
+              font-size: $font-size-sm + 3;
+              color: $dark-color;
+              text-align: left !important;
+              &::before {
+                display: none;
+              }
+              .dark-mode & {
+                color: $text-color-light;
+              }
+            }
+            th:nth-child(1) {
+              text-align: left !important;
+            }
+            th:last-child {
+              text-align: right !important;
+            }
+          }
+        }
+
+        .ant-table-tbody {
+          .ant-table-placeholder {
+            .ant-empty {
+              .dark-mode & {
+                color: $text-color-light;
+              }
+            }
+          }
+          tr {
+            border-radius: 15px;
+
+            td {
+              .ant-btn-sm {
+                padding: 0 22px;
+              }
+
+              color: $text-color-light2;
+              border-top: 1px solid;
+              border-bottom: 1px solid;
+              border-left: 0;
+              border-right: 0;
+              padding: 8px 15px;
+              font-size: $font-size-lg - 1;
+              line-height: 1;
+              border-color: transparent;
+              background: none;
+              text-align: left;
+
+              &:last-child {
+                text-align: right !important;
+              }
+              &:first-child {
+                border-radius: 15px 0 0 15px !important;
+
+                .dark-mode & {
+                  border-left: 1px solid white;
+                }
+              }
+
+              &:last-child {
+                border-radius: 0 15px 15px 0 !important;
+
+                .dark-mode & {
+                  border-right: 1px solid white;
+                }
+              }
+
+              .dark-mode & {
+                color: $white;
+                border-color: white;
+              }
+            }
+
+            p {
+              margin-bottom: 0;
+              line-height: 1;
+              font-size: $font-size-base + 3;
+            }
+
+            small {
+              font-size: $font-size-sm;
+              line-height: 1;
+
+              .dark-mode & {
+                color: $text-color-light;
+              }
+            }
+
+            &:nth-child(odd) {
+              background: $background-light;
+              box-shadow: $box-shadow-inner-light;
+              height: 3rem;
+              .dark-mode & {
+                background: rgba(black, 0.5);
+                box-shadow: none;
+              }
+              &:hover {
+                // box-shadow: $box-shadow-inner-light;
+                background: rgba(black, 0.7);
+                .dark-mode & {
+                  // box-shadow: $box-shadow-inner-dark;
+                  background: rgba(black, 0.7);
+                }
+              }
+            }
+
+            &:nth-child(even) {
+              background: $background-light;
+              box-shadow: $box-shadow-inner-light;
+              height: 3rem;
+              .dark-mode & {
+                background: rgba(black, 0.5);
+                box-shadow: none;
+              }
+              &:hover {
+                // box-shadow: $box-shadow-inner-light-hover;
+                background: rgba(black, 0.7);
+                .dark-mode & {
+                  // box-shadow: $box-shadow-inner-dark;
+                  background: rgba(black, 0.7);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    &.ant-table-empty {
+      box-sizing: border-box;
+      .ant-table-tbody {
+        overflow: hidden !important;
+        tr {
+          td:last-child {
+            border-radius: 15px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            .dark-mode & {
+              border-radius: 15px !important;
+            }
+          }
+          .ant-table-expanded-row-fixed {
+            overflow: hidden;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
