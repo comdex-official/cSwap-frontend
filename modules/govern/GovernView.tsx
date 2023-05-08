@@ -1,42 +1,177 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import style from './Govern.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { useRouter } from 'next/router';
 import { Button, List } from 'antd';
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import Link from 'next/link';
+import {
+  fetchRestProposal,
+  fetchRestProposalTally,
+  fetchRestProposer,
+  queryUserVote,
+} from '@/services/govern/query';
+import {
+  DOLLAR_DECIMALS,
+  denomConversion,
+  formatNumber,
+  formatTime,
+  proposalOptionMap,
+  proposalStatusMap,
+  stringTagParser,
+  truncateString,
+} from '@/helpers/utils';
+import { comdex } from '@/config/network';
 
 const GovernView = () => {
   // const theme = useAppSelector((state) => state.theme.theme);
   // const router = useRouter();
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
+  const router = useRouter();
+  const { id } = router.query;
 
+  const [votedOption, setVotedOption] = useState(3);
+  const [getVotes, setGetVotes] = useState({
+    yes: 0,
+    no: 0,
+    veto: 0,
+    abstain: 0,
+  });
+
+  const [proposal, setProposal] = useState<any>();
+  const [proposalTally, setProposalTally] = useState<any>();
+  const [proposer, setProposer] = useState<any>();
 
   const data = [
     {
-      title: "Voting Start",
-      counts: "2023-04-24"
-
+      title: 'Voting Start',
+      counts: proposal?.voting_start_time
+        ? formatTime(proposal?.voting_start_time)
+        : '--/--/-- 00:00:00',
     },
     {
-      title: "Voting Ends",
-      counts: "2023-04-25"
+      title: 'Voting Ends',
+      counts: proposal?.voting_end_time
+        ? formatTime(proposal?.voting_end_time)
+        : '--/--/-- 00:00:00',
     },
     {
-      title: "Proposer",
-      counts: "comdexsfe...re43"
-    }
+      title: 'Proposer',
+      counts: (
+        <div className="address_with_copy">
+          {proposer ? (
+            <>
+              <span className="mr-1">{truncateString(proposer, 6, 6)}</span>
+            </>
+          ) : (
+            '------'
+          )}
+        </div>
+      ),
+    },
   ];
 
+  useEffect(() => {
+    if (id) {
+      fetchRestProposal(id, (error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        setProposal(result?.proposal);
+      });
+      fetchRestProposalTally(id, (error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        setProposalTally(result?.tally);
+      });
+
+      fetchRestProposer(id, (error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
+          setProposer(
+            result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer
+          );
+        }
+      });
+    }
+  }, [id, setProposal, setProposer, setProposalTally]);
+
+  const fetchVote = useCallback(() => {
+    queryUserVote(
+      'comdex12ref04v38lrta7cdv7pgrqqexcjka4zl2arnxf',
+      proposal?.proposal_id,
+      (error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        setVotedOption(result?.vote?.option);
+      }
+    );
+  }, [proposal?.proposal_id]);
+
+  useEffect(() => {
+    if (proposal?.proposal_id) {
+      fetchVote();
+    }
+  }, [id, proposal, fetchVote]);
+
+  const calculateTotalValue = () => {
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
+
+    let totalValue: any = yes + no + abstain + veto;
+
+    totalValue = totalValue / 1000000;
+    totalValue = formatNumber(totalValue);
+    return totalValue;
+  };
+
+  const calculateVotes = useCallback(() => {
+    let yes: any = Number(proposalTally?.yes);
+    let no: any = Number(proposalTally?.no);
+    let veto: any = Number(proposalTally?.no_with_veto);
+    let abstain: any = Number(proposalTally?.abstain);
+    let totalValue = yes + no + abstain + veto;
+
+    yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    no = Number((no / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    veto = Number((veto / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    abstain = Number((abstain / totalValue || 0) * 100).toFixed(
+      DOLLAR_DECIMALS
+    );
+
+    setGetVotes({
+      ...getVotes,
+      yes: yes || 0,
+      no: no || 0,
+      veto: veto || 0,
+      abstain: abstain || 0,
+    });
+  }, [proposalTally]);
+
+  useEffect(() => {
+    if (proposalTally?.yes) {
+      calculateVotes();
+    }
+  }, [calculateVotes, proposalTally?.yes]);
 
   const Options = {
     chart: {
-      type: "pie",
+      type: 'pie',
       backgroundColor: null,
       height: 160,
       width: 220,
@@ -51,20 +186,20 @@ const GovernView = () => {
     subtitle: {
       floating: true,
       style: {
-        fontSize: "25px",
-        fontWeight: "500",
-        fontFamily: "Lexend Deca",
-        color: "#fff",
+        fontSize: '25px',
+        fontWeight: '500',
+        fontFamily: 'Lexend Deca',
+        color: '#fff',
       },
       y: 70,
     },
     plotOptions: {
       pie: {
         showInLegend: false,
-        size: "120%",
-        innerSize: "75%",
+        size: '120%',
+        innerSize: '75%',
         borderWidth: 0,
-        className: "highchart_chart",
+        className: 'highchart_chart',
         dataLabels: {
           enabled: false,
           distance: -14,
@@ -81,27 +216,27 @@ const GovernView = () => {
             enabled: true,
           },
         },
-        name: "",
+        name: '',
         data: [
           {
-            name: "Yes",
-            y: 48,
-            color: "#03d707c4",
+            name: 'Yes',
+            y: Number(getVotes?.yes || 0),
+            color: '#03d707c4',
           },
           {
-            name: "No",
-            y: 20,
-            color: "#FF6767",
+            name: 'No',
+            y: Number(getVotes?.no || 0),
+            color: '#FF6767',
           },
           {
-            name: "No With Veto",
-            y: 14,
-            color: "#C0C0C0",
+            name: 'No With Veto',
+            y: Number(getVotes?.veto || 0),
+            color: '#C0C0C0',
           },
           {
-            name: "Abstain",
-            y: 33,
-            color: "#B699CA",
+            name: 'Abstain',
+            y: Number(getVotes?.abstain || 0),
+            color: '#B699CA',
           },
         ],
       },
@@ -111,9 +246,10 @@ const GovernView = () => {
   return (
     <>
       <div className={`${style.govern_main_container} ${style.max_width}`}>
-
         <div className={style.back_button_container}>
-          <Link href="/govern"><Button type='primary'>Back</Button></Link>
+          <Link href="/govern">
+            <Button type="primary">Back</Button>
+          </Link>
         </div>
 
         <div className={style.govern_container}>
@@ -130,10 +266,14 @@ const GovernView = () => {
                   xl: 3,
                   xxl: 3,
                 }}
-                className={`${style.govern_upper_container_list} ${"govern_ant_list_class"} ${style.govern_detail_ant_list_class}`}
+                className={`${
+                  style.govern_upper_container_list
+                } ${'govern_ant_list_class'} ${
+                  style.govern_detail_ant_list_class
+                }`}
                 dataSource={data}
-                renderItem={item => (
-                  <List.Item >
+                renderItem={(item) => (
+                  <List.Item>
                     <div>
                       <p>{item.title}</p>
                       <h3>{item.counts}</h3>
@@ -148,23 +288,30 @@ const GovernView = () => {
             <div className={style.govern_detail_left_container}>
               <div className={style.up_main_container}>
                 <div className={style.proposal_id}>
-                  #137
+                  #{proposal?.proposal_id || '-'}
                 </div>
                 <div className={`${style.status} ${style.passed_color}`}>
-                  Passed
+                  {proposalStatusMap[proposal?.status]}
                 </div>
               </div>
               <div className={style.bottom_main_container}>
-                <div className={style.title}>Lorem ipsum dolor sit amet.</div>
+                <div className={style.title}>
+                  {proposal?.content?.title || '------'}
+                </div>
                 <div className={style.description}>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, aspernatur alias esse in earum at accusamus culpa voluptate aut aliquid? Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eveniet alias inventore a quis, exercitationem aspernatur minima in iste temporibus nostrum consequatur mollitia voluptatibus, blanditiis cupiditate, deserunt expedita impedit fugiat ipsum. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt accusamus perferendis assumenda recusandae aliquid optio modi saepe illo non mollitia?
+                  {stringTagParser(proposal?.content?.description || ' ')}{' '}
                 </div>
               </div>
             </div>
             <div className={style.govern_detail_right_container}>
               <div className={style.vote_button}>
-                <div className={style.user_vote}> Your Vote : <span>Yes</span> </div>
-                <Button type="primary" className={style.ant_vote_button}>Vote Now</Button>
+                <div className={style.user_vote}>
+                  {' '}
+                  Your Vote : <span>{proposalOptionMap[votedOption]}</span>
+                </div>
+                <Button type="primary" className={style.ant_vote_button}>
+                  Vote Now
+                </Button>
               </div>
               <div className={style.charts_Value_container}>
                 <div className={style.charts}>
@@ -172,14 +319,11 @@ const GovernView = () => {
                 </div>
                 <div className={style.total_value}>
                   <div className={style.vote_border}>
-                    <div className={style.title}>
-                      Total Vote
-                    </div>
-                    <div className={style.value}>
-                      23,342,32 CMDX
-                    </div>
+                    <div className={style.title}>Total Vote</div>
+                    <div className={style.value}>{`${
+                      calculateTotalValue() || '0'
+                    } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
                   </div>
-
                 </div>
               </div>
               <div className={style.vote_count_container}>
@@ -187,28 +331,36 @@ const GovernView = () => {
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>Yes</div>
-                    <div className={style.value}>48 %</div>
+                    <div className={style.value}>{`${Number(
+                      getVotes?.yes || '0.00'
+                    )}%`}</div>
                   </div>
                 </div>
                 <div className={style.no_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>No</div>
-                    <div className={style.value}>20%</div>
+                    <div className={style.value}>{`${Number(
+                      getVotes?.no || '0.00'
+                    )}%`}</div>
                   </div>
                 </div>
                 <div className={style.noWithVeto_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>No With Veto</div>
-                    <div className={style.value}>14%</div>
+                    <div className={style.value}>{`${Number(
+                      getVotes?.veto || '0.00'
+                    )}%`}</div>
                   </div>
                 </div>
                 <div className={style.abstain_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>Abstain</div>
-                    <div className={style.value}>33%</div>
+                    <div className={style.value}>{`${Number(
+                      getVotes?.abstain || '0.00'
+                    )}%`}</div>
                   </div>
                 </div>
               </div>

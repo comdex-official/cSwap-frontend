@@ -78,10 +78,18 @@
               }
               h3 {
                 font-size: 20px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
 
                 .dark-mode & {
                   color: white;
                 }
+              }
+              p {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .proposal_id {
                 h3 {

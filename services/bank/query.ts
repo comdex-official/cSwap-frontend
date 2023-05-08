@@ -1,15 +1,15 @@
 import { QueryClientImpl } from "cosmjs-types/cosmos/bank/v1beta1/query";
 import { createQueryClient, newQueryClientRPC } from "../helper";
 
-let myClient = null;
+let myClient:any = null;
 
-const getQueryService = (callback) => {
+const getQueryService = (callback:any) => {
     if (myClient) {
         const queryService = new QueryClientImpl(myClient);
 
         return callback(null, queryService);
     } else {
-        createQueryClient((error, client) => {
+        createQueryClient((error:any, client:any) => {
             if (error) {
                 return callback(error);
             }
@@ -22,8 +22,8 @@ const getQueryService = (callback) => {
     }
 };
 
-export const queryAllBalances = (owner, callback) => {
-    getQueryService((error, queryService) => {
+export const queryAllBalances = (owner:string, callback:any) => {
+    getQueryService((error:any, queryService:any) => {
         if (error) {
             callback(error);
             return;
@@ -33,17 +33,17 @@ export const queryAllBalances = (owner, callback) => {
             .AllBalances({
                 address: owner,
             })
-            .then((result) => {
+            .then((result:any) => {
                 callback(null, result);
             })
-            .catch((error) => {
+            .catch((error:any) => {
                 callback(error?.message);
             });
     });
 };
 
-export const queryBalance = (rpc, address, denom, callback) => {
-    newQueryClientRPC(rpc, (error, client) => {
+export const queryBalance = (rpc: string, address:any, denom:string, callback:(error: any, result?: any)=> void) => {
+    newQueryClientRPC(rpc, (error:any, client:any) => {
         if (error) {
             callback(error);
             return;
@@ -56,17 +56,17 @@ export const queryBalance = (rpc, address, denom, callback) => {
                 address,
                 denom,
             })
-            .then((result) => {
+            .then((result:any) => {
                 callback(null, result);
             })
-            .catch((error) => {
+            .catch((error:any) => {
                 callback(error?.message);
             });
     });
 };
 
-export const querySupply = (denom, callback) => {
-    createQueryClient((error, client) => {
+export const querySupply = (denom:any, callback:any) => {
+    createQueryClient((error:any, client:any) => {
         if (error) {
             callback(error);
             return;
