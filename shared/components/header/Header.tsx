@@ -5,8 +5,15 @@ import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { toggleTheme } from '@/logic/redux/slices/themeSlice';
 import { NextImage } from '@/shared/image/NextImage';
-import { DotDropdownData, HeaderData, cSwapDropdownData } from './Data';
-import { C_Logo, Faucet, Logo_Dark, Logo_Light } from '@/shared/image';
+import { DotDropdownData, HeaderData } from './Data';
+import {
+  C_Logo,
+  Comodo,
+  Faucet,
+  Harbor,
+  Logo_Dark,
+  Logo_Light,
+} from '@/shared/image';
 import { Icon } from '@/shared/image/Icon';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -24,6 +31,10 @@ import {
   setAssetBalance,
   showAccountConnectModal
 } from "../../../logic/redux/account/account";
+// import { useState } from 'react';
+// import Sidebar from '../sidebar/Sidebar';
+// import { Modal } from 'antd';
+import MyDropdown from '../dropDown/Dropdown';
 
 interface HeaderProps {
   setAccountAddress: any;
@@ -45,12 +56,6 @@ const Header = ({
     dispatch(toggleTheme());
   };
 
-  const [isOpen, setIsOpen] = useState({
-    cSwap: false,
-    wallet: false,
-    dot: false,
-  });
-
   const [mobileHam, setMobileHam] = useState<boolean>(false);
 
   const router = useRouter();
@@ -58,31 +63,6 @@ const Header = ({
   const isActive = (pathname: string) => {
     return router.pathname === pathname;
   };
-
-  const cSwapRef = useRef<any>();
-  const walletRef = useRef<any>();
-  const dotRef = useRef<any>();
-
-  useOutsideClick({
-    isOpen: isOpen.cSwap,
-    node: cSwapRef,
-    ids: ['cSwap'],
-    onOutsideClick: () => setIsOpen({ ...isOpen, cSwap: false }),
-  });
-
-  useOutsideClick({
-    isOpen: isOpen.wallet,
-    node: walletRef,
-    ids: ['wallet'],
-    onOutsideClick: () => setIsOpen({ ...isOpen, wallet: false }),
-  });
-
-  useOutsideClick({
-    isOpen: isOpen.dot,
-    node: dotRef,
-    ids: ['dot'],
-    onOutsideClick: () => setIsOpen({ ...isOpen, dot: false }),
-  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -152,6 +132,55 @@ const Header = ({
     }
     // }, [address, refreshBalance, markets, fetchBalances]);
   }, [address, fetchBalances]);
+  const cswapItems = [
+    {
+      key: '1',
+      label: (
+        <div className={styles.dropdown__cSwap__menu}>
+          <button>
+            <NextImage src={Harbor} alt="Logo" />
+          </button>
+          <button>
+            <NextImage src={Comodo} alt="Logo" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const walletItems = [
+    {
+      key: '1',
+      label: (
+        <div className={styles.dropdown__wallet__menu}>
+          <div className={styles.dropdown__wallet__title}>
+            {' Connect Wallet'}
+          </div>
+          <button onClick={() => handleConnectToWallet("keplr")}>{'Keplr Wallet'}</button>
+        </div>
+      ),
+    },
+  ];
+
+  const threeDotItems = [
+    {
+      key: '1',
+      label: (
+        <div className={styles.dropdown__dot__menu}>
+          {DotDropdownData.map((item) => (
+            <div key={item.id} className={styles.dropdown__dot__item}>
+              <Link href="#">
+                <div>
+                  <NextImage src={item.icon} alt="Icon" />
+                </div>
+                <div>{item.name}</div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className={styles.header__wrap}>
@@ -209,31 +238,32 @@ const Header = ({
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
-            <div
-              id="cSwap"
-              className={styles.header__cSwap}
-              onClick={() => setIsOpen({ ...isOpen, cSwap: !isOpen.cSwap })}
-            >
-              <div className={styles.header__cSwap__main}>
-                {theme === 'dark' ? (
-                  <NextImage src={C_Logo} alt="Logo_Dark" />
-                ) : (
-                  <NextImage src={C_Logo} alt="Logo_Dark" />
-                )}
+            <MyDropdown items={cswapItems} placement={'bottomLeft'}>
+              <div className={styles.header__cSwap}>
+                <div className={styles.header__cSwap__main}>
+                  {theme === 'dark' ? (
+                    <NextImage src={C_Logo} alt="Logo_Dark" />
+                  ) : (
+                    <NextImage src={C_Logo} alt="Logo_Dark" />
+                  )}
 
-                <div
-                  className={`${styles.header__cSwap__title} ${theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                >
-                  {'cSwap'}
+                  <div
+                    className={`${styles.header__cSwap__title} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
+                  >
+                    {'cSwap'}
+                  </div>
+                  <Icon
+                    className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                      }`}
+                  />
                 </div>
+                <Icon
+                  className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
+                />
               </div>
-              <Icon
-                className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
-              />
-            </div>
-
+            </MyDropdown>
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
@@ -243,62 +273,27 @@ const Header = ({
                 {'Faucet'}
               </div>
             </div>
-            <div
-              id="wallet"
-              className={styles.header__wallet}
-              onClick={() => setIsOpen({ ...isOpen, wallet: !isOpen.wallet })}
-            >
-              <div
-                className={`${styles.header__wallet__title} ${theme === 'dark' ? styles.dark : styles.light
-                  }`}
-              >
-                {'Connect Wallet'}
-              </div>
-            </div>
-            <Icon
-              id="dot"
-              className={`bi bi-three-dots-vertical ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-                }`}
-              size={'2rem'}
-              onClick={() => setIsOpen({ ...isOpen, dot: !isOpen.dot })}
-            />
 
-            {isOpen.cSwap && (
-              <div className={styles.dropdown__cSwap__menu} ref={cSwapRef}>
-                {cSwapDropdownData.map((item) => (
-                  <button key={item.id}>{item.name}</button>
-                ))}
-              </div>
-            )}
-
-            {isOpen.wallet && (
-              <div className={styles.dropdown__wallet__menu} ref={walletRef}>
-                <div className={styles.dropdown__wallet__title}>
-                  {' Connect Wallet'}
+            <MyDropdown items={walletItems} placement={'bottomLeft'}>
+              <div className={styles.header__wallet}>
+                <div
+                  className={`${styles.header__wallet__title} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                >
+                  {'Connect Wallet'}
                 </div>
-                <button onClick={() => handleConnectToWallet("keplr")}>{'Keplr Wallet'}</button>
               </div>
-            )}
+            </MyDropdown>
 
-            {isOpen.dot && (
-              <div className={styles.dropdown__dot__menu} ref={dotRef}>
-                {DotDropdownData.map((item) => (
-                  <div key={item.id} className={styles.dropdown__dot__item}>
-                    <Link href="#">
-                      <div>
-                        <Icon
-                          className={`${item.icon} ${theme === 'dark'
-                            ? styles.icon_dark
-                            : styles.icon_light
-                            }`}
-                        />
-                      </div>
-                      <div>{item.name}</div>
-                    </Link>
-                  </div>
-                ))}
+            <MyDropdown items={threeDotItems} placement={'bottomLeft'}>
+              <div>
+                <Icon
+                  className={`bi bi-three-dots-vertical ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
+                  size={'2rem'}
+                />
               </div>
-            )}
+            </MyDropdown>
 
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>

@@ -101,7 +101,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  // background: url('../public/assets/images/background.svg');
+  background: url('../public/assets/images/background.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -401,5 +401,186 @@ a {
 
   .ant-input-number-handler-wrap {
     display: none;
+  }
+}
+
+.ant-dropdown {
+  .ant-dropdown-menu {
+    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
+    border: 2px solid #303950 !important;
+    border-radius: 10px !important;
+
+    .ant-dropdown-menu-item {
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
+    }
+  }
+}
+
+.ant-input {
+  height: 40px;
+  border-radius: 5px;
+  max-width: 200px;
+  padding: 0 0px 0 10px;
+  text-align: center;
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: right;
+  color: #ffffff;
+  border: none;
+  background: #101b2f;
+
+  &:active {
+    border-color: #18305a;
+    color: $white;
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    display: none;
+    margin: 0;
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 27px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 24px;
+  }
+}
+
+.assets-select-wrapper {
+  position: relative;
+  margin-top: 10px;
+
+  .ant-select {
+    background: none;
+
+    &.assets-select {
+      .ant-select-selection-placeholder {
+        display: flex;
+        align-items: center;
+
+        .select-placeholder {
+          display: flex;
+          align-items: center;
+          font-size: $font-size-lg + 1;
+
+          .dark-mode & {
+            color: $white;
+          }
+
+          .circle-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            padding: 1px;
+            background: rgb(60, 70, 116);
+            margin-right: 12px;
+
+            .circle-icon-inner {
+              background: $white;
+              width: 100%;
+              height: 100%;
+              border-radius: 100%;
+              .dark-mode & {
+                background: rgb(60, 70, 116);
+              }
+            }
+          }
+        }
+      }
+
+      .ant-select-selector {
+        background: none !important;
+        border: 0 !important;
+        height: 40px;
+        min-width: 150px;
+        padding-left: 0;
+        box-shadow: none !important;
+
+        .ant-select-selection-item {
+          display: flex;
+          align-items: center;
+          color: rgb(60, 70, 116);
+
+          .dark-mode & {
+            color: $white;
+          }
+
+          .select-inner {
+            display: flex;
+            align-items: center;
+
+            .svg-icon {
+              width: 40px;
+              height: 40px;
+              border-radius: 40px;
+              background: red;
+              padding: 1px;
+              margin-right: 15px;
+
+              .svg-icon-inner {
+                width: 100%;
+                height: 100%;
+                border-radius: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px;
+                background: $white;
+                .dark-mode & {
+                  background: rgb(60, 70, 116);
+                }
+                .icon {
+                  width: 100%;
+                  height: 100%;
+                  fill: rgb(60, 70, 116);
+                  border-radius: 50%;
+                }
+              }
+              .swap-svg-icon-inner {
+                .icon {
+                  border-radius: 50%;
+                }
+              }
+            }
+
+            .name {
+              .dark-mode & {
+                color: $white;
+                font-size: $font-size-lg + 1;
+              }
+            }
+          }
+        }
+      }
+
+      .ant-select-arrow {
+        right: 0;
+
+        i {
+          fill: rgb(60, 70, 116);
+          width: 13px;
+          height: 16px;
+        }
+      }
+
+      &:hover {
+        .ant-select-arrow {
+          .icon {
+            fill: rgb(60, 70, 116);
+          }
+        }
+      }
+    }
+
+    &.center-select-text {
+      .ant-select-selection-item {
+        justify-content: center;
+      }
+    }
   }
 }

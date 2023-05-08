@@ -16,6 +16,14 @@ import ArrowRight from '../../public/assets/images/arrow-right.svg';
 import No_Data from '../../public/assets/images/no_data.svg';
 import Slider from '../../public/assets/images/slider.svg';
 import Ranged from '../../public/assets/images/ranged.svg';
+import ArrowRightLeft from '../../public/assets/images/twoArrow.svg';
+import Discord from '../../public/assets/images/discord.svg';
+import Git from '../../public/assets/images/git.svg';
+import Telegram from '../../public/assets/images/tele.svg';
+import Twitter from '../../public/assets/images/twitter.svg';
+import Medium from '../../public/assets/images/medium.svg';
+import Info from '../../public/assets/images/info.svg';
+
 
 // exports
 export {
@@ -35,5 +43,12 @@ export {
   ArrowRight,
   No_Data,
   Slider,
-  Ranged
+  Ranged,
+  ArrowRightLeft,
+  Discord,
+  Git,
+  Telegram,
+  Twitter,
+  Medium,
+  Info
 };

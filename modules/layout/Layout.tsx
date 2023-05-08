@@ -1,6 +1,4 @@
 import store from '@/logic/redux/store';
-import { BackGround } from '@/shared/image';
-import { NextImage } from '@/shared/image/NextImage';
 import dynamic from 'next/dynamic';
 import { ReactNode, useEffect } from 'react';
 import { Provider } from 'react-redux';
@@ -52,15 +50,6 @@ const Layout = ({ children }: LayoutProps) => {
     <Provider store={store}>
       <Header />
       {children}
-
-      <NextImage
-        layout="fill"
-        objectFit={true}
-        className="object-center object-cover pointer-events-none"
-        src={BackGround}
-        alt={'Back'}
-        style={{ zIndex: '-1' }}
-      />
     </Provider>
   );
 };

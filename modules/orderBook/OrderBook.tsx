@@ -4,16 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './OrderBook.module.scss';
 import dynamic from 'next/dynamic';
 import { NextImage } from '@/shared/image/NextImage';
-import { Slider } from '@/shared/image';
+import { ArrowRightLeft, Slider } from '@/shared/image';
 import { OrderCustomData, OrderCustomData2 } from './Data';
-
-const SymbolOverviewNoSSR = dynamic(
-  () =>
-    import('react-ts-tradingview-widgets').then((w) => w.AdvancedRealTimeChart),
-  {
-    ssr: false,
-  }
-);
+import TradingViewWidget from './OrderBookTrading';
 
 const Tab = dynamic(() => import('@/shared/components/tab/Tab'));
 const OrderbookTable = dynamic(
@@ -62,7 +55,7 @@ const OrderBook = () => {
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                <NextImage src={''} alt="" />
+                <NextImage src={ArrowRightLeft} alt="Logo" />
                 <div
                   className={`${styles.orderbook__trading__title}  ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -158,21 +151,7 @@ const OrderBook = () => {
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              <SymbolOverviewNoSSR
-                theme="dark"
-                autosize={true}
-                height={'100%'}
-                width={'100%'}
-                locale="en"
-                symbol={'NASDAQ:AAPL'}
-                interval="D"
-                timezone="Etc/UTC"
-                style="1"
-                toolbar_bg="#f1f3f6"
-                enable_publishing={false}
-                allow_symbol_change={true}
-                container_id="tradingview_05075"
-              ></SymbolOverviewNoSSR>
+              <TradingViewWidget />
             </div>
           </div>
           <div
