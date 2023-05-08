@@ -10,14 +10,20 @@ const PortfolioTable = dynamic(
 );
 const Tab = dynamic(() => import('@/shared/components/tab/Tab'));
 const Search = dynamic(() => import('@/shared/components/search/Search'));
+const Toggle = dynamic(() => import('@/shared/components/toggle/Toggle'));
 
 const Portfolio = () => {
   const theme = useAppSelector((state) => state.theme.theme);
+  const [toggleValue, setToggleValue] = useState<boolean>(false);
 
   const [active, setActive] = useState('Assets');
 
   const handleActive = (item: string) => {
     setActive(item);
+  };
+
+  const handleToggleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToggleValue(e.target.checked);
   };
 
   const TabData = ['Assets', 'Liquidity', 'History'];
@@ -91,24 +97,20 @@ const Portfolio = () => {
 
   return (
     <div
-      className={`${styles.portfolio__wrap} ${
-        theme === 'dark' ? styles.dark : styles.light
-      }`}
+      className={`${styles.portfolio__wrap} ${theme === 'dark' ? styles.dark : styles.light
+        }`}
     >
       <div
-        className={`${styles.portfolio__main} ${
-          theme === 'dark' ? styles.dark : styles.light
-        }`}
+        className={`${styles.portfolio__main} ${theme === 'dark' ? styles.dark : styles.light
+          }`}
       >
         <div
-          className={`${styles.portfolio__header__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.portfolio__header__wrap} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.portfolio__header__element__wrap} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__header__element__wrap} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <HighchartsReact highcharts={Highcharts} options={Options} />
             {/* <div
@@ -127,91 +129,87 @@ const Portfolio = () => {
           </div>
 
           <div
-            className={`${styles.portfolio__element} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'Total Value'}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'137.87 USD'}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div />
               {'Asset Balance'}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'137.87 USD'}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div /> {'Farm Balance'}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'137.87 USD'}
             </div>
           </div>
         </div>
         <div
-          className={`${styles.portfolio__body__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.portfolio__body__wrap} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.portfolio__tab} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__tab} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <Tab data={TabData} active={active} handleActive={handleActive} />
           </div>
+
           <div
-            className={`${styles.portfolio__search} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.assets__toggle} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
+          >
+            <span>{'Hide 0 Balances'}</span>
+            <Toggle handleToggleValue={handleToggleValue} />
+          </div>
+
+          <div
+            className={`${styles.portfolio__search} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <Search theme={theme} type={1} placeHolder="Search Asset.." />
           </div>
         </div>
         <div
-          className={`${styles.portfolio__table} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.portfolio__table} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <PortfolioTable theme={theme} active={active} />
         </div>

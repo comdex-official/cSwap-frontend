@@ -8,16 +8,16 @@ const Layout = dynamic(() => import('@/modules/layout/Layout'));
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme: 'light',
-        }}
-      >
-        <Layout>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'light',
+      }}
+    >
+      <Layout>
         <Component {...pageProps} />
-        </Layout>
-      </MantineProvider>
+      </Layout>
+    </MantineProvider>
   );
 }
