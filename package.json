@@ -36,6 +36,7 @@
     "antd": "^5.4.6",
     "axios": "^1.4.0",
     "bootstrap-icons": "^1.10.4",
+    "classnames": "^2.3.2",
     "comdex-codec": "comdex-official/proto-codecs#main",
     "cosmjs-types": "^0.7.1",
     "eslint": "8.39.0",

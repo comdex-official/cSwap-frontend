@@ -4,9 +4,14 @@ import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import dynamic from 'next/dynamic';
 import { HighchartsReact } from 'highcharts-react-official';
 import Highcharts from 'highcharts';
+import { commaSeparatorWithRounding } from '@/utils/coin';
+import { DOLLAR_DECIMALS } from '@/constants/common';
 
 const PortfolioTable = dynamic(
   () => import('@/modules/portfolio/PortfollioTable')
+);
+const PortifolioTab = dynamic(
+  () => import('@/modules/portfolio/PortifolioTab')
 );
 const Tab = dynamic(() => import('@/shared/components/tab/Tab'));
 const Search = dynamic(() => import('@/shared/components/search/Search'));
@@ -14,6 +19,7 @@ const Toggle = dynamic(() => import('@/shared/components/toggle/Toggle'));
 
 const Portfolio = () => {
   const theme = useAppSelector((state) => state.theme.theme);
+  const assetBalance = useAppSelector((state) => state.account.account.balances.asset);
   const [toggleValue, setToggleValue] = useState<boolean>(false);
 
   const [active, setActive] = useState('Assets');
@@ -22,11 +28,6 @@ const Portfolio = () => {
     setActive(item);
   };
 
-  const handleToggleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setToggleValue(e.target.checked);
-  };
-
-  const TabData = ['Assets', 'Liquidity', 'History'];
 
   const Options = {
     chart: {
@@ -113,19 +114,6 @@ const Portfolio = () => {
               }`}
           >
             <HighchartsReact highcharts={Highcharts} options={Options} />
-            {/* <div
-              className={`${styles.portfolio__element__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.portfolio__element__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'137.87 USD'}
-              </div>
-            </div> */}
           </div>
 
           <div
@@ -143,6 +131,7 @@ const Portfolio = () => {
                 }`}
             >
               {'137.87 USD'}
+
             </div>
           </div>
           <div
@@ -160,7 +149,7 @@ const Portfolio = () => {
               className={`${styles.portfolio__element__title} ${theme === 'dark' ? styles.dark : styles.light
                 }`}
             >
-              {'137.87 USD'}
+              {`${commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)} USD`}
             </div>
           </div>
           <div
@@ -185,33 +174,13 @@ const Portfolio = () => {
           className={`${styles.portfolio__body__wrap} ${theme === 'dark' ? styles.dark : styles.light
             }`}
         >
-          <div
-            className={`${styles.portfolio__tab} ${theme === 'dark' ? styles.dark : styles.light
-              }`}
-          >
-            <Tab data={TabData} active={active} handleActive={handleActive} />
-          </div>
-
-          <div
-            className={`${styles.assets__toggle} ${theme === 'dark' ? styles.dark : styles.light
-              }`}
-          >
-            <span>{'Hide 0 Balances'}</span>
-            <Toggle handleToggleValue={handleToggleValue} />
-          </div>
-
-          <div
-            className={`${styles.portfolio__search} ${theme === 'dark' ? styles.dark : styles.light
-              }`}
-          >
-            <Search theme={theme} type={1} placeHolder="Search Asset.." />
-          </div>
         </div>
         <div
           className={`${styles.portfolio__table} ${theme === 'dark' ? styles.dark : styles.light
             }`}
         >
-          <PortfolioTable theme={theme} active={active} />
+          {/* <PortfolioTable theme={theme} active={active} /> */}
+          <PortifolioTab  />
         </div>
       </div>
     </div>

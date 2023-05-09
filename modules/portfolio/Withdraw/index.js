@@ -15,7 +15,7 @@ import { defaultFee, fetchTxHash } from "../../../services/transaction";
 import { denomConversion, getAmount } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
-// import "./assetWithdraw.scss";
+import "./assetWithdraw.module.scss";
 
 const Withdraw = ({
   lang,
@@ -238,7 +238,7 @@ const Withdraw = ({
         Withdraw <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
-        className="asstedepositw-modal"
+        className="asset-deposit-modal"
         centered={true}
         closable={true}
         footer={null}
@@ -250,7 +250,7 @@ const Withdraw = ({
         title="IBC Withdraw"
       >
         <Form layout="vertical">
-          <Row>
+          <Row style={{ justifyContent: "space-between" }}>
             <Col>
               <Form.Item label="From">
                 <CustomInput
@@ -272,10 +272,10 @@ const Withdraw = ({
             </Col>
           </Row>
           <Row>
-            <Col className="position-relative">
+            <Col className="position-relative" style={{ width: "100%" }}>
               <div className="availabe-balance">
                 Available
-                <span className="ml-1">
+                <span className="ml-1 asset_balance">
                   {chain?.balance?.amount || 0}{" "}
                   {denomConversion(chain?.coinMinimalDenom) || ""}
                 </span>
@@ -298,11 +298,12 @@ const Withdraw = ({
                   value={amount}
                   onChange={(event) => onChange(event.target.value)}
                   validationError={validationError}
+                  className="ibc_modal_input"
                 />
               </Form.Item>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ justifyContent: "center" }}>
             <Col className="text-center mt-2">
               <Button
                 loading={inProgress}

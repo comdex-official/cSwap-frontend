@@ -2,12 +2,9 @@ import { Button, Col, Input, message, Row, Switch, Table, Tabs } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { IoReload } from "react-icons/io5";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../logic/redux/account/account";
 import { setLPPrices, setMarkets } from "../../logic/redux/oracle";
-// import { Col, Row, SvgIcon } from "../../components/common";
-// import NoDataIcon from "../../components/common/NoDataIcon";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -15,7 +12,6 @@ import { getChainConfig } from "../../services/keplr";
 import { fetchRestPrices } from "../../services/oracle/query";
 import {
   amountConversion,
-  commaSeparatorWithRounding,
   denomConversion,
 } from "../../utils/coin";
 import {
@@ -23,19 +19,24 @@ import {
   formateNumberDecimalsAuto,
   marketPrice,
 } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
-import variables from "../../utils/variables";
 import Deposit from "./Deposit";
 import "./Portfolio.module.scss";
-import LPAsssets from "./LPAassets";
 import Withdraw from "./Withdraw";
 import styles from './Portfolio.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
-import dynamic from 'next/dynamic';
+
+
+interface AssetsProps {
+  balances?: any,
+  markets?: any,
+  parent?: any,
+  refreshBalance?: any,
+  assetMap?: any,
+  assetDenomMap?: any,
+  setMarkets?: any,
+}
 
 const Assets = ({
-  lang,
-  assetBalance,
   balances,
   markets,
   parent,
@@ -43,29 +44,18 @@ const Assets = ({
   assetMap,
   assetDenomMap,
   setMarkets,
-  setLPPrices,
-  lpPrices,
-}) => {
+}: AssetsProps) => {
+
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
   const [filterValue, setFilterValue] = useState("1");
 
-  const Search = dynamic(() => import('@/shared/components/search/Search'));
+
   const theme = useAppSelector((state) => state.theme.theme);
 
   const dispatch = useDispatch();
 
-  const tabItems = [
-    {
-      key: "1",
-      label: "Assets",
-    },
-    {
-      key: "2",
-      label: "LF Tokens",
-    },
-  ];
 
   const handleBalanceRefresh = () => {
     dispatch({
@@ -80,12 +70,12 @@ const Assets = ({
     setHideToggle(localStorage.getItem("hideToggle") === "true");
   }, []);
 
-  const handleHideSwitchChange = (value) => {
+  const handleHideSwitchChange = (value: any) => {
     localStorage.setItem("hideToggle", value);
     setHideToggle(value);
   };
 
-  const onSearchChange = (searchKey) => {
+  const onSearchChange = (searchKey: any) => {
     console.log(searchKey, "search kjey");
     setSearchKey(searchKey.trim().toLowerCase());
   };
@@ -93,7 +83,7 @@ const Assets = ({
   const updatePrices = () => {
     setPricesInProgress(true);
 
-    fetchRestPrices((error, result) => {
+    fetchRestPrices((error: any, result: any) => {
       setPricesInProgress(false);
 
       if (error) {
@@ -105,7 +95,7 @@ const Assets = ({
     });
   };
 
-  const columns = [
+  const columns:any = [
     {
       title: "Asset",
       dataIndex: "asset",
@@ -217,7 +207,7 @@ const Assets = ({
     },
   ];
 
-  const getPrice = (denom) => {
+  const getPrice = (denom: any) => {
     return marketPrice(markets, denom) || 0;
   };
 
@@ -225,7 +215,7 @@ const Assets = ({
     (item) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
   );
 
-  console.log(appAssets, "appAssets");
+
   let ibcBalances = appAssets?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
@@ -260,22 +250,20 @@ const Assets = ({
       withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
-  console.log(balances, "balances");
-  console.log(ibcBalances, "ibcBalances");
-  console.log(assetMap, "assetMap");
+
   const nativeCoin = balances.filter(
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
   const cmstCoin = balances.filter(
-    (item) => item.denom === cmst?.coinMinimalDenom
+    (item: any) => item.denom === cmst?.coinMinimalDenom
   )[0];
 
   const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
 
   const harborCoin = balances.filter(
-    (item) => item.denom === harbor?.coinMinimalDenom
+    (item: any) => item.denom === harbor?.coinMinimalDenom
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
 
@@ -393,12 +381,12 @@ const Assets = ({
 
   let tableData =
     isHideToggleOn && filterValue === "1"
-      ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
+      ? allTableData?.filter((item: any) => Number(item?.noOfTokens) > 0)
       : allTableData;
 
   tableData =
     searchKey && filterValue === "1"
-      ? tableData?.filter((item) => {
+      ? tableData?.filter((item: any) => {
         return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
       })
       : tableData;
@@ -407,49 +395,15 @@ const Assets = ({
     (item) => Number(item?.noOfTokens) > 0
   );
 
-  const onChange = (key) => {
-    setFilterValue(key);
-  };
+
 
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
-        {parent && parent === "portfolio" ? null : (
-          <Row>
-            <Col>
-              <div className="assets-head">
-                <div>
-                  <h2>Assets</h2>
-                </div>
-                <div>
-                  <span>Total Asset Balance</span>{" "}
-                  {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
-                  USD
-                  <span
-                    className="asset-reload-btn"
-                    onClick={() => handleBalanceRefresh()}
-                  >
-                    {" "}
-                    <IoReload />{" "}
-                  </span>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        )}
         <Row style={{ justifyContent: "flex-end" }}>
-          {/* <div className="mt-4">
-            <Tabs
-              defaultActiveKey="1"
-              items={tabItems}
-              activeKey={filterValue}
-              onChange={onChange}
-              className="comdex-tabs farm-details-tabmain"
-            />
-          </div> */}
           <Col className="assets-search-section" style={{ alignItems: "center", display: "flex", gap: "20px" }}>
             {parent && parent === "portfolio" ? null : (
-              <div className="text">
+              <div className="text" style={{ display: "flex", width: "110%", gap: "3px", color: 'white' }}>
                 Hide 0 Balances{" "}
                 <Switch
                   disabled={!balanceExists}
@@ -461,17 +415,12 @@ const Assets = ({
             <Input
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
+              className="asset_search_input"
             // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
             />
-            {/* <div
-              className={`${styles.portfolio__search} ${theme === 'dark' ? styles.dark : styles.light
-                }`}
-            >
-              <Search theme={theme} value={searchKey} onChange={(event) => onSearchChange(event.target.value)} type={1} placeHolder="Search Asset.." />
-            </div> */}
           </Col>
         </Row>
-        <Row>
+        <Row style={{ width: "100%" }}>
           <Col style={{ width: "100%" }}>
             {/* {filterValue === "1" ? ( */}
             <Table
@@ -492,6 +441,8 @@ const Assets = ({
             )} */}
           </Col>
         </Row>
+
+
       </div>
     </div>
   );
@@ -516,7 +467,7 @@ Assets.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
 };
 
-const stateToProps = (state) => {
+const stateToProps = (state: any) => {
   return {
     lang: state.language,
     assetBalance: state.account.account.balances.asset,

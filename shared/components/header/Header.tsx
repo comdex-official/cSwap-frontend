@@ -17,6 +17,7 @@ import {
 import { Icon } from '@/shared/image/Icon';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Lodash from "lodash";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useOutsideClick from '@/shared/hooks/useOutsideClick';
 import Sidebar from '../sidebar/Sidebar';
@@ -50,6 +51,9 @@ import { setMarkets } from "../../../logic/redux/oracle";
 // import { Modal } from 'antd';
 import MyDropdown from '../dropDown/Dropdown';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/constants/common";
+import { cmst, comdex, harbor } from "@/config/network";
+import { marketPrice } from "@/utils/number";
+import { amountConversion } from "@/utils/coin";
 
 interface HeaderProps {
   setAccountAddress: any;
@@ -59,6 +63,10 @@ interface HeaderProps {
   setAssets: any,
   setAppAssets: any
   assetDenomMap: object
+  markets: any,
+  assetMap: any,
+  balances: any,
+  setAssetBalance: any,
 }
 
 const Header = ({
@@ -66,9 +74,13 @@ const Header = ({
   address,
   setAccountBalances,
   setMarkets,
+  markets,
   setAssets,
   setAppAssets,
-  assetDenomMap
+  assetDenomMap,
+  assetMap,
+  balances,
+  setAssetBalance
 }: HeaderProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
@@ -128,6 +140,40 @@ const Header = ({
     });
   };
 
+  const getPrice = useCallback(
+    (denom: String) => {
+      return marketPrice(markets, denom) || 0;
+    },
+    [markets]
+  );
+
+
+  const calculateAssetBalance = useCallback(
+    (balances: any) => {
+      const assetBalances = balances.filter(
+        (item: any) =>
+          item.denom.substr(0, 4) === "ibc/" ||
+          item.denom === comdex.coinMinimalDenom ||
+          item.denom === cmst.coinMinimalDenom ||
+          item.denom === harbor.coinMinimalDenom
+      );
+
+      const value: number[] = assetBalances.map((item: any) => {
+        // console.log(item, "item");
+
+        // console.log(getPrice(item.denom) * amountConversion(item.amount, assetMap[item?.denom]?.decimals), "denom-->", item.denom, " getPrice(item.denom) * amountConversion(item.amount, assetMap[item?.denom]?.decimals)");
+
+        return (
+          getPrice(item.denom) * amountConversion(item.amount, assetMap[item?.denom]?.decimals)
+        );
+      });
+      console.log(Lodash.sum(value), "value");
+
+      setAssetBalance(Lodash.sum(value));
+    },
+    [getPrice, setAssetBalance, assetMap]
+  );
+
   const fetchBalances = useCallback(
     (address: String) => {
       queryAllBalances(address, (error: any, result: any) => {
@@ -140,12 +186,13 @@ const Header = ({
         console.log(result.balances, "Balance");
 
         setAccountBalances(result.balances, result.pagination);
-        // calculateAssetBalance(result.balances);
+        calculateAssetBalance(result.balances);
       });
     },
-    // [calculateAssetBalance, setAccountBalances]
-    []
+    [calculateAssetBalance, setAccountBalances]
+    // []
   );
+
 
   const fetchPrices = useCallback(() => {
     fetchRestPrices((error: any, result: any) => {
@@ -158,6 +205,8 @@ const Header = ({
       setMarkets(result.data);
     });
   }, [setMarkets]);
+
+
 
   const fetchAssets = useCallback(
     (offset: number, limit: number, countTotal: boolean, reverse: boolean) => {
@@ -198,7 +247,11 @@ const Header = ({
       fetchBalances(address);
     }
     // }, [address, refreshBalance, markets, fetchBalances]);
-  }, [address, fetchBalances]);
+  }, [address, markets, fetchBalances]);
+
+  useEffect(() => {
+    calculateAssetBalance(balances);
+  }, [balances, calculateAssetBalance]);
 
   useEffect(() => {
     fetchPrices();
@@ -389,7 +442,7 @@ Header.propTypes = {
   // showAccountConnectModal: PropTypes.func.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
   // setAccountName: PropTypes.func.isRequired,
-  // setAssetBalance: PropTypes.func.isRequired,
+  setAssetBalance: PropTypes.func.isRequired,
   // setAssetsInPrgoress: PropTypes.func.isRequired,
   setAssets: PropTypes.func.isRequired,
   // setAppAssets: PropTypes.func.isRequired,
@@ -398,15 +451,15 @@ Header.propTypes = {
   // setPoolIncentives: PropTypes.func.isRequired,
   // setPoolRewards: PropTypes.func.isRequired,
   address: PropTypes.string,
-  // assetMap: PropTypes.object,
+  assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
-  // balances: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     denom: PropTypes.string.isRequired,
-  //     amount: PropTypes.string,
-  //   })
-  // ),
-  // markets: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
+  markets: PropTypes.object,
   // pools: PropTypes.arrayOf(
   //   PropTypes.shape({
   //     id: PropTypes.shape({
@@ -427,11 +480,11 @@ const stateToProps = (state: any) => {
     // lang: state.language,
     address: state.account.account.address,
     // show: state.account.showModal,
-    // markets: state.oracle.market.list,
+    markets: state.account.oracle.market.list,
     // refreshBalance: state.account.refreshBalance,
     // pools: state.liquidity.pool.list,
-    // balances: state.account.balances.list,
-    // assetMap: state.asset.map,
+    balances: state.account.account.balances.list,
+    assetMap: state.account.asset.map,
     assetDenomMap: state.account.asset._.assetDenomMap,
   };
 };
@@ -440,7 +493,7 @@ const actionsToProps = {
   // showAccountConnectModal,
   setAccountAddress,
   setAccountBalances,
-  // setAssetBalance,
+  setAssetBalance,
   setMarkets,
   // setAccountName,
   // setPoolIncentives,

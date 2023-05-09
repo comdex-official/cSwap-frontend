@@ -1,4 +1,4 @@
-@import "../../../assets/scss/variables.scss";
+@import '../../../styles/globalVariable.scss';
 
 .ant-modal {
   &.asstedepositw-modal {
@@ -28,7 +28,7 @@
         color: $white;
       }
       span {
-        color: $secondary-color;
+        color: $primary-color;
       }
     }
   }

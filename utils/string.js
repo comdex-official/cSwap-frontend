@@ -21,7 +21,7 @@ let ibcDenomToDenomMap = getIbcDenomToDenomMap();
 const encoding = require("@cosmjs/encoding");
 
 export const decode = (hash) =>
-  decodeURIComponent(hash.replace("#", "")) || undefined;
+  decodeURIComponent(hash?.replace("#", "")) || undefined;
 
 export const generateHash = (txBytes) =>
   encoding.toHex(sha256(txBytes)).toUpperCase();

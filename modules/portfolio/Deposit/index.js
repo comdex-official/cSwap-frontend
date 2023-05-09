@@ -28,7 +28,7 @@ import {
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
-// import "./assetDeposit.scss";
+import "./assetDeposit.module.scss";
 
 const Deposit = ({
   lang,
@@ -393,7 +393,7 @@ const Deposit = ({
         Deposit <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
-        className="asstedepositw-modal"
+        className="asset-deposit-modal"
         centered={true}
         closable={true}
         footer={null}
@@ -405,7 +405,7 @@ const Deposit = ({
         title="IBC Deposit"
       >
         <Form layout="vertical">
-          <Row>
+          <Row style={{ justifyContent: "space-between" }}>
             <Col>
               <Form.Item label="From">
                 <CustomInput
@@ -427,14 +427,14 @@ const Deposit = ({
             </Col>
           </Row>
           <Row>
-            <Col className="position-relative mt-3">
+            <Col className="position-relative mt-3" style={{ width: "100%" }}>
               <div className="availabe-balance">
                 {balanceInProgress ? (
                   <Spin />
                 ) : (
                   <>
-                    available
-                    <span className="ml-1">
+                    Available
+                    <span className="ml-1 asset_balance" >
                       {(address &&
                         availableBalance &&
                         availableBalance.amount &&
@@ -473,11 +473,12 @@ const Deposit = ({
                   value={amount}
                   onChange={(event) => onChange(event.target.value)}
                   validationError={validationError}
+                  className="ibc_modal_input"
                 />
               </Form.Item>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ justifyContent: "center" }}>
             <Col className="text-center mt-2">
               <Button
                 loading={inProgress}
