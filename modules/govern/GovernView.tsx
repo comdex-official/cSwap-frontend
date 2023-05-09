@@ -12,21 +12,19 @@ import {
   fetchRestProposer,
   queryUserVote,
 } from '@/services/govern/query';
+import { formatTime } from '@/utils/date';
 import {
-  DOLLAR_DECIMALS,
-  denomConversion,
-  formatNumber,
-  formatTime,
   proposalOptionMap,
   proposalStatusMap,
   stringTagParser,
   truncateString,
-} from '@/helpers/utils';
-import { comdex } from '@/config/network';
+} from '@/utils/string';
+import { formatNumber } from '@/utils/number';
+import { DOLLAR_DECIMALS } from '@/constants/common';
+import { denomConversion } from '@/utils/coin';
 
 const GovernView = () => {
-  // const theme = useAppSelector((state) => state.theme.theme);
-  // const router = useRouter();
+  const comdex = useAppSelector((state) => state.config.config);
 
   useEffect(() => {
     window.scrollTo(0, 0);

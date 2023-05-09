@@ -29,6 +29,7 @@
     "@tharsis/proto": "^0.1.20",
     "@tharsis/provider": "^0.2.4",
     "@tharsis/transactions": "^0.2.6",
+    "@types/lodash": "^4.14.194",
     "@types/node": "18.16.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",

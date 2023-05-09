@@ -1,18 +1,18 @@
-import axios from "axios";
-import { QueryClientImpl } from "cosmjs-types/cosmos/gov/v1beta1/query";
-import Long from "long";
-import { comdex } from "../../config/network";
-import { createQueryClient } from "../helper";
+import axios from 'axios';
+import { QueryClientImpl } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import Long from 'long';
+import { createQueryClient } from '../helper';
+import { envConfigResult } from '@/config/envConfig';
 
-let myClient:any = null;
+let myClient: any = null;
 
-const getQueryService = (callback:any) => {
+const getQueryService = (callback: any) => {
   if (myClient) {
     const queryService = new QueryClientImpl(myClient);
 
     return callback(null, queryService);
   } else {
-    createQueryClient((error:any, client:any) => {
+    createQueryClient((error: any, client: any) => {
       if (error) {
         return callback(error);
       }
@@ -25,26 +25,26 @@ const getQueryService = (callback:any) => {
   }
 };
 
-export const queryAllProposals = (callback:any) => {
-  getQueryService((error:any, queryService:any) => {
+export const queryAllProposals = (callback: any) => {
+  getQueryService((error: any, queryService: any) => {
     if (error) {
       callback(error);
       return;
     }
 
     queryService
-      .Proposals({ proposalStatus: 0, voter: "", depositor: "" })
-      .then((result:any) => {
+      .Proposals({ proposalStatus: 0, voter: '', depositor: '' })
+      .then((result: any) => {
         callback(null, result);
       })
-      .catch((error:any) => {
+      .catch((error: any) => {
         callback(error?.message);
       });
   });
 };
 
-export const queryUserVote = (address:any, proposalId:any, callback:any) => {
-  getQueryService((error:any, queryService:any) => {
+export const queryUserVote = (address: any, proposalId: any, callback: any) => {
+  getQueryService((error: any, queryService: any) => {
     if (error) {
       callback(error);
       return;
@@ -52,18 +52,21 @@ export const queryUserVote = (address:any, proposalId:any, callback:any) => {
 
     queryService
       .Vote({ proposalId: Long.fromNumber(proposalId), voter: address })
-      .then((result:any) => {
+      .then((result: any) => {
         callback(null, result);
       })
-      .catch((error:any) => {
+      .catch((error: any) => {
         callback(error?.message);
       });
   });
 };
 
-export const fetchRestProposals = (callback:any) => {
-  axios
-    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals`)
+export const fetchRestProposals = async (callback: any) => {
+  const comdex = await envConfigResult();
+  console.log({ comdex });
+
+  return axios
+    .get(`${comdex?.envConfig?.rest}/cosmos/gov/v1beta1/proposals`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -72,9 +75,10 @@ export const fetchRestProposals = (callback:any) => {
     });
 };
 
-export const fetchRestProposal = (id:any, callback:any) => {
-  axios
-    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
+export const fetchRestProposal = async (id: any, callback: any) => {
+  const comdex = await envConfigResult();
+  return axios
+    .get(`${comdex?.envConfig?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -83,9 +87,10 @@ export const fetchRestProposal = (id:any, callback:any) => {
     });
 };
 
-export const fetchRestProposalTally = (id:any, callback:any) => {
-  axios
-    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}/tally`)
+export const fetchRestProposalTally = async (id: any, callback: any) => {
+  const comdex = await envConfigResult();
+  return axios
+    .get(`${comdex?.envConfig?.rest}/cosmos/gov/v1beta1/proposals/${id}/tally`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -94,10 +99,11 @@ export const fetchRestProposalTally = (id:any, callback:any) => {
     });
 };
 
-export const fetchRestProposer = (id:any, callback:any) => {
-  axios
+export const fetchRestProposer = async (id: any, callback: any) => {
+  const comdex = await envConfigResult();
+  return axios
     .get(
-      `${comdex?.rest}/cosmos/tx/v1beta1/txs?events=submit_proposal.proposal_id=${id}`
+      `${comdex?.envConfig?.rest}/cosmos/tx/v1beta1/txs?events=submit_proposal.proposal_id=${id}`
     )
     .then((result) => {
       callback(null, result?.data);
@@ -106,5 +112,3 @@ export const fetchRestProposer = (id:any, callback:any) => {
       callback(error?.message);
     });
 };
-
-

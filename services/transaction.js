@@ -1,27 +1,26 @@
-import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
-import { comdex } from "../config/network";
-import { DEFAULT_FEE } from "../constants/common";
+import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
+import { buildQuery } from '@cosmjs/tendermint-rpc/build/tendermint34/requests';
+import { DEFAULT_FEE } from '../constants/common';
 
-const httpBatch = new HttpBatchClient(comdex?.rpc, {
+const httpBatch = new HttpBatchClient('https://devnet.rpc.comdex.one', {
   batchSizeLimit: 50,
   dispatchInterval: 500,
 });
 
 export const getTypeURL = (key) => {
   switch (key) {
-    case "create":
-      return "/comdex.vault.v1beta1.MsgCreateRequest";
-    case "deposit":
-      return "/comdex.vault.v1beta1.MsgDepositRequest";
-    case "withdraw":
-      return "/comdex.vault.v1beta1.MsgWithdrawRequest";
-    case "draw":
-      return "/comdex.vault.v1beta1.MsgDrawRequest";
-    case "repay":
-      return "/comdex.vault.v1beta1.MsgRepayRequest";
+    case 'create':
+      return '/comdex.vault.v1beta1.MsgCreateRequest';
+    case 'deposit':
+      return '/comdex.vault.v1beta1.MsgDepositRequest';
+    case 'withdraw':
+      return '/comdex.vault.v1beta1.MsgWithdrawRequest';
+    case 'draw':
+      return '/comdex.vault.v1beta1.MsgDrawRequest';
+    case 'repay':
+      return '/comdex.vault.v1beta1.MsgRepayRequest';
     default:
-      return "";
+      return '';
   }
 };
 
@@ -43,30 +42,30 @@ export const abbreviateMessage = (msg) => {
     Object.keys(sum).forEach((k) => {
       output.push(sum[k] > 1 ? `${k}×${sum[k]}` : k);
     });
-    return output.join(", ");
+    return output.join(', ');
   }
 
-  if (msg["@type"]) {
-    return msg["@type"]
-      .substring(msg["@type"]?.lastIndexOf(".") + 1)
-      .replace("Msg", "");
+  if (msg['@type']) {
+    return msg['@type']
+      .substring(msg['@type']?.lastIndexOf('.') + 1)
+      .replace('Msg', '');
   }
 
   if (msg?.typeUrl) {
     return msg?.typeUrl
-      .substring(msg?.typeUrl?.lastIndexOf(".") + 1)
-      .replace("Msg", "");
+      .substring(msg?.typeUrl?.lastIndexOf('.') + 1)
+      .replace('Msg', '');
   }
 
   return msg?.type
-    ?.substring(msg?.type?.lastIndexOf("/") + 1)
-    .replace("Msg", "");
+    ?.substring(msg?.type?.lastIndexOf('/') + 1)
+    .replace('Msg', '');
 };
 
 export const defaultFee = () => {
   return {
-    amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
-    gas: "500000",
+    amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
+    gas: '500000',
   };
 };
 
@@ -78,7 +77,7 @@ const txSearchParams = (recipientAddress, pageNumber, pageSize, type) => {
     page: pageNumber,
     per_page: pageSize,
     prove: false,
-    order_by: "desc",
+    order_by: 'desc',
   };
 };
 
@@ -87,7 +86,7 @@ export const fetchTxHistory = (address, pageNumber, pageSize, callback) => {
     .then((tendermintClient) => {
       tendermintClient
         .txSearch(
-          txSearchParams(address, pageNumber, pageSize, "message.sender")
+          txSearchParams(address, pageNumber, pageSize, 'message.sender')
         )
         .then((res) => {
           callback(null, res);

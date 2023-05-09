@@ -1,23 +1,24 @@
-import { LedgerSigner } from "@cosmjs/ledger-amino";
+import { LedgerSigner } from '@cosmjs/ledger-amino';
 import {
   AminoTypes,
   createProtobufRpcClient,
   QueryClient,
-  SigningStargateClient
-} from "@cosmjs/stargate";
-import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { comdex } from "../config/network";
-import { makeHdPath } from "../utils/string";
-import { customAminoTypes } from "./aminoConverter";
-import { strideAccountParser } from "./parser";
-import { myRegistry } from "./registry";
+  SigningStargateClient,
+} from '@cosmjs/stargate';
+import { HttpBatchClient, Tendermint34Client } from '@cosmjs/tendermint-rpc';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import { makeHdPath } from '../utils/string';
+import { customAminoTypes } from './aminoConverter';
+import { strideAccountParser } from './parser';
+import { myRegistry } from './registry';
+import { envConfigResult } from '@/config/envConfig';
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
-export const createQueryClient = (callback) => {
-  return newQueryClientRPC(comdex.rpc, callback);
+export const createQueryClient = async (callback) => {
+  const comdex = await envConfigResult();
+  return newQueryClientRPC(comdex?.envConfig?.rpc, callback);
 };
 
 export const newQueryClientRPC = (rpc, callback) => {
@@ -37,15 +38,15 @@ export const newQueryClientRPC = (rpc, callback) => {
     });
 };
 
-export const KeplrWallet = async (chainID = comdex.chainId) => {
-  let walletType = localStorage.getItem("loginType");
+export const KeplrWallet = async (chainID = 'test-1') => {
+  let walletType = localStorage.getItem('loginType');
 
-  walletType === "keplr"
+  walletType === 'keplr'
     ? await window.keplr.enable(chainID)
     : await window.leap.enable(chainID);
 
   const offlineSigner =
-    walletType === "keplr"
+    walletType === 'keplr'
       ? await window.getOfflineSignerAuto(chainID)
       : await window?.leap?.getOfflineSignerAuto(chainID);
 
@@ -55,7 +56,7 @@ export const KeplrWallet = async (chainID = comdex.chainId) => {
 };
 
 export const signAndBroadcastTransaction = (transaction, address, callback) => {
-  if (localStorage.getItem("loginType") === "ledger") {
+  if (localStorage.getItem('loginType') === 'ledger') {
     return TransactionWithLedger(transaction, address, callback);
   }
 
@@ -63,18 +64,25 @@ export const signAndBroadcastTransaction = (transaction, address, callback) => {
 };
 
 export const TransactionWithKeplr = async (transaction, address, callback) => {
-  const [offlineSigner, accounts] = await KeplrWallet(comdex.chainId);
+  const comdex = await envConfigResult();
+  const [offlineSigner, accounts] = await KeplrWallet(
+    comdex?.envConfig?.chainId
+  );
   if (address !== accounts[0].address) {
-    const error = "Connected account is not active in Keplr";
+    const error = 'Connected account is not active in Keplr';
     callback(error);
     return;
   }
 
-  SigningStargateClient.connectWithSigner(comdex.rpc, offlineSigner, {
-    registry: myRegistry,
-    aminoTypes: aminoTypes,
-    preferNoSetFee: true,
-  })
+  SigningStargateClient.connectWithSigner(
+    comdex?.envConfig?.rpc,
+    offlineSigner,
+    {
+      registry: myRegistry,
+      aminoTypes: aminoTypes,
+      preferNoSetFee: true,
+    }
+  )
     .then((client) => {
       client
         .signAndBroadcast(
@@ -121,9 +129,13 @@ export async function TransactionWithLedger(
   userAddress,
   callback
 ) {
-  const [wallet, address] = await LedgerWallet(makeHdPath(), comdex.prefix);
+  const comdex = await envConfigResult();
+  const [wallet, address] = await LedgerWallet(
+    makeHdPath(),
+    comdex?.envConfig?.prefix
+  );
   if (userAddress !== address) {
-    const error = "Connected account is not active in Keplr";
+    const error = 'Connected account is not active in Keplr';
     callback(error);
     return;
   }
@@ -145,9 +157,10 @@ export async function TransactionWithLedger(
     });
 }
 
-async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
+async function Transaction(wallet, signerAddress, msgs, fee, memo = '') {
+  const comdex = await envConfigResult();
   const cosmJS = await SigningStargateClient.connectWithSigner(
-    comdex.rpc,
+    comdex?.envConfig?.rpc,
     wallet,
     { registry: myRegistry, aminoTypes: aminoTypes, preferNoSetFee: true }
   );
@@ -168,15 +181,15 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
 
 export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
-    let walletType = localStorage.getItem("loginType");
+    let walletType = localStorage.getItem('loginType');
 
-    (walletType === "keplr" ? await window.keplr : await window.wallet) &&
-    walletType === "keplr"
+    (walletType === 'keplr' ? await window.keplr : await window.wallet) &&
+    walletType === 'keplr'
       ? window.keplr.enable(config.chainId)
       : window.leap.enable(config.chainId);
 
     const offlineSigner =
-      walletType === "keplr"
+      walletType === 'keplr'
         ? window.getOfflineSignerOnlyAmino &&
           window.getOfflineSignerOnlyAmino(config.chainId)
         : window?.leap?.getOfflineSignerOnlyAmino &&

@@ -1,34 +1,34 @@
-import { Button, Col, Input, message, Row, Switch, Table, Tabs } from "antd";
-import Lodash from "lodash";
-import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { IoReload } from "react-icons/io5";
-import { connect, useDispatch } from "react-redux";
-import { setAccountBalances } from "../../logic/redux/account/account";
-import { setLPPrices, setMarkets } from "../../logic/redux/oracle";
+import { Button, Col, Input, message, Row, Switch, Table, Tabs } from 'antd';
+import Lodash from 'lodash';
+import * as PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { IoReload } from 'react-icons/io5';
+import { connect, useDispatch } from 'react-redux';
+import { setAccountBalances } from '../../logic/redux/account/account';
+import { setLPPrices, setMarkets } from '../../logic/redux/oracle';
 // import { Col, Row, SvgIcon } from "../../components/common";
 // import NoDataIcon from "../../components/common/NoDataIcon";
-import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor } from "../../config/network";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { getChainConfig } from "../../services/keplr";
-import { fetchRestPrices } from "../../services/oracle/query";
+// import AssetList from "../../config/ibc_assets.json";
+import { cmst, comdex, harbor } from '../../config/network';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { getChainConfig } from '../../services/keplr';
+import { fetchRestPrices } from '../../services/oracle/query';
 import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
-} from "../../utils/coin";
+} from '../../utils/coin';
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   marketPrice,
-} from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
-import variables from "../../utils/variables";
-import Deposit from "./Deposit";
-import "./Portfolio.module.scss";
-import LPAsssets from "./LPAassets";
-import Withdraw from "./Withdraw";
+} from '../../utils/number';
+import { iconNameFromDenom } from '../../utils/string';
+import variables from '../../utils/variables';
+import Deposit from './Deposit';
+import './Portfolio.module.scss';
+import LPAsssets from './LPAassets';
+import Withdraw from './Withdraw';
 import styles from './Portfolio.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import dynamic from 'next/dynamic';
@@ -49,7 +49,7 @@ const Assets = ({
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
-  const [filterValue, setFilterValue] = useState("1");
+  const [filterValue, setFilterValue] = useState('1');
 
   const Search = dynamic(() => import('@/shared/components/search/Search'));
   const theme = useAppSelector((state) => state.theme.theme);
@@ -58,18 +58,18 @@ const Assets = ({
 
   const tabItems = [
     {
-      key: "1",
-      label: "Assets",
+      key: '1',
+      label: 'Assets',
     },
     {
-      key: "2",
-      label: "LF Tokens",
+      key: '2',
+      label: 'LF Tokens',
     },
   ];
 
   const handleBalanceRefresh = () => {
     dispatch({
-      type: "BALANCE_REFRESH_SET",
+      type: 'BALANCE_REFRESH_SET',
       value: refreshBalance + 1,
     });
 
@@ -77,16 +77,16 @@ const Assets = ({
   };
 
   useEffect(() => {
-    setHideToggle(localStorage.getItem("hideToggle") === "true");
+    setHideToggle(localStorage.getItem('hideToggle') === 'true');
   }, []);
 
   const handleHideSwitchChange = (value) => {
-    localStorage.setItem("hideToggle", value);
+    localStorage.setItem('hideToggle', value);
     setHideToggle(value);
   };
 
   const onSearchChange = (searchKey) => {
-    console.log(searchKey, "search kjey");
+    console.log(searchKey, 'search kjey');
     setSearchKey(searchKey.trim().toLowerCase());
   };
 
@@ -107,15 +107,15 @@ const Assets = ({
 
   const columns = [
     {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
+      title: 'Asset',
+      dataIndex: 'asset',
+      key: 'asset',
     },
     {
-      title: "No. of Tokens",
-      dataIndex: "noOfTokens",
-      key: "noOfTokens",
-      align: "left",
+      title: 'No. of Tokens',
+      dataIndex: 'noOfTokens',
+      key: 'noOfTokens',
+      align: 'left',
       render: (tokens) => (
         <>
           <p>{commaSeparator(Number(tokens || 0))}</p>
@@ -123,10 +123,10 @@ const Assets = ({
       ),
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      align: "left",
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+      align: 'left',
       width: 150,
       render: (price) => (
         <>
@@ -137,10 +137,10 @@ const Assets = ({
       ),
     },
     {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-      align: "left",
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      align: 'left',
       render: (amount) => (
         <>
           <p>
@@ -153,10 +153,10 @@ const Assets = ({
       ),
     },
     {
-      title: "IBC Deposit",
-      dataIndex: "ibcdeposit",
-      key: "ibcdeposit",
-      align: "left",
+      title: 'IBC Deposit',
+      dataIndex: 'ibcdeposit',
+      key: 'ibcdeposit',
+      align: 'left',
       // width: 210,
       render: (value) => {
         if (value) {
@@ -167,9 +167,9 @@ const Assets = ({
                 target="_blank"
                 rel="noreferrer"
               >
-                Deposit{" "}
+                Deposit{' '}
                 <span className="hyperlink-icon">
-                  {" "}
+                  {' '}
                   {/* <SvgIcon name="hyperlink" /> */}
                 </span>
               </a>
@@ -185,9 +185,9 @@ const Assets = ({
       },
     },
     {
-      title: "IBC Withdraw",
-      dataIndex: "ibcwithdraw",
-      key: "ibcwithdraw",
+      title: 'IBC Withdraw',
+      dataIndex: 'ibcwithdraw',
+      key: 'ibcwithdraw',
       width: 110,
       render: (value) => {
         if (value) {
@@ -198,9 +198,9 @@ const Assets = ({
                 target="_blank"
                 rel="noreferrer"
               >
-                Withdraw{" "}
+                Withdraw{' '}
                 <span className="hyperlink-icon">
-                  {" "}
+                  {' '}
                   {/* <SvgIcon name="hyperlink" /> */}
                 </span>
               </a>
@@ -220,17 +220,17 @@ const Assets = ({
   const getPrice = (denom) => {
     return marketPrice(markets, denom) || 0;
   };
-
+  let AssetList = {};
   let appAssets = AssetList?.tokens?.filter(
     (item) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
   );
 
-  console.log(appAssets, "appAssets");
+  console.log(appAssets, 'appAssets');
   let ibcBalances = appAssets?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
-    console.log(ibcBalance, "ibcBalance in func");
+    console.log(ibcBalance, 'ibcBalance in func');
     const value =
       getPrice(ibcBalance?.denom) *
       amountConversion(
@@ -244,9 +244,9 @@ const Assets = ({
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
-            ibcBalance.amount,
-            assetMap[ibcBalance?.denom]?.decimals
-          )
+              ibcBalance.amount,
+              assetMap[ibcBalance?.denom]?.decimals
+            )
           : 0,
         value: value || 0,
         denom: ibcBalance?.denom,
@@ -260,9 +260,9 @@ const Assets = ({
       withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
-  console.log(balances, "balances");
-  console.log(ibcBalances, "ibcBalances");
-  console.log(assetMap, "assetMap");
+  console.log(balances, 'balances');
+  console.log(ibcBalances, 'ibcBalances');
+  console.log(assetMap, 'assetMap');
   const nativeCoin = balances.filter(
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
@@ -279,7 +279,6 @@ const Assets = ({
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
 
-
   let currentChainData = [
     {
       key: comdex.chainId,
@@ -289,8 +288,8 @@ const Assets = ({
           <div className="assets-withicon">
             <div className="assets-icon">
               {/* <SvgIcon name={iconNameFromDenom(comdex?.coinMinimalDenom)} /> */}
-            </div>{" "}
-            {denomConversion(comdex?.coinMinimalDenom)}{" "}
+            </div>{' '}
+            {denomConversion(comdex?.coinMinimalDenom)}{' '}
           </div>
         </>
       ),
@@ -313,8 +312,8 @@ const Assets = ({
           <div className="assets-withicon">
             <div className="assets-icon">
               {/* <SvgIcon name={iconNameFromDenom(cmst?.coinMinimalDenom)} /> */}
-            </div>{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}{" "}
+            </div>{' '}
+            {denomConversion(cmst?.coinMinimalDenom)}{' '}
           </div>
         </>
       ),
@@ -337,8 +336,8 @@ const Assets = ({
           <div className="assets-withicon">
             <div className="assets-icon">
               {/* <SvgIcon name={iconNameFromDenom(harbor?.coinMinimalDenom)} /> */}
-            </div>{" "}
-            {denomConversion(harbor?.coinMinimalDenom)}{" "}
+            </div>{' '}
+            {denomConversion(harbor?.coinMinimalDenom)}{' '}
           </div>
         </>
       ),
@@ -356,7 +355,7 @@ const Assets = ({
   ];
 
   ibcBalances =
-    parent && parent === "portfolio"
+    parent && parent === 'portfolio'
       ? ibcBalances.filter((item) => item?.balance?.amount > 0)
       : ibcBalances;
 
@@ -371,8 +370,8 @@ const Assets = ({
             <div className="assets-withicon">
               <div className="assets-icon">
                 {/* <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} /> */}
-              </div>{" "}
-              {denomConversion(item?.ibcDenomHash)}{" "}
+              </div>{' '}
+              {denomConversion(item?.ibcDenomHash)}{' '}
             </div>
           </>
         ),
@@ -392,15 +391,15 @@ const Assets = ({
   let allTableData = Lodash.concat(currentChainData, tableIBCData);
 
   let tableData =
-    isHideToggleOn && filterValue === "1"
+    isHideToggleOn && filterValue === '1'
       ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
       : allTableData;
 
   tableData =
-    searchKey && filterValue === "1"
+    searchKey && filterValue === '1'
       ? tableData?.filter((item) => {
-        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
-      })
+          return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
+        })
       : tableData;
 
   let balanceExists = allTableData?.find(
@@ -414,7 +413,7 @@ const Assets = ({
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
-        {parent && parent === "portfolio" ? null : (
+        {parent && parent === 'portfolio' ? null : (
           <Row>
             <Col>
               <div className="assets-head">
@@ -422,22 +421,22 @@ const Assets = ({
                   <h2>Assets</h2>
                 </div>
                 <div>
-                  <span>Total Asset Balance</span>{" "}
-                  {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
+                  <span>Total Asset Balance</span>{' '}
+                  {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{' '}
                   USD
                   <span
                     className="asset-reload-btn"
                     onClick={() => handleBalanceRefresh()}
                   >
-                    {" "}
-                    <IoReload />{" "}
+                    {' '}
+                    <IoReload />{' '}
                   </span>
                 </div>
               </div>
             </Col>
           </Row>
         )}
-        <Row style={{ justifyContent: "flex-end" }}>
+        <Row style={{ justifyContent: 'flex-end' }}>
           {/* <div className="mt-4">
             <Tabs
               defaultActiveKey="1"
@@ -447,10 +446,13 @@ const Assets = ({
               className="comdex-tabs farm-details-tabmain"
             />
           </div> */}
-          <Col className="assets-search-section" style={{ alignItems: "center", display: "flex", gap: "20px" }}>
-            {parent && parent === "portfolio" ? null : (
+          <Col
+            className="assets-search-section"
+            style={{ alignItems: 'center', display: 'flex', gap: '20px' }}
+          >
+            {parent && parent === 'portfolio' ? null : (
               <div className="text">
-                Hide 0 Balances{" "}
+                Hide 0 Balances{' '}
                 <Switch
                   disabled={!balanceExists}
                   onChange={(value) => handleHideSwitchChange(value)}
@@ -461,7 +463,7 @@ const Assets = ({
             <Input
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
-            // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+              // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
             />
             {/* <div
               className={`${styles.portfolio__search} ${theme === 'dark' ? styles.dark : styles.light
@@ -472,7 +474,7 @@ const Assets = ({
           </Col>
         </Row>
         <Row>
-          <Col style={{ width: "100%" }}>
+          <Col style={{ width: '100%' }}>
             {/* {filterValue === "1" ? ( */}
             <Table
               className="custom-table assets-table"
@@ -480,8 +482,8 @@ const Assets = ({
               columns={columns}
               loading={pricesInProgress}
               pagination={false}
-              scroll={{ x: "100%" }}
-            // locale={{ emptyText: <NoDataIcon /> }}
+              scroll={{ x: '100%' }}
+              // locale={{ emptyText: <NoDataIcon /> }}
             />
             {/* ) : (
               <LPAsssets

@@ -1,21 +1,21 @@
-import { Button, Col, Form, message, Modal, Row } from "antd";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { fetchProofHeight } from "../../../logic/redux/asset";
+import { Button, Col, Form, message, Modal, Row } from 'antd';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { fetchProofHeight } from '../../../logic/redux/asset';
 // import { Col, Row, SvgIcon } from "../../../components/common";
-import Snack from "../../../shared/components/common/Snack";
-import CustomInput from "../../../shared/components/common/CustomInput";
-import { comdex } from "../../../config/network";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { queryBalance } from "../../../services/bank/query";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
-import { defaultFee, fetchTxHash } from "../../../services/transaction";
-import { denomConversion, getAmount } from "../../../utils/coin";
-import { toDecimals, truncateString } from "../../../utils/string";
-import variables from "../../../utils/variables";
-// import "./assetWithdraw.scss";
+import Snack from '../../../shared/components/common/Snack';
+import CustomInput from '../../../shared/components/common/CustomInput';
+import { comdex } from '../../../config/network';
+import { ValidateInputNumber } from '../../../config/_validation';
+import { queryBalance } from '../../../services/bank/query';
+import { aminoSignIBCTx } from '../../../services/helper';
+import { getChainConfig, initializeIBCChain } from '../../../services/keplr';
+import { defaultFee, fetchTxHash } from '../../../services/transaction';
+import { denomConversion, getAmount } from '../../../utils/coin';
+import { toDecimals, truncateString } from '../../../utils/string';
+import variables from '../../../utils/variables';
+// import './assetWithdraw.scss';
 
 const Withdraw = ({
   lang,
@@ -26,7 +26,7 @@ const Withdraw = ({
   handleRefresh,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [destinationAddress, setDestinationAddress] = useState("");
+  const [destinationAddress, setDestinationAddress] = useState('');
   const [inProgress, setInProgress] = useState(false);
   const [amount, setAmount] = useState();
   const [proofHeight, setProofHeight] = useState(0);
@@ -67,7 +67,7 @@ const Withdraw = ({
 
   const showModal = () => {
     if (!address) {
-      message.info("Please connect your wallet");
+      message.info('Please connect your wallet');
       return;
     }
 
@@ -79,16 +79,16 @@ const Withdraw = ({
     setInProgress(true);
 
     if (!proofHeight?.revision_height) {
-      message.error("Unable to get the latest block height");
+      message.error('Unable to get the latest block height');
       setInProgress(false);
       return;
     }
 
     const data = {
       msg: {
-        typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
+        typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
         value: {
-          source_port: "transfer",
+          source_port: 'transfer',
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
@@ -104,7 +104,7 @@ const Withdraw = ({
         },
       },
       fee: defaultFee(),
-      memo: "",
+      memo: '',
     };
 
     aminoSignIBCTx(getChainConfig(), data, (error, result) => {
@@ -127,7 +127,7 @@ const Withdraw = ({
 
       if (result?.transactionHash) {
         message.loading(
-          "Transaction Broadcasting, Waiting for transaction to be included in the block"
+          'Transaction Broadcasting, Waiting for transaction to be included in the block'
         );
 
         handleHash(result?.transactionHash);
@@ -186,7 +186,7 @@ const Withdraw = ({
 
           message.success(
             <Snack
-              message={"Transaction Successful. Token Transfer in progress."}
+              message={'Transaction Successful. Token Transfer in progress.'}
               explorerUrlToTx={comdex?.explorerUrlToTx}
               hash={txhash}
             />
@@ -212,7 +212,7 @@ const Withdraw = ({
                   handleRefresh();
                   resetValues();
 
-                  message.success("IBC Transfer Complete");
+                  message.success('IBC Transfer Complete');
 
                   clearInterval(fetchTime);
                 }
@@ -276,8 +276,8 @@ const Withdraw = ({
               <div className="availabe-balance">
                 Available
                 <span className="ml-1">
-                  {chain?.balance?.amount || 0}{" "}
-                  {denomConversion(chain?.coinMinimalDenom) || ""}
+                  {chain?.balance?.amount || 0}{' '}
+                  {denomConversion(chain?.coinMinimalDenom) || ''}
                 </span>
                 <span className="assets-maxhalf">
                   <Button

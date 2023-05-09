@@ -1,5 +1,4 @@
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
+import Lodash from 'lodash';
 import styles from './Header.module.scss';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
@@ -21,59 +20,48 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import useOutsideClick from '@/shared/hooks/useOutsideClick';
 import Sidebar from '../sidebar/Sidebar';
 import { message, Modal } from 'antd';
-import { fetchKeplrAccountName, initializeChain } from "../../../services/keplr";
-import { decode, encode } from "js-base64";
-import { queryAllBalances } from "../../../services/bank/query";
-import { queryAssets } from "../../../services/asset/query";
 import {
-  setAccountAddress,
-  setAccountBalances,
-  setAccountName,
-  setAssetBalance,
-  showAccountConnectModal
-} from "../../../logic/redux/account/account";
+  fetchKeplrAccountName,
+  initializeChain,
+} from '../../../services/keplr';
+import { decode, encode } from 'js-base64';
+import { queryAllBalances } from '../../../services/bank/query';
+import { queryAssets } from '../../../services/asset/query';
+
 import {
   fetchAllTokens,
   fetchRestAPRs,
   queryLiquidityParams,
-  queryPoolIncentives
-} from "../../../services/liquidity/query";
-import {
-  setAppAssets,
-  setAssets,
-  setAssetsInPrgoress
-} from "../../../logic/redux/asset";
-import { fetchRestPrices } from "../../../services/oracle/query";
-import { setMarkets } from "../../../logic/redux/oracle";
+  queryPoolIncentives,
+} from '../../../services/liquidity/query';
+
+import { fetchRestPrices } from '../../../services/oracle/query';
+import { setMarkets } from '../../../logic/redux/oracle';
 // import { useState } from 'react';
 // import Sidebar from '../sidebar/Sidebar';
 // import { Modal } from 'antd';
 import MyDropdown from '../dropDown/Dropdown';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/constants/common";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@/constants/common';
+import { marketPrice } from '@/utils/number';
+import { cmst, harbor } from '@/config/network';
+import { amountConversion } from '@/utils/coin';
+import { setAccountAddress } from '@/logic/redux/slices/accountSlice';
 
-interface HeaderProps {
-  setAccountAddress: any;
-  setAccountBalances: any;
-  address: String,
-  setMarkets: any,
-  setAssets: any,
-  setAppAssets: any
-  assetDenomMap: object
-}
+interface HeaderProps {}
 
-const Header = ({
-  setAccountAddress,
-  address,
-  setAccountBalances,
-  setMarkets,
-  setAssets,
-  setAppAssets,
-  assetDenomMap
-}: HeaderProps) => {
+const Header = ({}: HeaderProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
+  const comdex = useAppSelector((state) => state.config.config);
+  const account = useAppSelector((state) => state.account);
   const [inProgress, setInProgress] = useState(false);
-  // const [address, setAddress] = useState()
+  const [address1, setAccountAddress1] = useState<any>();
+  const [balances, setAccountBalances] = useState<any>();
+  const [accountName, setAccountName] = useState<any>();
+  const [markets, setMarkets] = useState<any>();
+  const [assetMap, setAssets] = useState<any>();
+
+  console.log({ account });
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
@@ -101,10 +89,7 @@ const Header = ({
     setIsModalOpen(false);
   };
 
-  // console.log(address, "address reducer");
-
-
-  const handleConnectToWallet = (walletType: string): void => {
+  const handleConnectToWallet = (walletType: string) => {
     setInProgress(true);
 
     initializeChain(walletType, (error: any, account: any) => {
@@ -114,16 +99,14 @@ const Header = ({
         return;
       }
 
-      // setAccountAddress(account.address);
-      setAccountAddress(account.address)
-      fetchKeplrAccountName().then((name: string) => {
-        // setAccountName(name);
-        console.log(name, "Keplr name");
-
+      setAccountAddress1(account.address);
+      dispatch(setAccountAddress(account.address));
+      fetchKeplrAccountName().then((name) => {
+        setAccountName(name);
       });
 
-      localStorage.setItem("ac", encode(account.address));
-      localStorage.setItem("loginType", walletType || "keplr");
+      localStorage.setItem('ac', encode(account.address));
+      localStorage.setItem('loginType', walletType || 'keplr');
       // showAccountConnectModal(false);
     });
   };
@@ -132,14 +115,17 @@ const Header = ({
     (address: String) => {
       queryAllBalances(address, (error: any, result: any) => {
         if (error) {
-          console.log(error, "error in balance ");
+          console.log(error, 'error in balance ');
           return;
         }
-        console.log(result, "result Balance");
+        console.log(result, 'result Balance');
 
-        console.log(result.balances, "Balance");
+        console.log(result.balances, 'Balance');
 
-        setAccountBalances(result.balances, result.pagination);
+        setAccountBalances({
+          balance: result.balances,
+          result: result.pagination,
+        });
         // calculateAssetBalance(result.balances);
       });
     },
@@ -153,7 +139,7 @@ const Header = ({
         message.error(error);
         return;
       }
-      console.log(result, "Market data");
+      console.log(result, 'Market data');
 
       setMarkets(result.data);
     });
@@ -161,44 +147,30 @@ const Header = ({
 
   const fetchAssets = useCallback(
     (offset: number, limit: number, countTotal: boolean, reverse: boolean) => {
-      queryAssets(offset, limit, countTotal, reverse, (error: any, data: any) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
+      queryAssets(
+        offset,
+        limit,
+        countTotal,
+        reverse,
+        (error: any, data: any) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
 
-        setAssets(data.assets);
-      });
+          setAssets(data.assets);
+        }
+      );
     },
     [setAssets]
   );
 
   useEffect(() => {
-    if (!Object.keys(assetDenomMap)?.length) {
-      setAssetsInPrgoress(true);
-      fetchAllTokens((error: any, result: any) => {
-        if (error) {
-          return;
-        }
-
-        console.log(result, "asset all token");
-
-
-        if (result?.data?.length) {
-          setAppAssets(result?.data);
-        }
-      });
+    console.log(address1, 'address');
+    if (address1) {
+      fetchBalances(address1);
     }
-  }, [setAppAssets, assetDenomMap, setAssetsInPrgoress]);
-
-  useEffect(() => {
-    console.log(address, "address");
-    if (address) {
-
-      fetchBalances(address);
-    }
-    // }, [address, refreshBalance, markets, fetchBalances]);
-  }, [address, fetchBalances]);
+  }, [address1, fetchBalances]);
 
   useEffect(() => {
     fetchPrices();
@@ -209,7 +181,6 @@ const Header = ({
       false
     );
   }, [fetchAssets, fetchPrices]);
-  // }, [fetchPrices]);
 
   const cswapItems = [
     {
@@ -235,7 +206,13 @@ const Header = ({
           <div className={styles.dropdown__wallet__title}>
             {' Connect Wallet'}
           </div>
-          <button onClick={() => handleConnectToWallet("keplr")}>{'Keplr Wallet'}</button>
+          <button onClick={() => handleConnectToWallet('keplr')}>
+            {'Keplr Wallet'}
+          </button>
+          <button onClick={() => handleConnectToWallet('leap')}>
+            {'Leap Cosmos Wallet'}
+          </button>
+          <button>{'Ledger'}</button>
         </div>
       ),
     },
@@ -269,8 +246,9 @@ const Header = ({
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-              }`}
+            className={`bi bi-list ${
+              theme === 'dark' ? styles.icon_dark : styles.icon_light
+            }`}
             size={'1.5rem'}
           />
         </div>
@@ -286,8 +264,9 @@ const Header = ({
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${theme === 'dark' ? styles.dark : styles.light
-                } ${isActive(item.route) ? styles.active : ''}`}
+              className={`${styles.header__left__element} ${
+                theme === 'dark' ? styles.dark : styles.light
+              } ${isActive(item.route) ? styles.active : ''}`}
             >
               <Link
                 href={i === 6 ? '' : item.route}
@@ -327,27 +306,31 @@ const Header = ({
                   )}
 
                   <div
-                    className={`${styles.header__cSwap__title} ${theme === 'dark' ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.header__cSwap__title} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
                   >
                     {'cSwap'}
                   </div>
                   <Icon
-                    className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-                      }`}
+                    className={`bi bi-grid-fill ${
+                      theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
                   />
                 </div>
                 <Icon
-                  className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                  className={`bi bi-grid-fill ${
+                    theme === 'dark' ? styles.icon_dark : styles.icon_light
+                  }`}
                 />
               </div>
             </MyDropdown>
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
-                className={`${styles.header__faucet__title} ${theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                className={`${styles.header__faucet__title} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
               >
                 {'Faucet'}
               </div>
@@ -356,8 +339,9 @@ const Header = ({
             <MyDropdown items={walletItems} placement={'bottomLeft'}>
               <div className={styles.header__wallet}>
                 <div
-                  className={`${styles.header__wallet__title} ${theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.header__wallet__title} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
                 >
                   {'Connect Wallet'}
                 </div>
@@ -367,8 +351,9 @@ const Header = ({
             <MyDropdown items={threeDotItems} placement={'bottomLeft'}>
               <div>
                 <Icon
-                  className={`bi bi-three-dots-vertical ${theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                  className={`bi bi-three-dots-vertical ${
+                    theme === 'dark' ? styles.icon_dark : styles.icon_light
+                  }`}
                   size={'2rem'}
                 />
               </div>
@@ -382,75 +367,4 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  // lang: PropTypes.string.isRequired,
-  // refreshBalance: PropTypes.number.isRequired,
-  setAccountAddress: PropTypes.func.isRequired,
-  // showAccountConnectModal: PropTypes.func.isRequired,
-  setAccountBalances: PropTypes.func.isRequired,
-  // setAccountName: PropTypes.func.isRequired,
-  // setAssetBalance: PropTypes.func.isRequired,
-  // setAssetsInPrgoress: PropTypes.func.isRequired,
-  setAssets: PropTypes.func.isRequired,
-  // setAppAssets: PropTypes.func.isRequired,
-  setMarkets: PropTypes.func.isRequired,
-  // setParams: PropTypes.func.isRequired,
-  // setPoolIncentives: PropTypes.func.isRequired,
-  // setPoolRewards: PropTypes.func.isRequired,
-  address: PropTypes.string,
-  // assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
-  // balances: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     denom: PropTypes.string.isRequired,
-  //     amount: PropTypes.string,
-  //   })
-  // ),
-  // markets: PropTypes.object,
-  // pools: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     id: PropTypes.shape({
-  //       high: PropTypes.number,
-  //       low: PropTypes.number,
-  //       unsigned: PropTypes.bool,
-  //     }),
-  //     reserveAccountAddress: PropTypes.string,
-  //     poolCoinDenom: PropTypes.string,
-  //     reserveCoinDenoms: PropTypes.array,
-  //   })
-  // ),
-  // show: PropTypes.bool,
-};
-
-const stateToProps = (state: any) => {
-  return {
-    // lang: state.language,
-    address: state.account.account.address,
-    // show: state.account.showModal,
-    // markets: state.oracle.market.list,
-    // refreshBalance: state.account.refreshBalance,
-    // pools: state.liquidity.pool.list,
-    // balances: state.account.balances.list,
-    // assetMap: state.asset.map,
-    assetDenomMap: state.account.asset._.assetDenomMap,
-  };
-};
-
-const actionsToProps = {
-  // showAccountConnectModal,
-  setAccountAddress,
-  setAccountBalances,
-  // setAssetBalance,
-  setMarkets,
-  // setAccountName,
-  // setPoolIncentives,
-  // setPoolRewards,
-  // setParams,
-  setAssets,
-  setAppAssets,
-  // setAssetsInPrgoress,
-};
-
-// export default Header;
-
-export default connect(stateToProps, actionsToProps)(Header);
+export default Header;
