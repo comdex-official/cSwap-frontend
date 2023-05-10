@@ -19,7 +19,11 @@ const Toggle = dynamic(() => import('@/shared/components/toggle/Toggle'));
 
 const Portfolio = () => {
   const theme = useAppSelector((state) => state.theme.theme);
-  const assetBalance = useAppSelector((state) => state.account.account.balances.asset);
+  // const assetBalance = useAppSelector((state) => state.account.account.balances.asset);
+  const comdex = useAppSelector((state: any) => state.config.config);
+  const account = useAppSelector((state) => state.account);
+
+
   const [toggleValue, setToggleValue] = useState<boolean>(false);
 
   const [active, setActive] = useState('Assets');
@@ -149,7 +153,7 @@ const Portfolio = () => {
               className={`${styles.portfolio__element__title} ${theme === 'dark' ? styles.dark : styles.light
                 }`}
             >
-              {`${commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)} USD`}
+              {`${commaSeparatorWithRounding(account.assetBalance, DOLLAR_DECIMALS)} USD`}
             </div>
           </div>
           <div
@@ -180,7 +184,7 @@ const Portfolio = () => {
             }`}
         >
           {/* <PortfolioTable theme={theme} active={active} /> */}
-          <PortifolioTab  />
+          <PortifolioTab />
         </div>
       </div>
     </div>

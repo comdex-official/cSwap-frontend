@@ -3,13 +3,32 @@ import { createSlice } from '@reduxjs/toolkit';
 type StateProps = {
   address: string;
   accountName: string;
-  accountBalance: [];
+  balances: 
+ {
+    list: [],
+    pagination: {},
+    asset: 0,
+    pool: 0,
+  },
+
+  assetBalance: number;
+  poolBalance: any;
+  balanceRefetch: null;
 };
 
 const initialState: StateProps = {
   address: '',
   accountName: '',
-  accountBalance: [],
+  balances: 
+    {
+    list: [],
+    pagination: {},
+    asset: 0,
+    pool: 0,
+  },
+  assetBalance: 0,
+  poolBalance: [],
+  balanceRefetch: null,
 };
 
 const accountSlice = createSlice({
@@ -23,11 +42,26 @@ const accountSlice = createSlice({
       state.accountName = action?.payload;
     },
     setAccountBalances: (state: StateProps, action: any) => {
-      state.accountBalance = action?.payload;
+      state.balances = action?.payload;
+    },
+    setAssetBalance: (state: StateProps, action: any) => {
+      state.assetBalance = action?.payload;
+    },
+    setPoolBalance: (state: StateProps, action: any) => {
+      state.poolBalance = action?.payload;
+    },
+    setBalanceRefresh: (state: StateProps, action: any) => {
+      state.balanceRefetch = action?.payload;
     },
   },
 });
 
-export const { setAccountAddress, setAccountName, setAccountBalances } =
-  accountSlice.actions;
+export const {
+  setAccountAddress,
+  setAccountName,
+  setAccountBalances,
+  setAssetBalance,
+  setPoolBalance,
+  setBalanceRefresh,
+} = accountSlice.actions;
 export default accountSlice.reducer;

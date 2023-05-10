@@ -32,25 +32,26 @@ import styles from './Portfolio.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 
 
-interface AssetsProps {
-  balances?: any,
-  markets?: any,
-  parent?: any,
-  refreshBalance?: any,
-  assetMap?: any,
-  assetDenomMap?: any,
-  setMarkets?: any,
-}
+// interface PortofolioTable {
+//   balances?: any,
+//   markets?: any,
+//   parent?: any,
+//   refreshBalance?: any,
+//   assetMap?: any,
+//   assetDenomMap?: any,
+//   setMarkets?: any,
+// }
 
-const Assets = ({
-  balances,
-  markets,
-  parent,
-  refreshBalance,
-  assetMap,
-  assetDenomMap,
-  setMarkets,
-}: AssetsProps) => {
+// const PortofolioTable = ({
+//   balances,
+//   markets,
+//   parent,
+//   refreshBalance,
+//   assetMap,
+//   assetDenomMap,
+//   setMarkets,
+// }: PortofolioTable) => {
+const PortofolioTable = () => {
 
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
@@ -59,6 +60,8 @@ const Assets = ({
 
 
   const theme = useAppSelector((state) => state.theme.theme);
+  const account = useAppSelector((state) => state.account);
+  const balances = account?.balances?.list;
 
   const dispatch = useDispatch();
 
@@ -101,7 +104,7 @@ const Assets = ({
     });
   };
 
-  const columns:any = [
+  const columns: any = [
     {
       title: 'Asset',
       dataIndex: 'asset',
@@ -112,7 +115,7 @@ const Assets = ({
       dataIndex: 'noOfTokens',
       key: 'noOfTokens',
       align: 'left',
-      render: (tokens:any) => (
+      render: (tokens: any) => (
         <>
           <p>{commaSeparator(Number(tokens || 0))}</p>
         </>
@@ -124,7 +127,7 @@ const Assets = ({
       key: 'price',
       align: 'left',
       width: 150,
-      render: (price:any) => (
+      render: (price: any) => (
         <>
           <p className="text-left">
             ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
@@ -137,7 +140,7 @@ const Assets = ({
       dataIndex: 'amount',
       key: 'amount',
       align: 'left',
-      render: (amount:any) => (
+      render: (amount: any) => (
         <>
           <p>
             $
@@ -154,7 +157,7 @@ const Assets = ({
       key: 'ibcdeposit',
       align: 'left',
       // width: 210,
-      render: (value:any) => {
+      render: (value: any) => {
         if (value) {
           return value?.depositUrlOverride ? (
             <Button type="primary" size="small">
@@ -185,7 +188,7 @@ const Assets = ({
       dataIndex: 'ibcwithdraw',
       key: 'ibcwithdraw',
       width: 110,
-      render: (value:any) => {
+      render: (value: any) => {
         if (value) {
           return value?.withdrawUrlOverride ? (
             <Button type="primary" size="small">
@@ -216,15 +219,15 @@ const Assets = ({
   const getPrice = (denom: any) => {
     return marketPrice(markets, denom) || 0;
   };
-  
+
   let AssetList = {};
-  let appAssets:any = AssetList?.tokens?.filter(
-    (item:any) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
+  let appAssets: any = AssetList?.tokens?.filter(
+    (item: any) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
   );
 
-  let ibcBalances = appAssets?.map((token:any) => {
+  let ibcBalances = appAssets?.map((token: any) => {
     const ibcBalance = balances.find(
-      (item:any) => item.denom === token?.ibcDenomHash
+      (item: any) => item.denom === token?.ibcDenomHash
     );
     console.log(ibcBalance, 'ibcBalance in func');
     const value =
@@ -240,9 +243,9 @@ const Assets = ({
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
-              ibcBalance.amount,
-              assetMap[ibcBalance?.denom]?.decimals
-            )
+            ibcBalance.amount,
+            assetMap[ibcBalance?.denom]?.decimals
+          )
           : 0,
         value: value || 0,
         denom: ibcBalance?.denom,
@@ -257,7 +260,7 @@ const Assets = ({
     };
   });
   const nativeCoin = balances.filter(
-    (item:any) => item.denom === comdex?.coinMinimalDenom
+    (item: any) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
@@ -349,12 +352,12 @@ const Assets = ({
 
   ibcBalances =
     parent && parent === 'portfolio'
-      ? ibcBalances.filter((item:any) => item?.balance?.amount > 0)
+      ? ibcBalances.filter((item: any) => item?.balance?.amount > 0)
       : ibcBalances;
 
   const tableIBCData =
     ibcBalances &&
-    ibcBalances.map((item:any) => {
+    ibcBalances.map((item: any) => {
       return {
         key: item?.coinMinimalDenom,
         symbol: item?.symbol,
@@ -396,7 +399,7 @@ const Assets = ({
       : tableData;
 
   let balanceExists = allTableData?.find(
-    (item:any) => Number(item?.noOfTokens) > 0
+    (item: any) => Number(item?.noOfTokens) > 0
   );
 
 
@@ -434,7 +437,7 @@ const Assets = ({
               loading={pricesInProgress}
               pagination={false}
               scroll={{ x: '100%' }}
-              // locale={{ emptyText: <NoDataIcon /> }}
+            // locale={{ emptyText: <NoDataIcon /> }}
             />
             {/* ) : (
               <LPAsssets
@@ -452,42 +455,44 @@ const Assets = ({
   );
 };
 
-Assets.propTypes = {
-  lang: PropTypes.string.isRequired,
-  setAccountBalances: PropTypes.func.isRequired,
-  setMarkets: PropTypes.func.isRequired,
-  setLPPrices: PropTypes.func.isRequired,
-  assetBalance: PropTypes.number,
-  assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
-  markets: PropTypes.object,
-  lpPrices: PropTypes.object,
-  refreshBalance: PropTypes.number.isRequired,
-};
+// Assets.propTypes = {
+//   lang: PropTypes.string.isRequired,
+//   setAccountBalances: PropTypes.func.isRequired,
+//   setMarkets: PropTypes.func.isRequired,
+//   setLPPrices: PropTypes.func.isRequired,
+//   assetBalance: PropTypes.number,
+//   assetMap: PropTypes.object,
+//   assetDenomMap: PropTypes.object,
+//   balances: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       denom: PropTypes.string.isRequired,
+//       amount: PropTypes.string,
+//     })
+//   ),
+//   markets: PropTypes.object,
+//   lpPrices: PropTypes.object,
+//   refreshBalance: PropTypes.number.isRequired,
+// };
 
-const stateToProps = (state: any) => {
-  return {
-    lang: state.language,
-    assetBalance: state.account.account.balances.asset,
-    balances: state.account.account.balances.list,
-    markets: state.account.oracle.market.list,
-    lpPrices: state.account.oracle.lpPrice.list,
-    refreshBalance: state.account.account.refreshBalance,
-    assetMap: state.account.asset.map,
-    assetDenomMap: state.account.asset.appAssetMap,
-  };
-};
+// const stateToProps = (state: any) => {
+//   return {
+//     lang: state.language,
+//     assetBalance: state.account.account.balances.asset,
+//     balances: state.account.account.balances.list,
+//     markets: state.account.oracle.market.list,
+//     lpPrices: state.account.oracle.lpPrice.list,
+//     refreshBalance: state.account.account.refreshBalance,
+//     assetMap: state.account.asset.map,
+//     assetDenomMap: state.account.asset.appAssetMap,
+//   };
+// };
 
-const actionsToProps = {
-  setAccountBalances,
-  setMarkets,
-  setLPPrices,
-};
+// const actionsToProps = {
+//   setAccountBalances,
+//   setMarkets,
+//   setLPPrices,
+// };
 
-export default connect(stateToProps, actionsToProps)(Assets);
+// export default connect(stateToProps, actionsToProps)(Assets);
+
+export default PortofolioTable;

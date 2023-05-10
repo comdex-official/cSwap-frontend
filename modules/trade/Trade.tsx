@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 const TradeCard = dynamic(() => import('@/modules/trade/TradeCard'));
 
 const Trade = () => {
-  const theme = useAppSelector((state) => state.theme.theme);
+  const theme = useAppSelector((state: any) => state.theme.theme);
 
   const [validationError, setValidationError] = useState();
   const [priceValidationError, setPriceValidationError] = useState();

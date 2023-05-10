@@ -39,7 +39,7 @@ const Assets = () => {
         {
             label: "Assets",
             key: "1",
-            children: <PortfolioTable  />,
+            children: <PortfolioTable />,
         },
         {
             label: "Liquidity",
@@ -72,42 +72,43 @@ const Assets = () => {
     );
 };
 
-Assets.propTypes = {
-    lang: PropTypes.string.isRequired,
-    setAccountBalances: PropTypes.func.isRequired,
-    setMarkets: PropTypes.func.isRequired,
-    setLPPrices: PropTypes.func.isRequired,
-    assetBalance: PropTypes.number,
-    assetMap: PropTypes.object,
-    assetDenomMap: PropTypes.object,
-    balances: PropTypes.arrayOf(
-        PropTypes.shape({
-            denom: PropTypes.string.isRequired,
-            amount: PropTypes.string,
-        })
-    ),
-    markets: PropTypes.object,
-    lpPrices: PropTypes.object,
-    refreshBalance: PropTypes.number.isRequired,
-};
+// Assets.propTypes = {
+//     lang: PropTypes.string.isRequired,
+//     setAccountBalances: PropTypes.func.isRequired,
+//     setMarkets: PropTypes.func.isRequired,
+//     setLPPrices: PropTypes.func.isRequired,
+//     assetBalance: PropTypes.number,
+//     assetMap: PropTypes.object,
+//     assetDenomMap: PropTypes.object,
+//     balances: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             denom: PropTypes.string.isRequired,
+//             amount: PropTypes.string,
+//         })
+//     ),
+//     markets: PropTypes.object,
+//     lpPrices: PropTypes.object,
+//     refreshBalance: PropTypes.number.isRequired,
+// };
 
-const stateToProps = (state:any) => {
-    return {
-        lang: state.language,
-        assetBalance: state.account.account.balances.asset,
-        balances: state.account.account.balances.list,
-        markets: state.account.oracle.market.list,
-        lpPrices: state.account.oracle.lpPrice.list,
-        refreshBalance: state.account.account.refreshBalance,
-        assetMap: state.account.asset.map,
-        assetDenomMap: state.account.asset.appAssetMap,
-    };
-};
+// const stateToProps = (state: any) => {
+//     return {
+//         lang: state.language,
+//         assetBalance: state.account.assetBalance,
+//         balances: state.account.account.balances.list,
+//         markets: state.account.oracle.market.list,
+//         lpPrices: state.account.oracle.lpPrice.list,
+//         refreshBalance: state.account.account.refreshBalance,
+//         assetMap: state.account.asset.map,
+//         assetDenomMap: state.account.asset.appAssetMap,
+//     };
+// };
 
-const actionsToProps = {
-    setAccountBalances,
-    setMarkets,
-    setLPPrices,
-};
+// const actionsToProps = {
+//     setAccountBalances,
+//     setMarkets,
+//     setLPPrices,
+// };
 
-export default connect(stateToProps, actionsToProps)(Assets);
+// export default connect(stateToProps, actionsToProps)(Assets);
+export default Assets;
