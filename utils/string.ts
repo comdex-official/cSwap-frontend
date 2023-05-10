@@ -108,7 +108,7 @@ export const lowercaseFirstLetter = (string: any) => {
 };
 
 //Considering input with given decimal point only.
-export const toDecimals = async (value: any, decimal: any) => {
+export const toDecimals = async (value: any, decimal?: any) => {
   const comdex = await envConfigResult();
   return value.indexOf('.') >= 0
     ? value.substr(0, value.indexOf('.')) +

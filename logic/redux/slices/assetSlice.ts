@@ -4,7 +4,7 @@ type StateProps = {
   pairs: {};
   appAssetMap: {};
   assetDenom: {};
-  map: {};
+  map: any;
   pairId: null;
   pair: {};
 };

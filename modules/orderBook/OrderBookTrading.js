@@ -46,7 +46,6 @@ export default function TradingViewWidget() {
           enable_publishing: false,
           withdateranges: true,
           range: 'YTD',
-
           allow_symbol_change: true,
           container_id: 'tradingview_2bc9b',
         });

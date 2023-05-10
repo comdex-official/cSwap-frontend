@@ -4,6 +4,7 @@ import configSlice from './slices/configSlice';
 import accountSlice from './slices/accountSlice';
 import oracleSlice from './slices/oracleSlice';
 import assetSlice from './slices/assetSlice';
+import swapSlice from './slices/swapSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     account: accountSlice,
     oracle: oracleSlice,
     asset: assetSlice,
+    swap: swapSlice,
   },
   // devTools: process.env.NODE_ENV !== "production",
 });

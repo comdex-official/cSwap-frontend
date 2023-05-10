@@ -3,26 +3,46 @@ import styles from './Trade.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { useEffect, useState } from 'react';
 import { getPairMappings, toDecimals } from '@/utils/string';
-import { amountConversion, getAmount, getDenomBalance } from '@/utils/coin';
-import { decimalConversion } from '@/utils/number';
-import { ValidateInputNumber } from '@/config/_validation';
+import {
+  amountConversion,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
+} from '@/utils/coin';
+import { decimalConversion, getExponent, marketPrice } from '@/utils/number';
+import {
+  ValidateInputNumber,
+  ValidatePriceInputNumber,
+} from '@/config/_validation';
 import {
   calculateRangedPoolPrice,
   calculateSlippage,
   getNewRangedPoolRatio,
 } from '@/utils/slippage';
 import {
+  fetchExchangeRateValue,
+  queryLiquidityPair,
   queryLiquidityPairs,
+  queryPool,
   queryPoolsList,
 } from '@/services/liquidity/query';
 import { message } from 'antd';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@/constants/common';
+import {
+  DEFAULT_FEE,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
+} from '@/constants/common';
 
 const TradeCard = dynamic(() => import('@/modules/trade/TradeCard'));
 
 const Trade = () => {
   const theme = useAppSelector((state: any) => state.theme.theme);
   const account = useAppSelector((state) => state.account);
+  const asset = useAppSelector((state) => state.asset);
+  const comdex = useAppSelector((state) => state.config.config);
+  const params = useAppSelector((state) => state.swap.params);
+  const markets = useAppSelector((state) => state.oracle.market.list);
 
   const [validationError, setValidationError] = useState<any>();
   const [priceValidationError, setPriceValidationError] = useState<any>();
@@ -146,26 +166,30 @@ const Trade = () => {
 
   useEffect(() => {
     if (pair?.id) {
-      fetchExchangeRateValue(APP_ID, pair?.id, (error, result) => {
+      const app: any = process.env.NEXT_PUBLIC_APP_APP;
+      const APP_ID = Number(comdex?.[app]?.appId);
+
+      fetchExchangeRateValue(APP_ID, pair?.id, (error: any, result: any) => {
         if (error) {
-          setBaseCoinPoolPrice(0, 0);
+          setBaseCoinPoolPrice({ originalPrice: 0, basePrice: 0 });
           return;
         }
 
         if (result?.pairs[0]?.base_price) {
-          setBaseCoinPoolPrice(
-            Number(result?.pairs[0]?.base_price) /
+          setBaseCoinPoolPrice({
+            originalPrice:
+              Number(result?.pairs[0]?.base_price) /
               10 **
                 Math.abs(
-                  getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                    getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                  getExponent(asset.map[pair?.baseCoinDenom]?.decimals) -
+                    getExponent(asset.map[pair?.quoteCoinDenom]?.decimals)
                 ),
-            result?.pairs[0]?.base_price
-          );
+            basePrice: result?.pairs[0]?.base_price,
+          });
         }
       });
     }
-  }, [pair, setBaseCoinPoolPrice, assetMap]);
+  }, [pair, setBaseCoinPoolPrice, asset.map]);
 
   const updatePoolDetails = async (denomIn: any, denomOut: any) => {
     const selectedPair = pairs?.list?.filter(
@@ -195,13 +219,13 @@ const Trade = () => {
   };
 
   const onChange = (value: any) => {
-    value = toDecimals(value, assetMap[offerCoin?.denom]?.decimals)
+    value = toDecimals(value, asset.map[offerCoin?.denom]?.decimals)
       .toString()
       .trim();
     handleOfferCoinAmountChange(value);
   };
 
-  const handleOfferCoinAmountChange = (value: any) => {
+  const handleOfferCoinAmountChange = (value?: any) => {
     const selectedAsset =
       poolBalance &&
       Object.values(poolBalance).filter(
@@ -219,7 +243,7 @@ const Trade = () => {
           (Number(
             amountConversion(
               assetVolume,
-              assetMap[selectedAsset?.denom]?.decimals
+              asset.map[selectedAsset?.denom]?.decimals
             )
           ) +
             Number(value))) *
@@ -232,7 +256,7 @@ const Trade = () => {
 
     setValidationError(
       ValidateInputNumber(
-        Number(getAmount(value, assetMap[selectedAsset?.denom]?.decimals)),
+        Number(getAmount(value, asset.map[selectedAsset?.denom]?.decimals)),
         availableBalance,
         'macro'
       )
@@ -264,12 +288,12 @@ const Trade = () => {
       // Rx: quoteAmount, Ry: BaseAmount
       const currentPrice = Number(decimalConversion(pool?.price)); // for slippage calculation this is current price.
 
-      const [newRx, newRy, final] = getNewRangedPoolRatio(
+      const [newRx, newRy, final]: any = getNewRangedPoolRatio(
         quoteAmount,
         baseAmount,
         reverse ? 'buy' : 'sell',
         currentPrice,
-        Number(getAmount(input, assetMap[offerCoin?.denom]?.decimals))
+        Number(getAmount(input, asset.map[offerCoin?.denom]?.decimals))
       );
 
       const newPrice = calculateRangedPoolPrice(
@@ -286,32 +310,32 @@ const Trade = () => {
     }
   };
 
-  const handleDemandCoinDenomChange = (value) => {
+  const handleDemandCoinDenomChange = (value: any) => {
     setDemandCoinDenom(value);
 
     if (isLimitOrder) {
       setLimitPrice(0);
-      setPriceValidationError();
+      setPriceValidationError(null);
     }
 
     setDemandCoinDenom(value);
     updatePoolDetails(offerCoin?.denom, value);
   };
 
-  const handleOfferCoinDenomChange = (value) => {
+  const handleOfferCoinDenomChange = (value: any) => {
     setOfferCoinDenom(value);
 
     setDemandCoinDenom(pairsMapping[value]?.[0]);
 
     if (isLimitOrder) {
       setLimitPrice(0);
-      setPriceValidationError();
+      setPriceValidationError(null);
     }
     updatePoolDetails(value, pairsMapping[value]?.[0]);
   };
 
   const availableBalance =
-    getDenomBalance(account?.accountBalance, offerCoin?.denom) || 0;
+    getDenomBalance(account?.balances.list, offerCoin?.denom) || 0;
 
   const showOfferCoinSpotPrice = () => {
     const denomIn = denomConversion(offerCoin?.denom);
@@ -379,25 +403,26 @@ const Trade = () => {
         Number(availableBalance) > DEFAULT_FEE
           ? availableBalance - DEFAULT_FEE
           : 0;
-      const nativeOfferCoinFee = value * decimalConversion(params?.swapFeeRate);
+      const nativeOfferCoinFee =
+        value * +decimalConversion(params?.swapFeeRate);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
             amountConversion(
               value - nativeOfferCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
+              asset.map[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance);
-      const offerCoinFee = value * decimalConversion(params?.swapFeeRate);
+      const offerCoinFee = value * +decimalConversion(params?.swapFeeRate);
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
             amountConversion(
               value - offerCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
+              asset.map[offerCoin?.denom]?.decimals
             )
           )
         : handleOfferCoinAmountChange();
@@ -409,26 +434,27 @@ const Trade = () => {
       const value =
         Number(availableBalance / 2) > DEFAULT_FEE ? availableBalance / 2 : 0;
       const nativeOfferCoinFee =
-        value * (decimalConversion(params?.swapFeeRate) / 2);
+        value * (+decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
+            amountConversion(value, asset.map[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance / 2);
-      const offerCoinFee = value * (decimalConversion(params?.swapFeeRate) / 2);
+      const offerCoinFee =
+        value * (+decimalConversion(params?.swapFeeRate) / 2);
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
+            amountConversion(value, asset.map[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     }
   };
 
-  const handleLimitPriceChange = (price) => {
+  const handleLimitPriceChange = (price: any) => {
     price = toDecimals(price).toString().trim();
 
     setLimitPrice(price);
@@ -439,8 +465,8 @@ const Trade = () => {
           Number(price) *
             10 **
               Math.abs(
-                getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                  getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+                getExponent(asset.map[pair?.baseCoinDenom]?.decimals) -
+                  getExponent(asset.map[pair?.quoteCoinDenom]?.decimals)
               ),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
@@ -452,7 +478,7 @@ const Trade = () => {
     calculateDemandCoinAmount(price, offerCoin?.amount);
   };
 
-  const handleLimitSwitchChange = (value) => {
+  const handleLimitSwitchChange = (value: any) => {
     setLimitOrderToggle(value);
     resetValues();
   };
@@ -480,7 +506,7 @@ const Trade = () => {
   }, [pool]);
 
   const fetchPair = () => {
-    queryLiquidityPair(pair?.id, (error, result) => {
+    queryLiquidityPair(pair?.id, (error: any, result: any) => {
       if (error) {
         message.error(error);
         return;
@@ -493,7 +519,7 @@ const Trade = () => {
   };
 
   const fetchPool = () => {
-    queryPool(pool?.id, (error, result) => {
+    queryPool(pool?.id, (error: any, result: any) => {
       if (error) {
         return;
       }
@@ -502,7 +528,7 @@ const Trade = () => {
     });
   };
 
-  const handleOrderLifespanChange = (value) => {
+  const handleOrderLifespanChange = (value: any) => {
     value = value.toString().trim();
 
     if (value >= 0 && value <= params?.maxOrderLifespan?.seconds.toNumber()) {
@@ -510,7 +536,11 @@ const Trade = () => {
     }
   };
 
-  const priceRange = (lastPrice, maxPriceLimitRatio, decimal) => {
+  const priceRange = async (
+    lastPrice: any,
+    maxPriceLimitRatio: any,
+    decimal: any
+  ) => {
     return `${((lastPrice - maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
       comdex?.coinDecimals
     )} - ${((lastPrice + maxPriceLimitRatio * lastPrice) / decimal)?.toFixed(
@@ -518,7 +548,11 @@ const Trade = () => {
     )}`;
   };
 
-  const priceRangeValues = (lastPrice, maxPriceLimitRatio, decimal) => {
+  const priceRangeValues = (
+    lastPrice: any,
+    maxPriceLimitRatio: any,
+    decimal: any
+  ) => {
     let minPrice = (lastPrice - maxPriceLimitRatio * lastPrice) / decimal;
 
     let maxPrice = (lastPrice + maxPriceLimitRatio * lastPrice) / decimal;
