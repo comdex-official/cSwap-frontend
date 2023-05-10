@@ -51,6 +51,7 @@ import {
 import { truncateString } from '@/utils/string';
 import { setMarkets } from '@/logic/redux/oracle';
 import { setAppAssets, setAssets } from '@/logic/redux/asset';
+import { setParams } from '@/logic/redux/slices/swapSlice';
 
 interface HeaderProps { }
 
@@ -324,18 +325,18 @@ const Header = ({ }: HeaderProps) => {
     );
   }, [fetchAssets, fetchPrices]);
 
-  // const fetchParams = useCallback(() => {
-  //   queryLiquidityParams((error:any, result:any) => {
-  //     if (error) {
-  //       message.error(error);
-  //       return;
-  //     }
+  const fetchParams = useCallback(() => {
+    queryLiquidityParams((error: any, result: any) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
 
-  //     if (result?.params) {
-  //       setParams(result?.params);
-  //     }
-  //   });
-  // }, [setParams]);
+      if (result?.params) {
+        dispatch(setParams(result?.params));
+      }
+    });
+  }, [setParams]);
 
   // const fetchPoolIncentives = useCallback(() => {
   //   queryPoolIncentives((error:any, result:any) => {
@@ -359,11 +360,14 @@ const Header = ({ }: HeaderProps) => {
   //   });
   // }, [setPoolRewards]);
 
-  // useEffect(() => {
-  //   fetchPoolIncentives();
-  //   fetchParams();
-  //   getAPRs();
-  // }, [fetchParams, fetchPoolIncentives, getAPRs]);
+  useEffect(() => {
+    // fetchPoolIncentives();
+    fetchParams();
+    // getAPRs();
+  }, [
+    fetchParams,
+    // fetchPoolIncentives, getAPRs
+  ]);
 
   const cswapItems = [
     {
