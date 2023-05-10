@@ -4,12 +4,18 @@ type StateProps = {
   address: string;
   accountName: string;
   accountBalance: [];
+  assetBalance: number;
+  poolBalance: any;
+  balanceRefetch: null;
 };
 
 const initialState: StateProps = {
   address: '',
   accountName: '',
   accountBalance: [],
+  assetBalance: 0,
+  poolBalance: [],
+  balanceRefetch: null,
 };
 
 const accountSlice = createSlice({
@@ -25,9 +31,24 @@ const accountSlice = createSlice({
     setAccountBalances: (state: StateProps, action: any) => {
       state.accountBalance = action?.payload;
     },
+    setAssetBalance: (state: StateProps, action: any) => {
+      state.assetBalance = action?.payload;
+    },
+    setPoolBalance: (state: StateProps, action: any) => {
+      state.poolBalance = action?.payload;
+    },
+    setBalanceRefresh: (state: StateProps, action: any) => {
+      state.balanceRefetch = action?.payload;
+    },
   },
 });
 
-export const { setAccountAddress, setAccountName, setAccountBalances } =
-  accountSlice.actions;
+export const {
+  setAccountAddress,
+  setAccountName,
+  setAccountBalances,
+  setAssetBalance,
+  setPoolBalance,
+  setBalanceRefresh,
+} = accountSlice.actions;
 export default accountSlice.reducer;

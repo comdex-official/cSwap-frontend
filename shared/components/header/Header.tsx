@@ -46,6 +46,7 @@ import {
   setAccountAddress,
   setAccountBalances,
   setAccountName,
+  setAssetBalance,
 } from '@/logic/redux/slices/accountSlice';
 import { truncateString } from '@/utils/string';
 
@@ -58,7 +59,6 @@ const Header = ({}: HeaderProps) => {
   const account = useAppSelector((state) => state.account);
   const [addressFromLocal, setAddressFromLocal] = useState<any>();
   const [inProgress, setInProgress] = useState(false);
-  const [assetBalance, setAssetBalance] = useState<any>();
   const [assetsInPrgoress, setAssetsInPrgoress] = useState<any>();
   const [assetMap, setAppAssets] = useState<any>();
   const [markets, setMarkets] = useState<any>();
@@ -229,8 +229,8 @@ const Header = ({}: HeaderProps) => {
           +amountConversion(item.amount, assetMap[item?.denom]?.decimals)
         );
       });
-
-      setAssetBalance(Lodash.sum(value));
+      //@ts-ignore
+      dispatch(setAssetBalance(Lodash.sum(value)));
     },
     [getPrice, setAssetBalance, assetMap]
   );
