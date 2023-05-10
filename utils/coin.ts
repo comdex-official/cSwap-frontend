@@ -32,17 +32,19 @@ export const getAmount = async (selectedAmount: any, decimal: any) => {
   return amountWithoutScientificNumber;
 };
 
-export const amountConversionWithComma = async (amount: any, decimals: any) => {
-  const comdex = await envConfigResult();
-
+export const amountConversionWithComma = (
+  amount: any,
+  comdex: any,
+  decimals?: any
+) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
 
   const result =
-    Number(finiteAmount) / (decimals || 10 ** comdex?.envConfig?.coinDecimals);
+    Number(finiteAmount) / (decimals || 10 ** comdex?.coinDecimals);
 
   return commaSeparator(
-    Math.floor(result * Math.pow(10, comdex?.envConfig?.coinDecimals)) /
-      Math.pow(10, comdex?.envConfig?.coinDecimals)
+    Math.floor(result * Math.pow(10, comdex?.coinDecimals)) /
+      Math.pow(10, comdex?.coinDecimals)
   );
 };
 
