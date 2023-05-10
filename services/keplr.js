@@ -1,13 +1,15 @@
-import { Bech32Address } from "@keplr-wallet/cosmos";
+import { envConfigResult } from '@/config/envConfig';
+import { cmst, harbor } from '@/config/network';
+import { Bech32Address } from '@keplr-wallet/cosmos';
 import {
   AccountSetBase,
   ChainStore,
-  getKeplrFromWindow
-} from "@keplr-wallet/stores";
-import { cmst, comdex, harbor } from "../config/network";
+  getKeplrFromWindow,
+} from '@keplr-wallet/stores';
 
-const getCurrencies = (chain) => {
-  if (chain?.rpc === comdex?.rpc) {
+const getCurrencies = async (chain) => {
+  const comdex = await envConfigResult();
+  if (chain?.rpc === comdex?.envConfig?.rpc) {
     return [
       {
         coinDenom: chain?.coinDenom,
@@ -36,7 +38,10 @@ const getCurrencies = (chain) => {
   }
 };
 
-export const getChainConfig = (chain = comdex) => {
+export const getChainConfig = async (chain) => {
+  const comdex = await envConfigResult();
+  chain = comdex?.envConfig;
+
   return {
     chainId: chain?.chainId,
     chainName: chain?.chainName,
@@ -52,7 +57,7 @@ export const getChainConfig = (chain = comdex) => {
       coinType: chain?.coinType,
     },
     bech32Config: Bech32Address.defaultBech32Config(chain?.prefix),
-    currencies: getCurrencies(chain),
+    currencies: await getCurrencies(chain),
     feeCurrencies: [
       {
         coinDenom: chain?.coinDenom,
@@ -60,7 +65,7 @@ export const getChainConfig = (chain = comdex) => {
         coinDecimals: chain?.coinDecimals,
         coinGeckoId: chain?.coinGeckoId,
         // Adding separate gas steps for eth accounts.
-        gasPriceStep: chain?.features?.includes("eth-address-gen")
+        gasPriceStep: chain?.features?.includes('eth-address-gen')
           ? {
               low: 1000000000000,
               average: 1500000000000,
@@ -80,10 +85,11 @@ export const getChainConfig = (chain = comdex) => {
 
 export const initializeChain = (type, callback) => {
   (async () => {
-    let walletType = type || localStorage.getItem("loginType");
+    const comdex = await envConfigResult();
+    let walletType = type || localStorage.getItem('loginType');
 
     let isNoExtensionExists =
-      walletType === "keplr"
+      walletType === 'keplr'
         ? !window.getOfflineSigner || !window.keplr
         : !window?.leap?.getOfflineSigner || !window.wallet;
 
@@ -92,21 +98,25 @@ export const initializeChain = (type, callback) => {
       callback(error);
     } else {
       let suggestChain =
-        walletType === "keplr"
+        walletType === 'keplr'
           ? window.keplr.experimentalSuggestChain
           : window.leap.experimentalSuggestChain;
 
       if (suggestChain) {
         try {
-          walletType === "keplr"
-            ? await window.keplr.experimentalSuggestChain(getChainConfig())
-            : await window.leap.experimentalSuggestChain(getChainConfig());
-          const offlineSigner =
-            walletType === "keplr"
-              ? window.getOfflineSigner(comdex?.chainId)
-              : window?.leap?.getOfflineSigner(comdex?.chainId);
-          const accounts = await offlineSigner.getAccounts();
+          walletType === 'keplr'
+            ? await window.keplr.experimentalSuggestChain(
+                await getChainConfig()
+              )
+            : await window.leap.experimentalSuggestChain(
+                await getChainConfig()
+              );
 
+          const offlineSigner =
+            walletType === 'keplr'
+              ? window.getOfflineSigner(comdex?.envConfig?.chainId)
+              : window?.leap?.getOfflineSigner(comdex?.envConfig?.chainId);
+          const accounts = await offlineSigner.getAccounts();
           callback(null, accounts[0]);
         } catch (error) {
           callback(error?.message);
@@ -121,10 +131,10 @@ export const initializeChain = (type, callback) => {
 
 export const initializeIBCChain = (config, callback) => {
   (async () => {
-    let walletType = localStorage.getItem("loginType");
+    let walletType = localStorage.getItem('loginType');
 
     let isNoExtensionExists =
-      walletType === "keplr"
+      walletType === 'keplr'
         ? !window.getOfflineSigner || !window.keplr
         : !window?.leap?.getOfflineSigner || !window.wallet;
 
@@ -133,17 +143,17 @@ export const initializeIBCChain = (config, callback) => {
       callback(error);
     } else {
       let suggestChain =
-        walletType === "keplr"
+        walletType === 'keplr'
           ? window.keplr.experimentalSuggestChain
           : window.leap.experimentalSuggestChain;
 
       if (suggestChain) {
         try {
-          walletType === "keplr"
+          walletType === 'keplr'
             ? await window.keplr.experimentalSuggestChain(config)
             : await window.leap.experimentalSuggestChain(config);
           const offlineSigner =
-            walletType === "keplr"
+            walletType === 'keplr'
               ? window.getOfflineSigner(config?.chainId)
               : window?.leap?.getOfflineSigner(config?.chainId);
           const accounts = await offlineSigner.getAccounts();
@@ -153,7 +163,7 @@ export const initializeIBCChain = (config, callback) => {
           callback(error?.message);
         }
       } else {
-        const versionError = "Please use the recent version of keplr extension";
+        const versionError = 'Please use the recent version of keplr extension';
         callback(versionError);
       }
     }
@@ -161,8 +171,8 @@ export const initializeIBCChain = (config, callback) => {
 };
 
 export const fetchKeplrAccountName = async () => {
-  const chainStore = new ChainStore([getChainConfig()]);
-
+  const chainStore = new ChainStore([await getChainConfig()]);
+  const comdex = await envConfigResult();
   const accountSetBase = new AccountSetBase(
     {
       // No need
@@ -170,7 +180,7 @@ export const fetchKeplrAccountName = async () => {
       removeEventListener: () => {},
     },
     chainStore,
-    comdex?.chainId,
+    comdex?.envConfig?.chainId,
     {
       suggestChain: false,
       autoInit: true,
@@ -179,6 +189,7 @@ export const fetchKeplrAccountName = async () => {
   );
 
   // Need wait some time to get the Keplr.
+
   await (() => {
     return new Promise((resolve) => {
       setTimeout(resolve, 1000);

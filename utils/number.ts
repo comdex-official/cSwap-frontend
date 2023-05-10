@@ -1,7 +1,8 @@
+import { DOLLAR_DECIMALS } from "@/constants/common";
 import { Decimal } from "@cosmjs/math";
-import { DOLLAR_DECIMALS } from "../constants/common";
 
-export const formatNumber = (number) => {
+
+export const formatNumber = (number:any) => {
   if (number >= 1000 && number < 1000000) {
     return (number / 1000).toFixed(DOLLAR_DECIMALS) + "K";
   } else if (number >= 1000000) {
@@ -11,7 +12,7 @@ export const formatNumber = (number) => {
   }
 };
 
-export const commaSeparator = (value) => {
+export const commaSeparator = (value:any) => {
   const array = value.toString().split(".");
   const stringWithComma = array[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -22,11 +23,11 @@ export const commaSeparator = (value) => {
   return stringWithComma;
 };
 
-export const decimalConversion = (data) => {
+export const decimalConversion = (data:any) => {
   return Decimal.fromAtomics(data || "0", 18).toString();
 };
 
-export const marketPrice = (array, denom) => {
+export const marketPrice = (array:any, denom:any) => {
   // Remove: below if condition for testing local purpose
   if (denom === "weth-wei") {
     return 1450;
@@ -39,11 +40,11 @@ export const marketPrice = (array, denom) => {
   return 0; // returning 0 values if price not exists.
 };
 
-export const getAccountNumber = (value) => {
+export const getAccountNumber = (value:any) => {
   return value === "" ? "0" : value;
 };
 
-export const getExponent = (number) => {
+export const getExponent = (number:any) => {
   let count = 0;
   while (number > 1) {
     number = number / 10;
@@ -53,7 +54,7 @@ export const getExponent = (number) => {
   return count;
 };
 
-export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
+export const getAMP = (currentPrice:any, minimumPrice:any, maximumPrice:any) => {
   return (
     1 /
     (1 -
@@ -63,14 +64,14 @@ export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
   );
 };
 
-export const rangeToPercentage = (min, max, input) =>
+export const rangeToPercentage = (min:any, max:any, input:any) =>
   Number(((input - min) * 100) / (max - min))?.toFixed(0);
 
 export const detectBestDecimalsDisplay = (
-  price,
-  minDecimal = 2,
-  minPrice = 1,
-  maxDecimal
+  price:any,
+  minDecimal:number = 2,
+  minPrice:number = 1,
+  maxDecimal:any
 ) => {
   if (price && price > minPrice) return minDecimal;
   let decimals = minDecimal;
@@ -92,7 +93,7 @@ export const formateNumberDecimalsAuto = ({
   unit,
   minDecimal,
   minPrice,
-}) => {
+}:any) => {
   minDecimal = minDecimal ? minDecimal : 2;
   minPrice = minPrice ? minPrice : 1;
   let res =
@@ -103,7 +104,7 @@ export const formateNumberDecimalsAuto = ({
   return res;
 };
 
-export const formateNumberDecimals = (price, decimals = 2) => {
+export const formateNumberDecimals = (price:any, decimals: number = 2) => {
   return new Intl.NumberFormat("en-US", {
     currency: "USD",
     maximumFractionDigits: decimals,

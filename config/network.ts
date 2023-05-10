@@ -1,9 +1,8 @@
-import AssetList from '../Config/ibc_assets.json';
-import { envConfig } from './envConfig';
+import { ibcAssets } from './ibc_assets';
 
-const getIbcDenomsMap = () => {
-  let myMap = {};
-
+const getIbcDenomsMap = async () => {
+  let myMap: any = {};
+  const AssetList: any = await ibcAssets();
   for (let i = 0; i < AssetList?.tokens?.length; i++) {
     if (myMap[AssetList?.tokens[i].coinMinimDenom] === undefined) {
       myMap[AssetList?.tokens[i].coinMinimalDenom] =
@@ -12,22 +11,6 @@ const getIbcDenomsMap = () => {
   }
 
   return myMap;
-};
-
-export const comdex = {
-  chainId: envConfig?.chainId,
-  chainName: envConfig?.chainName,
-  rpc: envConfig?.rpc,
-  rest: envConfig?.rest,
-  explorerUrlToTx: envConfig?.explorerUrlToTx,
-  walletUrlForStaking: envConfig?.walletUrlForStaking,
-  coinDenom: envConfig?.coinDenom,
-  coinMinimalDenom: envConfig?.coinMinimalDenom,
-  coinDecimals: envConfig?.coinDecimals,
-  prefix: envConfig?.prefix,
-  coinType: envConfig?.coinType,
-  symbol: envConfig?.symbol,
-  webSocketApiUrl: envConfig?.webSocketApiUrl,
 };
 
 export const cmst = {
@@ -44,7 +27,7 @@ export const harbor = {
   symbol: 'HARBOR',
 };
 
-export const ibcDenoms = getIbcDenomsMap() || {};
+export const ibcDenoms: any = getIbcDenomsMap() || {};
 
 export const tokenCoinGeckoIds = [
   'cosmos',

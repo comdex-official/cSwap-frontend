@@ -40,7 +40,6 @@
             gap: 15px;
             padding: 18px;
             text-align: center;
-            border-bottom: 2px solid rgba($border-dark, 0.5);
 
             .dark-mode & {
               border-bottom: 1px solid rgba($white, 0.5);
@@ -52,10 +51,11 @@
         }
         .govern_bottom_proposals_container {
           min-height: 8rem;
+          border-top: 2px solid rgba($border-dark, 0.5);
           .governlist_row {
             display: flex;
             padding: 20px 40px 20px;
-            border-bottom: 1px solid rgba($border-dark, 0.5);
+
             cursor: pointer;
             &:last-child {
               border: 0;
@@ -98,6 +98,7 @@
               .proposal_status_container {
                 display: flex;
                 justify-content: space-between;
+
                 .proposal_status {
                   padding: 3px 20px;
                   border-radius: 15px;
@@ -109,6 +110,10 @@
                   height: max-content;
                   width: 9rem;
                   text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  gap: 10px;
+                  align-items: center;
                 }
                 .open_color {
                   border: 1px solid #00b0ff;
@@ -130,6 +135,10 @@
                   // background-color: #cce7de;
                   border: 1px solid #02865b;
                   background-color: #19323a;
+                  display: flex;
+                  justify-content: center;
+                  gap: 10px;
+                  align-items: center;
                   .dark-mode & {
                     background-color: #19323a;
                   }
@@ -290,6 +299,10 @@
   // background-color: #cce7de;
   background-color: #19323a;
   border: 1px solid #02865b;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
   .dark-mode & {
     background-color: #19323a;
   }

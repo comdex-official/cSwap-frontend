@@ -1,9 +1,9 @@
-import axios from "axios";
-import { API_URL } from "../../constants/url";
+import axios from 'axios';
+import { API_URL } from '../../constants/url';
 
 export const fetchRestPrices = (callback) => {
   axios
-    .get(`${API_URL}/api/v2/cswap/tokens/all`)
+    .get(`https://srinu-assets.comdex.one/tokens.json`)
     .then((result) => {
       callback(null, result?.data);
     })

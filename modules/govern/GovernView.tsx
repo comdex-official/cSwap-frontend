@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import style from './Govern.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { useRouter } from 'next/router';
-import { Button, List } from 'antd';
+import { Button, List, Spin } from 'antd';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Link from 'next/link';
@@ -12,21 +12,21 @@ import {
   fetchRestProposer,
   queryUserVote,
 } from '@/services/govern/query';
+import { formatTime } from '@/utils/date';
 import {
-  DOLLAR_DECIMALS,
-  denomConversion,
-  formatNumber,
-  formatTime,
   proposalOptionMap,
   proposalStatusMap,
   stringTagParser,
   truncateString,
-} from '@/helpers/utils';
-import { comdex } from '@/config/network';
+} from '@/utils/string';
+import { formatNumber } from '@/utils/number';
+import { DOLLAR_DECIMALS } from '@/constants/common';
+import { denomConversion } from '@/utils/coin';
+import VoteNowModal from './VoteNowModal';
 
 const GovernView = () => {
-  // const theme = useAppSelector((state) => state.theme.theme);
-  // const router = useRouter();
+  const comdex = useAppSelector((state) => state.config.config);
+  const account = useAppSelector((state) => state.account);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,7 +35,7 @@ const GovernView = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const [votedOption, setVotedOption] = useState(3);
+  const [votedOption, setVotedOption] = useState<number>(3);
   const [getVotes, setGetVotes] = useState({
     yes: 0,
     no: 0,
@@ -43,6 +43,7 @@ const GovernView = () => {
     abstain: 0,
   });
 
+  const [inProgress, setInProgress] = useState(true);
   const [proposal, setProposal] = useState<any>();
   const [proposalTally, setProposalTally] = useState<any>();
   const [proposer, setProposer] = useState<any>();
@@ -80,9 +81,10 @@ const GovernView = () => {
     if (id) {
       fetchRestProposal(id, (error: any, result: any) => {
         if (error) {
+          setInProgress(false);
           return;
         }
-
+        setInProgress(false);
         setProposal(result?.proposal);
       });
       fetchRestProposalTally(id, (error: any, result: any) => {
@@ -109,7 +111,7 @@ const GovernView = () => {
 
   const fetchVote = useCallback(() => {
     queryUserVote(
-      'comdex12ref04v38lrta7cdv7pgrqqexcjka4zl2arnxf',
+      account?.address,
       proposal?.proposal_id,
       (error: any, result: any) => {
         if (error) {
@@ -119,13 +121,13 @@ const GovernView = () => {
         setVotedOption(result?.vote?.option);
       }
     );
-  }, [proposal?.proposal_id]);
+  }, [proposal?.proposal_id, account?.address]);
 
   useEffect(() => {
     if (proposal?.proposal_id) {
       fetchVote();
     }
-  }, [id, proposal, fetchVote]);
+  }, [id, proposal, fetchVote, account]);
 
   const calculateTotalValue = () => {
     let yes = Number(proposalTally?.yes);
@@ -251,122 +253,152 @@ const GovernView = () => {
             <Button type="primary">Back</Button>
           </Link>
         </div>
+        {inProgress ? (
+          <div className={'loader'}>
+            <Spin />
+          </div>
+        ) : (
+          <div className={style.govern_container}>
+            {/* Upper copntainer  */}
+            <div className={style.govern_upper_main_container}>
+              <div className={style.govern_upper_container}>
+                <List
+                  grid={{
+                    gutter: 16,
+                    xs: 1,
+                    sm: 2,
+                    md: 3,
+                    lg: 3,
+                    xl: 3,
+                    xxl: 3,
+                  }}
+                  className={`${
+                    style.govern_upper_container_list
+                  } ${'govern_ant_list_class'} ${
+                    style.govern_detail_ant_list_class
+                  }`}
+                  dataSource={data}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <div>
+                        <p>{item.title}</p>
+                        <h3>{item.counts}</h3>
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </div>
+            {/* Bottom Container  */}
+            <div className={style.govern_detail_bottom_main_container}>
+              <div className={style.govern_detail_left_container}>
+                <div className={style.up_main_container}>
+                  <div className={style.proposal_id}>
+                    #{proposal?.proposal_id || '-'}
+                  </div>
+                  <div className={`${style.status} ${style.passed_color}`}>
+                    <div
+                      className={
+                        proposalStatusMap[proposal?.status] === 'Rejected' ||
+                        proposalStatusMap[proposal?.status] === 'Failed'
+                          ? 'failed-circle'
+                          : proposalStatusMap[proposal?.status] === 'Passed'
+                          ? 'passed-circle'
+                          : 'warning-circle'
+                      }
+                    ></div>
+                    {proposalStatusMap[proposal?.status]}
+                  </div>
+                </div>
+                <div className={style.bottom_main_container}>
+                  <div className={style.title}>
+                    {proposal?.content?.title || '------'}
+                  </div>
+                  <div className={style.description}>
+                    {stringTagParser(proposal?.content?.description || ' ')}{' '}
+                  </div>
+                </div>
+              </div>
+              <div className={style.govern_detail_right_container}>
+                {account.address && proposalOptionMap[votedOption] && (
+                  <div className={style.vote_button}>
+                    {proposalOptionMap?.[votedOption] && (
+                      <div className={style.user_vote}>
+                        {' '}
+                        Your Vote :{' '}
+                        <span>{proposalOptionMap[votedOption]}</span>
+                      </div>
+                    )}
 
-        <div className={style.govern_container}>
-          {/* Upper copntainer  */}
-          <div className={style.govern_upper_main_container}>
-            <div className={style.govern_upper_container}>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 1,
-                  sm: 2,
-                  md: 3,
-                  lg: 3,
-                  xl: 3,
-                  xxl: 3,
-                }}
-                className={`${
-                  style.govern_upper_container_list
-                } ${'govern_ant_list_class'} ${
-                  style.govern_detail_ant_list_class
-                }`}
-                dataSource={data}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>{item.title}</p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
+                    <VoteNowModal
+                      refreshVote={fetchVote}
+                      proposal={proposal}
+                      address={account.address}
+                    />
+                    {/* <Button type="primary" >
+                      Vote Now
+                    </Button> */}
+                  </div>
                 )}
-              />
-            </div>
-          </div>
-          {/* Bottom Container  */}
-          <div className={style.govern_detail_bottom_main_container}>
-            <div className={style.govern_detail_left_container}>
-              <div className={style.up_main_container}>
-                <div className={style.proposal_id}>
-                  #{proposal?.proposal_id || '-'}
-                </div>
-                <div className={`${style.status} ${style.passed_color}`}>
-                  {proposalStatusMap[proposal?.status]}
-                </div>
-              </div>
-              <div className={style.bottom_main_container}>
-                <div className={style.title}>
-                  {proposal?.content?.title || '------'}
-                </div>
-                <div className={style.description}>
-                  {stringTagParser(proposal?.content?.description || ' ')}{' '}
-                </div>
-              </div>
-            </div>
-            <div className={style.govern_detail_right_container}>
-              <div className={style.vote_button}>
-                <div className={style.user_vote}>
-                  {' '}
-                  Your Vote : <span>{proposalOptionMap[votedOption]}</span>
-                </div>
-                <Button type="primary" className={style.ant_vote_button}>
-                  Vote Now
-                </Button>
-              </div>
-              <div className={style.charts_Value_container}>
-                <div className={style.charts}>
-                  <HighchartsReact highcharts={Highcharts} options={Options} />
-                </div>
-                <div className={style.total_value}>
-                  <div className={style.vote_border}>
-                    <div className={style.title}>Total Vote</div>
-                    <div className={style.value}>{`${
-                      calculateTotalValue() || '0'
-                    } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
+
+                <div className={style.charts_Value_container}>
+                  <div className={style.charts}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={Options}
+                    />
+                  </div>
+                  <div className={style.total_value}>
+                    <div className={style.vote_border}>
+                      <div className={style.title}>Total Vote</div>
+                      <div className={style.value}>{`${
+                        calculateTotalValue() || '0'
+                      } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className={style.vote_count_container}>
-                <div className={style.yes_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>Yes</div>
-                    <div className={style.value}>{`${Number(
-                      getVotes?.yes || '0.00'
-                    )}%`}</div>
+                <div className={style.vote_count_container}>
+                  <div className={style.yes_container}>
+                    <div className={style.fill_box}></div>
+                    <div className={style.data_box}>
+                      <div className={style.title}>Yes</div>
+                      <div className={style.value}>{`${Number(
+                        getVotes?.yes || '0.00'
+                      )}%`}</div>
+                    </div>
                   </div>
-                </div>
-                <div className={style.no_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>No</div>
-                    <div className={style.value}>{`${Number(
-                      getVotes?.no || '0.00'
-                    )}%`}</div>
+                  <div className={style.no_container}>
+                    <div className={style.fill_box}></div>
+                    <div className={style.data_box}>
+                      <div className={style.title}>No</div>
+                      <div className={style.value}>{`${Number(
+                        getVotes?.no || '0.00'
+                      )}%`}</div>
+                    </div>
                   </div>
-                </div>
-                <div className={style.noWithVeto_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>No With Veto</div>
-                    <div className={style.value}>{`${Number(
-                      getVotes?.veto || '0.00'
-                    )}%`}</div>
+                  <div className={style.noWithVeto_container}>
+                    <div className={style.fill_box}></div>
+                    <div className={style.data_box}>
+                      <div className={style.title}>No With Veto</div>
+                      <div className={style.value}>{`${Number(
+                        getVotes?.veto || '0.00'
+                      )}%`}</div>
+                    </div>
                   </div>
-                </div>
-                <div className={style.abstain_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>Abstain</div>
-                    <div className={style.value}>{`${Number(
-                      getVotes?.abstain || '0.00'
-                    )}%`}</div>
+                  <div className={style.abstain_container}>
+                    <div className={style.fill_box}></div>
+                    <div className={style.data_box}>
+                      <div className={style.title}>Abstain</div>
+                      <div className={style.value}>{`${Number(
+                        getVotes?.abstain || '0.00'
+                      )}%`}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import themeSlice from './slices/themeSlice';
-import account from '../../reducer/index';
+import configSlice from './slices/configSlice';
+import accountSlice from './slices/accountSlice';
 
 const store = configureStore({
   reducer: {
     theme: themeSlice,
-    account:account,
+    config: configSlice,
+    account: accountSlice,
   },
   // devTools: process.env.NODE_ENV !== "production",
 });

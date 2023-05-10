@@ -1,20 +1,12 @@
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-
-// const GovernCard = dynamic(() => import('@/modules/bridge/BridgeCard'));
-
 import style from './Govern.module.scss';
-
 import { Button, List, Select, Spin, message } from 'antd';
 import { Progress } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { fetchRestProposals } from '@/services/govern/query';
-import {
-  DOLLAR_DECIMALS,
-  formatNumber,
-  formatTime,
-  proposalStatusMap,
-} from '@/helpers/utils';
+import { DOLLAR_DECIMALS } from '@/constants/common';
+import { proposalStatusMap } from '@/utils/string';
+import { formatTime } from '@/utils/date';
 
 const Govern = () => {
   const router = useRouter();
@@ -90,7 +82,7 @@ const Govern = () => {
   return (
     <>
       {inProgress && !allProposals?.length ? (
-        <div className="loader">
+        <div className={'loader'}>
           <Spin />
         </div>
       ) : (
@@ -184,6 +176,18 @@ const Govern = () => {
                               <div
                                 className={`${style.proposal_status} ${style.passed_color}`}
                               >
+                                <div
+                                  className={
+                                    proposalStatusMap[item?.status] ===
+                                      'Rejected' ||
+                                    proposalStatusMap[item?.status] === 'Failed'
+                                      ? 'failed-circle'
+                                      : proposalStatusMap[item?.status] ===
+                                        'Passed'
+                                      ? 'passed-circle'
+                                      : 'warning-circle'
+                                  }
+                                ></div>
                                 {proposalStatusMap[item?.status]}
                               </div>
                             </div>
