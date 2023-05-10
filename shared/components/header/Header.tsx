@@ -36,16 +36,18 @@ import {
 } from '../../../services/liquidity/query';
 
 import { fetchRestPrices } from '../../../services/oracle/query';
-import { setMarkets } from '../../../logic/redux/oracle';
-// import { useState } from 'react';
-// import Sidebar from '../sidebar/Sidebar';
-// import { Modal } from 'antd';
+
 import MyDropdown from '../dropDown/Dropdown';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@/constants/common';
 import { marketPrice } from '@/utils/number';
 import { cmst, harbor } from '@/config/network';
 import { amountConversion } from '@/utils/coin';
-import { setAccountAddress } from '@/logic/redux/slices/accountSlice';
+import {
+  setAccountAddress,
+  setAccountBalances,
+  setAccountName,
+} from '@/logic/redux/slices/accountSlice';
+import { truncateString } from '@/utils/string';
 
 interface HeaderProps {}
 
@@ -54,12 +56,13 @@ const Header = ({}: HeaderProps) => {
   const theme = useAppSelector((state) => state.theme.theme);
   const comdex = useAppSelector((state) => state.config.config);
   const account = useAppSelector((state) => state.account);
+  const [addressFromLocal, setAddressFromLocal] = useState<any>();
   const [inProgress, setInProgress] = useState(false);
-  const [address1, setAccountAddress1] = useState<any>();
-  const [balances, setAccountBalances] = useState<any>();
-  const [accountName, setAccountName] = useState<any>();
+  const [assetBalance, setAssetBalance] = useState<any>();
+  const [assetsInPrgoress, setAssetsInPrgoress] = useState<any>();
+  const [assetMap, setAppAssets] = useState<any>();
   const [markets, setMarkets] = useState<any>();
-  const [assetMap, setAssets] = useState<any>();
+  const [assetDenomMap, setAssets] = useState<any>({});
 
   console.log({ account });
 
@@ -89,7 +92,7 @@ const Header = ({}: HeaderProps) => {
     setIsModalOpen(false);
   };
 
-  const handleConnectToWallet = (walletType: string) => {
+  const handleConnectToWallet = (walletType: any) => {
     setInProgress(true);
 
     initializeChain(walletType, (error: any, account: any) => {
@@ -99,10 +102,9 @@ const Header = ({}: HeaderProps) => {
         return;
       }
 
-      setAccountAddress1(account.address);
       dispatch(setAccountAddress(account.address));
-      fetchKeplrAccountName().then((name) => {
-        setAccountName(name);
+      fetchKeplrAccountName().then((name: any) => {
+        dispatch(setAccountName(name));
       });
 
       localStorage.setItem('ac', encode(account.address));
@@ -111,27 +113,169 @@ const Header = ({}: HeaderProps) => {
     });
   };
 
-  const fetchBalances = useCallback(
-    (address: String) => {
-      queryAllBalances(address, (error: any, result: any) => {
+  const subscription = {
+    jsonrpc: '2.0',
+    method: 'subscribe',
+    id: '0',
+    params: {
+      query: `coin_spent.spender='${account.address}'`,
+    },
+  };
+  const subscription2 = {
+    jsonrpc: '2.0',
+    method: 'subscribe',
+    id: '0',
+    params: {
+      query: `coin_received.receiver='${account.address}'`,
+    },
+  };
+
+  useEffect(() => {
+    let addressAlreadyExist = localStorage.getItem('ac');
+    addressAlreadyExist = addressAlreadyExist
+      ? decode(addressAlreadyExist)
+      : '';
+    setAddressFromLocal(addressAlreadyExist);
+  }, []);
+
+  useEffect(() => {
+    let walletType = localStorage.getItem('loginType');
+
+    if (addressFromLocal) {
+      initializeChain(walletType, (error: any, account: any) => {
         if (error) {
-          console.log(error, 'error in balance ');
+          message.error(error);
           return;
         }
-        console.log(result, 'result Balance');
+        // setAccountAddress(account.address);
+        dispatch(setAccountAddress(account.address));
 
-        console.log(result.balances, 'Balance');
-
-        setAccountBalances({
-          balance: result.balances,
-          result: result.pagination,
+        fetchKeplrAccountName().then((name: any) => {
+          dispatch(setAccountName(name));
         });
-        // calculateAssetBalance(result.balances);
+        localStorage.setItem('ac', encode(account.address));
+        localStorage.setItem('loginType', walletType || 'keplr');
+      });
+    }
+  }, [addressFromLocal, setAccountAddress, setAccountName]);
+
+  // useEffect(() => {
+  //   if (account.address) {
+  //     let ws = new WebSocket(`${comdex?.webSocketApiUrl}`);
+
+  //     ws.onopen = () => {
+  //       ws.send(JSON.stringify(subscription));
+  //       ws.send(JSON.stringify(subscription2));
+  //     };
+
+  //     ws.onmessage = (event) => {
+  //       const response = JSON.parse(event.data);
+  //       if (response?.result?.events) {
+  //         const savedAddress = localStorage.getItem('ac');
+  //         const userAddress = savedAddress
+  //           ? decode(savedAddress)
+  //           : account.address;
+  //         fetchBalances(userAddress);
+  //       }
+  //     };
+
+  //     ws.onclose = () => {
+  //       console.log('Connection Closed! 0');
+  //     };
+
+  //     ws.onerror = (error) => {
+  //       console.log(error, 'WS Error');
+  //     };
+  //   }
+  // }, [account.address]);
+
+  useEffect(() => {
+    const savedAddress = localStorage.getItem('ac');
+    const userAddress: any = savedAddress
+      ? decode(savedAddress)
+      : account.address;
+
+    if (userAddress) {
+      dispatch(setAccountAddress(userAddress));
+
+      fetchKeplrAccountName().then((name: any) => {
+        dispatch(setAccountName(name));
+      });
+    }
+  }, [account.address, setAccountAddress, setAccountName]);
+
+  const getPrice = useCallback(
+    (denom: any) => {
+      return marketPrice(markets, denom) || 0;
+    },
+    [markets]
+  );
+
+  const calculateAssetBalance = useCallback(
+    (balances: any) => {
+      console.log({ balances });
+
+      const assetBalances = balances.filter(
+        (item: any) =>
+          item.denom.substr(0, 4) === 'ibc/' ||
+          item.denom === comdex.coinMinimalDenom ||
+          item.denom === cmst.coinMinimalDenom ||
+          item.denom === harbor.coinMinimalDenom
+      );
+
+      const value = assetBalances.map((item: any) => {
+        return (
+          getPrice(item.denom) *
+          +amountConversion(item.amount, assetMap[item?.denom]?.decimals)
+        );
+      });
+
+      setAssetBalance(Lodash.sum(value));
+    },
+    [getPrice, setAssetBalance, assetMap]
+  );
+
+  const fetchBalances = useCallback(
+    (address: any) => {
+      queryAllBalances(address, (error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        console.log({ result });
+
+        dispatch(setAccountBalances(result.balances));
+
+        calculateAssetBalance(result.balances);
       });
     },
-    // [calculateAssetBalance, setAccountBalances]
-    []
+    [calculateAssetBalance, setAccountBalances]
   );
+
+  useEffect(() => {
+    if (account.address) {
+      fetchBalances(account.address);
+    }
+  }, [account.address, markets, fetchBalances]);
+
+  // useEffect(() => {
+  //   calculateAssetBalance(balances);
+  // }, [balances, calculateAssetBalance]);
+
+  useEffect(() => {
+    if (!Object.keys(assetDenomMap)?.length) {
+      setAssetsInPrgoress(true);
+      fetchAllTokens((error: any, result: any) => {
+        if (error) {
+          return;
+        }
+
+        if (result?.data?.length) {
+          setAppAssets(result?.data);
+        }
+      });
+    }
+  }, [setAppAssets, assetDenomMap, setAssetsInPrgoress]);
 
   const fetchPrices = useCallback(() => {
     fetchRestPrices((error: any, result: any) => {
@@ -139,14 +283,13 @@ const Header = ({}: HeaderProps) => {
         message.error(error);
         return;
       }
-      console.log(result, 'Market data');
 
       setMarkets(result.data);
     });
   }, [setMarkets]);
 
   const fetchAssets = useCallback(
-    (offset: number, limit: number, countTotal: boolean, reverse: boolean) => {
+    (offset: any, limit: any, countTotal: any, reverse: any) => {
       queryAssets(
         offset,
         limit,
@@ -166,13 +309,6 @@ const Header = ({}: HeaderProps) => {
   );
 
   useEffect(() => {
-    console.log(address1, 'address');
-    if (address1) {
-      fetchBalances(address1);
-    }
-  }, [address1, fetchBalances]);
-
-  useEffect(() => {
     fetchPrices();
     fetchAssets(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
@@ -181,6 +317,47 @@ const Header = ({}: HeaderProps) => {
       false
     );
   }, [fetchAssets, fetchPrices]);
+
+  // const fetchParams = useCallback(() => {
+  //   queryLiquidityParams((error:any, result:any) => {
+  //     if (error) {
+  //       message.error(error);
+  //       return;
+  //     }
+
+  //     if (result?.params) {
+  //       setParams(result?.params);
+  //     }
+  //   });
+  // }, [setParams]);
+
+  // const fetchPoolIncentives = useCallback(() => {
+  //   queryPoolIncentives((error:any, result:any) => {
+  //     if (error) {
+  //       message.error(error);
+  //       return;
+  //     }
+
+  //     setPoolIncentives(result?.poolIncentives);
+  //   });
+  // }, [setPoolIncentives]);
+
+  // const getAPRs = useCallback(() => {
+  //   fetchRestAPRs((error:any, result:any) => {
+  //     if (error) {
+  //       message.error(error);
+  //       return;
+  //     }
+
+  //     setPoolRewards(result?.data);
+  //   });
+  // }, [setPoolRewards]);
+
+  // useEffect(() => {
+  //   fetchPoolIncentives();
+  //   fetchParams();
+  //   getAPRs();
+  // }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
   const cswapItems = [
     {
@@ -198,10 +375,32 @@ const Header = ({}: HeaderProps) => {
     },
   ];
 
+  const handleDisconnect = () => {
+    //@ts-ignore
+    setAccountAddress('');
+    localStorage.removeItem('ac');
+    localStorage.removeItem('loginType');
+    window.location.reload();
+  };
+
   const walletItems = [
     {
       key: '1',
-      label: (
+      label: account.address ? (
+        <div className={styles.dropdown__wallet__menu}>
+          <div className={styles.dropdown__wallet__title}>
+            {`Name: ${account.accountName}`}
+          </div>
+          <div className={styles.dropdown__wallet__title}>
+            {`Balance: ${account.accountBalance}`}
+          </div>
+          <div className={styles.dropdown__wallet__title}>
+            {`Account: ${truncateString(account.address, 6, 6)}`}
+          </div>
+
+          <button onClick={() => handleDisconnect()}>{'Disconnect'}</button>
+        </div>
+      ) : (
         <div className={styles.dropdown__wallet__menu}>
           <div className={styles.dropdown__wallet__title}>
             {' Connect Wallet'}
@@ -343,7 +542,11 @@ const Header = ({}: HeaderProps) => {
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  {'Connect Wallet'}
+                  {`${
+                    account.address
+                      ? truncateString(account.address, 6, 6)
+                      : 'Connect Wallet'
+                  }`}
                 </div>
               </div>
             </MyDropdown>

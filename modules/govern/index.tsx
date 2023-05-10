@@ -82,7 +82,7 @@ const Govern = () => {
   return (
     <>
       {inProgress && !allProposals?.length ? (
-        <div className="loader">
+        <div className={'loader'}>
           <Spin />
         </div>
       ) : (
@@ -176,6 +176,18 @@ const Govern = () => {
                               <div
                                 className={`${style.proposal_status} ${style.passed_color}`}
                               >
+                                <div
+                                  className={
+                                    proposalStatusMap[item?.status] ===
+                                      'Rejected' ||
+                                    proposalStatusMap[item?.status] === 'Failed'
+                                      ? 'failed-circle'
+                                      : proposalStatusMap[item?.status] ===
+                                        'Passed'
+                                      ? 'passed-circle'
+                                      : 'warning-circle'
+                                  }
+                                ></div>
                                 {proposalStatusMap[item?.status]}
                               </div>
                             </div>

@@ -54,6 +54,7 @@ export const queryUserVote = (address: any, proposalId: any, callback: any) => {
       .Vote({ proposalId: Long.fromNumber(proposalId), voter: address })
       .then((result: any) => {
         callback(null, result);
+        console.log({ result });
       })
       .catch((error: any) => {
         callback(error?.message);

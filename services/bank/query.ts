@@ -28,9 +28,6 @@ export const queryAllBalances = async (owner: any, callback: any) => {
       callback(error);
       return;
     }
-    console.log('====================================');
-    console.log(owner, 'owner');
-    console.log('====================================');
 
     queryService
       .AllBalances({
@@ -41,7 +38,6 @@ export const queryAllBalances = async (owner: any, callback: any) => {
         callback(null, result);
       })
       .catch((error: any) => {
-        console.log('GGGGGG');
         callback(error?.message);
       });
   });

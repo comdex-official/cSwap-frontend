@@ -171,7 +171,7 @@ export const initializeIBCChain = (config, callback) => {
 };
 
 export const fetchKeplrAccountName = async () => {
-  const chainStore = new ChainStore([getChainConfig()]);
+  const chainStore = new ChainStore([await getChainConfig()]);
   const comdex = await envConfigResult();
   const accountSetBase = new AccountSetBase(
     {

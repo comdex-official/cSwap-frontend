@@ -749,3 +749,46 @@ a {
     }
   }
 }
+
+.loader {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.passed-circle {
+  border-radius: 5px;
+  background: $success-color;
+  width: 11px;
+  height: 11px;
+  margin-right: 3px;
+  @media screen and (max-width: 1540px) {
+    width: 8px;
+    height: 8px;
+  }
+}
+.failed-circle {
+  border-radius: 5px;
+  background: $error-color;
+  width: 11px;
+  height: 11px;
+  margin-right: 3px;
+  @media screen and (max-width: 1540px) {
+    width: 8px;
+    height: 8px;
+  }
+}
+.warning-circle {
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background: $warning-color;
+  width: 11px;
+  height: 11px;
+  margin-right: 3px;
+  @media screen and (max-width: 1540px) {
+    width: 8px;
+    height: 8px;
+  }
+}
