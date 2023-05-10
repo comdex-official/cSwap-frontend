@@ -29,37 +29,31 @@ const FarmTable = ({ theme }: FarmTableProps) => {
       accessor: 'PoolPair',
       Cell: ({ row, value }: any) => (
         <div
-          className={`${styles.farmCard__table__data__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farmCard__table__data__wrap} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farmCard__element__left__logo__wrap} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farmCard__element__left__logo__wrap} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farmCard__element__left__logo} ${
-                styles.first
-              } ${theme === 'dark' ? styles.dark : styles.light}`}
+              className={`${styles.farmCard__element__left__logo} ${styles.first
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
-                className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__left__logo__main} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <NextImage src={row.original.Image1} alt="" />
               </div>
             </div>
             <div
-              className={`${styles.farmCard__element__left__logo} ${
-                styles.last
-              } ${theme === 'dark' ? styles.dark : styles.light}`}
+              className={`${styles.farmCard__element__left__logo} ${styles.last
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
-                className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__left__logo__main} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <NextImage src={row.original.Image2} alt="" />
               </div>
@@ -67,40 +61,34 @@ const FarmTable = ({ theme }: FarmTableProps) => {
           </div>
 
           <div
-            className={`${styles.farmCard__element__left__title} ${
-              styles.tableActive
-            } ${theme === 'dark' ? styles.dark : styles.light}`}
+            className={`${styles.farmCard__element__left__title} ${styles.tableActive
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
           >
             {value}
           </div>
 
           <div
-            className={`${styles.farmCard__element__right} ${
-              styles.tableActive
-            } ${theme === 'dark' ? styles.dark : styles.light}`}
+            className={`${styles.farmCard__element__right} ${styles.tableActive
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
           >
             <div
-              className={`${styles.farmCard__element__right__main} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farmCard__element__right__main} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div
-                className={`${styles.farmCard__element__right__basic} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__right__basic} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <div
-                  className={`${
-                    styles.farmCard__element__right__basic__title
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                  className={`${styles.farmCard__element__right__basic__title
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {'Basic'}
                 </div>
                 {false && (
                   <div
-                    className={`${
-                      styles.farmCard__element__right__ranged__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.farmCard__element__right__ranged__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     <NextImage src={Ranged} alt="Pool" />
                     {'Ranged'}
@@ -108,14 +96,12 @@ const FarmTable = ({ theme }: FarmTableProps) => {
                 )}
               </div>
               <div
-                className={`${styles.farmCard__element__right__pool} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__right__pool} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <div
-                  className={`${styles.farmCard__element__right__pool__title} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.farmCard__element__right__pool__title} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
                 >
                   <NextImage src={Pyramid} alt="Logo" />
                   {'Master Pool'}
@@ -123,9 +109,8 @@ const FarmTable = ({ theme }: FarmTableProps) => {
 
                 {false && (
                   <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.farmCard__element__right__pool__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     <NextImage src={Current} alt="Logo" />
                     {'MP Boost'}
@@ -134,14 +119,12 @@ const FarmTable = ({ theme }: FarmTableProps) => {
               </div>
             </div>
             <div
-              className={`${styles.farmCard__element__right__incentive} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farmCard__element__right__incentive} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div
-                className={`${styles.farmCard__element__right__pool__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__right__pool__title} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <NextImage src={Cup} alt="Logo" />
                 {'External Incentives'}
@@ -156,27 +139,23 @@ const FarmTable = ({ theme }: FarmTableProps) => {
       accessor: 'APR',
       Cell: ({ value }: any) => (
         <div
-          className={`${styles.farmCard__element__right__details} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farmCard__element__right__details} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farmCard__element__right__details__title} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farmCard__element__right__details__title} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             {value}%
             <Icon className={'bi bi-arrow-right'} />
           </div>
           <div
-            className={`${styles.farmCard__element__right__pool} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farmCard__element__right__pool} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farmCard__element__right__pool__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farmCard__element__right__pool__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <NextImage src={Current} alt="Logo" />
               {'Upto 54.45%'}
@@ -190,22 +169,19 @@ const FarmTable = ({ theme }: FarmTableProps) => {
       accessor: 'TotalLiquidity',
       Cell: ({ value }: any) => (
         <div
-          className={`${styles.liquidity__wrap} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.liquidity__wrap} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farmCard__element__right__title} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farmCard__element__right__title} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             ${value}
           </div>
 
           <div
-            className={`${styles.farmCard__buttonWrap} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farmCard__buttonWrap} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <button>Add Liquidity</button>
           </div>

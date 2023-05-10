@@ -9,7 +9,7 @@ import { setLPPrices, setMarkets } from '../../logic/redux/oracle';
 // import { Col, Row, SvgIcon } from "../../components/common";
 // import NoDataIcon from "../../components/common/NoDataIcon";
 // import AssetList from "../../config/ibc_assets.json";
-import { cmst, comdex, harbor } from '../../config/network';
+// import { cmst, comdex, harbor } from '../../config/network';
 import { DOLLAR_DECIMALS } from '../../constants/common';
 import { getChainConfig } from '../../services/keplr';
 import { fetchRestPrices } from '../../services/oracle/query';
@@ -30,6 +30,9 @@ import './Portfolio.module.scss';
 import Withdraw from './Withdraw';
 import styles from './Portfolio.module.scss';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
+import { cmdx, comdex } from '@/config/network';
+import { cmst } from '@/config/network';
+import { harbor } from '@/config/network';
 
 
 // interface PortofolioTable {
@@ -51,6 +54,7 @@ import { useAppSelector } from '@/shared/hooks/useAppSelector';
 //   assetDenomMap,
 //   setMarkets,
 // }: PortofolioTable) => {
+
 const PortofolioTable = () => {
 
   const [pricesInProgress, setPricesInProgress] = useState(false);
@@ -61,9 +65,11 @@ const PortofolioTable = () => {
 
   const theme = useAppSelector((state) => state.theme.theme);
   const account = useAppSelector((state) => state.account);
-  const balances = account?.balances?.list;
+  const balances = account?.balances;
+  const comdex = useAppSelector((state) => state.config.config);
 
   const dispatch = useDispatch();
+  console.log(account, "account");
 
 
   const handleBalanceRefresh = () => {
@@ -259,18 +265,21 @@ const PortofolioTable = () => {
       withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
-  const nativeCoin = balances.filter(
+
+  console.log(balances, "balances");
+
+  const nativeCoin = balances?.filter(
     (item: any) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
-  const cmstCoin = balances.filter(
+  const cmstCoin = balances?.filter(
     (item: any) => item.denom === cmst?.coinMinimalDenom
   )[0];
 
   const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
 
-  const harborCoin = balances.filter(
+  const harborCoin = balances?.filter(
     (item: any) => item.denom === harbor?.coinMinimalDenom
   )[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;

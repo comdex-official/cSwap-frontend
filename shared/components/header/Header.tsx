@@ -52,9 +52,9 @@ import { truncateString } from '@/utils/string';
 import { setMarkets } from '@/logic/redux/oracle';
 import { setAppAssets, setAssets } from '@/logic/redux/asset';
 
-interface HeaderProps {}
+interface HeaderProps { }
 
-const Header = ({}: HeaderProps) => {
+const Header = ({ }: HeaderProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
   const comdex = useAppSelector((state) => state.config.config);
@@ -69,7 +69,6 @@ const Header = ({}: HeaderProps) => {
   // const [markets, setMarkets] = useState<any>();
   // const [assetDenomMap, setAssets] = useState<any>({});
 
-  console.log({ account });
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
@@ -218,7 +217,6 @@ const Header = ({}: HeaderProps) => {
 
   const calculateAssetBalance = useCallback(
     (balances: any) => {
-      console.log({ balances });
 
       const assetBalances = balances.filter(
         (item: any) =>
@@ -250,7 +248,6 @@ const Header = ({}: HeaderProps) => {
           return;
         }
 
-        console.log({ result });
 
         dispatch(setAccountBalances(result.balances));
 
@@ -292,7 +289,6 @@ const Header = ({}: HeaderProps) => {
         return;
       }
 
-      console.log(result, 'market data');
 
       dispatch(setMarkets(result.data));
     });
@@ -455,9 +451,8 @@ const Header = ({}: HeaderProps) => {
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${
-              theme === 'dark' ? styles.icon_dark : styles.icon_light
-            }`}
+            className={`bi bi-list ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+              }`}
             size={'1.5rem'}
           />
         </div>
@@ -473,9 +468,8 @@ const Header = ({}: HeaderProps) => {
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${
-                theme === 'dark' ? styles.dark : styles.light
-              } ${isActive(item.route) ? styles.active : ''}`}
+              className={`${styles.header__left__element} ${theme === 'dark' ? styles.dark : styles.light
+                } ${isActive(item.route) ? styles.active : ''}`}
             >
               <Link
                 href={i === 6 ? '' : item.route}
@@ -515,31 +509,27 @@ const Header = ({}: HeaderProps) => {
                   )}
 
                   <div
-                    className={`${styles.header__cSwap__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.header__cSwap__title} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
                   >
                     {'cSwap'}
                   </div>
                   <Icon
-                    className={`bi bi-grid-fill ${
-                      theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                    className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                      }`}
                   />
                 </div>
                 <Icon
-                  className={`bi bi-grid-fill ${
-                    theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
+                  className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
                 />
               </div>
             </MyDropdown>
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
-                className={`${styles.header__faucet__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.header__faucet__title} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 {'Faucet'}
               </div>
@@ -548,15 +538,13 @@ const Header = ({}: HeaderProps) => {
             <MyDropdown items={walletItems} placement={'bottomLeft'}>
               <div className={styles.header__wallet}>
                 <div
-                  className={`${styles.header__wallet__title} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.header__wallet__title} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
                 >
-                  {`${
-                    account.address
+                  {`${account.address
                       ? truncateString(account.address, 6, 6)
                       : 'Connect Wallet'
-                  }`}
+                    }`}
                 </div>
               </div>
             </MyDropdown>
@@ -564,9 +552,8 @@ const Header = ({}: HeaderProps) => {
             <MyDropdown items={threeDotItems} placement={'bottomLeft'}>
               <div>
                 <Icon
-                  className={`bi bi-three-dots-vertical ${
-                    theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
+                  className={`bi bi-three-dots-vertical ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
                   size={'2rem'}
                 />
               </div>

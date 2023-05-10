@@ -23,118 +23,99 @@ const Farm = () => {
 
   return (
     <div
-      className={`${styles.farm__wrap} ${
-        theme === 'dark' ? styles.dark : styles.light
-      }`}
+      className={`${styles.farm__wrap} ${theme === 'dark' ? styles.dark : styles.light
+        }`}
     >
       <div
-        className={`${styles.farm__main} ${
-          theme === 'dark' ? styles.dark : styles.light
-        }`}
+        className={`${styles.farm__main} ${theme === 'dark' ? styles.dark : styles.light
+          }`}
       >
         <div
-          className={`${styles.farm__header} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farm__header} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farm__header__body__left} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__header__body__left} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farm__header__left__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__header__left__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'cSwap v2 Live'}
             </div>
             <div
-              className={`${styles.farm__header__left__description} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__header__left__description} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'Supercharge Your LP Earnings with boosted rewards on cSwap.'}
             </div>
             <div
-              className={`${styles.farm__header__left__more} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__header__left__more} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'learn more'}
             </div>
           </div>
           <div
-            className={`${styles.farm__header__body__right} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__header__body__right} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farm__header__right__title} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__header__right__title} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {'How it works?'}
             </div>
             <div
-              className={`${styles.farm__header__right__main} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__header__right__main} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farm__header__right__body} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.farm__header__right__body__background} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
                 >
                   <div
-                    className={`${styles.farm__header__right__body__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.farm__header__right__body__title} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
                   >
                     {'STEP 1'}
                   </div>
                   <div
-                    className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.farm__header__right__body__description
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {'Provide liquidity in the Master pool'}
                   </div>
                   <div
-                    className={`${styles.farm__header__right__body__button} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.farm__header__right__body__button} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
                   >
                     {'Go to Pool'}
                   </div>
                 </div>
               </div>
               <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farm__header__right__body} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.farm__header__right__body__background} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
                 >
                   <div
-                    className={`${styles.farm__header__right__body__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.farm__header__right__body__title} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
                   >
                     {'STEP 2'}
                   </div>
                   <div
-                    className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    className={`${styles.farm__header__right__body__description
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {`Deposit Equal value of assets in Child Pool 
                     or pools as your Master Pool to 
@@ -146,31 +127,26 @@ const Farm = () => {
           </div>
         </div>
         <div
-          className={`${styles.farm__body} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farm__body} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farm__body__left} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__body__left} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farm__body__tab__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__tab__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <Tab data={TabData} active={active} handleActive={handleActive} />
             </div>
             <div
-              className={`${styles.farm__body__line} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__line} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             />
             <div
-              className={`${styles.farm__body__icon__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__icon__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <Icon
                 className={'bi bi-grid-fill'}
@@ -185,45 +161,39 @@ const Farm = () => {
             </div>
           </div>
           <div
-            className={`${styles.farm__body__right} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__body__right} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farm__body__filter__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__filter__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <Icon className={'bi bi-funnel-fill'} />
               {'Filter'}
             </div>
             <div
-              className={`${styles.farm__body__search__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__search__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <Search theme={theme} type={1} placeHolder="Search Pools.." />
             </div>
           </div>
         </div>
         <div
-          className={`${styles.farm__footer} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farm__footer} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           {listView ? (
             <div
-              className={`${styles.farm__table__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__table__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <FarmTable theme={theme} />
             </div>
           ) : (
             <div
-              className={`${styles.farm__footer__card__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__footer__card__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {FarmCustomData.map((item) => (
                 <FarmCard key={item.id} theme={theme} />

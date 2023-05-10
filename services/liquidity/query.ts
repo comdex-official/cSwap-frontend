@@ -27,7 +27,7 @@ const getQueryService = (callback: any) => {
 
 export const queryLiquidityPairs = async (callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
 
   getQueryService((error: any, queryService: any) => {
@@ -54,7 +54,7 @@ export const queryUserOrders = async (
   callback: any
 ) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -77,7 +77,7 @@ export const queryUserOrders = async (
 
 export const queryOrder = async (orderId: any, pairId: any, callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -106,8 +106,14 @@ export const queryPoolsList = async (
   callback: any
 ) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  console.log(comdex,"comdex");
+  
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
+  console.log(app,"app");
+  
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
+  console.log(APP_ID,"app id");
+  
   getQueryService((error: any, queryService: any) => {
     if (error) {
       callback(error);
@@ -131,7 +137,7 @@ export const queryPoolsList = async (
 
 export const queryLiquidityPair = async (pairId: any, callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -153,7 +159,7 @@ export const queryLiquidityPair = async (pairId: any, callback: any) => {
 
 export const queryLiquidityParams = async (callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -178,7 +184,7 @@ export const queryPoolSoftLocks = async (
   callback: any
 ) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -205,7 +211,7 @@ export const queryPoolCoinDeserialize = async (
   callback: any
 ) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -228,7 +234,7 @@ export const queryPoolCoinDeserialize = async (
 
 export const queryPoolIncentives = async (callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -249,7 +255,7 @@ export const queryPoolIncentives = async (callback: any) => {
 
 export const queryPool = async (id: any, callback: any) => {
   const comdex = await envConfigResult();
-  const app: any = process.env.REACT_APP_APP;
+  const app: any = process.env.NEXT_PUBLIC_APP_APP;
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
   getQueryService((error: any, queryService: any) => {
     if (error) {

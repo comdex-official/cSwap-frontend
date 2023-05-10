@@ -3,7 +3,7 @@ import { API_URL } from '../../constants/url';
 
 export const fetchRestPrices = (callback) => {
   axios
-    .get(`https://srinu-assets.comdex.one/tokens.json`)
+    .get(`https://srinu-assets.comdex.one/devnet_ibc_assets.json`)
     .then((result) => {
       callback(null, result?.data);
     })
