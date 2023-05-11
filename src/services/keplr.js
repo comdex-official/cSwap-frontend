@@ -62,18 +62,6 @@ export const getFeeCurrencies = (chain = comdex) => {
           high: 0.04,
         },
       },
-      {
-        coinDenom: harbor?.coinDenom,
-        coinMinimalDenom: harbor?.coinMinimalDenom,
-        coinDecimals: harbor?.coinDecimals,
-        coinGeckoId: chain?.coinGeckoId,
-        // Adding separate gas steps for eth accounts.
-        gasPriceStep: {
-          low: 0.01,
-          average: 0.025,
-          high: 0.04,
-        },
-      },
     ];
   } else {
     return [
