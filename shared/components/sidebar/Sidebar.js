@@ -1,21 +1,21 @@
 // import { useAppSelector } from "@/shared/hooks/useAppSelector"
-import styles from "./Sidebar.module.scss"
-import { NextImage } from "../../../shared/image/NextImage"
-import { Logo_Dark, Logo_Light } from "../../../shared/image"
-import { HeaderData } from "../header/Data"
-import { useRouter } from "next/router"
-import Link from "next/link"
-import { Icon } from "../../../shared/image/Icon"
-import { useSelector } from "react-redux"
+import styles from "./Sidebar.module.scss";
+import { NextImage } from "../../../shared/image/NextImage";
+import { Logo_Dark, Logo_Light } from "../../../shared/image";
+import { HeaderData } from "../header/Data";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Icon } from "../../../shared/image/Icon";
+import { useSelector } from "react-redux";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const theme = 'dark';
+  const theme = "dark";
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const isActive = pathname => {
-    return router.pathname === pathname
-  }
+  const isActive = (pathname) => {
+    return router.pathname === pathname;
+  };
 
   return (
     <div className={`${styles.sidebar__wrap} ${isOpen ? styles.active : ""}`}>
@@ -30,18 +30,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
 
           <Icon
-            className={`bi bi-x ${theme === "dark" ? styles.icon_dark : styles.icon_light
-              }`}
+            className={`bi bi-x ${
+              theme === "dark" ? styles.icon_dark : styles.icon_light
+            }`}
             size={"1.5rem"}
             onClick={() => setIsOpen(!isOpen)}
           />
         </div>
         <div className={styles.sidebar__lower}>
-          {HeaderData.map(item => (
+          {HeaderData.map((item) => (
             <div
               key={item.id}
-              className={`${styles.sidebar__element} ${theme === "dark" ? styles.dark : styles.light
-                } ${isActive(item.route) ? styles.active : ""}`}
+              className={`${styles.sidebar__element} ${
+                theme === "dark" ? styles.dark : styles.light
+              } ${isActive(item.route) ? styles.active : ""}`}
             >
               <Link href={item.route}>{item.name}</Link>
             </div>
@@ -49,7 +51,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

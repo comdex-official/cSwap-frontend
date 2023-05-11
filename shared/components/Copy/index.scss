@@ -1,0 +1,7 @@
+.copy-section {
+  cursor: pointer;
+  transition: all ease-in 0.1s;
+  &:hover{
+    transform: scale(1.18);
+  }
+}

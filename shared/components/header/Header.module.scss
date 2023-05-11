@@ -1,4 +1,4 @@
-@import '../../../styles/globalVariable.scss';
+@import "../../../styles/globalVariable.scss";
 
 .header__wrap {
   background: linear-gradient(
@@ -137,6 +137,11 @@
   padding: 10px 20px;
   width: 155px;
   margin-right: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  color: $white;
   cursor: pointer;
   & > * {
     pointer-events: none;

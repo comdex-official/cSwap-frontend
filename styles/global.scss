@@ -1,12 +1,12 @@
-@import './globalVariable.scss';
+@import "./globalVariable.scss";
 
 :root {
   font-family: Montserrat, sans-serif;
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -44,7 +44,7 @@
 
   @font-face {
     font-family: Montserrat, sans-serif;
-    src: url('../public/assets/fonts/static/Montserrat-Regular.ttf');
+    src: url("../public/assets/fonts/static/Montserrat-Regular.ttf");
   }
 }
 
@@ -101,7 +101,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  // background: url('../public/assets/images/background.svg');
+  background: url("../public/assets/images/background.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -120,7 +120,7 @@ a {
 }
 .discord {
   position: relative;
-  background-image: url('../public/assets/images/harbur.svg');
+  background-image: url("../public/assets/images/harbur.svg");
   width: 1.2em;
   height: 1.2em;
   background-repeat: no-repeat;
@@ -783,7 +783,7 @@ a {
     -moz-appearance: none;
   }
 
-  &[type='number'] {
+  &[type="number"] {
     -moz-appearance: textfield;
   }
 
