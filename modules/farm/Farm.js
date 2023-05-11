@@ -16,7 +16,7 @@ import { useSelector } from "react-redux"
 // const FarmTable = dynamic(() => import("@/modules/farm/FarmTable"))
 
 const Farm = () => {
-  const theme = useSelector(state => state.theme.theme)
+  const theme = 'dark';
   const TabData = ["All", "Basic", "Ranged", "My Pools"]
 
   const [active, setActive] = useState("All")

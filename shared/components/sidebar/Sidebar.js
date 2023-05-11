@@ -9,7 +9,7 @@ import { Icon } from "../../../shared/image/Icon"
 import { useSelector } from "react-redux"
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const theme = useSelector(state => state.theme.theme)
+  const theme = 'dark';
 
   const router = useRouter()
 
