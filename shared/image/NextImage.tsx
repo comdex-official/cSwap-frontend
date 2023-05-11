@@ -12,6 +12,7 @@ interface ImageProps {
   className?: string;
   quality?: string;
   placeholder?: any;
+  onClick?: any;
 }
 
 export const NextImage = ({
@@ -25,9 +26,11 @@ export const NextImage = ({
   className,
   quality,
   placeholder,
+  onClick,
 }: ImageProps) => {
   return (
     <Image
+      onClick={onClick}
       src={src}
       alt={alt}
       width={width}

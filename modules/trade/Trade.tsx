@@ -52,8 +52,8 @@ const Trade = () => {
   const [inputOptions, setinputOptions] = useState<any>([]);
   const [isFinalSlippage, setFinalSlippage] = useState(false);
   const [pools, setPools] = useState<any>([]);
-  const [offerCoin, setDemandCoinDenom] = useState<any>(null);
-  const [demandCoin, setOfferCoinDenom] = useState<any>(null);
+  const [offerCoin, setOfferCoinDenom] = useState<any>({});
+  const [demandCoin, setDemandCoinDenom] = useState<any>({});
   const [reverse, setReverse] = useState<any>(null);
   const [pool, setPool] = useState<any>(null);
   const [poolBalance, setPoolBalance] = useState<any>(null);
@@ -71,15 +71,21 @@ const Trade = () => {
     const poolPair = pairs?.list?.filter(
       (item: any) => item.id.toNumber === firstPool?.pairId.toNumber
     )[0];
+    console.log(poolPair);
 
     if (!offerCoin?.denom && !demandCoin?.denom && poolPair?.id) {
-      setOfferCoinDenom(poolPair?.quoteCoinDenom);
-      setDemandCoinDenom(poolPair?.baseCoinDenom);
+      setOfferCoinDenom({
+        denom: poolPair?.quoteCoinDenom,
+      });
+      setDemandCoinDenom({
+        denom: poolPair?.baseCoinDenom,
+      });
       updatePoolDetails(poolPair?.quoteCoinDenom, poolPair?.baseCoinDenom);
     }
 
     resetValues();
   }, [pools, pairs]);
+  console.log({ offerCoin });
 
   useEffect(() => {
     if (pairs?.list?.length) {
@@ -107,8 +113,8 @@ const Trade = () => {
 
     // returned function will be called on component unmount
     return () => {
-      setOfferCoinDenom('');
-      setDemandCoinDenom('');
+      setOfferCoinDenom({});
+      setDemandCoinDenom({});
     };
   }, []);
 
@@ -129,7 +135,7 @@ const Trade = () => {
         return;
       }
 
-      setPairs({ pair: data.pairs, pag: data.pagination });
+      setPairs({ list: data.pairs, pag: data.pagination });
     });
   };
 
@@ -311,21 +317,36 @@ const Trade = () => {
   };
 
   const handleDemandCoinDenomChange = (value: any) => {
-    setDemandCoinDenom(value);
-
+    // setDemandCoinDenom(value);
+    setDemandCoinDenom({
+      ...demandCoin,
+      denom: value,
+    });
     if (isLimitOrder) {
       setLimitPrice(0);
       setPriceValidationError(null);
     }
 
-    setDemandCoinDenom(value);
+    // setDemandCoinDenom(value);
+    setDemandCoinDenom({
+      ...demandCoin,
+      denom: value,
+    });
     updatePoolDetails(offerCoin?.denom, value);
   };
 
   const handleOfferCoinDenomChange = (value: any) => {
-    setOfferCoinDenom(value);
+    setOfferCoinDenom({
+      ...offerCoin,
+      denom: value,
+    });
 
-    setDemandCoinDenom(pairsMapping[value]?.[0]);
+    setDemandCoinDenom({
+      ...demandCoin,
+      denom: pairsMapping[value]?.[0],
+    });
+
+    // setDemandCoinDenom(]);
 
     if (isLimitOrder) {
       setLimitPrice(0);
@@ -335,7 +356,7 @@ const Trade = () => {
   };
 
   const availableBalance =
-    getDenomBalance(account?.balances.list, offerCoin?.denom) || 0;
+    getDenomBalance(account?.balances, offerCoin?.denom) || 0;
 
   const showOfferCoinSpotPrice = () => {
     const denomIn = denomConversion(offerCoin?.denom);
@@ -563,7 +584,39 @@ const Trade = () => {
   return (
     <>
       <div className={styles.trade__wrap}>
-        <TradeCard theme={theme} />
+        <TradeCard
+          theme={theme}
+          orderLifespan={orderLifespan}
+          setOrderLifeSpan={setOrderLifeSpan}
+          handleOrderLifespanChange={handleOrderLifespanChange}
+          assetsInProgress={asset.assetsInPrgoress}
+          offerCoin={offerCoin}
+          outputOptions={outputOptions}
+          handleOfferCoinDenomChange={handleOfferCoinDenomChange}
+          inputOptions={inputOptions}
+          availableBalance={availableBalance}
+          handleMaxClick={handleMaxClick}
+          handleHalfClick={handleHalfClick}
+          pool={pool}
+          isFinalSlippage={isFinalSlippage}
+          slippage={slippage}
+          onChange={onChange}
+          validationError={validationError}
+          showOfferCoinValue={showOfferCoinValue}
+          showOfferCoinSpotPrice={showOfferCoinSpotPrice}
+          handleSwapChange={handleSwapChange}
+          handleLimitPriceChange={handleLimitPriceChange}
+          baseCoinPoolPrice={baseCoinPoolPrice}
+          showPoolPrice={showPoolPrice}
+          pair={pair}
+          demandCoin={demandCoin}
+          handleDemandCoinDenomChange={handleDemandCoinDenomChange}
+          limitPrice={limitPrice}
+          priceRange={priceRange}
+          showDemandCoinValue={showDemandCoinValue}
+          showDemandCoinSpotPrice={showDemandCoinSpotPrice}
+          reverse={reverse}
+        />
       </div>
     </>
   );

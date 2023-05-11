@@ -10,6 +10,7 @@ type StateProps = {
   map: any;
   pairId: null;
   pair: {};
+  assetsInPrgoress: any;
 };
 
 const initialState: StateProps = {
@@ -22,6 +23,7 @@ const initialState: StateProps = {
   map: {},
   pairId: null,
   pair: {},
+  assetsInPrgoress: null,
 };
 
 const assetSlice = createSlice({
@@ -69,9 +71,17 @@ const assetSlice = createSlice({
         map: assetDenomMap,
       };
     },
+    setAssetsInPrgoress: (state: StateProps, action: any) => {
+      state.assetsInPrgoress = action?.payload;
+    },
   },
 });
 
-export const { setPairs, setPairId, setAssets, setAppAssets } =
-  assetSlice.actions;
+export const {
+  setPairs,
+  setPairId,
+  setAssets,
+  setAppAssets,
+  setAssetsInPrgoress,
+} = assetSlice.actions;
 export default assetSlice.reducer;

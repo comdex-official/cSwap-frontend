@@ -34,6 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <Provider store={store}>
+      {/* <SvgSprite url={svgFile} /> */}
       <Header />
       {children}
     </Provider>

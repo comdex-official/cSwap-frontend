@@ -5,6 +5,7 @@ const SvgSprite = (props: any) => {
   const [svg, setSvg] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [isErrored, setIsErrored] = useState(false);
+  console.log(props);
 
   useEffect(() => {
     const svgVersion = '1.5.7';
@@ -44,10 +45,6 @@ const SvgSprite = (props: any) => {
       }`}
     />
   );
-};
-
-SvgSprite.propTypes = {
-  url: PropTypes.any,
 };
 
 export default SvgSprite;
