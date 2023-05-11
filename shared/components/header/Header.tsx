@@ -54,21 +54,22 @@ import {
   setAssetBalance,
 } from '@/logic/redux/slices/accountSlice';
 import { truncateString } from '@/utils/string';
-import { setMarkets } from '@/logic/redux/oracle';
-import { setAppAssets, setAssets } from '@/logic/redux/asset';
+import { setMarkets } from '@/logic/redux/slices/oracleSlice';
+import { setAppAssets, setAssets } from '@/logic/redux/slices/assetSlice';
 import { setParams } from '@/logic/redux/slices/swapSlice';
 
-interface HeaderProps {}
+interface HeaderProps { }
 
-const Header = ({}: HeaderProps) => {
+const Header = ({ }: HeaderProps) => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
   const comdex = useAppSelector((state) => state.config.config);
   const account = useAppSelector((state: any) => state.account);
   const markets = useAppSelector((state) => state.oracle.market.list);
   const asset = useAppSelector((state: any) => state.asset);
+  const assetDenomMap = asset.assetDenom.assetDenomMap;
 
-  console.log(account.balances);
+
 
   const [addressFromLocal, setAddressFromLocal] = useState<any>();
   const [inProgress, setInProgress] = useState(false);
@@ -273,7 +274,7 @@ const Header = ({}: HeaderProps) => {
   // }, [balances, calculateAssetBalance]);
 
   useEffect(() => {
-    if (!Object.keys(asset.assetDenom)?.length) {
+    if (!Object.keys(assetDenomMap)?.length) {
       setAssetsInPrgoress(true);
       fetchAllTokens((error: any, result: any) => {
         if (error) {
@@ -285,7 +286,7 @@ const Header = ({}: HeaderProps) => {
         }
       });
     }
-  }, [setAppAssets, asset.assetDenom, setAssetsInPrgoress]);
+  }, [setAppAssets, assetDenomMap, setAssetsInPrgoress]);
 
   const fetchPrices = useCallback(() => {
     fetchRestPrices((error: any, result: any) => {
@@ -407,12 +408,12 @@ const Header = ({}: HeaderProps) => {
           <div className={styles.dropdown__wallet__title}>
             {account?.balances
               ? `Balance: ${amountConversionWithComma(
-                  getDenomBalance(
-                    account?.balances,
-                    comdex?.coinMinimalDenom
-                  ) || 0,
-                  comdex
-                )}
+                getDenomBalance(
+                  account?.balances,
+                  comdex?.coinMinimalDenom
+                ) || 0,
+                comdex
+              )}
               ${denomConversion(comdex?.coinMinimalDenom)}`
               : 0}
           </div>
@@ -467,9 +468,8 @@ const Header = ({}: HeaderProps) => {
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${
-              theme === 'dark' ? styles.icon_dark : styles.icon_light
-            }`}
+            className={`bi bi-list ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+              }`}
             size={'1.5rem'}
           />
         </div>
@@ -485,9 +485,8 @@ const Header = ({}: HeaderProps) => {
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${
-                theme === 'dark' ? styles.dark : styles.light
-              } ${isActive(item.route) ? styles.active : ''}`}
+              className={`${styles.header__left__element} ${theme === 'dark' ? styles.dark : styles.light
+                } ${isActive(item.route) ? styles.active : ''}`}
             >
               <Link
                 href={i === 6 ? '' : item.route}
@@ -527,31 +526,27 @@ const Header = ({}: HeaderProps) => {
                   )}
 
                   <div
-                    className={`${styles.header__cSwap__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.header__cSwap__title} ${theme === 'dark' ? styles.dark : styles.light
+                      }`}
                   >
                     {'cSwap'}
                   </div>
                   <Icon
-                    className={`bi bi-grid-fill ${
-                      theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                    className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                      }`}
                   />
                 </div>
                 <Icon
-                  className={`bi bi-grid-fill ${
-                    theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
+                  className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
                 />
               </div>
             </MyDropdown>
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
-                className={`${styles.header__faucet__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.header__faucet__title} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 {'Faucet'}
               </div>
@@ -560,15 +555,13 @@ const Header = ({}: HeaderProps) => {
             <MyDropdown items={walletItems} placement={'bottomLeft'}>
               <div className={styles.header__wallet}>
                 <div
-                  className={`${styles.header__wallet__title} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.header__wallet__title} ${theme === 'dark' ? styles.dark : styles.light
+                    }`}
                 >
-                  {`${
-                    account.address
-                      ? truncateString(account.address, 6, 6)
-                      : 'Connect Wallet'
-                  }`}
+                  {`${account.address
+                    ? truncateString(account.address, 6, 6)
+                    : 'Connect Wallet'
+                    }`}
                 </div>
               </div>
             </MyDropdown>
@@ -576,9 +569,8 @@ const Header = ({}: HeaderProps) => {
             <MyDropdown items={threeDotItems} placement={'bottomLeft'}>
               <div>
                 <Icon
-                  className={`bi bi-three-dots-vertical ${
-                    theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
+                  className={`bi bi-three-dots-vertical ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
                   size={'2rem'}
                 />
               </div>

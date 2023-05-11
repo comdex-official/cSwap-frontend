@@ -30,7 +30,6 @@ const accountSlice = createSlice({
       state.accountName = action?.payload;
     },
     setAccountBalances: (state: StateProps, action: any) => {
-      console.log(action,"action");
       
       state.balances = action?.payload;
     },

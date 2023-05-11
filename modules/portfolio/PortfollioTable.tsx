@@ -67,9 +67,12 @@ const PortofolioTable = () => {
   const account = useAppSelector((state) => state.account);
   const balances = account?.balances;
   const comdex = useAppSelector((state) => state.config.config);
+  const AssetList = useAppSelector((state) => state.config.AssetList);
+  const markets = useAppSelector((state) => state.oracle.market.list);
+  const asset = useAppSelector((state: any) => state.asset);
+  const assetDenomMap = asset.assetDenom.assetDenomMap;
 
   const dispatch = useDispatch();
-  console.log(account, "account");
 
 
   const handleBalanceRefresh = () => {
@@ -226,8 +229,12 @@ const PortofolioTable = () => {
     return marketPrice(markets, denom) || 0;
   };
 
-  let AssetList = {};
-  let appAssets: any = AssetList?.tokens?.filter(
+  // let AssetList = {};
+  console.log(AssetList, "AssetList");
+
+  // TODO: From here need to be match the ibc denom from api 
+
+  let appAssets: any = AssetList?.filter(
     (item: any) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
   );
 
@@ -266,7 +273,6 @@ const PortofolioTable = () => {
     };
   });
 
-  console.log(balances, "balances");
 
   const nativeCoin = balances?.filter(
     (item: any) => item.denom === comdex?.coinMinimalDenom
@@ -286,7 +292,7 @@ const PortofolioTable = () => {
 
   let currentChainData = [
     {
-      key: comdex.chainId,
+      key: comdex?.chainId,
       symbol: comdex?.symbol,
       asset: (
         <>
@@ -359,6 +365,8 @@ const PortofolioTable = () => {
     },
   ];
 
+
+
   ibcBalances =
     parent && parent === 'portfolio'
       ? ibcBalances.filter((item: any) => item?.balance?.amount > 0)
@@ -392,6 +400,10 @@ const PortofolioTable = () => {
         ibcwithdraw: item,
       };
     });
+
+  console.log(currentChainData, "currentChainData");
+  console.log(tableIBCData, "tableIBCData");
+
 
   let allTableData = Lodash.concat(currentChainData, tableIBCData);
 

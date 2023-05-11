@@ -5,7 +5,6 @@ type StateProps = {
     market:
     {
         list: {},
-        pagination: {},
     },
 };
 
@@ -14,7 +13,6 @@ const initialState: StateProps = {
     market:
     {
         list: {},
-        pagination: {},
     },
 };
 
@@ -23,7 +21,8 @@ const oracleSlice = createSlice({
     initialState,
     reducers: {
         setMarkets: (state: StateProps, action: any) => {
-            const {list,pagination}= action?.payload;
+            
+            const list= action?.payload;
             const priceMap = list?.reduce((map: any, obj: any) => {
                 map[obj?.denom] = obj;
                 return map;
@@ -32,7 +31,6 @@ const oracleSlice = createSlice({
             const data={
                 ...state.market,
                 list:priceMap,
-                pagination:pagination
             }
             state.market=data;
 

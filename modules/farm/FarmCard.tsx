@@ -4,22 +4,28 @@ import { useCallback, useEffect, useState } from 'react';
 import styles from './Farm.module.scss';
 import { ATOM, CMDS, Cup, Current, Pyramid, Ranged } from '@/shared/image';
 import dynamic from 'next/dynamic';
-import { message, Modal } from 'antd';
+import { message, Modal, Spin } from 'antd';
 import Liquidity from './Liquidity';
-import { queryPoolsList } from '@/services/liquidity/query';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@/constants/common';
+import { fetchRestAPRs, queryPoolsList } from '@/services/liquidity/query';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DOLLAR_DECIMALS } from '@/constants/common';
+import { ibcDenomToDenom } from '@/utils/string';
+import { denomConversion, FixedDecimal } from '@/utils/coin';
 
 const Card = dynamic(() => import('@/shared/components/card/Card'));
 interface FarmCardProps {
   theme: string;
+  pools: any;
+  item: any;
+  poolsApr: any;
 }
 
-const FarmCard = ({ theme }: FarmCardProps) => {
+const FarmCard = ({ theme, pools, item, poolsApr }: FarmCardProps) => {
   const [showMoreData, setshowMoreData] = useState<boolean>(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inProgress, setInProgress] = useState(false);
-  const [pool, setPools] = useState()
+
+
+  console.log(poolsApr, "single pools appr");
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -33,32 +39,37 @@ const FarmCard = ({ theme }: FarmCardProps) => {
     setIsModalOpen(false);
   };
 
+  const showPairDenoms = () => {
+    if (item?.balances?.baseCoin?.denom) {
+      return `${denomConversion(
+        item?.balances?.baseCoin?.denom
+      )}-${denomConversion(item?.balances?.quoteCoin?.denom)}`;
+    }
+  };
 
-  const fetchPools = useCallback(
-    (offset: number, limit: number, countTotal: boolean, reverse: boolean) => {
-      setInProgress(true);
-      queryPoolsList(offset, limit, countTotal, reverse, (error: any, result: any) => {
-        setInProgress(false);
-        if (error) {
-          message.error(error);
-          return;
-        }
-        console.log(result, "ppol");
+  const getPoolType = () => {
+    if (item?.type === 1) {
+      return "Basic"
+    }
+    else if (item?.type === 2) {
+      return "Ranged"
+    }
+  }
 
-        setPools(result.pools);
-      });
-    },
-    [setPools]
-  );
+  const getMasterPool = () => {
+    const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);
+    return hasMasterPool;
+  }
 
-  useEffect(() => {
-    fetchPools(
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, []);
+  const checkExternalIncentives = () => {
+    if (poolsApr?.incentive_rewards.length > 0) {
+      const hasExternalIncentive = poolsApr?.incentive_rewards?.some(pool => !pool.master_pool && pool?.apr);
+      return hasExternalIncentive;
+    }
+    else {
+      return false
+    }
+  }
 
   return (
     <div
@@ -109,13 +120,13 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                 className={`${styles.farmCard__element__left__title} ${theme === 'dark' ? styles.dark : styles.light
                   }`}
               >
-                {'CMDX-ATOM'}
+                {showPairDenoms()}
               </div>
               <div
                 className={`${styles.farmCard__element__left__description} ${theme === 'dark' ? styles.dark : styles.light
                   }`}
               >
-                {'Pool #03'}
+                Pool #{item?.id?.toNumber() || "-"}
               </div>
             </div>
             <div
@@ -134,9 +145,9 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                     className={`${styles.farmCard__element__right__basic__title
                       } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
-                    {'Basic'}
+                    {getPoolType()}
                   </div>
-                  {false && (
+                  {/* {false && (
                     <div
                       className={`${styles.farmCard__element__right__ranged__title
                         } ${theme === 'dark' ? styles.dark : styles.light}`}
@@ -144,21 +155,21 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                       <NextImage src={Ranged} alt="Pool" />
                       {'Ranged'}
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div
                   className={`${styles.farmCard__element__right__pool} ${theme === 'dark' ? styles.dark : styles.light
                     }`}
                 >
-                  <div
-                    className={`${styles.farmCard__element__right__pool__title
-                      } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Pyramid} alt="Logo" />
-                    {'Master Pool'}
-                  </div>
-
-                  {false && (
+                  {getMasterPool() ?
+                    <div
+                      className={`${styles.farmCard__element__right__pool__title
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Pyramid} alt="Logo" />
+                      {'Master Pool'}
+                    </div>
+                    :
                     <div
                       className={`${styles.farmCard__element__right__pool__title
                         } ${theme === 'dark' ? styles.dark : styles.light}`}
@@ -166,10 +177,22 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                       <NextImage src={Current} alt="Logo" />
                       {'MP Boost'}
                     </div>
-                  )}
+
+                  }
+
+                  {/* {false && (
+                    <div
+                      className={`${styles.farmCard__element__right__pool__title
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {'MP Boost'}
+                    </div>
+                  )} */}
                 </div>
               </div>
-              <div
+
+              {checkExternalIncentives() && <div
                 className={`${styles.farmCard__element__right__incentive} ${theme === 'dark' ? styles.dark : styles.light
                   }`}
               >
@@ -180,7 +203,8 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                   <NextImage src={Cup} alt="Logo" />
                   {'External Incentives'}
                 </div>
-              </div>
+              </div>}
+
             </div>
           </div>
           <div
@@ -201,7 +225,8 @@ const FarmCard = ({ theme }: FarmCardProps) => {
                 className={`${styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
-                {'14.45%'}
+                {`${poolsApr?.incentive_rewards?.apr}%`}
+                {/* {`${FixedDecimal(poolsApr?.incentive_rewards?.apr, DOLLAR_DECIMALS || 0)}%`} */}
                 <Icon className={'bi bi-arrow-right'} />
               </div>
               <div

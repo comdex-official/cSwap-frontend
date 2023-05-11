@@ -106,13 +106,10 @@ export const queryPoolsList = async (
   callback: any
 ) => {
   const comdex = await envConfigResult();
-  console.log(comdex,"comdex");
   
   const app: any = process.env.NEXT_PUBLIC_APP_APP;
-  console.log(app,"app");
   
   const APP_ID = Number(comdex?.envConfig?.[app]?.appId);
-  console.log(APP_ID,"app id");
   
   getQueryService((error: any, queryService: any) => {
     if (error) {
@@ -294,8 +291,8 @@ export const fetchAllTokens = async (callback: any) => {
   const comdex = await envConfigResult();
   const API_URL = comdex?.envConfig?.apiUrl;
   axios
-    .get(`https://srinu-assets.comdex.one/tokens.json`)
-    .then((result) => {
+    .get(`${API_URL}/api/v2/cswap/tokens/all`)
+    .then((result) => {      
       callback(null, result?.data);
     })
     .catch((error) => {

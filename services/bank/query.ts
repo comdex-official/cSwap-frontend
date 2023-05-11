@@ -34,7 +34,6 @@ export const queryAllBalances = async (owner: any, callback: any) => {
         address: owner,
       })
       .then((result: any) => {
-        console.log('SSSS', result);
         callback(null, result);
       })
       .catch((error: any) => {

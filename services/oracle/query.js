@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { API_URL } from '../../constants/url';
+import { envConfigResult } from '@/config/envConfig';
 
-export const fetchRestPrices = (callback) => {
+
+export const fetchRestPrices = async (callback) => {
+  const comdex = await envConfigResult();
   axios
-    .get(`https://srinu-assets.comdex.one/devnet_ibc_assets.json`)
+    .get(`${comdex?.envConfig?.apiUrl}/api/v2/cswap/tokens/all`)
     .then((result) => {
       callback(null, result?.data);
     })

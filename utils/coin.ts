@@ -128,3 +128,11 @@ export const getDenomBalance = (balances: any, denom: any) =>
   balances.length > 0 &&
   balances.find((item: any) => item.denom === denom) &&
   balances.find((item: any) => item.denom === denom).amount;
+
+
+  export const FixedDecimal=(result:number,decimal:number)=>{
+    console.log(result,"result");
+    
+    return Math.floor(Number(result) * Math.pow(10, decimal)) /
+      Math.pow(10, decimal)
+  }

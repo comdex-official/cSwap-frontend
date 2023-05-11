@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 type StateProps = {
   pairs: {};
   appAssetMap: {};
-  assetDenom: {};
+  assetDenom: {
+     list: [],
+    assetDenomMap: {},
+  };
   map: any;
   pairId: null;
   pair: {};
@@ -12,7 +15,10 @@ type StateProps = {
 const initialState: StateProps = {
   pairs: {},
   appAssetMap: {},
-  assetDenom: {},
+  assetDenom: {
+    list: [],
+    assetDenomMap: {},
+  },
   map: {},
   pairId: null,
   pair: {},
@@ -28,18 +34,25 @@ const assetSlice = createSlice({
     setPairId: (state: StateProps, action: any) => {
       state.pairId = action?.payload;
     },
+
     setAssets: (state: StateProps, action: any) => {
-      const { list, pagination } = action.payload;
+      
+      const  list  = action.payload;
+      
       const assetDenomMap = list?.reduce((map: any, obj: any) => {
         map[obj?.denom] = obj;
         return map;
       }, {});
 
+      // state.assetDenom = {
+      //   ...state.assetDenom,
+      //   list,
+      //   map: assetDenomMap,
+      //   assetDenomMap: assetDenomMap,
+      // };
       state.assetDenom = {
         ...state.assetDenom,
-        list,
-        pagination,
-        map: assetDenomMap,
+        list:list,
         assetDenomMap: assetDenomMap,
       };
     },

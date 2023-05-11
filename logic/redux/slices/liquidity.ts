@@ -1,16 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type StateProps = {
-    pool: {
-        _: {};
-        list: [];
-        pagination: {};
+    pools: {
+        list: any;
+        pagination: any;
     };
 };
 
 const initialState: StateProps = {
-    pool: {
-        _: {},
+    pools: {
         list: [],
         pagination: {},
     },
@@ -21,7 +19,12 @@ const liquiditySlice = createSlice({
     initialState,
     reducers: {
         setPools: (state: StateProps, action: any) => {
-            state.pool = action?.payload;
+
+            const { pools, pagination } = action?.payload
+            state.pools= {
+                list : pools,
+                pagination:pagination
+            }
         },
     },
 });
