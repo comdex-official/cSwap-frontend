@@ -1,4 +1,4 @@
-import store from "@/logic/redux/store"
+import store from "../../logic/redux/store"
 import { BackGround } from "../../shared/image"
 import { NextImage } from "../../shared/image/NextImage"
 import dynamic from "next/dynamic"
