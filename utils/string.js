@@ -1,10 +1,12 @@
 import { sha256, stringToPath } from '@cosmjs/crypto';
-import AssetList from '../config/ibc_assets.json';
 import { comdex, ibcDenoms } from '../config/network';
 import { getExponent } from './number';
+import { ibcAssets } from '../config/ibc_assets';
 
-const getIbcDenomToDenomMap = () => {
+const getIbcDenomToDenomMap = async () => {
   let myMap = {};
+
+  const AssetList = await ibcAssets();
 
   for (let i = 0; i < AssetList?.tokens?.length; i++) {
     if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {

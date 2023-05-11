@@ -1,8 +1,10 @@
-import AssetList from '../config/ibc_assets.json';
+import { ibcAssets } from './ibc_assets.js';
 import { envConfig } from './envConfig';
 
-const getIbcDenomsMap = () => {
+const getIbcDenomsMap = async () => {
   let myMap = {};
+
+  const AssetList = await ibcAssets();
 
   for (let i = 0; i < AssetList?.tokens?.length; i++) {
     if (myMap[AssetList?.tokens[i].coinMinimDenom] === undefined) {

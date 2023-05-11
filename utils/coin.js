@@ -1,10 +1,11 @@
-import AssetList from '../config/ibc_assets.json';
+import { ibcAssets } from '../config/ibc_assets';
 import { comdex } from '../config/network';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';
 
-const getDenomToDisplaySymbolMap = () => {
+const getDenomToDisplaySymbolMap = async () => {
   let myMap = {};
+  const AssetList = await ibcAssets();
 
   for (let i = 0; i < AssetList?.tokens?.length; i++) {
     if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
