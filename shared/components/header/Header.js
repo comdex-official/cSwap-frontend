@@ -18,10 +18,6 @@ const Header = () => {
   const dispatch = useDispatch();
   const theme = 'dark';
 
-  const handleToggleTheme = () => {
-    dispatch(toggleTheme());
-  };
-
   const [isOpen, setIsOpen] = useState({
     cSwap: false,
     wallet: false,
