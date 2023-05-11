@@ -1,0 +1,33 @@
+@import "../../../assets/scss/variables.scss";
+
+.votenow-modal {
+  .ant-modal-content {
+    padding: 0 !important;
+
+    .ant-modal-body {
+      padding: 40px;
+
+      .votenow-modal-inner {
+        .dark-mode & {
+          color: $white;
+        }
+
+        h3 {
+          font-size: 25px;
+
+          .dark-mode & {
+            color: $white;
+          }
+        }
+
+        .ant-radio-wrapper {
+          font-size: 21px;
+
+          .dark-mode & {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+}

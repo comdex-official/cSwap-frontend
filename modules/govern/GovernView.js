@@ -1,32 +1,198 @@
-import { useEffect, useState } from "react";
 import style from "./Govern.module.scss";
-// import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { useRouter } from "next/navigation";
 import { Button, List } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Link from "next/link";
+import Copy from "@/shared/components/Copy";
+import VoteNowModal from "./VoteNowModal";
 
-const GovernView = () => {
+import * as PropTypes from "prop-types";
+import { useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
+
+import {
+  setProposal,
+  setProposalTally,
+  setProposer,
+} from "../../actions/govern";
+import { comdex } from "../../config/network";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+  fetchRestProposal,
+  fetchRestProposalTally,
+  fetchRestProposer,
+  queryUserVote,
+} from "../../services/govern/query";
+import { denomConversion } from "../../utils/coin";
+import { formatTime } from "../../utils/date";
+import { formatNumber } from "../../utils/number";
+import {
+  proposalOptionMap,
+  proposalStatusMap,
+  stringTagParser,
+  truncateString,
+} from "../../utils/string";
+
+const GovernView = ({
+  address,
+  setProposal,
+  proposalMap,
+  setProposer,
+  proposerMap,
+  setProposalTally,
+  proposalTallyMap,
+}) => {
   // const theme = useAppSelector((state) => state.theme.theme);
-  // const router = useRouter();
+  const router = useRouter();
+
+  const { id } = router.query;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [votedOption, setVotedOption] = useState();
+  const [getVotes, setGetVotes] = useState({
+    yes: 0,
+    no: 0,
+    veto: 0,
+    abstain: 0,
+  });
+
+  let proposal = proposalMap?.[id];
+  let proposer = proposerMap?.[id];
+  let proposalTally = proposalTallyMap?.[id];
+
   const data = [
     {
-      title: "Voting Start",
-      counts: "2023-04-24",
+      title: "Voting Starts",
+      counts: proposal?.voting_start_time
+        ? formatTime(proposal?.voting_start_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Voting Ends",
-      counts: "2023-04-25",
+      counts: proposal?.voting_end_time
+        ? formatTime(proposal?.voting_end_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Proposer",
-      counts: "comdexsfe...re43",
+      counts: (
+        <div className="address_with_copy">
+          {proposer ? (
+            <>
+              <span className="mr-1">{truncateString(proposer, 6, 6)}</span>
+              <Copy text={proposer} />
+            </>
+          ) : (
+            "------"
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    if (id) {
+      fetchRestProposal(id, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        setProposal(result?.proposal);
+      });
+      fetchRestProposalTally(id, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        setProposalTally(result?.tally, id);
+      });
+
+      fetchRestProposer(id, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
+          setProposer(
+            result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
+            id
+          );
+        }
+      });
+    }
+  }, [id, setProposal, setProposer, setProposalTally]);
+
+  const fetchVote = useCallback(() => {
+    queryUserVote(address, proposal?.proposal_id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setVotedOption(result?.vote?.option);
+    });
+  }, [address, proposal?.proposal_id]);
+
+  useEffect(() => {
+    if (proposal?.proposal_id) {
+      fetchVote();
+    }
+  }, [address, id, proposal, fetchVote]);
+
+  const calculateTotalValue = () => {
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
+
+    let totalValue = yes + no + abstain + veto;
+
+    totalValue = totalValue / 1000000;
+    totalValue = formatNumber(totalValue);
+    return totalValue;
+  };
+
+  const calculateVotes = useCallback(() => {
+    let yes = Number(proposalTally?.yes);
+    let no = Number(proposalTally?.no);
+    let veto = Number(proposalTally?.no_with_veto);
+    let abstain = Number(proposalTally?.abstain);
+    let totalValue = yes + no + abstain + veto;
+
+    yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    no = Number((no / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    veto = Number((veto / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    abstain = Number((abstain / totalValue || 0) * 100).toFixed(
+      DOLLAR_DECIMALS
+    );
+
+    setGetVotes({
+      ...getVotes,
+      yes: yes || 0,
+      no: no || 0,
+      veto: veto || 0,
+      abstain: abstain || 0,
+    });
+  }, [proposalTally]);
+
+  useEffect(() => {
+    if (proposalTally?.yes) {
+      calculateVotes();
+    }
+  }, [proposalTallyMap, calculateVotes, proposalTally?.yes]);
+
+  const dataVote = [
+    {
+      title: "Total Vote",
+      counts: (
+        <>
+          {calculateTotalValue() || "0"}{" "}
+          {denomConversion(comdex?.coinMinimalDenom)}
+        </>
+      ),
     },
   ];
 
@@ -81,23 +247,23 @@ const GovernView = () => {
         data: [
           {
             name: "Yes",
-            y: 48,
-            color: "#03d707c4",
+            y: Number(getVotes?.yes || 0),
+            color: "#52B788",
           },
           {
             name: "No",
-            y: 20,
-            color: "#FF6767",
+            y: Number(getVotes?.no || 0),
+            color: "#F76872",
           },
           {
             name: "No With Veto",
-            y: 14,
-            color: "#C0C0C0",
+            y: Number(getVotes?.veto || 0),
+            color: "#AACBB9",
           },
           {
             name: "Abstain",
-            y: 33,
-            color: "#B699CA",
+            y: Number(getVotes?.abstain || 0),
+            color: "#6A7B6C",
           },
         ],
       },
@@ -148,37 +314,46 @@ const GovernView = () => {
           <div className={style.govern_detail_bottom_main_container}>
             <div className={style.govern_detail_left_container}>
               <div className={style.up_main_container}>
-                <div className={style.proposal_id}>#137</div>
+                <div className={style.proposal_id}>
+                  #{proposal?.proposal_id || "-"}
+                </div>
                 <div className={`${style.status} ${style.passed_color}`}>
-                  Passed
+                  <span
+                    className={
+                      proposalStatusMap[proposal?.status] === "Rejected" ||
+                      proposalStatusMap[proposal?.status] === "Failed"
+                        ? "failed-circle"
+                        : proposalStatusMap[proposal?.status] === "Passed"
+                        ? "passed-circle"
+                        : "warning-circle"
+                    }
+                  ></span>
+                  {proposalStatusMap[proposal?.status]}
                 </div>
               </div>
               <div className={style.bottom_main_container}>
-                <div className={style.title}>Lorem ipsum dolor sit amet.</div>
+                <div className={style.title}>
+                  {proposal?.content?.title || "------"}
+                </div>
                 <div className={style.description}>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Doloribus, aspernatur alias esse in earum at accusamus culpa
-                  voluptate aut aliquid? Lorem, ipsum dolor sit amet consectetur
-                  adipisicing elit. Eveniet alias inventore a quis,
-                  exercitationem aspernatur minima in iste temporibus nostrum
-                  consequatur mollitia voluptatibus, blanditiis cupiditate,
-                  deserunt expedita impedit fugiat ipsum. Lorem ipsum dolor sit,
-                  amet consectetur adipisicing elit. Nesciunt accusamus
-                  perferendis assumenda recusandae aliquid optio modi saepe illo
-                  non mollitia?
+                  {stringTagParser(proposal?.content?.description || " ")}{" "}
                 </div>
               </div>
             </div>
             <div className={style.govern_detail_right_container}>
-              <div className={style.vote_button}>
-                <div className={style.user_vote}>
-                  {" "}
-                  Your Vote : <span>Yes</span>{" "}
+              {address && proposalOptionMap[votedOption] ? (
+                <div className={style.vote_button}>
+                  {proposalOptionMap?.[votedOption] && (
+                    <div className={style.user_vote}>
+                      Your Vote : <span> {proposalOptionMap[votedOption]}</span>
+                    </div>
+                  )}
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
                 </div>
-                <Button type="primary" className={style.ant_vote_button}>
-                  Vote Now
-                </Button>
-              </div>
+              ) : (
+                <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+              )}
+
               <div className={style.charts_Value_container}>
                 <div className={style.charts}>
                   <HighchartsReact highcharts={Highcharts} options={Options} />
@@ -186,7 +361,9 @@ const GovernView = () => {
                 <div className={style.total_value}>
                   <div className={style.vote_border}>
                     <div className={style.title}>Total Vote</div>
-                    <div className={style.value}>23,342,32 CMDX</div>
+                    <div className={style.value}>{`${
+                      calculateTotalValue() || "0"
+                    } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
                   </div>
                 </div>
               </div>
@@ -195,28 +372,36 @@ const GovernView = () => {
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>Yes</div>
-                    <div className={style.value}>48 %</div>
+                    <div className={style.value}>
+                      {Number(getVotes?.yes || "0.00")}%
+                    </div>
                   </div>
                 </div>
                 <div className={style.no_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>No</div>
-                    <div className={style.value}>20%</div>
+                    <div className={style.value}>
+                      {Number(getVotes?.no || "0.00")}%
+                    </div>
                   </div>
                 </div>
                 <div className={style.noWithVeto_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>No With Veto</div>
-                    <div className={style.value}>14%</div>
+                    <div className={style.value}>
+                      {Number(getVotes?.veto || "0.00")}%
+                    </div>
                   </div>
                 </div>
                 <div className={style.abstain_container}>
                   <div className={style.fill_box}></div>
                   <div className={style.data_box}>
                     <div className={style.title}>Abstain</div>
-                    <div className={style.value}>33%</div>
+                    <div className={style.value}>
+                      {Number(getVotes?.abstain || "0.00")}%
+                    </div>
                   </div>
                 </div>
               </div>
@@ -228,4 +413,31 @@ const GovernView = () => {
   );
 };
 
-export default GovernView;
+GovernDetails.propTypes = {
+  lang: PropTypes.string.isRequired,
+  setProposal: PropTypes.func.isRequired,
+  setProposalTally: PropTypes.func.isRequired,
+  setProposer: PropTypes.func.isRequired,
+  address: PropTypes.string.isRequired,
+  proposalMap: PropTypes.object,
+  proposalTallyMap: PropTypes.object,
+  proposerMap: PropTypes.object,
+};
+
+const stateToProps = (state) => {
+  return {
+    lang: state.language,
+    address: state.account.address,
+    proposalMap: state.govern.proposalMap,
+    proposerMap: state.govern.proposerMap,
+    proposalTallyMap: state.govern.proposalTallyMap,
+  };
+};
+
+const actionsToProps = {
+  setProposal,
+  setProposer,
+  setProposalTally,
+};
+
+export default connect(stateToProps, actionsToProps)(GovernView);
