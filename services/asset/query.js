@@ -3,8 +3,6 @@ import Long from "long";
 import { createQueryClient } from "../helper";
 
 
-
-
 let myClient = null;
 
 export const getQueryService = (callback) => {

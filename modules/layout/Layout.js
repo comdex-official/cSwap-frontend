@@ -1,15 +1,36 @@
 import store from "../../logic/redux/store"
 import { BackGround } from "../../shared/image"
 import { NextImage } from "../../shared/image/NextImage"
-import dynamic from "next/dynamic"
-import { Provider } from "react-redux"
+import { useDispatch } from "react-redux"
 import Header from "../../shared/components/header/Header"
-
-// const Header = dynamic(() => import("@/shared/components/header/Header"))
+import { useEffect } from "react"
+import { envConfigResult, ibcAssets } from "../../config/ibc_assets"
+import { setAssetList, setEnvConfig } from "../../actions/config"
 
 const Layout = ({ children }) => {
+
+  const dispatch = useDispatch()
+
+
+  useEffect(() => {
+    envConfigResult().then((result) => {
+      dispatch(setEnvConfig(result?.envConfig))
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    ibcAssets()
+      .then((result) => {
+        dispatch(setAssetList(result))
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <Provider store={store}>
+    <>
       <Header />
       {children}
 
@@ -21,7 +42,7 @@ const Layout = ({ children }) => {
         alt={"Back"}
         style={{ zIndex: "-1" }}
       />
-    </Provider>
+    </>
   )
 }
 

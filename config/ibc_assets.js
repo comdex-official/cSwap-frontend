@@ -9,3 +9,13 @@ export const ibcAssets = async () => {
     return error;
   }
 };
+
+export const envConfigResult = async () => {
+  let url = process.env.NEXT_PUBLIC_CONFIG_JSON_URL
+  try {
+    const result = await axios.get(url)
+    return result?.data
+  } catch (error) {
+    return error
+  }
+}

@@ -9,9 +9,11 @@ import oracle from "./oracle";
 import order from './order';
 import swap from "./swap";
 import theme from "./theme";
+import config from "./config";
 
 const app = combineReducers({
   language,
+  config,
   account,
   asset,
   swap,
