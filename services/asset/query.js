@@ -1,7 +1,7 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
-
+import axios from 'axios';
 
 
 
@@ -49,3 +49,25 @@ export const queryAssets = (offset, limit, countTotal, reverse, callback) => {
       });
   });
 };
+
+
+
+export const ibcAssets = async () => {
+  let url = process.env.NEXT_PUBLIC_ASSET_LIST_URL;
+  try {
+    const result = await axios.get(url);
+    return result?.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const envConfigResult = async () => {
+  let url = process.env.NEXT_PUBLIC_CONFIG_JSON_URL
+  try {
+    const result = await axios.get(url)
+    return result?.data
+  } catch (error) {
+    return error
+  }
+}

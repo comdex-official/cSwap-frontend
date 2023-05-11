@@ -8,7 +8,6 @@ import { DotDropdownData, HeaderData, cSwapDropdownData } from "./Data";
 import { C_Logo, Faucet, Logo_Dark, Logo_Light } from "../../../shared/image";
 import { Icon } from "../../../shared/image/Icon";
 import Link from "next/link";
-import useOutsideClick from "../../../shared/hooks/useOutsideClick";
 import Sidebar from "../sidebar/Sidebar";
 import { decode, encode } from "js-base64";
 import {
@@ -33,7 +32,7 @@ import {
   queryPoolIncentives,
 } from "../../../services/liquidity/query.js";
 import { fetchRestPrices } from "../../../services/oracle/query";
-import { queryAssets } from "../../../services/asset/query";
+import { envConfigResult, ibcAssets, queryAssets } from "../../../services/asset/query";
 import {
   setAccountAddress,
   setAccountBalances,
@@ -46,6 +45,7 @@ import {
   setAssets,
   setAssetsInPrgoress,
 } from "../../../actions/asset.js";
+import { setEnvConfig, setAssetList } from '../../../actions/config';
 import { setPoolIncentives, setPoolRewards } from "../../../actions/liquidity";
 import { setMarkets } from "../../../actions/oracle";
 import { setParams } from "../../../actions/swap";
@@ -71,11 +71,13 @@ const Header = ({
   assetMap,
   setAssetsInPrgoress,
   assetDenomMap,
+  setAssetList,
+  setEnvConfig
 }) => {
   const theme = "darkssss";
 
   const [mobileHam, setMobileHam] = useState(false);
-  console.log({ address });
+
   const router = useRouter();
 
   const isActive = (pathname) => {
@@ -114,6 +116,24 @@ const Header = ({
       query: `coin_received.receiver='${address}'`,
     },
   };
+
+  useEffect(() => {
+    envConfigResult().then((result) => {
+      setEnvConfig(result?.envConfig)
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    ibcAssets()
+      .then((result) => {
+        setAssetList(result)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }, []);
 
   useEffect(() => {
     let addressAlreadyExist = localStorage.getItem("ac");
@@ -326,7 +346,8 @@ const Header = ({
     getAPRs();
   }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
-  const items = [{ label: <ConnectModal />, key: "item-1" }];
+  // const items = [{ label: <ConnectModal />, key: "item-1" }];
+  const items = [{ lable: <h1>Hello</h1>, key: 1 }]
 
   return (
     <div className={styles.header__wrap}>
@@ -434,7 +455,8 @@ const Header = ({
                   }
                 >
                   <div className={styles.header__wallet}>
-                    {variables[lang]?.connect}
+                    {/* {variables[lang]?.connect} */}
+                    Connect wallet
                   </div>
                 </Dropdown>
               </>
@@ -559,6 +581,8 @@ const actionsToProps = {
   setAssets,
   setAppAssets,
   setAssetsInPrgoress,
+  setAssetList,
+  setEnvConfig,
 };
 
 export default connect(stateToProps, actionsToProps)(Header);
