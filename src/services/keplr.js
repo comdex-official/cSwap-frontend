@@ -1,4 +1,3 @@
-import { Bech32Address } from "@keplr-wallet/cosmos";
 import {
   AccountSetBase,
   ChainStore,
@@ -36,24 +35,48 @@ const getCurrencies = (chain) => {
   }
 };
 
-export const getChainConfig = (chain = comdex) => {
-  return {
-    chainId: chain?.chainId,
-    chainName: chain?.chainName,
-    rpc: chain?.rpc,
-    rest: chain?.rest,
-    stakeCurrency: {
-      coinDenom: chain?.coinDenom,
-      coinMinimalDenom: chain?.coinMinimalDenom,
-      coinDecimals: chain?.coinDecimals,
-    },
-    walletUrlForStaking: chain?.walletUrlForStaking,
-    bip44: {
-      coinType: chain?.coinType,
-    },
-    bech32Config: Bech32Address.defaultBech32Config(chain?.prefix),
-    currencies: getCurrencies(chain),
-    feeCurrencies: [
+export const getFeeCurrencies = (chain = comdex) => {
+  if (chain?.rpc === comdex?.rpc) {
+    return [
+      {
+        coinDenom: chain?.coinDenom,
+        coinMinimalDenom: chain?.coinMinimalDenom,
+        coinDecimals: chain?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+      {
+        coinDenom: cmst?.coinDenom,
+        coinMinimalDenom: cmst?.coinMinimalDenom,
+        coinDecimals: cmst?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+      {
+        coinDenom: harbor?.coinDenom,
+        coinMinimalDenom: harbor?.coinMinimalDenom,
+        coinDecimals: harbor?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+    ];
+  } else {
+    return [
       {
         coinDenom: chain?.coinDenom,
         coinMinimalDenom: chain?.coinMinimalDenom,
@@ -72,7 +95,35 @@ export const getChainConfig = (chain = comdex) => {
               high: 0.04,
             },
       },
-    ],
+    ];
+  }
+};
+
+export const getChainConfig = (chain = comdex) => {
+  return {
+    chainId: chain?.chainId,
+    chainName: chain?.chainName,
+    rpc: chain?.rpc,
+    rest: chain?.rest,
+    stakeCurrency: {
+      coinDenom: chain?.coinDenom,
+      coinMinimalDenom: chain?.coinMinimalDenom,
+      coinDecimals: chain?.coinDecimals,
+    },
+    walletUrlForStaking: chain?.walletUrlForStaking,
+    bip44: {
+      coinType: chain?.coinType,
+    },
+    bech32Config: {
+      bech32PrefixAccAddr: `${chain?.prefix}`,
+      bech32PrefixAccPub: `${chain?.prefix}pub`,
+      bech32PrefixValAddr: `${chain?.prefix}valoper`,
+      bech32PrefixValPub: `${chain?.prefix}valoperpub`,
+      bech32PrefixConsAddr: `${chain?.prefix}valcons`,
+      bech32PrefixConsPub: `${chain?.prefix}valconspub`,
+    },
+    currencies: getCurrencies(chain),
+    feeCurrencies: getFeeCurrencies(chain),
     coinType: chain?.coinType,
     features: chain?.features,
   };
