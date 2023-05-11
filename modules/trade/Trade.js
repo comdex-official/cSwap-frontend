@@ -1,3 +1,4 @@
+"use client";
 import { useSelector } from "react-redux";
 import styles from "./Trade.module.scss";
 // import { useAppSelector } from '@/shared/hooks/useAppSelector';

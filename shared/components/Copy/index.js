@@ -2,7 +2,7 @@ import { Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import "./index.scss";
+// import "./index.scss";
 
 const Copy = ({ text }) => {
   const [open, setOpen] = useState(false);
@@ -25,9 +25,10 @@ const Copy = ({ text }) => {
       }}
     >
       <Tooltip arrow open={open} color="#FE4350" title="Copied!">
-        <CopyToClipboard onCopy={onCopy} text={text}>
+        {/* <CopyToClipboard onCopy={onCopy} text={text}>
           C
-        </CopyToClipboard>
+        </CopyToClipboard> */}
+        c
       </Tooltip>
     </div>
   );

@@ -346,8 +346,7 @@ const Header = ({
     getAPRs();
   }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
-  // const items = [{ label: <ConnectModal />, key: "item-1" }];
-  const items = [{ lable: <h1>Hello</h1>, key: 1 }]
+  const items = [{ label: <ConnectModal />, key: "item-1" }];
 
   return (
     <div className={styles.header__wrap}>
@@ -450,13 +449,13 @@ const Header = ({
                   placement="bottomRight"
                   trigger={["click"]}
                   overlayClassName="dropconnect-overlay"
-                  getPopupContainer={() =>
-                    document.getElementById("topRightToogle")
-                  }
+                // getPopupContainer={() =>
+                //   document.getElementById("topRightToogle")
+                // }
                 >
                   <div className={styles.header__wallet}>
-                    {/* {variables[lang]?.connect} */}
-                    Connect wallet
+                    {variables[lang]?.connect}
+                    {/* Connect wallet */}
                   </div>
                 </Dropdown>
               </>

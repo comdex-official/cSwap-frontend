@@ -48,36 +48,35 @@ const ConnectModal = ({
   };
 
   return (
-    // <Spin spinning={inProgress}>
-    //   <div className="wallet-connect-dropdown">
-    //     <div className="wallet-connect-upper">
-    //       {/* <h3 className="text-center">{variables[lang].connect_wallet}</h3> */}
-    //       <h3 className="text-center">connect_wallet</h3>
-    //     </div>
-    //     <div className="mb-2 mt-3">
-    //       <div
-    //         className="wallet-links"
-    //         onClick={() => handleConnectToWallet('keplr')}
-    //       >
-    //         {/* <span>{variables[lang].keplr_wallet}</span>{' '} */}
-    //         <span>keplr_wallet</span>{' '}
-    //       </div>
-    //     </div>
-    //     <div className="mb-2">
-    //       <div
-    //         className="wallet-links"
-    //         onClick={() => handleConnectToWallet('leap')}
-    //       >
-    //         {/* <span>{variables[lang].leap_wallet}</span>{' '} */}
-    //         <span>leap_wallet</span>{' '}
-    //       </div>
-    //     </div>
-    //     <div className="wallet-links">
-    //       <ButtonSubmit />
-    //     </div>
-    //   </div>
-    // </Spin>
-    <h1>Hello</h1>
+    <Spin spinning={inProgress}>
+      <div className="wallet-connect-dropdown">
+        <div className="wallet-connect-upper">
+          {/* <h3 className="text-center">{variables[lang].connect_wallet}</h3> */}
+          <h3 className="text-center">connect_wallet</h3>
+        </div>
+        <div className="mb-2 mt-3">
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet('keplr')}
+          >
+            {/* <span>{variables[lang].keplr_wallet}</span>{' '} */}
+            <span>keplr_wallet</span>{' '}
+          </div>
+        </div>
+        <div className="mb-2">
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet('leap')}
+          >
+            {/* <span>{variables[lang].leap_wallet}</span>{' '} */}
+            <span>leap_wallet</span>{' '}
+          </div>
+        </div>
+        <div className="wallet-links">
+          <ButtonSubmit />
+        </div>
+      </div>
+    </Spin>
   );
 };
 

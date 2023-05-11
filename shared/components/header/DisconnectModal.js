@@ -15,7 +15,7 @@ import {
 import { truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import Copy from "../Copy";
-import { Icon } from "@/shared/image/Icon";
+import { Icon } from "../../../shared/image/Icon";
 
 const DisConnectModal = ({
   setAccountAddress,
@@ -60,21 +60,18 @@ const DisConnectModal = ({
           <div className="px-3">
             <div> {variables[lang].balance_wallet}</div>
             <div className="balance__value__data">
-              {"0"}
-              {/* {amountConversionWithComma(
+              {amountConversionWithComma(
                 getDenomBalance(balances, comdex?.coinMinimalDenom) || 0
-              )}
-              {denomConversion(comdex?.coinMinimalDenom)} */}
+              )}{" "}
+              {denomConversion(comdex?.coinMinimalDenom)}
             </div>
           </div>
           <div className="mt-2 px-3">
             <div>{variables[lang].address_wallet} </div>
             <div className="wallet-address">
               <div className="address-wallet-address d-flex">
-                <span className="mr-3">{truncateString(address, 6, 6)} </span>
-                <div>
-                  <Copy text={address} />
-                </div>
+                <span className="mr-3"> {truncateString(address, 6, 6)} </span>{" "}
+                <Copy text={address} />
               </div>
             </div>
           </div>
@@ -91,7 +88,7 @@ const DisConnectModal = ({
           </div>
         </div>
       ),
-      key: "item-2",
+      key: "item-1",
     },
   ];
 
@@ -101,7 +98,7 @@ const DisConnectModal = ({
         menu={{ items }}
         trigger={["click"]}
         overlayClassName="dropconnect-overlay"
-        getPopupContainer={() => document.getElementById("topRightToogle")}
+      // getPopupContainer={() => document.getElementById("topRightToogle")}
       >
         <div className="connected_button">
           {`${truncateString(address, 6, 6)}`}{" "}
