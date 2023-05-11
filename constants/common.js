@@ -7,7 +7,7 @@ export const DOLLAR_DECIMALS = 2;
 export const MAX_SLIPPAGE_TOLERANCE = 3;
 export const PRICE_DECIMALS = 4;
 
-let app = process.env.REACT_APP_APP;
+let app = process.env.NEXT_PUBLIC_APP_APP;
 
 export const APP_ID = Number(envConfig?.[app]?.appId);
 export const MASTER_POOL_ID = Number(envConfig?.[app]?.masterPoolId);

@@ -142,33 +142,33 @@ const Header = ({
     }
   }, [addressFromLocal, setAccountAddress, setAccountName]);
 
-  useEffect(() => {
-    if (address) {
-      let ws = new WebSocket(`${comdex?.webSocketApiUrl}`);
+  // useEffect(() => {
+  //   if (address) {
+  //     let ws = new WebSocket(`${comdex?.webSocketApiUrl}`);
 
-      ws.onopen = () => {
-        ws.send(JSON.stringify(subscription));
-        ws.send(JSON.stringify(subscription2));
-      };
+  //     ws.onopen = () => {
+  //       ws.send(JSON.stringify(subscription));
+  //       ws.send(JSON.stringify(subscription2));
+  //     };
 
-      ws.onmessage = (event) => {
-        const response = JSON.parse(event.data);
-        if (response?.result?.events) {
-          const savedAddress = localStorage.getItem("ac");
-          const userAddress = savedAddress ? decode(savedAddress) : address;
-          fetchBalances(userAddress);
-        }
-      };
+  //     ws.onmessage = (event) => {
+  //       const response = JSON.parse(event.data);
+  //       if (response?.result?.events) {
+  //         const savedAddress = localStorage.getItem("ac");
+  //         const userAddress = savedAddress ? decode(savedAddress) : address;
+  //         fetchBalances(userAddress);
+  //       }
+  //     };
 
-      ws.onclose = () => {
-        console.log("Connection Closed! 0");
-      };
+  //     ws.onclose = () => {
+  //       console.log("Connection Closed! 0");
+  //     };
 
-      ws.onerror = (error) => {
-        console.log(error, "WS Error");
-      };
-    }
-  }, [address]);
+  //     ws.onerror = (error) => {
+  //       console.log(error, "WS Error");
+  //     };
+  //   }
+  // }, [address]);
 
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -336,9 +336,8 @@ const Header = ({
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${
-              theme === "dark" ? styles.icon_dark : styles.icon_light
-            }`}
+            className={`bi bi-list ${theme === "dark" ? styles.icon_dark : styles.icon_light
+              }`}
             size={"1.5rem"}
           />
         </div>
@@ -354,9 +353,8 @@ const Header = ({
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              } ${isActive(item.route) ? styles.active : ""}`}
+              className={`${styles.header__left__element} ${theme === "dark" ? styles.dark : styles.light
+                } ${isActive(item.route) ? styles.active : ""}`}
             >
               <Link
                 href={item?.id === 5 ? "" : item.route}
@@ -395,26 +393,23 @@ const Header = ({
                 )}
 
                 <div
-                  className={`${styles.header__cSwap__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.header__cSwap__title} ${theme === "dark" ? styles.dark : styles.light
+                    }`}
                 >
                   {"cSwap"}
                 </div>
               </div>
               <Icon
-                className={`bi bi-grid-fill ${
-                  theme === "dark" ? styles.icon_dark : styles.icon_light
-                }`}
+                className={`bi bi-grid-fill ${theme === "dark" ? styles.icon_dark : styles.icon_light
+                  }`}
               />
             </div>
 
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
-                className={`${styles.header__faucet__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+                className={`${styles.header__faucet__title} ${theme === "dark" ? styles.dark : styles.light
+                  }`}
               >
                 {"Faucet"}
               </div>
@@ -446,9 +441,8 @@ const Header = ({
             )}
 
             <Icon
-              className={`bi bi-three-dots-vertical ${
-                theme === "dark" ? styles.icon_dark : styles.icon_light
-              }`}
+              className={`bi bi-three-dots-vertical ${theme === "dark" ? styles.icon_dark : styles.icon_light
+                }`}
               size={"2rem"}
             />
 
