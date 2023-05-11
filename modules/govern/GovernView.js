@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import style from './Govern.module.scss';
-import { useAppSelector } from '@/shared/hooks/useAppSelector';
+// import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { useRouter } from 'next/router';
 import { Button, List } from 'antd';
 import Highcharts from "highcharts";
