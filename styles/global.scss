@@ -847,6 +847,7 @@ a {
         border-radius: 20px;
         border: 1px solid white;
         padding: 5px;
+        width: 100%;
 
         .ant-tabs-ink-bar {
           display: none;
@@ -865,7 +866,7 @@ a {
           border: 0;
           .ant-tabs-tab-btn {
             width: 100%;
-            color: $text-color-dark2;
+            color: white;
 
             .dark-mode & {
               color: $white;

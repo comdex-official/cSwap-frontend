@@ -1,3 +1,6 @@
+import * as PropTypes from "prop-types";
+import React, { useCallback, useEffect } from "react";
+import { connect } from "react-redux";
 import { Icon } from "../../shared/image/Icon"
 import { NextImage } from "../../shared/image/NextImage"
 import { useState } from "react"
@@ -7,10 +10,27 @@ import dynamic from "next/dynamic"
 import { Modal } from "antd"
 import Liquidity from "./Liquidity"
 import Card from "../../shared/components/card/Card"
+import { setUserLiquidityInPools } from "../../actions/liquidity";
+import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
+import { amountConversion } from "../../utils/coin";
+import { marketPrice } from "../../utils/number";
 
 // const Card = dynamic(() => import("@/shared/components/card/Card"))
 
-const FarmCard = ({ theme }) => {
+const FarmCard = ({
+  theme,
+  displayPools,
+  lang,
+  pool,
+  markets,
+  setUserLiquidityInPools,
+  userLiquidityInPools,
+  address,
+  balances,
+  rewardsMap,
+  parent,
+  assetMap,
+}) => {
   const [showMoreData, setshowMoreData] = useState(false)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -26,6 +46,22 @@ const FarmCard = ({ theme }) => {
   const handleCancel = () => {
     setIsModalOpen(false)
   }
+
+  const calculatePoolLiquidity = useCallback(
+    (poolBalance) => {
+      if (poolBalance && Object.values(poolBalance)?.length) {
+        const values = Object.values(poolBalance).map(
+          (item) =>
+            Number(
+              amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+            ) * marketPrice(markets, item?.denom)
+        );
+        return values?.reduce((prev, next) => prev + next, 0); // returning sum value
+      } else return 0;
+    },
+    [markets, assetMap]
+  );
+
 
   return (
     <div
@@ -342,4 +378,48 @@ const FarmCard = ({ theme }) => {
   )
 }
 
-export default FarmCard
+FarmCard.propTypes = {
+  setUserLiquidityInPools: PropTypes.func.isRequired,
+  address: PropTypes.string,
+  assetMap: PropTypes.object,
+  lang: PropTypes.string,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
+  markets: PropTypes.object,
+  parent: PropTypes.string,
+  pool: PropTypes.shape({
+    id: PropTypes.shape({
+      high: PropTypes.number,
+      low: PropTypes.number,
+      unsigned: PropTypes.bool,
+    }),
+    reserveAccountAddress: PropTypes.string,
+    poolCoinDenom: PropTypes.string,
+    reserveCoinDenoms: PropTypes.array,
+  }),
+  poolIndex: PropTypes.number,
+  rewardsMap: PropTypes.object,
+  userLiquidityInPools: PropTypes.object,
+};
+
+const stateToProps = (state) => {
+  return {
+    address: state.account.address,
+    markets: state.oracle.market.list,
+    rewardsMap: state.liquidity.rewardsMap,
+    lang: state.language,
+    balances: state.account.balances.list,
+    userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    assetMap: state.asset.map,
+  };
+};
+
+const actionsToProps = {
+  setUserLiquidityInPools,
+};
+
+export default connect(stateToProps, actionsToProps)(FarmCard);

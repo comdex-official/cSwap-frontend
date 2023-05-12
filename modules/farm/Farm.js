@@ -307,7 +307,29 @@ const Farm = ({
               className={`${styles.farm__body__tab__wrap} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              <Tab data={TabData} active={active} handleActive={handleActive} />
+              {/* <Tab data={TabData} active={active} handleActive={handleActive} /> */}
+              <div className="mb-4">
+                <Tabs
+                  defaultActiveKey="1"
+                  items={tabItems}
+                  activeKey={filterValue}
+                  onChange={onChange}
+                  className="comdex-tabs farm-details-tabmain"
+                // tabBarExtraContent={
+                //   <div className="farmtab-right-action">
+                //     <CreatePool
+                //       refreshData={updatePools}
+                //       refreshBalance={handleBalanceRefresh}
+                //     />
+                //     <Input
+                //       placeholder="Search Pools.."
+                //       onChange={(event) => onSearchChange(event.target.value)}
+                //     suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+                //     />
+                //   </div>
+                // }
+                />
+              </div>
             </div>
             <div
               className={`${styles.farm__body__line} ${theme === "dark" ? styles.dark : styles.light
@@ -364,8 +386,8 @@ const Farm = ({
               className={`${styles.farm__footer__card__wrap} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              {FarmCustomData.map((item) => (
-                <FarmCard key={item.id} theme={theme} />
+              {displayPools && displayPools.map((item) => (
+                <FarmCard key={item.id} theme={theme} displayPools={displayPools} />
               ))}
             </div>
           )}
