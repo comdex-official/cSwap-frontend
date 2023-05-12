@@ -16,7 +16,7 @@ import {
   DEFAULT_PAGE_SIZE,
   MASTER_POOL_ID,
 } from "../../constants/common";
-import { queryPoolsList } from "../../services/liquidity/query";
+import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion } from "../../utils/coin";
 
 // const Tab = dynamic(() => import("@/shared/components/tab/Tab"))
@@ -66,6 +66,8 @@ const Farm = ({
   const [inProgress, setInProgress] = useState(false);
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState("3");
+  const [poolsApr, setPoolsApr] = useState();
+
   const dispatch = useDispatch();
 
   const closeDisclaimer = () => {
@@ -94,6 +96,22 @@ const Farm = ({
     },
     [pools]
   );
+
+
+  const getAPRs = () => {
+    fetchRestAPRs((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setPoolsApr(result?.data)
+    });
+  };
+
+
+  useEffect(() => {
+    getAPRs()
+  }, [])
 
   useEffect(() => {
     updateFilteredData(filterValue);
@@ -166,6 +184,10 @@ const Farm = ({
     {
       key: "2",
       label: "Ranged",
+    },
+    {
+      key: "4",
+      label: "My Pools",
     },
   ];
 
@@ -387,7 +409,7 @@ const Farm = ({
                 }`}
             >
               {displayPools && displayPools.map((item) => (
-                <FarmCard key={item.id} theme={theme} displayPools={displayPools} />
+                <FarmCard key={item.id} theme={theme} pool={item} poolsApr={poolsApr} />
               ))}
             </div>
           )}
