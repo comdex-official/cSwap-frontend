@@ -1,12 +1,11 @@
 import style from "./Govern.module.scss";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button, List } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Link from "next/link";
-import Copy from "@/shared/components/Copy";
+import Copy from "../../shared/components/Copy";
 import VoteNowModal from "./VoteNowModal";
-
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -80,16 +79,16 @@ const GovernView = ({
     {
       title: "Proposer",
       counts: (
-        <div className="address_with_copy">
+        <>
           {proposer ? (
-            <>
+            <p className={style.wrap__proposer}>
               <span className="mr-1">{truncateString(proposer, 6, 6)}</span>
               <Copy text={proposer} />
-            </>
+            </p>
           ) : (
             "------"
           )}
-        </div>
+        </>
       ),
     },
   ];
@@ -413,7 +412,7 @@ const GovernView = ({
   );
 };
 
-GovernDetails.propTypes = {
+GovernView.propTypes = {
   lang: PropTypes.string.isRequired,
   setProposal: PropTypes.func.isRequired,
   setProposalTally: PropTypes.func.isRequired,

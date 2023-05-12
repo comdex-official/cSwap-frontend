@@ -2,7 +2,8 @@ import { Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-// import "./index.scss";
+import { Icon } from "../../image/Icon";
+import styles from "./index.module.scss";
 
 const Copy = ({ text }) => {
   const [open, setOpen] = useState(false);
@@ -18,17 +19,16 @@ const Copy = ({ text }) => {
 
   return (
     <div
-      className="copy-section"
+      className={styles.copy_section}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
       <Tooltip arrow open={open} color="#FE4350" title="Copied!">
-        {/* <CopyToClipboard onCopy={onCopy} text={text}>
-          C
-        </CopyToClipboard> */}
-        c
+        <CopyToClipboard onCopy={onCopy} text={text}>
+          <Icon className={"bi bi-clipboard2"} />
+        </CopyToClipboard>
       </Tooltip>
     </div>
   );

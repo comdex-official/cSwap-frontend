@@ -1,4 +1,4 @@
-@import '../../styles/globalVariable.scss';
+@import "../../styles/globalVariable.scss";
 
 .govern_main_container {
   .back_button_container {
@@ -40,7 +40,6 @@
             gap: 15px;
             padding: 18px;
             text-align: center;
-            border-bottom: 2px solid rgba($border-dark, 0.5);
 
             .dark-mode & {
               border-bottom: 1px solid rgba($white, 0.5);
@@ -52,6 +51,7 @@
         }
         .govern_bottom_proposals_container {
           min-height: 8rem;
+          border-top: 2px solid rgba($border-dark, 0.5);
           .governlist_row {
             display: flex;
             padding: 20px 40px 20px;
@@ -78,10 +78,17 @@
               }
               h3 {
                 font-size: 20px;
-
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 .dark-mode & {
                   color: white;
                 }
+              }
+              p {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
               }
               .proposal_id {
                 h3 {
@@ -456,4 +463,10 @@
       }
     }
   }
+}
+
+.wrap__proposer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }

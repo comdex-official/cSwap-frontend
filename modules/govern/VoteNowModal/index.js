@@ -3,13 +3,13 @@ import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import Snack from "../../../components/common/Snack";
+import Snack from "../../../shared/components/Snack/index";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import { errorMessageMappingParser } from "../../../utils/string";
 import variables from "../../../utils/variables";
-import "./index.scss";
+import { Icon } from "../../../shared/image/Icon";
+// import "./index.scss";
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,11 +86,11 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         width={550}
         onOk={handleOk}
         onCancel={handleCancel}
-        closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
+        closeIcon={<Icon className={"bi bi-x-lg"} />}
       >
         <div className="votenow-modal-inner">
-          <Row>
-            <Col sm="12">
+          <div>
+            <div sm="12">
               <h3>Your Vote</h3>
               <p>
                 #{proposal?.proposal_id} {proposal?.content?.title}
@@ -109,10 +109,10 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
                   <Radio value={2}>Abstain</Radio>
                 </Space>
               </Radio.Group>
-            </Col>
-          </Row>
-          <Row className="p-0">
-            <Col className="text-right mt-3">
+            </div>
+          </div>
+          <div className="p-0">
+            <div className="text-right mt-3">
               <Button
                 type="primary"
                 className="px-5 mr-3"
@@ -131,8 +131,8 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
               >
                 Confirm
               </Button>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       </Modal>
     </>

@@ -1,12 +1,13 @@
 import React from "react";
-import { SvgIcon } from "../";
-import "./index.scss";
+import { NextImage } from "../../image/NextImage";
+import { No_Data } from "../../image";
+import styles from "./index.module.scss";
 
 const NoDataIcon = ({ text }) => {
   return (
-    <div className="no-data-card">
-      <SvgIcon name="nodata-icon" viewbox="0 0 110.441 126.947" />
-      <div className="empty-text">{text ? `${text}` : "No Data"}</div>
+    <div className={styles.no_data_card}>
+      <NextImage src={No_Data} alt={"logo"} />
+      <div className={styles.empty_text}>{text ? `${text}` : "No Data"}</div>
     </div>
   );
 };

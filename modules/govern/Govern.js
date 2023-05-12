@@ -7,9 +7,10 @@ import { setAllProposals, setProposals } from "../../actions/govern";
 import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import style from "./Govern.module.scss";
 import { Progress } from "@mantine/core";
-import NoDataIcon from "@/shared/components/NoDataIcon";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const { Option } = Select;
 
@@ -116,10 +117,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
             </div>
             {/* Bottom Container  */}
             <div className={style.govern_bottom_main_container}>
-              <div
-                className={style.govern_bottom_container}
-                onClick={() => router.push(`/govern/${1}`)}
-              >
+              <div className={style.govern_bottom_container}>
                 <div className={style.govern_bottom_filters_container}>
                   <div className={style.governcard_head}>
                     {/* <Button
