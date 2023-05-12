@@ -43,6 +43,7 @@ import {
   envConfigResult,
   ibcAssets,
   queryAssets,
+  inconsResult,
 } from "../../../services/asset/query";
 import {
   setAccountAddress,
@@ -56,7 +57,11 @@ import {
   setAssets,
   setAssetsInPrgoress,
 } from "../../../actions/asset.js";
-import { setEnvConfig, setAssetList } from "../../../actions/config";
+import {
+  setEnvConfig,
+  setAssetList,
+  setIconList,
+} from "../../../actions/config";
 import { setPoolIncentives, setPoolRewards } from "../../../actions/liquidity";
 import { setMarkets } from "../../../actions/oracle";
 import { setParams } from "../../../actions/swap";
@@ -84,6 +89,7 @@ const Header = ({
   setAssetsInPrgoress,
   assetDenomMap,
   setAssetList,
+  setIconList,
   setEnvConfig,
 }) => {
   const theme = "dark";
@@ -141,6 +147,15 @@ const Header = ({
     ibcAssets()
       .then((result) => {
         setAssetList(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    inconsResult()
+      .then((result) => {
+        console.log({ result });
+        setIconList(result);
       })
       .catch((err) => {
         console.log(err);
@@ -607,6 +622,7 @@ const actionsToProps = {
   setAppAssets,
   setAssetsInPrgoress,
   setAssetList,
+  setIconList,
   setEnvConfig,
 };
 
