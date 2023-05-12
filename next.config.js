@@ -2,7 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  distDir: 'build',
-}
+  distDir: "build",
+  images: {
+    domains: ["raw.githubusercontent.com"],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

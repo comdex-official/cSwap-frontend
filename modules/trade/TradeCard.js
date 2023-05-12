@@ -111,6 +111,7 @@ const TradeCard = ({
   setBaseCoinPoolPrice,
   assetMap,
   assetsInProgress,
+  iconList,
 }) => {
   const [toggleValue, setToggleValue] = useState(false);
 
@@ -720,6 +721,7 @@ const TradeCard = ({
                 <div className={styles.settings__dropdown}>
                   <div className="assets-select-wrapper">
                     <CustomSelect
+                      iconList={iconList}
                       loading={assetsInProgress}
                       value={
                         offerCoin?.denom && outputOptions?.length > 0
@@ -814,6 +816,7 @@ const TradeCard = ({
                   <div className={styles.settings__dropdown}>
                     <div className="assets-select-wrapper">
                       <CustomSelect
+                        iconList={iconList}
                         loading={assetsInProgress}
                         value={
                           demandCoin?.denom && outputOptions?.length > 0
@@ -916,6 +919,7 @@ const TradeCard = ({
                 <div className={styles.tradeCard__body__right}>
                   <div className={styles.settings__dropdown}>
                     <CustomSelect
+                      iconList={iconList}
                       value={
                         demandCoin?.denom && outputOptions?.length > 0
                           ? demandCoin?.denom
@@ -1159,6 +1163,7 @@ const stateToProps = (state) => {
     assetMap: state.asset.map,
     assetDenomMap: state.asset._.assetDenomMap,
     assetsInProgress: state.asset._.inProgress,
+    iconList: state.config?.iconList,
   };
 };
 
