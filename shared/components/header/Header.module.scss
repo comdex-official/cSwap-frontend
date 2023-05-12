@@ -283,39 +283,30 @@
 }
 
 .dropdown__wallet__menu {
-  position: absolute;
-  margin-right: 10px;
-  width: 288px;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  border: 2px solid #303950;
-  border-radius: 10px;
-  padding: 10px 20px;
-  top: 53px;
-  right: -5px;
-  z-index: 2;
-
+  width: 175px;
+ 
   button {
-    border-radius: 5px;
     border: none;
     outline: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     background: $red;
     border-radius: 20px;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
+    font-size: 12px;
+    line-height: 15px;
     /* identical to box height */
     width: 100%;
     margin-top: 20px;
     text-align: center;
     text-transform: capitalize;
-
+cursor: pointer;
     color: $white;
   }
 }
 
 .dropdown__dot__menu {
-  padding: 15px 26px;
+  width: 130px;
+  text-align: center;
 }
 
 .dropdown__dot__item {

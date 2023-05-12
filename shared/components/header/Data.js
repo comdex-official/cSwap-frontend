@@ -1,78 +1,87 @@
+import {
+  Discord,
+  Git,
+  Info,
+  Medium,
+  Telegram,
+  Twitter,
+} from "../../../shared/image";
+
 export const HeaderData = [
   {
     id: 0,
     name: "TRADE",
-    route: "/"
+    route: "/",
   },
   {
     id: 1,
     name: "FARM",
-    route: "/farm"
+    route: "/farm",
   },
   {
     id: 2,
     name: "PORTFOLIO",
-    route: "/portfolio"
+    route: "/portfolio",
   },
   {
     id: 3,
     name: "GOVERN",
-    route: "/govern"
+    route: "/govern",
   },
   {
     id: 4,
     name: "ORDERBOOK",
-    route: "/orderbook"
+    route: "/orderbook",
   },
   {
     id: 5,
     name: "BRIDGE",
-    route: "/bridge"
-  }
-]
+    route: "/bridge",
+  },
+];
 
 export const cSwapDropdownData = [
   {
     id: 0,
     name: "HARBOR",
-    icon: ""
+    icon: "",
   },
   {
     id: 1,
     name: "COMMODO",
-    icon: ""
-  }
-]
+    icon: "",
+  },
+];
 
 export const DotDropdownData = [
   {
     id: 0,
     name: "Discord",
-    icon: "bi bi-discord"
+    icon: Discord,
   },
   {
     id: 1,
     name: "Github",
-    icon: "bi bi-github"
+    icon: Git,
   },
   {
     id: 1,
     name: "Telegram",
-    icon: "bi bi-telegram"
+    icon: Telegram,
   },
   {
     id: 1,
     name: "Twitter",
-    icon: "bi bi-twitter"
+    icon: Twitter,
   },
   {
     id: 1,
     name: "Medium",
-    icon: ""
+    icon: Medium,
   },
   {
     id: 1,
     name: "Info",
-    icon: "bi bi-info-circle-fill"
-  }
-]
+    icon: Info,
+  },
+];

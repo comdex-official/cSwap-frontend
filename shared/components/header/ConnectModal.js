@@ -14,6 +14,7 @@ import {
 } from '../../../services/keplr';
 import variables from '../../../utils/variables';
 import ButtonSubmit from './Ledger/index';
+import styles from "./Header.module.scss";
 
 const ConnectModal = ({
   setAccountAddress,
@@ -49,32 +50,20 @@ const ConnectModal = ({
 
   return (
     <Spin spinning={inProgress}>
-      <div className="wallet-connect-dropdown">
-        <div className="wallet-connect-upper">
-          {/* <h3 className="text-center">{variables[lang].connect_wallet}</h3> */}
-          <h3 className="text-center">connect_wallet</h3>
+      <div className={styles.dropdown__wallet__menu}>
+        <div className={styles.dropdown__wallet__title}>
+          {" Connect Wallet"}
         </div>
-        <div className="mb-2 mt-3">
-          <div
-            className="wallet-links"
-            onClick={() => handleConnectToWallet('keplr')}
-          >
-            {/* <span>{variables[lang].keplr_wallet}</span>{' '} */}
-            <span>keplr_wallet</span>{' '}
-          </div>
-        </div>
-        <div className="mb-2">
-          <div
-            className="wallet-links"
-            onClick={() => handleConnectToWallet('leap')}
-          >
-            {/* <span>{variables[lang].leap_wallet}</span>{' '} */}
-            <span>leap_wallet</span>{' '}
-          </div>
-        </div>
-        <div className="wallet-links">
-          <ButtonSubmit />
-        </div>
+        <button onClick={() => handleConnectToWallet("keplr")}>
+          {"Keplr Wallet"}
+        </button>
+        <button onClick={() => handleConnectToWallet("leap")}>
+          {"Leap Cosmos Wallet"}
+        </button>
+        <button >
+        <ButtonSubmit />
+        </button>
+       
       </div>
     </Spin>
   );

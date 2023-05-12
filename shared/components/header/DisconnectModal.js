@@ -98,10 +98,9 @@ const DisConnectModal = ({
         menu={{ items }}
         trigger={["click"]}
         overlayClassName="dropconnect-overlay"
-      // getPopupContainer={() => document.getElementById("topRightToogle")}
       >
         <div className="connected_button">
-          {`${truncateString(address, 6, 6)}`}{" "}
+          <Icon className={"bi bi-person-circle"} />
         </div>
       </Dropdown>
 
@@ -114,11 +113,11 @@ const DisConnectModal = ({
         width={550}
         onCancel={handleCancel}
         onOk={handleOk}
-        closeIcon={<Icon className={"bi bi-close"} />}
+        closeIcon={<Icon className={"bi bi-x-lg"} />}
       >
-        <div className="d-flex flex-wrap flex-column">
+        <div className="button__wrap">
           <h2> {variables[lang].disconnect_wallet}</h2>
-          <div className="d-flex">
+          <div className="button__head">
             <Button
               type="primary"
               className="btn-filled mx-3"
@@ -126,7 +125,6 @@ const DisConnectModal = ({
               onClick={handleCancel}
               block
             >
-              {" "}
               {variables[lang].no}
             </Button>
             <Button
@@ -136,7 +134,6 @@ const DisConnectModal = ({
               onClick={handleDisconnect}
               block
             >
-              {" "}
               {variables[lang].yes}
             </Button>
           </div>
