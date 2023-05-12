@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from "next/image";
 
 export const NextImage = ({
   src,
@@ -10,10 +10,12 @@ export const NextImage = ({
   style,
   className,
   quality,
-  placeholder
+  placeholder,
+  onClick,
 }) => {
   return (
     <Image
+      onClick={onClick}
       src={src}
       alt={alt}
       width={width}
@@ -27,5 +29,5 @@ export const NextImage = ({
         ? { blurDataURL: `${src}?w=${width}&q=${quality || 50}` }
         : {})}
     />
-  )
-}
+  );
+};

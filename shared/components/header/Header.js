@@ -5,7 +5,14 @@ import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { NextImage } from "../../../shared/image/NextImage";
 import { DotDropdownData, HeaderData, cSwapDropdownData } from "./Data";
-import { C_Logo, Faucet, Logo_Dark, Logo_Light } from "../../../shared/image";
+import {
+  C_Logo,
+  Comodo,
+  Faucet,
+  Harbor,
+  Logo_Dark,
+  Logo_Light,
+} from "../../../shared/image";
 import { Icon } from "../../../shared/image/Icon";
 import Link from "next/link";
 import Sidebar from "../sidebar/Sidebar";
@@ -32,7 +39,11 @@ import {
   queryPoolIncentives,
 } from "../../../services/liquidity/query.js";
 import { fetchRestPrices } from "../../../services/oracle/query";
-import { envConfigResult, ibcAssets, queryAssets } from "../../../services/asset/query";
+import {
+  envConfigResult,
+  ibcAssets,
+  queryAssets,
+} from "../../../services/asset/query";
 import {
   setAccountAddress,
   setAccountBalances,
@@ -45,12 +56,13 @@ import {
   setAssets,
   setAssetsInPrgoress,
 } from "../../../actions/asset.js";
-import { setEnvConfig, setAssetList } from '../../../actions/config';
+import { setEnvConfig, setAssetList } from "../../../actions/config";
 import { setPoolIncentives, setPoolRewards } from "../../../actions/liquidity";
 import { setMarkets } from "../../../actions/oracle";
 import { setParams } from "../../../actions/swap";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import DisconnectModal from "./DisconnectModal";
+import MyDropdown from "../dropDown/Dropdown";
 
 const Header = ({
   setAccountAddress,
@@ -72,9 +84,9 @@ const Header = ({
   setAssetsInPrgoress,
   assetDenomMap,
   setAssetList,
-  setEnvConfig
+  setEnvConfig,
 }) => {
-  const theme = "darkssss";
+  const theme = "dark";
 
   const [mobileHam, setMobileHam] = useState(false);
 
@@ -118,21 +130,21 @@ const Header = ({
   };
 
   useEffect(() => {
-    envConfigResult().then((result) => {
-      setEnvConfig(result?.envConfig)
-    })
+    envConfigResult()
+      .then((result) => {
+        setEnvConfig(result?.envConfig);
+      })
       .catch((err) => {
         console.log(err);
       });
 
     ibcAssets()
       .then((result) => {
-        setAssetList(result)
+        setAssetList(result);
       })
       .catch((err) => {
         console.log(err);
       });
-
   }, []);
 
   useEffect(() => {
@@ -348,16 +360,53 @@ const Header = ({
 
   const items = [{ label: <ConnectModal />, key: "item-1" }];
 
+  const cswapItems = [
+    {
+      key: "item-2",
+      label: (
+        <div className={styles.dropdown__cSwap__menu}>
+          <button>
+            <NextImage src={Harbor} alt="Logo" />
+          </button>
+          <button>
+            <NextImage src={Comodo} alt="Logo" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const threeDotItems = [
+    {
+      key: "1",
+      label: (
+        <div className={styles.dropdown__dot__menu}>
+          {DotDropdownData.map((item) => (
+            <div key={item.id} className={styles.dropdown__dot__item}>
+              <Link href="#">
+                <div>
+                  <NextImage src={item.icon} alt="Icon" />
+                </div>
+                <div>{item.name}</div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <div className={styles.header__wrap}>
+    <div className={`${styles.header__wrap} dark`}>
       <div className={styles.header__main}>
         <div
           className={styles.hamburger}
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${theme === "dark" ? styles.icon_dark : styles.icon_light
-              }`}
+            className={`bi bi-list ${
+              theme === "dark" ? styles.icon_dark : styles.icon_light
+            }`}
             size={"1.5rem"}
           />
         </div>
@@ -373,8 +422,9 @@ const Header = ({
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${theme === "dark" ? styles.dark : styles.light
-                } ${isActive(item.route) ? styles.active : ""}`}
+              className={`${styles.header__left__element} ${
+                theme === "dark" ? styles.dark : styles.light
+              } ${isActive(item.route) ? styles.active : ""}`}
             >
               <Link
                 href={item?.id === 5 ? "" : item.route}
@@ -404,32 +454,41 @@ const Header = ({
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
-            <div className={styles.header__cSwap}>
-              <div className={styles.header__cSwap__main}>
-                {theme === "dark" ? (
-                  <NextImage src={C_Logo} alt="Logo_Dark" />
-                ) : (
-                  <NextImage src={C_Logo} alt="Logo_Dark" />
-                )}
+            <MyDropdown
+              items={cswapItems}
+              placement={"bottomLeft"}
+              trigger={["click"]}
+            >
+              <div className={styles.header__cSwap}>
+                <div className={styles.header__cSwap__main}>
+                  {theme === "dark" ? (
+                    <NextImage src={C_Logo} alt="Logo_Dark" />
+                  ) : (
+                    <NextImage src={C_Logo} alt="Logo_Dark" />
+                  )}
 
-                <div
-                  className={`${styles.header__cSwap__title} ${theme === "dark" ? styles.dark : styles.light
+                  <div
+                    className={`${styles.header__cSwap__title} ${
+                      theme === "dark" ? styles.dark : styles.light
                     }`}
-                >
-                  {"cSwap"}
+                  >
+                    {"cSwap"}
+                  </div>
                 </div>
-              </div>
-              <Icon
-                className={`bi bi-grid-fill ${theme === "dark" ? styles.icon_dark : styles.icon_light
+                <Icon
+                  className={`bi bi-grid-fill ${
+                    theme === "dark" ? styles.icon_dark : styles.icon_light
                   }`}
-              />
-            </div>
+                />
+              </div>
+            </MyDropdown>
 
             <div className={styles.header__faucet}>
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
-                className={`${styles.header__faucet__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.header__faucet__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 {"Faucet"}
               </div>
@@ -449,9 +508,9 @@ const Header = ({
                   placement="bottomRight"
                   trigger={["click"]}
                   overlayClassName="dropconnect-overlay"
-                // getPopupContainer={() =>
-                //   document.getElementById("topRightToogle")
-                // }
+                  // getPopupContainer={() =>
+                  //   document.getElementById("topRightToogle")
+                  // }
                 >
                   <div className={styles.header__wallet}>
                     {variables[lang]?.connect}
@@ -460,51 +519,18 @@ const Header = ({
                 </Dropdown>
               </>
             )}
-
-            <Icon
-              className={`bi bi-three-dots-vertical ${theme === "dark" ? styles.icon_dark : styles.icon_light
+            <MyDropdown
+              items={threeDotItems}
+              placement={"bottomLeft"}
+              trigger={["click"]}
+            >
+              <Icon
+                className={`bi bi-three-dots-vertical ${
+                  theme === "dark" ? styles.icon_dark : styles.icon_light
                 }`}
-              size={"2rem"}
-            />
-
-            {/* {isOpen.cSwap && (
-              <div className={styles.dropdown__cSwap__menu} ref={cSwapRef}>
-                {cSwapDropdownData.map((item) => (
-                  <button key={item.id}>{item.name}</button>
-                ))}
-              </div>
-            )} */}
-
-            {/* {isOpen.wallet && (
-              <div className={styles.dropdown__wallet__menu} ref={walletRef}>
-                <div className={styles.dropdown__wallet__title}>
-                  {' Connect Wallet'}
-                </div>
-                <button>{'Keplr Wallet'}</button>
-              </div>
-            )} */}
-
-            {/* {isOpen.dot && (
-              <div className={styles.dropdown__dot__menu} ref={dotRef}>
-                {DotDropdownData.map((item) => (
-                  <div key={item.id} className={styles.dropdown__dot__item}>
-                    <Link href="#">
-                      <div>
-                        <Icon
-                          className={`${item.icon} ${
-                            theme === "dark"
-                              ? styles.icon_dark
-                              : styles.icon_light
-                          }`}
-                        />
-                      </div>
-                      <div>{item.name}</div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            )} */}
-
+                size={"2rem"}
+              />
+            </MyDropdown>
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>
         </div>

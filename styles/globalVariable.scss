@@ -68,3 +68,24 @@ $text-color-label-dark: #acbfdb;
 $text-color-dark2: #03253e;
 $text-color-light2: #747f86;
 $text-color-label-dark2: #2d3748;
+$tooltip-bg-light: #ececec;
+$primary-gradient: linear-gradient(180deg, #fe4350 1.34%, #053c75 100.83%);
+$secondary-color: #fe4350;
+
+$box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15); // major shadow for layers
+
+$form-input-bg-light: #f1f2f7;
+$form-input-bg-dark: #243333;
+
+$tooltip-bg-dark: #464646;
+$tooltip-bg-light: #ececec;
+$tooltip-color-dark: #5a5f63;
+$tooltip-color-light: #ffffff;
+
+$box-shadow-inner-dark: inset 5px 5px 12px 1px #262b38;
+$box-shadow-input-dark: inset 0 4px 12px 6px #1d2330;
+$box-shadow-dark: inset 0 4px 16px 6px #1d2330;
+$box-shadow-inner-light: 3px 3px 10px rgba(174, 174, 192, 0.4),
+  inset -8px -8px 12px rgba(174, 174, 192, 0.25);
+$box-shadow-inner-light-hover: 3px 3px 10px rgba(174, 174, 192, 0.4),
+  inset -8px -8px 12px rgba(174, 174, 192, 0.25);

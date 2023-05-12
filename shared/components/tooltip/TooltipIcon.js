@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
-// import { SvgIcon } from "./common";
 import { Tooltip } from "antd";
 import React from "react";
+import { Icon } from "../../image/Icon";
 
 const TooltipIcon = (props) => {
   return (
@@ -9,8 +9,9 @@ const TooltipIcon = (props) => {
       overlayClassName="comdex-tooltip"
       title={props.text || "Tooltip info text"}
     >
-      {/* <SvgIcon className="tooltip-icon" name="info-icon" /> */}
-      <p>TP</p>
+      <div>
+        <Icon className={"bi bi-info-circle"} />
+      </div>
     </Tooltip>
   );
 };

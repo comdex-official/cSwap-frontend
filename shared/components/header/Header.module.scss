@@ -258,26 +258,20 @@
 }
 
 .dropdown__cSwap__menu {
-  position: absolute;
-  margin-right: 10px;
-  width: 160px;
-
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  border: 2px solid #303950;
-  border-radius: 10px;
-  padding: 10px 20px;
-  top: 53px;
-  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
 
   button {
     border-radius: 5px;
     border: none;
     outline: none;
-    padding: 10px 20px;
+    padding: 8px 12px;
+    cursor: pointer;
 
     &:first-child {
       background: linear-gradient(82.97deg, #665aa6 -2.08%, #8c81c7 120.82%);
-      margin-bottom: 10px;
       color: $white;
     }
 
@@ -321,15 +315,6 @@
 }
 
 .dropdown__dot__menu {
-  position: absolute;
-  margin-right: 10px;
-  width: 160px;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  border: 2px solid #303950;
-  border-radius: 10px;
-  top: 53px;
-  right: -10px;
-  z-index: 3;
   padding: 15px 26px;
 }
 

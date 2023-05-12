@@ -1,4 +1,4 @@
-@import '../../styles/globalVariable.scss';
+@import "../../styles/globalVariable.scss";
 
 .trade__wrap {
   display: flex;
@@ -536,6 +536,9 @@
   }
 
   .settings__dropdown__title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
     font-weight: 600;
     font-size: 16px;
     line-height: 20px;

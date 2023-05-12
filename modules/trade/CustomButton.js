@@ -3,7 +3,7 @@ import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import Snack from "../../components/common/Snack";
+import Snack from "../../shared/components/Snack/index";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
 import { signAndBroadcastTransaction } from "../../services/helper";
 import { queryOrder } from "../../services/liquidity/query";
