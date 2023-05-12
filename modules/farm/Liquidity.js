@@ -21,6 +21,8 @@ import {
   setSpotPrice,
   setUserLiquidityInPools
 } from "../../actions/liquidity";
+import CustomInput from "../../shared/components/CustomInput";
+
 // import { Col, Row, SvgIcon } from "../../../components/common";
 // import TooltipIcon from "../../../components/TooltipIcon";
 // import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -30,23 +32,12 @@ import {
   queryPoolCoinDeserialize,
   queryPoolSoftLocks
 } from "../../services/liquidity/query";
-// import {
-//   amountConversion,
-//   amountConversionWithComma,
-//   commaSeparatorWithRounding,
-//   denomConversion,
-//   getDenomBalance
-// } from "../../../utils/coin";
-// import { commaSeparator, marketPrice } from "../../../../../utils/number";
-// import { decode, iconNameFromDenom } from "../../../utils/string";
-// import "../index.scss";
-// import ShowAPR from "../ShowAPR";
-// import Deposit from "./Deposit";
-// import Farm from "./Farm";
-// import "./index.scss";
-// import PoolTokenValue from "./PoolTokenValue";
-
-// const Tab = dynamic(() => import("@/shared/components/tab/Tab"))
+import { amountConversion, amountConversionWithComma, commaSeparatorWithRounding, denomConversion, getDenomBalance } from "../../utils/coin"
+import { DOLLAR_DECIMALS } from "../../constants/common"
+import { marketPrice } from "../../utils/number"
+import Deposit from "./Deposit"
+import Withdraw from "./Withdraw"
+import PoolDetails from "./poolDetail"
 
 const Liquidity = ({
   theme,
@@ -71,6 +62,155 @@ const Liquidity = ({
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
+
+  const [firstInput, setFirstInput] = useState();
+  const [secondInput, setSecondInput] = useState();
+  const [inProgress, setInProgress] = useState(false);
+  const [inputValidationError, setInputValidationError] = useState();
+  const [outputValidationError, setOutputValidationError] = useState();
+
+  const id = pool?.id?.toNumber();
+
+  const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+  const queuedAmounts =
+    queuedSoftLocks && queuedSoftLocks.length > 0
+      ? queuedSoftLocks?.map((item) => item?.poolCoin?.amount)
+      : 0;
+
+  const userLockedPoolTokens =
+    Number(
+      queuedAmounts?.length > 0 &&
+      queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+    ) + Number(activeSoftLock?.amount) || 0;
+
+  const fetchSoftLock = useCallback(() => {
+    queryPoolSoftLocks(address, pool?.id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setActiveSoftLock(result?.activePoolCoin);
+      setQueuedSoftLocks(result?.queuedPoolCoin);
+    });
+  }, [address, pool?.id]);
+
+
+  useEffect(() => {
+    if (address && pool?.id) {
+      fetchSoftLock();
+    }
+  }, [address, pool, refreshBalance, fetchSoftLock]);
+
+  const fetchPool = useCallback(() => {
+    queryPool(id, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      setPool(result?.pool);
+    });
+  }, [id, setPool]);
+
+  useEffect(() => {
+    if (id) {
+      fetchPool(id);
+    }
+  }, [id, fetchPool]);
+
+
+  const fetchProvidedCoins = useCallback(() => {
+    queryPoolCoinDeserialize(
+      pool?.id,
+      Number(userPoolTokens) + userLockedPoolTokens,
+      (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setProvidedTokens(result?.coins);
+      }
+    );
+  }, [pool?.id, userLockedPoolTokens, userPoolTokens]);
+
+  useEffect(() => {
+    if (pool?.id) {
+      fetchProvidedCoins();
+    }
+  }, [pool?.id, fetchProvidedCoins]);
+
+  const queryPoolBalance = () => {
+    if (pool?.reserveAccountAddress) {
+      fetchPoolBalance(pool?.reserveAccountAddress);
+    }
+    if (id) {
+      fetchPool(id);
+    }
+  };
+
+  const fetchPoolBalance = (address) => {
+    setFetchBalanceInProgress(true);
+    queryAllBalances(address, (error, result) => {
+      setFetchBalanceInProgress(false);
+
+      if (error) {
+        return;
+      }
+
+      setPoolBalance(result.balances);
+      const spotPrice =
+        result.balances?.baseCoin?.amount / result.balances?.quoteCoin?.amount;
+      setSpotPrice(spotPrice.toFixed(6));
+    });
+  };
+
+  const handleBalanceRefresh = () => {
+    dispatch({
+      type: "BALANCE_REFRESH_SET",
+      value: refreshBalance + 1,
+    });
+  };
+
+  const showPoolBalance = (list, denom) => {
+    let denomBalance =
+      list && Object.values(list)?.filter((item) => item.denom === denom)[0];
+
+    return `${amountConversionWithComma(
+      denomBalance?.amount || 0,
+      assetMap[denomBalance?.denom]?.decimals
+    )} ${denomConversion(denom)}`;
+  };
+
+  const calculatePoolLiquidity = useCallback(
+    (poolBalance) => {
+      if (poolBalance && Object.values(poolBalance)?.length) {
+        const values = Object.values(poolBalance)?.map(
+          (item) =>
+            Number(
+              amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+            ) * marketPrice(markets, item?.denom)
+        );
+        return values.reduce((prev, next) => prev + next, 0); // returning sum value
+      } else return 0;
+    },
+    [assetMap, markets]
+  );
+
+
+  const TotalPoolLiquidity = commaSeparatorWithRounding(
+    calculatePoolLiquidity(pool?.balances),
+    DOLLAR_DECIMALS
+  );
+
+  useEffect(() => {
+    let totalUserPoolLiquidity = Number(calculatePoolLiquidity(providedTokens));
+
+    if (pool?.id) {
+      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity || 0);
+    }
+  }, [pool?.id, providedTokens, calculatePoolLiquidity]);
+
+
 
   const handleActive = item => {
     setActive(item)
@@ -100,221 +240,12 @@ const Liquidity = ({
       </div>
 
       {active === "DEPOSIT" ? (
-        <>
-          <div className={styles.tradeCard__body__item}>
-            <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__main}>
-                <div
-                  className={`${styles.tradeCard__body__left__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
-                >
-                  {"Provide CMDX"}
-                </div>
-
-                <div className={styles.tradeCard__body__right__el1}>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"Available"} <span>{"1.99 ATOM"}</span>
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"MAX"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__footer} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"HALF"}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.tradeCard__body__right}>
-                <div
-                  className={`${styles.tradeCard__body__left__item__details} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
-                >
-                  <div className={`${styles.tradeCard__logo__wrap}`}>
-                    <div className={`${styles.tradeCard__logo}`}>
-                      <NextImage src={ATOM} alt="Logo_Dark" />
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${styles.tradeCard__body__left__item__details__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"ATOM"}
-                  </div>
-                  <Icon className={`bi bi-chevron-down`} />
-                </div>
-
-                <div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el2} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"0.00000"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el3} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"~ $0.00"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el4} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"1 ATOM = 207.727462 CMDX"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.tradeCard__body__item}>
-            <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__main}>
-                <div
-                  className={`${styles.tradeCard__body__left__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
-                >
-                  {"Provide ATOM"}
-                </div>
-
-                <div className={styles.tradeCard__body__right__el1}>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"Available"} <span>{"1.99 ATOM"}</span>
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"MAX"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__footer} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"HALF"}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.tradeCard__body__right}>
-                <div
-                  className={`${styles.tradeCard__body__left__item__details} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
-                >
-                  <div className={`${styles.tradeCard__logo__wrap}`}>
-                    <div className={`${styles.tradeCard__logo}`}>
-                      <NextImage src={ATOM} alt="Logo_Dark" />
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${styles.tradeCard__body__left__item__details__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"ATOM"}
-                  </div>
-                  <Icon className={`bi bi-chevron-down`} />
-                </div>
-
-                <div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el2}  ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"0.00000"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el3} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"~ $0.00"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el4} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
-                  >
-                    {"1 ATOM = 207.727462 CMDX"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+        <Deposit pool={pool} active={active} />
       ) : (
-        <div
-          className={`${styles.liquidityCard__pool__withdraw__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          <div
-            className={`${styles.liquidityCard__pool__withdraw__title} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            {"Amount to Withdraw"}
-          </div>
-          <div
-            className={`${styles.liquidityCard__pool__input} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <RangeTooltipContent />
-          </div>
-          <div
-            className={`${styles.liquidityCard__pool__withdraw__footer} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <div
-              className={`${styles.liquidityCard__pool__withdraw__element} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              <div
-                className={`${styles.liquidityCard__pool__withdraw__element__title
-                  } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                {"Tokens to be Withdrawn"}
-              </div>
-              <div
-                className={`${styles.liquidityCard__pool__withdraw__element__title
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
-              >
-                {"$0.00 ≈ 0 PoolToken"}
-              </div>
-            </div>
-            <div
-              className={`${styles.liquidityCard__pool__withdraw__element} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              <div
-                className={`${styles.liquidityCard__pool__withdraw__element__title
-                  } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                {"You have"}
-              </div>
-              <div
-                className={`${styles.liquidityCard__pool__withdraw__element__title
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
-              >
-                {"$0.00 ≈ 0 PoolToken"}
-              </div>
-            </div>
-          </div>
-        </div>
+        <Withdraw pool={pool} active={active} />
       )}
 
-      <div
+      {/* <div
         className={`${styles.liquidityCard__pool__details} ${theme === "dark" ? styles.dark : styles.light
           }`}
       >
@@ -478,7 +409,8 @@ const Liquidity = ({
             {active === "DEPOSIT" ? "Deposit & Farm" : "Withdraw & Unfarm"}
           </button>
         </div>
-      </div>
+      </div> */}
+      <PoolDetails active={active} pool={pool} />
     </div>
   )
 }

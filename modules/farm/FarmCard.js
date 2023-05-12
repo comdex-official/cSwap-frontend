@@ -32,6 +32,7 @@ const FarmCard = ({
   parent,
   assetMap,
   poolsApr,
+  iconList,
 }) => {
   const [showMoreData, setshowMoreData] = useState(false)
 
@@ -49,8 +50,8 @@ const FarmCard = ({
     setIsModalOpen(false)
   }
 
-  console.log(pool, "pool");
-  console.log(poolsApr, "poolsApr");
+  // console.log(pool, "pool");
+  // console.log(poolsApr, "poolsApr");
 
   const getMasterPool = () => {
     const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);
@@ -192,7 +193,7 @@ const FarmCard = ({
                     className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
                       }`}
                   >
-                    <NextImage src={CMDS} alt="" />
+                    <NextImage src={iconList?.[pool?.balances?.baseCoin?.denom]?.coinImageUrl} width={50} height={50} alt="" />
                   </div>
                 </div>
                 <div
@@ -203,7 +204,7 @@ const FarmCard = ({
                     className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
                       }`}
                   >
-                    <NextImage src={ATOM} alt="" />
+                    <NextImage src={iconList?.[pool?.balances?.quoteCoin?.denom]?.coinImageUrl} width={50} height={50} alt="" />
                   </div>
                 </div>
               </div>
@@ -574,6 +575,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     assetMap: state.asset.map,
+    iconList: state.config?.iconList,
   };
 };
 

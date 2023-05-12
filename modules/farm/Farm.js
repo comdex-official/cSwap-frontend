@@ -401,7 +401,9 @@ const Farm = ({
               className={`${styles.farm__table__wrap} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              <FarmTable theme={theme} />
+              {/* {displayPools && displayPools.map((item) => ( */}
+              <FarmTable theme={theme} pool={displayPools} poolsApr={poolsApr} />
+              {/* ))} */}
             </div>
           ) : (
             <div
