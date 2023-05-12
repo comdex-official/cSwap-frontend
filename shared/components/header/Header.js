@@ -29,6 +29,7 @@ import { queryAllBalances } from "../../../services/bank/query";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  NETWORK_TAG
 } from "../../../constants/common";
 import ConnectModal from "./ConnectModal";
 import variables from "../../../utils/variables";
@@ -510,10 +511,12 @@ const Header = ({
             </div>
 
             {address ? (
-              <div className="connected_div" id="topRightToogle">
-                {/* <div className="connected_left">
-                  <div className="testnet-top"></div>
-                </div> */}
+              <div className="connected_div" >
+              <div className="connected_left">
+            <div className="testnet-top">
+              {NETWORK_TAG || "Testnet"}
+            </div>
+          </div>
                 <DisconnectModal />
               </div>
             ) : (
@@ -523,20 +526,18 @@ const Header = ({
                   placement="bottomRight"
                   trigger={["click"]}
                   overlayClassName="dropconnect-overlay"
-                  // getPopupContainer={() =>
-                  //   document.getElementById("topRightToogle")
-                  // }
+                
                 >
                   <div className={styles.header__wallet}>
                     {variables[lang]?.connect}
-                    {/* Connect wallet */}
+                   
                   </div>
                 </Dropdown>
               </>
             )}
             <MyDropdown
               items={threeDotItems}
-              placement={"bottomLeft"}
+              placement={"bottomRight"}
               trigger={["click"]}
             >
               <Icon
