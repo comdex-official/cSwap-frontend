@@ -442,12 +442,12 @@ const Header = ({
                 theme === "dark" ? styles.dark : styles.light
               } ${isActive(item.route) ? styles.active : ""}`}
             >
-              <Link
-                href={item?.id === 5 ? "" : item.route}
-                onClick={() => item?.id === 5 && showModal()}
+              <div
+               className={styles.header__name}
+                onClick={() => item?.id === 5 ? showModal(): router.push(item.route)}
               >
                 {item.name}
-              </Link>
+              </div>
             </div>
           ))}
         </div>

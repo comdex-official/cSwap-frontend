@@ -88,7 +88,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         <div className={`${style.govern_main_container} ${style.max_width}`}>
           <div className={style.govern_container}>
             {/* Upper copntainer  */}
-            <div className={style.govern_upper_main_container}>
+            {/* <div className={style.govern_upper_main_container}>
               <div className={style.govern_upper_container}>
                 <List
                   grid={{
@@ -114,7 +114,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                   )}
                 />
               </div>
-            </div>
+            </div> */}
             {/* Bottom Container  */}
             <div className={style.govern_bottom_main_container}>
               <div className={style.govern_bottom_container}>
