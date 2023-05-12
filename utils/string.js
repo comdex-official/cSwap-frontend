@@ -1,7 +1,7 @@
 import { sha256, stringToPath } from '@cosmjs/crypto';
 import { comdex, ibcDenoms } from '../config/network';
 import { getExponent } from './number';
-import { ibcAssets } from '../config/ibc_assets';
+import { ibcAssets } from '../config/ibc_asset_api';
 
 const getIbcDenomToDenomMap = async () => {
   let myMap = {};
@@ -71,6 +71,7 @@ export const iconNameFromDenom = (denom) => {
   }
 };
 
+
 export const orderStatusText = (key) => {
   switch (key) {
     case 0:
@@ -111,12 +112,12 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal) =>
   value.indexOf('.') >= 0
     ? value.substr(0, value.indexOf('.')) +
-      value.substr(
-        value.indexOf('.'),
-        Number(decimal)
-          ? Number(getExponent(decimal)) + 1
-          : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
-      )
+    value.substr(
+      value.indexOf('.'),
+      Number(decimal)
+        ? Number(getExponent(decimal)) + 1
+        : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
+    )
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -136,8 +137,8 @@ export const uniqueLiquidityPairDenoms = (list, type) => {
     ...new Set(
       list && list.length > 0
         ? list.map((item) =>
-            type === 'in' ? item.baseCoinDenom : item.quoteCoinDenom
-          )
+          type === 'in' ? item.baseCoinDenom : item.quoteCoinDenom
+        )
         : []
     ),
   ];
@@ -147,10 +148,10 @@ export const uniqueQuoteDenomsForBase = (list, type, denom) => {
   const quoteList =
     list && list.length > 0
       ? list.filter((item) =>
-          type === 'in'
-            ? item.baseCoinDenom === denom
-            : item.quoteCoinDenom === denom
-        )
+        type === 'in'
+          ? item.baseCoinDenom === denom
+          : item.quoteCoinDenom === denom
+      )
       : [];
 
   const quoteMap = quoteList.map((item) =>

@@ -1,4 +1,5 @@
 @import "./globalVariable.scss";
+@import "./grid.scss";
 
 :root {
   font-family: Montserrat, sans-serif;
@@ -799,14 +800,19 @@ a {
     }
   }
 }
+.assets-withicon {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
 
 .asset_search_input {
   // & .ant-input {
   // border: 0;
   background: none;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   line-height: 1;
-  margin-top: 8px;
+  // margin-top: 8px;
   text-align: right;
   max-width: 200px;
   margin-bottom: 0;
@@ -949,6 +955,23 @@ a {
     }
   }
 }
+.portifolio-tabs {
+  .ant-tabs-nav {
+    margin-bottom: 10px;
+
+    &:before {
+      display: none;
+    }
+
+    .ant-tabs-nav-wrap {
+      width: 100%;
+
+      .ant-tabs-nav-list {
+        width: auto;
+      }
+    }
+  }
+}
 
 .asset-deposit-modal {
   &.ant-modal {
@@ -1008,7 +1031,8 @@ a {
               font-size: 1rem;
               padding: 0 10px;
               .dark-mode & {
-                background: $background-dark2;
+                // background: $background-dark2;
+                background: #0e1529;
                 color: $white;
                 box-shadow: $box-shadow-input-dark;
                 box-shadow: none;
@@ -1083,7 +1107,8 @@ a {
       // box-shadow: $box-shadow-inner-light;
 
       .dark-mode & {
-        background: $background-dark1;
+        // background: $background-dark1;
+        background: #00081b;
         // box-shadow: $box-shadow-inner-dark;
         border: 1px solid white;
       }
@@ -1724,4 +1749,15 @@ a {
       }
     }
   }
+}
+
+.ant-form-item-control-input-content {
+  .alert-label {
+    color: $error-color;
+    text-align: end;
+  }
+}
+
+.assets-icon-2 {
+  margin-left: -15px;
 }

@@ -5,6 +5,7 @@ import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { NextImage } from "../../../shared/image/NextImage";
 import { DotDropdownData, HeaderData, cSwapDropdownData } from "./Data";
+import Lodash from "lodash";
 import {
   C_Logo,
   Comodo,
@@ -155,7 +156,6 @@ const Header = ({
 
     inconsResult()
       .then((result) => {
-        console.log({ result });
         setIconList(result);
       })
       .catch((err) => {
@@ -255,7 +255,7 @@ const Header = ({
         );
       });
 
-      // setAssetBalance(Lodash.sum(value));
+      setAssetBalance(Lodash.sum(value));
     },
     [getPrice, setAssetBalance, assetMap]
   );

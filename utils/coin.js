@@ -1,4 +1,4 @@
-import { ibcAssets } from '../config/ibc_assets';
+import { ibcAssets } from '../config/ibc_asset_api';
 import { comdex } from '../config/network';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';

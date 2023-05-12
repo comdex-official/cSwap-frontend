@@ -50,8 +50,6 @@ const FarmCard = ({
     setIsModalOpen(false)
   }
 
-  // console.log(pool, "pool");
-  // console.log(poolsApr, "poolsApr");
 
   const getMasterPool = () => {
     const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);

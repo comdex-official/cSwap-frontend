@@ -1,5 +1,5 @@
-import { ibcAssets } from './ibc_assets.js';
 import { envConfig } from './envConfig.js';
+import { ibcAssets } from './ibc_asset_api.js';
 
 const getIbcDenomsMap = async () => {
   let myMap = {};

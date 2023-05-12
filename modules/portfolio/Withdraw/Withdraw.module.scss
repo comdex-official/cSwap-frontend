@@ -1,4 +1,4 @@
-@import "../../../assets/scss/variables.scss";
+@import "../../../styles/globalVariable.scss";
 
 .ant-modal {
   &.asstedepositw-modal {
@@ -31,5 +31,15 @@
         color: $secondary-color;
       }
     }
+  }
+}
+
+.available_main_container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-left: 3px;
+  .available_main_container_text {
+    color: white;
   }
 }

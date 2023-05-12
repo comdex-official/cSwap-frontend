@@ -1,34 +1,33 @@
-import { createTxRaw } from "@tharsis/proto";
-import { generateEndpointAccount } from "@tharsis/provider";
+import { createTxRaw } from "@tharsis/proto"
+import { generateEndpointAccount } from "@tharsis/provider"
 import {
   generateEndpointBroadcast,
   generatePostBodyBroadcast
-} from "@tharsis/provider/dist/rest/broadcast";
-import { createTxIBCMsgTransfer } from "@tharsis/transactions";
-import { Button, Form, message, Modal, Spin } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
+} from "@tharsis/provider/dist/rest/broadcast"
+import { createTxIBCMsgTransfer } from "@tharsis/transactions"
+import { Button, Col, Form, message, Modal, Row, Spin } from "antd"
+import Long from "long"
+import * as PropTypes from "prop-types"
+import React, { useCallback, useEffect, useState } from "react"
+import { connect } from "react-redux"
+import Snack from "../../../shared/components/Snack"
 import { fetchProofHeight } from "../../../actions/asset";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import Snack from "../../../components/common/Snack";
-import CustomInput from "../../../components/CustomInput";
-import { comdex } from "../../../config/network";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { DEFAULT_FEE } from "../../../constants/common";
-import { queryBalance } from "../../../services/bank/query";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { initializeIBCChain } from "../../../services/keplr";
-import { fetchTxHash } from "../../../services/transaction";
+import CustomInput from "../../../shared/components/CustomInput"
+import { comdex } from "../../../config/network"
+import { ValidateInputNumber } from "../../../config/_validation"
+import { DEFAULT_FEE } from "../../../constants/common"
+import { queryBalance } from "../../../services/bank/query"
+import { aminoSignIBCTx } from "../../../services/helper"
+import { initializeIBCChain } from "../../../services/keplr"
+import { fetchTxHash } from "../../../services/transaction"
 import {
   amountConversion,
   denomConversion,
   getAmount
-} from "../../../utils/coin";
-import { toDecimals, truncateString } from "../../../utils/string";
-import variables from "../../../utils/variables";
-import "./index.scss";
+} from "../../../utils/coin"
+import { toDecimals, truncateString } from "../../../utils/string"
+import variables from "../../../utils/variables"
+import style from './Deposit.module.scss';
 
 const Deposit = ({
   lang,
@@ -36,7 +35,7 @@ const Deposit = ({
   address,
   handleRefresh,
   balances,
-  assetMap,
+  assetMap
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
@@ -160,29 +159,29 @@ const Deposit = ({
       const sign =
         walletType === "keplr"
           ? await window?.keplr?.signDirect(
-              chain.chainInfo?.chainId,
-              sourceAddress,
-              {
-                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-                authInfoBytes:
-                  transferMsg.signDirect.authInfo.serializeBinary(),
-                chainId: chainInfoForMsg.cosmosChainId,
-                accountNumber: new Long(sender.accountNumber),
-              },
-              { isEthereum: true }
-            )
+            chain.chainInfo?.chainId,
+            sourceAddress,
+            {
+              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+              authInfoBytes:
+                transferMsg.signDirect.authInfo.serializeBinary(),
+              chainId: chainInfoForMsg.cosmosChainId,
+              accountNumber: new Long(sender.accountNumber),
+            },
+            { isEthereum: true }
+          )
           : await window?.leap?.signDirect(
-              chain.chainInfo?.chainId,
-              sourceAddress,
-              {
-                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-                authInfoBytes:
-                  transferMsg.signDirect.authInfo.serializeBinary(),
-                chainId: chainInfoForMsg.cosmosChainId,
-                accountNumber: new Long(sender.accountNumber),
-              },
-              { isEthereum: true }
-            );
+            chain.chainInfo?.chainId,
+            sourceAddress,
+            {
+              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+              authInfoBytes:
+                transferMsg.signDirect.authInfo.serializeBinary(),
+              chainId: chainInfoForMsg.cosmosChainId,
+              accountNumber: new Long(sender.accountNumber),
+            },
+            { isEthereum: true }
+          );
 
       if (sign !== undefined) {
         let rawTx = createTxRaw(
@@ -390,10 +389,10 @@ const Deposit = ({
   return (
     <>
       <Button type="primary" size="small" onClick={showModal}>
-        {variables[lang].deposit} <span className="asset-ibc-btn"> &#62;</span>
+        Deposit <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
-        className="asstedepositw-modal"
+        className="asset-deposit-modal"
         centered={true}
         closable={true}
         footer={null}
@@ -401,11 +400,11 @@ const Deposit = ({
         width={480}
         onCancel={handleCancel}
         onOk={handleOk}
-        closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
+        // closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
         title="IBC Deposit"
       >
         <Form layout="vertical">
-          <Row>
+          <Row style={{ justifyContent: "space-between" }}>
             <Col>
               <Form.Item label="From">
                 <CustomInput
@@ -415,7 +414,7 @@ const Deposit = ({
                 />
               </Form.Item>
             </Col>
-            <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" />
+            {/* <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" /> */}
             <Col>
               <Form.Item label="To">
                 <CustomInput
@@ -427,57 +426,63 @@ const Deposit = ({
             </Col>
           </Row>
           <Row>
-            <Col className="position-relative mt-3">
-              <div className="availabe-balance">
-                {balanceInProgress ? (
-                  <Spin />
-                ) : (
-                  <>
-                    {variables[lang].available}
-                    <span className="ml-1">
-                      {(address &&
-                        availableBalance &&
-                        availableBalance.amount &&
-                        amountConversion(
-                          availableBalance.amount,
-                          assetMap[chain?.ibcDenomHash]?.decimals
-                        )) ||
-                        0}{" "}
-                      {denomConversion(chain?.coinMinimalDenom || "")}
-                    </span>
-                    <span className="assets-maxhalf">
-                      <Button
-                        className=" active"
-                        onClick={() => {
-                          setAmount(
-                            availableBalance?.amount > DEFAULT_FEE
-                              ? amountConversion(
+            <Col className="position-relative mt-3" style={{ width: "100%" }}>
+              <div className={style.available_main_container}>
+                <div className={style.available_main_container_text}>
+                  Amount to Deposit
+                </div>
+                <div className="availabe-balance">
+                  Available
+                  {balanceInProgress ? (
+                    <Spin />
+                  ) : (
+                    <>
+                      <span className="ml-1 asset_balance">
+                        {(address &&
+                          availableBalance &&
+                          availableBalance.amount &&
+                          amountConversion(
+                            availableBalance.amount,
+                            assetMap[chain?.ibcDenomHash]?.decimals
+                          )) ||
+                          0}{" "}
+                        {denomConversion(chain?.coinMinimalDenom || "")}
+                      </span>
+                      <span className="assets-maxhalf">
+                        <Button
+                          className=" active"
+                          onClick={() => {
+                            setAmount(
+                              availableBalance?.amount > DEFAULT_FEE
+                                ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
-                              : amountConversion(
+                                : amountConversion(
                                   availableBalance?.amount,
                                   assetMap[chain?.ibcDenomHash]?.decimals
                                 )
-                          );
-                        }}
-                      >
-                        {variables[lang].max}
-                      </Button>
-                    </span>
-                  </>
-                )}
+                            )
+                          }}
+                        >
+                          Max
+                        </Button>
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
-              <Form.Item label="Amount to Deposit" className="assets-input-box">
+              <Form.Item className="assets-input-box">
                 <CustomInput
                   value={amount}
-                  onChange={(event) => onChange(event.target.value)}
+                  onChange={event => onChange(event.target.value)}
                   validationError={validationError}
+                  className="ibc_modal_input"
                 />
               </Form.Item>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ justifyContent: "center" }}>
             <Col className="text-center mt-2">
               <Button
                 loading={inProgress}
@@ -491,31 +496,31 @@ const Deposit = ({
                 className="btn-filled modal-btn"
                 onClick={signIBCTx}
               >
-                {variables[lang].deposit}
+                Deposit
               </Button>
             </Col>
           </Row>
         </Form>
       </Modal>
     </>
-  );
-};
+  )
+}
 
 Deposit.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  chain: PropTypes.any,
-};
+  chain: PropTypes.any
+}
 
-const stateToProps = (state) => {
+const stateToProps = state => {
   return {
     lang: state.language,
     address: state.account.address,
     refreshBalance: state.account.refreshBalance,
-    assetMap: state.asset.map,
-  };
-};
+    assetMap: state.asset.map
+  }
+}
 
-export default connect(stateToProps)(Deposit);
+export default connect(stateToProps)(Deposit)

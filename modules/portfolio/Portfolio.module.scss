@@ -1,4 +1,4 @@
-@import '../../styles/globalVariable.scss';
+@import "../../styles/globalVariable.scss";
 
 .portfolio__wrap {
   max-width: 1500px;
@@ -271,5 +271,16 @@
   }
 
   &.dark {
+  }
+}
+
+.portifolio_toggle_main_row {
+  position: absolute;
+  right: 0;
+  top: -18%;
+  justify-content: flex-end;
+  @media only screen and (max-width: 800px) {
+    position: unset;
+    justify-content: flex-start;
   }
 }

@@ -7,11 +7,10 @@ import PortfolioTable from "./PortfollioTable";
 import { Button, Input, message, Switch, Table, Tabs } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
 import { setLPPrices, setMarkets } from "../../actions/oracle";
-import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
@@ -20,395 +19,152 @@ import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
+  getDenomBalance
 } from "../../utils/coin";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
+  formatNumber,
   marketPrice,
 } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
-import { Icon } from "@/shared/image/Icon";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
+import { Icon } from "../../shared/image/Icon";
+import PortifolioTab from './PortofolioTab'
+import {
+  queryPoolCoinDeserialize,
+  queryPoolsList,
+  queryPoolSoftLocks
+} from "../../services/liquidity/query";
+import { setPools, setUserLiquidityInPools } from "../../actions/liquidity";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import variables from "../../utils/variables";
 
 const Portfolio = ({
   lang,
   assetBalance,
   balances,
   markets,
-  parent,
-  refreshBalance,
   assetMap,
-  assetDenomMap,
-  setMarkets,
-  setLPPrices,
-  lpPrices,
+  address,
+  setPools,
+  setUserLiquidityInPools,
+  userLiquidityInPools,
 }) => {
   const theme = "dark";
 
   const [active, setActive] = useState("Assets");
 
-  const handleActive = (item) => {
-    setActive(item);
-  };
 
-  const TabData = ["Assets", "Liquidity", "History"];
+  const getUserLiquidity = useCallback(
+    (pool) => {
+      if (address) {
+        queryPoolSoftLocks(address, pool?.id, (error, result) => {
+          if (error) {
+            return;
+          }
 
-  const [pricesInProgress, setPricesInProgress] = useState(false);
-  const [isHideToggleOn, setHideToggle] = useState(false);
-  const [searchKey, setSearchKey] = useState();
-  const [filterValue, setFilterValue] = useState("1");
+          const availablePoolToken =
+            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-  const dispatch = useDispatch();
+          const activeSoftLock = result?.activePoolCoin;
+          const queuedSoftLocks = result?.queuedPoolCoin;
 
-  const tabItems = [
-    {
-      key: "1",
-      label: "Assets",
+          const queuedAmounts =
+            queuedSoftLocks &&
+            queuedSoftLocks.length > 0 &&
+            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+          const userLockedAmount =
+            Number(
+              queuedAmounts?.length > 0 &&
+              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+            ) + Number(activeSoftLock?.amount) || 0;
+
+
+
+
+          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+
+          queryPoolCoinDeserialize(
+            pool?.id,
+            totalPoolToken,
+            (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              const providedTokens = result?.coins;
+              const totalLiquidityInDollar =
+                Number(
+                  amountConversion(
+                    providedTokens?.[0]?.amount,
+                    assetMap[providedTokens?.[0]?.denom]?.decimals
+                  )
+                ) *
+                marketPrice(markets, providedTokens?.[0]?.denom) +
+                Number(
+                  amountConversion(
+                    providedTokens?.[1]?.amount,
+                    assetMap[providedTokens?.[1]?.denom]?.decimals
+                  )
+                ) *
+                marketPrice(markets, providedTokens?.[1]?.denom);
+
+              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
+            }
+          );
+        });
+      }
     },
-    {
-      key: "2",
-      label: "LF Tokens",
+    [assetMap, address, markets, balances]
+  );
+
+  const fetchPools = useCallback(
+    (offset, limit, countTotal, reverse) => {
+      queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setPools(result.pools, result.pagination);
+
+        const userPools = result?.pools;
+        if (
+          balances &&
+          balances.length > 0 &&
+          userPools &&
+          userPools.length > 0
+        ) {
+          userPools.forEach((item) => {
+            return getUserLiquidity(item);
+          });
+        }
+      });
     },
-  ];
-
-  const handleBalanceRefresh = () => {
-    dispatch({
-      type: "BALANCE_REFRESH_SET",
-      value: refreshBalance + 1,
-    });
-
-    updatePrices();
-  };
+    [balances, getUserLiquidity, setPools]
+  );
 
   useEffect(() => {
-    setHideToggle(localStorage.getItem("hideToggle") === "true");
-  }, []);
-
-  const handleHideSwitchChange = (value) => {
-    localStorage.setItem("hideToggle", value);
-    setHideToggle(value);
-  };
-
-  const onSearchChange = (searchKey) => {
-    setSearchKey(searchKey.trim().toLowerCase());
-  };
-
-  const updatePrices = () => {
-    setPricesInProgress(true);
-
-    fetchRestPrices((error, result) => {
-      setPricesInProgress(false);
-
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setMarkets(result.data);
-    });
-  };
-
-  const columns = [
-    {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
-    },
-    {
-      title: "No. of Tokens",
-      dataIndex: "noOfTokens",
-      key: "noOfTokens",
-      align: "left",
-      render: (tokens) => (
-        <>
-          <p>{commaSeparator(Number(tokens || 0))}</p>
-        </>
-      ),
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      align: "left",
-      width: 150,
-      render: (price) => (
-        <>
-          <p className="text-left">
-            ${formateNumberDecimalsAuto({ price: Number(price?.value) || 0 })}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-      align: "left",
-      render: (amount) => (
-        <>
-          <p>
-            $
-            {commaSeparator(
-              Number(amount?.value || 0).toFixed(DOLLAR_DECIMALS)
-            )}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "IBC Deposit",
-      dataIndex: "ibcdeposit",
-      key: "ibcdeposit",
-      align: "left",
-      // width: 210,
-      render: (value) => {
-        if (value) {
-          return value?.depositUrlOverride ? (
-            <Button type="primary" size="small">
-              <a
-                href={value?.depositUrlOverride}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Deposit{" "}
-                <span className="hyperlink-icon">
-                  {" "}
-                  <Icon className={"bi bi-x-lg"} />
-                </span>
-              </a>
-            </Button>
-          ) : (
-            <Deposit
-              chain={value}
-              balances={balances}
-              handleRefresh={handleBalanceRefresh}
-            />
-          );
-        }
-      },
-    },
-    {
-      title: "IBC Withdraw",
-      dataIndex: "ibcwithdraw",
-      key: "ibcwithdraw",
-      width: 110,
-      render: (value) => {
-        if (value) {
-          return value?.withdrawUrlOverride ? (
-            <Button type="primary" size="small">
-              <a
-                href={value?.withdrawUrlOverride}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Withdraw{" "}
-                <span className="hyperlink-icon">
-                  {" "}
-                  <Icon className={"bi bi-x-lg"} />
-                </span>
-              </a>
-            </Button>
-          ) : (
-            <Withdraw
-              chain={value}
-              balances={balances}
-              handleRefresh={handleBalanceRefresh}
-            />
-          );
-        }
-      },
-    },
-  ];
-
-  const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
-  };
-
-  let appAssets = AssetList?.tokens?.filter(
-    (item) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
-  );
-
-  let ibcBalances = appAssets?.map((token) => {
-    const ibcBalance = balances.find(
-      (item) => item.denom === token?.ibcDenomHash
+    fetchPools(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false
     );
+  }, [markets, balances, fetchPools]);
 
-    const value =
-      getPrice(ibcBalance?.denom) *
-      amountConversion(
-        ibcBalance?.amount,
-        assetMap[ibcBalance?.denom]?.decimals
-      );
-    return {
-      chainInfo: getChainConfig(token),
-      coinMinimalDenom: token?.coinMinimalDenom,
-      symbol: token?.symbol,
-      balance: {
-        amount: ibcBalance?.amount
-          ? amountConversion(
-              ibcBalance.amount,
-              assetMap[ibcBalance?.denom]?.decimals
-            )
-          : 0,
-        value: value || 0,
-        denom: ibcBalance?.denom,
-      },
-
-      sourceChannelId: token.comdexChannel,
-      destChannelId: token.channel,
-      ibcDenomHash: token?.ibcDenomHash,
-      explorerUrlToTx: token?.explorerUrlToTx,
-      depositUrlOverride: token?.depositUrlOverride,
-      withdrawUrlOverride: token?.withdrawUrlOverride,
-    };
-  });
-
-  const nativeCoin = balances.filter(
-    (item) => item.denom === comdex?.coinMinimalDenom
-  )[0];
-  const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
-
-  const cmstCoin = balances.filter(
-    (item) => item.denom === cmst?.coinMinimalDenom
-  )[0];
-
-  const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
-
-  const harborCoin = balances.filter(
-    (item) => item.denom === harbor?.coinMinimalDenom
-  )[0];
-  const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
-
-  let currentChainData = [
-    {
-      key: comdex.chainId,
-      symbol: comdex?.symbol,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <Icon className={"bi bi-x-lg"} />
-            </div>{" "}
-            {denomConversion(comdex?.coinMinimalDenom)}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
-      price: {
-        value: getPrice(comdex?.coinMinimalDenom),
-        denom: comdex?.coinMinimalDenom,
-      },
-
-      amount: {
-        value: amountConversion(nativeCoinValue || 0),
-        denom: comdex?.coinMinimalDenom,
-      },
-    },
-    {
-      key: cmst.coinMinimalDenom,
-      symbol: cmst?.symbol,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <Icon className={"bi bi-x-lg"} />
-            </div>{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      price: {
-        value: getPrice(cmst?.coinMinimalDenom),
-        denom: cmst?.coinMinimalDenom,
-      },
-
-      amount: {
-        value: amountConversion(cmstCoinValue || 0),
-        denom: cmst?.coinMinimalDenom,
-      },
-    },
-    {
-      key: harbor.coinMinimalDenom,
-      symbol: harbor?.symbol,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <Icon className={"bi bi-x-lg"} />
-            </div>{" "}
-            {denomConversion(harbor?.coinMinimalDenom)}{" "}
-          </div>
-        </>
-      ),
-      noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
-      price: {
-        value: getPrice(harbor?.coinMinimalDenom),
-        denom: harbor?.coinMinimalDenom,
-      },
-
-      amount: {
-        value: amountConversion(harborCoinValue || 0),
-        denom: harbor?.coinMinimalDenom,
-      },
-    },
-  ];
-
-  ibcBalances =
-    parent && parent === "portfolio"
-      ? ibcBalances.filter((item) => item?.balance?.amount > 0)
-      : ibcBalances;
-
-  const tableIBCData =
-    ibcBalances &&
-    ibcBalances.map((item) => {
-      return {
-        key: item?.coinMinimalDenom,
-        symbol: item?.symbol,
-        asset: (
-          <>
-            <div className="assets-withicon">
-              <div className="assets-icon">
-                <Icon className={"bi bi-x-lg"} />
-              </div>{" "}
-              {denomConversion(item?.ibcDenomHash)}{" "}
-            </div>
-          </>
-        ),
-        noOfTokens: Number(item?.balance?.amount || 0)?.toFixed(
-          comdex?.coinDecimals
-        ),
-        price: {
-          value: getPrice(item?.ibcDenomHash),
-          denom: item?.ibcDenomHash,
-        },
-        amount: item.balance,
-        ibcdeposit: item,
-        ibcwithdraw: item,
-      };
-    });
-
-  let allTableData = Lodash.concat(currentChainData, tableIBCData);
-
-  let tableData =
-    isHideToggleOn && filterValue === "1"
-      ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
-      : allTableData;
-
-  tableData =
-    searchKey && filterValue === "1"
-      ? tableData?.filter((item) => {
-          return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
-        })
-      : tableData;
-
-  let balanceExists = allTableData?.find(
-    (item) => Number(item?.noOfTokens) > 0
+  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
+    (a, b) => a + b,
+    0
   );
 
-  const onChange = (key) => {
-    setFilterValue(key);
+  const getTotalValue = useCallback(() => {
+    const total = Number(assetBalance) + Number(totalFarmBalance);
+    return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
+  }, [assetBalance, totalFarmBalance]);
+
+  const handleActive = (item) => {
+    setActive(item);
   };
 
   const Options = {
@@ -423,7 +179,7 @@ const Portfolio = ({
       enabled: false,
     },
     title: {
-      text: "137.87 USD",
+      text: `${getTotalValue()} <br /> ${variables[lang].USD}`,
       verticalAlign: "middle",
       floating: true,
       style: {
@@ -459,6 +215,27 @@ const Portfolio = ({
         },
       },
     },
+    tooltip: {
+      formatter: function () {
+        return (
+          '<div style="text-align:center; font-weight:800; ">' + "$" +
+          formatNumber(this.y.toFixed(DOLLAR_DECIMALS)) +
+          "<br />" +
+          '<small style="font-size: 10px; font-weight:400;">' +
+          this.key +
+          "</small>" +
+          "</div>"
+        );
+      },
+      useHTML: true,
+      backgroundColor: "#222A49",
+      borderColor: "#222A49",
+      borderRadius: 10,
+      zIndex: 99,
+      style: {
+        color: "#fff",
+      },
+    },
     series: [
       {
         states: {
@@ -469,9 +246,14 @@ const Portfolio = ({
         name: "",
         data: [
           {
-            name: "Asset Balance",
-            y: 13.52,
-            color: "#1E3B6F",
+            name: variables[lang].farm_balance,
+            y: Number(totalFarmBalance) || 0,
+            color: "#1A4F94",
+          },
+          {
+            name: variables[lang].asset_balance,
+            y: Number(assetBalance) || 0,
+            color: "#123C73",
           },
         ],
       },
@@ -480,136 +262,96 @@ const Portfolio = ({
 
   return (
     <div
-      className={`${styles.portfolio__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
-      }`}
+      className={`${styles.portfolio__wrap} ${theme === "dark" ? styles.dark : styles.light
+        }`}
     >
       <div
-        className={`${styles.portfolio__main} ${
-          theme === "dark" ? styles.dark : styles.light
-        }`}
+        className={`${styles.portfolio__main} ${theme === "dark" ? styles.dark : styles.light
+          }`}
       >
         <div
-          className={`${styles.portfolio__header__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
+          className={`${styles.portfolio__header__wrap} ${theme === "dark" ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.portfolio__header__element__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__header__element__wrap} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <HighchartsReact highcharts={Highcharts} options={Options} />
-            {/* <div
-              className={`${styles.portfolio__element__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.portfolio__element__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'137.87 USD'}
-              </div>
-            </div> */}
           </div>
 
           <div
-            className={`${styles.portfolio__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               {"Total Value"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
-              {"137.87 USD"}
+              {getTotalValue()} {variables[lang].USD}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               <div />
               {"Asset Balance"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
-              {"137.87 USD"}
+              {commaSeparatorWithRounding(
+                assetBalance,
+                DOLLAR_DECIMALS
+              )}{" "}
+              {variables[lang].USD}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               <div /> {"Farm Balance"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
-              {"137.87 USD"}
+              {commaSeparator(
+                Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
+              )}{" "}
+              {variables[lang].USD}
             </div>
           </div>
         </div>
         <div
-          className={`${styles.portfolio__body__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
-        >
-          <div
-            className={`${styles.portfolio__tab} ${
-              theme === "dark" ? styles.dark : styles.light
+          className={`${styles.portfolio__table} ${theme === "dark" ? styles.dark : styles.light
             }`}
-          >
-            <Tab data={TabData} active={active} handleActive={handleActive} />
-          </div>
-          <div
-            className={`${styles.portfolio__search} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            <Search theme={theme} type={1} placeHolder="Search Asset.." />
-          </div>
-        </div>
-        <div
-          className={`${styles.portfolio__table} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
         >
-          <PortfolioTable theme={theme} active={active} />
+          <PortifolioTab />
         </div>
       </div>
     </div>
   );
 };
 
-Assets.propTypes = {
+Portfolio.propTypes = {
   lang: PropTypes.string.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
@@ -638,6 +380,9 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     assetMap: state.asset.map,
     assetDenomMap: state.asset.appAssetMap,
+    userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    poolBalance: state.account.balances.pool,
+    address: state.account.address,
   };
 };
 
@@ -645,6 +390,8 @@ const actionsToProps = {
   setAccountBalances,
   setMarkets,
   setLPPrices,
+  setPools,
+  setUserLiquidityInPools,
 };
 
 export default connect(stateToProps, actionsToProps)(Portfolio);
