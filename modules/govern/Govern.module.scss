@@ -36,7 +36,7 @@
         .govern_bottom_filters_container {
           .governcard_head {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             gap: 15px;
             padding: 18px;
             text-align: center;
@@ -369,6 +369,9 @@
       background-color: $primary-color-light;
       background: blueviolet;
       box-shadow: none;
+    }
+    .vot_end {
+      text-align: end;
     }
     .vote_button {
       display: flex;

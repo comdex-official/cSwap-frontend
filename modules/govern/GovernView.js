@@ -199,7 +199,7 @@ const GovernView = ({
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 160,
+      height: 180,
       width: 220,
       margin: 5,
     },
@@ -222,7 +222,7 @@ const GovernView = ({
     plotOptions: {
       pie: {
         showInLegend: false,
-        size: "120%",
+        size: "105%",
         innerSize: "75%",
         borderWidth: 0,
         className: "highchart_chart",
@@ -347,10 +347,13 @@ const GovernView = ({
                       Your Vote : <span> {proposalOptionMap[votedOption]}</span>
                     </div>
                   )}
+
                   <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
                 </div>
               ) : (
-                <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                <div className={style.vot_end}>
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                </div>
               )}
 
               <div className={style.charts_Value_container}>

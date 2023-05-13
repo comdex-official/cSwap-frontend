@@ -192,14 +192,13 @@ a {
 .ant-btn {
   border: 0;
   font-size: $font-size-base;
-  padding: 0 22px;
+  padding: 5px 35px;
   color: $white;
   background: $btn-bg-dark;
   border-radius: $base-border-radius;
   cursor: pointer;
   transition: all 300ms ease-in-out;
   height: 36px;
-  line-height: 36px;
 
   &:not(.ant-btn-round) {
     border-radius: 0;
@@ -1760,4 +1759,76 @@ a {
 
 .assets-icon-2 {
   margin-left: -15px;
+}
+
+.filter-select {
+  .ant-select-selector {
+    background: $background-dark1;
+    border-radius: 40px;
+    padding: 0 40px;
+    color: $white;
+
+    .dark-mode & {
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+      border: 1px solid #e2f7e5;
+    }
+    &:hover {
+      background: $background-dark2;
+
+      .dark-mode & {
+        background: $background-dark2;
+        border: 1px solid #e2f7e5;
+      }
+    }
+  }
+
+  .ant-select-arrow {
+    i {
+      color: $white;
+
+      .dark-mode & {
+        color: $white;
+      }
+    }
+  }
+}
+
+.ant-select-dropdown {
+  border-radius: 10px;
+  .dark-mode & {
+    background: #0d1627;
+  }
+  .ant-select-item-empty {
+    .dark-mode & {
+      .ant-empty-description {
+        color: $white;
+      }
+    }
+  }
+  .ant-select-item {
+    .ant-select-item-option-content {
+      .dark-mode & {
+        color: $white;
+      }
+    }
+    &.ant-select-item-option-selected,
+    &.ant-select-item-option-active,
+    &:hover {
+      background: $background-light2;
+      font-weight: normal;
+      color: $secondary-color;
+
+      .dark-mode & {
+        background: $background-select-hover-dark;
+      }
+    }
+  }
+}
+
+.vote_now {
+  text-align: end;
 }

@@ -30,7 +30,7 @@ import { queryAllBalances } from "../../../services/bank/query";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  NETWORK_TAG
+  NETWORK_TAG,
 } from "../../../constants/common";
 import ConnectModal from "./ConnectModal";
 import variables from "../../../utils/variables";
@@ -443,8 +443,10 @@ const Header = ({
               } ${isActive(item.route) ? styles.active : ""}`}
             >
               <div
-               className={styles.header__name}
-                onClick={() => item?.id === 5 ? showModal(): router.push(item.route)}
+                className={styles.header__name}
+                onClick={() =>
+                  item?.id === 5 ? showModal() : router.push(item.route)
+                }
               >
                 {item.name}
               </div>
@@ -499,7 +501,12 @@ const Header = ({
               </div>
             </MyDropdown>
 
-            <div className={styles.header__faucet}>
+            <div
+              className={styles.header__faucet}
+              onClick={() =>
+                window.open("https://faucet.comdex.one/", "_blank")
+              }
+            >
               <NextImage src={Faucet} alt="Logo_Dark" />
               <div
                 className={`${styles.header__faucet__title} ${
@@ -511,12 +518,10 @@ const Header = ({
             </div>
 
             {address ? (
-              <div className="connected_div" >
-              <div className="connected_left">
-            <div className="testnet-top">
-              {NETWORK_TAG || "Testnet"}
-            </div>
-          </div>
+              <div className="connected_div">
+                <div className="connected_left">
+                  <div className="testnet-top">{NETWORK_TAG || "Testnet"}</div>
+                </div>
                 <DisconnectModal />
               </div>
             ) : (
@@ -526,11 +531,9 @@ const Header = ({
                   placement="bottomRight"
                   trigger={["click"]}
                   overlayClassName="dropconnect-overlay"
-                
                 >
                   <div className={styles.header__wallet}>
                     {variables[lang]?.connect}
-                   
                   </div>
                 </Dropdown>
               </>

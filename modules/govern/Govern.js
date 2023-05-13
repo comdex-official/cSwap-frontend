@@ -11,6 +11,7 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 import style from "./Govern.module.scss";
 import { Progress } from "@mantine/core";
 import NoDataIcon from "../../shared/components/NoDataIcon";
+import { Icon } from "../../shared/image/Icon";
 
 const { Option } = Select;
 
@@ -137,9 +138,10 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                     </a>
                     <Select
                       defaultValue="Filter"
-                      className="select-primary ml-2"
+                      className="select-primary ml-2 filter-select"
                       style={{ width: 120 }}
                       onChange={(e) => filterAllProposal(e)}
+                      suffixIcon={<Icon className={"bi bi-chevron-down"} />}
                     >
                       <Option value="all" className="govern-select-option">
                         All
