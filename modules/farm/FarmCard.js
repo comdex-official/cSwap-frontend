@@ -7,12 +7,12 @@ import { useState } from "react"
 import styles from "./Farm.module.scss"
 import { ATOM, CMDS, Cup, Current, Pyramid, Ranged } from "../../shared/image"
 import dynamic from "next/dynamic"
-import { Modal, Tooltip } from "antd"
+import { Modal, Tooltip, message } from "antd"
 import Liquidity from "./Liquidity"
 import Card from "../../shared/components/card/Card"
 import { setUserLiquidityInPools } from "../../actions/liquidity";
 import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
-import { amountConversion, commaSeparatorWithRounding, denomConversion, getDenomBalance } from "../../utils/coin";
+import { amountConversion, commaSeparatorWithRounding, denomConversion, fixedDecimal, getDenomBalance } from "../../utils/coin";
 import { commaSeparator, decimalConversion, marketPrice } from "../../utils/number";
 import { queryPoolCoinDeserialize, queryPoolSoftLocks } from "../../services/liquidity/query";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
@@ -49,7 +49,7 @@ const FarmCard = ({
   const handleCancel = () => {
     setIsModalOpen(false)
   }
-
+  console.log(poolsApr, "poolsApr");
 
   const getMasterPool = () => {
     const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);
@@ -64,6 +64,39 @@ const FarmCard = ({
     else {
       return false
     }
+  }
+
+  const calculateMasterPoolApr = () => {
+    const totalMasterPoolApr = poolsApr?.incentive_rewards
+      .filter((reward) => reward.master_pool)
+    // .reduce((acc, reward) => acc + reward.apr, 0);
+
+    // console.log(totalMasterPoolApr?.[0]?.apr, "totalMasterPoolApr");
+    return fixedDecimal(totalMasterPoolApr?.[0]?.apr)
+  }
+
+  const calculateChildPoolApr = () => {
+    const totalApr = poolsApr?.incentive_rewards
+      .filter((reward) => !reward.master_pool)
+      .reduce((acc, reward) => acc + reward.apr, 0);
+
+    const swapFeeApr = poolsApr?.swap_fee_rewards.reduce(
+      (acc, reward) => acc + reward.apr,
+      0
+    );
+    const total = totalApr + swapFeeApr;
+    // console.log(total, "Total chaild pool apr");
+    return fixedDecimal(total);
+  }
+
+  const calculateApr = () => {
+    getMasterPool()
+    if (getMasterPool()) {
+      return calculateMasterPoolApr()
+    } else {
+      return calculateChildPoolApr()
+    }
+
   }
 
   const calculatePoolLiquidity = useCallback(
@@ -324,10 +357,7 @@ const FarmCard = ({
                 className={`${styles.farmCard__element__right__incentive} ${theme === "dark" ? styles.dark : styles.light
                   }`}
               >
-                {checkExternalIncentives() && <div
-                  className={`${styles.farmCard__element__right__incentive} ${theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                >
+                {checkExternalIncentives() &&
                   <div
                     className={`${styles.farmCard__element__right__pool__title} ${theme === 'dark' ? styles.dark : styles.light
                       }`}
@@ -335,7 +365,7 @@ const FarmCard = ({
                     <NextImage src={Cup} alt="Logo" />
                     {'External Incentives'}
                   </div>
-                </div>}
+                }
               </div>
             </div>
           </div>
@@ -357,7 +387,8 @@ const FarmCard = ({
                 className={`${styles.farmCard__element__right__details__title
                   } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                {"14.45%"}
+                {/* {"14.45%"} */}
+                {calculateApr()} %
                 <Icon className={"bi bi-arrow-right"} />
               </div>
               <div

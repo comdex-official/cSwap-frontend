@@ -1,5 +1,6 @@
 import { ibcAssets } from '../config/ibc_asset_api';
 import { comdex } from '../config/network';
+import { DOLLAR_DECIMALS } from '../constants/common';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';
 
@@ -17,6 +18,7 @@ const getDenomToDisplaySymbolMap = async () => {
 };
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
+
 
 export const getAmount = (selectedAmount, decimal) => {
   let result =
@@ -36,7 +38,7 @@ export const amountConversionWithComma = (amount, decimals) => {
 
   return commaSeparator(
     Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
-      Math.pow(10, comdex.coinDecimals)
+    Math.pow(10, comdex.coinDecimals)
   );
 };
 
@@ -51,7 +53,7 @@ export const amountConversion = (amount, decimals) => {
 
   return String(
     Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
-      Math.pow(10, comdex.coinDecimals)
+    Math.pow(10, comdex.coinDecimals)
   );
 };
 
@@ -86,9 +88,9 @@ export const orderPriceReverseConversion = (amount) => {
 
 export const denomConversion = (denom) => {
   // Remove: below if for local testing
-  if (denom === 'weth-wei') {
-    return 'WETH';
-  }
+  // if (denom === 'weth-wei') {
+  //   return 'WETH';
+  // }
 
   if (denomToDisplaySymbol[denom]) {
     return denomToDisplaySymbol[denom];
@@ -117,3 +119,12 @@ export const getDenomBalance = (balances, denom) =>
   balances.length > 0 &&
   balances.find((item) => item.denom === denom) &&
   balances.find((item) => item.denom === denom).amount;
+
+export const fixedDecimal = (_number = 0, _decimal = DOLLAR_DECIMALS) => {
+  return (
+    String(
+      Math.floor(_number * Math.pow(10, _decimal)) /
+      Math.pow(10, _decimal)
+    )
+  )
+}

@@ -160,7 +160,7 @@ const PortofolioTable = ({
                 Deposit{" "}
                 <span className="hyperlink-icon">
                   {" "}
-                  <SvgIcon name="hyperlink" />
+                  {/* <SvgIcon name="hyperlink" /> */}
                 </span>
               </a>
             </Button>
@@ -191,7 +191,7 @@ const PortofolioTable = ({
                 Withdraw{" "}
                 <span className="hyperlink-icon">
                   {" "}
-                  <SvgIcon name="hyperlink" />
+                  {/* <SvgIcon name="hyperlink" /> */}
                 </span>
               </a>
             </Button>

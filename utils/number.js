@@ -58,8 +58,8 @@ export const getAMP = (currentPrice, minimumPrice, maximumPrice) => {
     1 /
     (1 -
       (1 / 2) *
-        (Math.sqrt(minimumPrice / currentPrice) +
-          Math.sqrt(currentPrice / maximumPrice)))
+      (Math.sqrt(minimumPrice / currentPrice) +
+        Math.sqrt(currentPrice / maximumPrice)))
   );
 };
 
@@ -103,7 +103,7 @@ export const formateNumberDecimalsAuto = ({
   return res;
 };
 
-export const formateNumberDecimals = (price, decimals = 2) => {
+export const formateNumberDecimals = (price, decimals = DOLLAR_DECIMALS) => {
   return new Intl.NumberFormat('en-US', {
     currency: 'USD',
     maximumFractionDigits: decimals,
