@@ -453,22 +453,6 @@ const Header = ({
           ))}
         </div>
 
-        <Modal
-          className={"modal__wrap"}
-          title="Bridge"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <iframe
-            src="https://dev-transit.comdex.one/"
-            frameBorder="0"
-            width={"100%"}
-            height={"580px"}
-            style={{ borderRadius: "10px", background: "#030b1e" }}
-          ></iframe>
-        </Modal>
-
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
             <MyDropdown
@@ -496,6 +480,7 @@ const Header = ({
                   className={`bi bi-grid-fill ${
                     theme === "dark" ? styles.icon_dark : styles.icon_light
                   }`}
+                  size={"0.8rem"}
                 />
               </div>
             </MyDropdown>
@@ -543,15 +528,31 @@ const Header = ({
               trigger={["click"]}
             >
               <Icon
-                className={`bi bi-three-dots-vertical ${
+                className={`bi bi-three-dots-vertical cursor ${
                   theme === "dark" ? styles.icon_dark : styles.icon_light
                 }`}
-                size={"2rem"}
+                size={"1.5rem"}
               />
             </MyDropdown>
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>
         </div>
+
+        <Modal
+          className={"modal__wrap"}
+          title="Bridge"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <iframe
+            src="https://dev-transit.comdex.one/"
+            frameBorder="0"
+            width={"100%"}
+            height={"580px"}
+            style={{ borderRadius: "10px", background: "#030b1e" }}
+          ></iframe>
+        </Modal>
       </div>
     </div>
   );

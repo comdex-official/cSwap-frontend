@@ -9,8 +9,9 @@
 
 .tradeCard__wrap {
   width: 100%;
-  margin-top: 45px;
-  max-width: 650px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  max-width: 500px;
 }
 
 .tradeCard__main {
@@ -40,19 +41,19 @@
 
   span {
     margin-left: 10px;
-    font-weight: 600;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 14px;
     line-height: 22px;
     text-align: center;
     color: #ffffff;
 
-    @media screen and (max-width: $XXL) {
-      font-size: 13px;
-    }
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 13px;
+    // }
 
-    @media screen and (max-width: $XS) {
-      font-size: 10px;
-    }
+    // @media screen and (max-width: $XS) {
+    //   font-size: 10px;
+    // }
 
     &.light {
     }
@@ -93,19 +94,19 @@
 }
 
 .tradeCard__body__limit__body {
-  font-weight: 400;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 8px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 7px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 7px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 5px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 5px;
+  // }
 
   &.light {
   }
@@ -142,18 +143,18 @@
 }
 
 .tradeCard__body__left__title {
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 14px;
   line-height: 22px;
   color: #acbfdb;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 13px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 13px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 10px;
+  // }
 
   &.light {
   }
@@ -225,19 +226,22 @@
 .tradeCard__swap {
   margin: 20px 0px;
   text-align: center;
+  img {
+    height: 25px;
+    cursor: pointer;
+  }
 }
 
 .tradeCard__body__right__el1 {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .tradeCard__body__right__el2 {
-  margin-bottom: 4px;
+  // margin-bottom: 4px;
   font-weight: 500;
   font-size: 32px;
-  line-height: 39px;
+  line-height: 20px;
   text-align: right;
   color: #ffffff;
   opacity: 0.5;
@@ -284,18 +288,18 @@
 
 .tradeCard__body__right__el3 {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 8px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 7px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 7px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 5px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 5px;
+  // }
 
   &.light {
   }
@@ -306,17 +310,17 @@
 
 .tradeCard__body__right__el4 {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 8px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
-  @media screen and (max-width: $XXL) {
-    font-size: 7px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 7px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 5px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 5px;
+  // }
 
   &.light {
   }
@@ -327,18 +331,18 @@
 
 .tradeCard__body__right__el1__title {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 10px;
   line-height: 20px;
   text-align: right;
   color: #acbfdb;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 11px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 11px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.light {
   }
@@ -361,20 +365,20 @@
   margin: 0px 6px;
   background: #fe4350;
   border-radius: 5px;
-  padding: 5px 10px;
-  font-weight: 700;
-  font-size: 12px;
+  padding: 2px 8px;
+  font-weight: 400;
+  font-size: 10px;
   line-height: 15px;
   text-align: center;
   color: #ffffff;
+  cursor: pointer;
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 7px;
+  // }
 
-  @media screen and (max-width: $XXL) {
-    font-size: 7px;
-  }
-
-  @media screen and (max-width: $XS) {
-    font-size: 5px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 5px;
+  // }
 
   &.light {
   }
@@ -384,21 +388,22 @@
 }
 
 .tradeCard__body__right__el1__footer {
-  font-weight: 700;
-  font-size: 12px;
+  font-weight: 400;
+  font-size: 10px;
   line-height: 15px;
   text-align: center;
   color: #ffffff;
   background: #0f2048;
   border-radius: 5px;
-  padding: 5px 10px;
-  @media screen and (max-width: $XXL) {
-    font-size: 7px;
-  }
+  padding: 2px 8px;
+  cursor: pointer;
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 7px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 5px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 5px;
+  // }
 
   &.light {
   }
@@ -421,8 +426,8 @@
 
 .tradeCard__description__el2 {
   margin-top: 20px;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 11px;
   line-height: 20px;
   width: 90%;
   color: #80acce;
@@ -443,19 +448,19 @@
 }
 
 .tradeCard__description__left_title {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 11px;
   line-height: 20px;
   color: #80acce;
   margin-bottom: 10px;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 11px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 11px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.light {
   }
@@ -465,18 +470,18 @@
 }
 
 .tradeCard__description__right_title {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 11px;
   line-height: 20px;
   text-align: right;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 11px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 11px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.light {
     color: #ffffff;

@@ -138,7 +138,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                     </a>
                     <Select
                       defaultValue="Filter"
-                      className="select-primary ml-2 filter-select"
+                      className="select-primary filter-select"
                       style={{ width: 120 }}
                       onChange={(e) => filterAllProposal(e)}
                       suffixIcon={<Icon className={"bi bi-chevron-down"} />}
@@ -206,7 +206,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                 </div>
                               </div>
                             </div>
-                            <h3>{item?.content?.title}</h3>
+                            <h4>{item?.content?.title}</h4>
                             <p>{item?.content?.description} </p>
                           </div>
                           <div className={style.right_section}>
@@ -249,8 +249,8 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                       className={`${style.boder} ${style.no_border}`}
                                     ></div>
                                     <div className={style.text_container}>
-                                      <div className="title">No</div>
-                                      <div className="vote">
+                                      <div className={style.title}>No</div>
+                                      <div className={style.vote}>
                                         {`${calculateVotes(
                                           item?.final_tally_result?.no,
                                           item?.final_tally_result
@@ -263,8 +263,10 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                       className={`${style.boder} ${style.veto_border}`}
                                     ></div>
                                     <div className={style.text_container}>
-                                      <div className="title">No With Veto</div>
-                                      <div className="vote">
+                                      <div className={style.title}>
+                                        No With Veto
+                                      </div>
+                                      <div className={style.vote}>
                                         {`${calculateVotes(
                                           item?.final_tally_result
                                             ?.no_with_veto,
@@ -278,8 +280,8 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                       className={`${style.boder} ${style.abstain_border}`}
                                     ></div>
                                     <div className={style.text_container}>
-                                      <div className="title">Abstain</div>
-                                      <div className="vote">
+                                      <div className={style.title}>Abstain</div>
+                                      <div className={style.vote}>
                                         {`${calculateVotes(
                                           item?.final_tally_result?.abstain,
                                           item?.final_tally_result

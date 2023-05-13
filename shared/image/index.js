@@ -22,6 +22,7 @@ import Telegram from "../../public/assets/images/tele.svg";
 import Twitter from "../../public/assets/images/twitter.svg";
 import Medium from "../../public/assets/images/medium.svg";
 import Info from "../../public/assets/images/info.svg";
+import ArrowRL from "../../public/assets/images/arrow-right-left.svg";
 
 // exports
 export {
@@ -48,4 +49,5 @@ export {
   Twitter,
   Medium,
   Info,
+  ArrowRL,
 };

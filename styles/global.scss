@@ -168,8 +168,12 @@ a {
                 margin-left: 13px;
                 color: white;
                 p {
+                  font-weight: 200;
+                  font-size: 12px;
                 }
                 h3 {
+                  font-weight: 700;
+                  font-size: 16px;
                 }
               }
             }
@@ -191,14 +195,14 @@ a {
 
 .ant-btn {
   border: 0;
-  font-size: $font-size-base;
-  padding: 5px 35px;
+  font-size: 12px;
+  padding: 5px 50px;
   color: $white;
   background: $btn-bg-dark;
   border-radius: $base-border-radius;
   cursor: pointer;
   transition: all 300ms ease-in-out;
-  height: 36px;
+  height: 30px;
 
   &:not(.ant-btn-round) {
     border-radius: 0;
@@ -250,6 +254,10 @@ a {
         cursor: not-allowed;
       }
     }
+  }
+
+  .voote__now {
+    padding: 5px !important;
   }
 
   &.ant-btn-sm {
@@ -409,6 +417,7 @@ a {
     background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
     border: 2px solid #303950 !important;
     border-radius: 10px !important;
+    margin-top: 4px;
 
     .ant-dropdown-menu-item {
       background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
@@ -583,7 +592,7 @@ a {
               display: flex;
               align-items: center;
               justify-content: center;
-              padding: 6px;
+              padding: 2px;
               background: $white;
 
               .dark-mode & {
@@ -606,7 +615,8 @@ a {
           .name {
             .dark-mode & {
               color: $white;
-              font-size: $font-size-lg + 1;
+              font-size: 15px;
+              font-weight: 700;
             }
           }
         }
@@ -618,8 +628,7 @@ a {
 
       i {
         color: #697589;
-        width: 13px;
-        height: 16px;
+        font-size: 0.8rem;
 
         &:hover {
           color: #fe4350;
@@ -1181,11 +1190,11 @@ a {
   .ant-popover-inner {
     padding: 6px 10px;
     border-radius: 10 - 5;
-    box-shadow: $box-shadow-inner-light;
 
     .dark-mode & {
-      background: $dark-color;
-      box-shadow: $box-shadow-dark;
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+      border: 2px solid #303950;
+      border-radius: 10px;
 
       .ant-popover-inner-content {
         color: $text-color-label-dark;
@@ -1231,7 +1240,7 @@ a {
     align-items: center;
     margin-top: 10px;
     .ant-radio-group {
-      margin-right: 18px;
+      margin-right: 8px;
       .ant-radio-button-wrapper {
         background: none;
         border: 0;
@@ -1353,7 +1362,7 @@ a {
               display: flex;
               align-items: center;
               justify-content: center;
-              padding: 6px;
+              padding: 2px;
               background: $white;
               .dark-mode & {
                 background: $background-dark1;
@@ -1375,7 +1384,8 @@ a {
           .name {
             .dark-mode & {
               color: $white;
-              font-size: 10px;
+              font-size: 15px;
+              font-weight: 700;
             }
           }
         }
@@ -1493,7 +1503,7 @@ a {
       align-items: center;
       justify-content: flex-end;
       line-height: 20px;
-      font-size: $font-size-base + 1;
+      font-size: 12px;
       .dark-mode & {
         color: $white;
       }
@@ -1549,7 +1559,6 @@ a {
 }
 
 .wallet-connect-dropdown {
-  padding: 10px 15px;
   font-size: $font-size-base;
   max-width: 230px;
   min-width: 230px;
@@ -1719,7 +1728,8 @@ a {
         .name {
           .dark-mode & {
             color: $white;
-            font-size: $font-size-lg + 1;
+            font-size: 15px;
+            font-weight: 700;
           }
         }
       }
@@ -1765,8 +1775,11 @@ a {
   .ant-select-selector {
     background: $background-dark1;
     border-radius: 40px;
-    padding: 0 40px;
     color: $white;
+    font-size: 12px;
+
+    height: 30px !important;
+    width: 130px !important;
 
     .dark-mode & {
       background: linear-gradient(
@@ -1879,4 +1892,20 @@ a {
       }
     }
   }
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.alert-label {
+  font-size: 12px;
+  color: $error-color;
+  visibility: visible;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.alert-hidden {
+  visibility: hidden;
 }

@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
 
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     height: 0;
     width: 0;
     visibility: hidden;
@@ -12,8 +12,8 @@
   label {
     cursor: pointer;
     text-indent: -9999px;
-    width: 43px;
-    height: 21px;
+    width: 32px;
+    height: 16px;
     background: #0d2459;
     display: block;
     border-radius: 24px;
@@ -21,12 +21,12 @@
   }
 
   label:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 2.5px;
     left: 4px;
-    width: 15px;
-    height: 15px;
+    width: 11px;
+    height: 11px;
     background: #ffffff;
     border-radius: 50px;
     transition: 0.4s;

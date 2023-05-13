@@ -352,10 +352,12 @@ const GovernView = ({
                         </div>
                       )}
 
-                      <VoteNowModal
-                        refreshVote={fetchVote}
-                        proposal={proposal}
-                      />
+                      <div className={style.vot_end}>
+                        <VoteNowModal
+                          refreshVote={fetchVote}
+                          proposal={proposal}
+                        />
+                      </div>
                     </div>
                   ) : (
                     <div className={style.vot_end}>

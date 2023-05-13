@@ -9,7 +9,14 @@ import { ATOM } from "../../image";
 
 const Option = Select.Option;
 
-const CustomSelect = ({iconList, value, onChange, list, loading, disabled, }) => {
+const CustomSelect = ({
+  iconList,
+  value,
+  onChange,
+  list,
+  loading,
+  disabled,
+}) => {
   return (
     <Select
       aria-label="Select"
@@ -39,7 +46,12 @@ const CustomSelect = ({iconList, value, onChange, list, loading, disabled, }) =>
               <div className="select-inner">
                 <div className="svg-icon">
                   <div className="svg-icon-inner swap-svg-icon-inner">
-                    <NextImage src={iconList?.[item]?.coinImageUrl} alt={"logo"} height={22} width={22}/>
+                    <NextImage
+                      src={iconList?.[item]?.coinImageUrl}
+                      alt={"logo"}
+                      height={25}
+                      width={25}
+                    />
                   </div>
                 </div>
                 <div className="name">{denomConversion(item)}</div>
