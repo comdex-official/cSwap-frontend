@@ -1,17 +1,17 @@
 import { envConfig } from './envConfig.js';
 import { ibcAssets } from './ibc_asset_api.js';
 
-const getIbcDenomsMap = async () => {
+const getIbcDenomsMap = () => {
   let myMap = {};
-
-  const AssetList = await ibcAssets();
-
-  for (let i = 0; i < AssetList?.tokens?.length; i++) {
-    if (myMap[AssetList?.tokens[i].coinMinimDenom] === undefined) {
-      myMap[AssetList?.tokens[i].coinMinimalDenom] =
-        AssetList?.tokens[i]?.ibcDenomHash;
+  ibcAssets().then((result) => {
+    for (let i = 0; i < result?.tokens?.length; i++) {
+      if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
+        myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+      }
     }
-  }
+  }).catch((error) => {
+    console.log(error, "error in assetList Api");
+  });
 
   return myMap;
 };

@@ -4,15 +4,17 @@ import { DOLLAR_DECIMALS } from '../constants/common';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';
 
-const getDenomToDisplaySymbolMap = async () => {
+const getDenomToDisplaySymbolMap = () => {
   let myMap = {};
-  const AssetList = await ibcAssets();
-
-  for (let i = 0; i < AssetList?.tokens?.length; i++) {
-    if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
-      myMap[AssetList?.tokens[i].ibcDenomHash] = AssetList?.tokens[i]?.symbol;
+  ibcAssets().then((result) => {
+    for (let i = 0; i < result?.tokens?.length; i++) {
+      if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
+        myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+      }
     }
-  }
+  }).catch((error) => {
+    console.log(error, "error in assetList Api");
+  });
 
   return myMap;
 };
@@ -93,6 +95,7 @@ export const denomConversion = (denom) => {
   // }
 
   if (denomToDisplaySymbol[denom]) {
+    console.log(denom, "denom");
     return denomToDisplaySymbol[denom];
   }
 

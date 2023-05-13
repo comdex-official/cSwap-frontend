@@ -77,9 +77,22 @@ const Farm = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+    displayPools?.find(
+      (pool) =>
+        pool?.id?.toNumber() === Number(poolKey) &&
+        Number(userLiquidityInPools[poolKey]) > 0
+    )
+  );
+
+  const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
+
   const updateFilteredData = useCallback(
     (filterValue) => {
       if (filterValue !== "3") {
+        if (filterValue === "4") {
+          return setDisplayPools(userPools)
+        }
         let filteredPools = pools.filter(
           (item) => item.type === Number(filterValue)
         );
@@ -154,16 +167,10 @@ const Farm = ({
     });
   };
 
-  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    displayPools?.find(
-      (pool) =>
-        pool?.id?.toNumber() === Number(poolKey) &&
-        Number(userLiquidityInPools[poolKey]) > 0
-    )
-  );
 
-  const userPools = rawUserPools.filter((item) => item); // removes undefined values from array
-  // console.log(userPools, "userPools");
+
+
+  console.log(userPools, "userPools");
   const tabItems = [
     {
       key: "3",
