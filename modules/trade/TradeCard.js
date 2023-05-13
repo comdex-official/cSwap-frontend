@@ -781,7 +781,7 @@ const TradeCard = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {"Base Price: "}{" "}
+                    {"Base Price: "}
                     <span
                       className="ml-1 cursor-pointer"
                       onClick={() =>

@@ -47,6 +47,11 @@
             .btn_filled {
               margin: 0;
             }
+
+            @media screen and (max-width: $XS) {
+              flex-direction: column;
+              align-items: flex-start;
+            }
           }
         }
         .govern_bottom_proposals_container {
@@ -57,6 +62,11 @@
             padding: 20px 40px 20px;
             border-bottom: 1px solid rgba($border-dark, 0.5);
             cursor: pointer;
+
+            @media screen and (max-width: $XS) {
+              padding: 10px;
+            }
+
             &:last-child {
               border: 0;
             }
@@ -76,33 +86,40 @@
                 width: 100%;
                 padding-right: 0;
               }
-              h3 {
-                font-size: 20px;
+              h4 {
+                font-weight: 600;
+                font-size: 14px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                margin-top: 15px;
+
                 .dark-mode & {
                   color: white;
                 }
               }
               p {
+                font-size: 14px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
               }
               .proposal_id {
                 h3 {
+                  margin: 0;
                 }
               }
               .proposal_status_container {
                 display: flex;
-                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+
                 .proposal_status {
                   display: flex;
                   align-items: center;
                   justify-content: center;
                   gap: 10px;
-                  padding: 3px 20px;
+                  padding: 5px 20px;
                   border-radius: 15px;
                   text-transform: capitalize;
                   font-weight: 500;
@@ -115,9 +132,9 @@
                 }
                 .open_color {
                   border: 1px solid #00b0ff;
-                  background-color: #cbe7fb;
+                  // background-color: #cbe7fb;
                   .dark-mode & {
-                    background-color: #19385a;
+                    // background-color: #19385a;
                   }
                 }
 
@@ -158,11 +175,36 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 10px;
+
+                @media screen and (max-width: $XS) {
+                  flex-direction: column;
+                  align-items: flex-start;
+                }
                 .time_left_container {
                   flex-basis: 45%;
+
+                  label {
+                    font-weight: 200;
+                    font-size: 12px;
+                  }
+
+                  p {
+                    font-weight: 700;
+                    font-size: 15px;
+                  }
                 }
                 .time_right_container {
                   flex-basis: 45%;
+
+                  label {
+                    font-weight: 200;
+                    font-size: 12px;
+                  }
+
+                  p {
+                    font-weight: 700;
+                    font-size: 15px;
+                  }
                 }
               }
               .ant-progress {
@@ -205,13 +247,18 @@
 
               .user_vote_box_container {
                 width: 100%;
-                margin-top: 2rem;
+                margin-top: 0.5rem;
                 .user_vote_box {
                   display: flex;
                   width: 100%;
                   justify-content: space-between;
                   gap: 10px;
                   padding: 0 10px;
+
+                  @media screen and (max-width: $XS) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                  }
                   .single_vote_container {
                     display: flex;
                     .boder {
@@ -300,7 +347,7 @@
 
 .pending_color {
   border: 1px solid yellow;
-  background-color: rgba(255, 255, 0, 0.295);
+  // background-color: rgba(255, 255, 0, 0.295);
 }
 
 // Govern Detail
@@ -340,7 +387,7 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        padding: 3px 20px;
+        padding: 5px 20px;
         border-radius: 15px;
         text-transform: capitalize;
         font-weight: 500;
@@ -354,12 +401,12 @@
     }
     .bottom_main_container {
       .title {
-        font-weight: 500;
-        font-size: 1.2rem;
+        font-weight: 600;
+        font-size: 14px;
         margin-bottom: 5px;
       }
       .description {
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 400;
         line-height: 1.4;
       }
@@ -380,6 +427,9 @@
     }
     .vot_end {
       text-align: end;
+      button {
+        padding: 5px 20px;
+      }
     }
     .vote_button {
       display: flex;
@@ -480,4 +530,9 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  span {
+    font-weight: 700;
+    font-size: 16px;
+  }
 }

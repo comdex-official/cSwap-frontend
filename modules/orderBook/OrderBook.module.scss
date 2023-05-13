@@ -12,74 +12,72 @@
 
 .orderbook__main {
   display: grid;
+  grid-template-rows: repeat(1, 1fr);
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
 
   @media screen and (max-width: $L) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (max-width: $M) {
     grid-template-columns: repeat(1, 100%);
   }
 }
 
 .orderbook__element__left {
-  grid-row: 1/3;
-  grid-column: 1/2;
+  // grid-row: 1/3;
+  // grid-column: 1/2;
 
-  @media screen and (max-width: $M) {
-    grid-row: auto;
-    grid-column: auto;
-  }
+  // @media screen and (max-width: $M) {
+  //   grid-row: auto;
+  //   grid-column: auto;
+  // }
 }
 
 .orderbook__element__middle__upper {
-  grid-row: 1/2;
-  grid-column: 2/3;
-  @media screen and (max-width: $L) {
-    grid-row: auto;
-    grid-column: auto;
-  }
-  @media screen and (max-width: $M) {
-    margin-top: 50px;
-  }
+  // grid-row: 1/2;
+  // grid-column: 2/3;
+  // @media screen and (max-width: $L) {
+  //   grid-row: auto;
+  //   grid-column: auto;
+  // }
+  // @media screen and (max-width: $M) {
+  //   margin-top: 50px;
+  // }
 }
 
 .orderbook__element__middle__lower {
-  grid-row: 2/3;
-  grid-column: 2/3;
-  @media screen and (max-width: $L) {
-    grid-row: auto;
-    grid-column: auto;
-  }
+  // grid-row: 2/3;
+  // grid-column: 2/3;
+  // @media screen and (max-width: $L) {
+  //   grid-row: auto;
+  //   grid-column: auto;
+  // }
 }
 
 .orderbook__element__right {
-  grid-row: 1/3;
-  grid-column: 3/4;
-  height: 70%;
+  // grid-row: 1/3;
+  // grid-column: 3/4;
+  // height: 70%;
 
-  @media screen and (max-width: $XXL) {
-    height: 75%;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   height: 75%;
+  // }
 
-  @media screen and (max-width: $L) {
-    grid-row: auto;
-    grid-column: auto;
-    height: 95%;
-  }
+  // @media screen and (max-width: $L) {
+  //   grid-row: auto;
+  //   grid-column: auto;
+  //   height: 95%;
+  // }
 }
 
 .orderbook__trading__view {
-  height: 70%;
+  height: 100%;
   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
   border: 2px solid #303950;
   border-radius: 20px;
   min-width: 650px;
 
-  @media screen and (max-width: $XL) {
+  @media screen and (max-width: $L) {
     min-width: 500px;
+    height: 600px;
   }
 
   @media screen and (max-width: $MIX) {
@@ -98,7 +96,7 @@
 }
 
 .orderbook__trading__part {
-  height: 87%;
+  height: 91%;
   iframe {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -118,6 +116,9 @@
       }
     }
   }
+  @media screen and (max-width: $L) {
+    height: 89%;
+  }
 }
 
 .orderbook__tab__wrap {
@@ -128,20 +129,20 @@
 }
 
 .orderbook__tab__element {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 12px;
   line-height: 17px;
   opacity: 0.4;
   text-align: center;
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.active {
     opacity: 1;
@@ -173,39 +174,39 @@
 
 .orderbook__upper__head__left__title {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 10px;
   line-height: 16px;
   /* identical to box height */
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__upper__head__right__title {
   display: flex;
   align-items: center;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 15px;
   gap: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #cdfe43;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   i {
     color: #cdfe43;
@@ -245,13 +246,13 @@
   text-align: right;
   color: #73aed2;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 8px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__lower__table__head__title {
@@ -260,13 +261,13 @@
   line-height: 13px;
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 8px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.profit {
     color: #3ff4be;
@@ -291,27 +292,27 @@
   line-height: 12px;
   color: #73aed2;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 8px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.active {
     font-weight: 700;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 15px;
     color: #ffffff;
 
-    @media screen and (max-width: $XXL) {
-      font-size: 10px;
-    }
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 10px;
+    // }
 
-    @media screen and (max-width: $XS) {
-      font-size: 8px;
-    }
+    // @media screen and (max-width: $XS) {
+    //   font-size: 8px;
+    // }
   }
 }
 
@@ -349,6 +350,11 @@
   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
   border: 2px solid #303950;
   border-radius: 20px;
+  height: 70%;
+
+  @media screen and (max-width: $L) {
+    height: 100%;
+  }
 }
 
 .orderbook__element__right__head {
@@ -368,23 +374,27 @@
   i {
     color: #ffffff;
   }
+
+  img {
+    height: 15px;
+  }
 }
 
 .orderbook__element__right__head__title {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 10px;
   line-height: 16px;
   /* identical to box height */
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__element__right__body__main {
@@ -406,19 +416,19 @@
 
 .orderbook__body__tab__head__element {
   font-weight: 500;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 17px;
   /* identical to box height */
 
   text-transform: uppercase;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   color: #7491a6;
 
@@ -434,20 +444,20 @@
 
 .orderbook__body__tab__body__balance {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 15px;
   /* identical to box height */
-  text-align: end;
+  text-align: flex-end;
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__body__tab__body__input__wrap {
@@ -459,19 +469,19 @@
 
 .orderbook__body__tab__body__input__title {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 10px;
   line-height: 20px;
   /* identical to box height */
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__body__tab__body__input {
@@ -487,20 +497,20 @@
     text-align: right;
     color: #ffffff;
 
-    @media screen and (max-width: $XXL) {
-      font-size: 10px;
-    }
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 10px;
+    // }
 
-    @media screen and (max-width: $XS) {
-      font-size: 8px;
-    }
+    // @media screen and (max-width: $XS) {
+    //   font-size: 8px;
+    // }
   }
 }
 
 .orderbook__body__tab__footer {
   padding: 20px 0px;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: 10px;
 }
@@ -516,13 +526,13 @@
 
   color: #eaeaea;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__body__tab__button {
@@ -533,42 +543,41 @@
     background: #fe4350;
     border: 2px solid #fe4350;
     border-radius: 20px;
-    padding: 10px 40px;
+    padding: 5px 20px;
     font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 10px;
     /* identical to box height */
 
     text-align: center;
 
     color: #ffffff;
 
-    @media screen and (max-width: $XXL) {
-      font-size: 10px;
-    }
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 10px;
+    // }
 
-    @media screen and (max-width: $XS) {
-      font-size: 8px;
-    }
+    // @media screen and (max-width: $XS) {
+    //   font-size: 8px;
+    // }
   }
 }
 
 .orderbook__table__title {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 10px;
   line-height: 17px;
   /* identical to box height */
   width: 100%;
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.action {
     color: #fe4350;
@@ -622,6 +631,18 @@
   align-items: center;
   padding: 15px;
   border-bottom: 1px solid #28385f;
+
+  // @media screen and (max-width: $XXL) {
+  //   flex-direction: column;
+  //   align-items: flex-start;
+  //   gap: 10px;
+  // }
+}
+
+.middle__row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .orderbook__trading__element {
@@ -636,28 +657,34 @@
 
   i {
     color: #ffffff;
+    margin-left: 8px;
+  }
+
+  img {
+    height: 12px;
+    margin-right: 8px;
   }
 }
 
 .orderbook__trading__title {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 12px;
   line-height: 22px;
   letter-spacing: 0.428571px;
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 }
 
 .orderbook__trading__element__title {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 17px;
   /* identical to box height */
 
@@ -665,17 +692,17 @@
 
   color: #ffffff;
 
-  @media screen and (max-width: $XXL) {
-    font-size: 10px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
 
-  @media screen and (max-width: $XS) {
-    font-size: 8px;
-  }
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
 
   &.header {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 15px;
     /* identical to box height */
 
@@ -683,18 +710,22 @@
 
     color: #73aed2;
 
-    @media screen and (max-width: $XXL) {
-      font-size: 10px;
-    }
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 10px;
+    // }
 
-    @media screen and (max-width: $XS) {
-      font-size: 8px;
-    }
+    // @media screen and (max-width: $XS) {
+    //   font-size: 8px;
+    // }
   }
   &.profit {
     color: #3ff4be;
   }
   &.loos {
     color: #eb4545;
+  }
+
+  @media screen and (max-width: $XS) {
+    display: none;
   }
 }
