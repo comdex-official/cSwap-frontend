@@ -1832,3 +1832,51 @@ a {
 .vote_now {
   text-align: end;
 }
+
+.vote-now-modal {
+  .votenow-modal-inner {
+    .dark-mode & {
+      color: $white;
+    }
+
+    h3 {
+      font-size: 25px;
+
+      .dark-mode & {
+        color: $white;
+      }
+    }
+
+    .ant-radio-wrapper {
+      font-size: 21px;
+
+      .dark-mode & {
+        color: $white;
+      }
+    }
+  }
+  &.ant-modal {
+    border-radius: $base-border-radius;
+
+    .ant-modal-content {
+      background: $background-light;
+      border-radius: $base-border-radius;
+      padding: 30px;
+      max-width: 500px;
+
+      .ant-modal-close-x {
+        i {
+          font-sixe: 1.2rem;
+          color: $white;
+        }
+      }
+
+      .dark-mode & {
+        background: $background-dark1;
+      }
+      .ant-modal-body {
+        padding: 4px 10px;
+      }
+    }
+  }
+}

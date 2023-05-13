@@ -9,7 +9,6 @@ import { defaultFee } from "../../../services/transaction";
 import { errorMessageMappingParser } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import { Icon } from "../../../shared/image/Icon";
-// import "./index.scss";
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,13 +72,13 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         className="btn-filled mb-n4"
         onClick={showModal}
         loading={inProgress}
-        disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
+        // disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
       >
         Vote Now
       </Button>
       <Modal
         centered={true}
-        className="votenow-modal"
+        className="vote-now-modal"
         footer={null}
         header={null}
         open={isModalOpen}

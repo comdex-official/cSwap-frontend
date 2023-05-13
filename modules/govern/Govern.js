@@ -176,9 +176,20 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                               </div>
                               <div className={style.proposal_status_container}>
                                 <div
-                                  className={`${style.proposal_status} ${style.passed_color}`}
+                                  className={`${style.proposal_status} 
+                                  ${
+                                    proposalStatusMap[item?.status] ===
+                                      "Rejected" ||
+                                    proposalStatusMap[item?.status] === "Failed"
+                                      ? style.reject_color
+                                      : proposalStatusMap[item?.status] ===
+                                        "Passed"
+                                      ? style.passed_color
+                                      : style.pending_color
+                                  } 
+                                  `}
                                 >
-                                  <span
+                                  <div
                                     className={
                                       proposalStatusMap[item?.status] ===
                                         "Rejected" ||
@@ -190,7 +201,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                         ? "passed-circle"
                                         : "warning-circle"
                                     }
-                                  ></span>
+                                  ></div>
                                   {proposalStatusMap[item?.status]}
                                 </div>
                               </div>

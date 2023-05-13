@@ -1,6 +1,6 @@
 import style from "./Govern.module.scss";
 import { useRouter } from "next/router";
-import { Button, List } from "antd";
+import { Button, List, Spin } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Link from "next/link";
@@ -46,6 +46,7 @@ const GovernView = ({
   const router = useRouter();
 
   const { id } = router.query;
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -94,12 +95,13 @@ const GovernView = ({
   ];
 
   useEffect(() => {
+    setInProgress(true);
     if (id) {
       fetchRestProposal(id, (error, result) => {
         if (error) {
           return;
         }
-
+        setInProgress(false);
         setProposal(result?.proposal);
       });
       fetchRestProposalTally(id, (error, result) => {
@@ -183,18 +185,6 @@ const GovernView = ({
     }
   }, [proposalTallyMap, calculateVotes, proposalTally?.yes]);
 
-  const dataVote = [
-    {
-      title: "Total Vote",
-      counts: (
-        <>
-          {calculateTotalValue() || "0"}{" "}
-          {denomConversion(comdex?.coinMinimalDenom)}
-        </>
-      ),
-    },
-  ];
-
   const Options = {
     chart: {
       type: "pie",
@@ -272,144 +262,171 @@ const GovernView = ({
   return (
     <>
       <div className={`${style.govern_main_container} ${style.max_width}`}>
-        <div className={style.back_button_container}>
-          <Link href="/govern">
-            <Button type="primary">Back</Button>
-          </Link>
-        </div>
-
-        <div className={style.govern_container}>
-          {/* Upper copntainer  */}
-          <div className={style.govern_upper_main_container}>
-            <div className={style.govern_upper_container}>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 1,
-                  sm: 2,
-                  md: 3,
-                  lg: 3,
-                  xl: 3,
-                  xxl: 3,
-                }}
-                className={`${
-                  style.govern_upper_container_list
-                } ${"govern_ant_list_class"} ${
-                  style.govern_detail_ant_list_class
-                }`}
-                dataSource={data}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>{item.title}</p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
-                )}
-              />
-            </div>
+        {inProgress ? (
+          <div className="loader">
+            <Spin />
           </div>
-          {/* Bottom Container  */}
-          <div className={style.govern_detail_bottom_main_container}>
-            <div className={style.govern_detail_left_container}>
-              <div className={style.up_main_container}>
-                <div className={style.proposal_id}>
-                  #{proposal?.proposal_id || "-"}
-                </div>
-                <div className={`${style.status} ${style.passed_color}`}>
-                  <span
-                    className={
-                      proposalStatusMap[proposal?.status] === "Rejected" ||
-                      proposalStatusMap[proposal?.status] === "Failed"
-                        ? "failed-circle"
-                        : proposalStatusMap[proposal?.status] === "Passed"
-                        ? "passed-circle"
-                        : "warning-circle"
-                    }
-                  ></span>
-                  {proposalStatusMap[proposal?.status]}
-                </div>
-              </div>
-              <div className={style.bottom_main_container}>
-                <div className={style.title}>
-                  {proposal?.content?.title || "------"}
-                </div>
-                <div className={style.description}>
-                  {stringTagParser(proposal?.content?.description || " ")}{" "}
-                </div>
-              </div>
+        ) : (
+          <>
+            <div className={style.back_button_container}>
+              <Link href="/govern">
+                <Button type="primary">Back</Button>
+              </Link>
             </div>
-            <div className={style.govern_detail_right_container}>
-              {address && proposalOptionMap[votedOption] ? (
-                <div className={style.vote_button}>
-                  {proposalOptionMap?.[votedOption] && (
-                    <div className={style.user_vote}>
-                      Your Vote : <span> {proposalOptionMap[votedOption]}</span>
+
+            <div className={style.govern_container}>
+              {/* Upper copntainer  */}
+              <div className={style.govern_upper_main_container}>
+                <div className={style.govern_upper_container}>
+                  <List
+                    grid={{
+                      gutter: 16,
+                      xs: 1,
+                      sm: 2,
+                      md: 3,
+                      lg: 3,
+                      xl: 3,
+                      xxl: 3,
+                    }}
+                    className={`${
+                      style.govern_upper_container_list
+                    } ${"govern_ant_list_class"} ${
+                      style.govern_detail_ant_list_class
+                    }`}
+                    dataSource={data}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <div>
+                          <p>{item.title}</p>
+                          <h3>{item.counts}</h3>
+                        </div>
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              </div>
+              {/* Bottom Container  */}
+              <div className={style.govern_detail_bottom_main_container}>
+                <div className={style.govern_detail_left_container}>
+                  <div className={style.up_main_container}>
+                    <div className={style.proposal_id}>
+                      #{proposal?.proposal_id || "-"}
+                    </div>
+                    <div
+                      className={`${style.status}  ${
+                        proposalStatusMap[proposal?.status] === "Rejected" ||
+                        proposalStatusMap[proposal?.status] === "Failed"
+                          ? style.reject_color
+                          : proposalStatusMap[proposal?.status] === "Passed"
+                          ? style.passed_color
+                          : style.pending_color
+                      }`}
+                    >
+                      <div
+                        className={
+                          proposalStatusMap[proposal?.status] === "Rejected" ||
+                          proposalStatusMap[proposal?.status] === "Failed"
+                            ? "failed-circle"
+                            : proposalStatusMap[proposal?.status] === "Passed"
+                            ? "passed-circle"
+                            : "warning-circle"
+                        }
+                      ></div>
+                      {proposalStatusMap[proposal?.status]}
+                    </div>
+                  </div>
+                  <div className={style.bottom_main_container}>
+                    <div className={style.title}>
+                      {proposal?.content?.title || "------"}
+                    </div>
+                    <div className={style.description}>
+                      {stringTagParser(proposal?.content?.description || " ")}{" "}
+                    </div>
+                  </div>
+                </div>
+                <div className={style.govern_detail_right_container}>
+                  {address && proposalOptionMap[votedOption] ? (
+                    <div className={style.vote_button}>
+                      {proposalOptionMap?.[votedOption] && (
+                        <div className={style.user_vote}>
+                          Your Vote :{" "}
+                          <span> {proposalOptionMap[votedOption]}</span>
+                        </div>
+                      )}
+
+                      <VoteNowModal
+                        refreshVote={fetchVote}
+                        proposal={proposal}
+                      />
+                    </div>
+                  ) : (
+                    <div className={style.vot_end}>
+                      <VoteNowModal
+                        refreshVote={fetchVote}
+                        proposal={proposal}
+                      />
                     </div>
                   )}
 
-                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
-                </div>
-              ) : (
-                <div className={style.vot_end}>
-                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
-                </div>
-              )}
-
-              <div className={style.charts_Value_container}>
-                <div className={style.charts}>
-                  <HighchartsReact highcharts={Highcharts} options={Options} />
-                </div>
-                <div className={style.total_value}>
-                  <div className={style.vote_border}>
-                    <div className={style.title}>Total Vote</div>
-                    <div className={style.value}>{`${
-                      calculateTotalValue() || "0"
-                    } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
-                  </div>
-                </div>
-              </div>
-              <div className={style.vote_count_container}>
-                <div className={style.yes_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>Yes</div>
-                    <div className={style.value}>
-                      {Number(getVotes?.yes || "0.00")}%
+                  <div className={style.charts_Value_container}>
+                    <div className={style.charts}>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={Options}
+                      />
+                    </div>
+                    <div className={style.total_value}>
+                      <div className={style.vote_border}>
+                        <div className={style.title}>Total Vote</div>
+                        <div className={style.value}>{`${
+                          calculateTotalValue() || "0"
+                        } ${denomConversion(comdex?.coinMinimalDenom)}`}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className={style.no_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>No</div>
-                    <div className={style.value}>
-                      {Number(getVotes?.no || "0.00")}%
+                  <div className={style.vote_count_container}>
+                    <div className={style.yes_container}>
+                      <div className={style.fill_box}></div>
+                      <div className={style.data_box}>
+                        <div className={style.title}>Yes</div>
+                        <div className={style.value}>
+                          {Number(getVotes?.yes || "0.00")}%
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className={style.noWithVeto_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>No With Veto</div>
-                    <div className={style.value}>
-                      {Number(getVotes?.veto || "0.00")}%
+                    <div className={style.no_container}>
+                      <div className={style.fill_box}></div>
+                      <div className={style.data_box}>
+                        <div className={style.title}>No</div>
+                        <div className={style.value}>
+                          {Number(getVotes?.no || "0.00")}%
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className={style.abstain_container}>
-                  <div className={style.fill_box}></div>
-                  <div className={style.data_box}>
-                    <div className={style.title}>Abstain</div>
-                    <div className={style.value}>
-                      {Number(getVotes?.abstain || "0.00")}%
+                    <div className={style.noWithVeto_container}>
+                      <div className={style.fill_box}></div>
+                      <div className={style.data_box}>
+                        <div className={style.title}>No With Veto</div>
+                        <div className={style.value}>
+                          {Number(getVotes?.veto || "0.00")}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className={style.abstain_container}>
+                      <div className={style.fill_box}></div>
+                      <div className={style.data_box}>
+                        <div className={style.title}>Abstain</div>
+                        <div className={style.value}>
+                          {Number(getVotes?.abstain || "0.00")}%
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );

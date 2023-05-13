@@ -98,6 +98,10 @@
                 display: flex;
                 justify-content: space-between;
                 .proposal_status {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 10px;
                   padding: 3px 20px;
                   border-radius: 15px;
                   text-transform: capitalize;
@@ -118,25 +122,25 @@
                 }
 
                 .reject_color {
-                  background-color: #f6d9d9;
+                  // background-color: #f6d9d9;
                   border: 1px solid #8e353c;
                   .dark-mode & {
-                    background-color: #422234;
+                    // background-color: #422234;
                   }
                 }
 
                 .passed_color {
                   // background-color: #cce7de;
                   border: 1px solid #02865b;
-                  background-color: #19323a;
+                  // background-color: #19323a;
                   .dark-mode & {
-                    background-color: #19323a;
+                    // background-color: #19323a;
                   }
                 }
 
                 .pending_color {
                   border: 1px solid yellow;
-                  background-color: rgba(255, 255, 0, 0.295);
+                  // background-color: rgba(255, 255, 0, 0.295);
                 }
               }
             }
@@ -271,26 +275,26 @@
 
 .open_color {
   border: 1px solid #00b0ff;
-  background-color: #cbe7fb;
+  // background-color: #cbe7fb;
   .dark-mode & {
-    background-color: #19385a;
+    // background-color: #19385a;
   }
 }
 
 .reject_color {
-  background-color: #f6d9d9;
+  // background-color: #f6d9d9;
   border: 1px solid #8e353c;
   .dark-mode & {
-    background-color: #422234;
+    // background-color: #422234;
   }
 }
 
 .passed_color {
   // background-color: #cce7de;
-  background-color: #19323a;
+  // background-color: #19323a;
   border: 1px solid #02865b;
   .dark-mode & {
-    background-color: #19323a;
+    // background-color: #19323a;
   }
 }
 
@@ -332,6 +336,10 @@
         font-size: 1.2rem;
       }
       .status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
         padding: 3px 20px;
         border-radius: 15px;
         text-transform: capitalize;
