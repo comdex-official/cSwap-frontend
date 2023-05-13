@@ -23,6 +23,7 @@ const FarmCard = ({
   theme,
   lang,
   pool,
+  poolAprList,
   markets,
   setUserLiquidityInPools,
   userLiquidityInPools,
@@ -33,10 +34,12 @@ const FarmCard = ({
   assetMap,
   poolsApr,
   iconList,
+  masterPoolData
 }) => {
   const [showMoreData, setshowMoreData] = useState(false)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [poolExternalIncentiveData, setPoolExternalIncentiveData] = useState()
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -49,7 +52,7 @@ const FarmCard = ({
   const handleCancel = () => {
     setIsModalOpen(false)
   }
-  console.log(poolsApr, "poolsApr");
+  // console.log(poolsApr, "poolsApr");
 
   const getMasterPool = () => {
     const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);
@@ -96,6 +99,52 @@ const FarmCard = ({
     } else {
       return calculateChildPoolApr()
     }
+
+  }
+
+  const calculateRewardPerDay = (_totalApr) => {
+    let calculateReward = (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) * (Number(_totalApr?.apr) / 100)) / 365;
+    return fixedDecimal(calculateReward);
+  }
+
+  const fetchMasterPoolAprData = () => {
+
+    let totalMasterPoolApr = 0;
+    // This will output the total APR value for all incentive_rewards where master_pool=true
+    if (poolAprList) {
+      Object.values(poolAprList && poolAprList).forEach((value) => {
+        const incentiveRewards = value.incentive_rewards;
+
+        incentiveRewards.forEach((incentive) => {
+          if (incentive.master_pool === true) {
+            totalMasterPoolApr += incentive.apr;
+          }
+        });
+      });
+    }
+    return fixedDecimal(totalMasterPoolApr)
+  }
+
+  const calculateUptoApr = () => {
+    let totalApr = 0;
+    let totalMasterPoolApr = fetchMasterPoolAprData();
+
+
+    // calculate apr in incentive_rewards
+    poolsApr?.incentive_rewards.forEach((reward) => {
+      if (!reward.master_pool) {
+        totalApr += reward.apr;
+      }
+    });
+
+    // calculate apr in swap_fee_rewards
+    poolsApr?.swap_fee_rewards.forEach((reward) => {
+      totalApr += reward.apr;
+    });
+
+
+    totalMasterPoolApr = fixedDecimal(totalMasterPoolApr) + fixedDecimal(totalApr);
+    return fixedDecimal(totalMasterPoolApr);
 
   }
 
@@ -186,6 +235,20 @@ const FarmCard = ({
     },
     [address, assetMap, balances, markets]
   );
+
+  useEffect(() => {
+    // setPoolExternalIncentiveData(poolsApr?.incentive_rewards.filter((reward) => !reward.master_pool))
+    setPoolExternalIncentiveData(poolsApr?.incentive_rewards)
+  }, [poolsApr])
+
+
+
+  useEffect(() => {
+    if (poolAprList) {
+      fetchMasterPoolAprData()
+    }
+  }, [poolAprList])
+
 
   useEffect(() => {
     // fetching user liquidity for my pools.
@@ -388,10 +451,10 @@ const FarmCard = ({
                   } ${theme === "dark" ? styles.dark : styles.light}`}
               >
                 {/* {"14.45%"} */}
-                {calculateApr()} %
-                <Icon className={"bi bi-arrow-right"} />
+                {commaSeparator(calculateApr() || 0)} %
+                {!getMasterPool() && <Icon className={"bi bi-arrow-right"} />}
               </div>
-              <div
+              {!getMasterPool() && <div
                 className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
                   }`}
               >
@@ -400,9 +463,10 @@ const FarmCard = ({
                     }`}
                 >
                   <NextImage src={Current} alt="Logo" />
-                  {"Upto 54.45%"}
+                  {/* {"Upto 54.45%"} */}
+                  {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
                 </div>
-              </div>
+              </div>}
             </div>
           </div>
           <div
@@ -422,7 +486,7 @@ const FarmCard = ({
               {`$${TotalPoolLiquidity}`}
             </div>
           </div>
-          <div
+          {!getMasterPool() && <div
             className={`${styles.farmCard__element} ${theme === "dark" ? styles.dark : styles.light
               }`}
           >
@@ -440,7 +504,7 @@ const FarmCard = ({
                 className={`${styles.farmCard__element__boost__left__description
                   } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                {"Upto +40%"}
+                {`Upto ${commaSeparator(fetchMasterPoolAprData() || 0)} %`}
               </div>
             </div>
             <div
@@ -450,7 +514,7 @@ const FarmCard = ({
               {"Go to Pool"}
             </div>
           </div>
-
+          }
           <div
             className={`${styles.farmCard__buttonWrap} ${theme === "dark" ? styles.dark : styles.light
               }`}
@@ -496,7 +560,21 @@ const FarmCard = ({
                   className={`${styles.farmCard__footer__rewards} ${theme === "dark" ? styles.dark : styles.light
                     }`}
                 >
-                  <div
+                  {
+
+                    poolExternalIncentiveData?.map((singleIncentive) => {
+
+                      return (
+                        <div
+                          className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
+                            }`}
+                        >
+                          <NextImage src={iconList?.[singleIncentive?.denom]?.coinImageUrl} width={50} height={50} alt="" /> ${calculateRewardPerDay(singleIncentive)}
+                        </div>
+                      )
+                    })
+                  }
+                  {/* <div
                     className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
                       }`}
                   >
@@ -507,7 +585,7 @@ const FarmCard = ({
                       }`}
                   >
                     <NextImage src={CMDS} alt="" /> {"0.000000"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div
@@ -532,7 +610,7 @@ const FarmCard = ({
                   )}
                 </div>
               </div>
-              {getMasterPool() && <div
+              {!getMasterPool() && <div
                 className={`${styles.farmCard__footer__main} ${theme === "dark" ? styles.dark : styles.light
                   }`}
               >
@@ -540,14 +618,22 @@ const FarmCard = ({
                   className={`${styles.farmCard__footer__left__title} ${theme === "dark" ? styles.dark : styles.light
                     }`}
                 >
-                  {`${showPairDenoms()} LP Farmed (Master Pool)`}
+                  {/* {`${showPairDenoms()} LP Farmed (Master Pool)`} */}
+                  {`${denomConversion(
+                    masterPoolData?.balances?.baseCoin?.denom
+                  )}-${denomConversion(masterPoolData?.balances?.quoteCoin?.denom)} LP Farmed (Master Pool)`}
                 </div>
                 <div
                   className={`${styles.farmCard__footer__right__title} ${theme === "dark" ? styles.dark : styles.light
                     }`}
                 >
                   {" "}
-                  {"$150.000"}
+                  $
+                  {commaSeparator(
+                    Number(userLiquidityInPools?.[masterPoolData?.id?.toNumber()] || 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )
+                  )}
                 </div>
               </div>}
             </div>

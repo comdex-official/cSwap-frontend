@@ -9,6 +9,8 @@ import {
   MsgUnfarm,
   MsgWithdraw,
   MsgMarketOrder,
+  MsgDepositAndFarm,
+  MsgUnfarmAndWithdraw
 } from "comdex-codec/build/comdex/liquidity/v1beta1/tx";
 
 export const myRegistry = new Registry([
@@ -21,4 +23,6 @@ export const myRegistry = new Registry([
   ["/comdex.liquidity.v1beta1.MsgFarm", MsgFarm],
   ["/comdex.liquidity.v1beta1.MsgUnfarm", MsgUnfarm],
   ["/comdex.liquidity.v1beta1.MsgCancelOrder", MsgCancelOrder],
+  ["/comdex.liquidity.v1beta1.MsgDepositAndFarm", MsgDepositAndFarm],
+  ["/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw", MsgUnfarmAndWithdraw],
 ]);

@@ -44,6 +44,7 @@ import {
 import variables from "../../../utils/variables";
 import styles from "../Farm.module.scss"
 import { NextImage } from "../../../shared/image/NextImage";
+import PoolDetails from "../poolDetail";
 
 
 const Deposit = ({
@@ -187,7 +188,7 @@ const Deposit = ({
         isFinite(Number(numberOfTokens)) && setFirstInput(numberOfTokens);
     };
 
-    const handleClick = () => {
+    const handleDepositClick = () => {
         setInProgress(true);
 
         const deposits = [
@@ -214,7 +215,7 @@ const Deposit = ({
         signAndBroadcastTransaction(
             {
                 message: {
-                    typeUrl: "/comdex.liquidity.v1beta1.MsgDeposit",
+                    typeUrl: "/comdex.liquidity.v1beta1.MsgDepositAndFarm",
                     value: {
                         depositor: address.toString(),
                         poolId: pool?.id,
@@ -354,7 +355,7 @@ const Deposit = ({
                                     {denomConversion(pool?.balances?.baseCoin?.denom)}
                                 </span>
                             </div>
-                  
+
 
                             <div className=" maxhalf">
                                 <Button
@@ -515,6 +516,22 @@ const Deposit = ({
                     </div>
                 </div>
             </div>
+            <PoolDetails active={active} pool={pool} />
+
+            <Button type="primary" className="btn-filled"
+                loading={inProgress}
+                disabled={
+                    inProgress ||
+                    !pool?.id ||
+                    !Number(firstInput) ||
+                    !Number(secondInput) ||
+                    inputValidationError?.message ||
+                    outputValidationError?.message
+                }
+                onClick={() => handleDepositClick()}
+            >
+                Farm & Deposit
+            </Button>
 
         </>
     );

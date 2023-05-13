@@ -16,7 +16,7 @@ import {
   MASTER_POOL_ID,
 } from "../../constants/common";
 import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
-import { denomConversion } from "../../utils/coin";
+import { denomConversion, fixedDecimal } from "../../utils/coin";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -52,6 +52,8 @@ const Farm = ({
 
   const [active, setActive] = useState("All");
   const [listView, setListView] = useState(false);
+  const [masterPoolData, setMasterPoolData] = useState(0)
+  const [userPools, setUserPool] = useState()
 
   const handleActive = (item) => {
     setActive(item);
@@ -77,26 +79,34 @@ const Farm = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-    displayPools?.find(
-      (pool) =>
-        pool?.id?.toNumber() === Number(poolKey) &&
-        Number(userLiquidityInPools[poolKey]) > 0
-    )
-  );
 
-  const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
+
+  useEffect(() => {
+    const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
+      displayPools?.find(
+        (pool) =>
+          pool?.id?.toNumber() === Number(poolKey) &&
+          Number(userLiquidityInPools[poolKey]) > 0
+      )
+    );
+    const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
+    // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
+    setUserPool(userPools)
+  }, [userLiquidityInPools])
+
 
   const updateFilteredData = useCallback(
-    (filterValue) => {
+    (filterValue, userPools) => {
       if (filterValue !== "3") {
         if (filterValue === "4") {
-          return setDisplayPools(userPools)
+          setDisplayPools(userPools)
         }
-        let filteredPools = pools.filter(
-          (item) => item.type === Number(filterValue)
-        );
-        setDisplayPools(filteredPools);
+        else {
+          let filteredPools = pools.filter(
+            (item) => item.type === Number(filterValue)
+          );
+          setDisplayPools(filteredPools);
+        }
       } else {
         setDisplayPools(pools);
       }
@@ -119,7 +129,7 @@ const Farm = ({
   }, []);
 
   useEffect(() => {
-    updateFilteredData(filterValue);
+    updateFilteredData(filterValue, userPools);
   }, [pools, filterValue, updateFilteredData]);
 
   const onChange = (key) => {
@@ -167,10 +177,32 @@ const Farm = ({
     });
   };
 
+  const fetchMasterPoolAprData = () => {
+
+    // Fetching master pool key
+    if (pools) {
+      Object.keys(poolsApr && poolsApr).forEach((value) => {
+        const incentiveRewards = poolsApr?.[value]?.incentive_rewards;
+
+        incentiveRewards.forEach((incentive) => {
+          if (incentive.master_pool === true) {
+            let masterPoolData = pools?.filter((item) => Number(item?.id?.toNumber()) === Number(value))
+            setMasterPoolData(masterPoolData?.[0])
+          }
+        });
+      });
+    }
+
+  }
 
 
+  useEffect(() => {
+    if (poolsApr) {
+      fetchMasterPoolAprData()
+    }
+  }, [poolsApr])
 
-  console.log(userPools, "userPools");
+
   const tabItems = [
     {
       key: "3",
@@ -211,7 +243,6 @@ const Farm = ({
     }
   };
 
-  console.log(displayPools, "displayPools");
 
   return (
     <div
@@ -422,6 +453,8 @@ const Farm = ({
                     theme={theme}
                     pool={item}
                     poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                    poolAprList={poolsApr && poolsApr}
+                    masterPoolData={masterPoolData}
                   />
                 ))}
             </div>

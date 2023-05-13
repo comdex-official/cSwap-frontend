@@ -302,9 +302,9 @@ const PoolDetails = ({
                     className={`${styles.tradeCard__button__wrap} ${theme === "dark" ? styles.dark : styles.light
                         }`}
                 >
-                    <button>
+                    {/* <button>
                         {active === "DEPOSIT" ? "Deposit & Farm" : "Withdraw & Unfarm"}
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

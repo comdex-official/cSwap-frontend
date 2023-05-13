@@ -95,7 +95,6 @@ export const denomConversion = (denom) => {
   // }
 
   if (denomToDisplaySymbol[denom]) {
-    console.log(denom, "denom");
     return denomToDisplaySymbol[denom];
   }
 
@@ -125,7 +124,7 @@ export const getDenomBalance = (balances, denom) =>
 
 export const fixedDecimal = (_number = 0, _decimal = DOLLAR_DECIMALS) => {
   return (
-    String(
+    Number(
       Math.floor(_number * Math.pow(10, _decimal)) /
       Math.pow(10, _decimal)
     )

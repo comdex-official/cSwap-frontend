@@ -1,4 +1,4 @@
-import { Button, Form, message, Slider } from "antd";
+import { Button, Col, Form, message, Row, Slider } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
@@ -17,13 +17,30 @@ import variables from "../../../utils/variables";
 import { errorMessageMappingParser } from "../../../utils/string";
 import RangeTooltipContent from "../../../shared/components/range/RangedToolTip";
 import styles from "../Farm.module.scss"
+import PoolTokenValue from "../PoolTokenValue";
 import PoolDetails from "../poolDetail";
 
+
 const marks = {
-    0: "0",
-    50: "50%",
-    100: "100%",
-};
+    0: {
+        style: {
+            color: "#ffffff"
+        },
+        label: "0%"
+    },
+    50: {
+        style: {
+            color: "#ffffff"
+        },
+        label: "50%"
+    },
+    100: {
+        style: {
+            color: "#ffffff"
+        },
+        label: "100%"
+    }
+}
 
 const Remove = ({
     active,
@@ -34,39 +51,55 @@ const Remove = ({
     address,
     refreshData,
     updateBalance,
+    userLockedPoolTokens,
 }) => {
     const [sliderValue, setSliderValue] = useState(0);
     const [removeInProgress, setRemoveInProgress] = useState(false);
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState(0);
+
+    const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+
 
     const myLiquidity =
         amountConversion(getDenomBalance(balances, pool?.poolCoinDenom)) || 0;
 
     const onChange = (value) => {
         setSliderValue(value);
-        calculateAmount(value);
+        calculateBondAmount(value);
     };
 
-    const calculateAmount = (input) => {
-        const amount = (input / 100) * myLiquidity;
-
-        setAmount(amount && getAmount(amount));
+    const calculateBondAmount = (input) => {
+        const amount = (input / 100) * userLockedPoolTokens;
+        setAmount(amount);
     };
 
-    const handleClick = () => {
+    const handleWithdrawClick = () => {
         setRemoveInProgress(true);
 
         signAndBroadcastTransaction(
             {
+                // message: {
+                //     typeUrl: "/comdex.liquidity.v1beta1.MsgWithdraw",
+                //     value: {
+                //         withdrawer: address,
+                //         poolId: pool?.id,
+                //         appId: Long.fromNumber(APP_ID),
+                //         poolCoin: {
+                //             denom: pool?.poolCoinDenom,
+                //             amount: amount,
+                //         },
+                //     },
+                // },
                 message: {
-                    typeUrl: "/comdex.liquidity.v1beta1.MsgWithdraw",
+                    typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw",
                     value: {
-                        withdrawer: address,
+                        farmer: address,
                         poolId: pool?.id,
                         appId: Long.fromNumber(APP_ID),
-                        poolCoin: {
+                        /** soft_lock_coin specifies coins to stake */
+                        unfarmingPoolCoin: {
+                            amount: Number(amount).toFixed(0).toString(),
                             denom: pool?.poolCoinDenom,
-                            amount: amount,
                         },
                     },
                 },
@@ -119,7 +152,31 @@ const Remove = ({
                     className={`${styles.liquidityCard__pool__input} ${theme === "dark" ? styles.dark : styles.light
                         }`}
                 >
-                    <RangeTooltipContent />
+                    {/* <RangeTooltipContent /> */}
+                    <Row style={{ justifyContent: "space-between" }}>
+                        <Col span={17}>
+                            <Slider
+                                className="comdex-slider-alt"
+                                marks={marks}
+                                value={sliderValue}
+                                max={100}
+                                min={0}
+                                onChange={onChange}
+                                tooltip={{ open: false }}
+                            />
+                        </Col >
+                        <Col span={6} >
+                            <CustomInput
+                                defaultValue={sliderValue}
+                                onChange={(event) => {
+                                    onChange(event.target?.value);
+                                }}
+                                placeholder="0"
+                                value={`${sliderValue}`}
+                            />
+
+                        </Col>
+                    </Row>
                 </div>
                 <div
                     className={`${styles.liquidityCard__pool__withdraw__footer} ${theme === "dark" ? styles.dark : styles.light
@@ -134,13 +191,16 @@ const Remove = ({
                                 } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
                                 }`}
                         >
-                            {"Tokens to be Withdrawn"}
+                            {"You will unfarm"}
                         </div>
                         <div
                             className={`${styles.liquidityCard__pool__withdraw__element__title
                                 } ${theme === "dark" ? styles.dark : styles.light}`}
                         >
-                            {"$0.00 ≈ 0 PoolToken"}
+                            {/* {"$0.00 ≈ 0 PoolToken"} */}
+                            <PoolTokenValue poolTokens={amount} /> ≈{" "}
+                            {Number(amount).toFixed() || 0} PoolToken
+
                         </div>
                     </div>
                     <div
@@ -152,19 +212,34 @@ const Remove = ({
                                 } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
                                 }`}
                         >
-                            {"You have"}
+                            {"You farmed"}
                         </div>
                         <div
                             className={`${styles.liquidityCard__pool__withdraw__element__title
                                 } ${theme === "dark" ? styles.dark : styles.light}`}
                         >
-                            {"$0.00 ≈ 0 PoolToken"}
+                            {/* {"$0.00 ≈ 0 PoolToken"} */}
+                            <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{" "}
+                            {Number(userLockedPoolTokens).toFixed() || 0} PoolToken
                         </div>
                     </div>
                 </div>
             </div>
+            <PoolDetails active={active} pool={pool} />
 
-            {/* <PoolDetails active={active } pool={pool}/> */}
+            <Button
+                onClick={handleWithdrawClick}
+                type="primary"
+                disabled={
+                    !sliderValue ||
+                    removeInProgress ||
+                    sliderValue > 100 ||
+                    !userPoolBalance
+                }
+                loading={removeInProgress}
+                className="btn-filled px-4">
+                UnFarm & Withdraw
+            </Button>
         </>
     );
 };
@@ -189,6 +264,7 @@ Remove.propTypes = {
         reserveAccountAddress: PropTypes.string,
         poolCoinDenom: PropTypes.string,
     }),
+    userLockedPoolTokens: PropTypes.number,
 };
 
 const stateToProps = (state) => {

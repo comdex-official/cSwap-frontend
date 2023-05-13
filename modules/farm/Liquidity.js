@@ -32,7 +32,7 @@ import {
   queryPoolCoinDeserialize,
   queryPoolSoftLocks
 } from "../../services/liquidity/query";
-import { amountConversion, amountConversionWithComma, commaSeparatorWithRounding, denomConversion, getDenomBalance } from "../../utils/coin"
+import { amountConversion, amountConversionWithComma, commaSeparatorWithRounding, denomConversion, getAmount, getDenomBalance } from "../../utils/coin"
 import { DOLLAR_DECIMALS } from "../../constants/common"
 import { marketPrice } from "../../utils/number"
 import Deposit from "./Deposit"
@@ -55,6 +55,7 @@ const Liquidity = ({
   assetMap,
   rewardsMap,
 }) => {
+  const dispatch = useDispatch();
   const TabData = ["DEPOSIT", "WITHDRAW"]
 
   const [active, setActive] = useState("DEPOSIT")
@@ -240,177 +241,22 @@ const Liquidity = ({
       </div>
 
       {active === "DEPOSIT" ? (
-        <Deposit pool={pool} active={active} />
+        <Deposit
+          pool={pool}
+          active={active}
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
       ) : (
-        <Withdraw pool={pool} active={active} />
+        <Withdraw
+          pool={pool}
+          active={active}
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userLockedPoolTokens={userLockedPoolTokens}
+        />
       )}
-
-      {/* <div
-        className={`${styles.liquidityCard__pool__details} ${theme === "dark" ? styles.dark : styles.light
-          }`}
-      >
-        <div
-          className={`${styles.liquidityCard__pool__title} ${styles.title} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          {"Pool Details"}
-        </div>
-        <div
-          className={`${styles.liquidityCard__pool__details__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          <div
-            className={`${styles.farmCard__element__left__logo__wrap} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <div
-              className={`${styles.farmCard__element__left__logo} ${styles.first
-                } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
-              <div
-                className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                <NextImage src={CMDS} alt="" />
-              </div>
-            </div>
-            <div
-              className={`${styles.farmCard__element__left__logo} ${styles.last
-                } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
-              <div
-                className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                <NextImage src={ATOM} alt="" />
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            {"CMDX/ATOM"}
-          </div>
-        </div>
-
-        <div
-          className={`${styles.liquidityCard__pool__footer__details} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          <div
-            className={`${styles.liquidityCard__pool__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <div
-              className={`${styles.liquidityCard__pool__title} ${styles.semiTitle
-                } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
-              {"CMDX-50%"}
-            </div>
-            <div
-              className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              {"2,446,148.9 CMDX"}
-            </div>
-          </div>
-          <div
-            className={`${styles.liquidityCard__pool__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <div
-              className={`${styles.liquidityCard__pool__title} ${styles.semiTitle
-                } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
-              {"ATOM-50%"}
-            </div>
-            <div
-              className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              {"16,259,599.7 ATOM"}
-            </div>
-          </div>
-        </div>
-        <div
-          className={`${styles.liquidityCard__pool__footer__details__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          <div
-            className={`${styles.liquidityCard__pool__title} ${styles.title} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            {"Your Details"}
-          </div>
-          <div
-            className={`${styles.liquidityCard__pool__footer__details} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            <div
-              className={`${styles.liquidityCard__pool__element} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              <div
-                className={`${styles.liquidityCard__pool__title} ${styles.semiTitle
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
-              >
-                {"My Amount"}
-              </div>
-              <div
-                className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                {"22.385608 CMDX"}
-              </div>
-            </div>
-            <div
-              className={`${styles.liquidityCard__pool__element} ${styles.semiTitle
-                } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
-              <div
-                className={`${styles.liquidityCard__pool__title} ${styles.semiTitle
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
-              >
-                {"My Amount"}
-              </div>
-              <div
-                className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                {"0.148797 ATOM"}
-              </div>
-            </div>
-            <div
-              className={`${styles.liquidityCard__pool__element} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              <div
-                className={`${styles.liquidityCard__pool__title} ${styles.semiTitle
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
-              >
-                {"LP Amount"}
-              </div>
-              <div
-                className={`${styles.liquidityCard__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                {"$ 342.242"}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={`${styles.tradeCard__button__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
-        >
-          <button>
-            {active === "DEPOSIT" ? "Deposit & Farm" : "Withdraw & Unfarm"}
-          </button>
-        </div>
-      </div> */}
-      <PoolDetails active={active} pool={pool} />
+      {/* <PoolDetails active={active} pool={pool} /> */}
     </div>
   )
 }

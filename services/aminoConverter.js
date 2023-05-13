@@ -113,6 +113,26 @@ export const customAminoTypes = {
     },
   },
 
+  "/comdex.liquidity.v1beta1.MsgDepositAndFarm": {
+    aminoType: "comdex/liquidity/MsgDepositAndFarm",
+    toAmino: ({ depositor, depositCoins, poolId, appId }) => {
+      return {
+        depositor,
+        deposit_coins: depositCoins,
+        pool_id: String(poolId),
+        app_id: String(appId),
+      };
+    },
+    fromAmino: ({ depositor, deposit_coins, pool_id, app_id }) => {
+      return {
+        depositor,
+        depositCoins: deposit_coins,
+        poolId: Number(pool_id),
+        appId: Number(app_id),
+      };
+    },
+  },
+
   "/comdex.liquidity.v1beta1.MsgWithdraw": {
     aminoType: "comdex/liquidity/MsgWithdraw",
     toAmino: ({ withdrawer, poolId, poolCoin, appId }) => {
@@ -167,6 +187,25 @@ export const customAminoTypes = {
         poolId: Number(pool_id),
         appId: Number(app_id),
         farmingPoolCoin: farming_pool_coin,
+      };
+    },
+  },
+  "/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw": {
+    aminoType: "comdex/liquidity/MsgUnfarmAndWithdraw",
+    toAmino: ({ farmer, poolId, unfarmingPoolCoin, appId }) => {
+      return {
+        farmer,
+        pool_id: String(poolId),
+        app_id: String(appId),
+        unfarming_pool_coin: unfarmingPoolCoin,
+      };
+    },
+    fromAmino: ({ farmer, pool_id, unfarming_pool_coin, app_id }) => {
+      return {
+        farmer,
+        poolId: Number(pool_id),
+        appId: Number(app_id),
+        unfarmingPoolCoin: unfarming_pool_coin,
       };
     },
   },
