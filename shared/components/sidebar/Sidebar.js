@@ -1,4 +1,3 @@
-// import { useAppSelector } from "@/shared/hooks/useAppSelector"
 import styles from "./Sidebar.module.scss";
 import { NextImage } from "../../../shared/image/NextImage";
 import { Logo_Dark, Logo_Light } from "../../../shared/image";

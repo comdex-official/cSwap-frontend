@@ -1,4 +1,3 @@
-"use client";
 import styles from "./Header.module.scss";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import * as PropTypes from "prop-types";

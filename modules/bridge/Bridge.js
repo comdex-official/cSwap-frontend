@@ -1,13 +1,8 @@
-// import { useAppSelector } from "@/shared/hooks/useAppSelector"
-import dynamic from 'next/dynamic';
-import { useSelector } from 'react-redux';
-import styles from './Bridge.module.scss';
-import BridgeCard from './BridgeCard';
-
-// const BridgeCard = dynamic(() => import("@/modules/bridge/BridgeCard"))
+import styles from "./Bridge.module.scss";
+import BridgeCard from "./BridgeCard";
 
 const Bridge = () => {
-  const theme = 'dark';
+  const theme = "dark";
 
   return (
     <div className={styles.bridge__wrap}>

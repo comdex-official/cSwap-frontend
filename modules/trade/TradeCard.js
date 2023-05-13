@@ -1,14 +1,10 @@
-"use client";
 import styles from "./Trade.module.scss";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Icon } from "../../shared/image/Icon";
 import { NextImage } from "../../shared/image/NextImage";
-import { ATOM, Arrow, CMDS } from "../../shared/image";
+import { Arrow } from "../../shared/image";
 import Toggle from "../../shared/components/toggle/Toggle";
-import { OrderData, TradeFooterData } from "./Data";
-import useOutsideClick from "../../shared/hooks/useOutsideClick";
-import dynamic from "next/dynamic";
 import Card from "../../shared/components/card/Card";
 import CustomInput from "../../shared/components/CustomInput";
 import TooltipIcon from "../../shared/components/tooltip/TooltipIcon";
@@ -71,12 +67,10 @@ import {
   setSlippage,
   setSlippageTolerance,
 } from "../../actions/swap";
-import { useRef } from "react";
+
 import CustomSelect from "../../shared/components/CustomSelect";
 import CustomButton from "./CustomButton";
 import variables from "../../utils/variables";
-
-// const Card = dynamic(() => import("@/shared/components/card/Card"))
 
 const TradeCard = ({
   lang,

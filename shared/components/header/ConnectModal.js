@@ -1,19 +1,19 @@
-import { message, Spin } from 'antd';
-import { encode } from 'js-base64';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { message, Spin } from "antd";
+import { encode } from "js-base64";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import {
   setAccountAddress,
   setAccountName,
   showAccountConnectModal,
-} from '../../../actions/account';
+} from "../../../actions/account";
 import {
   fetchKeplrAccountName,
   initializeChain,
-} from '../../../services/keplr';
-import variables from '../../../utils/variables';
-import ButtonSubmit from './Ledger/index';
+} from "../../../services/keplr";
+import variables from "../../../utils/variables";
+import ButtonSubmit from "./Ledger/index";
 import styles from "./Header.module.scss";
 
 const ConnectModal = ({
@@ -24,10 +24,7 @@ const ConnectModal = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
-  console.log("In connect modal");
-
   const handleConnectToWallet = (walletType) => {
-    console.log("clicked");
     setInProgress(true);
 
     initializeChain(walletType, (error, account) => {
@@ -42,8 +39,8 @@ const ConnectModal = ({
         setAccountName(name);
       });
 
-      localStorage.setItem('ac', encode(account.address));
-      localStorage.setItem('loginType', walletType || 'keplr');
+      localStorage.setItem("ac", encode(account.address));
+      localStorage.setItem("loginType", walletType || "keplr");
       showAccountConnectModal(false);
     });
   };
@@ -60,10 +57,9 @@ const ConnectModal = ({
         <button onClick={() => handleConnectToWallet("leap")}>
           {"Leap Cosmos Wallet"}
         </button>
-        <button >
-        <ButtonSubmit />
+        <button>
+          <ButtonSubmit />
         </button>
-       
       </div>
     </Spin>
   );

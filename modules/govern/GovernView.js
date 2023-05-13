@@ -9,7 +9,6 @@ import VoteNowModal from "./VoteNowModal";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
-
 import {
   setProposal,
   setProposalTally,
@@ -42,7 +41,6 @@ const GovernView = ({
   setProposalTally,
   proposalTallyMap,
 }) => {
-  // const theme = useAppSelector((state) => state.theme.theme);
   const router = useRouter();
 
   const { id } = router.query;

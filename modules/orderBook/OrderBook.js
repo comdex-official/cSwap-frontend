@@ -1,4 +1,3 @@
-import { useAppSelector } from "../../shared/hooks/useAppSelector";
 import { Icon } from "../../shared/image/Icon";
 import React, { useState } from "react";
 import styles from "./OrderBook.module.scss";
@@ -10,7 +9,7 @@ import OrderbookTable from "../../modules/orderBook/OrderbookTable";
 import TradingViewWidget from "./OrderBookTrading";
 
 const OrderBook = () => {
-  const theme = useAppSelector((state) => state.theme.theme);
+  const theme = "dark";
 
   const TabData = ["Buy", "Sell"];
 
