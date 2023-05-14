@@ -16,6 +16,8 @@ import {
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET,
   SHOW_ELIGIBLE_DISCLAIMER_SET,
+  SET_SHOW_MY_POOL,
+  SET_SELECTED_MANAGE_POOL,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -122,7 +124,7 @@ export const setPoolIncentives = (list) => {
     if (list[i].isSwapFee) {
       if (
         rewardMap[list[i].poolId]["swapRewards"][
-          list[i].totalRewards?.denom
+        list[i].totalRewards?.denom
         ] === undefined
       ) {
         rewardMap[list[i].poolId]["swapRewards"][
@@ -134,7 +136,7 @@ export const setPoolIncentives = (list) => {
     } else {
       if (
         rewardMap[list[i].poolId]["normalRewards"][
-          list[i].totalRewards?.denom
+        list[i].totalRewards?.denom
         ] === undefined
       ) {
         rewardMap[list[i].poolId]["normalRewards"][
@@ -150,10 +152,10 @@ export const setPoolIncentives = (list) => {
   const masterPoolsIds =
     list.length > 0
       ? list?.filter(
-          (item) =>
-            item?.masterPool === true ||
-            item?.poolId?.toNumber() === MASTER_POOL_ID
-        )
+        (item) =>
+          item?.masterPool === true ||
+          item?.poolId?.toNumber() === MASTER_POOL_ID
+      )
       : [];
 
   const masterPoolHashMap = masterPoolsIds?.reduce((map, obj) => {
@@ -188,6 +190,19 @@ export const setPoolRewards = (value) => {
 export const setShowEligibleDisclaimer = (value) => {
   return {
     type: SHOW_ELIGIBLE_DISCLAIMER_SET,
+    value,
+  };
+};
+export const setShowMyPool = (value) => {
+  return {
+    type: SET_SHOW_MY_POOL,
+    value,
+  };
+};
+
+export const setSelectedManagePool = (value) => {
+  return {
+    type: SET_SELECTED_MANAGE_POOL,
     value,
   };
 };

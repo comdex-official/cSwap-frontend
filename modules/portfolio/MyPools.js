@@ -4,7 +4,9 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   setFirstReserveCoinDenom,
-  setSecondReserveCoinDenom
+  setSecondReserveCoinDenom,
+  setShowMyPool,
+  setSelectedManagePool
 } from "../../actions/liquidity";
 // import NoDataIcon from "../../components/common/NoDataIcon";
 import TooltipIcon from "../../shared/components/TooltipIcon";
@@ -14,7 +16,7 @@ import ShowAPR from "./ShowAPR";
 import PoolCardRow from "./MyPoolRow";
 import { useRouter } from "next/router";
 
-const MyPools = ({ pools, lang, userLiquidityInPools }) => {
+const MyPools = ({ pools, lang, userLiquidityInPools, setShowMyPool, setSelectedManagePool }) => {
   const navigate = useRouter();
 
   const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
@@ -73,7 +75,12 @@ const MyPools = ({ pools, lang, userLiquidityInPools }) => {
       render: (item) => (
         <Button
           type="primary"
-          onClick={() => navigate.push(`/farm`)}
+          onClick={() => {
+            setSelectedManagePool(item)
+            setShowMyPool(true)
+            navigate.push(`/farm`)
+          }
+          }
           className="btn-filled"
           size="small"
         >
@@ -153,6 +160,8 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
+  setShowMyPool,
+  setSelectedManagePool
 };
 
 export default connect(stateToProps, actionsToProps)(MyPools);

@@ -377,30 +377,59 @@ const FarmTable = ({
       Header: "APR",
       accessor: "APR",
       Cell: ({ value }) => (
-        <div
-          className={`${styles.farmCard__element__right__details} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+        <Tooltip
+          overlayClassName="farm_upto_apr_tooltip"
+          title={!getMasterPool(value?.id?.toNumber()) ?
+            <>
+              <div className="upto_apr_tooltip_farm_main_container">
+                <div className="upto_apr_tooltip_farm">
+                  <span className="text">Total APR (incl. MP Rewards):</span><span className="value"> {commaSeparator(calculateUptoApr(value?.id?.toNumber()) || 0)}%</span>
+                </div>
+
+                <div className="upto_apr_tooltip_farm">
+                  <span className="text">Base APR (CMDX. yeild only):</span><span className="value"> {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)}%</span>
+                </div>
+
+                <div className="upto_apr_tooltip_farm">
+                  <span className="text">Swap Fee APR :</span><span className="value"> {fixedDecimal(poolsApr?.[value?.id?.toNumber()]?.swap_fee_rewards?.[0]?.apr || 0)}%</span>
+                </div>
+
+                <div className="upto_apr_tooltip_farm">
+                  <span className="text">Available MP Boost:</span><span className="value"> Upto {commaSeparator(fetchMasterPoolAprData() || 0)}% for providing liquidity in the Master Pool</span>
+                </div>
+              </div>
+
+
+            </>
+            : null
+          }
+
         >
           <div
-            className={`${styles.farmCard__element__right__details__title} ${theme === "dark" ? styles.dark : styles.light
-              }`}
-          >
-            {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
-            {!getMasterPool(value?.id?.toNumber()) && <Icon className={"bi bi-arrow-right"} />}
-          </div>
-          {!getMasterPool(value?.id?.toNumber()) && <div
-            className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
+            className={`${styles.farmCard__element__right__details} ${theme === "dark" ? styles.dark : styles.light
               }`}
           >
             <div
-              className={`${styles.farmCard__element__right__pool__title} ${theme === "dark" ? styles.dark : styles.light
+              className={`${styles.farmCard__element__right__details__title} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              <NextImage src={Current} alt="Logo" />
-              {`Upto ${commaSeparator(calculateUptoApr(value?.id?.toNumber()) || 0)} %`}
+              {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
+              {!getMasterPool(value?.id?.toNumber()) && <Icon className={"bi bi-arrow-right"} />}
             </div>
-          </div>}
-        </div>
+            {!getMasterPool(value?.id?.toNumber()) && <div
+              className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
+                }`}
+            >
+              <div
+                className={`${styles.farmCard__element__right__pool__title} ${theme === "dark" ? styles.dark : styles.light
+                  }`}
+              >
+                <NextImage src={Current} alt="Logo" />
+                {`Upto ${commaSeparator(calculateUptoApr(value?.id?.toNumber()) || 0)} %`}
+              </div>
+            </div>}
+          </div>
+        </Tooltip>
       )
     },
     {

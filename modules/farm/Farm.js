@@ -46,6 +46,7 @@ const Farm = ({
   incentivesMap,
   setShowEligibleDisclaimer,
   showEligibleDisclaimer,
+  showMyPool,
 }) => {
   const theme = "dark";
   const TabData = ["All", "Basic", "Ranged", "My Pools"];
@@ -92,7 +93,7 @@ const Farm = ({
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
     setUserPool(userPools)
-  }, [userLiquidityInPools])
+  }, [userLiquidityInPools, filterValue])
 
 
   const updateFilteredData = useCallback(
@@ -200,7 +201,7 @@ const Farm = ({
     if (poolsApr) {
       fetchMasterPoolAprData()
     }
-  }, [poolsApr])
+  }, [poolsApr, pools])
 
 
   const tabItems = [
@@ -242,6 +243,12 @@ const Farm = ({
       updateFilteredData(filterValue);
     }
   };
+
+  useEffect(() => {
+    if (showMyPool) {
+      setFilterValue("4")
+    }
+  }, [])
 
 
   return (
@@ -501,6 +508,7 @@ const stateToProps = (state) => {
     masterPoolMap: state.liquidity.masterPoolMap,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     incentivesMap: state.liquidity.incentivesMap,
+    showMyPool: state.liquidity.showMyPool,
     showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
   };
 };

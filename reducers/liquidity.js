@@ -15,6 +15,8 @@ import {
   POOL_SET,
   POOL_TOKEN_SUPPLY_SET,
   SECOND_RESERVE_COIN_DENOM_SET,
+  SET_SELECTED_MANAGE_POOL,
+  SET_SHOW_MY_POOL,
   SHOW_ELIGIBLE_DISCLAIMER_SET,
   SPOT_PRICE_SET,
   USER_LIQUIDITY_IN_DOLLAR_SET,
@@ -229,6 +231,22 @@ const showEligibleDisclaimer = (state = true, action) => {
   return state;
 };
 
+const showMyPool = (state = false, action) => {
+  if (action.type === SET_SHOW_MY_POOL) {
+    return action.value;
+  }
+
+  return state;
+};
+
+const selectedManagePool = (state = "", action) => {
+  if (action.type === SET_SELECTED_MANAGE_POOL) {
+    return action.value;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -251,4 +269,6 @@ export default combineReducers({
   farmedTokensDollarValue,
   rewardsMap,
   showEligibleDisclaimer,
+  showMyPool,
+  selectedManagePool
 });

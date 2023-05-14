@@ -1927,3 +1927,48 @@ a {
 .alert-hidden {
   visibility: hidden;
 }
+
+.farm_upto_apr_tooltip {
+  cursor: pointer;
+  .ant-tooltip-arrow {
+    cursor: pointer;
+    .ant-tooltip-arrow-content {
+      background: $tooltip-bg-light;
+
+      .dark-mode & {
+        background: $tooltip-bg-light;
+      }
+    }
+  }
+
+  .ant-tooltip-inner {
+    cursor: pointer;
+    background-color: $tooltip-bg-light !important;
+    color: $tooltip-color-dark;
+    font-size: 10px;
+    min-height: 18px;
+    padding: 2px 3px;
+    line-height: 13px;
+    border-radius: 3px !important;
+    font-weight: 400;
+
+    .dark-mode & {
+      background-color: $dark-color;
+      color: $tooltip-color-dark;
+    }
+    .upto_apr_tooltip_farm_main_container {
+      width: 100%;
+      padding: 6px;
+      .upto_apr_tooltip_farm {
+        font-size: 12px;
+        margin-bottom: 5px;
+        .text {
+        }
+        .value {
+          font-weight: 600;
+          color: #665aa6;
+        }
+      }
+    }
+  }
+}
