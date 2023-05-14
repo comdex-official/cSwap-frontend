@@ -16,7 +16,7 @@ import Liquidity from "./Liquidity"
 import Card from "../../shared/components/card/Card"
 import { setUserLiquidityInPools } from "../../actions/liquidity";
 import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
-import { amountConversion, commaSeparatorWithRounding, denomConversion, getDenomBalance } from "../../utils/coin";
+import { amountConversion, commaSeparatorWithRounding, denomConversion, fixedDecimal, getDenomBalance } from "../../utils/coin";
 import { commaSeparator, decimalConversion, marketPrice } from "../../utils/number";
 import { queryPoolCoinDeserialize, queryPoolSoftLocks } from "../../services/liquidity/query";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
@@ -35,6 +35,7 @@ const FarmTable = ({
   assetMap,
   poolsApr,
   iconList,
+  poolAprList
 }) => {
 
   const [showMoreData, setshowMoreData] = useState(false)
@@ -58,14 +59,14 @@ const FarmTable = ({
   // console.log(pool, "pool");
   // console.log(poolsApr, "poolsApr");
 
-  const getMasterPool = () => {
-    const hasMasterPool = poolsApr?.incentive_rewards?.some(pool => pool.master_pool);
+  const getMasterPool = (_id) => {
+    const hasMasterPool = poolsApr?.[_id]?.incentive_rewards?.some(pool => pool.master_pool);
     return hasMasterPool;
   }
 
-  const checkExternalIncentives = () => {
-    if (poolsApr?.incentive_rewards?.length > 0) {
-      const hasExternalIncentive = poolsApr?.incentive_rewards?.some(pool => !pool.master_pool && pool?.apr);
+  const checkExternalIncentives = (_id) => {
+    if (poolsApr?.[_id]?.incentive_rewards?.length > 0) {
+      const hasExternalIncentive = poolsApr?.[_id]?.incentive_rewards?.some(pool => !pool.master_pool && pool?.apr);
       return hasExternalIncentive;
     }
     else {
@@ -100,6 +101,79 @@ const FarmTable = ({
       )}-${denomConversion(_item?.balances?.quoteCoin?.denom)}`;
     }
   };
+
+  const calculateMasterPoolApr = (_id) => {
+    const totalMasterPoolApr = poolsApr?.[_id]?.incentive_rewards
+      .filter((reward) => reward.master_pool)
+    // .reduce((acc, reward) => acc + reward.apr, 0);
+
+    // console.log(totalMasterPoolApr?.[0]?.apr, "totalMasterPoolApr");
+    return fixedDecimal(totalMasterPoolApr?.[0]?.apr)
+  }
+
+  const calculateChildPoolApr = (_id) => {
+    const totalApr = poolsApr?.[_id]?.incentive_rewards
+      .filter((reward) => !reward.master_pool)
+      .reduce((acc, reward) => acc + reward.apr, 0);
+
+    const swapFeeApr = poolsApr?.[_id]?.swap_fee_rewards.reduce(
+      (acc, reward) => acc + reward.apr,
+      0
+    );
+    const total = totalApr + swapFeeApr;
+    return fixedDecimal(total);
+  }
+
+  const calculateApr = (_id) => {
+    getMasterPool(_id)
+    if (getMasterPool(_id)) {
+      return calculateMasterPoolApr(_id)
+    } else {
+      return calculateChildPoolApr(_id)
+    }
+
+  }
+
+  const fetchMasterPoolAprData = () => {
+
+    let totalMasterPoolApr = 0;
+    // This will output the total APR value for all incentive_rewards where master_pool=true
+    if (poolAprList) {
+      Object.values(poolAprList && poolAprList).forEach((value) => {
+        const incentiveRewards = value.incentive_rewards;
+
+        incentiveRewards.forEach((incentive) => {
+          if (incentive.master_pool === true) {
+            totalMasterPoolApr += incentive.apr;
+          }
+        });
+      });
+    }
+    return fixedDecimal(totalMasterPoolApr)
+  }
+
+  const calculateUptoApr = (_id) => {
+    let totalApr = 0;
+    let totalMasterPoolApr = fetchMasterPoolAprData();
+
+
+    // calculate apr in incentive_rewards
+    poolsApr?.[_id]?.incentive_rewards.forEach((reward) => {
+      if (!reward.master_pool) {
+        totalApr += reward.apr;
+      }
+    });
+
+    // calculate apr in swap_fee_rewards
+    poolsApr?.[_id]?.swap_fee_rewards.forEach((reward) => {
+      totalApr += reward.apr;
+    });
+
+
+    totalMasterPoolApr = fixedDecimal(totalMasterPoolApr) + fixedDecimal(totalApr);
+    return fixedDecimal(totalMasterPoolApr);
+
+  }
 
   const getUserLiquidity = useCallback(
     (pool) => {
@@ -251,27 +325,6 @@ const FarmTable = ({
 
                   </div>
                   : ""}
-              {/* <div
-                className={`${styles.farmCard__element__right__basic} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                <div
-                  className={`${styles.farmCard__element__right__basic__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                >
-                  {"Basic"}
-                </div>
-                {false && (
-                  <div
-                    className={`${styles.farmCard__element__right__ranged__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Ranged} alt="Pool" />
-                    {"Ranged"}
-                  </div>
-                )}
-              </div> */}
-
 
               <div
                 className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
@@ -281,7 +334,7 @@ const FarmTable = ({
                   className={`${styles.farmCard__element__right__pool__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {getMasterPool() ?
+                  {getMasterPool(value?.id?.toNumber()) ?
                     <div
                       className={`${styles.farmCard__element__right__pool__title
                         } ${theme === 'dark' ? styles.dark : styles.light}`}
@@ -302,58 +355,20 @@ const FarmTable = ({
                 </div>
 
               </div>
-              {/* <div
-                className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                <div
-                  className={`${styles.farmCard__element__right__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
-                >
-                  <NextImage src={Pyramid} alt="Logo" />
-                  {"Master Pool"}
-                </div>
-
-                {false && (
-                  <div
-                    className={`${styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Current} alt="Logo" />
-                    {"MP Boost"}
-                  </div>
-                )}
-              </div> */}
             </div>
             <div
               className={`${styles.farmCard__element__right__incentive} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              {checkExternalIncentives() && <div
-                className={`${styles.farmCard__element__right__incentive} ${theme === 'dark' ? styles.dark : styles.light
-                  }`}
-              >
+              {checkExternalIncentives(value?.id?.toNumber()) &&
                 <div
                   className={`${styles.farmCard__element__right__pool__title} ${theme === 'dark' ? styles.dark : styles.light
                     }`}
                 >
                   <NextImage src={Cup} alt="Logo" />
                   {'External Incentives'}
-                </div>
-              </div>}
+                </div>}
             </div>
-            {/* <div
-              className={`${styles.farmCard__element__right__incentive} ${theme === "dark" ? styles.dark : styles.light
-                }`}
-            >
-              <div
-                className={`${styles.farmCard__element__right__pool__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
-              >
-                <NextImage src={Cup} alt="Logo" />
-                {"External Incentives"}
-              </div>
-            </div> */}
           </div>
         </div>
       )
@@ -370,10 +385,10 @@ const FarmTable = ({
             className={`${styles.farmCard__element__right__details__title} ${theme === "dark" ? styles.dark : styles.light
               }`}
           >
-            {value}%
-            <Icon className={"bi bi-arrow-right"} />
+            {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
+            {!getMasterPool(value?.id?.toNumber()) && <Icon className={"bi bi-arrow-right"} />}
           </div>
-          <div
+          {!getMasterPool(value?.id?.toNumber()) && <div
             className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
               }`}
           >
@@ -382,9 +397,9 @@ const FarmTable = ({
                 }`}
             >
               <NextImage src={Current} alt="Logo" />
-              {"Upto 54.45%"}
+              {`Upto ${commaSeparator(calculateUptoApr(value?.id?.toNumber()) || 0)} %`}
             </div>
-          </div>
+          </div>}
         </div>
       )
     },
@@ -423,7 +438,7 @@ const FarmTable = ({
       PoolPair: item,
       Image1: CMDS,
       Image2: ATOM,
-      APR: 14.45,
+      APR: item,
       TotalLiquidity: item
     }
   })

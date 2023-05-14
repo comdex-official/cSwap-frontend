@@ -420,7 +420,11 @@ const Farm = ({
               className={`${styles.farm__body__search__wrap} ${theme === "dark" ? styles.dark : styles.light
                 }`}
             >
-              <Search theme={theme} type={1} placeHolder="Search Pools.." />
+              <Input
+                placeholder="Search Pools.."
+                onChange={(event) => onSearchChange(event.target.value)}
+                className="asset_search_input"
+              />
             </div>
           </div>
         </div>
@@ -438,6 +442,7 @@ const Farm = ({
                 theme={theme}
                 pool={displayPools}
                 poolsApr={poolsApr}
+                poolAprList={poolsApr && poolsApr}
               />
               {/* ))} */}
             </div>

@@ -88,7 +88,6 @@ const FarmCard = ({
       0
     );
     const total = totalApr + swapFeeApr;
-    // console.log(total, "Total chaild pool apr");
     return fixedDecimal(total);
   }
 
