@@ -3,13 +3,14 @@ import account from "./account";
 import asset from "./asset";
 import govern from "./govern";
 import language from "./language";
-import ledger from './ledger';
+import ledger from "./ledger";
 import liquidity from "./liquidity";
 import oracle from "./oracle";
-import order from './order';
+import order from "./order";
 import swap from "./swap";
 import theme from "./theme";
-import config from './config';
+import config from "./config";
+import tradePair from "./tradePair";
 
 const app = combineReducers({
   language,
@@ -22,7 +23,8 @@ const app = combineReducers({
   oracle,
   order,
   ledger,
-  govern
+  govern,
+  tradePair,
 });
 
 const root = (state, action) => {

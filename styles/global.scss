@@ -981,6 +981,24 @@ a {
   }
 }
 
+.position_container {
+  .ant-tabs-nav {
+    margin-bottom: 10px;
+
+    &:before {
+      display: none;
+    }
+
+    .ant-tabs-nav-wrap {
+      width: 100%;
+
+      .ant-tabs-nav-list {
+        width: auto;
+      }
+    }
+  }
+}
+
 .asset-deposit-modal {
   &.ant-modal {
     .ant-modal-close {

@@ -71,6 +71,7 @@ import {
 import CustomSelect from "../../shared/components/CustomSelect";
 import CustomButton from "./CustomButton";
 import variables from "../../utils/variables";
+import Order from "./OrderTable";
 
 const TradeCard = ({
   lang,
@@ -106,6 +107,7 @@ const TradeCard = ({
   assetMap,
   assetsInProgress,
   iconList,
+  tradeData,
 }) => {
   const [toggleValue, setToggleValue] = useState(false);
 
@@ -129,6 +131,13 @@ const TradeCard = ({
       (item) => item.id.toNumber === firstPool?.pairId.toNumber
     )[0];
 
+    if (tradeData?.baseCoin) {
+      setOfferCoinDenom(tradeData?.baseCoin);
+      setDemandCoinDenom(tradeData?.quoteCoin);
+      updatePoolDetails(tradeData?.quoteCoinDenom, tradeData?.baseCoinDenom);
+      return;
+    }
+
     if (!offerCoin?.denom && !demandCoin?.denom && poolPair?.id) {
       setOfferCoinDenom(poolPair?.quoteCoinDenom);
       setDemandCoinDenom(poolPair?.baseCoinDenom);
@@ -136,7 +145,7 @@ const TradeCard = ({
     }
 
     resetValues();
-  }, [pools, pairs]);
+  }, [pools, pairs, tradeData]);
 
   useEffect(() => {
     if (pairs?.list?.length) {
@@ -632,186 +641,297 @@ const TradeCard = ({
   );
 
   return (
-    <div className={styles.tradeCard__wrap}>
-      <Card>
-        <div className={styles.tradeCard__main}>
-          <div
-            className={`${styles.tradeCard__head} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
+    <>
+      <div className={styles.tradeCard__wrap}>
+        <Card>
+          <div className={styles.tradeCard__main}>
             <div
-              className={`${styles.tradeCard__head__title} ${
+              className={`${styles.tradeCard__head} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <Toggle handleToggleValue={handleToggleValue} />
-              <span>{"Limit Order"}</span>
-            </div>
-
-            <div className={"assets-select-wrapper"}>
-              {toggleValue && (
-                <Popover
-                  className="setting-popover"
-                  content={SettingPopup}
-                  placement="bottomRight"
-                  overlayClassName="cmdx-popver"
-                  trigger="click"
-                >
-                  <div>
-                    <Icon className={`bi bi-gear-fill`} size={"1.2rem"} />
-                  </div>
-                </Popover>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.tradeCard__body__item}>
-            <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__main}>
-                <div
-                  className={`${styles.tradeCard__body__left__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  {toggleValue ? "Sell" : "From"}
-                </div>
-
-                <div className={styles.tradeCard__body__right__el1}>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {"Available"}{" "}
-                    <span>
-                      {amountConversionWithComma(
-                        availableBalance,
-                        assetMap[offerCoin?.denom]?.decimals
-                      )}{" "}
-                      {denomConversion(offerCoin?.denom)}
-                    </span>
-                  </div>
-                  <div
-                    className={`${
-                      styles.tradeCard__body__right__el1__description
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                    onClick={() => handleMaxClick()}
-                  >
-                    {"MAX"}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el1__footer} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                    onClick={() => handleHalfClick()}
-                  >
-                    {"HALF"}
-                  </div>
-                </div>
+              <div
+                className={`${styles.tradeCard__head__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <Toggle handleToggleValue={handleToggleValue} />
+                <span>{"Limit Order"}</span>
               </div>
 
-              <div className={styles.tradeCard__body__right}>
-                <div className={styles.settings__dropdown}>
-                  <div className="assets-select-wrapper">
-                    <CustomSelect
-                      iconList={iconList}
-                      loading={assetsInProgress}
-                      value={
-                        offerCoin?.denom && outputOptions?.length > 0
-                          ? offerCoin?.denom
-                          : null
-                      }
-                      onChange={handleOfferCoinDenomChange}
-                      list={inputOptions?.length > 0 ? inputOptions : null}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el2} ${
-                      toggleValue ? styles.limit__order : ""
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    <CustomInput
-                      value={offerCoin && offerCoin.amount}
-                      className="assets-select-input with-select"
-                      onChange={(event) => onChange(event.target.value)}
-                      validationError={validationError}
-                    />
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el3} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {pool?.id && showOfferCoinValue()}
-                  </div>
-                  <div
-                    className={`${styles.tradeCard__body__right__el4} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {pool?.id && showOfferCoinSpotPrice()}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.tradeCard__swap}>
-            <NextImage src={Arrow} alt="Logo_Dark" onClick={handleSwapChange} />
-          </div>
-
-          <div className={styles.tradeCard__body__item}>
-            <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__main}>
-                <div
-                  className={`${styles.tradeCard__body__left__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  {toggleValue ? "At" : "To"}
-                </div>
-
+              <div className={"assets-select-wrapper"}>
                 {toggleValue && (
-                  <div
-                    className={`${styles.tradeCard__body__limit__body} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  <Popover
+                    className="setting-popover"
+                    content={SettingPopup}
+                    placement="bottomRight"
+                    overlayClassName="cmdx-popver"
+                    trigger="click"
                   >
-                    {"Base Price: "}
-                    <span
-                      className="ml-1 cursor-pointer"
-                      onClick={() =>
-                        handleLimitPriceChange(
-                          Number(baseCoinPoolPrice).toFixed(comdex.coinDecimals)
-                        )
-                      }
-                    >
-                      {showPoolPrice()}
-                    </span>{" "}
-                  </div>
+                    <div>
+                      <Icon className={`bi bi-gear-fill`} size={"1.2rem"} />
+                    </div>
+                  </Popover>
                 )}
               </div>
+            </div>
 
-              <div className={styles.tradeCard__body__right}>
-                {toggleValue ? (
+            <div className={styles.tradeCard__body__item}>
+              <div className={styles.tradeCard__body__left}>
+                <div className={styles.tradeCard__body__main}>
                   <div
-                    className={`${
-                      styles.tradeCard__body__left__item__toggle_title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${styles.tradeCard__body__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
-                    {denomConversion(pair?.quoteCoinDenom)}/
-                    {denomConversion(pair?.baseCoinDenom)}
+                    {toggleValue ? "Sell" : "From"}
                   </div>
-                ) : (
+
+                  <div className={styles.tradeCard__body__right__el1}>
+                    <div
+                      className={`${
+                        styles.tradeCard__body__right__el1__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      {"Available"}{" "}
+                      <span>
+                        {amountConversionWithComma(
+                          availableBalance,
+                          assetMap[offerCoin?.denom]?.decimals
+                        )}{" "}
+                        {denomConversion(offerCoin?.denom)}
+                      </span>
+                    </div>
+                    <div
+                      className={`${
+                        styles.tradeCard__body__right__el1__description
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      onClick={() => handleMaxClick()}
+                    >
+                      {"MAX"}
+                    </div>
+                    <div
+                      className={`${
+                        styles.tradeCard__body__right__el1__footer
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      onClick={() => handleHalfClick()}
+                    >
+                      {"HALF"}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.tradeCard__body__right}>
                   <div className={styles.settings__dropdown}>
                     <div className="assets-select-wrapper">
                       <CustomSelect
                         iconList={iconList}
                         loading={assetsInProgress}
+                        value={
+                          offerCoin?.denom && outputOptions?.length > 0
+                            ? offerCoin?.denom
+                            : null
+                        }
+                        onChange={handleOfferCoinDenomChange}
+                        list={inputOptions?.length > 0 ? inputOptions : null}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      className={`${styles.tradeCard__body__right__el2} ${
+                        toggleValue ? styles.limit__order : ""
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <CustomInput
+                        value={offerCoin && offerCoin.amount}
+                        className="assets-select-input with-select"
+                        onChange={(event) => onChange(event.target.value)}
+                        validationError={validationError}
+                      />
+                    </div>
+                    <div
+                      className={`${styles.tradeCard__body__right__el3} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {pool?.id && showOfferCoinValue()}
+                    </div>
+                    <div
+                      className={`${styles.tradeCard__body__right__el4} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {pool?.id && showOfferCoinSpotPrice()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.tradeCard__swap}>
+              <NextImage
+                src={Arrow}
+                alt="Logo_Dark"
+                onClick={handleSwapChange}
+              />
+            </div>
+
+            <div className={styles.tradeCard__body__item}>
+              <div className={styles.tradeCard__body__left}>
+                <div className={styles.tradeCard__body__main}>
+                  <div
+                    className={`${styles.tradeCard__body__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {toggleValue ? "At" : "To"}
+                  </div>
+
+                  {toggleValue && (
+                    <div
+                      className={`${styles.tradeCard__body__limit__body} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {"Base Price: "}
+                      <span
+                        className="ml-1 cursor-pointer"
+                        onClick={() =>
+                          handleLimitPriceChange(
+                            Number(baseCoinPoolPrice).toFixed(
+                              comdex.coinDecimals
+                            )
+                          )
+                        }
+                      >
+                        {showPoolPrice()}
+                      </span>{" "}
+                    </div>
+                  )}
+                </div>
+
+                <div className={styles.tradeCard__body__right}>
+                  {toggleValue ? (
+                    <div
+                      className={`${
+                        styles.tradeCard__body__left__item__toggle_title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      {denomConversion(pair?.quoteCoinDenom)}/
+                      {denomConversion(pair?.baseCoinDenom)}
+                    </div>
+                  ) : (
+                    <div className={styles.settings__dropdown}>
+                      <div className="assets-select-wrapper">
+                        <CustomSelect
+                          iconList={iconList}
+                          loading={assetsInProgress}
+                          value={
+                            demandCoin?.denom && outputOptions?.length > 0
+                              ? demandCoin?.denom
+                              : null
+                          }
+                          onChange={handleDemandCoinDenomChange}
+                          list={
+                            outputOptions?.length > 0 ? outputOptions : null
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    {toggleValue ? (
+                      <>
+                        <div
+                          className={`${styles.tradeCard__body__right__el2} ${
+                            toggleValue ? styles.limit__order : ""
+                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                        >
+                          <CustomInput
+                            onChange={(event) =>
+                              handleLimitPriceChange(event.target.value)
+                            }
+                            className="assets-select-input with-select"
+                            value={limitPrice}
+                          />
+                        </div>
+                        <div
+                          className={`${styles.tradeCard__body__limit__body} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          {"Tolerance Range: "}{" "}
+                          <span className="ml-1 cursor-pointer">
+                            {priceRange(
+                              Number(decimalConversion(pair?.lastPrice)),
+                              Number(
+                                decimalConversion(params?.maxPriceLimitRatio)
+                              ),
+
+                              10 **
+                                Math.abs(
+                                  getExponent(
+                                    assetMap[pair?.baseCoinDenom]?.decimals
+                                  ) -
+                                    getExponent(
+                                      assetMap[pair?.quoteCoinDenom]?.decimals
+                                    )
+                                )
+                            )}
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          className={`${styles.tradeCard__body__right__el2} ${
+                            toggleValue ? styles.limit__order : ""
+                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                        >
+                          <CustomInput
+                            disabled
+                            className="assets-select-input with-select"
+                            value={demandCoin && demandCoin.amount}
+                          />
+                        </div>
+                        <div
+                          className={`${styles.tradeCard__body__right__el3} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          {pool?.id && showDemandCoinValue()}
+                        </div>
+                        <div
+                          className={`${styles.tradeCard__body__right__el4} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          {pool?.id && showDemandCoinSpotPrice()}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {toggleValue && (
+              <div className={styles.tradeCard__body__item}>
+                <div className={styles.tradeCard__body__left}>
+                  <div
+                    className={`${styles.tradeCard__body__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {"And Get"}
+                  </div>
+                  <div className={styles.tradeCard__body__right}>
+                    <div className={styles.settings__dropdown}>
+                      <CustomSelect
+                        iconList={iconList}
                         value={
                           demandCoin?.denom && outputOptions?.length > 0
                             ? demandCoin?.denom
@@ -821,221 +941,124 @@ const TradeCard = ({
                         list={outputOptions?.length > 0 ? outputOptions : null}
                       />
                     </div>
+                    <div
+                      className={`${styles.tradeCard__body__right__el2} ${
+                        toggleValue ? styles.limit__order : ""
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <CustomInput
+                        disabled
+                        value={
+                          limitPrice
+                            ? reverse
+                              ? Number(offerCoin?.amount / limitPrice).toFixed(
+                                  comdex.coinDecimals
+                                )
+                              : demandCoin?.amount
+                            : 0
+                        }
+                        className="assets-select-input with-select"
+                      />
+                    </div>
                   </div>
-                )}
-
-                <div>
-                  {toggleValue ? (
-                    <>
-                      <div
-                        className={`${styles.tradeCard__body__right__el2} ${
-                          toggleValue ? styles.limit__order : ""
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <CustomInput
-                          onChange={(event) =>
-                            handleLimitPriceChange(event.target.value)
-                          }
-                          className="assets-select-input with-select"
-                          value={limitPrice}
-                        />
-                      </div>
-                      <div
-                        className={`${styles.tradeCard__body__limit__body} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        {"Tolerance Range: "}{" "}
-                        <span className="ml-1 cursor-pointer">
-                          {priceRange(
-                            Number(decimalConversion(pair?.lastPrice)),
-                            Number(
-                              decimalConversion(params?.maxPriceLimitRatio)
-                            ),
-
-                            10 **
-                              Math.abs(
-                                getExponent(
-                                  assetMap[pair?.baseCoinDenom]?.decimals
-                                ) -
-                                  getExponent(
-                                    assetMap[pair?.quoteCoinDenom]?.decimals
-                                  )
-                              )
-                          )}
-                        </span>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        className={`${styles.tradeCard__body__right__el2} ${
-                          toggleValue ? styles.limit__order : ""
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <CustomInput
-                          disabled
-                          className="assets-select-input with-select"
-                          value={demandCoin && demandCoin.amount}
-                        />
-                      </div>
-                      <div
-                        className={`${styles.tradeCard__body__right__el3} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        {pool?.id && showDemandCoinValue()}
-                      </div>
-                      <div
-                        className={`${styles.tradeCard__body__right__el4} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        {pool?.id && showDemandCoinSpotPrice()}
-                      </div>
-                    </>
-                  )}
                 </div>
               </div>
-            </div>
-          </div>
+            )}
 
-          {toggleValue && (
-            <div className={styles.tradeCard__body__item}>
-              <div className={styles.tradeCard__body__left}>
-                <div
-                  className={`${styles.tradeCard__body__left__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  {"And Get"}
-                </div>
-                <div className={styles.tradeCard__body__right}>
-                  <div className={styles.settings__dropdown}>
-                    <CustomSelect
-                      iconList={iconList}
-                      value={
-                        demandCoin?.denom && outputOptions?.length > 0
-                          ? demandCoin?.denom
-                          : null
-                      }
-                      onChange={handleDemandCoinDenomChange}
-                      list={outputOptions?.length > 0 ? outputOptions : null}
-                    />
+            <div className={styles.tradeCard__description}>
+              {toggleValue ? null : (
+                <div className={styles.tradeCard__description__el}>
+                  <div
+                    className={`${styles.tradeCard__description__left_title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {"Estimated Slippage"}
                   </div>
                   <div
-                    className={`${styles.tradeCard__body__right__el2} ${
-                      toggleValue ? styles.limit__order : ""
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${styles.tradeCard__description__right_title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
-                    <CustomInput
-                      disabled
-                      value={
-                        limitPrice
-                          ? reverse
-                            ? Number(offerCoin?.amount / limitPrice).toFixed(
-                                comdex.coinDecimals
-                              )
-                            : demandCoin?.amount
-                          : 0
-                      }
-                      className="assets-select-input with-select"
-                    />
+                    {pool?.type === 2 && isFinalSlippage ? ">" : ""}
+                    {Number(slippage)?.toFixed(comdex.coinDecimals)}%
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )}
 
-          <div className={styles.tradeCard__description}>
-            {toggleValue ? null : (
               <div className={styles.tradeCard__description__el}>
                 <div
                   className={`${styles.tradeCard__description__left_title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {"Estimated Slippage"}
+                  {toggleValue ? "Trade Fee" : "Swap Fee"}
                 </div>
                 <div
                   className={`${styles.tradeCard__description__right_title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {pool?.type === 2 && isFinalSlippage ? ">" : ""}
-                  {Number(slippage)?.toFixed(comdex.coinDecimals)}%
+                  {Number(decimalConversion(params?.swapFeeRate) || 0) * 100}%
                 </div>
               </div>
-            )}
 
-            <div className={styles.tradeCard__description__el}>
-              <div
-                className={`${styles.tradeCard__description__left_title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {toggleValue ? "Trade Fee" : "Swap Fee"}
-              </div>
-              <div
-                className={`${styles.tradeCard__description__right_title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {Number(decimalConversion(params?.swapFeeRate) || 0) * 100}%
-              </div>
+              {!toggleValue && (
+                <div
+                  className={`${styles.tradeCard__description__el2} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {
+                    "Note: The requested swap could be completed fully, partially, or cancelled due to price limiting and to maintain pool stability."
+                  }
+                </div>
+              )}
             </div>
 
-            {!toggleValue && (
-              <div
-                className={`${styles.tradeCard__description__el2} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {
-                  "Note: The requested swap could be completed fully, partially, or cancelled due to price limiting and to maintain pool stability."
+            <div
+              className={`${styles.tradeCard__button__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
+            >
+              <CustomButton
+                isLimitOrder={isLimitOrder}
+                limitPrice={limitPrice}
+                lang={lang}
+                pair={pair}
+                params={params}
+                orderLifespan={orderLifespan}
+                refreshDetails={handleRefreshDetails}
+                orderDirection={reverse ? 1 : 2}
+                baseCoinPoolPrice={baseCoinPoolPrice}
+                validationError={
+                  validationError || (isLimitOrder && priceValidationError)
                 }
-              </div>
-            )}
+                isDisabled={
+                  !pool?.id ||
+                  !Number(demandCoin?.amount) ||
+                  (isLimitOrder
+                    ? !Number(limitPrice) || priceValidationError?.message
+                    : false)
+                }
+                max={availableBalance}
+                name={
+                  !pool?.id
+                    ? "No pool exists"
+                    : MAX_SLIPPAGE_TOLERANCE < slippage && !isLimitOrder
+                    ? variables[lang].swap_anyway
+                    : variables[lang].swap
+                }
+              />
+            </div>
           </div>
+        </Card>
+      </div>
 
-          <div
-            className={`${styles.tradeCard__button__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            <CustomButton
-              isLimitOrder={isLimitOrder}
-              limitPrice={limitPrice}
-              lang={lang}
-              pair={pair}
-              params={params}
-              orderLifespan={orderLifespan}
-              refreshDetails={handleRefreshDetails}
-              orderDirection={reverse ? 1 : 2}
-              baseCoinPoolPrice={baseCoinPoolPrice}
-              validationError={
-                validationError || (isLimitOrder && priceValidationError)
-              }
-              isDisabled={
-                !pool?.id ||
-                !Number(demandCoin?.amount) ||
-                (isLimitOrder
-                  ? !Number(limitPrice) || priceValidationError?.message
-                  : false)
-              }
-              max={availableBalance}
-              name={
-                !pool?.id
-                  ? "No pool exists"
-                  : MAX_SLIPPAGE_TOLERANCE < slippage && !isLimitOrder
-                  ? variables[lang].swap_anyway
-                  : variables[lang].swap
-              }
-            />
-          </div>
-        </div>
-      </Card>
-    </div>
+      <div className="order_table_section">
+        {toggleValue && <Order lang={lang} assetMap={assetMap} />}
+      </div>
+    </>
   );
 };
 
@@ -1158,6 +1181,7 @@ const stateToProps = (state) => {
     assetDenomMap: state.asset._.assetDenomMap,
     assetsInProgress: state.asset._.inProgress,
     iconList: state.config?.iconList,
+    tradeData: state?.tradePair?.tradeData,
   };
 };
 

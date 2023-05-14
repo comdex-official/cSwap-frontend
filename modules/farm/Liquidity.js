@@ -1,25 +1,24 @@
 // import React, { useState } from "react"
-import styles from "./Farm.module.scss"
-import { NextImage } from "../../shared/image/NextImage"
-import { ATOM, CMDS } from "../../shared/image"
-import { Icon } from "../../shared/image/Icon"
-import dynamic from "next/dynamic"
-import RangeTooltipContent from "../../shared/components/range/RangedToolTip"
-import Tab from "../../shared/components/tab/Tab"
+import styles from "./Farm.module.scss";
+import { NextImage } from "../../shared/image/NextImage";
+import { ATOM, CMDS } from "../../shared/image";
+import { Icon } from "../../shared/image/Icon";
+import dynamic from "next/dynamic";
+import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
+import Tab from "../../shared/components/tab/Tab";
 
 import { Button, message, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import MediaQuery from "react-responsive";
-import { useLocation, useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { useRouter } from "next/router";
+
 import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
   setSpotPrice,
-  setUserLiquidityInPools
+  setUserLiquidityInPools,
 } from "../../actions/liquidity";
 import CustomInput from "../../shared/components/CustomInput";
 
@@ -30,14 +29,21 @@ import { queryAllBalances } from "../../services/bank/query";
 import {
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../../services/liquidity/query";
-import { amountConversion, amountConversionWithComma, commaSeparatorWithRounding, denomConversion, getAmount, getDenomBalance } from "../../utils/coin"
-import { DOLLAR_DECIMALS } from "../../constants/common"
-import { marketPrice } from "../../utils/number"
-import Deposit from "./Deposit"
-import Withdraw from "./Withdraw"
-import PoolDetails from "./poolDetail"
+import {
+  amountConversion,
+  amountConversionWithComma,
+  commaSeparatorWithRounding,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
+} from "../../utils/coin";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import { marketPrice } from "../../utils/number";
+import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
+import PoolDetails from "./poolDetail";
 
 const Liquidity = ({
   theme,
@@ -56,9 +62,11 @@ const Liquidity = ({
   rewardsMap,
 }) => {
   const dispatch = useDispatch();
-  const TabData = ["DEPOSIT", "WITHDRAW"]
+  const TabData = ["DEPOSIT", "WITHDRAW"];
 
-  const [active, setActive] = useState("DEPOSIT")
+  const router = useRouter();
+
+  const [active, setActive] = useState("DEPOSIT");
 
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -81,7 +89,7 @@ const Liquidity = ({
   const userLockedPoolTokens =
     Number(
       queuedAmounts?.length > 0 &&
-      queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+        queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
     ) + Number(activeSoftLock?.amount) || 0;
 
   const fetchSoftLock = useCallback(() => {
@@ -94,7 +102,6 @@ const Liquidity = ({
       setQueuedSoftLocks(result?.queuedPoolCoin);
     });
   }, [address, pool?.id]);
-
 
   useEffect(() => {
     if (address && pool?.id) {
@@ -117,7 +124,6 @@ const Liquidity = ({
       fetchPool(id);
     }
   }, [id, fetchPool]);
-
 
   const fetchProvidedCoins = useCallback(() => {
     queryPoolCoinDeserialize(
@@ -197,7 +203,6 @@ const Liquidity = ({
     [assetMap, markets]
   );
 
-
   const TotalPoolLiquidity = commaSeparatorWithRounding(
     calculatePoolLiquidity(pool?.balances),
     DOLLAR_DECIMALS
@@ -211,30 +216,33 @@ const Liquidity = ({
     }
   }, [pool?.id, providedTokens, calculatePoolLiquidity]);
 
-
-
-  const handleActive = item => {
-    setActive(item)
-  }
+  const handleActive = (item) => {
+    setActive(item);
+  };
 
   return (
     <div
-      className={`${styles.liquidityCard__wrap} ${theme === "dark" ? styles.dark : styles.light
-        }`}
+      className={`${styles.liquidityCard__wrap} ${
+        theme === "dark" ? styles.dark : styles.light
+      }`}
     >
       <div
-        className={`${styles.liquidityCard__tab} ${theme === "dark" ? styles.dark : styles.light
-          }`}
+        className={`${styles.liquidityCard__tab} ${
+          theme === "dark" ? styles.dark : styles.light
+        }`}
       >
         <div
-          className={`${styles.liquidityCard__tab__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.liquidityCard__tab__wrap} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <Tab data={TabData} active={active} handleActive={handleActive} />
         </div>
         <div
-          className={`${styles.liquidityCard__trade__pair} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.liquidityCard__trade__pair} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
+          onClick={() => router.push("/")}
         >
           {"Trade Pair"}
         </div>
@@ -258,13 +266,14 @@ const Liquidity = ({
       )}
       {/* <PoolDetails active={active} pool={pool} /> */}
     </div>
-  )
-}
+  );
+};
 
 Liquidity.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setFetchBalanceInProgress: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
+
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
@@ -316,6 +325,5 @@ const actionsToProps = {
   setSpotPrice,
   setUserLiquidityInPools,
 };
-
 
 export default connect(stateToProps, actionsToProps)(Liquidity);
