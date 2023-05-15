@@ -1,6 +1,0 @@
-**/node_modules/*
-**/out/*
-**/.next/*
-dist
-__generated__
-server/__generated__
