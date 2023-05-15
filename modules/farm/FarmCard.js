@@ -430,39 +430,34 @@ const FarmCard = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {getMasterPool() ? (
-                      <div
-                        className={`${
-                          styles.farmCard__element__right__pool__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <NextImage src={Pyramid} alt="Logo" />
-                        {"Master Pool"}
-                      </div>
-                    ) : (
-                      <div
-                        className={`${
-                          styles.farmCard__element__right__pool__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <NextImage src={Current} alt="Logo" />
-                        {"MP Boost"}
-                      </div>
-                    )}
-                  </div>
+                  {getMasterPool() ? (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Pyramid} alt="Logo" />
+                      {"Master Pool"}
+                    </div>
+                  ) : (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {"MP Boost"}
+                    </div>
+                  )}
                 </div>
               </div>
-              <div
-                className={`${styles.farmCard__element__right__incentive} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {checkExternalIncentives() && (
+
+              {checkExternalIncentives() && (
+                <div
+                  className={`${styles.farmCard__element__right__incentive} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
                   <div
                     className={`${
                       styles.farmCard__element__right__pool__title
@@ -471,8 +466,8 @@ const FarmCard = ({
                     <NextImage src={Cup} alt="Logo" />
                     {"External Incentives"}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
           <div
@@ -598,9 +593,9 @@ const FarmCard = ({
             </div>
 
             {showMoreData ? (
-              <Icon className={"bi bi-chevron-up"} size={"1.2rem"} />
+              <Icon className={"bi bi-chevron-up"} size={"0.7rem"} />
             ) : (
-              <Icon className={"bi bi-chevron-down"} size={"1.2rem"} />
+              <Icon className={"bi bi-chevron-down"} size={"0.7rem"} />
             )}
           </div>
 
@@ -610,55 +605,60 @@ const FarmCard = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <div
-                className={`${styles.farmCard__footer__main} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
+              {poolExternalIncentiveData.length > 0 && (
                 <div
-                  className={`${styles.farmCard__footer__left__title} ${
+                  className={`${styles.farmCard__footer__main} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {"Estimated rewards earned per day"}
-                </div>
-                <div
-                  className={`${styles.farmCard__footer__rewards} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  {poolExternalIncentiveData?.map((singleIncentive) => {
-                    return (
-                      <div
-                        className={`${
-                          styles.farmCard__footer__rewards__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                        key={singleIncentive?.denom}
-                      >
-                        <NextImage
-                          src={iconList?.[singleIncentive?.denom]?.coinImageUrl}
-                          width={50}
-                          height={50}
-                          alt=""
-                        />{" "}
-                        ${calculateRewardPerDay(singleIncentive)}
-                      </div>
-                    );
-                  })}
-                  {/* <div
-                    className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                  <div
+                    className={`${styles.farmCard__footer__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
-                    <NextImage src={ATOM} alt="" /> {"0.000000"}
+                    {"Estimated rewards earned per day"}
                   </div>
                   <div
-                    className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__footer__rewards} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
-                    <NextImage src={CMDS} alt="" /> {"0.000000"}
-                  </div> */}
+                    {poolExternalIncentiveData?.map((singleIncentive) => {
+                      return (
+                        <div
+                          className={`${
+                            styles.farmCard__footer__rewards__title
+                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                          key={singleIncentive?.denom}
+                        >
+                          <NextImage
+                            src={
+                              iconList?.[singleIncentive?.denom]?.coinImageUrl
+                            }
+                            width={50}
+                            height={50}
+                            alt=""
+                          />{" "}
+                          ${calculateRewardPerDay(singleIncentive)}
+                        </div>
+                      );
+                    })}
+                    {/* <div
+                   className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
+                     }`}
+                 >
+                   <NextImage src={ATOM} alt="" /> {"0.000000"}
+                 </div>
+                 <div
+                   className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
+                     }`}
+                 >
+                   <NextImage src={CMDS} alt="" /> {"0.000000"}
+                 </div> */}
+                  </div>
                 </div>
-              </div>
+              )}
+
               <div
                 className={`${styles.farmCard__footer__main} ${
                   theme === "dark" ? styles.dark : styles.light
@@ -727,6 +727,7 @@ const FarmCard = ({
             title="Liquidity"
             open={isModalOpen}
             onCancel={handleCancel}
+            centered={true}
           >
             <Liquidity theme={theme} pool={pool} />
           </Modal>

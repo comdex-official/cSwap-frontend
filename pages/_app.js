@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <Layout>
       <Head>
-      <title>cSwap Exchange</title>
-      <link rel="shortcut icon" href="/assets/favicon.ico" />
+        <title>cSwap Exchange</title>
+        <link rel="shortcut icon" href="/assets/favicon.ico" />
       </Head>
       <Component {...pageProps} />
     </Layout>

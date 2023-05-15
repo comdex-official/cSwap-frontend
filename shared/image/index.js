@@ -1,5 +1,4 @@
 //import
-import BackGround from "../../public/assets/images/background.svg";
 import Logo_Dark from "../../public/assets/images/cSwap-light-logo.svg";
 import Logo_Light from "../../public/assets/images/cSwap-dark-logo.svg";
 import C_Logo from "../../public/assets/images/c-logo.svg";
@@ -23,10 +22,13 @@ import Twitter from "../../public/assets/images/twitter.svg";
 import Medium from "../../public/assets/images/medium.svg";
 import Info from "../../public/assets/images/info.svg";
 import ArrowRL from "../../public/assets/images/arrow-right-left.svg";
+import List from "../../public/assets/images/list.svg";
+import Square from "../../public/assets/images/square.svg";
+import SquareWhite from "../../public/assets/images/squarew.svg";
+import ListWhite from "../../public/assets/images/listw.svg";
 
 // exports
 export {
-  BackGround,
   Logo_Light,
   Logo_Dark,
   C_Logo,
@@ -50,4 +52,8 @@ export {
   Medium,
   Info,
   ArrowRL,
+  List,
+  Square,
+  SquareWhite,
+  ListWhite,
 };

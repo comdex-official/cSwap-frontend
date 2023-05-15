@@ -540,16 +540,18 @@ const Header = ({
 
         <Modal
           className={"modal__wrap"}
-          title="Bridge"
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
+          centered={true}
+          footer={null}
+          header={null}
         >
           <iframe
             src="https://dev-transit.comdex.one/"
             frameBorder="0"
             width={"100%"}
-            height={"580px"}
+            height={"700px"}
             style={{ borderRadius: "10px", background: "#030b1e" }}
           ></iframe>
         </Modal>

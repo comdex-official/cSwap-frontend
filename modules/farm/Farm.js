@@ -17,6 +17,9 @@ import {
 } from "../../constants/common";
 import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion, fixedDecimal } from "../../utils/coin";
+import MyDropdown from "../../shared/components/dropDown/Dropdown";
+import { NextImage } from "../../shared/image/NextImage";
+import { List, ListWhite, Square, SquareWhite } from "../../shared/image";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -52,8 +55,8 @@ const Farm = ({
 
   const [active, setActive] = useState("All");
   const [listView, setListView] = useState(false);
-  const [masterPoolData, setMasterPoolData] = useState(0)
-  const [userPools, setUserPool] = useState()
+  const [masterPoolData, setMasterPoolData] = useState(0);
+  const [userPools, setUserPool] = useState();
 
   const handleActive = (item) => {
     setActive(item);
@@ -79,8 +82,6 @@ const Farm = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-
   useEffect(() => {
     const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
       displayPools?.find(
@@ -91,17 +92,15 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
-    setUserPool(userPools)
-  }, [userLiquidityInPools])
-
+    setUserPool(userPools);
+  }, [userLiquidityInPools]);
 
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
       if (filterValue !== "3") {
         if (filterValue === "4") {
-          setDisplayPools(userPools)
-        }
-        else {
+          setDisplayPools(userPools);
+        } else {
           let filteredPools = pools.filter(
             (item) => item.type === Number(filterValue)
           );
@@ -178,7 +177,6 @@ const Farm = ({
   };
 
   const fetchMasterPoolAprData = () => {
-
     // Fetching master pool key
     if (pools) {
       Object.keys(poolsApr && poolsApr).forEach((value) => {
@@ -186,22 +184,21 @@ const Farm = ({
 
         incentiveRewards.forEach((incentive) => {
           if (incentive.master_pool === true) {
-            let masterPoolData = pools?.filter((item) => Number(item?.id?.toNumber()) === Number(value))
-            setMasterPoolData(masterPoolData?.[0])
+            let masterPoolData = pools?.filter(
+              (item) => Number(item?.id?.toNumber()) === Number(value)
+            );
+            setMasterPoolData(masterPoolData?.[0]);
           }
         });
       });
     }
-
-  }
-
+  };
 
   useEffect(() => {
     if (poolsApr) {
-      fetchMasterPoolAprData()
+      fetchMasterPoolAprData();
     }
-  }, [poolsApr])
-
+  }, [poolsApr]);
 
   const tabItems = [
     {
@@ -243,102 +240,134 @@ const Farm = ({
     }
   };
 
+  const Items = [
+    {
+      key: "item-2",
+      label: (
+        <div className={styles.dropdown__farm}>
+          <p>{"APR"}</p>
+          <p>{"My Pools"}</p>
+          <p>{"Date Created"}</p>
+          <p>{"Pool Liquidity"}</p>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div
-      className={`${styles.farm__wrap} ${theme === "dark" ? styles.dark : styles.light
-        }`}
+      className={`${styles.farm__wrap} ${
+        theme === "dark" ? styles.dark : styles.light
+      }`}
     >
       <div
-        className={`${styles.farm__main} ${theme === "dark" ? styles.dark : styles.light
-          }`}
+        className={`${styles.farm__main} ${
+          theme === "dark" ? styles.dark : styles.light
+        }`}
       >
         <div
-          className={`${styles.farm__header} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.farm__header} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <div
-            className={`${styles.farm__header__body__left} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farm__header__body__left} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farm__header__left__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__header__left__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"cSwap v2 Live"}
             </div>
             <div
-              className={`${styles.farm__header__left__description} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__header__left__description} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
             </div>
             <div
-              className={`${styles.farm__header__left__more} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__header__left__more} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"learn more"}
             </div>
           </div>
           <div
-            className={`${styles.farm__header__body__right} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farm__header__body__right} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farm__header__right__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__header__right__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"How it works?"}
             </div>
             <div
-              className={`${styles.farm__header__right__main} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__header__right__main} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div
-                className={`${styles.farm__header__right__body} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farm__header__right__body} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farm__header__right__body__background} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farm__header__right__body__background} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farm__header__right__body__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farm__header__right__body__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {"STEP 1"}
                   </div>
                   <div
-                    className={`${styles.farm__header__right__body__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${
+                      styles.farm__header__right__body__description
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     {"Provide liquidity in the Master pool"}
                   </div>
                   <div
-                    className={`${styles.farm__header__right__body__button} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farm__header__right__body__button} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {"Go to Pool"}
                   </div>
                 </div>
               </div>
               <div
-                className={`${styles.farm__header__right__body} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farm__header__right__body} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farm__header__right__body__background} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farm__header__right__body__background} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farm__header__right__body__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farm__header__right__body__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {"STEP 2"}
                   </div>
                   <div
-                    className={`${styles.farm__header__right__body__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${
+                      styles.farm__header__right__body__description
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     {`Deposit Equal value of assets in Child Pool 
                     or pools as your Master Pool to 
@@ -350,75 +379,110 @@ const Farm = ({
           </div>
         </div>
         <div
-          className={`${styles.farm__body} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.farm__body} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <div
-            className={`${styles.farm__body__left} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farm__body__left} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farm__body__tab__wrap} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__body__tab__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {/* <Tab data={TabData} active={active} handleActive={handleActive} /> */}
-              <div className="mb-4">
+              <div className="">
                 <Tabs
                   defaultActiveKey="1"
                   items={tabItems}
                   activeKey={filterValue}
                   onChange={onChange}
                   className="comdex-tabs farm-details-tabmain"
-                // tabBarExtraContent={
-                //   <div className="farmtab-right-action">
-                //     <CreatePool
-                //       refreshData={updatePools}
-                //       refreshBalance={handleBalanceRefresh}
-                //     />
-                //     <Input
-                //       placeholder="Search Pools.."
-                //       onChange={(event) => onSearchChange(event.target.value)}
-                //     suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-                //     />
-                //   </div>
-                // }
+                  // tabBarExtraContent={
+                  //   <div className="farmtab-right-action">
+                  //     <CreatePool
+                  //       refreshData={updatePools}
+                  //       refreshBalance={handleBalanceRefresh}
+                  //     />
+                  //     <Input
+                  //       placeholder="Search Pools.."
+                  //       onChange={(event) => onSearchChange(event.target.value)}
+                  //     suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+                  //     />
+                  //   </div>
+                  // }
                 />
               </div>
             </div>
             <div
-              className={`${styles.farm__body__line} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__body__line} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             />
             <div
-              className={`${styles.farm__body__icon__wrap} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__body__icon__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
-              <Icon
-                className={"bi bi-grid-fill"}
-                size={"25.05px"}
-                onClick={() => setListView(false)}
-              />
-              <Icon
-                className={"bi bi-list-ul"}
-                size={"1.9rem"}
-                onClick={() => setListView(true)}
-              />
+              {!listView ? (
+                <>
+                  <NextImage
+                    src={SquareWhite}
+                    onClick={() => setListView(false)}
+                    height={15}
+                    width={15}
+                  />
+                  <NextImage
+                    src={List}
+                    onClick={() => setListView(true)}
+                    height={15}
+                    width={15}
+                  />
+                </>
+              ) : (
+                <>
+                  <NextImage
+                    src={Square}
+                    onClick={() => setListView(false)}
+                    height={15}
+                    width={15}
+                  />
+                  <NextImage
+                    src={ListWhite}
+                    onClick={() => setListView(true)}
+                    height={15}
+                    width={15}
+                  />
+                </>
+              )}
             </div>
           </div>
           <div
-            className={`${styles.farm__body__right} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farm__body__right} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
-            <div
-              className={`${styles.farm__body__filter__wrap} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+            <MyDropdown
+              items={Items}
+              placement={"bottomRight"}
+              trigger={["click"]}
             >
-              <Icon className={"bi bi-funnel-fill"} />
-              {"Filter"}
-            </div>
-            <div
-              className={`${styles.farm__body__search__wrap} ${theme === "dark" ? styles.dark : styles.light
+              <div
+                className={`${styles.farm__body__filter__wrap} ${
+                  theme === "dark" ? styles.dark : styles.light
                 }`}
+              >
+                <Icon className={"bi bi-funnel-fill"} />
+                {"Filter"}
+              </div>
+            </MyDropdown>
+            <div
+              className={`${styles.farm__body__search__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <Input
                 placeholder="Search Pools.."
@@ -429,13 +493,15 @@ const Farm = ({
           </div>
         </div>
         <div
-          className={`${styles.farm__footer} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.farm__footer} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           {listView ? (
             <div
-              className={`${styles.farm__table__wrap} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__table__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {/* {displayPools && displayPools.map((item) => ( */}
               <FarmTable
@@ -448,8 +514,9 @@ const Farm = ({
             </div>
           ) : (
             <div
-              className={`${styles.farm__footer__card__wrap} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farm__footer__card__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {displayPools &&
                 displayPools.map((item) => (
