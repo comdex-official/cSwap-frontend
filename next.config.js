@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   distDir: "build",
   images: {
-    domains: ["raw.githubusercontent.com"],
+    unoptimized: true,
   },
 };
 
