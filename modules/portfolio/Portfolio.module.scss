@@ -1,0 +1,286 @@
+@import "../../styles/globalVariable.scss";
+
+.portfolio__wrap {
+  max-width: 1500px;
+  margin: auto;
+  padding: 40px 80px;
+
+  @media screen and (max-width: $XS) {
+    padding: 20px;
+  }
+}
+
+.portfolio__main {
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio__header__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  border: 2px solid #303950;
+  border-radius: 20px;
+  padding: 30px 80px;
+
+  @media screen and (max-width: $L) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
+.portfolio__header__element__wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: $L) {
+    width: 100%;
+  }
+}
+
+.portfolio__element__wrap {
+  border: 20px solid #1e3b6f;
+  border-radius: 50%;
+  height: 230px;
+  width: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.portfolio__element__title {
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 44px;
+  text-align: center;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 31px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 26px;
+  }
+}
+
+.portfolio__element {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.portfolio__element__upper__title {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: #9badc7;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  div {
+    height: 14px;
+    width: 14px;
+    background: #1e3b6f;
+    border-radius: 2px;
+    margin-right: 10px;
+  }
+}
+
+.portfolio__body__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0px;
+
+  @media screen and (max-width: $M) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+.portfolio__tab {
+  width: 100%;
+  max-width: 350px;
+}
+
+.portfolio__search {
+  width: 100%;
+  max-width: 265px;
+}
+
+.portfolio__table {
+  overflow: auto;
+}
+
+.portfolio__table__asset {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.farmCard__element__left__logo__wrap {
+  display: flex;
+  align-items: center;
+}
+
+.farmCard__element__left__logo {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+
+  &.first {
+    margin-right: -10px;
+    z-index: 1;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__logo__main {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__title {
+  font-weight: 700;
+  font-size: 20.5509px;
+  line-height: 25px;
+  color: #ffffff;
+  margin-top: 10px;
+
+  &.tableActive {
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.portfolio__table__apr {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+}
+
+.portfolio__table__liquidity {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+}
+
+.farmCard__buttonWrap {
+  margin: 15px 0px;
+
+  button {
+    cursor: pointer;
+    background: #fe4350;
+    border-radius: 54px;
+    padding: 5px 25px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    border: none;
+    outline: none;
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.portifolio_toggle_main_row {
+  position: absolute;
+  right: 0;
+  top: -10%;
+  // justify-content: flex-end;
+  @media only screen and (max-width: 800px) {
+    position: unset;
+    justify-content: flex-start;
+  }
+}

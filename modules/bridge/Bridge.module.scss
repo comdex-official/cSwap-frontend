@@ -1,0 +1,293 @@
+.bridge__wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.bridgeCard__wrap {
+  width: 100%;
+  margin: 20px;
+  max-width: 764px;
+}
+
+.bridgeCard__main {
+  padding: 10px 0px;
+}
+
+.bridgeCard__title {
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 33px;
+  color: #ffffff;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__toggle__element {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+.bridgeCard__toggle__element__title {
+  background: #0c1424;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  padding: 12px 40px;
+  color: #ffffff;
+  cursor: pointer;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+
+  &.activeTab {
+    border: 1px solid transparent;
+    border-image: linear-gradient(to bottom, #fe4350, #123c73);
+    border-image-slice: 1;
+  }
+}
+
+.bridgeCard__body {
+  margin: 10px 0px;
+}
+
+.bridgeCard__logo__wrap {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+}
+
+.bridgeCard__logo {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__body__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #101b2f;
+  border-radius: 20px;
+  padding: 20px;
+
+  & > * {
+    pointer-events: none;
+  }
+
+  i {
+    color: #516285;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+.bridgeCard__body__item__title {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
+  color: #acbfdb;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__body__item__details {
+  display: flex;
+  align-items: center;
+
+  i {
+    color: #516285;
+    margin-left: 45px;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.bridgeCard__body__item__details__title {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 27px;
+  color: #ffffff;
+  margin-left: 20px;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__swap {
+  margin: 20px 0px;
+  text-align: center;
+
+  i {
+    color: #fe4350;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.bridgeCard__body__item__footer {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  align-items: center;
+  background: #101b2f;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px 0px;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__footer {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 50px;
+}
+
+.bridgeCard__footer__title {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 10px 0px;
+  color: #acbfdb;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__button__wrap {
+  text-align: center;
+
+  button {
+    background: #fe4350;
+    border-radius: 54px;
+    border: none;
+    outline: none;
+    padding: 15px 70px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    color: #ffffff;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.bridgeCard__body__item__last {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.bridgeCard__body__item__details__button {
+  background: #fe4350;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #ffffff;
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.bridgeCard__footer__element {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings__dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.token__dropdown__child {
+  position: absolute;
+  top: 72px;
+  right: 20px;
+  width: 182px;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border: 2px solid #303950;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+  z-index: 999999;
+}
+
+.token__dropdown__child2 {
+  position: absolute;
+  top: 72px;
+  left: 20px;
+  width: 182px;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border: 2px solid #303950;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+  z-index: 999999;
+}

@@ -1,0 +1,1460 @@
+@import "../../styles/globalVariable.scss";
+
+.farm__wrap {
+  max-width: 1500px;
+  margin: auto;
+  padding: 40px 80px;
+
+  @media screen and (max-width: $XS) {
+    padding: 20px;
+  }
+}
+
+.farm__main {
+  display: flex;
+  flex-direction: column;
+}
+
+.farm__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  @media screen and (max-width: $L) {
+    flex-direction: column;
+  }
+}
+
+.farm__header__body__left {
+  position: relative;
+  background-image: url("../../public/assets/images/space.svg");
+  background-size: cover;
+  border: 2px solid #303950;
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+  height: 275px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+    border-radius: 20px;
+  }
+}
+
+.farm__header__body__right {
+  position: relative;
+  background-image: url("../../public/assets/images/space.svg");
+  background-size: cover;
+  border: 2px solid #303950;
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+  height: 275px;
+
+  @media screen and (max-width: $S) {
+    height: auto;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+    border-radius: 20px;
+  }
+}
+
+.farm__header__left__title {
+  position: relative;
+  font-size: 42px;
+  line-height: 133.3%;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 37px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 22px;
+  }
+}
+
+.farm__header__left__description {
+  position: relative;
+  font-size: 18px;
+  line-height: 28px;
+  color: #ffffff;
+  opacity: 0.8;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+}
+
+.farm__header__left__more {
+  position: relative;
+  font-size: 18px;
+  line-height: 28px;
+  color: #929fe1;
+  opacity: 0.8;
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+}
+
+.farm__header__right__title {
+  position: relative;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 133.3%;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 18px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 13px;
+  }
+}
+
+.farm__header__right__main {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0px;
+  gap: 20px;
+
+  @media screen and (max-width: $S) {
+    flex-direction: column;
+  }
+}
+
+.farm__header__right__body {
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(2px);
+  width: 100%;
+
+  ::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    padding: 0.5px; /* control the border thickness */
+    background: linear-gradient(
+      96.58deg,
+      rgba(254, 67, 80, 0.32) 0%,
+      rgba(8, 94, 206, 0.165) 101.46%
+    );
+    backdrop-filter: blur(2px);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+.farm__header__right__body__background {
+  //   background: rgba(255, 255, 255, 0.02);
+  // backdrop-filter: blur(2px);
+}
+
+.farm__header__right__body__title {
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 27px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+}
+
+.farm__header__right__body__description {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: #ffffff;
+  margin: 20px 0px;
+  @media screen and (max-width: $XXL) {
+    font-size: 9px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 7px;
+  }
+}
+
+.farm__header__right__body__button {
+  background: #fe4350;
+  border: 2px solid #fe4350;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: center;
+  color: #ffffff;
+  @media screen and (max-width: $XXL) {
+    font-size: 9px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 7px;
+  }
+}
+
+.farm__body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0px;
+  flex: 20px;
+  @media screen and (max-width: $M) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+.farm__body__left {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.farm__body__right {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+
+  @media screen and (max-width: $M) {
+    justify-content: flex-start;
+  }
+}
+
+.farm__body__tab__wrap {
+  width: 100%;
+  max-width: 458px;
+}
+
+.farm__body__line {
+  width: 20px;
+  height: 0px;
+  border: 2px solid #6b758d;
+  transform: rotate(90deg);
+  margin: 0px 10px;
+}
+
+.farm__body__icon__wrap {
+  display: flex;
+  align-items: center;
+
+  i {
+    color: #ffffff;
+    opacity: 0.5;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.farm__body__search__wrap {
+  max-width: 265px;
+}
+
+.farm__body__filter__wrap {
+  max-width: 133px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  border: 2px solid #c5cbdb;
+  border-radius: 40px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  margin-right: 10px;
+  /* identical to box height */
+
+  text-align: right;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  i {
+    margin-right: 10px;
+    color: #ffffff;
+  }
+}
+
+.farm__footer {
+  margin-top: 10px;
+}
+
+.farm__footer__card__wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1rem;
+  row-gap: 1rem;
+  @media screen and (max-width: $XL) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: $M) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.farmCard__wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 544px;
+
+  @media screen and (max-width: $M) {
+    max-width: 100%;
+  }
+}
+
+.farmCard__main {
+  padding: 10px 0px;
+}
+
+.farmCard__element {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.farmCard__element__left {
+  display: flex;
+  flex-direction: column;
+}
+
+.farmCard__element__left__logo__wrap {
+  display: flex;
+  align-items: center;
+}
+
+.farmCard__element__left__logo {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+
+  &.first {
+    margin-right: -10px;
+    z-index: 1;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__logo__main {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__title {
+  font-weight: 700;
+  font-size: 20.5509px;
+  line-height: 25px;
+  color: #ffffff;
+  margin-top: 10px;
+
+  &.tableActive {
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 9px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 7px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  &.tableActive {
+    margin-left: 40px;
+    // width: 100%;
+  }
+}
+
+.farmCard__element__right__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.farmCard__element__right__basic {
+  border-radius: 41px;
+  padding: 2px;
+  position: relative;
+  background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
+  margin-right: 10px;
+}
+
+.farmCard__element__right__basic__title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 5px 10px;
+  color: #ffffff;
+  background: #132239;
+  border-radius: 41px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 10px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__ranged__title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 5px 10px;
+  color: #ffffff;
+  background: #132239;
+  border-radius: 41px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 10px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__pool {
+  border-radius: 41px;
+  padding: 2px;
+  position: relative;
+  background: linear-gradient(95.24deg, #70f0af -5.75%, #3fbb7c 110.25%);
+}
+
+.farmCard__element__right__pool__title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 5px 10px;
+  color: #ffffff;
+  background: #132239;
+  border-radius: 41px;
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 10px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  img {
+    margin-right: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__left__title2 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #b1d2e6;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__details {
+  display: flex;
+  align-items: center;
+}
+
+.farmCard__element__right__details__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 9px;
+  }
+
+  i {
+    margin: 0px 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__incentive {
+  border-radius: 41px;
+  padding: 2px;
+  position: relative;
+  background: linear-gradient(99.47deg, #99e0ef -18.18%, #4e98a8 53.31%);
+  margin-top: 10px;
+}
+
+.farmCard__element__right__title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__boost__left {
+  display: flex;
+  align-items: center;
+}
+
+.farmCard__element__boost__left__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #b1d2e6;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__boost__left__description {
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 27px;
+  margin-left: 10px;
+  color: #68ffc0;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__boost__right {
+  background: #fe4350;
+  border: 2px solid #fe4350;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  padding: 5px 15px;
+  text-align: center;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 9px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 7px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__buttonWrap {
+  text-align: center;
+  margin: 15px 0px;
+
+  button {
+    cursor: pointer;
+    background: #fe4350;
+    border-radius: 54px;
+    padding: 5px 25px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    border: none;
+    outline: none;
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 8px;
+    }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  i {
+    margin: 0px 10px;
+    color: #bec9f8;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__details__title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21px;
+  text-align: right;
+  color: #bec9f8;
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 9px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__footer__wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.farmCard__footer__main {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.farmCard__footer__left__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #b1d2e6;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__footer__rewards {
+  display: flex;
+  flex-direction: column;
+}
+
+.farmCard__footer__rewards__title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 9px;
+  }
+
+  img {
+    height: 27px;
+    width: 27px;
+    margin-right: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__footer__right__title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farm__table__wrap {
+  overflow: auto;
+}
+
+.farmCard__table__data__wrap {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.liquidity__wrap {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.liquidityCard__wrap {
+  padding: 10px;
+}
+
+.liquidityCard__tab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+.liquidityCard__tab__wrap {
+  width: 100%;
+  max-width: 250px;
+}
+
+.liquidityCard__trade__pair {
+  background: #fe4350;
+  box-shadow: 0px 4px 12px rgba(254, 67, 80, 0.25);
+  border-radius: 57px;
+  padding: 6px 20px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 10px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+}
+
+.tradeCard__body__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #101b2f;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 20px 0px;
+}
+
+.tradeCard__body__left {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tradeCard__body__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tradeCard__body__left__title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el1 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tradeCard__body__right__el1__title {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: right;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 11px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 8px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+
+  span {
+    color: #fe4350;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.tradeCard__body__right__el1__description {
+  margin: 0px 6px;
+  background: #fe4350;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el1__footer {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #ffffff;
+  background: #0f2048;
+  border-radius: 5px;
+  padding: 5px 10px;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tradeCard__body__left__item__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  i {
+    color: #3a4b6d;
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.tradeCard__logo__wrap {
+  background: linear-gradient(to bottom, #fe4350, #053c75);
+  border-radius: 40px;
+  height: 42px;
+  width: 42px;
+  padding: 1px;
+
+  @media screen and (max-width: $XS) {
+    height: 38px;
+    width: 38px;
+  }
+}
+
+.tradeCard__logo {
+  background: #030b1e;
+  padding: 5px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+
+    @media screen and (max-width: $XS) {
+      height: 25px;
+      width: 25px;
+    }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__left__item__details__title {
+  font-weight: 700;
+  font-size: 22.7191px;
+  line-height: 28px;
+  color: #ffffff;
+  margin: 0px 10px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 17px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 14px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el2 {
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: right;
+  color: #ffffff;
+  opacity: 0.5;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 27px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 24px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+
+  &.limit__order {
+    opacity: 1;
+  }
+}
+
+.tradeCard__body__right__el3 {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #acbfdb;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.tradeCard__body__right__el4 {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #acbfdb;
+  @media screen and (max-width: $XXL) {
+    font-size: 7px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.liquidityCard__pool__details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.liquidityCard__pool__title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #ffffff;
+
+  &.title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
+
+  &.semiTitle {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #acbfdb;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+}
+
+.liquidityCard__pool__details__wrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+.liquidityCard__pool__footer__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+.liquidityCard__pool__element {
+  display: flex;
+  flex-direction: column;
+}
+.liquidityCard__pool__footer__details__wrap {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.tradeCard__button__wrap {
+  text-align: center;
+
+  button {
+    background: #fe4350;
+    border-radius: 54px;
+    border: none;
+    outline: none;
+    padding: 5px 80px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 20px;
+    text-align: center;
+    color: #ffffff;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+
+    &.light {
+    }
+
+    &.dark {
+    }
+  }
+}
+
+.liquidityCard__pool__withdraw__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  border-bottom: 2px solid #202e50;
+}
+
+.liquidityCard__pool__withdraw__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  /* identical to box height */
+
+  color: #acbfdb;
+
+  margin-top: 10px;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+}
+
+.liquidityCard__pool__input {
+  width: 100%;
+  color: #ffffff;
+}
+
+.liquidityCard__pool__input__box {
+  background: #102044;
+  border-radius: 4px;
+  padding: 10px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 21px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 10px;
+  }
+}
+
+.liquidityCard__pool__withdraw__footer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.liquidityCard__pool__withdraw__element {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liquidityCard__pool__withdraw__element__title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-align: right;
+
+  color: #ffffff;
+
+  @media screen and (max-width: $XXL) {
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: $XS) {
+    font-size: 12px;
+  }
+
+  &.title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    /* identical to box height */
+
+    color: #acbfdb;
+
+    @media screen and (max-width: $XXL) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: $XS) {
+      font-size: 10px;
+    }
+  }
+}

@@ -1,0 +1,538 @@
+@import "../../styles/globalVariable.scss";
+
+.govern_main_container {
+  .back_button_container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.6rem;
+  }
+  .govern_container {
+    .govern_upper_main_container {
+      .govern_upper_container {
+        .govern_upper_container_list {
+          padding: 25px 0;
+        }
+        .govern_detail_ant_list_class {
+          margin-top: 1rem;
+        }
+      }
+    }
+    .govern_bottom_main_container {
+      margin-top: 2.5rem;
+      margin-bottom: 2rem;
+      padding: 40px 25px 35px 25px;
+      border-radius: $base-border-radius;
+      background: $background-light;
+      background: $primary-background;
+      // box-shadow: $box-shadow-inner-light;
+      border: 0.5px solid $border-color-base;
+
+      &.dark-mode {
+        background-color: $primary-color-light;
+        background: blueviolet;
+        box-shadow: none;
+      }
+      .govern_bottom_container {
+        .govern_bottom_filters_container {
+          .governcard_head {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 18px;
+            text-align: center;
+
+            .dark-mode & {
+              border-bottom: 1px solid rgba($white, 0.5);
+            }
+            .btn_filled {
+              margin: 0;
+            }
+
+            @media screen and (max-width: $XS) {
+              flex-direction: column;
+              align-items: flex-start;
+            }
+          }
+        }
+        .govern_bottom_proposals_container {
+          min-height: 8rem;
+          border-top: 2px solid rgba($border-dark, 0.5);
+          .governlist_row {
+            display: flex;
+            padding: 20px 40px 20px;
+            border-bottom: 1px solid rgba($border-dark, 0.5);
+            cursor: pointer;
+
+            @media screen and (max-width: $XS) {
+              padding: 10px;
+            }
+
+            &:last-child {
+              border: 0;
+            }
+
+            .dark-mode & {
+              border-bottom: 1px solid rgba(white, 0.2);
+            }
+            @media only screen and (max-width: 900px) {
+              flex-direction: column;
+              row-gap: 10px;
+            }
+            .left_section {
+              width: 55%;
+              padding-right: 10%;
+              color: white;
+              @media only screen and (max-width: 900px) {
+                width: 100%;
+                padding-right: 0;
+              }
+              h4 {
+                font-weight: 600;
+                font-size: 14px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                margin-top: 15px;
+
+                .dark-mode & {
+                  color: white;
+                }
+              }
+              p {
+                font-size: 14px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+              .proposal_id {
+                h3 {
+                  margin: 0;
+                }
+              }
+              .proposal_status_container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .proposal_status {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 10px;
+                  padding: 5px 20px;
+                  border-radius: 15px;
+                  text-transform: capitalize;
+                  font-weight: 500;
+                  line-height: 1.2;
+                  letter-spacing: 1px;
+                  font-size: 0.8rem;
+                  height: max-content;
+                  width: 9rem;
+                  text-align: center;
+                }
+                .open_color {
+                  border: 1px solid #00b0ff;
+                  // background-color: #cbe7fb;
+                  .dark-mode & {
+                    // background-color: #19385a;
+                  }
+                }
+
+                .reject_color {
+                  // background-color: #f6d9d9;
+                  border: 1px solid #8e353c;
+                  .dark-mode & {
+                    // background-color: #422234;
+                  }
+                }
+
+                .passed_color {
+                  // background-color: #cce7de;
+                  border: 1px solid #02865b;
+                  // background-color: #19323a;
+                  .dark-mode & {
+                    // background-color: #19323a;
+                  }
+                }
+
+                .pending_color {
+                  border: 1px solid yellow;
+                  // background-color: rgba(255, 255, 0, 0.295);
+                }
+              }
+            }
+
+            .right_section {
+              width: 45%;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-evenly;
+              color: white;
+              @media only screen and (max-width: 900px) {
+                width: 100%;
+              }
+              .time_main_container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+
+                @media screen and (max-width: $XS) {
+                  flex-direction: column;
+                  align-items: flex-start;
+                }
+                .time_left_container {
+                  flex-basis: 45%;
+
+                  label {
+                    font-weight: 200;
+                    font-size: 12px;
+                  }
+
+                  p {
+                    font-weight: 700;
+                    font-size: 15px;
+                  }
+                }
+                .time_right_container {
+                  flex-basis: 45%;
+
+                  label {
+                    font-weight: 200;
+                    font-size: 12px;
+                  }
+
+                  p {
+                    font-weight: 700;
+                    font-size: 15px;
+                  }
+                }
+              }
+              .ant-progress {
+                .ant-progress-outer {
+                  padding: 0;
+                }
+
+                .ant-progress-inner {
+                  background: $slider-empty-bg;
+                  height: 15px;
+                  overflow: inherit;
+                  width: 91%;
+                  .ant-progress-bg {
+                    background: $primary-color;
+                    min-height: 100%;
+                    position: relative;
+                  }
+                }
+                .ant-progress-text {
+                  .dark-mode & {
+                    color: white;
+                    font-weight: normal;
+                    font-size: $font-size-sm - 1;
+                  }
+                }
+              }
+
+              label {
+                .dark-mode & {
+                }
+              }
+
+              p {
+                font-weight: bold;
+                font-size: 17px;
+
+                .dark-mode & {
+                }
+              }
+
+              .user_vote_box_container {
+                width: 100%;
+                margin-top: 0.5rem;
+                .user_vote_box {
+                  display: flex;
+                  width: 100%;
+                  justify-content: space-between;
+                  gap: 10px;
+                  padding: 0 10px;
+
+                  @media screen and (max-width: $XS) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                  }
+                  .single_vote_container {
+                    display: flex;
+                    .boder {
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 2px;
+                      margin-right: 5px;
+                    }
+                    .yes_border {
+                      background-color: #03d707c4;
+                    }
+                    .no_border {
+                      background-color: #ff6767;
+                    }
+                    .veto_border {
+                      background-color: #c0c0c0;
+                    }
+                    .abstain_border {
+                      background-color: #b699ca;
+                    }
+                    .text_container {
+                      display: flex;
+                      flex-direction: column;
+                      align-items: flex-start;
+                      justify-content: center;
+                      .title {
+                        font-size: 0.7rem;
+                        margin-top: -4px;
+                        font-weight: 300;
+                        padding: 0;
+                      }
+                      .vote {
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.max_width {
+  max-width: 1300px;
+  padding: 0 1rem;
+  margin: auto;
+}
+
+.ant-list {
+  margin-top: 10rem;
+}
+
+.govern_ant_list_class {
+  .ant-spin-nested-loading {
+    margin-top: 3rem;
+    padding: 1rem;
+  }
+}
+
+.open_color {
+  border: 1px solid #00b0ff;
+  // background-color: #cbe7fb;
+  .dark-mode & {
+    // background-color: #19385a;
+  }
+}
+
+.reject_color {
+  // background-color: #f6d9d9;
+  border: 1px solid #8e353c;
+  .dark-mode & {
+    // background-color: #422234;
+  }
+}
+
+.passed_color {
+  // background-color: #cce7de;
+  // background-color: #19323a;
+  border: 1px solid #02865b;
+  .dark-mode & {
+    // background-color: #19323a;
+  }
+}
+
+.pending_color {
+  border: 1px solid yellow;
+  // background-color: rgba(255, 255, 0, 0.295);
+}
+
+// Govern Detail
+
+.govern_detail_bottom_main_container {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 10px;
+  @media only screen and (max-width: 700px) {
+    flex-direction: column;
+  }
+  .govern_detail_left_container {
+    padding: 40px 25px 35px 25px;
+    border-radius: $base-border-radius;
+    background: $background-light;
+    background: $primary-background;
+    border: 0.5px solid $border-color-base;
+    width: 100%;
+    color: white;
+    &.dark-mode {
+      background-color: $primary-color-light;
+      background: blueviolet;
+      box-shadow: none;
+    }
+    .up_main_container {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      .proposal_id {
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+      .status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 20px;
+        border-radius: 15px;
+        text-transform: capitalize;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+        height: max-content;
+        width: 9rem;
+        text-align: center;
+      }
+    }
+    .bottom_main_container {
+      .title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      .description {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.4;
+      }
+    }
+  }
+  .govern_detail_right_container {
+    padding: 40px 25px 35px 25px;
+    border-radius: $base-border-radius;
+    background: $background-light;
+    background: $primary-background;
+    border: 0.5px solid $border-color-base;
+    width: 100%;
+    height: max-content;
+    &.dark-mode {
+      background-color: $primary-color-light;
+      background: blueviolet;
+      box-shadow: none;
+    }
+    .vot_end {
+      text-align: end;
+      button {
+        padding: 5px 20px;
+      }
+    }
+    .vote_button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      .user_vote {
+        color: white;
+        span {
+          color: $success-color;
+          font-weight: 600;
+          font-size: 1.2rem;
+        }
+      }
+      .ant_vote_button {
+        margin: 0;
+      }
+    }
+    .charts_Value_container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      .charts {
+      }
+      .total_value {
+        color: white;
+        .vote_border {
+          border-left: 3px solid $primary-color;
+          .title {
+            margin-left: 10px;
+            font-size: 0.8rem;
+          }
+          .value {
+            margin-left: 10px;
+            font-weight: 700;
+            font-size: 1.3rem;
+          }
+        }
+      }
+    }
+    .vote_count_container {
+      color: white;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 1.3rem;
+      flex-wrap: wrap;
+      .fill_box {
+        height: 1rem;
+        width: 1rem;
+        border-radius: 3px;
+        margin-top: 5px;
+      }
+      .data_box {
+        line-height: 1.3;
+        .title {
+          font-size: 0.9rem;
+        }
+        .value {
+          font-size: 1.1rem;
+          font-weight: 700;
+        }
+      }
+      .yes_container {
+        display: flex;
+        column-gap: 9px;
+        .fill_box {
+          background-color: $success-color;
+        }
+      }
+      .no_container {
+        display: flex;
+        column-gap: 9px;
+        .fill_box {
+          background-color: #ff6767;
+        }
+      }
+      .noWithVeto_container {
+        display: flex;
+        column-gap: 9px;
+        .fill_box {
+          background-color: #c0c0c0;
+        }
+      }
+      .abstain_container {
+        display: flex;
+        column-gap: 9px;
+        .fill_box {
+          background-color: #b699ca;
+        }
+      }
+    }
+  }
+}
+
+.wrap__proposer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  span {
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
