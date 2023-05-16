@@ -8,14 +8,32 @@ import { Icon } from "../../../shared/image/Icon";
 import { useSelector } from "react-redux";
 import MyDropdown from "../dropDown/Dropdown";
 import { C_Logo, Comodo, Faucet, Harbor } from "../../../shared/image";
+import { Modal } from "antd";
+import { useState, useRef, useEffect } from "react";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const theme = "dark";
 
   const router = useRouter();
 
+  const wrapperRef = useRef(null);
+
   const isActive = (pathname) => {
     return router.pathname === pathname;
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   const cswapItems = [
@@ -34,11 +52,32 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
   ];
 
+  useEffect(() => {
+    if (isOpen) {
+      function handleClickOutside(event) {
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+          setIsOpen(!isOpen);
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef, isOpen]);
+
   return (
     <div className={`${styles.sidebar__wrap} ${isOpen ? styles.active : ""}`}>
-      <div className={styles.sidebar__main}>
+      <div className={styles.sidebar__main} ref={wrapperRef}>
         <div className={styles.sidebar__upper}>
-          <div className={styles.sidebar__logo}>
+          <div
+            className={styles.sidebar__logo}
+            onClick={() => {
+              router.push("/");
+              setIsOpen(!isOpen);
+            }}
+          >
             {theme === "dark" ? (
               <NextImage src={Logo_Dark} alt="Logo_Dark" />
             ) : (
@@ -64,7 +103,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             >
               <div
                 className={styles.header__name}
-                onClick={() => (item?.id === 5 ? "" : router.push(item.route))}
+                onClick={() => {
+                  item?.id === 5 ? showModal() : router.push(item.route);
+                  setIsOpen(!isOpen);
+                }}
               >
                 {item.name}
               </div>
@@ -74,7 +116,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         <MyDropdown
           items={cswapItems}
-          placement={"bottomRight"}
+          placement={"topRight"}
           trigger={["click"]}
         >
           <div className={styles.header__cSwap}>
@@ -115,6 +157,24 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             {"Faucet"}
           </div>
         </div>
+
+        <Modal
+          className={"modal__wrap"}
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          centered={true}
+          footer={null}
+          header={null}
+        >
+          <iframe
+            src="https://dev-transit.comdex.one/"
+            frameBorder="0"
+            width={"100%"}
+            height={"700px"}
+            style={{ borderRadius: "10px", background: "#030b1e" }}
+          ></iframe>
+        </Modal>
       </div>
     </div>
   );

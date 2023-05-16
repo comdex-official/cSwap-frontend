@@ -4,11 +4,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: rebeccapurple;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   height: 100%;
   padding: 20px;
   width: 250px;
-  z-index: 999999;
+  z-index: 2;
   transform: translateX(-100%);
   transition: 0.3s transform ease-in;
   display: none;
@@ -34,6 +34,10 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+
+  i {
+    color: #ffffff;
+  }
 }
 .sidebar__logo {
   img {
@@ -50,6 +54,30 @@
 
 .sidebar__element {
   padding: 20px 0px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: left;
+  opacity: 0.5;
+  text-transform: uppercase;
+
+  &.light {
+    color: $black;
+  }
+
+  &.dark {
+    color: $navyBlue;
+  }
+
+  &.active {
+    font-weight: 700;
+    color: $white;
+    opacity: 1;
+
+    &::first-letter {
+      text-decoration: underline;
+    }
+  }
 }
 
 .dropdown__cSwap__menu {
@@ -94,6 +122,10 @@
   cursor: pointer;
   & > * {
     pointer-events: none;
+  }
+
+  i {
+    color: #ffffff;
   }
 
   // @media screen and (max-width: $XL) {

@@ -16,6 +16,8 @@ import {
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET,
   SHOW_ELIGIBLE_DISCLAIMER_SET,
+  SET_SHOW_MY_POOL,
+  SET_SELECTED_MANAGE_POOL,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -188,6 +190,20 @@ export const setPoolRewards = (value) => {
 export const setShowEligibleDisclaimer = (value) => {
   return {
     type: SHOW_ELIGIBLE_DISCLAIMER_SET,
+    value,
+  };
+};
+
+export const setShowMyPool = (value) => {
+  return {
+    type: SET_SHOW_MY_POOL,
+    value,
+  };
+};
+
+export const setSelectedManagePool = (value) => {
+  return {
+    type: SET_SELECTED_MANAGE_POOL,
     value,
   };
 };

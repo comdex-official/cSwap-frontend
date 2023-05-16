@@ -19,7 +19,13 @@ import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion, fixedDecimal } from "../../utils/coin";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
 import { NextImage } from "../../shared/image/NextImage";
-import { List, ListWhite, Square, SquareWhite } from "../../shared/image";
+import {
+  List,
+  ListWhite,
+  No_Data,
+  Square,
+  SquareWhite,
+} from "../../shared/image";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -49,6 +55,7 @@ const Farm = ({
   incentivesMap,
   setShowEligibleDisclaimer,
   showEligibleDisclaimer,
+  showMyPool,
 }) => {
   const theme = "dark";
   const TabData = ["All", "Basic", "Ranged", "My Pools"];
@@ -92,8 +99,9 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
+    console.log(userPools, userLiquidityInPools);
     setUserPool(userPools);
-  }, [userLiquidityInPools]);
+  }, [userLiquidityInPools, filterValue, displayPools]);
 
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
@@ -198,7 +206,7 @@ const Farm = ({
     if (poolsApr) {
       fetchMasterPoolAprData();
     }
-  }, [poolsApr]);
+  }, [poolsApr, pools]);
 
   const tabItems = [
     {
@@ -239,6 +247,12 @@ const Farm = ({
       updateFilteredData(filterValue);
     }
   };
+
+  useEffect(() => {
+    if (showMyPool) {
+      setFilterValue("4");
+    }
+  }, []);
 
   const Items = [
     {
@@ -512,23 +526,29 @@ const Farm = ({
               />
               {/* ))} */}
             </div>
+          ) : displayPools && displayPools.length <= 0 ? (
+            <div className={`${styles.table__empty__data__wrap}`}>
+              <div className={`${styles.table__empty__data}`}>
+                <NextImage src={No_Data} alt="Message" />
+                <span>{"NO DATA"}</span>
+              </div>
+            </div>
           ) : (
             <div
               className={`${styles.farm__footer__card__wrap} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools &&
-                displayPools.map((item) => (
-                  <FarmCard
-                    key={item.id}
-                    theme={theme}
-                    pool={item}
-                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                    poolAprList={poolsApr && poolsApr}
-                    masterPoolData={masterPoolData}
-                  />
-                ))}
+              {displayPools.map((item) => (
+                <FarmCard
+                  key={item.id}
+                  theme={theme}
+                  pool={item}
+                  poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                  poolAprList={poolsApr && poolsApr}
+                  masterPoolData={masterPoolData}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -569,6 +589,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     incentivesMap: state.liquidity.incentivesMap,
     showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
+    showMyPool: state.liquidity.showMyPool,
   };
 };
 

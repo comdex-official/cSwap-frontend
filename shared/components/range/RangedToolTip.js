@@ -1,63 +1,65 @@
-import { Col, InputNumber, Row, Slider } from "antd"
-import { useState } from "react"
+import { Col, InputNumber, Row, Slider } from "antd";
+import { useState } from "react";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { getAMP, rangeToPercentage } from "../../../utils/number";
 
-const RangeTooltipContent = () => {
-  const [inputValue, setInputValue] = useState(0)
-
-  const onChange = value => {
-    if (isNaN(value)) {
-      return
-    }
-    setInputValue(value)
-  }
-
+const RangeTooltipContent = ({ min, max, price, parent }) => {
   const marks = {
-    0: {
-      style: {
-        color: "#ffffff"
-      },
-      label: "0%"
-    },
-    50: {
-      style: {
-        color: "#ffffff"
-      },
-      label: "50%"
-    },
-    100: {
-      style: {
-        color: "#ffffff"
-      },
-      label: "100%"
-    }
-  }
+    0: min,
+    100: max,
+  };
+
+  let amp = getAMP(price, min, max)?.toFixed(DOLLAR_DECIMALS);
 
   return (
-    <Row>
-      <Col span={18}>
-        <Slider
-          min={0}
-          max={100}
-          onChange={onChange}
-          value={typeof inputValue === "number" ? inputValue : 0}
-          step={0.01}
-          tooltip={{ open: false }}
-          marks={marks}
-        />
-      </Col>
-      <Col span={4}>
-        <InputNumber
-          type="number"
-          min={0}
-          max={100}
-          style={{ margin: "0 16px" }}
-          value={inputValue}
-          //@ts-ignore
-          onChange={onChange}
-        />
-      </Col>
-    </Row>
-  )
-}
+    <div>
+      {parent === "pool" ? (
+        <div>
+          <div className="text-center">
+            <small>
+              {price > min && price < max ? (
+                <span className="success-color">In range</span>
+              ) : (
+                <span className="warn-color">Out of range</span>
+              )}
+            </small>
+          </div>
+          <div className="">
+            <Slider
+              className="farm-slider farm-slider-small ranged"
+              tooltip={{ open: false }}
+              value={rangeToPercentage(min, max, price)}
+              marks={marks}
+            />
+          </div>
+        </div>
+      ) : null}
+      <Row>
+        <Col>Min Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {min}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Max Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {max}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Current Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {price}
+        </Col>
+      </Row>
+      <Row>
+        <Col>AMP</Col>
+        <Col>
+          <span className="mr-2">:</span> {amp ? `x${amp}` : ""}
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
-export default RangeTooltipContent
+export default RangeTooltipContent;
