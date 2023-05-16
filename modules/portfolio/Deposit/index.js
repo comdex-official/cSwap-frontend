@@ -1,33 +1,33 @@
-import { createTxRaw } from "@tharsis/proto"
-import { generateEndpointAccount } from "@tharsis/provider"
+import { createTxRaw } from "@tharsis/proto";
+import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
-  generatePostBodyBroadcast
-} from "@tharsis/provider/dist/rest/broadcast"
-import { createTxIBCMsgTransfer } from "@tharsis/transactions"
-import { Button, Col, Form, message, Modal, Row, Spin } from "antd"
-import Long from "long"
-import * as PropTypes from "prop-types"
-import React, { useCallback, useEffect, useState } from "react"
-import { connect } from "react-redux"
-import Snack from "../../../shared/components/Snack"
+  generatePostBodyBroadcast,
+} from "@tharsis/provider/dist/rest/broadcast";
+import { createTxIBCMsgTransfer } from "@tharsis/transactions";
+import { Button, Col, Form, message, Modal, Row, Spin } from "antd";
+import Long from "long";
+import * as PropTypes from "prop-types";
+import React, { useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import Snack from "../../../shared/components/Snack";
 import { fetchProofHeight } from "../../../actions/asset";
-import CustomInput from "../../../shared/components/CustomInput"
-import { comdex } from "../../../config/network"
-import { ValidateInputNumber } from "../../../config/_validation"
-import { DEFAULT_FEE } from "../../../constants/common"
-import { queryBalance } from "../../../services/bank/query"
-import { aminoSignIBCTx } from "../../../services/helper"
-import { initializeIBCChain } from "../../../services/keplr"
-import { fetchTxHash } from "../../../services/transaction"
+import CustomInput from "../../../shared/components/CustomInput";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DEFAULT_FEE } from "../../../constants/common";
+import { queryBalance } from "../../../services/bank/query";
+import { aminoSignIBCTx } from "../../../services/helper";
+import { initializeIBCChain } from "../../../services/keplr";
+import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
-} from "../../../utils/coin"
-import { toDecimals, truncateString } from "../../../utils/string"
-import variables from "../../../utils/variables"
-import style from './Deposit.module.scss';
+  getAmount,
+} from "../../../utils/coin";
+import { toDecimals, truncateString } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import style from "./Deposit.module.scss";
 
 const Deposit = ({
   lang,
@@ -35,7 +35,7 @@ const Deposit = ({
   address,
   handleRefresh,
   balances,
-  assetMap
+  assetMap,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
@@ -159,29 +159,29 @@ const Deposit = ({
       const sign =
         walletType === "keplr"
           ? await window?.keplr?.signDirect(
-            chain.chainInfo?.chainId,
-            sourceAddress,
-            {
-              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-              authInfoBytes:
-                transferMsg.signDirect.authInfo.serializeBinary(),
-              chainId: chainInfoForMsg.cosmosChainId,
-              accountNumber: new Long(sender.accountNumber),
-            },
-            { isEthereum: true }
-          )
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            )
           : await window?.leap?.signDirect(
-            chain.chainInfo?.chainId,
-            sourceAddress,
-            {
-              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-              authInfoBytes:
-                transferMsg.signDirect.authInfo.serializeBinary(),
-              chainId: chainInfoForMsg.cosmosChainId,
-              accountNumber: new Long(sender.accountNumber),
-            },
-            { isEthereum: true }
-          );
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            );
 
       if (sign !== undefined) {
         let rawTx = createTxRaw(
@@ -388,7 +388,12 @@ const Deposit = ({
 
   return (
     <>
-      <Button type="primary" size="small" onClick={showModal}>
+      <Button
+        type="primary"
+        size="small"
+        onClick={showModal}
+        className="btn-filled"
+      >
         Deposit <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
@@ -455,14 +460,14 @@ const Deposit = ({
                             setAmount(
                               availableBalance?.amount > DEFAULT_FEE
                                 ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                    availableBalance?.amount - DEFAULT_FEE,
+                                    assetMap[chain?.ibcDenomHash]?.decimals
+                                  )
                                 : amountConversion(
-                                  availableBalance?.amount,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
-                            )
+                                    availableBalance?.amount,
+                                    assetMap[chain?.ibcDenomHash]?.decimals
+                                  )
+                            );
                           }}
                         >
                           Max
@@ -475,7 +480,7 @@ const Deposit = ({
               <Form.Item className="assets-input-box">
                 <CustomInput
                   value={amount}
-                  onChange={event => onChange(event.target.value)}
+                  onChange={(event) => onChange(event.target.value)}
                   validationError={validationError}
                   className="ibc_modal_input"
                 />
@@ -503,24 +508,24 @@ const Deposit = ({
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 Deposit.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  chain: PropTypes.any
-}
+  chain: PropTypes.any,
+};
 
-const stateToProps = state => {
+const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
     refreshBalance: state.account.refreshBalance,
-    assetMap: state.asset.map
-  }
-}
+    assetMap: state.asset.map,
+  };
+};
 
-export default connect(stateToProps)(Deposit)
+export default connect(stateToProps)(Deposit);

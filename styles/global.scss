@@ -391,6 +391,42 @@ a {
   }
 }
 
+.modal__wrap2 {
+  &.ant-modal {
+    // max-width: 00px !important;
+
+    .ant-modal-content {
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+      border: 2px solid #303950;
+      border-radius: 12px;
+
+      .ant-modal-header {
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
+
+        .ant-modal-title {
+          color: #ffffff;
+        }
+      }
+
+      .ant-modal-close-x {
+        color: #ffffff;
+      }
+
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
+}
+
 .liquidity__modal {
   &.ant-modal {
     .ant-modal-content {
@@ -855,7 +891,7 @@ a {
 .assets-withicon {
   display: flex;
   align-items: center;
-  column-gap: 5px;
+  gap: 20px;
 }
 
 .asset_search_input {
@@ -1836,8 +1872,22 @@ a {
   }
 }
 
+.card__farm {
+  height: 100%;
+}
+
+.farmCard__button {
+  margin-top: auto;
+}
+
+.farm-apr-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .assets-icon-2 {
-  margin-left: -15px;
+  margin-left: -22px;
 }
 
 .filter-select {

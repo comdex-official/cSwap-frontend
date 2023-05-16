@@ -1,22 +1,22 @@
-import { Button, Col, Form, message, Modal, Row } from "antd"
-import * as PropTypes from "prop-types"
-import React, { useCallback, useEffect, useState } from "react"
-import { connect } from "react-redux"
+import { Button, Col, Form, message, Modal, Row } from "antd";
+import * as PropTypes from "prop-types";
+import React, { useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
 // import { fetchProofHeight } from "../../../logic/redux/asset"
 // import { Col, Row, SvgIcon } from "../../../components/common";
 import { fetchProofHeight } from "../../../actions/asset";
-import Snack from "../../../shared/components/Snack"
-import CustomInput from "../../../shared/components/CustomInput"
-import { comdex } from "../../../config/network"
-import { ValidateInputNumber } from "../../../config/_validation"
-import { queryBalance } from "../../../services/bank/query"
-import { aminoSignIBCTx } from "../../../services/helper"
-import { getChainConfig, initializeIBCChain } from "../../../services/keplr"
-import { defaultFee, fetchTxHash } from "../../../services/transaction"
-import { denomConversion, getAmount } from "../../../utils/coin"
-import { toDecimals, truncateString } from "../../../utils/string"
-import variables from "../../../utils/variables"
-import style from './Withdraw.module.scss'
+import Snack from "../../../shared/components/Snack";
+import CustomInput from "../../../shared/components/CustomInput";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { queryBalance } from "../../../services/bank/query";
+import { aminoSignIBCTx } from "../../../services/helper";
+import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
+import { defaultFee, fetchTxHash } from "../../../services/transaction";
+import { denomConversion, getAmount } from "../../../utils/coin";
+import { toDecimals, truncateString } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import style from "./Withdraw.module.scss";
 // import './assetWithdraw.scss';
 
 const Withdraw = ({
@@ -25,65 +25,65 @@ const Withdraw = ({
   address,
   assetMap,
   balances,
-  handleRefresh
+  handleRefresh,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [destinationAddress, setDestinationAddress] = useState("")
-  const [inProgress, setInProgress] = useState(false)
-  const [amount, setAmount] = useState()
-  const [proofHeight, setProofHeight] = useState(0)
-  const [validationError, setValidationError] = useState()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [destinationAddress, setDestinationAddress] = useState("");
+  const [inProgress, setInProgress] = useState(false);
+  const [amount, setAmount] = useState();
+  const [proofHeight, setProofHeight] = useState(0);
+  const [validationError, setValidationError] = useState();
 
-  const onChange = value => {
+  const onChange = (value) => {
     value = toDecimals(value, assetMap[chain?.ibcDenomHash]?.decimals)
       .toString()
-      .trim()
+      .trim();
 
-    setAmount(value)
-    setValidationError(ValidateInputNumber(value, chain?.balance?.amount))
-  }
+    setAmount(value);
+    setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
+  };
 
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
-        message.error(error)
-        return
+        message.error(error);
+        return;
       }
-      setDestinationAddress(account?.address)
+      setDestinationAddress(account?.address);
       fetchProofHeight(
         chain.chainInfo?.rest,
         chain.destChannelId,
         (error, data) => {
-          if (error) return
-          setProofHeight(data)
+          if (error) return;
+          setProofHeight(data);
         }
-      )
-    })
-  }, [chain?.chainInfo, chain?.destChannelId])
+      );
+    });
+  }, [chain?.chainInfo, chain?.destChannelId]);
 
   useEffect(() => {
     if (isModalOpen) {
-      initialize()
+      initialize();
     }
-  }, [address, initialize, isModalOpen])
+  }, [address, initialize, isModalOpen]);
 
   const showModal = () => {
     if (!address) {
-      message.info("Please connect your wallet")
-      return
+      message.info("Please connect your wallet");
+      return;
     }
 
-    initialize()
-    setIsModalOpen(true)
-  }
+    initialize();
+    setIsModalOpen(true);
+  };
 
   const signIBCTx = () => {
-    setInProgress(true)
+    setInProgress(true);
 
     if (!proofHeight?.revision_height) {
-      message.error("Unable to get the latest block height")
-      setInProgress(false)
-      return
+      message.error("Unable to get the latest block height");
+      setInProgress(false);
+      return;
     }
 
     const data = {
@@ -94,20 +94,20 @@ const Withdraw = ({
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
-            amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals)
+            amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals),
           },
           sender: address,
           receiver: destinationAddress,
           timeout_height: {
             revisionNumber: Number(proofHeight?.revision_number),
-            revisionHeight: Number(proofHeight?.revision_height) + 100
+            revisionHeight: Number(proofHeight?.revision_height) + 100,
           },
-          timeout_timestamp: undefined
-        }
+          timeout_timestamp: undefined,
+        },
       },
       fee: defaultFee(),
-      memo: ""
-    }
+      memo: "",
+    };
 
     aminoSignIBCTx(getChainConfig(), data, (error, result) => {
       if (error) {
@@ -118,36 +118,36 @@ const Withdraw = ({
               explorerUrlToTx={comdex?.explorerUrlToTx}
               hash={result?.transactionHash}
             />
-          )
+          );
         } else {
-          message.error(error)
+          message.error(error);
         }
 
-        resetValues()
-        return
+        resetValues();
+        return;
       }
 
       if (result?.transactionHash) {
         message.loading(
           "Transaction Broadcasting, Waiting for transaction to be included in the block"
-        )
+        );
 
-        handleHash(result?.transactionHash)
+        handleHash(result?.transactionHash);
       }
-    })
-  }
+    });
+  };
 
   const resetValues = () => {
-    setInProgress(false)
-    setIsModalOpen(false)
-    setAmount()
-  }
+    setInProgress(false);
+    setIsModalOpen(false);
+    setAmount();
+  };
 
-  const handleHash = txhash => {
-    let counter = 0
+  const handleHash = (txhash) => {
+    let counter = 0;
 
     const time = setInterval(() => {
-      fetchTxHash(txhash, hashResult => {
+      fetchTxHash(txhash, (hashResult) => {
         if (hashResult) {
           if (hashResult?.code !== undefined && hashResult?.code !== 0) {
             message.error(
@@ -156,16 +156,16 @@ const Withdraw = ({
                 explorerUrlToTx={comdex?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
-            )
+            );
 
-            resetValues()
-            clearInterval(time)
+            resetValues();
+            clearInterval(time);
 
-            return
+            return;
           }
         }
 
-        counter++
+        counter++;
         if (counter === 3) {
           if (
             hashResult &&
@@ -178,12 +178,12 @@ const Withdraw = ({
                 explorerUrlToTx={comdex?.explorerUrlToTx}
                 hash={hashResult?.hash}
               />
-            )
+            );
 
-            resetValues()
-            clearInterval(time)
+            resetValues();
+            clearInterval(time);
 
-            return
+            return;
           }
 
           message.success(
@@ -192,10 +192,10 @@ const Withdraw = ({
               explorerUrlToTx={comdex?.explorerUrlToTx}
               hash={txhash}
             />
-          )
+          );
 
-          resetValues()
-          clearInterval(time)
+          resetValues();
+          clearInterval(time);
 
           const fetchTime = setInterval(() => {
             queryBalance(
@@ -203,40 +203,45 @@ const Withdraw = ({
               address,
               chain?.ibcDenomHash,
               (error, result) => {
-                if (error) return
+                if (error) return;
 
                 let resultBalance =
                   balances?.length &&
                   chain?.ibcDenomHash &&
-                  balances.find(val => val.denom === chain?.ibcDenomHash)
+                  balances.find((val) => val.denom === chain?.ibcDenomHash);
 
                 if (result?.balance?.amount !== resultBalance?.amount) {
-                  handleRefresh()
-                  resetValues()
+                  handleRefresh();
+                  resetValues();
 
-                  message.success("IBC Transfer Complete")
+                  message.success("IBC Transfer Complete");
 
-                  clearInterval(fetchTime)
+                  clearInterval(fetchTime);
                 }
               }
-            )
-          }, 5000)
+            );
+          }, 5000);
         }
-      })
-    }, 5000)
-  }
+      });
+    }, 5000);
+  };
 
   const handleOk = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   return (
     <>
-      <Button type="primary" size="small" onClick={showModal}>
+      <Button
+        type="primary"
+        size="small"
+        onClick={showModal}
+        className="btn-filled"
+      >
         Withdraw <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
@@ -289,7 +294,7 @@ const Withdraw = ({
                     <Button
                       className=" active"
                       onClick={() => {
-                        setAmount(chain?.balance?.amount || 0)
+                        setAmount(chain?.balance?.amount || 0);
                       }}
                     >
                       Max
@@ -304,7 +309,7 @@ const Withdraw = ({
               >
                 <CustomInput
                   value={amount}
-                  onChange={event => onChange(event.target.value)}
+                  onChange={(event) => onChange(event.target.value)}
                   validationError={validationError}
                   className="ibc_modal_input"
                 />
@@ -329,23 +334,23 @@ const Withdraw = ({
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 Withdraw.propTypes = {
   lang: PropTypes.string.isRequired,
   handleRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  chain: PropTypes.any
-}
+  chain: PropTypes.any,
+};
 
-const stateToProps = state => {
+const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
-    assetMap: state.asset.map
-  }
-}
+    assetMap: state.asset.map,
+  };
+};
 
-export default connect(stateToProps)(Withdraw)
+export default connect(stateToProps)(Withdraw);

@@ -368,6 +368,10 @@
 
 .farmCard__main {
   // padding: 10px 0px;
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
 }
 
 .farmCard__element {
@@ -624,6 +628,7 @@
 .farmCard__element__right__details {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .farmCard__element__right__details__title {
@@ -741,6 +746,7 @@
   margin-left: 10px;
   color: #68ffc0;
   text-shadow: 2px 2px 8px #68ffc0;
+  cursor: pointer;
   // @media screen and (max-width: $XXL) {
   //   font-size: 17px;
   // }
@@ -787,6 +793,38 @@
   display: inline-block;
 
   white-space: nowrap;
+  button {
+    cursor: pointer;
+    background: #fe4350;
+    border-radius: 54px;
+    padding: 5px 35px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+    border: none;
+    outline: none;
+    color: #ffffff;
+
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 13px;
+    // }
+
+    // @media screen and (max-width: $XS) {
+    //   font-size: 8px;
+    // }
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__buttonWrap2 {
+  text-align: center;
+  margin: 15px 0px;
+
   button {
     cursor: pointer;
     background: #fe4350;
@@ -949,6 +987,7 @@
 .farmCard__table__data__wrap {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 15px;
 }
 
@@ -956,7 +995,7 @@
   display: flex;
   align-items: center;
   gap: 60px;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .liquidityCard__wrap {
@@ -986,8 +1025,8 @@
   border-radius: 57px;
   padding: 6px 20px;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 12px;
   line-height: 17px;
   /* identical to box height */
 
@@ -1034,7 +1073,7 @@
 
 .tradeCard__body__left__title {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 12px;
   line-height: 22px;
   color: #acbfdb;
 
@@ -1061,10 +1100,14 @@
 
 .tradeCard__body__right__el1__title {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 20px;
   text-align: right;
   color: #acbfdb;
+
+  span {
+    margin-left: 10px;
+  }
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 11px;
@@ -1203,9 +1246,15 @@
   }
 }
 
+.farm__deposit__buttonWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tradeCard__body__left__item__details__title {
   font-weight: 700;
-  font-size: 22.7191px;
+  font-size: 15px;
   line-height: 28px;
   color: #ffffff;
   margin: 0px 10px;
@@ -1255,7 +1304,7 @@
 
 .tradeCard__body__right__el3 {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 8px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
@@ -1277,7 +1326,7 @@
 
 .tradeCard__body__right__el4 {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 8px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
@@ -1305,14 +1354,14 @@
 
 .liquidityCard__pool__title {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 14px;
   line-height: 24px;
 
   color: #ffffff;
 
   &.title {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 12px;
     line-height: 20px;
     /* identical to box height */
 
@@ -1329,7 +1378,7 @@
 
   &.semiTitle {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 12px;
     line-height: 20px;
     /* identical to box height */
 
@@ -1424,7 +1473,7 @@
 
 .liquidityCard__pool__withdraw__title {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 20px;
   /* identical to box height */
 
@@ -1481,7 +1530,7 @@
 
 .liquidityCard__pool__withdraw__element__title {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 12px;
   line-height: 22px;
   /* identical to box height */
 
@@ -1499,7 +1548,7 @@
 
   &.title {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 12px;
     line-height: 20px;
     /* identical to box height */
 

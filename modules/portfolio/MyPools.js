@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table } from "antd";
+import { Button, Col, Row, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
@@ -57,12 +57,7 @@ const MyPools = ({
       ),
     },
     {
-      title: (
-        <>
-          My Liquidity
-          <TooltipIcon text="Your current liquidity position in the corresponding Asset pool" />
-        </>
-      ),
+      title: <>My Liquidity</>,
       dataIndex: "position",
       key: "position",
       // width: 300,

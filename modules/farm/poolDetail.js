@@ -115,7 +115,6 @@ const PoolDetails = ({
       fetchSoftLock();
     }
 
-    
     setTradeData({
       baseCoin: pool?.balances?.baseCoin?.denom,
       quoteCoin: pool?.balances?.quoteCoin?.denom,

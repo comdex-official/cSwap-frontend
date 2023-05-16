@@ -19,7 +19,7 @@ import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   commaSeparator,
@@ -28,11 +28,11 @@ import {
   marketPrice,
 } from "../../utils/number";
 import { Icon } from "../../shared/image/Icon";
-import PortifolioTab from './PortofolioTab'
+import PortifolioTab from "./PortofolioTab";
 import {
   queryPoolCoinDeserialize,
   queryPoolsList,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../../services/liquidity/query";
 import { setPools, setUserLiquidityInPools } from "../../actions/liquidity";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
@@ -52,7 +52,6 @@ const Portfolio = ({
   const theme = "dark";
 
   const [active, setActive] = useState("Assets");
-
 
   const getUserLiquidity = useCallback(
     (pool) => {
@@ -75,11 +74,8 @@ const Portfolio = ({
           const userLockedAmount =
             Number(
               queuedAmounts?.length > 0 &&
-              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
             ) + Number(activeSoftLock?.amount) || 0;
-
-
-
 
           const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
 
@@ -100,14 +96,14 @@ const Portfolio = ({
                     assetMap[providedTokens?.[0]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[0]?.denom) +
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
                 Number(
                   amountConversion(
                     providedTokens?.[1]?.amount,
                     assetMap[providedTokens?.[1]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[1]?.denom);
+                  marketPrice(markets, providedTokens?.[1]?.denom);
 
               setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
@@ -171,22 +167,24 @@ const Portfolio = ({
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 220,
-      width: 220,
+      height: 200,
+      width: 200,
       margin: 5,
     },
     credits: {
       enabled: false,
     },
     title: {
-      text: `${getTotalValue()} <br /> ${variables[lang].USD}`,
+      text: `${formatNumber(getTotalValue() || 0)} <br /> ${
+        variables[lang].USD
+      }`,
       verticalAlign: "middle",
       floating: true,
       style: {
-        fontSize: "36px",
+        fontSize: "25px",
         fontWeight: "600",
-        fontFamily: "Montserrat",
         color: "#FFFFFF",
+        fontFamily: "Montserrat, sans-serif",
       },
     },
     subtitle: {
@@ -194,7 +192,7 @@ const Portfolio = ({
       style: {
         fontSize: "25px",
         fontWeight: "500",
-        fontFamily: "Lexend Deca",
+        fontFamily: "Montserrat, sans-serif",
         color: "#fff",
       },
       y: 70,
@@ -218,7 +216,8 @@ const Portfolio = ({
     tooltip: {
       formatter: function () {
         return (
-          '<div style="text-align:center; font-weight:800; ">' + "$" +
+          '<div style="text-align:center; font-weight:800; ">' +
+          "$" +
           formatNumber(this.y.toFixed(DOLLAR_DECIMALS)) +
           "<br />" +
           '<small style="font-size: 10px; font-weight:400;">' +
@@ -262,76 +261,86 @@ const Portfolio = ({
 
   return (
     <div
-      className={`${styles.portfolio__wrap} ${theme === "dark" ? styles.dark : styles.light
-        }`}
+      className={`${styles.portfolio__wrap} ${
+        theme === "dark" ? styles.dark : styles.light
+      }`}
     >
       <div
-        className={`${styles.portfolio__main} ${theme === "dark" ? styles.dark : styles.light
-          }`}
+        className={`${styles.portfolio__main} ${
+          theme === "dark" ? styles.dark : styles.light
+        }`}
       >
         <div
-          className={`${styles.portfolio__header__wrap} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.portfolio__header__wrap} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <div
-            className={`${styles.portfolio__header__element__wrap} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.portfolio__header__element__wrap} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <HighchartsReact highcharts={Highcharts} options={Options} />
           </div>
 
           <div
-            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.portfolio__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__upper__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"Total Value"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {getTotalValue()} {variables[lang].USD}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.portfolio__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__upper__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div />
               {"Asset Balance"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
-              {commaSeparatorWithRounding(
-                assetBalance,
-                DOLLAR_DECIMALS
-              )}{" "}
+              {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
               {variables[lang].USD}
             </div>
           </div>
           <div
-            className={`${styles.portfolio__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.portfolio__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__upper__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div /> {"Farm Balance"}
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.portfolio__element__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {commaSeparator(
                 Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
@@ -341,8 +350,9 @@ const Portfolio = ({
           </div>
         </div>
         <div
-          className={`${styles.portfolio__table} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.portfolio__table} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <PortifolioTab />
         </div>

@@ -1,26 +1,26 @@
-import { Button, Col, Input, message, Row, Switch, Table } from "antd"
-import Lodash from "lodash"
+import { Button, Col, Input, message, Row, Switch, Table } from "antd";
+import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 // import NoDataIcon from "../../components/common/NoDataIcon";
 import { setLPPrices, setMarkets } from "../../actions/oracle";
-import { cmst, comdex, harbor } from '../../config/network';
-import { DOLLAR_DECIMALS } from "../../constants/common"
-import { getChainConfig } from "../../services/keplr"
-import { fetchRestPrices } from "../../services/oracle/query"
-import { amountConversion, denomConversion } from "../../utils/coin"
+import { cmst, comdex, harbor } from "../../config/network";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import { getChainConfig } from "../../services/keplr";
+import { fetchRestPrices } from "../../services/oracle/query";
+import { amountConversion, denomConversion } from "../../utils/coin";
 import { connect, useDispatch } from "react-redux";
 import { setAccountBalances } from "../../actions/account";
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
-  marketPrice
-} from "../../utils/number"
-import Deposit from "./Deposit"
-import "./Portfolio.module.scss"
-import Withdraw from "./Withdraw"
+  marketPrice,
+} from "../../utils/number";
+import Deposit from "./Deposit";
+import "./Portfolio.module.scss";
+import Withdraw from "./Withdraw";
 import { Icon } from "../../shared/image/Icon";
-import styles from './Portfolio.module.scss';
+import styles from "./Portfolio.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
 
 const PortofolioTable = ({
@@ -38,12 +38,11 @@ const PortofolioTable = ({
   iconList,
   AssetList,
 }) => {
-
+  let theme = "dark";
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
   const [filterValue, setFilterValue] = useState("1");
-
 
   const dispatch = useDispatch();
 
@@ -151,7 +150,7 @@ const PortofolioTable = ({
       render: (value) => {
         if (value) {
           return value?.depositUrlOverride ? (
-            <Button type="primary" size="small">
+            <Button type="primary" size="small" className="btn-filled">
               <a
                 href={value?.depositUrlOverride}
                 target="_blank"
@@ -182,7 +181,7 @@ const PortofolioTable = ({
       render: (value) => {
         if (value) {
           return value?.withdrawUrlOverride ? (
-            <Button type="primary" size="small">
+            <Button type="primary" size="small" className="btn-filled">
               <a
                 href={value?.withdrawUrlOverride}
                 target="_blank"
@@ -233,9 +232,9 @@ const PortofolioTable = ({
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
-            ibcBalance.amount,
-            assetMap[ibcBalance?.denom]?.decimals
-          )
+              ibcBalance.amount,
+              assetMap[ibcBalance?.denom]?.decimals
+            )
           : 0,
         value: value || 0,
         denom: ibcBalance?.denom,
@@ -274,8 +273,24 @@ const PortofolioTable = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              {/* <SvgIcon name={iconNameFromDenom(comdex?.coinMinimalDenom)} /> */}
-              <NextImage src={iconList?.[comdex?.coinMinimalDenom]?.coinImageUrl} width={30} height={30} alt="" />
+              <div
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.first
+                } ${theme === "dark" ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={iconList?.[comdex?.coinMinimalDenom]?.coinImageUrl}
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                </div>
+              </div>
             </div>{" "}
             {denomConversion(comdex?.coinMinimalDenom)}{" "}
           </div>
@@ -299,9 +314,24 @@ const PortofolioTable = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              {/* <SvgIcon name={iconNameFromDenom(cmst?.coinMinimalDenom)} /> */}
-              <NextImage src={iconList?.[cmst?.coinMinimalDenom]?.coinImageUrl} width={30} height={30} alt="" />
-
+              <div
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.first
+                } ${theme === "dark" ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={iconList?.[cmst?.coinMinimalDenom]?.coinImageUrl}
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                </div>
+              </div>
             </div>{" "}
             {denomConversion(cmst?.coinMinimalDenom)}{" "}
           </div>
@@ -325,11 +355,34 @@ const PortofolioTable = ({
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              {/* <SvgIcon name={iconNameFromDenom(harbor?.coinMinimalDenom)} /> */}
-              <NextImage src={iconList?.[harbor?.coinMinimalDenom]?.coinImageUrl} width={30} height={30} alt="" />
-            </div>{" "}
-            {denomConversion(harbor?.coinMinimalDenom)}{" "}
+              <div
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.first
+                } ${theme === "dark" ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={iconList?.[harbor?.coinMinimalDenom]?.coinImageUrl}
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            {denomConversion(harbor?.coinMinimalDenom)}
           </div>
+          {/* <div className="assets-withicon">
+            <div className="assets-icon">
+            
+             
+            </div>{" "}
+           
+          </div> */}
         </>
       ),
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
@@ -360,8 +413,24 @@ const PortofolioTable = ({
           <>
             <div className="assets-withicon">
               <div className="assets-icon">
-                {/* <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} /> */}
-                <NextImage src={iconList?.[item?.ibcDenomHash]?.coinImageUrl} width={30} height={30} alt="" />
+                <div
+                  className={`${styles.farmCard__element__left__logo} ${
+                    styles.first
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  <div
+                    className={`${styles.farmCard__element__left__logo__main} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <NextImage
+                      src={iconList?.[item?.ibcDenomHash]?.coinImageUrl}
+                      width={30}
+                      height={30}
+                      alt=""
+                    />
+                  </div>
+                </div>
               </div>{" "}
               {denomConversion(item?.ibcDenomHash)}{" "}
             </div>
@@ -390,8 +459,8 @@ const PortofolioTable = ({
   tableData =
     searchKey && filterValue === "1"
       ? tableData?.filter((item) => {
-        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
-      })
+          return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
+        })
       : tableData;
 
   let balanceExists = allTableData?.find(
@@ -405,7 +474,7 @@ const PortofolioTable = ({
   return (
     <div className="app-content-wrapper">
       <div className="assets-section">
-        <Row className={styles.portifolio_toggle_main_row} >
+        <Row className={styles.portifolio_toggle_main_row}>
           <Col
             className="assets-search-section"
             style={{ alignItems: "center", display: "flex", gap: "10px" }}
@@ -417,20 +486,20 @@ const PortofolioTable = ({
                 display: "flex",
                 width: "110%",
                 gap: "3px",
-                color: "white"
+                color: "white",
               }}
             >
               Hide 0 Balances{" "}
               <Switch
                 disabled={!balanceExists}
-                onChange={value => handleHideSwitchChange(value)}
+                onChange={(value) => handleHideSwitchChange(value)}
                 checked={isHideToggleOn}
               />
             </div>
             {/* )} */}
             <Input
               placeholder="Search Asset.."
-              onChange={event => onSearchChange(event.target.value)}
+              onChange={(event) => onSearchChange(event.target.value)}
               // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
               // suffix={<Icon className={"bi bi-search"} />}
               className="asset_search_input"
@@ -460,8 +529,8 @@ const PortofolioTable = ({
         </Row>
       </div>
     </div>
-  )
-}
+  );
+};
 
 PortofolioTable.propTypes = {
   lang: PropTypes.string.isRequired,
@@ -504,4 +573,3 @@ const actionsToProps = {
 };
 
 export default connect(stateToProps, actionsToProps)(PortofolioTable);
-
