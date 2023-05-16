@@ -1,5 +1,6 @@
 @import "./globalVariable.scss";
 @import "./grid.scss";
+@import "./govern/Govern.module.scss";
 
 :root {
   font-family: Montserrat, sans-serif;
@@ -414,7 +415,6 @@ a {
         }
       }
 
-      
       .ant-modal-close-x {
         color: #ffffff;
       }

@@ -1,0 +1,220 @@
+@import "../globalVariable.scss";
+
+.govern_max_width {
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 20px;
+
+  .govern_main_container {
+    .govern_container {
+      .govern_tab_main_container {
+        .govern_tab {
+        }
+        .govern_search {
+        }
+      }
+      .proposal_box_parent_container {
+        display: flex;
+        // gap: 0.7rem;
+        row-gap: 0.7rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .proposal_main_container {
+          background: #020b1e;
+          padding: 25px;
+          border-radius: 20px;
+          color: white;
+          flex-basis: 49.5%;
+          cursor: pointer;
+          .proposal_container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .id_timer_container {
+              display: flex;
+              justify-content: space-between;
+              width: 100%;
+              align-items: center;
+              margin-bottom: 1rem;
+              .proposal_id {
+                color: #8c89b4;
+                line-height: 20px;
+                font-weight: 400;
+                font-size: 1.2rem;
+              }
+              .proposal_timer {
+                // background: linear-gradient(
+                //   90.55deg,
+                //   #6359e9 -33.82%,
+                //   rgba(114, 9, 183, 0.76) 334.79%
+                // );
+                background: $primary-color;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                text-fill-color: transparent;
+                svg {
+                  fill: $primary-color;
+                  height: 70%;
+                }
+              }
+            }
+            .haeading_container {
+              .heading {
+                line-height: 27px;
+                font-weight: 700;
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+              }
+            }
+            .para_main_container {
+              .para_container {
+                color: #d1d1da;
+                font-size: 0.9rem;
+                font-weight: 300;
+                line-height: 21px;
+              }
+            }
+            .progress_bar_main_container {
+              .progress_bar_container {
+                .stata_main_container {
+                  display: flex;
+                  justify-content: space-between;
+                  width: 100%;
+                  margin-top: 1rem;
+                  .stats_container {
+                    display: flex;
+                    column-gap: 10px;
+                    .color {
+                      height: 12px;
+                      width: 12px;
+                    }
+                    .data_container {
+                      .title {
+                        margin-bottom: 5px;
+                        font-size: 0.8rem;
+                        font-weight: 400;
+                        color: #d1d1da;
+                      }
+                      .value {
+                        font-weight: 600;
+                        font-size: 1rem;
+                      }
+                    }
+                  }
+                }
+                .progress_bar {
+                  .vote-progress-bar {
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Proposal view Page
+
+.proposal_view_back_button_container {
+}
+.govern_view_main_container {
+  .govern_view_container {
+    .proposal_detail_main_container {
+      background-color: $background-dark1;
+      margin-bottom: 2rem;
+      padding: 1.2rem 1.4rem;
+      border-radius: 20px;
+      .proposal_detail_container {
+        .proposal_id {
+        }
+        .proposal_title {
+        }
+        .proposal_overview_container {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          .proposal_stats_container {
+            .title {
+            }
+            .value {
+            }
+          }
+        }
+      }
+    }
+    .proposal_vote_details_main_container {
+      background-color: $background-dark1;
+      padding: 1.2rem 1.4rem;
+      border-radius: 20px;
+      .proposal_vote_details_container {
+        .title_and_user_vote_container {
+          display: flex;
+          justify-content: space-between;
+          .vote_title {
+          }
+          .user_vote {
+          }
+        }
+        .proposal_vote_details_main {
+          display: flex;
+          .proposal_vote_column {
+            background-color: orange;
+            .total_votel_container {
+              .title {
+              }
+              .value {
+              }
+            }
+            .proposal_quorem_container {
+              .total_quorem {
+                .title {
+                }
+                .value {
+                }
+              }
+            }
+          }
+          .proposal_vote_detail_column {
+            background-color: palegreen;
+
+            .proposal_vote_up_row {
+              .stata_main_container {
+                display: flex;
+                .stats_container {
+                  .color {
+                  }
+                  .data_container {
+                    .title {
+                    }
+                    .value {
+                    }
+                  }
+                }
+              }
+            }
+            .proposal_vote_botom_row {
+              .vote-progress-bar {
+              }
+            }
+          }
+          .proposal_vote_btn_container {
+            background-color: rebeccapurple;
+          }
+        }
+      }
+    }
+
+    .proposal_description_main_container {
+      .proposal_heading {
+      }
+      .proposal_para {
+      }
+      .proposal_suggest_box {
+      }
+    }
+  }
+}
