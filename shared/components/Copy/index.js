@@ -25,9 +25,11 @@ const Copy = ({ text }) => {
         e.stopPropagation();
       }}
     >
-      <Tooltip arrow open={open} color="#FE4350" title="Copied!">
+      <Tooltip open={open} color="#FE4350" title="Copied!">
         <CopyToClipboard onCopy={onCopy} text={text}>
-          <Icon className={"bi bi-clipboard2"} />
+          <div>
+            <Icon className={"bi bi-clipboard2"} />
+          </div>
         </CopyToClipboard>
       </Tooltip>
     </div>

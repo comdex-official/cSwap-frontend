@@ -41,9 +41,14 @@
   }
 }
 
+.right__item {
+  width: 60%;
+  text-align: left;
+}
+
 .header__left__element {
   font-weight: 500;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 18px;
   margin-left: 35px;
   text-align: center;
@@ -324,8 +329,9 @@
 }
 
 .dropdown__dot__menu {
-  width: 85px;
+  width: 100px;
   text-align: center;
+  padding: 0px 5px;
 }
 
 .dropdown__dot__item {

@@ -365,32 +365,32 @@ const FarmTable = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                <div
+                {/* <div
                   className={`${styles.farmCard__element__right__pool__title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
-                >
-                  {getMasterPool(value?.id?.toNumber()) ? (
-                    <div
-                      className={`${
-                        styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      <NextImage src={Pyramid} alt="Logo" />
-                      {"Master Pool"}
-                    </div>
-                  ) : (
-                    <div
-                      className={`${
-                        styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      <NextImage src={Current} alt="Logo" />
-                      {"MP Boost"}
-                    </div>
-                  )}
-                </div>
+                > */}
+                {getMasterPool(value?.id?.toNumber()) ? (
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__pool__title
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    <NextImage src={Pyramid} alt="Logo" />
+                    {"Master Pool"}
+                  </div>
+                ) : (
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__pool__title
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    <NextImage src={Current} alt="Logo" />
+                    {"MP Boost"}
+                  </div>
+                )}
               </div>
+              {/* </div> */}
             </div>
             <div
               className={`${styles.farmCard__element__right__incentive} ${
@@ -416,40 +416,85 @@ const FarmTable = ({
       Header: "APR",
       accessor: "APR",
       Cell: ({ value }) => (
-        <div
-          className={`${styles.farmCard__element__right__details} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
+        <Tooltip
+          title={
+            !getMasterPool() ? (
+              <>
+                <div className="upto_apr_tooltip_farm_main_container">
+                  <div className="upto_apr_tooltip_farm">
+                    <span className="text">Total APR (incl. MP Rewards):</span>
+                    <span className="value">
+                      {" "}
+                      {commaSeparator(calculateUptoApr() || 0)}%
+                    </span>
+                  </div>
+
+                  <div className="upto_apr_tooltip_farm">
+                    <span className="text">Base APR (CMDX. yeild only):</span>
+                    <span className="value">
+                      {" "}
+                      {commaSeparator(calculateApr() || 0)}%
+                    </span>
+                  </div>
+
+                  <div className="upto_apr_tooltip_farm">
+                    <span className="text">Swap Fee APR :</span>
+                    <span className="value">
+                      {" "}
+                      {fixedDecimal(poolsApr?.swap_fee_rewards?.[0]?.apr || 0)}%
+                    </span>
+                  </div>
+
+                  <div className="upto_apr_tooltip_farm">
+                    <span className="text">Available MP Boost:</span>
+                    <span className="value">
+                      {" "}
+                      Upto {commaSeparator(fetchMasterPoolAprData() || 0)}% for
+                      providing liquidity in the Master Pool
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : null
+          }
+          // className="farm_upto_apr_tooltip"
+          overlayClassName="farm_upto_apr_tooltip"
         >
           <div
-            className={`${styles.farmCard__element__right__details__title} ${
+            className={`${styles.farmCard__element__right__details} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
-            {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
-            {!getMasterPool(value?.id?.toNumber()) && (
-              <Icon className={"bi bi-arrow-right"} />
-            )}
-          </div>
-          {!getMasterPool(value?.id?.toNumber()) && (
             <div
-              className={`${styles.farmCard__element__right__pool} ${
+              className={`${styles.farmCard__element__right__details__title} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
+              {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
+              {!getMasterPool(value?.id?.toNumber()) && (
+                <Icon className={"bi bi-arrow-right"} />
+              )}
+            </div>
+            {!getMasterPool(value?.id?.toNumber()) && (
               <div
-                className={`${styles.farmCard__element__right__pool__title} ${
+                className={`${styles.farmCard__element__right__pool} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                <NextImage src={Current} alt="Logo" />
-                {`Upto ${commaSeparator(
-                  calculateUptoApr(value?.id?.toNumber()) || 0
-                )} %`}
+                <div
+                  className={`${styles.farmCard__element__right__pool__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage src={Current} alt="Logo" />
+                  {`Upto ${commaSeparator(
+                    calculateUptoApr(value?.id?.toNumber()) || 0
+                  )} %`}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </Tooltip>
       ),
     },
     {
