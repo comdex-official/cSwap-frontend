@@ -10,6 +10,7 @@ import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
 import "./index.scss";
+import { comdex } from "../../config/network";
 
 const { Option } = Select;
 
@@ -31,9 +32,9 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     });
   }, [setAllProposals, setProposals]);
 
-  useEffect(() => {
-    fetchAllProposals();
-  }, [fetchAllProposals]);
+  // useEffect(() => {
+  //   fetchAllProposals();
+  // }, [fetchAllProposals]);
 
   const filterAllProposal = (value) => {
     let allFilteredProposal =
@@ -46,6 +47,29 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
       });
     setProposals(allFilteredProposal);
   };
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let nextPage = '';
+      let allProposals = [];
+
+      do {
+        const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        allProposals = [...allProposals, ...data.proposals];
+        nextPage = data.pagination.next_key ? `?pagination.key=${data.pagination.next_key}` : null;
+      } while (nextPage !== null);
+
+      setProposals(allProposals?.reverse());
+      setAllProposals(allProposals?.proposals);
+    };
+
+    fetchData();
+  }, []);
+
 
   return (
     <div className="app-content-wrapper">
@@ -108,12 +132,12 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                   className={
                                     proposalStatusMap[item?.status] ===
                                       "Rejected" ||
-                                    proposalStatusMap[item?.status] === "Failed"
+                                      proposalStatusMap[item?.status] === "Failed"
                                       ? "failed-circle"
                                       : proposalStatusMap[item?.status] ===
                                         "Passed"
-                                      ? "passed-circle"
-                                      : "warning-circle"
+                                        ? "passed-circle"
+                                        : "warning-circle"
                                   }
                                 ></span>
                                 {proposalStatusMap[item?.status]}
