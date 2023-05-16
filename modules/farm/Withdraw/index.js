@@ -1,11 +1,11 @@
-import { Button, Col, Form, message, Row, Slider } from "antd";
+import { Button, Col, Form, message, Row, Slider, Tooltip } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import Snack from "../../../shared/components/Snack";
 import CustomInput from "../../../shared/components/CustomInput";
-import { APP_ID } from "../../../constants/common";
+import { APP_ID, PRICE_DECIMALS } from "../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import {
@@ -19,6 +19,8 @@ import RangeTooltipContent from "../../../shared/components/range/RangedToolTip"
 import styles from "../Farm.module.scss";
 import PoolTokenValue from "../PoolTokenValue";
 import PoolDetails from "../poolDetail";
+import { Icon } from "../../../shared/image/Icon";
+import { decimalConversion, rangeToPercentage } from "../../../utils/number";
 
 const marks = {
   0: {
@@ -136,6 +138,55 @@ const Remove = ({
 
   return (
     <>
+      <div className="ranged-box">
+        <div className="ranged-box-inner">
+          {pool?.type === 2 ? (
+            <div className="farm-rang-slider">
+              <div className="farmrange-title">
+                {Number(pool?.price) > Number(pool?.minPrice) &&
+                Number(pool?.price) < Number(pool?.maxPrice) ? (
+                  <span className="success-color">In range</span>
+                ) : (
+                  <span className="warn-color">Out of range</span>
+                )}
+                <Tooltip
+                  overlayClassName="ranged-tooltip"
+                  title={
+                    <RangeTooltipContent
+                      price={Number(decimalConversion(pool?.price)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                      max={Number(decimalConversion(pool?.maxPrice)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                      min={Number(decimalConversion(pool?.minPrice)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                    />
+                  }
+                  placement="bottom"
+                >
+                  <>
+                    <Icon className={"bi bi-info-circle"} />
+                  </>
+                </Tooltip>
+              </div>
+              <div className="pool-ranged">
+                <Slider
+                  className="farm-slider farm-slider-small"
+                  tooltip={{ open: false }}
+                  value={rangeToPercentage(
+                    Number(decimalConversion(pool?.minPrice)),
+                    Number(decimalConversion(pool?.maxPrice)),
+                    Number(decimalConversion(pool?.price))
+                  )}
+                  marks={marks}
+                />
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
       <div
         className={`${styles.liquidityCard__pool__withdraw__wrap} ${
           theme === "dark" ? styles.dark : styles.light

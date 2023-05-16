@@ -520,6 +520,10 @@
 
   white-space: nowrap;
 
+  &.active {
+    cursor: pointer;
+  }
+
   // @media screen and (max-width: $XXL) {
   //   font-size: 10px;
   // }

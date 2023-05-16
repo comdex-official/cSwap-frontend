@@ -393,52 +393,16 @@ const FarmCard = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                <div className="ranged-box">
-                  <div className="ranged-box-inner">
-                    {pool?.type === 2 ? (
-                      <div
-                        className={`${styles.farmCard__element__right__basic} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        <div className="ranged-box">
-                          <div className="ranged-box-inner">
-                            <Tooltip
-                              overlayClassName="ranged-tooltip ranged-tooltip-small"
-                              title={
-                                pool?.type === 2 ? (
-                                  <RangeTooltipContent
-                                    parent={"pool"}
-                                    price={Number(
-                                      decimalConversion(pool?.price)
-                                    ).toFixed(PRICE_DECIMALS)}
-                                    max={Number(
-                                      decimalConversion(pool?.maxPrice)
-                                    ).toFixed(PRICE_DECIMALS)}
-                                    min={Number(
-                                      decimalConversion(pool?.minPrice)
-                                    ).toFixed(PRICE_DECIMALS)}
-                                  />
-                                ) : null
-                              }
-                              placement="bottom"
-                            >
-                              <div
-                                className={`${
-                                  styles.farmCard__element__right__basic__title
-                                } ${
-                                  theme === "dark" ? styles.dark : styles.light
-                                }`}
-                              >
-                                {"Ranged"}
-                              </div>
-                            </Tooltip>
-                          </div>
-                        </div>
-                        {/* <Tooltip
-                          overlayClassName="ranged-tooltip "
-                          visible={true}
-                          delayHide={1500000}
+                {pool?.type === 2 ? (
+                  <div
+                    className={`${styles.farmCard__element__right__basic} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className="ranged-box">
+                      <div className="ranged-box-inner">
+                        <Tooltip
+                          overlayClassName="ranged-tooltip ranged-tooltip-small"
                           title={
                             pool?.type === 2 ? (
                               <RangeTooltipContent
@@ -457,32 +421,40 @@ const FarmCard = ({
                           }
                           placement="top"
                         >
-                          
-                        </Tooltip> */}
+                          <div
+                            className={`${
+                              styles.farmCard__element__right__basic__title
+                            } ${styles.active} ${
+                              theme === "dark" ? styles.dark : styles.light
+                            }`}
+                          >
+                            {"Ranged"}
+                          </div>
+                        </Tooltip>
                       </div>
-                    ) : pool?.type === 1 ? (
-                      <div
-                        className={`${styles.farmCard__element__right__basic} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        <div
-                          className={`${
-                            styles.farmCard__element__right__basic__title
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
-                        >
-                          {"Basic"}
-                        </div>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {/* {pool?.type === 2 ? (
+                    </div>
+                  </div>
+                ) : pool?.type === 1 ? (
+                  <div
+                    className={`${styles.farmCard__element__right__basic} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__basic__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      {"Basic"}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* {pool?.type === 2 ? (
                         // <SvgIcon name="info-icon" viewbox="0 0 9 9" /> 
                         <Icon className={"bi bi-arrow-right"} />
                       ) : null} */}
-                  </div>
-                </div>
 
                 <div
                   className={`${styles.farmCard__element__right__pool} ${

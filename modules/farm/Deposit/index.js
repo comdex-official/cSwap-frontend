@@ -45,6 +45,7 @@ import variables from "../../../utils/variables";
 import styles from "../Farm.module.scss";
 import { NextImage } from "../../../shared/image/NextImage";
 import PoolDetails from "../poolDetail";
+import { Icon } from "../../../shared/image/Icon";
 
 const Deposit = ({
   active,
@@ -329,6 +330,56 @@ const Deposit = ({
 
   return (
     <>
+      <div className="ranged-box">
+        <div className="ranged-box-inner">
+          {pool?.type === 2 ? (
+            <div className="farm-rang-slider">
+              <div className="farmrange-title">
+                {Number(pool?.price) > Number(pool?.minPrice) &&
+                Number(pool?.price) < Number(pool?.maxPrice) ? (
+                  <span className="success-color">In range</span>
+                ) : (
+                  <span className="warn-color">Out of range</span>
+                )}
+                <Tooltip
+                  overlayClassName="ranged-tooltip"
+                  title={
+                    <RangeTooltipContent
+                      price={Number(decimalConversion(pool?.price)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                      max={Number(decimalConversion(pool?.maxPrice)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                      min={Number(decimalConversion(pool?.minPrice)).toFixed(
+                        PRICE_DECIMALS
+                      )}
+                    />
+                  }
+                  placement="bottom"
+                >
+                  <>
+                    <Icon className={"bi bi-info-circle"} />
+                  </>
+                </Tooltip>
+              </div>
+              <div className="ranged">
+                <Slider
+                  className="farm-slider farm-slider-small"
+                  tooltip={{ open: false }}
+                  value={rangeToPercentage(
+                    Number(decimalConversion(pool?.minPrice)),
+                    Number(decimalConversion(pool?.maxPrice)),
+                    Number(decimalConversion(pool?.price))
+                  )}
+                  marks={marks}
+                />
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
       <div className={styles.tradeCard__body__item}>
         <div className={styles.tradeCard__body__left}>
           <div className={styles.tradeCard__body__main}>
