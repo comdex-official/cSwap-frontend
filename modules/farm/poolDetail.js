@@ -324,7 +324,7 @@ const PoolDetails = ({
                   styles.semiTitle
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                {"LP Amount"}
+                {"Farming Amount"}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${

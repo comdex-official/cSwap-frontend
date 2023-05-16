@@ -86,7 +86,7 @@ export const DotDropdownData = [
   },
   {
     id: 1,
-    name: "Info",
+    name: "Stats",
     icon: Info,
     link: "https://docs.comdex.one/",
   },

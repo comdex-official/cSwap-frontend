@@ -402,7 +402,7 @@ const Header = ({
                 <div>
                   <NextImage src={item.icon} alt="Icon" />
                 </div>
-                <div>{item.name}</div>
+                <div className={styles.right__item}>{item.name}</div>
               </a>
             </div>
           ))}

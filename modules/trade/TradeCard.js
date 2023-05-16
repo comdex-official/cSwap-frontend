@@ -992,7 +992,7 @@ const TradeCard = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {toggleValue ? "Trade Fee" : "Swap Fee"}
+                  {"Swap Fee"}
                 </div>
                 <div
                   className={`${styles.tradeCard__description__right_title} ${

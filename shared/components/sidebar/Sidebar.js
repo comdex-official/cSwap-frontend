@@ -2,7 +2,7 @@ import styles from "./Sidebar.module.scss";
 import { NextImage } from "../../../shared/image/NextImage";
 import { Logo_Dark, Logo_Light } from "../../../shared/image";
 import { HeaderData } from "../header/Data";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { Icon } from "../../../shared/image/Icon";
 import { useSelector } from "react-redux";

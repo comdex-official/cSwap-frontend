@@ -270,7 +270,7 @@ const Remove = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"You farmed"}
+              {"Your current farming balance"}
             </div>
             <div
               className={`${
@@ -299,7 +299,7 @@ const Remove = ({
           loading={removeInProgress}
           className="btn-filled px-4"
         >
-          UnFarm & Withdraw
+          Unfarm & Withdraw
         </Button>
       </div>
     </>

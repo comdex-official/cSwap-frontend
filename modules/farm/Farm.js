@@ -321,7 +321,7 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"How it works?"}
+              {"How to earn boosted rewards in 2 steps?"}
             </div>
             <div
               className={`${styles.farm__header__right__main} ${
@@ -386,6 +386,13 @@ const Farm = ({
                     {`Deposit Equal value of assets in Child Pool 
                     or pools as your Master Pool to 
                     earn boosted rewards`}
+                  </div>
+                  <div
+                    className={`${styles.farm__header__right__body__button} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {"Go to Child Pools"}
                   </div>
                 </div>
               </div>

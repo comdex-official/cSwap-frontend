@@ -516,14 +516,25 @@ a {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  color: $text-color-dark2;
+  color: $white;
   padding-right: 0;
-
+  border: 1px solid #828281;
+  outline: none;
   &::-webkit-placeholder {
-    color: $text-color-dark2;
+    color: $white;
     .dark-mode & {
       color: white;
     }
+  }
+
+  &:active {
+    border: 1px solid #828281;
+    outline: none;
+  }
+
+  &:hover {
+    border: 1px solid #828281;
+    outline: none;
   }
 
   &::placeholder {
@@ -556,6 +567,19 @@ a {
 
     &::placeholder {
       color: $white;
+    }
+  }
+}
+
+.ant-input-disabled {
+  color: $white;
+  border: 1px solid #828281 !important;
+  outline: none;
+
+  &::placeholder {
+    color: white;
+    .dark-mode & {
+      color: white;
     }
   }
 }
@@ -992,12 +1016,12 @@ a {
           }
 
           &:hover {
-            background: rgba($primary-color, 0.5);
+            // background: rgba($primary-color, 0.5);
           }
 
           &.ant-tabs-tab-active {
-            background: $primary-color;
-            border-color: $primary-color;
+            // background: $primary-color;
+            // border-color: $primary-color;
 
             .ant-tabs-tab-btn {
               font-weight: 400;
