@@ -141,6 +141,7 @@
       margin-bottom: 2rem;
       padding: 1.2rem 1.4rem;
       border-radius: 20px;
+      color: white;
       .proposal_detail_container {
         .proposal_id {
           font-weight: 700;
@@ -179,6 +180,7 @@
       padding: 1.2rem 1.4rem;
       border-radius: 20px;
       margin-bottom: 2rem;
+      color: white;
       .proposal_vote_details_container {
         .title_and_user_vote_container {
           display: flex;
@@ -272,6 +274,7 @@
     }
 
     .proposal_description_main_container {
+        color: white;
       .proposal_heading {
         font-weight: 700;
         font-size: 1.3rem;
