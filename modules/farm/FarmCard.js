@@ -474,7 +474,9 @@ const FarmCard = ({
                     <div
                       className={`${
                         styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
                     >
                       <NextImage src={Current} alt="Logo" />
                       {"MP Boost"}

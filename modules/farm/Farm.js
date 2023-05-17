@@ -5,7 +5,7 @@ import Tab from "../../shared/components/tab/Tab";
 import Search from "../../shared/components/search/Search";
 import FarmTable from "./FarmTable";
 import FarmCard from "./FarmCard";
-import { Input, message, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Radio, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -254,15 +254,25 @@ const Farm = ({
     }
   }, []);
 
+  const [filterValue1, setFilterValue1] = useState("APR");
+
   const Items = [
     {
       key: "item-2",
       label: (
         <div className={styles.dropdown__farm}>
-          <p>{"APR"}</p>
-          <p>{"My Pools"}</p>
-          <p>{"Date Created"}</p>
-          <p>{"Pool Liquidity"}</p>
+          <div className="filter-button-radio">
+            <Radio.Group
+              onChange={(event) => setFilterValue1(event.target.value)}
+              defaultValue="a"
+              value={filterValue1}
+            >
+              <Radio value={"APR"}>APR</Radio>
+              <Radio value={"MyPools"}>My Pools</Radio>
+              <Radio value={"DateCreated"}>Date Created</Radio>
+              <Radio value={"PoolLiquidity"}>Pool Liquidity</Radio>
+            </Radio.Group>
+          </div>
         </div>
       ),
     },
@@ -510,6 +520,7 @@ const Farm = ({
                 onChange={(event) => onSearchChange(event.target.value)}
                 className="asset_search_input"
               />
+              <Icon className={"bi bi-search"} />
             </div>
           </div>
         </div>

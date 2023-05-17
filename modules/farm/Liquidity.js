@@ -1,7 +1,7 @@
 // import React, { useState } from "react"
 import styles from "./Farm.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
-import { ATOM, CMDS } from "../../shared/image";
+import { ArrowRL, ATOM, CMDS } from "../../shared/image";
 import { Icon } from "../../shared/image/Icon";
 import dynamic from "next/dynamic";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
@@ -244,6 +244,7 @@ const Liquidity = ({
           }`}
           onClick={() => router.push("/")}
         >
+          <NextImage src={ArrowRL} alt={"Arrow"} />
           {"Trade Pair"}
         </div>
       </div>

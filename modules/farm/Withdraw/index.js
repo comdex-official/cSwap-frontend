@@ -217,7 +217,10 @@ const Remove = ({
                 tooltip={{ open: false }}
               />
             </Col>
-            <Col span={6}>
+            <Col
+              span={6}
+              style={{ display: "flex", alignItems: "center", gap: "2px" }}
+            >
               <CustomInput
                 defaultValue={sliderValue}
                 onChange={(event) => {
@@ -226,6 +229,7 @@ const Remove = ({
                 placeholder="0"
                 value={`${sliderValue}`}
               />
+              {"%"}
             </Col>
           </Row>
         </div>

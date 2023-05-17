@@ -606,7 +606,7 @@ const Deposit = ({
           }
           onClick={() => handleDepositClick()}
         >
-          Farm & Deposit
+          Deposit & Farm
         </Button>
       </div>
     </>
