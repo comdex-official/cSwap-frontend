@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import Datafeed from "./static/datafeed";
 
 let tvScriptLoadingPromise;
 
@@ -31,20 +32,27 @@ export default function TradingViewWidget() {
         document.getElementById("tradingview_2bc9b") &&
         "TradingView" in window
       ) {
+        console.log("ggggg", window.TradingView);
         new window.TradingView.widget({
+          library_path:
+            "https://charting-library.tradingview-widget.com/charting_library/",
           width: "100%",
           height: "100%",
-          symbol: "BINANCE:BTCUSDT",
+          symbol: "Atom",
           timezone: "Etc/UTC",
           theme: "dark",
           style: "2",
+          datafeed: Datafeed,
           locale: "en",
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
+          clientId: "tradingview.com",
           withdateranges: true,
           range: "YTD",
           allow_symbol_change: true,
           container_id: "tradingview_2bc9b",
+          debug: true,
+          userId: "public_user_id",
         });
       }
     }

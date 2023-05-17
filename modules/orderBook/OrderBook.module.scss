@@ -277,6 +277,10 @@
   &.loss {
     color: #ff7b51;
   }
+  &.no__data {
+    text-align: center;
+    margin-top: 10px;
+  }
 }
 
 .orderbook__middle__head__main {
@@ -351,7 +355,7 @@
   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
   border: 2px solid #303950;
   border-radius: 20px;
-  height: 70%;
+  height: 85%;
 
   @media screen and (max-width: $L) {
     height: 100%;
@@ -448,7 +452,7 @@
   font-size: 10px;
   line-height: 15px;
   /* identical to box height */
-  text-align: flex-end;
+  text-align: right;
 
   color: #ffffff;
 
@@ -465,7 +469,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0px;
+  padding: 5px 0px;
 }
 
 .orderbook__body__tab__body__input__title {
@@ -509,7 +513,7 @@
 }
 
 .orderbook__body__tab__footer {
-  padding: 20px 0px;
+  padding: 10px 0px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -729,4 +733,16 @@
   @media screen and (max-width: $XS) {
     display: none;
   }
+}
+
+.total__row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #28385f;
+}
+
+.total__title {
+  font-size: 12px;
+  font-weight: 500;
+  color: $white;
 }
