@@ -260,13 +260,13 @@ const GovernViewPage = ({
 
     return (
         <>
-            <div className="proposal_view_back_button_container mt-4 govern_max_width">
+            <div className="proposal_view_back_button_container mt-4">
                 <Link href="/govern">
                     <Button type="primary">Back</Button>
                 </Link>
             </div>
 
-            <div className="govern_view_main_container mt-4 govern_max_width">
+            <div className="govern_view_main_container mt-4 ">
                 <div className="govern_view_container">
 
                     <div className="proposal_detail_main_container">
@@ -311,8 +311,8 @@ const GovernViewPage = ({
 
                                     <div className="proposal_quorem_container">
                                         <div className="total_quorem">
-                                            <div className="title">Total Votes</div>
-                                            <div className="value">2.7M CMDX</div>
+                                            <div className="title">Current Quorum</div>
+                                            <div className="value">1.47M CMDX</div>
                                         </div>
                                     </div>
                                 </div>
@@ -397,7 +397,7 @@ const GovernViewPage = ({
                                 </div>
 
                                 <div className="proposal_vote_btn_container">
-                                    <Button type="primary"> Vote</Button>
+                                    <Button type="primary" className="btn-filled"> Vote</Button>
                                 </div>
 
 
@@ -415,9 +415,9 @@ const GovernViewPage = ({
 
                         <div className="proposal_suggest_box">
                             <p>No other parameters are being changed.</p>
-                            <p>  Vote YES to approve the increase of debt ceiling.</p>
-                            <p> Vote NO to disapprove the increase of debt ceiling.</p>
-                            <p>  Vote ABSTAIN to express no interest in the proposal.</p>
+                            <p>  Vote <span>YES</span>  to approve the increase of debt ceiling.</p>
+                            <p> Vote <span>NO</span>  to disapprove the increase of debt ceiling.</p>
+                            <p>  Vote <span>ABSTAIN</span>  to express no interest in the proposal.</p>
                         </div>
                     </div>
 

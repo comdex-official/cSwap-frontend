@@ -70,7 +70,7 @@ const GovernOpenProposal = ({ proposals }) => {
                                                 {/* Pairagraph container  */}
                                                 <div className="para_main_container">
                                                     <div className="para_container">
-                                                        {stringTagParser(item?.content?.description.substring(0, 165) || " ") + "......"}                                               </div>
+                                                        {stringTagParser(item?.content?.description.substring(0, 150) || " ") + "......"}                                               </div>
                                                 </div>
 
                                                 {/* Progress bar container  */}

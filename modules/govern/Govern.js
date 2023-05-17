@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { Button, List, message, Select, Spin } from "antd";
+import { Button, Col, Input, List, message, Row, Select, Spin, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -22,6 +22,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     const router = useRouter();
 
     const [inProgress, setInProgress] = useState(false);
+    const [activeKey, setActiveKey] = useState("1");
 
     const fetchAllProposals = useCallback(() => {
         setInProgress(true);
@@ -103,6 +104,22 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         fetchData();
     }, []);
 
+    const onSearchChange = (searchKey) => {
+        console.log(searchKey);
+    };
+
+    const tabItems = [
+
+        {
+            key: "1",
+            label: "Open Proposals",
+        },
+        {
+            key: "2",
+            label: "Past Proposals",
+        },
+    ];
+
     return (
         <>
             <div className={`mt-4 govern_max_width`}>
@@ -110,8 +127,28 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                 <div className="govern_main_container">
                     <div className="govern_container">
                         <div className="govern_tab_main_container">
-                            <div className="govern_tab"></div>
-                            <div className="govern_search"></div>
+                            <div className="govern_tab">
+                                <Row className="pl-4">
+                                    <Col >
+                                        <div className="portifolio-tabs">
+                                            <Tabs
+                                                className="comdex-tabs"
+                                                onChange={setActiveKey}
+                                                activeKey={activeKey}
+                                                type="card"
+                                                items={tabItems}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
+                            <div className="govern_search ">
+                                <Input
+                                    placeholder="Search..."
+                                    onChange={(event) => onSearchChange(event.target.value)}
+                                    className="asset_search_input"
+                                />
+                            </div>
                         </div>
                         {/* ist container start */}
                         <div className="proposal_box_parent_container">
