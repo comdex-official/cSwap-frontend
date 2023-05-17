@@ -37,7 +37,7 @@ export default function TradingViewWidget() {
           symbol: "BINANCE:BTCUSDT",
           timezone: "Etc/UTC",
           theme: "dark",
-          style: "0",
+          style: "2",
           locale: "en",
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
