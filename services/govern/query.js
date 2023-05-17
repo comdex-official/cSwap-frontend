@@ -60,6 +60,23 @@ export const queryUserVote = (address, proposalId, callback) => {
       });
   });
 };
+export const queryTallyProposalData = (proposalId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .TallyResult({ proposalId: Long.fromNumber(proposalId) })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
 
 export const fetchRestProposals = (callback) => {
   axios
@@ -98,6 +115,32 @@ export const fetchRestProposer = (id, callback) => {
   axios
     .get(
       `${comdex?.rest}/cosmos/tx/v1beta1/txs?events=submit_proposal.proposal_id=${id}`
+    )
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestTallyParamsProposer = (callback) => {
+  axios
+    .get(
+      `${comdex?.rest}/cosmos/gov/v1beta1/params/tallying`
+    )
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestBondexTokens = (callback) => {
+  axios
+    .get(
+      `${comdex?.rest}/cosmos/staking/v1beta1/pool`
     )
     .then((result) => {
       callback(null, result?.data);

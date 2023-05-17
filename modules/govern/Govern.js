@@ -4,7 +4,7 @@ import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setAllProposals, setProposals } from "../../actions/govern";
-import { fetchRestProposals } from "../../services/govern/query";
+import { fetchRestBondexTokens, fetchRestProposals, fetchRestTallyParamsProposer } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap, stringTagParser } from "../../utils/string";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -16,13 +16,19 @@ import GovernOpenProposal from './openProposal/index'
 import GovernPastProposal from './pastProposal/index'
 import { comdex } from "../../config/network";
 
+
 const { Option } = Select;
 
 const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
+
+
     const router = useRouter();
 
     const [inProgress, setInProgress] = useState(false);
     const [activeKey, setActiveKey] = useState("1");
+    const [pastProposals, setPastProposals] = useState();
+    const [activeProposals, setActiveProposals] = useState();
+    const [filteredProposal, setFilteredProposal] = useState()
 
     const fetchAllProposals = useCallback(() => {
         setInProgress(true);
@@ -38,21 +44,27 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         });
     }, [setAllProposals, setProposals]);
 
+
     // useEffect(() => {
     //     fetchAllProposals();
     // }, [fetchAllProposals]);
 
     const filterAllProposal = (value) => {
+        setInProgress(true);
+        let oldProposals = proposals?.filter((item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD")
         let allFilteredProposal =
-            allProposals &&
-            allProposals?.filter((item) => {
+            pastProposals &&
+            pastProposals?.filter((item) => {
                 if (value === "all") {
-                    return allProposals;
+                    return oldProposals
+                } else {
+                    return item.status === value;
                 }
-                return item.status === value;
             });
-        setProposals(allFilteredProposal);
+        setFilteredProposal(allFilteredProposal);
+        setInProgress(false);
     };
+
 
     const calculateVotes = useCallback((value, final_tally_result) => {
         let yes = Number(final_tally_result?.yes);
@@ -98,6 +110,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
             } while (nextPage !== null);
 
             setProposals(allProposals?.reverse());
+            setFilteredProposal(allProposals);
             setAllProposals(allProposals?.proposals);
         };
 
@@ -105,8 +118,31 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     }, []);
 
     const onSearchChange = (searchKey) => {
-        console.log(searchKey);
+        if (activeKey === "2") {
+            let oldProposals = proposals?.filter((item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD")
+            oldProposals = oldProposals?.filter((item) => ((item?.content?.title)?.toLowerCase()).includes(searchKey) || (item?.proposal_id).includes(searchKey))
+            setFilteredProposal(oldProposals)
+        } else {
+            let ActiveProposals = proposals?.filter((item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+            ActiveProposals = ActiveProposals?.filter((item) => ((item?.content?.title)?.toLowerCase()).includes(searchKey) || (item?.proposal_id).includes(searchKey))
+            setFilteredProposal(ActiveProposals)
+        }
     };
+
+    const handleTabChange = (key) => {
+
+        let openProposal = proposals?.filter((item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+        let pastProposal = proposals?.filter((item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD")
+        if (key === "1") {
+            setFilteredProposal(openProposal)
+            setActiveProposals(openProposal)
+        }
+        else {
+            setFilteredProposal(pastProposal)
+            setPastProposals(pastProposal)
+        }
+        setActiveKey(key)
+    }
 
     const tabItems = [
 
@@ -120,6 +156,24 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         },
     ];
 
+    useEffect(() => {
+        if (proposals) {
+            let openProposal = proposals?.filter((item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+            let pastProposal = proposals?.filter((item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD")
+
+            if (activeKey === "1") {
+                setFilteredProposal(openProposal)
+            }
+            else {
+                setFilteredProposal(pastProposal)
+            }
+        }
+    }, [proposals])
+
+    if (inProgress) {
+        return <div className="no_data"> <Spin /></div>
+    }
+
     return (
         <>
             <div className={`mt-4 govern_max_width`}>
@@ -128,12 +182,12 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                     <div className="govern_container">
                         <div className="govern_tab_main_container">
                             <div className="govern_tab">
-                                <Row className="pl-4">
+                                <Row className="pl-2">
                                     <Col >
                                         <div className="portifolio-tabs">
                                             <Tabs
                                                 className="comdex-tabs"
-                                                onChange={setActiveKey}
+                                                onChange={handleTabChange}
                                                 activeKey={activeKey}
                                                 type="card"
                                                 items={tabItems}
@@ -143,6 +197,25 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                 </Row>
                             </div>
                             <div className="govern_search ">
+                                {activeKey === "2" &&
+                                    <Select
+                                        defaultValue="Filter"
+                                        className="select-primary filter-select govern-filter-search"
+                                        style={{ width: 150 }}
+                                        onChange={(e) => filterAllProposal(e)}
+                                        suffixIcon={<Icon className={"bi bi-chevron-down"} />}
+                                    >
+                                        <Option value="all" className="govern-select-option">
+                                            All
+                                        </Option>
+                                        <Option value="PROPOSAL_STATUS_DEPOSIT_PERIOD">
+                                            Pending
+                                        </Option>
+                                        <Option value="PROPOSAL_STATUS_PASSED">Passed</Option>
+                                        <Option value="PROPOSAL_STATUS_FAILED">Failed</Option>
+                                        <Option value="PROPOSAL_STATUS_REJECTED">Rejected</Option>
+                                    </Select>
+                                }
                                 <Input
                                     placeholder="Search..."
                                     onChange={(event) => onSearchChange(event.target.value)}
@@ -150,20 +223,18 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                                 />
                             </div>
                         </div>
-                        {/* ist container start */}
+
                         <div className="proposal_box_parent_container">
+                            {activeKey === "1" ?
+                                filteredProposal?.length > 0 ?
+                                    <GovernOpenProposal proposals={filteredProposal} />
+                                    : <h1 className="no_data">No Active proposal</h1>
+                                :
+                                filteredProposal?.length > 0 ?
+                                    <GovernPastProposal proposals={filteredProposal} />
+                                    : <h1 className="no_data">No data found</h1>
 
-                            {proposals?.length > 0 ?
-                                <GovernOpenProposal proposals={proposals} />
-                                : <h1>No Active proposal</h1>
                             }
-                            {/* {proposals?.length > 0 ?
-                                <GovernPastProposal proposals={proposals} />
-                                : <h1>No Past proposal</h1>
-                            } */}
-
-                            {/* 1st container end  */}
-
                         </div>
                     </div>
                 </div>

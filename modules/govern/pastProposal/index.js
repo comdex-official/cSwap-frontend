@@ -3,10 +3,13 @@ import { Button, List, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { stringTagParser } from "../../../utils/string";
+import { proposalStatusMap, stringTagParser } from "../../../utils/string";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 // import style from "./Govern.moduleOld.scss";
 import { Progress } from "@mantine/core";
+import { useTimer } from "react-timer-hook";
+import MyTimer from "../../../shared/components/governTimer";
+import { formatTime } from "../../../utils/date";
 
 const { Option } = Select;
 
@@ -28,10 +31,24 @@ const GovernPastProposal = ({ proposals }) => {
         return result;
     }, []);
 
+    const parsedVotingStatustext = (text) => {
+        if (text === "open") {
+            return "voting Period"
+        }
+        return text;
+    }
+
+    const proposalEndDate = (_date) => {
+        const enddate = new Date(_date);
+        enddate.setSeconds(enddate.getSeconds());
+        return enddate;
+
+    }
+
 
     return (
         <>
-            <div className={`mt-4 govern_max_width`}>
+            <div className={`mt-4`}>
 
                 <div className="govern_main_container">
                     <div className="govern_container">
@@ -45,15 +62,23 @@ const GovernPastProposal = ({ proposals }) => {
                             {proposals?.length > 0 ?
                                 proposals?.map((item) => {
                                     return (
-                                        <div className="proposal_main_container" key={item?.proposal_id} >
+                                        <div className="proposal_main_container" key={item?.proposal_id} onClick={() =>
+                                            router.push(`/govern/${item?.proposal_id}`)
+                                        } >
                                             <div className="proposal_container">
                                                 {/* Id and Timer Container  */}
                                                 <div className="id_timer_container">
                                                     <div className="proposal_id">#{item?.proposal_id}</div>
                                                     <div className="proposal_timer">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hourglass-bottom" viewBox="0 0 16 16">
-                                                            <path d="M2 1.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1-.5-.5zm2.5.5v1a3.5 3.5 0 0 0 1.989 3.158c.533.256 1.011.791 1.011 1.491v.702s.18.149.5.149.5-.15.5-.15v-.7c0-.701.478-1.236 1.011-1.492A3.5 3.5 0 0 0 11.5 3V2h-7z" />
-                                                        </svg>  6d 23h 12m
+
+                                                        <div className="proposal-status-container">
+                                                            <div className={proposalStatusMap[item?.status] === "Open" ? "proposal-status open-color"
+                                                                : proposalStatusMap[item?.status] === "Passed" || proposalStatusMap[item?.status] === "Executed" ? "proposal-status passed-color"
+                                                                    : proposalStatusMap[item?.status] === "Rejected" || proposalStatusMap[item?.status] === "Failed" ? "proposal-status reject-color"
+                                                                        : proposalStatusMap[item?.status] === "Pending" || proposalStatusMap[item?.status] === "Deposit Period" ? "proposal-status pending-color" : "proposal-status"
+
+                                                            }> {item ? proposalStatusMap[item?.status] : "-" || "-"}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -68,7 +93,7 @@ const GovernPastProposal = ({ proposals }) => {
                                                 {/* Pairagraph container  */}
                                                 <div className="para_main_container">
                                                     <div className="para_container">
-                                                        {stringTagParser(item?.content?.description.substring(0, 165) || " ") + "......"}                                               </div>
+                                                        {stringTagParser(item?.content?.description.substring(0, 150) || " ") + "......"}                                               </div>
                                                 </div>
 
                                                 {/* Progress bar container  */}
@@ -216,7 +241,7 @@ const stateToProps = (state) => {
     return {
         lang: state.language,
         allProposals: state.govern.allProposals,
-        proposals: state.govern.proposals,
+        // proposals: state.govern.proposals,
     };
 };
 
