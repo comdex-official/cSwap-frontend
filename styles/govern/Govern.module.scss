@@ -11,6 +11,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @media only screen and (max-width: 725px) {
+          justify-content: flex-start;
+          align-items: flex-start;
+          row-gap: 0.7rem;
+          flex-direction: column;
+        }
         .govern_tab {
         }
         .govern_search {
@@ -19,17 +25,27 @@
       }
       .proposal_box_parent_container {
         display: flex;
-        // gap: 0.7rem;
+        // gap: 1rem;
         row-gap: 0.7rem;
         flex-wrap: wrap;
         justify-content: space-between;
+        @media only screen and (max-width: 600px) {
+          display: block;
+        }
         .proposal_main_container {
           background: #020b1ebe;
           padding: 25px;
           border-radius: 20px;
           color: white;
           flex-basis: 49.5%;
+          //   flex-basis: 49.2%;
           cursor: pointer;
+          @media only screen and (max-width: 800px) {
+            flex-basis: unset;
+          }
+          @media only screen and (max-width: 600px) {
+            margin-bottom: 10px;
+          }
           .proposal_container {
             height: 100%;
             display: flex;
@@ -62,6 +78,51 @@
                   fill: $primary-color;
                   height: 70%;
                 }
+                .proposal-status-container {
+                  -webkit-text-fill-color: white;
+                  text-fill-color: white;
+
+                  color: white;
+                  .proposal-status {
+                    padding: 3px 20px;
+                    border-radius: 15px;
+                    text-transform: capitalize;
+                    font-weight: 500;
+                    line-height: 1.2;
+                    letter-spacing: 1px;
+                    font-size: 0.8rem;
+                    width: 9rem;
+                    text-align: center;
+                  }
+                  .open-color {
+                    border: 1px solid #00b0ff;
+                    background-color: #cbe7fb;
+                    .dark-mode & {
+                      background-color: #19385a;
+                    }
+                  }
+
+                  .reject-color {
+                    background-color: #f6d9d9;
+                    border: 1px solid #8e353c;
+                    .dark-mode & {
+                      background-color: #422234;
+                    }
+                  }
+
+                  .passed-color {
+                    background-color: #cce7de;
+                    border: 1px solid #02865b;
+                    .dark-mode & {
+                      background-color: #19323a;
+                    }
+                  }
+
+                  .pending-color {
+                    border: 1px solid yellow;
+                    background-color: rgba(255, 255, 0, 0.295);
+                  }
+                }
               }
             }
             .haeading_container {
@@ -78,6 +139,7 @@
                 font-size: 0.9rem;
                 font-weight: 300;
                 line-height: 21px;
+                word-break: break-all;
               }
             }
             .progress_bar_main_container {
@@ -129,12 +191,12 @@
   justify-content: flex-end;
   max-width: 1200px;
   margin: auto;
-  padding: 0 10px;
+  padding: 0 20px;
 }
 .govern_view_main_container {
   max-width: 1200px;
   margin: auto;
-  padding: 0 10px;
+  padding: 0 20px;
   .govern_view_container {
     .proposal_detail_main_container {
       background-color: #020b1ebe;
@@ -160,6 +222,7 @@
           display: flex;
           justify-content: space-between;
           flex-wrap: wrap;
+          gap: 25px;
           .proposal_stats_container {
             .title {
               margin-bottom: 5px;
@@ -193,12 +256,22 @@
         }
         .proposal_vote_details_main {
           display: flex;
+          @media only screen and (max-width: 860px) {
+            flex-direction: column;
+            row-gap: 25px;
+          }
           .proposal_vote_column {
             flex-basis: 20%;
+            @media only screen and (max-width: 860px) {
+              display: flex;
+              justify-content: space-between;
+              gap: 20px;
+              flex-wrap: wrap;
+            }
             .total_votel_container {
               margin-bottom: 10px;
               .title {
-                color: #d1d1da;
+                color: rgba(255, 255, 255, 0.801);
                 font-size: 0.85rem;
                 font-weight: 300;
                 line-height: 20px;
@@ -212,7 +285,7 @@
             .proposal_quorem_container {
               .total_quorem {
                 .title {
-                  color: #d1d1da;
+                  color: rgba(255, 255, 255, 0.801);
                   font-size: 0.85rem;
                   font-weight: 300;
                   line-height: 20px;
@@ -229,7 +302,7 @@
             flex-basis: 60%;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            // justify-content: space-around;
             .proposal_vote_up_row {
               .stata_main_container {
                 display: flex;
@@ -261,6 +334,34 @@
             .proposal_vote_botom_row {
               .vote-progress-bar {
               }
+              .mask_container_relative {
+                position: relative;
+              }
+              .mask_container {
+                .quorem_container {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  position: absolute;
+                  top: -40%;
+                  left: 10%;
+                  .line {
+                    height: 20px;
+                    width: 1px;
+                    background-color: white;
+                  }
+                  .arrow {
+                  }
+                  .value {
+                    color: rgba(255, 255, 255, 0.801);
+                    font-weight: 300;
+                    font-size: 0.7rem;
+                  }
+                }
+                .threshold_container {
+                  left: 43%;
+                }
+              }
             }
           }
           .proposal_vote_btn_container {
@@ -268,13 +369,17 @@
             display: flex;
             justify-content: flex-end;
             align-items: flex-end;
+            @media only screen and (max-width: 860px) {
+              justify-content: center;
+              margin-top: 3.5rem;
+            }
           }
         }
       }
     }
 
     .proposal_description_main_container {
-        color: white;
+      color: white;
       .proposal_heading {
         font-weight: 700;
         font-size: 1.3rem;
@@ -303,4 +408,38 @@
       }
     }
   }
+}
+.govern_search {
+  position: relative;
+  @media only screen and (max-width: 725px) {
+    margin-left: 8px;
+  }
+  .govern-filter-search {
+    position: absolute;
+    right: 110%;
+    @media only screen and (max-width: 725px) {
+      position: unset;
+      margin-bottom: 10px;
+      .ant-select-arrow {
+        display: none !important;
+      }
+    }
+    .ant-select-selector {
+      height: 38px !important;
+      width: 160px !important;
+      align-items: center;
+      background: transparent !important;
+      @media only screen and (max-width: 725px) {
+        height: 30px !important;
+      }
+    }
+  }
+}
+
+.no_data {
+  height: 70vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }

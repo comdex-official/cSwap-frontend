@@ -18,12 +18,14 @@ import {
 import { comdex } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
+    fetchRestBondexTokens,
     fetchRestProposal,
     fetchRestProposalTally,
     fetchRestProposer,
+    fetchRestTallyParamsProposer,
     queryUserVote,
 } from "../../services/govern/query";
-import { denomConversion } from "../../utils/coin";
+import { amountConversion, denomConversion, fixedDecimal } from "../../utils/coin";
 import { formatTime } from "../../utils/date";
 import { formatNumber } from "../../utils/number";
 import {
@@ -32,6 +34,7 @@ import {
     stringTagParser,
     truncateString,
 } from "../../utils/string";
+import moment from "moment";
 
 const GovernViewPage = ({
     address,
@@ -41,15 +44,17 @@ const GovernViewPage = ({
     proposerMap,
     setProposalTally,
     proposalTallyMap,
+
 }) => {
     const router = useRouter();
+
+    const [tallyParams, setTallyParams] = useState();
+    const [bondedTokens, setBondedTokens] = useState();
+
 
     const { id } = router.query;
     const [inProgress, setInProgress] = useState(false);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     const [votedOption, setVotedOption] = useState();
     const [getVotes, setGetVotes] = useState({
@@ -62,6 +67,7 @@ const GovernViewPage = ({
     let proposal = proposalMap?.[id];
     let proposer = proposerMap?.[id];
     let proposalTally = proposalTallyMap?.[id];
+
 
     const data = [
         {
@@ -92,6 +98,72 @@ const GovernViewPage = ({
             ),
         },
     ];
+
+    const fetchTallyParamsProposer = useCallback(() => {
+        setInProgress(true);
+        fetchRestTallyParamsProposer((error, result) => {
+            setInProgress(false);
+            if (error) {
+                message.error(error);
+                return;
+            }
+            setTallyParams(result)
+        });
+    }, []);
+
+    const fetchBondexTokens = useCallback(() => {
+        setInProgress(true);
+        fetchRestBondexTokens((error, result) => {
+            setInProgress(false);
+            if (error) {
+                message.error(error);
+                return;
+            }
+            setBondedTokens(result)
+        });
+    }, []);
+
+
+    const calculateQuoremThreshold = () => {
+        let bondedToken = bondedTokens?.pool?.bonded_tokens;
+        let quorem = tallyParams?.tally_params?.quorum;
+        let calculateQuoremThreshold = bondedToken * quorem;
+        calculateQuoremThreshold = formatNumber(amountConversion(calculateQuoremThreshold || 0))
+        return calculateQuoremThreshold;
+    }
+
+    const calculateCurrentThreshold = () => {
+        let yes = Number(proposalTally?.yes);
+        let no = Number(proposalTally?.no);
+        let veto = Number(proposalTally?.no_with_veto);
+        let abstain = Number(proposalTally?.abstain);
+
+        let totalValue = yes + no + abstain + veto;
+
+        let bondedToken = bondedTokens?.pool?.bonded_tokens;
+        let quorem = tallyParams?.tally_params?.quorum;
+        let calculateQuoremThreshold = bondedToken * quorem;
+
+
+        totalValue = amountConversion(totalValue || 0);
+        calculateQuoremThreshold = amountConversion(calculateQuoremThreshold || 0);
+
+        let calculateCurrentThresholdData = (Number(totalValue) / Number(calculateQuoremThreshold)) * 100;
+        return fixedDecimal(calculateCurrentThresholdData || 0);
+
+
+    }
+
+    useEffect(() => {
+        fetchTallyParamsProposer()
+        fetchBondexTokens()
+    }, [])
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
 
     useEffect(() => {
         setInProgress(true);
@@ -258,6 +330,10 @@ const GovernViewPage = ({
         ],
     };
 
+    if (inProgress) {
+        return <div className="no_data"> <Spin /></div>
+    }
+
     return (
         <>
             <div className="proposal_view_back_button_container mt-4">
@@ -271,20 +347,30 @@ const GovernViewPage = ({
 
                     <div className="proposal_detail_main_container">
                         <div className="proposal_detail_container">
-                            <div className="proposal_id">#41</div>
-                            <div className="proposal_title">Increasing Debt Ceiling of stATOM-A Vault</div>
+                            <div className="proposal_id"> #{proposal?.proposal_id || "-"}</div>
+                            <div className="proposal_title">{proposal?.content?.title || "------"}</div>
                             <div className="proposal_overview_container">
                                 <div className="proposal_stats_container">
                                     <div className="title">Voting Starts</div>
-                                    <div className="value">24-02-2023</div>
+                                    <div className="value">{
+                                        proposal?.voting_start_time
+                                            ? moment(proposal?.voting_start_time).format("DD-MM-YYYY")
+                                            : "--/--/--"
+                                    }</div>
                                 </div>
                                 <div className="proposal_stats_container">
                                     <div className="title">Voting Ends</div>
-                                    <div className="value">27-02-2023</div>
+                                    <div className="value">
+                                        {
+                                            proposal?.voting_end_time
+                                                ? moment(proposal?.voting_end_time).format("DD-MM-YYYY")
+                                                : "--/--/--"
+                                        }
+                                    </div>
                                 </div>
                                 <div className="proposal_stats_container">
                                     <div className="title">Proposer</div>
-                                    <div className="value">comdex...8n9khd</div>
+                                    <div className="value">{truncateString(proposer, 6, 6)}</div>
                                 </div>
                                 <div className="proposal_stats_container">
                                     <div className="title">My Voting power</div>
@@ -299,20 +385,32 @@ const GovernViewPage = ({
                         <div className="proposal_vote_details_container">
                             <div className="title_and_user_vote_container">
                                 <div className="vote_title">Vote Details</div>
-                                <div className="user_vote">Your Vote: <span>Yes</span></div>
+                                {/* <div className="user_vote">Your Vote: <span>Yes</span></div> */}
+                                <div className="user_vote"> {proposalOptionMap?.[votedOption] && (
+                                    <span>
+                                        Your Vote :{" "}
+                                        <span> {proposalOptionMap[votedOption]}</span>
+                                    </span>
+                                )}</div>
+
                             </div>
                             <div className="proposal_vote_details_main">
 
                                 <div className="proposal_vote_column">
                                     <div className="total_votel_container">
                                         <div className="title">Total Votes</div>
-                                        <div className="value">2.7M CMDX</div>
+                                        <div className="value">
+                                            <div >
+                                                {`${calculateTotalValue() || "0"
+                                                    } ${denomConversion(comdex?.coinMinimalDenom)}`}
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div className="proposal_quorem_container">
                                         <div className="total_quorem">
-                                            <div className="title">Current Quorum</div>
-                                            <div className="value">1.47M CMDX</div>
+                                            <div className="title">Current Quorum: {calculateCurrentThreshold() || 0} %</div>
+                                            <div className="value">{calculateQuoremThreshold() || 0} CMDX</div>
                                         </div>
                                     </div>
                                 </div>
@@ -324,35 +422,35 @@ const GovernViewPage = ({
                                                 <div className="color" style={{ backgroundColor: "#52B788" }}></div>
                                                 <div className="data_container">
                                                     <div className="title">Yes</div>
-                                                    <div className="value">  14.76%</div>
+                                                    <div className="value"> {Number(getVotes?.yes || "0.00")}%</div>
                                                 </div>
                                             </div>
                                             <div className="stats_container">
                                                 <div className="color" style={{ backgroundColor: "#D74A4A" }}></div>
                                                 <div className="data_container">
                                                     <div className="title">No</div>
-                                                    <div className="value">2.00%</div>
+                                                    <div className="value"> {Number(getVotes?.no || "0.00")}%</div>
                                                 </div>
                                             </div>
                                             <div className="stats_container">
                                                 <div className="color" style={{ backgroundColor: "#C2A3A3" }}></div>
                                                 <div className="data_container">
                                                     <div className="title">No With Veto</div>
-                                                    <div className="value">  0.00%</div>
+                                                    <div className="value">{Number(getVotes?.veto || "0.00")}%</div>
                                                 </div>
                                             </div>
                                             <div className="stats_container">
                                                 <div className="color" style={{ backgroundColor: "#C58E3D" }}></div>
                                                 <div className="data_container">
                                                     <div className="title">Abstain</div>
-                                                    <div className="value">84.54%</div>
+                                                    <div className="value">{Number(getVotes?.abstain || "0.00")}%</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="proposal_vote_botom_row">
-                                        <div className="mt-3">
+                                        <div className="mt-3 mask_container_relative">
                                             <div>
                                                 <Progress
                                                     className="vote-progress-bar"
@@ -360,44 +458,61 @@ const GovernViewPage = ({
                                                     size={10}
                                                     sections={[
                                                         {
-                                                            value: Number(
-                                                                14.00
-                                                            ),
+                                                            value: Number(getVotes?.yes || 0),
                                                             color: "#52B788",
-                                                            tooltip: `Yes %`,
+                                                            tooltip: `Yes ${Number(getVotes?.yes || 0)} %`,
                                                         },
                                                         {
-                                                            value: Number(
-                                                                0.00
-                                                            ),
+                                                            value: Number(getVotes?.no || 0),
                                                             color: "#D74A4A",
-                                                            tooltip: `No 0.00 %`,
+                                                            tooltip: `No ${Number(getVotes?.no || 0)} %`,
                                                         },
                                                         {
-                                                            value: Number(
-                                                                2.00
-                                                            ),
+                                                            value: Number(getVotes?.veto || 0),
                                                             color: "#C2A3A3",
 
-                                                            tooltip: `No With Veto 2.00 %`,
+                                                            tooltip: `No With Veto ${Number(getVotes?.veto || 0)} %`,
                                                         },
                                                         {
-                                                            value: Number(
-                                                                54.14
-                                                            ),
+                                                            value: Number(getVotes?.abstain || 0),
                                                             color: "#C58E3D",
 
-                                                            tooltip: `Abstain 4.14 %`,
+                                                            tooltip: `Abstain ${Number(getVotes?.abstain || 0)} %`,
                                                         },
                                                     ]}
                                                 />
+                                            </div>
+                                            <div className="mask_container">
+                                                <div className="quorem_container">
+                                                    <div className="line"></div>
+                                                    <div className="arrow">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="value">Quorum: 33%</div>
+                                                </div>
+
+                                                <div className="quorem_container threshold_container">
+                                                    <div className="line"></div>
+                                                    <div className="arrow">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="value">Threshold: 50%</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="proposal_vote_btn_container">
-                                    <Button type="primary" className="btn-filled"> Vote</Button>
+                                    {/* <Button type="primary" className="btn-filled"> Vote</Button> */}
+                                    <VoteNowModal
+                                        refreshVote={fetchVote}
+                                        proposal={proposal}
+                                    />
                                 </div>
 
 
@@ -410,7 +525,7 @@ const GovernViewPage = ({
                             Description
                         </div>
                         <div className="proposal_para">
-                            This proposal is to raise the debt ceiling of stATOM-A vault from 20k to 60k. The stATOM-A vault is very near to its current Debt ceiling.
+                            {stringTagParser(proposal?.content?.description || " ")}
                         </div>
 
                         <div className="proposal_suggest_box">
