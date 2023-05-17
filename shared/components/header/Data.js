@@ -58,30 +58,36 @@ export const DotDropdownData = [
     id: 0,
     name: "Discord",
     icon: Discord,
+    link: "https://discord.com/invite/7vjPvWKKMT",
   },
   {
     id: 1,
     name: "Github",
     icon: Git,
+    link: "https://github.com/comdex-official",
   },
   {
     id: 1,
     name: "Telegram",
     icon: Telegram,
+    link: "https://t.me/cSwap_DEX",
   },
   {
     id: 1,
     name: "Twitter",
     icon: Twitter,
+    link: "https://twitter.com/cSwap_DEX",
   },
   {
     id: 1,
     name: "Medium",
     icon: Medium,
+    link: "https://medium.com/@cSwap_DEX",
   },
   {
     id: 1,
-    name: "Info",
+    name: "Stats",
     icon: Info,
+    link: "https://docs.comdex.one/",
   },
 ];

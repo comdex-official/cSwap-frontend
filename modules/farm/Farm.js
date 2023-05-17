@@ -5,7 +5,7 @@ import Tab from "../../shared/components/tab/Tab";
 import Search from "../../shared/components/search/Search";
 import FarmTable from "./FarmTable";
 import FarmCard from "./FarmCard";
-import { Input, message, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Radio, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -19,7 +19,13 @@ import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
 import { denomConversion, fixedDecimal } from "../../utils/coin";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
 import { NextImage } from "../../shared/image/NextImage";
-import { List, ListWhite, Square, SquareWhite } from "../../shared/image";
+import {
+  List,
+  ListWhite,
+  No_Data,
+  Square,
+  SquareWhite,
+} from "../../shared/image";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -49,6 +55,7 @@ const Farm = ({
   incentivesMap,
   setShowEligibleDisclaimer,
   showEligibleDisclaimer,
+  showMyPool,
 }) => {
   const theme = "dark";
   const TabData = ["All", "Basic", "Ranged", "My Pools"];
@@ -92,8 +99,9 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
+    console.log(userPools, userLiquidityInPools);
     setUserPool(userPools);
-  }, [userLiquidityInPools]);
+  }, [userLiquidityInPools, filterValue, displayPools]);
 
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
@@ -198,7 +206,7 @@ const Farm = ({
     if (poolsApr) {
       fetchMasterPoolAprData();
     }
-  }, [poolsApr]);
+  }, [poolsApr, pools]);
 
   const tabItems = [
     {
@@ -240,15 +248,31 @@ const Farm = ({
     }
   };
 
+  useEffect(() => {
+    if (showMyPool) {
+      setFilterValue("4");
+    }
+  }, []);
+
+  const [filterValue1, setFilterValue1] = useState("APR");
+
   const Items = [
     {
       key: "item-2",
       label: (
         <div className={styles.dropdown__farm}>
-          <p>{"APR"}</p>
-          <p>{"My Pools"}</p>
-          <p>{"Date Created"}</p>
-          <p>{"Pool Liquidity"}</p>
+          <div className="filter-button-radio">
+            <Radio.Group
+              onChange={(event) => setFilterValue1(event.target.value)}
+              defaultValue="a"
+              value={filterValue1}
+            >
+              <Radio value={"APR"}>APR</Radio>
+              <Radio value={"MyPools"}>My Pools</Radio>
+              <Radio value={"DateCreated"}>Date Created</Radio>
+              <Radio value={"PoolLiquidity"}>Pool Liquidity</Radio>
+            </Radio.Group>
+          </div>
         </div>
       ),
     },
@@ -307,7 +331,7 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"How it works?"}
+              {"How to earn boosted rewards in 2 steps?"}
             </div>
             <div
               className={`${styles.farm__header__right__main} ${
@@ -372,6 +396,13 @@ const Farm = ({
                     {`Deposit Equal value of assets in Child Pool 
                     or pools as your Master Pool to 
                     earn boosted rewards`}
+                  </div>
+                  <div
+                    className={`${styles.farm__header__right__body__button} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {"Go to Child Pools"}
                   </div>
                 </div>
               </div>
@@ -489,6 +520,7 @@ const Farm = ({
                 onChange={(event) => onSearchChange(event.target.value)}
                 className="asset_search_input"
               />
+              <Icon className={"bi bi-search"} />
             </div>
           </div>
         </div>
@@ -512,23 +544,29 @@ const Farm = ({
               />
               {/* ))} */}
             </div>
+          ) : displayPools && displayPools.length <= 0 ? (
+            <div className={`${styles.table__empty__data__wrap}`}>
+              <div className={`${styles.table__empty__data}`}>
+                <NextImage src={No_Data} alt="Message" />
+                <span>{"NO DATA"}</span>
+              </div>
+            </div>
           ) : (
             <div
               className={`${styles.farm__footer__card__wrap} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools &&
-                displayPools.map((item) => (
-                  <FarmCard
-                    key={item.id}
-                    theme={theme}
-                    pool={item}
-                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                    poolAprList={poolsApr && poolsApr}
-                    masterPoolData={masterPoolData}
-                  />
-                ))}
+              {displayPools.map((item) => (
+                <FarmCard
+                  key={item.id}
+                  theme={theme}
+                  pool={item}
+                  poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                  poolAprList={poolsApr && poolsApr}
+                  masterPoolData={masterPoolData}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -569,6 +607,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     incentivesMap: state.liquidity.incentivesMap,
     showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
+    showMyPool: state.liquidity.showMyPool,
   };
 };
 

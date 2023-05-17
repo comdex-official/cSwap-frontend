@@ -398,12 +398,12 @@ const Header = ({
         <div className={styles.dropdown__dot__menu}>
           {DotDropdownData.map((item) => (
             <div key={item.id} className={styles.dropdown__dot__item}>
-              <Link href="#">
+              <a href={item.link} target="_blank">
                 <div>
                   <NextImage src={item.icon} alt="Icon" />
                 </div>
-                <div>{item.name}</div>
-              </Link>
+                <div className={styles.right__item}>{item.name}</div>
+              </a>
             </div>
           ))}
         </div>

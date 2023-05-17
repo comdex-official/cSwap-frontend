@@ -14,50 +14,46 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
   return (
     <div>
       {parent === "pool" ? (
-        <Row>
-          <Col>
-            <div className="text-center">
-              <small>
-                {price > min && price < max ? (
-                  <span className="success-color">In range</span>
-                ) : (
-                  <span className="warn-color">Out of range</span>
-                )}
-              </small>
-            </div>
+        <>
+          <div className="text-center ranged2">
+            <small>
+              {price > min && price < max ? (
+                <span className="success-color">In range</span>
+              ) : (
+                <span className="warn-color">Out of range</span>
+              )}
+            </small>
+          </div>
+          <div className="ranged-slider-over">
             <Slider
               className="farm-slider farm-slider-small"
               tooltip={{ open: false }}
               value={rangeToPercentage(min, max, price)}
               marks={marks}
             />
-          </Col>
-        </Row>
+          </div>
+        </>
       ) : null}
-      <Row>
-        <Col>Min Price</Col>
-        <Col>
-          <span className="mr-2">:</span> {min}
-        </Col>
-      </Row>
-      <Row>
-        <Col>Max Price</Col>
-        <Col>
-          <span className="mr-2">:</span> {max}
-        </Col>
-      </Row>
-      <Row>
-        <Col>Current Price</Col>
-        <Col>
-          <span className="mr-2">:</span> {price}
-        </Col>
-      </Row>
-      <Row>
-        <Col>AMP</Col>
-        <Col>
-          <span className="mr-2">:</span> {amp ? `x${amp}` : ""}
-        </Col>
-      </Row>
+      <div className="row">
+        <div>Min Price</div>
+        <div className="col">{`:`}</div>
+        <div>{`${min}`}</div>
+      </div>
+      <div className="row">
+        <div>Max Price</div>
+        <div className="col">{`:`}</div>
+        <div>{`${max}`}</div>
+      </div>
+      <div className="row">
+        <div>Current Price</div>
+        <div className="col">{`:`}</div>
+        <div>{`${price}`}</div>
+      </div>
+      <div className="row">
+        <div>AMP</div>
+        <div className="col">{`:`}</div>
+        <div>{amp ? `x${amp}` : ""}</div>
+      </div>
     </div>
   );
 };

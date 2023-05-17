@@ -115,7 +115,6 @@ const PoolDetails = ({
       fetchSoftLock();
     }
 
-    
     setTradeData({
       baseCoin: pool?.balances?.baseCoin?.denom,
       quoteCoin: pool?.balances?.quoteCoin?.denom,
@@ -325,7 +324,7 @@ const PoolDetails = ({
                   styles.semiTitle
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                {"LP Amount"}
+                {"Farming Amount"}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${
