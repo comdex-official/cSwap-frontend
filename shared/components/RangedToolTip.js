@@ -24,14 +24,14 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
               )}
             </small>
           </div>
-          <p className="pool-ranged">
+          <div className="ranged-slider-over">
             <Slider
               className="farm-slider farm-slider-small"
               tooltip={{ open: false }}
               value={rangeToPercentage(min, max, price)}
               marks={marks}
             />
-          </p>
+          </div>
         </>
       ) : null}
       <div className="row">

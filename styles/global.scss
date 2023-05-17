@@ -734,7 +734,7 @@ a {
                 display: none;
               }
               .dark-mode & {
-                color: $text-color-light;
+                color: $white;
               }
             }
             th:nth-child(1) {
@@ -1017,12 +1017,12 @@ a {
           }
 
           &:hover {
-            // background: rgba($primary-color, 0.5);
+            background: rgba($primary-color, 0.5);
           }
 
           &.ant-tabs-tab-active {
-            // background: $primary-color;
-            // border-color: $primary-color;
+            background: $primary-color;
+            border-color: $primary-color;
 
             .ant-tabs-tab-btn {
               font-weight: 400;
@@ -1034,6 +1034,73 @@ a {
     }
   }
 }
+
+.position_container {
+  .comdex-tabs {
+    .ant-tabs-nav {
+      // margin-bottom: 10px;
+      margin-bottom: 0 !important;
+      width: 100%;
+      max-width: 130px;
+      &:before {
+        display: none;
+      }
+
+      .ant-tabs-nav-wrap {
+        width: 100%;
+
+        .ant-tabs-nav-list {
+          border-radius: 20px;
+          border: 1px solid white;
+          padding: 5px;
+          width: 100%;
+          // max-width: 350px;
+
+          .ant-tabs-ink-bar {
+            display: none;
+          }
+
+          .ant-tabs-tab {
+            width: 100%;
+            text-align: center;
+            color: $primary-color;
+            font-weight: 300;
+            font-size: $font-size-base - 2;
+            margin-left: 0;
+
+            padding: 4px 18px;
+            border-radius: 20px;
+            background: none;
+            border: 0;
+            .ant-tabs-tab-btn {
+              width: 100%;
+              color: white;
+
+              .dark-mode & {
+                color: $white;
+              }
+            }
+
+            &:hover {
+              // background: rgba($primary-color, 0.5);
+            }
+
+            &.ant-tabs-tab-active {
+              // background: $primary-color;
+              // border-color: $primary-color;
+
+              .ant-tabs-tab-btn {
+                font-weight: 400;
+                color: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .portifolio-tabs {
   .ant-tabs-nav {
     margin-bottom: 10px;
@@ -1313,6 +1380,41 @@ a {
       .dark-mode & {
         background: #2b3548;
         color: $text-color-label-dark;
+      }
+    }
+  }
+}
+
+.filter-button-radio {
+  .ant-radio-group {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0;
+    .ant-radio-wrapper {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: 0;
+      padding: 0 10px;
+      border-radius: 4px;
+      font-size: $font-size-sm;
+      height: 28px;
+      .dark-mode & {
+        color: $white;
+      }
+      // &::before {
+      //   display: none;
+      // }
+      &.ant-radio-wrapper-checked {
+        background: #ffffff;
+        color: $text-color-label-dark;
+        .dark-mode & {
+          background: transparent;
+          font-size: 10px;
+          font-weight: 500;
+          color: $white;
+        }
       }
     }
   }
@@ -2676,3 +2778,41 @@ a {
 //     }
 //   }
 // }
+
+.ant-pagination {
+  .ant-pagination-prev {
+    button {
+      color: $white !important;
+    }
+  }
+
+  .ant-pagination-next {
+    button {
+      color: $white !important;
+    }
+  }
+
+  .ant-pagination-item {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    a {
+      color: $white;
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+
+  .ant-pagination-options {
+    .ant-select {
+      .ant-select-selector {
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: $white;
+      }
+      .ant-select-arrow {
+        color: $white;
+      }
+    }
+  }
+}
