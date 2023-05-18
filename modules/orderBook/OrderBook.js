@@ -6,7 +6,6 @@ import { ArrowRL, Slider } from "../../shared/image";
 import { OrderCustomData, OrderCustomData2 } from "./Data";
 import Tab from "../../shared/components/tab/Tab";
 import OrderbookTable from "../../modules/orderBook/OrderbookTable";
-import TradingViewWidget from "./OrderBookTrading";
 import { connect } from "react-redux";
 import * as PropTypes from "prop-types";
 import {
@@ -22,7 +21,7 @@ import {
   queryUserOrders,
 } from "../../services/liquidity/query";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
-import { Select, Table, Tabs } from "antd";
+import { Select, Table, Tabs, message } from "antd";
 import {
   commaSeparator,
   formatNumber,
@@ -32,6 +31,13 @@ import {
 import NoDataIcon from "../../shared/components/NoDataIcon";
 import Buy from "./Buy";
 import Sell from "./Sell";
+import Script from "next/script";
+import dynamic from "next/dynamic";
+
+const TVChartContainer = dynamic(
+  () => import("./OrderBookTrading").then((mod) => mod.TVChartContainer),
+  { ssr: false }
+);
 
 const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   const theme = "dark";
@@ -476,6 +482,21 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   //     key: "2",
   //   },
   // ];
+  const [isScriptReady, setIsScriptReady] = useState(false);
+  const defaultWidgetProps = {
+    symbol: "AAPL",
+    interval: "1D",
+    library_path: "/public/charting_library",
+    locale: "en",
+    charts_storage_url: "https://saveload.tradingview.com",
+    charts_storage_api_version: "1.1",
+    client_id: "3000",
+    // user_id: "public_user_id",
+    fullscreen: false,
+    autosize: true,
+  };
+
+  console.log(isScriptReady);
 
   return (
     <div
@@ -642,7 +663,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <TradingViewWidget />
+              <TVChartContainer />
             </div>
           </div>
         </div>

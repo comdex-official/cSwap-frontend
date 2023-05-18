@@ -343,6 +343,10 @@
   }
 }
 
+.TVChartContainer {
+  height: calc(100vh - 80px);
+}
+
 .orderbook__middle__lower__table__head {
   display: flex;
   justify-content: space-between;
