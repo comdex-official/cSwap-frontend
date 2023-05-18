@@ -149,6 +149,12 @@ const GovernViewPage = ({
         calculateQuoremThreshold = amountConversion(calculateQuoremThreshold || 0);
 
         let calculateCurrentThresholdData = (Number(totalValue) / Number(calculateQuoremThreshold)) * 100;
+        if (isNaN(calculateCurrentThresholdData) || calculateCurrentThresholdData == "Infinity") {
+            return 0
+        }
+        if (Number(calculateCurrentThresholdData) > 100) {
+            calculateCurrentThresholdData = 100;
+        }
         return fixedDecimal(calculateCurrentThresholdData || 0);
 
 
@@ -409,8 +415,10 @@ const GovernViewPage = ({
 
                                     <div className="proposal_quorem_container">
                                         <div className="total_quorem">
-                                            <div className="title">Current Quorum: {calculateCurrentThreshold() || 0} %</div>
-                                            <div className="value">{calculateQuoremThreshold() || 0} CMDX</div>
+                                            <div className="title">Current Quorum</div>
+                                            {/* <div className="title">Current Quorum: {calculateCurrentThreshold() || 0} %</div> */}
+                                            {/* <div className="value">{calculateQuoremThreshold() || 0} CMDX</div> */}
+                                            <div className={calculateCurrentThreshold() < 100 ? "value error-color" : "value green-color"}> {calculateCurrentThreshold() || 0} %</div>
                                         </div>
                                     </div>
                                 </div>
@@ -440,7 +448,7 @@ const GovernViewPage = ({
                                                 </div>
                                             </div>
                                             <div className="stats_container">
-                                                <div className="color" style={{ backgroundColor: "#C58E3D" }}></div>
+                                                <div className="color" style={{ backgroundColor: "#9FA4AD" }}></div>
                                                 <div className="data_container">
                                                     <div className="title">Abstain</div>
                                                     <div className="value">{Number(getVotes?.abstain || "0.00")}%</div>
@@ -475,7 +483,7 @@ const GovernViewPage = ({
                                                         },
                                                         {
                                                             value: Number(getVotes?.abstain || 0),
-                                                            color: "#C58E3D",
+                                                            color: "#9FA4AD",
 
                                                             tooltip: `Abstain ${Number(getVotes?.abstain || 0)} %`,
                                                         },
@@ -483,7 +491,7 @@ const GovernViewPage = ({
                                                 />
                                             </div>
                                             <div className="mask_container">
-                                                <div className="quorem_container">
+                                                {/* <div className="quorem_container">
                                                     <div className="line"></div>
                                                     <div className="arrow">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
@@ -491,9 +499,9 @@ const GovernViewPage = ({
                                                         </svg>
                                                     </div>
                                                     <div className="value">Quorum: 33%</div>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="quorem_container threshold_container">
+                                                {/* <div className="quorem_container threshold_container">
                                                     <div className="line"></div>
                                                     <div className="arrow">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
@@ -501,7 +509,7 @@ const GovernViewPage = ({
                                                         </svg>
                                                     </div>
                                                     <div className="value">Threshold: 50%</div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
