@@ -63,148 +63,152 @@ async function getAllSymbols() {
   return allSymbols;
 }
 
-export default {
-  onReady: (callback) => {
-    setTimeout(() => callback(configurationData));
-  },
+export const Datafeed = (value) => {
+  return {
+    onReady: (callback) => {
+      setTimeout(() => callback(configurationData));
+    },
 
-  searchSymbols: async (
-    userInput,
-    exchange,
-    symbolType,
-    onResultReadyCallback
-  ) => {
-    const symbols = await getAllSymbols();
-    const newSymbols = symbols.filter((symbol) => {
-      const isExchangeValid = exchange === "" || symbol.exchange === exchange;
-      const isFullSymbolContainsInput =
-        symbol.full_name.toLowerCase().indexOf(userInput.toLowerCase()) !== -1;
-      return isExchangeValid && isFullSymbolContainsInput;
-    });
+    searchSymbols: async (
+      userInput,
+      exchange,
+      symbolType,
+      onResultReadyCallback
+    ) => {
+      const symbols = await getAllSymbols();
+      const newSymbols = symbols.filter((symbol) => {
+        const isExchangeValid = exchange === "" || symbol.exchange === exchange;
+        const isFullSymbolContainsInput =
+          symbol.full_name.toLowerCase().indexOf(userInput.toLowerCase()) !==
+          -1;
+        return isExchangeValid && isFullSymbolContainsInput;
+      });
 
-    onResultReadyCallback(newSymbols);
-  },
+      onResultReadyCallback(newSymbols);
+    },
 
-  resolveSymbol: async (
-    symbolName,
-    onSymbolResolvedCallback,
-    onResolveErrorCallback,
-    extension
-  ) => {
-    const symbols = await getAllSymbols();
+    resolveSymbol: async (
+      symbolName,
+      onSymbolResolvedCallback,
+      onResolveErrorCallback,
+      extension
+    ) => {
+      const symbols = await getAllSymbols();
 
-    const symbolItem = symbols.find(({ symbol }) => symbol === "CMDX/AKT");
-
-    if (!symbolItem) {
-      onResolveErrorCallback("cannot resolve symbol");
-      return;
-    }
-
-    const symbolInfo = {
-      pair_id: symbolItem.pairId,
-      ticker: symbolItem.full_name,
-      name: symbolItem.symbol,
-      description: symbolItem.description,
-      type: symbolItem.type,
-      session: "24x7",
-      timezone: "Etc/UTC",
-      exchange: symbolItem.exchange,
-      minmov: 0,
-      pricescale: 100,
-      has_intraday: true,
-      has_no_volume: true,
-      has_weekly_and_monthly: false,
-      supported_resolutions: configurationData.supported_resolutions,
-      volume_precision: 2,
-      data_status: "streaming",
-    };
-
-    onSymbolResolvedCallback(symbolInfo);
-  },
-
-  getBars: async (
-    symbolInfo,
-    resolution,
-    periodParams,
-    onHistoryCallback,
-    onErrorCallback,
-    HistoryMetadata,
-    TimescaleMark,
-    Mark
-  ) => {
-    const { from, to, firstDataRequest } = periodParams;
-    console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
-    const parsedSymbol = parseFullSymbol(symbolInfo.full_name);
-    console.log(resolution);
-    // let resolutionM;
-    // for (const resolutionItem of configurationData?.resulation) {
-    //   return (resolutionM = resolutionItem[resolution]);
-    // }
-    console.log(HistoryMetadata, TimescaleMark, Mark);
-    const urlParameters = {
-      pair_id: symbolInfo?.pair_id,
-      from: 1633044165,
-      resolution: 21600,
-    };
-
-    const query = Object.keys(urlParameters)
-      .map((name) => `${name}=${encodeURIComponent(urlParameters[name])}`)
-      .join("&");
-
-    // console.log(from, to, resolution);
-    // console.log(parsedSymbol);
-    // console.log(urlParameters, query);
-    try {
-      if (from < 0) return;
-      const data = await makeApiRequest(`pair/analytical/data?${query}`);
-      console.log(data);
-      if (data.result !== "success" || data?.data?.data.length === 0) {
-        onHistoryCallback([], {
-          noData: true,
-        });
+      const symbolItem = symbols.find(({ symbol }) => symbol === value);
+      if (!symbolItem) {
+        onResolveErrorCallback("cannot resolve symbol");
         return;
       }
 
-      let bars = [];
-      data?.data?.data.forEach((bar) => {
-        bars = [
-          ...bars,
-          {
-            time: moment(bar.timestamp).unix() * 1000,
-            low: bar.low_price,
-            high: bar.high_price,
-            open: bar.open_price,
-            close: bar.close_price,
-            volume: bar.volume,
-          },
-        ];
-      });
+      const symbolInfo = {
+        pair_id: symbolItem.pairId,
+        ticker: symbolItem.full_name,
+        name: symbolItem.symbol,
+        description: symbolItem.description,
+        type: symbolItem.type,
+        session: "24x7",
+        timezone: "Etc/UTC",
+        exchange: symbolItem.exchange,
+        minmov: 0,
+        style: "2",
+        pricescale: 10000,
+        has_intraday: true,
+        has_no_volume: true,
+        has_weekly_and_monthly: false,
+        supported_resolutions: configurationData.supported_resolutions,
+        volume_precision: 2,
+        data_status: "streaming",
+      };
 
-      console.log(bars);
+      onSymbolResolvedCallback(symbolInfo);
+    },
 
-      if (firstDataRequest) {
-        lastBarsCache.set(symbolInfo.full_name, {
-          ...bars[bars.length - 1],
+    getBars: async (
+      symbolInfo,
+      resolution,
+      periodParams,
+      onHistoryCallback,
+      onErrorCallback
+    ) => {
+      const { from, to, firstDataRequest } = periodParams;
+      console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
+      const parsedSymbol = parseFullSymbol(symbolInfo.full_name);
+      console.log(resolution);
+      // let resolutionM;
+      // for (const resolutionItem of configurationData?.resulation) {
+      //   return (resolutionM = resolutionItem[resolution]);
+      // }
+
+      const urlParameters = {
+        pair_id: symbolInfo?.pair_id,
+        from: 1633044165,
+        resolution: 21600,
+      };
+
+      const query = Object.keys(urlParameters)
+        .map((name) => `${name}=${encodeURIComponent(urlParameters[name])}`)
+        .join("&");
+
+      // console.log(from, to, resolution);
+      // console.log(parsedSymbol);
+      // console.log(urlParameters, query);
+      try {
+        if (from < 0) return;
+        const data = await makeApiRequest(`pair/analytical/data?${query}`);
+        console.log(data);
+        if (data.result !== "success" || data?.data?.data.length === 0) {
+          onHistoryCallback([], {
+            noData: true,
+          });
+          return;
+        }
+
+        let bars = [];
+        data?.data?.data.forEach((bar) => {
+          bars = [
+            ...bars,
+            {
+              time: moment(bar.timestamp).unix() * 1000,
+              low: bar.low_price,
+              high: bar.high_price,
+              open: bar.open_price,
+              close: bar.close_price,
+              volume: bar.volume,
+            },
+          ];
         });
+
+        console.log(bars);
+
+        if (firstDataRequest) {
+          lastBarsCache.set(symbolInfo.full_name, {
+            ...bars[bars.length - 1],
+          });
+        }
+
+        console.log(`[getBars]: returned ${bars.length} bar(s)`);
+        onHistoryCallback(bars, {
+          noData: false,
+        });
+      } catch (error) {
+        console.log("[getBars]: Get error", error);
+        onErrorCallback(error);
       }
+    },
 
-      console.log(`[getBars]: returned ${bars.length} bar(s)`);
-      onHistoryCallback(bars, {
-        noData: false,
-      });
-    } catch (error) {
-      console.log("[getBars]: Get error", error);
-      onErrorCallback(error);
-    }
-  },
+    subscribeBars: (
+      symbolInfo,
+      resolution,
+      onRealtimeCallback,
+      subscriberUID,
+      onResetCacheNeededCallback
+    ) => {},
 
-  subscribeBars: (
-    symbolInfo,
-    resolution,
-    onRealtimeCallback,
-    subscriberUID,
-    onResetCacheNeededCallback
-  ) => {},
-
-  unsubscribeBars: (subscriberUID) => {},
+    unsubscribeBars: (subscriberUID) => {},
+  };
 };
+
+// export default {
+
+// };

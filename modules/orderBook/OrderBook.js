@@ -333,6 +333,8 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
     );
   };
 
+  console.log(selectedPair);
+
   const ordersTablecolumns = [
     {
       title: "Order ID",
@@ -526,7 +528,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                   })}
                   className="orderbook__select"
                 />
-             
+
                 {/* <NextImage src={ArrowRL} alt="" />
                 <div
                   className={`${styles.orderbook__trading__title}  ${
@@ -651,7 +653,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <TVChartContainer />
+              <TVChartContainer selectedPair={selectedPair} />
             </div>
           </div>
         </div>

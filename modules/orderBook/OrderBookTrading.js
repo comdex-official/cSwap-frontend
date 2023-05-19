@@ -1,7 +1,7 @@
 import * as React from "react";
 import styles from "./OrderBook.module.scss";
 import { widget, version } from "../../public/static/charting_library";
-import Datafeed from "./static/datafeed";
+import { Datafeed } from "./static/datafeed";
 
 function getLanguageFromURL() {
   const regex = new RegExp("[\\?&]lang=([^&#]*)");
@@ -31,7 +31,8 @@ export class TVChartContainer extends React.PureComponent {
 
   constructor(props) {
     super(props);
-
+    console.log(this.props.selectedPair);
+    // console.log(Datafeed("CMDX/AKT"));
     this.ref = React.createRef();
   }
 
@@ -40,13 +41,19 @@ export class TVChartContainer extends React.PureComponent {
       width: "100%",
       height: "100%",
       symbol: this.props.symbol,
-      datafeed: Datafeed,
+      datafeed: Datafeed(
+        this.props.selectedPair
+          ? this.props.selectedPair?.pair_symbol
+          : "CMDX/AKT"
+      ),
       interval: this.props.interval,
       container: this.ref.current,
       library_path: this.props.libraryPath,
       locale: getLanguageFromURL() || "en",
       theme: "dark",
-      style: "2",
+      overrides: {
+        "mainSeriesProperties.style": 2,
+      },
       disabled_features: [
         "use_localstorage_for_settings",
         "left_toolbar",
