@@ -6,6 +6,10 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+
+  @media screen and (max-width: $XS) {
+    padding: 10px;
+  }
 }
 
 .tradeCard__wrap {
@@ -95,11 +99,16 @@
 }
 
 .tradeCard__body__limit__body {
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: 300;
+  font-size: 13px;
   line-height: 20px;
   text-align: right;
   color: #acbfdb;
+  border: 1px solid #122458d9;
+  outline: #855215;
+  background: #030c1f;
+  border-radius: 8px;
+  padding: 0px 10px;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
@@ -288,8 +297,8 @@
 }
 
 .tradeCard__body__right__el3 {
-  font-weight: 600;
-  font-size: 10px;
+  font-weight: 530;
+  font-size: 11px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
@@ -310,8 +319,8 @@
 }
 
 .tradeCard__body__right__el4 {
-  font-weight: 600;
-  font-size: 10px;
+  font-weight: 530;
+  font-size: 11px;
   line-height: 15px;
   text-align: right;
   color: #acbfdb;
@@ -331,11 +340,16 @@
 }
 
 .tradeCard__body__right__el1__title {
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: 300;
+  font-size: 13px;
   line-height: 20px;
   text-align: right;
   color: #acbfdb;
+  border: 1px solid #122458d9;
+  outline: #855215;
+  background: #030c1f;
+  border-radius: 8px;
+  padding: 0px 10px;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 11px;
@@ -416,7 +430,7 @@
 .tradeCard__description {
   display: flex;
   flex-direction: column;
-  padding: 0px 50px;
+  padding: 10px 20px;
 }
 
 .tradeCard__description__el {
@@ -426,10 +440,10 @@
 }
 
 .tradeCard__description__el2 {
-  margin-top: 20px;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
+  margin-top: 31px;
+  font-weight: 35;
+  font-size: 12px;
+  line-height: 22px;
   width: 90%;
   color: #80acce;
 
@@ -472,7 +486,7 @@
 
 .tradeCard__description__right_title {
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   text-align: right;
 
