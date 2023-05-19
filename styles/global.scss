@@ -2816,3 +2816,53 @@ a {
     }
   }
 }
+
+.orderbook__select {
+  &.ant-select {
+    width: 125px;
+    .ant-select-selector {
+      background: none;
+      border: none;
+      color: $white;
+    }
+
+    .ant-select-arrow {
+      color: $white;
+    }
+  }
+  .ant-select-focused {
+    border: none;
+  }
+}
+
+.order_input {
+  border: none;
+  width: 100%;
+    max-width: 130px;
+  &:active {
+    border: none;
+  }
+  &.ant-input {
+    border: none;
+    &:active {
+      border: none;
+    }
+  }
+}
+
+.order_input2 {
+  width: 100%;
+    max-width: 130px;
+  background: rgba(31, 42, 69, 0.7);
+  border: none;
+  color: $white;
+  &:active {
+    border: none;
+  }
+  .ant-input{
+    background: none;
+  }
+  // .ant-input-affix-wrapper {
+  //   background: rgba(31, 42, 69, 0.7);
+  // }
+}

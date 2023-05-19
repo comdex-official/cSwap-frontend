@@ -482,21 +482,6 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   //     key: "2",
   //   },
   // ];
-  const [isScriptReady, setIsScriptReady] = useState(false);
-  const defaultWidgetProps = {
-    symbol: "AAPL",
-    interval: "1D",
-    library_path: "/public/charting_library",
-    locale: "en",
-    charts_storage_url: "https://saveload.tradingview.com",
-    charts_storage_api_version: "1.1",
-    client_id: "3000",
-    // user_id: "public_user_id",
-    fullscreen: false,
-    autosize: true,
-  };
-
-  console.log(isScriptReady);
 
   return (
     <div
@@ -529,6 +514,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
+                <NextImage src={ArrowRL} alt="" />
                 <Select
                   onChange={handlePairChange}
                   value={selectedPair?.pair_id || null}
@@ -538,7 +524,9 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                       label: item?.pair_symbol,
                     };
                   })}
+                  className="orderbook__select"
                 />
+             
                 {/* <NextImage src={ArrowRL} alt="" />
                 <div
                   className={`${styles.orderbook__trading__title}  ${

@@ -1,13 +1,27 @@
-import { makeApiRequest, generateSymbol, parseFullSymbol } from "./helpers.js";
-import { subscribeOnStream, unsubscribeFromStream } from "./streaming.js";
-
+import { makeApiRequest, parseFullSymbol } from "./helpers.js";
+import moment from "moment";
 const lastBarsCache = new Map();
 
 // DatafeedConfiguration implementation
 const configurationData = {
   // Represents the resolutions for bars supported by your datafeed
-  supported_resolutions: ["1D", "1W", "1M"],
+  supported_resolutions: ["1", "5", "30", "60", "240", "D", "1W", "1M"],
+  // supported_resolutions: ['60', '300', '600', '900', '1800', '3600', '21600', '43200', '64800', '86400', '604800', '2592000'],
 
+  resulation: [
+    {
+      "1H": "60",
+    },
+    {
+      "1D": "86400",
+    },
+    {
+      "1W": "604800",
+    },
+    {
+      "1M": "2592000",
+    },
+  ],
   // The `exchanges` arguments are used for the `searchSymbols` method if a user selects the exchange
   exchanges: [
     {
@@ -32,38 +46,25 @@ const configurationData = {
   ],
 };
 
-// Obtains all symbols for all exchanges supported by CryptoCompare API
 async function getAllSymbols() {
-  const data = await makeApiRequest("data/v3/all/exchanges");
-  let allSymbols = [];
+  const data = await makeApiRequest("pairs/all");
 
-  for (const exchange of configurationData.exchanges) {
-    const pairs = data.Data[exchange.value].pairs;
+  const allSymbols = data.data.map((item) => {
+    return {
+      pairId: item?.pair_id,
+      symbol: item.pair_symbol,
+      full_name: "",
+      description: item.pair_symbol,
+      exchange: "",
+      type: "crypto",
+    };
+  });
 
-    for (const leftPairPart of Object.keys(pairs)) {
-      const symbols = pairs[leftPairPart].map((rightPairPart) => {
-        const symbol = generateSymbol(
-          exchange.value,
-          leftPairPart,
-          rightPairPart
-        );
-        return {
-          symbol: symbol.short,
-          full_name: symbol.full,
-          description: symbol.short,
-          exchange: exchange.value,
-          type: "crypto",
-        };
-      });
-      allSymbols = [...allSymbols, ...symbols];
-    }
-  }
   return allSymbols;
 }
 
 export default {
   onReady: (callback) => {
-    console.log("[onReady]: Method call");
     setTimeout(() => callback(configurationData));
   },
 
@@ -73,7 +74,6 @@ export default {
     symbolType,
     onResultReadyCallback
   ) => {
-    console.log("[searchSymbols]: Method call");
     const symbols = await getAllSymbols();
     const newSymbols = symbols.filter((symbol) => {
       const isExchangeValid = exchange === "" || symbol.exchange === exchange;
@@ -81,6 +81,7 @@ export default {
         symbol.full_name.toLowerCase().indexOf(userInput.toLowerCase()) !== -1;
       return isExchangeValid && isFullSymbolContainsInput;
     });
+
     onResultReadyCallback(newSymbols);
   },
 
@@ -90,19 +91,17 @@ export default {
     onResolveErrorCallback,
     extension
   ) => {
-    console.log("[resolveSymbol]: Method call", symbolName);
     const symbols = await getAllSymbols();
-    const symbolItem = symbols.find(
-      ({ full_name }) => full_name === "Bitfinex:RRB/UST"
-    );
-    console.log(symbols);
+
+    const symbolItem = symbols.find(({ symbol }) => symbol === "CMDX/AKT");
+
     if (!symbolItem) {
-      console.log("[resolveSymbol]: Cannot resolve symbol", symbolName);
       onResolveErrorCallback("cannot resolve symbol");
       return;
     }
-    // Symbol information object
+
     const symbolInfo = {
+      pair_id: symbolItem.pairId,
       ticker: symbolItem.full_name,
       name: symbolItem.symbol,
       description: symbolItem.description,
@@ -110,9 +109,9 @@ export default {
       session: "24x7",
       timezone: "Etc/UTC",
       exchange: symbolItem.exchange,
-      minmov: 1,
+      minmov: 0,
       pricescale: 100,
-      has_intraday: false,
+      has_intraday: true,
       has_no_volume: true,
       has_weekly_and_monthly: false,
       supported_resolutions: configurationData.supported_resolutions,
@@ -120,7 +119,6 @@ export default {
       data_status: "streaming",
     };
 
-    console.log("[resolveSymbol]: Symbol resolved", symbolName);
     onSymbolResolvedCallback(symbolInfo);
   },
 
@@ -129,48 +127,57 @@ export default {
     resolution,
     periodParams,
     onHistoryCallback,
-    onErrorCallback
+    onErrorCallback,
+    HistoryMetadata,
+    TimescaleMark,
+    Mark
   ) => {
     const { from, to, firstDataRequest } = periodParams;
     console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
     const parsedSymbol = parseFullSymbol(symbolInfo.full_name);
+    console.log(resolution);
+    // let resolutionM;
+    // for (const resolutionItem of configurationData?.resulation) {
+    //   return (resolutionM = resolutionItem[resolution]);
+    // }
+    console.log(HistoryMetadata, TimescaleMark, Mark);
     const urlParameters = {
-      e: parsedSymbol.exchange,
-      fsym: parsedSymbol.fromSymbol,
-      tsym: parsedSymbol.toSymbol,
-      toTs: to,
-      limit: 2000,
+      pair_id: symbolInfo?.pair_id,
+      from: 1633044165,
+      resolution: 21600,
     };
+
     const query = Object.keys(urlParameters)
       .map((name) => `${name}=${encodeURIComponent(urlParameters[name])}`)
       .join("&");
-    console.log(query);
+
+    // console.log(from, to, resolution);
+    // console.log(parsedSymbol);
+    // console.log(urlParameters, query);
     try {
-      const data = await makeApiRequest(`data/histoday?${query}`);
-      if (
-        (data.Response && data.Response === "Error") ||
-        data.Data.length === 0
-      ) {
-        // "noData" should be set if there is no data in the requested period
+      if (from < 0) return;
+      const data = await makeApiRequest(`pair/analytical/data?${query}`);
+      console.log(data);
+      if (data.result !== "success" || data?.data?.data.length === 0) {
         onHistoryCallback([], {
           noData: true,
         });
         return;
       }
+
       let bars = [];
-      data.Data.forEach((bar) => {
-        if (bar.time >= from && bar.time < to) {
-          bars = [
-            ...bars,
-            {
-              time: bar.time * 1000,
-              low: bar.low,
-              high: bar.high,
-              open: bar.open,
-              close: bar.close,
-            },
-          ];
-        }
+      data?.data?.data.forEach((bar) => {
+        bars = [
+          ...bars,
+          {
+            time: moment(bar.timestamp).unix() * 1000,
+            low: bar.low_price,
+            high: bar.high_price,
+            open: bar.open_price,
+            close: bar.close_price,
+            volume: bar.volume,
+          },
+        ];
       });
 
       console.log(bars);
@@ -180,6 +187,7 @@ export default {
           ...bars[bars.length - 1],
         });
       }
+
       console.log(`[getBars]: returned ${bars.length} bar(s)`);
       onHistoryCallback(bars, {
         noData: false,
@@ -196,26 +204,7 @@ export default {
     onRealtimeCallback,
     subscriberUID,
     onResetCacheNeededCallback
-  ) => {
-    console.log(
-      "[subscribeBars]: Method call with subscriberUID:",
-      subscriberUID
-    );
-    subscribeOnStream(
-      symbolInfo,
-      resolution,
-      onRealtimeCallback,
-      subscriberUID,
-      onResetCacheNeededCallback,
-      lastBarsCache.get(symbolInfo.full_name)
-    );
-  },
+  ) => {},
 
-  unsubscribeBars: (subscriberUID) => {
-    console.log(
-      "[unsubscribeBars]: Method call with subscriberUID:",
-      subscriberUID
-    );
-    unsubscribeFromStream(subscriberUID);
-  },
+  unsubscribeBars: (subscriberUID) => {},
 };

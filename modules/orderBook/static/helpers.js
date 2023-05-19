@@ -1,7 +1,9 @@
 // Makes requests to CryptoCompare API
 export async function makeApiRequest(path) {
   try {
-    const response = await fetch(`https://min-api.cryptocompare.com/${path}`);
+    const response = await fetch(
+      `https://stat.comdex.one/api/v2/cswap/${path}`
+    );
     return response.json();
   } catch (error) {
     throw new Error(`CryptoCompare request error: ${error.status}`);
@@ -23,10 +25,11 @@ export function parseFullSymbol(fullSymbol) {
   if (!match) {
     return null;
   }
-
+  console.log(match);
   return {
     exchange: match[1],
     fromSymbol: match[2],
     toSymbol: match[3],
   };
 }
+

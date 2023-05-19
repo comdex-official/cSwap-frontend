@@ -47,7 +47,12 @@ export class TVChartContainer extends React.PureComponent {
       locale: getLanguageFromURL() || "en",
       theme: "dark",
       style: "2",
-      disabled_features: ["use_localstorage_for_settings"],
+      disabled_features: [
+        "use_localstorage_for_settings",
+        "left_toolbar",
+        "header_symbol_search",
+        "header_compare",
+      ],
       enabled_features: ["study_templates"],
       charts_storage_url: this.props.chartsStorageUrl,
       charts_storage_api_version: this.props.chartsStorageApiVersion,
@@ -56,7 +61,6 @@ export class TVChartContainer extends React.PureComponent {
       fullscreen: this.props.fullscreen,
       autosize: true,
       studies_overrides: this.props.studiesOverrides,
-      allow_symbol_change: false,
     };
 
     const tvWidget = new widget(widgetOptions);

@@ -77,11 +77,12 @@ const OrderbookTable = ({ openOrdersData }) => {
             </div>
           ) : (
             openOrdersData &&
-            openOrdersData.map((itwm) => (
+            openOrdersData.map((item) => (
               <div
                 className={`${styles.orderbook__table__body} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
+                key={item.id}
               >
                 <div
                   className={`${styles.orderbook__table__title} ${

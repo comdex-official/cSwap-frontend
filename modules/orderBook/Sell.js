@@ -115,15 +115,15 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
     setPrice(value);
     setTotal(amount * value);
   };
-
+  const [active, setActive] = useState();
   const handleAmountChange = (value) => {
     setAmount(value);
     setTotal(value * price);
   };
 
   const handleAmountPercentage = (value) => {
+    setActive(+value);
     let amountPercentage = (value / 100) * amountConversion(available);
-
     setAmount(amountPercentage || 0);
     setTotal(amountPercentage * pair?.price);
   };
@@ -189,6 +189,7 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
                 <Input
                   type={"number"}
                   value={price}
+                  className="order_input"
                   step={
                     1 /
                     10 **
@@ -223,6 +224,7 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
             >
               <Input
                 value={amount}
+                className="order_input2"
                 placeholder="0"
                 onChange={(event) => handleAmountChange(event.target.value)}
                 suffix={denomConversion(pair?.base_coin_denom)}
@@ -237,8 +239,8 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
           >
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+                active === 10 ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(10)}
             >
               {"10%"}
@@ -246,7 +248,7 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
                 theme === "dark" ? styles.dark : styles.light
-              }`}
+              } ${active === 25 ? styles.active : ""}`}
               onClick={() => handleAmountPercentage(25)}
             >
               {"25%"}
@@ -254,7 +256,7 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
                 theme === "dark" ? styles.dark : styles.light
-              }`}
+              }  ${active === 50 ? styles.active : ""}`}
               onClick={() => handleAmountPercentage(50)}
             >
               {"50%"}
@@ -262,7 +264,7 @@ const Sell = ({ pair, balances, markets, address, params, type }) => {
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
                 theme === "dark" ? styles.dark : styles.light
-              }`}
+              }  ${active === 100 ? styles.active : ""}`}
               onClick={() => handleAmountPercentage(100)}
             >
               {"100%"}

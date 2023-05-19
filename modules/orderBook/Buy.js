@@ -123,13 +123,14 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
     setPrice(value);
     setTotal(amount * price);
   };
-
+  const [active, setActive] = useState();
   const handleAmountChange = (value) => {
     setAmount(value);
     setTotal(value * price);
   };
 
   const handleAmountPercentage = (value) => {
+    setActive(+value);
     let AmountPercentage = (value / 100) * amountConversion(quoteBalance);
     setTotal(AmountPercentage || 0);
     setAmount(AmountPercentage * pair?.price);
@@ -143,6 +144,7 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
       marketPrice(markets, pair?.quote_coin_denom)
     );
   };
+
   return (
     <>
       <div className="spot-card-dtl">
@@ -197,6 +199,7 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
                 <Input
                   type={"number"}
                   value={price}
+                  className="order_input"
                   step={
                     1 /
                     10 **
@@ -231,6 +234,7 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
             >
               <Input
                 value={amount}
+                className="order_input2"
                 placeholder="0"
                 onChange={(event) => handleAmountChange(event.target.value)}
                 suffix={denomConversion(pair?.base_coin_denom)}
@@ -244,33 +248,33 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
             }`}
           >
             <div
-              className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.orderbook__body__tab__footer__element}
+              ${active === 10 ? styles.active : ""}
+              ${theme === "dark" ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(10)}
             >
               {"10%"}
             </div>
             <div
-              className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.orderbook__body__tab__footer__element}   ${
+                active === 25 ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(25)}
             >
               {"25%"}
             </div>
             <div
-              className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.orderbook__body__tab__footer__element}   ${
+                active === 50 ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(50)}
             >
               {"50%"}
             </div>
             <div
-              className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.orderbook__body__tab__footer__element}   ${
+                active === 100 ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(100)}
             >
               {"100%"}

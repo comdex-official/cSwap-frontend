@@ -116,9 +116,9 @@
       }
     }
   }
-  @media screen and (max-width: $L) {
-    height: 89%;
-  }
+  // @media screen and (max-width: $L) {
+  //   height: 89%;
+  // }
 }
 
 .orderbook__tab__wrap {
@@ -344,7 +344,7 @@
 }
 
 .TVChartContainer {
-  height: calc(100vh - 80px);
+  height: 98%;
 }
 
 .orderbook__middle__lower__table__head {
@@ -359,7 +359,7 @@
   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
   border: 2px solid #303950;
   border-radius: 20px;
-  height: 85%;
+  height: 87%;
 
   @media screen and (max-width: $L) {
     height: 100%;
@@ -532,8 +532,12 @@
   font-size: 11px;
   line-height: 13px;
   text-align: center;
-
+  cursor: pointer;
   color: #eaeaea;
+
+  &.active {
+    background: #293656;
+  }
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 10px;
@@ -666,12 +670,10 @@
 
   i {
     color: #ffffff;
-    margin-left: 8px;
   }
 
   img {
     height: 12px;
-    margin-right: 8px;
   }
 }
 
@@ -743,6 +745,7 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #28385f;
+  padding: 10px 0px;
 }
 
 .total__title {
