@@ -5,8 +5,8 @@ import { getAMP, rangeToPercentage } from "../../../utils/number";
 
 const RangeTooltipContent = ({ min, max, price, parent }) => {
   const marks = {
-    0: min,
-    100: max,
+    0: Number(min).toFixed(DOLLAR_DECIMALS),
+    100: Number(max).toFixed(DOLLAR_DECIMALS),
   };
 
   let amp = getAMP(price, min, max)?.toFixed(DOLLAR_DECIMALS);
@@ -26,7 +26,7 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           </div>
           <div className="">
             <Slider
-              className="farm-slider farm-slider-small ranged"
+              className="farm-slider farm-slider-small"
               tooltip={{ open: false }}
               value={rangeToPercentage(min, max, price)}
               marks={marks}
@@ -34,7 +34,7 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           </div>
         </div>
       ) : null}
-      <Row>
+      <Row style={{ marginTop: "25px" }}>
         <Col>Min Price</Col>
         <Col>
           <span className="mr-2">:</span> {min}
