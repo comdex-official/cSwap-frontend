@@ -226,6 +226,7 @@
   text-align: center;
   color: #ffffff;
   margin-top: 25px;
+  cursor: pointer;
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
@@ -252,6 +253,12 @@
   display: flex;
   align-items: center;
   width: 100%;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
 .farm__body__right {
@@ -276,6 +283,10 @@
   border: 2px solid #6b758d;
   transform: rotate(90deg);
   margin: 0px 10px;
+
+  @media screen and (max-width: $XS) {
+    display: none;
+  }
 }
 
 .farm__body__icon__wrap {
@@ -287,6 +298,10 @@
     &:first-child {
       margin-right: 10px;
     }
+  }
+
+  @media screen and (max-width: $XS) {
+    margin-left: 10px;
   }
 }
 
@@ -359,11 +374,13 @@
   column-gap: 5rem;
   row-gap: 1rem;
 
-  @media screen and (max-width: $L) {
+  @media screen and (max-width: $XL) {
     grid-template-columns: repeat(2, 1fr);
+    // column-gap: 8rem;
+    // row-gap: 1rem;
   }
 
-  @media screen and (max-width: $M) {
+  @media screen and (max-width: 930px) {
     grid-template-columns: repeat(1, 1fr);
   }
 }
@@ -374,7 +391,13 @@
   // align-items: flex-start;
   max-width: 450px;
 
-  @media screen and (max-width: $M) {
+  align-items: unset;
+
+  &.card__active {
+    align-items: flex-start;
+  }
+
+  @media screen and (max-width: $XL) {
     max-width: 100%;
   }
 }
@@ -917,6 +940,14 @@
 .farmCard__footer__wrap {
   display: flex;
   flex-direction: column;
+  // transform: translateY(-129%);
+ 
+  // transition: 0.3s transform ease-in;
+
+
+  // &.active{
+  //   transform: translateY(0%);
+  // }
 }
 
 .farmCard__footer__main {
@@ -1591,4 +1622,10 @@
     //   font-size: 10px;
     // }
   }
+}
+
+.farmCard__element__left__title__logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }

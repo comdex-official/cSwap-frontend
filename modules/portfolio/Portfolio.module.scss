@@ -23,6 +23,7 @@
   border: 2px solid #303950;
   border-radius: 20px;
   padding: 20px 50px;
+  gap: 60px;
 
   @media screen and (max-width: $L) {
     flex-direction: column;
@@ -58,6 +59,10 @@
   text-align: center;
   color: #ffffff;
 
+  @media screen and (max-width: $M) {
+    font-size: 15px;
+  }
+
   // @media screen and (max-width: $XXL) {
   //   font-size: 31px;
   // }
@@ -80,6 +85,7 @@
   font-size: 15px;
   line-height: 24px;
   text-align: center;
+  flex-wrap: wrap;
   color: #9badc7;
 
   // @media screen and (max-width: $XXL) {
@@ -93,7 +99,15 @@
   div {
     height: 14px;
     width: 14px;
-    background: #1e3b6f;
+    background: #123c73;
+    border-radius: 2px;
+    margin-right: 10px;
+  }
+
+  .farm {
+    height: 14px;
+    width: 14px;
+    background: #1a4f94;
     border-radius: 2px;
     margin-right: 10px;
   }
@@ -282,5 +296,18 @@
   @media only screen and (max-width: 800px) {
     position: unset;
     justify-content: flex-start;
+    margin-top: 15px;
+  }
+}
+
+.portfolio__element__footer__down {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  @media screen and (max-width: $XS) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

@@ -5,7 +5,7 @@ import Tab from "../../shared/components/tab/Tab";
 import Search from "../../shared/components/search/Search";
 import FarmTable from "./FarmTable";
 import FarmCard from "./FarmCard";
-import { Input, message, Radio, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Modal, Radio, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -26,6 +26,7 @@ import {
   Square,
   SquareWhite,
 } from "../../shared/image";
+import Liquidity from "./Liquidity";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -267,16 +268,44 @@ const Farm = ({
               defaultValue="a"
               value={filterValue1}
             >
-              <Radio value={"APR"}>APR</Radio>
-              <Radio value={"MyPools"}>My Pools</Radio>
-              <Radio value={"DateCreated"}>Date Created</Radio>
-              <Radio value={"PoolLiquidity"}>Pool Liquidity</Radio>
+              <Radio.Button value={"APR"}>APR</Radio.Button>
+              <Radio.Button value={"MyPools"}>My Pools</Radio.Button>
+              <Radio.Button value={"DateCreated"}>Date Created</Radio.Button>
+              <Radio.Button value={"PoolLiquidity"}>
+                Pool Liquidity
+              </Radio.Button>
             </Radio.Group>
           </div>
         </div>
       ),
     },
   ];
+
+  const [isMasterPoolModalOpen, setMasterPoolModalOpen] = useState(false);
+  const [isChildPool, setChildPool] = useState(false);
+
+  const handleMasterPoolCancel = () => {
+    setMasterPoolModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (isChildPool) {
+      let temp = [];
+      displayPools.map((item) => {
+        const hasMasterPool = poolsApr?.[
+          item?.id?.toNumber()
+        ]?.incentive_rewards?.some((pool) => pool.master_pool);
+
+        console.log(hasMasterPool, "sssss");
+        if (!hasMasterPool) {
+          temp.push(item);
+        }
+      });
+      setDisplayPools(temp);
+    } else {
+      updateFilteredData(filterValue);
+    }
+  }, [displayPools, isChildPool]);
 
   return (
     <div
@@ -366,6 +395,7 @@ const Farm = ({
                     className={`${styles.farm__header__right__body__button} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
+                    onClick={() => setMasterPoolModalOpen(true)}
                   >
                     {"Go to Pool"}
                   </div>
@@ -401,8 +431,9 @@ const Farm = ({
                     className={`${styles.farm__header__right__body__button} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
+                    onClick={() => setChildPool(!isChildPool)}
                   >
-                    {"Go to Child Pools"}
+                    {isChildPool ? "Go to All Pools" :"Go to Child Pools"}
                   </div>
                 </div>
               </div>
@@ -557,19 +588,29 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item) => (
-                <FarmCard
-                  key={item.id}
-                  theme={theme}
-                  pool={item}
-                  poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                  poolAprList={poolsApr && poolsApr}
-                  masterPoolData={masterPoolData}
-                />
-              ))}
+              {displayPools.map((item) => {
+                return (
+                  <FarmCard
+                    key={item.id}
+                    theme={theme}
+                    pool={item}
+                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                    poolAprList={poolsApr && poolsApr}
+                    masterPoolData={masterPoolData}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
+        <Modal
+          className={"modal__wrap2"}
+          open={isMasterPoolModalOpen}
+          onCancel={handleMasterPoolCancel}
+          centered={true}
+        >
+          <Liquidity theme={theme} pool={masterPoolData} />
+        </Modal>
       </div>
     </div>
   );
