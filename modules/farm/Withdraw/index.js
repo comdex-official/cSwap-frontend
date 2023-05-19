@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import Snack from "../../../shared/components/Snack";
 import CustomInput from "../../../shared/components/CustomInput";
-import { APP_ID, PRICE_DECIMALS } from "../../../constants/common";
+import { APP_ID, DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import {
@@ -22,26 +22,7 @@ import PoolDetails from "../poolDetail";
 import { Icon } from "../../../shared/image/Icon";
 import { decimalConversion, rangeToPercentage } from "../../../utils/number";
 
-const marks = {
-  0: {
-    style: {
-      color: "#ffffff",
-    },
-    label: "0%",
-  },
-  50: {
-    style: {
-      color: "#ffffff",
-    },
-    label: "50%",
-  },
-  100: {
-    style: {
-      color: "#ffffff",
-    },
-    label: "100%",
-  },
-};
+
 
 const Remove = ({
   active,
@@ -54,6 +35,12 @@ const Remove = ({
   updateBalance,
   userLockedPoolTokens,
 }) => {
+
+  const marks = {
+    0: Number(decimalConversion(pool?.minPrice)).toFixed(DOLLAR_DECIMALS),
+    100: Number(decimalConversion(pool?.maxPrice)).toFixed(DOLLAR_DECIMALS),
+  };
+
   const [sliderValue, setSliderValue] = useState(0);
   const [removeInProgress, setRemoveInProgress] = useState(false);
   const [amount, setAmount] = useState(0);
@@ -78,18 +65,6 @@ const Remove = ({
 
     signAndBroadcastTransaction(
       {
-        // message: {
-        //     typeUrl: "/comdex.liquidity.v1beta1.MsgWithdraw",
-        //     value: {
-        //         withdrawer: address,
-        //         poolId: pool?.id,
-        //         appId: Long.fromNumber(APP_ID),
-        //         poolCoin: {
-        //             denom: pool?.poolCoinDenom,
-        //             amount: amount,
-        //         },
-        //     },
-        // },
         message: {
           typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw",
           value: {
@@ -144,7 +119,7 @@ const Remove = ({
             <div className="farm-rang-slider">
               <div className="farmrange-title">
                 {Number(pool?.price) > Number(pool?.minPrice) &&
-                Number(pool?.price) < Number(pool?.maxPrice) ? (
+                  Number(pool?.price) < Number(pool?.maxPrice) ? (
                   <span className="success-color">In range</span>
                 ) : (
                   <span className="warn-color">Out of range</span>
@@ -171,7 +146,7 @@ const Remove = ({
                   </>
                 </Tooltip>
               </div>
-              <div className="pool-ranged">
+              <div className="ranged">
                 <Slider
                   className="farm-slider farm-slider-small"
                   tooltip={{ open: false }}
@@ -188,21 +163,18 @@ const Remove = ({
         </div>
       </div>
       <div
-        className={`${styles.liquidityCard__pool__withdraw__wrap} ${
-          theme === "dark" ? styles.dark : styles.light
-        }`}
+        className={`${styles.liquidityCard__pool__withdraw__wrap} ${theme === "dark" ? styles.dark : styles.light
+          }`}
       >
         <div
-          className={`${styles.liquidityCard__pool__withdraw__title} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
+          className={`${styles.liquidityCard__pool__withdraw__title} ${theme === "dark" ? styles.dark : styles.light
+            }`}
         >
           {"Amount to Withdraw"}
         </div>
         <div
-          className={`${styles.liquidityCard__pool__input} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
+          className={`${styles.liquidityCard__pool__input} ${theme === "dark" ? styles.dark : styles.light
+            }`}
         >
           {/* <RangeTooltipContent /> */}
           <Row style={{ justifyContent: "space-between" }}>
@@ -234,28 +206,23 @@ const Remove = ({
           </Row>
         </div>
         <div
-          className={`${styles.liquidityCard__pool__withdraw__footer} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
+          className={`${styles.liquidityCard__pool__withdraw__footer} ${theme === "dark" ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.liquidityCard__pool__withdraw__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.liquidityCard__pool__withdraw__element} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${
-                styles.liquidityCard__pool__withdraw__element__title
-              } ${styles.title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.liquidityCard__pool__withdraw__element__title
+                } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               {"You will unfarm"}
             </div>
             <div
-              className={`${
-                styles.liquidityCard__pool__withdraw__element__title
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              className={`${styles.liquidityCard__pool__withdraw__element__title
+                } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               {/* {"$0.00 ≈ 0 PoolToken"} */}
               <PoolTokenValue poolTokens={amount} /> ≈{" "}
@@ -263,23 +230,19 @@ const Remove = ({
             </div>
           </div>
           <div
-            className={`${styles.liquidityCard__pool__withdraw__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
+            className={`${styles.liquidityCard__pool__withdraw__element} ${theme === "dark" ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${
-                styles.liquidityCard__pool__withdraw__element__title
-              } ${styles.title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.liquidityCard__pool__withdraw__element__title
+                } ${styles.title} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               {"Your current farming balance"}
             </div>
             <div
-              className={`${
-                styles.liquidityCard__pool__withdraw__element__title
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              className={`${styles.liquidityCard__pool__withdraw__element__title
+                } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               {/* {"$0.00 ≈ 0 PoolToken"} */}
               <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{" "}
