@@ -264,3 +264,44 @@ export const fetchExchangeRateValue = (appId, pairId, callback) => {
       callback(error?.message);
     });
 };
+
+export const queryOrders = (pairId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .Orders({
+        pairId,
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const fetchRestPairs = (callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/pairs/all`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestPair = (pairId, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/pairs/${pairId}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};

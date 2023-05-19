@@ -497,11 +497,12 @@ const PortofolioTable = ({
               />
             </div>
             {/* )} */}
+
             <Input
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
               // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-              // suffix={<Icon className={"bi bi-search"} />}
+              suffix={<Icon className={"bi bi-search"} />}
               className="asset_search_input"
             />
           </Col>

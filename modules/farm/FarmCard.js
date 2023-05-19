@@ -298,9 +298,11 @@ const FarmCard = ({
     }
   }, []);
 
+ 
+
   return (
     <div
-      className={`${styles.farmCard__wrap} ${
+      className={`${styles.farmCard__wrap}  ${
         theme === "dark" ? styles.dark : styles.light
       }`}
     >
@@ -590,7 +592,9 @@ const FarmCard = ({
                     <div
                       className={`${
                         styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
                     >
                       <NextImage src={Current} alt="Logo" />
                       {/* {"Upto 54.45%"} */}
@@ -700,8 +704,8 @@ const FarmCard = ({
           {showMoreData && (
             <div
               className={`${styles.farmCard__footer__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+                showMoreData ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               {poolExternalIncentiveData.length > 0 && (
                 <div

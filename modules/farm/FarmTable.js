@@ -264,58 +264,65 @@ const FarmTable = ({
           }`}
         >
           <div
-            className={`${styles.farmCard__element__left__logo__wrap} ${
+            className={`${styles.farmCard__element__left__title__logo} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
             <div
-              className={`${styles.farmCard__element__left__logo} ${
-                styles.first
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              className={`${styles.farmCard__element__left__logo__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div
-                className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.first
+                } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                <NextImage
-                  src={
-                    iconList?.[value?.balances?.baseCoin?.denom]?.coinImageUrl
-                  }
-                  width={50}
-                  height={50}
-                  alt=""
-                />
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={
+                      iconList?.[value?.balances?.baseCoin?.denom]?.coinImageUrl
+                    }
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </div>
               </div>
-            </div>
-            <div
-              className={`${styles.farmCard__element__left__logo} ${
-                styles.last
-              } ${theme === "dark" ? styles.dark : styles.light}`}
-            >
               <div
-                className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.last
+                } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                <NextImage
-                  src={
-                    iconList?.[value?.balances?.quoteCoin?.denom]?.coinImageUrl
-                  }
-                  width={50}
-                  height={50}
-                  alt=""
-                />
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={
+                      iconList?.[value?.balances?.quoteCoin?.denom]
+                        ?.coinImageUrl
+                    }
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div
-            className={`${styles.farmCard__element__left__title} ${
-              styles.tableActive
-            } ${theme === "dark" ? styles.dark : styles.light}`}
-          >
-            {showPairDenoms(value)}
+            <div
+              className={`${styles.farmCard__element__left__title} ${
+                styles.tableActive
+              } ${theme === "dark" ? styles.dark : styles.light}`}
+            >
+              {showPairDenoms(value)}
+            </div>
           </div>
 
           <div
@@ -383,7 +390,9 @@ const FarmTable = ({
                   <div
                     className={`${
                       styles.farmCard__element__right__pool__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${styles.boost} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <NextImage src={Current} alt="Logo" />
                     {"MP Boost"}
@@ -392,12 +401,12 @@ const FarmTable = ({
               </div>
               {/* </div> */}
             </div>
-            <div
-              className={`${styles.farmCard__element__right__incentive} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {checkExternalIncentives(value?.id?.toNumber()) && (
+            {checkExternalIncentives(value?.id?.toNumber()) && (
+              <div
+                className={`${styles.farmCard__element__right__incentive} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
                 <div
                   className={`${styles.farmCard__element__right__pool__title} ${
                     theme === "dark" ? styles.dark : styles.light
@@ -406,8 +415,8 @@ const FarmTable = ({
                   <NextImage src={Cup} alt="Logo" />
                   {"External Incentives"}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       ),
@@ -483,8 +492,8 @@ const FarmTable = ({
               >
                 <div
                   className={`${styles.farmCard__element__right__pool__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                    styles.boost
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <NextImage src={Current} alt="Logo" />
                   {`Upto ${commaSeparator(

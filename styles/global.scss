@@ -316,7 +316,7 @@ a {
 
 .modal__wrap {
   &.ant-modal {
-    max-width: 800px !important;
+    max-width: 590px !important;
 
     .ant-modal-content {
       background: linear-gradient(
@@ -344,6 +344,9 @@ a {
         height: 700px !important;
       }
       .ant-modal-close-x {
+        position: absolute;
+        right: 35px;
+        top: 35px;
         color: #ffffff;
       }
 
@@ -508,19 +511,20 @@ a {
 
 .ant-input {
   border: 0;
-  background: none;
-  font-size: 1.3rem;
-  line-height: 1;
+  outline: none;
+  background: #030c1f;
+  font-size: 1.2rem;
+  line-height: 1.2;
   text-align: right;
-  max-width: 200px;
+  max-width: 170px;
   margin-bottom: 0;
   -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
-  color: $white;
-  padding-right: 0;
-  border: 1px solid #828281;
-  outline: none;
+  color: #fff;
+  padding-right: 5px;
+  border: 1px solid #122458d9;
+  outline: #855215;
+
   &::-webkit-placeholder {
     color: $white;
     .dark-mode & {
@@ -529,13 +533,18 @@ a {
   }
 
   &:active {
-    border: 1px solid #828281;
-    outline: none;
+    border: 1px solid #122458d9;
+    outline: #855215;
   }
 
   &:hover {
-    border: 1px solid #828281;
-    outline: none;
+    border: 1px solid #122458d9 !important;
+    outline: #855215 !important;
+  }
+
+  &:focus {
+    border: 1px solid #122458d9 !important;
+    outline: #855215 !important;
   }
 
   &::placeholder {
@@ -574,8 +583,10 @@ a {
 
 .ant-input-disabled {
   color: $white;
-  border: 1px solid #828281 !important;
-  outline: none;
+  border: 1px solid #122458d9 !important;
+  outline: #855215 !important;
+  background: #030c1f !important;
+  padding-right: 5px !important;
 
   &::placeholder {
     color: white;
@@ -869,6 +880,8 @@ a {
           .ant-table-expanded-row-fixed {
             overflow: hidden;
             width: 100%;
+
+            
           }
         }
       }
@@ -881,6 +894,16 @@ a {
   gap: 20px;
 }
 
+
+   
+        .ant-empty-description {
+          color: $white !important;
+        }
+
+
+
+
+
 .asset_search_input {
   // & .ant-input {
   // border: 0;
@@ -888,7 +911,7 @@ a {
   font-size: 12px;
   line-height: 1;
   // margin-top: 8px;
-  text-align: right;
+
   max-width: 200px;
   margin-bottom: 0;
   -webkit-appearance: none;
@@ -937,6 +960,27 @@ a {
 
     &::placeholder {
       color: $white;
+    }
+  }
+
+  .ant-input {
+    text-align: left;
+    background: transparent;
+    border: none !important;
+    outline: none !important;
+    &:active {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:hover {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:focus {
+      border: none !important;
+      outline: none !important;
     }
   }
   // }
@@ -2815,4 +2859,101 @@ a {
       }
     }
   }
+}
+
+.orderbook__select {
+  &.ant-select {
+    width: 125px;
+    .ant-select-selector {
+      background: none;
+      border: none;
+      color: $white;
+    }
+
+    .ant-select-arrow {
+      color: $white;
+    }
+  }
+  .ant-select-focused {
+    border: none;
+  }
+}
+
+.order_input {
+  border: none;
+  width: 100%;
+  max-width: 130px;
+  &:active {
+    border: none;
+  }
+  &.ant-input {
+    border: none;
+    &:active {
+      border: none;
+    }
+  }
+}
+
+.order_input2 {
+  width: 100%;
+  max-width: 130px;
+  background: rgba(31, 42, 69, 0.7);
+  border: none;
+  color: $white;
+  &:active {
+    border: none;
+  }
+  .ant-input {
+    background: none;
+  }
+  // .ant-input-affix-wrapper {
+  //   background: rgba(31, 42, 69, 0.7);
+  // }
+}
+
+.ant-tooltip {
+  cursor: pointer;
+  .ant-tooltip-arrow {
+    cursor: pointer;
+    .ant-tooltip-arrow-content {
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+      border: 2px solid #303950;
+      border-radius: 10px;
+
+      .dark-mode & {
+        background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+        border: 2px solid #303950;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  .ant-tooltip-inner {
+    cursor: pointer;
+    background-color: $tooltip-bg-light !important;
+    color: $tooltip-color-dark;
+    font-size: 10px;
+    min-height: 18px;
+    padding: 2px 3px;
+    line-height: 13px;
+    border-radius: 3px !important;
+    font-weight: 400;
+    padding: 10px;
+    .dark-mode & {
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+      border: 2px solid #303950;
+      border-radius: 15px;
+      color: $white;
+    }
+  }
+}
+
+.info__circle {
+  cursor: pointer;
+}
+
+.order_table_section {
+  overflow: auto;
+  max-width: 65rem;
+  width: 100%;
 }

@@ -5,11 +5,8 @@ import { Icon } from "../../image/Icon";
 
 const TooltipIcon = (props) => {
   return (
-    <Tooltip
-      overlayClassName="comdex-tooltip"
-      title={props.text || "Tooltip info text"}
-    >
-      <div>
+    <Tooltip overlayClassName="" title={props.text || "Tooltip info text"}>
+      <div className={"info__circle"}>
         <Icon className={"bi bi-info-circle"} />
       </div>
     </Tooltip>

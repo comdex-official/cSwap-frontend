@@ -9,7 +9,6 @@
   td,
   th {
     text-align: left;
-    padding: 8px;
     color: #ffffff;
     padding: 10px 20px;
   }
@@ -18,9 +17,9 @@
     tr:nth-child(1) {
       background-color: transparent;
 
-      // th {
-      //   padding: 0px 30px;
-      // }
+      th {
+        padding: 0px 20px;
+      }
     }
 
     tr {

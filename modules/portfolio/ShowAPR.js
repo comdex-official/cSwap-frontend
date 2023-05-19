@@ -39,8 +39,13 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
             <div key={uuid()}>
               {index < 2 ? (
                 <span className="ml-1">
-                  <NextImage src={iconList?.[list[key]?.denom]?.coinImageUrl} width={30} height={30} alt="" />
-                  {" "}  {list[key]?.master_pool ? "Master Pool - " : "External - "}
+                  <NextImage
+                    src={iconList?.[list[key]?.denom]?.coinImageUrl}
+                    width={30}
+                    height={30}
+                    alt=""
+                  />{" "}
+                  {list[key]?.master_pool ? "Master Pool - " : "External - "}
                   {commaSeparator(
                     (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
                   )}
@@ -58,8 +63,13 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
               title={Object.keys(list)?.map((key) => (
                 <div key={uuid()}>
                   <span className="ml-1">
-                    <NextImage src={iconList?.[list[key]?.denom]?.coinImageUrl} width={30} height={30} alt="" />
-                    {" "}    {list[key]?.master_pool ? "Master Pool - " : "External - "}
+                    <NextImage
+                      src={iconList?.[list[key]?.denom]?.coinImageUrl}
+                      width={30}
+                      height={30}
+                      alt=""
+                    />{" "}
+                    {list[key]?.master_pool ? "Master Pool - " : "External - "}
                     {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
                   </span>
                 </div>
@@ -74,8 +84,13 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
       return Object.keys(list)?.map((key) => (
         <div key={uuid()}>
           <span className="ml-1">
-            <NextImage src={iconList?.[list[key]?.denom]?.coinImageUrl} width={30} height={30} alt="" />
-            {" "}  {list[key]?.master_pool ? "Master Pool - " : "External - "}
+            <NextImage
+              src={iconList?.[list[key]?.denom]?.coinImageUrl}
+              width={30}
+              height={30}
+              alt=""
+            />{" "}
+            {list[key]?.master_pool ? "Master Pool - " : "External - "}
             {commaSeparator(
               (Number(list[key]?.apr) || 0).toFixed(DOLLAR_DECIMALS)
             )}
@@ -95,8 +110,8 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
           size={"small"}
         />
       ) : Number(
-        rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards[0]?.apr
-      ) ? (
+          rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards[0]?.apr
+        ) ? (
         showIndividualAPR(rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards)
       ) : (
         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`

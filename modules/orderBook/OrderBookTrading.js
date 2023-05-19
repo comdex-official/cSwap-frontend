@@ -1,58 +1,110 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
+import styles from "./OrderBook.module.scss";
+import { widget, version } from "../../public/static/charting_library";
+import { Datafeed } from "./static/datafeed";
 
-let tvScriptLoadingPromise;
+function getLanguageFromURL() {
+  const regex = new RegExp("[\\?&]lang=([^&#]*)");
+  const results = regex.exec(window.location.search);
+  return results === null
+    ? null
+    : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
-export default function TradingViewWidget() {
-  const onLoadScriptRef = useRef();
+export class TVChartContainer extends React.PureComponent {
+  static defaultProps = {
+    symbol: "AAPL",
+    interval: "D",
+    datafeedUrl: "https://demo_feed.tradingview.com",
+    libraryPath: "/static/charting_library/",
+    chartsStorageUrl: "https://saveload.tradingview.com",
+    chartsStorageApiVersion: "1.1",
+    clientId: "tradingview.com",
+    userId: "public_user_id",
+    fullscreen: false,
+    autosize: true,
+    studiesOverrides: {},
+    allow_symbol_change: false,
+  };
 
-  useEffect(() => {
-    onLoadScriptRef.current = createWidget;
+  tvWidget = null;
 
-    if (!tvScriptLoadingPromise) {
-      tvScriptLoadingPromise = new Promise((resolve) => {
-        const script = document.createElement("script");
-        script.id = "tradingview-widget-loading-script";
-        script.src = "https://s3.tradingview.com/tv.js";
-        script.type = "text/javascript";
-        script.onload = resolve;
+  constructor(props) {
+    super(props);
+    console.log(this.props.selectedPair);
+    // console.log(Datafeed("CMDX/AKT"));
+    this.ref = React.createRef();
+  }
 
-        document.head.appendChild(script);
+  componentDidMount() {
+    const widgetOptions = {
+      width: "100%",
+      height: "100%",
+      symbol: this.props.symbol,
+      datafeed: Datafeed(
+        this.props.selectedPair
+          ? this.props.selectedPair?.pair_symbol
+          : "CMDX/AKT"
+      ),
+      interval: this.props.interval,
+      container: this.ref.current,
+      library_path: this.props.libraryPath,
+      locale: getLanguageFromURL() || "en",
+      theme: "dark",
+      overrides: {
+        "mainSeriesProperties.style": 2,
+      },
+      disabled_features: [
+        "use_localstorage_for_settings",
+        "left_toolbar",
+        "header_symbol_search",
+        "header_compare",
+      ],
+      enabled_features: ["study_templates"],
+      charts_storage_url: this.props.chartsStorageUrl,
+      charts_storage_api_version: this.props.chartsStorageApiVersion,
+      client_id: this.props.clientId,
+      user_id: this.props.userId,
+      fullscreen: this.props.fullscreen,
+      autosize: true,
+      studies_overrides: this.props.studiesOverrides,
+    };
+
+    const tvWidget = new widget(widgetOptions);
+    this.tvWidget = tvWidget;
+
+    tvWidget.onChartReady(() => {
+      tvWidget.headerReady().then(() => {
+        const button = tvWidget.createButton();
+        button.setAttribute("title", "Click to show a notification popup");
+        button.classList.add("apply-common-tooltip");
+        button.addEventListener("click", () =>
+          tvWidget.showNoticeDialog({
+            title: "Notification",
+            body: "TradingView Charting Library API works correctly",
+            callback: () => {
+              console.log("Noticed!");
+            },
+          })
+        );
+
+        button.innerHTML = "Check API";
       });
-    }
+    });
+  }
 
-    tvScriptLoadingPromise.then(
-      () => onLoadScriptRef.current && onLoadScriptRef.current()
+  componentWillUnmount() {
+    if (this.tvWidget !== null) {
+      this.tvWidget.remove();
+      this.tvWidget = null;
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <div ref={this.ref} className={styles.TVChartContainer} />
+      </>
     );
-
-    return () => (onLoadScriptRef.current = null);
-
-    function createWidget() {
-      if (
-        document.getElementById("tradingview_2bc9b") &&
-        "TradingView" in window
-      ) {
-        new window.TradingView.widget({
-          width: "100%",
-          height: "100%",
-          symbol: "BINANCE:BTCUSDT",
-          timezone: "Etc/UTC",
-          theme: "dark",
-          style: "2",
-          locale: "en",
-          toolbar_bg: "#f1f3f6",
-          enable_publishing: false,
-          withdateranges: true,
-          range: "YTD",
-          allow_symbol_change: true,
-          container_id: "tradingview_2bc9b",
-        });
-      }
-    }
-  }, []);
-
-  return (
-    <div className="tradingview-widget-container">
-      <div id="tradingview_2bc9b" />
-    </div>
-  );
+  }
 }

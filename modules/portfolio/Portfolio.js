@@ -284,68 +284,74 @@ const Portfolio = ({
           </div>
 
           <div
-            className={`${styles.portfolio__element} ${
+            className={`${styles.portfolio__element__footer__down} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
             <div
-              className={`${styles.portfolio__element__upper__title} ${
+              className={`${styles.portfolio__element} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"Total Value"}
+              <div
+                className={`${styles.portfolio__element__upper__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {"Total Value"}
+              </div>
+              <div
+                className={`${styles.portfolio__element__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {getTotalValue()} {variables[lang].USD}
+              </div>
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
+              className={`${styles.portfolio__element} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {getTotalValue()} {variables[lang].USD}
-            </div>
-          </div>
-          <div
-            className={`${styles.portfolio__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <div />
-              {"Asset Balance"}
-            </div>
-            <div
-              className={`${styles.portfolio__element__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
-              {variables[lang].USD}
-            </div>
-          </div>
-          <div
-            className={`${styles.portfolio__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            <div
-              className={`${styles.portfolio__element__upper__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <div /> {"Farm Balance"}
+              <div
+                className={`${styles.portfolio__element__upper__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <div />
+                {"Asset Balance"}
+              </div>
+              <div
+                className={`${styles.portfolio__element__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
+                {variables[lang].USD}
+              </div>
             </div>
             <div
-              className={`${styles.portfolio__element__title} ${
+              className={`${styles.portfolio__element} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {commaSeparator(
-                Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
-              )}{" "}
-              {variables[lang].USD}
+              <div
+                className={`${styles.portfolio__element__upper__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <div className={`${styles.farm}`} /> {"Farm Balance"}
+              </div>
+              <div
+                className={`${styles.portfolio__element__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {commaSeparator(
+                  Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
+                )}{" "}
+                {variables[lang].USD}
+              </div>
             </div>
           </div>
         </div>
