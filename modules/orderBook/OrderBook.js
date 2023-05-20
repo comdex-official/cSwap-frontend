@@ -33,6 +33,7 @@ import Buy from "./Buy";
 import Sell from "./Sell";
 import Script from "next/script";
 import dynamic from "next/dynamic";
+import TradehistoryTable from "./TradehistoryTable";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod.TVChartContainer),
@@ -333,8 +334,6 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
     );
   };
 
-  console.log(selectedPair);
-
   const ordersTablecolumns = [
     {
       title: "Order ID",
@@ -443,6 +442,19 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
   sellOrders = sellOrders.sort((a, b) => {
     return b.price - a.price; // sort descending.
   });
+
+  const orderItems = [
+    {
+      label: "Open Order",
+      key: "1",
+      children: <OrderbookTable openOrdersData={myOrders} />,
+    },
+    {
+      label: "Trade History",
+      key: "2",
+      children: <TradehistoryTable />,
+    },
+  ];
 
   // const dataSource =
   //   sellOrders.length &&
@@ -1097,7 +1109,8 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
           theme === "dark" ? styles.dark : styles.light
         }`}
       >
-        <div
+        <Tabs className="order-tabs" type="card" items={orderItems} />
+        {/* <div
           className={`${styles.orderbook__tab__wrap} ${
             theme === "dark" ? styles.dark : styles.light
           }`}
@@ -1117,7 +1130,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
             {"Trade History"}
           </div>
         </div>
-        <OrderbookTable openOrdersData={myOrders} />
+        <OrderbookTable openOrdersData={myOrders} /> */}
       </div>
     </div>
   );

@@ -55,9 +55,9 @@ const FarmCard = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
+  showMoreData,
+  setshowMoreData,
 }) => {
-  const [showMoreData, setshowMoreData] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
     useState(false);
@@ -232,7 +232,7 @@ const FarmCard = ({
           const userLockedAmount =
             Number(
               queuedAmounts?.length > 0 &&
-              queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
             ) + Number(activeSoftLock?.amount) || 0;
 
           const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
@@ -253,14 +253,14 @@ const FarmCard = ({
                     assetMap[providedTokens?.[0]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[0]?.denom) +
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
                 Number(
                   amountConversion(
                     providedTokens?.[1]?.amount,
                     assetMap[providedTokens?.[1]?.denom]?.decimals
                   )
                 ) *
-                marketPrice(markets, providedTokens?.[1]?.denom);
+                  marketPrice(markets, providedTokens?.[1]?.denom);
               console.log("====================================");
               console.log(totalLiquidityInDollar, pool?.id);
               console.log("====================================");
@@ -298,37 +298,42 @@ const FarmCard = ({
     }
   }, []);
 
-
-
   return (
     <div
-      className={`${styles.farmCard__wrap}  ${theme === "dark" ? styles.dark : styles.light
-        }`}
+      className={`${styles.farmCard__wrap} ${
+        showMoreData ? styles.card__active : ""
+      } ${theme === "dark" ? styles.dark : styles.light}`}
     >
       <Card>
         <div
-          className={`${styles.farmCard__main} ${theme === "dark" ? styles.dark : styles.light
-            }`}
+          className={`${styles.farmCard__main} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
         >
           <div
-            className={`${styles.farmCard__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farmCard__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farmCard__element__left} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element__left} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div
-                className={`${styles.farmCard__element__left__logo__wrap} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__left__logo__wrap} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farmCard__element__left__logo} ${styles.first
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  className={`${styles.farmCard__element__left__logo} ${
+                    styles.first
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__element__left__logo__main} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <NextImage
                       src={
@@ -342,12 +347,14 @@ const FarmCard = ({
                   </div>
                 </div>
                 <div
-                  className={`${styles.farmCard__element__left__logo} ${styles.last
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  className={`${styles.farmCard__element__left__logo} ${
+                    styles.last
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__left__logo__main} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__element__left__logo__main} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <NextImage
                       src={
@@ -362,30 +369,35 @@ const FarmCard = ({
                 </div>
               </div>
               <div
-                className={`${styles.farmCard__element__left__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__left__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 {showPairDenoms()}
               </div>
               <div
-                className={`${styles.farmCard__element__left__description} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__left__description} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 {`Pool #${pool?.id?.toNumber()}`}
               </div>
             </div>
             <div
-              className={`${styles.farmCard__element__right} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element__right} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div
-                className={`${styles.farmCard__element__right__main} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__right__main} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 {pool?.type === 2 ? (
                   <div
-                    className={`${styles.farmCard__element__right__basic} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__element__right__basic} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
@@ -410,9 +422,11 @@ const FarmCard = ({
                           placement="top"
                         >
                           <div
-                            className={`${styles.farmCard__element__right__basic__title
-                              } ${styles.active} ${theme === "dark" ? styles.dark : styles.light
-                              }`}
+                            className={`${
+                              styles.farmCard__element__right__basic__title
+                            } ${styles.active} ${
+                              theme === "dark" ? styles.dark : styles.light
+                            }`}
                           >
                             {"Ranged"}
                           </div>
@@ -422,12 +436,14 @@ const FarmCard = ({
                   </div>
                 ) : pool?.type === 1 ? (
                   <div
-                    className={`${styles.farmCard__element__right__basic} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__element__right__basic} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <div
-                      className={`${styles.farmCard__element__right__basic__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${
+                        styles.farmCard__element__right__basic__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       {"Basic"}
                     </div>
@@ -441,22 +457,26 @@ const FarmCard = ({
                       ) : null} */}
 
                 <div
-                  className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__element__right__pool} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   {getMasterPool() ? (
                     <div
-                      className={`${styles.farmCard__element__right__pool__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       <NextImage src={Pyramid} alt="Logo" />
                       {"Master Pool"}
                     </div>
                   ) : (
                     <div
-                      className={`${styles.farmCard__element__right__pool__title
-                        } ${styles.boost} ${theme === "dark" ? styles.dark : styles.light
-                        }`}
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
                     >
                       <NextImage src={Current} alt="Logo" />
                       {"MP Boost"}
@@ -467,12 +487,14 @@ const FarmCard = ({
 
               {checkExternalIncentives() && (
                 <div
-                  className={`${styles.farmCard__element__right__incentive} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__element__right__incentive} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farmCard__element__right__pool__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${
+                      styles.farmCard__element__right__pool__title
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     <NextImage src={Cup} alt="Logo" />
                     {"External Incentives"}
@@ -482,12 +504,14 @@ const FarmCard = ({
             </div>
           </div>
           <div
-            className={`${styles.farmCard__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farmCard__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farmCard__element__left__title2} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element__left__title2} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"APR"}
             </div>
@@ -544,12 +568,14 @@ const FarmCard = ({
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
-                className={`${styles.farmCard__element__right__details} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__right__details} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farmCard__element__right__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  className={`${
+                    styles.farmCard__element__right__details__title
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   {/* {"14.45%"} */}
                   {commaSeparator(calculateApr() || 0)} %
@@ -557,13 +583,16 @@ const FarmCard = ({
                 </div>
                 {!getMasterPool() && (
                   <div
-                    className={`${styles.farmCard__element__right__pool} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__element__right__pool} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <div
-                      className={`${styles.farmCard__element__right__pool__title
-                        } ${styles.boost} ${theme === "dark" ? styles.dark : styles.light
-                        }`}
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
                     >
                       <NextImage src={Current} alt="Logo" />
                       {/* {"Upto 54.45%"} */}
@@ -575,34 +604,40 @@ const FarmCard = ({
             </Tooltip>
           </div>
           <div
-            className={`${styles.farmCard__element} ${theme === "dark" ? styles.dark : styles.light
-              }`}
+            className={`${styles.farmCard__element} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farmCard__element__left__title2} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element__left__title2} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {"Total Liquidity"}
             </div>
             <div
-              className={`${styles.farmCard__element__right__title} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element__right__title} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {`$${TotalPoolLiquidity}`}
             </div>
           </div>
           {!getMasterPool() && (
             <div
-              className={`${styles.farmCard__element} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__element} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <div
-                className={`${styles.farmCard__element__boost__left} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__boost__left} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farmCard__element__boost__left__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__element__boost__left__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   {"MP Boost"}
                 </div>
@@ -614,8 +649,9 @@ const FarmCard = ({
                   overlayClassName="farm_upto_apr_tooltip"
                 >
                   <div
-                    className={`${styles.farmCard__element__boost__left__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${
+                      styles.farmCard__element__boost__left__description
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     {`Upto ${commaSeparator(fetchMasterPoolAprData() || 0)} %`}
                   </div>
@@ -623,8 +659,9 @@ const FarmCard = ({
               </div>
 
               <div
-                className={`${styles.farmCard__element__boost__right} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__element__boost__right} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
                 onClick={() => setMasterPoolModalOpen(true)}
               >
                 {"Go to Pool"}
@@ -634,20 +671,23 @@ const FarmCard = ({
 
           <div className="farmCard__button">
             <div
-              className={`${styles.farmCard__buttonWrap2} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__buttonWrap2} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               <button onClick={() => showModal()}>Add Liquidity</button>
             </div>
 
             <div
-              className={`${styles.farmCard__details} ${theme === "dark" ? styles.dark : styles.light
-                }`}
+              className={`${styles.farmCard__details} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
               onClick={() => setshowMoreData(!showMoreData)}
             >
               <div
-                className={`${styles.farmCard__details__title} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__details__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 {showMoreData ? "Hide Details" : "Show Details"}
               </div>
@@ -661,29 +701,34 @@ const FarmCard = ({
           </div>
           {showMoreData && (
             <div
-              className={`${styles.farmCard__footer__wrap} ${showMoreData ? styles.active : ""
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+              className={`${styles.farmCard__footer__wrap} ${
+                showMoreData ? styles.active : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               {poolExternalIncentiveData.length > 0 && (
                 <div
-                  className={`${styles.farmCard__footer__main} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__footer__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farmCard__footer__left__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__footer__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {"Estimated rewards earned per day"}
                   </div>
                   <div
-                    className={`${styles.farmCard__footer__rewards} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__footer__rewards} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {poolExternalIncentiveData?.map((singleIncentive) => {
                       return (
                         <div
-                          className={`${styles.farmCard__footer__rewards__title
-                            } ${theme === "dark" ? styles.dark : styles.light}`}
+                          className={`${
+                            styles.farmCard__footer__rewards__title
+                          } ${theme === "dark" ? styles.dark : styles.light}`}
                           key={singleIncentive?.denom}
                         >
                           <NextImage
@@ -715,18 +760,21 @@ const FarmCard = ({
               )}
 
               <div
-                className={`${styles.farmCard__footer__main} ${theme === "dark" ? styles.dark : styles.light
-                  }`}
+                className={`${styles.farmCard__footer__main} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
                 <div
-                  className={`${styles.farmCard__footer__left__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__footer__left__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   {`${showPairDenoms()} LP Farmed`}
                 </div>
                 <div
-                  className={`${styles.farmCard__footer__right__title} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__footer__right__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   $
                   {commaSeparator(
@@ -738,12 +786,14 @@ const FarmCard = ({
               </div>
               {!getMasterPool() && (
                 <div
-                  className={`${styles.farmCard__footer__main} ${theme === "dark" ? styles.dark : styles.light
-                    }`}
+                  className={`${styles.farmCard__footer__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farmCard__footer__left__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__footer__left__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {/* {`${showPairDenoms()} LP Farmed (Master Pool)`} */}
                     {`${denomConversion(
@@ -753,15 +803,16 @@ const FarmCard = ({
                     )} LP Farmed (Master Pool)`}
                   </div>
                   <div
-                    className={`${styles.farmCard__footer__right__title} ${theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    className={`${styles.farmCard__footer__right__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     {" "}
                     $
                     {commaSeparator(
                       Number(
                         userLiquidityInPools?.[
-                        masterPoolData?.id?.toNumber()
+                          masterPoolData?.id?.toNumber()
                         ] || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}

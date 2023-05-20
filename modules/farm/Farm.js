@@ -288,6 +288,8 @@ const Farm = ({
     setMasterPoolModalOpen(false);
   };
 
+  const [showMoreData, setshowMoreData] = useState(false);
+
   useEffect(() => {
     if (isChildPool) {
       let temp = [];
@@ -433,7 +435,7 @@ const Farm = ({
                     }`}
                     onClick={() => setChildPool(!isChildPool)}
                   >
-                    {isChildPool ? "Go to All Pools" :"Go to Child Pools"}
+                    {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
                   </div>
                 </div>
               </div>
@@ -588,15 +590,17 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item) => {
+              {displayPools.map((item, i) => {
                 return (
                   <FarmCard
-                    key={item.id}
+                    key={i}
                     theme={theme}
                     pool={item}
                     poolsApr={poolsApr?.[item?.id?.toNumber()]}
                     poolAprList={poolsApr && poolsApr}
                     masterPoolData={masterPoolData}
+                    showMoreData={showMoreData}
+                    setshowMoreData={setshowMoreData}
                   />
                 );
               })}

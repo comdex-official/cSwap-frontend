@@ -11,7 +11,7 @@ function getLanguageFromURL() {
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-export class TVChartContainer extends React.PureComponent {
+export class TVChartContainer extends React.Component {
   static defaultProps = {
     symbol: "AAPL",
     interval: "D",
@@ -31,9 +31,12 @@ export class TVChartContainer extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    console.log(this.props.selectedPair);
-    // console.log(Datafeed("CMDX/AKT"));
     this.ref = React.createRef();
+
+    this.state = {
+      value: this.props.selectedPair?.pair_symbol,
+    };
+    console.log(this.state.value);
   }
 
   componentDidMount() {
@@ -41,11 +44,7 @@ export class TVChartContainer extends React.PureComponent {
       width: "100%",
       height: "100%",
       symbol: this.props.symbol,
-      datafeed: Datafeed(
-        this.props.selectedPair
-          ? this.props.selectedPair?.pair_symbol
-          : "CMDX/AKT"
-      ),
+      datafeed: Datafeed(this.state.value ? this.state.value : "CMDX/AKT"),
       interval: this.props.interval,
       container: this.ref.current,
       library_path: this.props.libraryPath,
@@ -91,6 +90,12 @@ export class TVChartContainer extends React.PureComponent {
         button.innerHTML = "Check API";
       });
     });
+  }
+
+  componentDidUpdate() {
+    this.state = {
+      value: this.props.selectedPair?.pair_symbol,
+    };
   }
 
   componentWillUnmount() {
