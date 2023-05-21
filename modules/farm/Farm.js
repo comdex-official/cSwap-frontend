@@ -307,8 +307,6 @@ const Farm = ({
     }
   }, [displayPools, isChildPool]);
 
-  const [isAlign, setAlign] = useState(false);
-
   return (
     <div
       className={`${styles.farm__wrap} ${
@@ -590,20 +588,19 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item, i) => {
-                return (
-                  <FarmCard
-                    key={i}
-                    theme={theme}
-                    pool={item}
-                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                    poolAprList={poolsApr && poolsApr}
-                    masterPoolData={masterPoolData}
-                    isAlign={isAlign}
-                    setAlign={setAlign}
-                  />
-                );
-              })}
+              {displayPools &&
+                displayPools.map((item, i) => {
+                  return (
+                    <FarmCard
+                      key={i}
+                      theme={theme}
+                      pool={item}
+                      poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                      poolAprList={poolsApr && poolsApr}
+                      masterPoolData={masterPoolData}
+                    />
+                  );
+                })}
             </div>
           )}
         </div>

@@ -2861,3 +2861,12 @@ a {
     }
   }
 }
+
+.tooltop-all {
+  .ant-tooltip-content {
+    .ant-tooltip-inner {
+      background-color: rgb(254, 67, 80) !important;
+      border: none !important;
+    }
+  }
+}

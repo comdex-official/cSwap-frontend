@@ -534,6 +534,7 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
                   value={selectedPair?.pair_id || null}
                   options={pairs?.map((item) => {
                     return {
+                      key: item?.pair_id,
                       value: item?.pair_id,
                       label: item?.pair_symbol,
                     };

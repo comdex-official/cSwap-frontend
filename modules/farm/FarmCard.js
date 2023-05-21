@@ -55,8 +55,6 @@ const FarmCard = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
-  isAlign,
-  setAlign,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
@@ -688,10 +686,7 @@ const FarmCard = ({
               className={`${styles.farmCard__details} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
-              onClick={() => {
-                setshowMoreData(!showMoreData);
-                setAlign(!showMoreData);
-              }}
+              onClick={() => setshowMoreData(!showMoreData)}
             >
               <div
                 className={`${styles.farmCard__details__title} ${
