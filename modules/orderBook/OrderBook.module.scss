@@ -16,7 +16,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
 
-  @media screen and (max-width: $L) {
+  @media screen and (max-width: $XL) {
     grid-template-columns: repeat(1, 100%);
   }
 }
@@ -34,7 +34,7 @@
 .orderbook__element__middle__upper {
   // grid-row: 1/2;
   // grid-column: 2/3;
-  // @media screen and (max-width: $L) {
+  // @media screen and (max-width: $XL) {
   //   grid-row: auto;
   //   grid-column: auto;
   // }
@@ -46,7 +46,7 @@
 .orderbook__element__middle__lower {
   // grid-row: 2/3;
   // grid-column: 2/3;
-  // @media screen and (max-width: $L) {
+  // @media screen and (max-width: $XL) {
   //   grid-row: auto;
   //   grid-column: auto;
   // }
@@ -61,7 +61,7 @@
   //   height: 75%;
   // }
 
-  // @media screen and (max-width: $L) {
+  // @media screen and (max-width: $XL) {
   //   grid-row: auto;
   //   grid-column: auto;
   //   height: 95%;
@@ -75,7 +75,7 @@
   border-radius: 20px;
   min-width: 650px;
 
-  @media screen and (max-width: $L) {
+  @media screen and (max-width: $XL) {
     min-width: 500px;
     height: 600px;
   }
@@ -116,7 +116,7 @@
       }
     }
   }
-  // @media screen and (max-width: $L) {
+  // @media screen and (max-width: $XL) {
   //   height: 89%;
   // }
 }
@@ -338,9 +338,9 @@
   padding: 15px;
   max-height: 270px;
   overflow: auto;
-  @media screen and (max-width: $XXL) {
-    max-height: 228px;
-  }
+  // @media screen and (max-width: $XXL) {
+  //   max-height: 228px;
+  // }
 }
 
 .TVChartContainer {
@@ -359,9 +359,9 @@
   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
   border: 2px solid #303950;
   border-radius: 20px;
-  height: 87%;
+  height: 82%;
 
-  @media screen and (max-width: $L) {
+  @media screen and (max-width: $XL) {
     height: 100%;
   }
 }

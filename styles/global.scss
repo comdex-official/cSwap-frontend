@@ -2002,7 +2002,7 @@ a {
 }
 
 .farmCard__button {
-  margin-top: auto;
+  // margin-top: auto;
 }
 
 .farm-apr-modal {
@@ -2341,15 +2341,15 @@ a {
           //   display: none;
           // }
           &:first-child {
-            border-width: 1px 0 1px 1px;
-            left: 0% !important;
+            border-width: 0 0 0 1px;
+            left: 20% !important;
           }
           // &:nth-child(2) {
           //   display: none;
           // }
           &:last-child {
-            border-width: 1px 1px 1px 0;
-            left: 100% !important;
+            border-width: 0 1px 0 0;
+            left: 80% !important;
           }
           .dark-mode & {
             border-color: $white;
@@ -2527,12 +2527,13 @@ a {
 .warn-color {
   color: $error-color;
 }
-.row {
+
+.row1 {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  row-gap: 10px;
 }
-.col {
+.col1 {
   flex: 1;
 }
 
@@ -2794,4 +2795,78 @@ a {
   overflow: auto;
   max-width: 65rem;
   width: 100%;
+}
+
+.order-tabs {
+  .ant-tabs-nav {
+    // margin-bottom: 10px;
+    margin-bottom: 0 !important;
+    margin-top: 20px;
+    width: 240px;
+
+    &:before {
+      display: none;
+    }
+
+    .ant-tabs-nav-wrap {
+      width: 100%;
+
+      .ant-tabs-nav-list {
+        border-radius: 20px;
+        border: 1px solid white;
+        padding: 5px;
+        width: 100%;
+        // max-width: 350px;
+
+        .ant-tabs-ink-bar {
+          display: none;
+        }
+
+        .ant-tabs-tab {
+          width: 100%;
+          text-align: center;
+          color: $primary-color;
+          font-weight: 300;
+          font-size: $font-size-base - 2;
+          margin-left: 0;
+
+          padding: 4px 18px;
+          border-radius: 20px;
+          background: none;
+          border: 0;
+          .ant-tabs-tab-btn {
+            width: 100%;
+            color: white;
+
+            .dark-mode & {
+              color: $white;
+            }
+          }
+
+          &:hover {
+            background: rgba($primary-color, 0.5);
+          }
+
+          &.ant-tabs-tab-active {
+            background: $primary-color;
+            border-color: $primary-color;
+
+            .ant-tabs-tab-btn {
+              font-weight: 400;
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.tooltop-all {
+  .ant-tooltip-content {
+    .ant-tooltip-inner {
+      background-color: rgb(254, 67, 80) !important;
+      border: none !important;
+    }
+  }
 }

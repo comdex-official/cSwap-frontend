@@ -433,7 +433,7 @@ const Farm = ({
                     }`}
                     onClick={() => setChildPool(!isChildPool)}
                   >
-                    {isChildPool ? "Go to All Pools" :"Go to Child Pools"}
+                    {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
                   </div>
                 </div>
               </div>
@@ -588,18 +588,19 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item) => {
-                return (
-                  <FarmCard
-                    key={item.id}
-                    theme={theme}
-                    pool={item}
-                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                    poolAprList={poolsApr && poolsApr}
-                    masterPoolData={masterPoolData}
-                  />
-                );
-              })}
+              {displayPools &&
+                displayPools.map((item, i) => {
+                  return (
+                    <FarmCard
+                      key={i}
+                      theme={theme}
+                      pool={item}
+                      poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                      poolAprList={poolsApr && poolsApr}
+                      masterPoolData={masterPoolData}
+                    />
+                  );
+                })}
             </div>
           )}
         </div>

@@ -34,7 +34,7 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           </div>
         </div>
       ) : null}
-      <Row style={{ marginTop: "25px" }}>
+      <Row style={{ marginTop: parent === "pool" ? "25px" : "0" }}>
         <Col>Min Price</Col>
         <Col>
           <span className="mr-2">:</span> {min}
