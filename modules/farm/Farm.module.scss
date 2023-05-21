@@ -388,13 +388,12 @@
 .farmCard__wrap {
   display: flex;
   justify-content: center;
-  // align-items: flex-start;
   max-width: 450px;
-
-  align-items: unset;
-
+  transition: all 0.5s ease-in;
+  height: 333px;
+  overflow: hidden;
   &.card__active {
-    align-items: flex-start;
+    height: 460px;
   }
 
   @media screen and (max-width: $XL) {
@@ -414,6 +413,10 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  &.active {
+    min-height: 32px;
+  }
+
   // margin-top: 20px;
   // align-items: center;
 }
@@ -940,13 +943,6 @@
 .farmCard__footer__wrap {
   display: flex;
   flex-direction: column;
-  // transform: translateY(-129%);
-
-  // transition: 0.3s transform ease-in;
-
-  // &.active{
-  //   transform: translateY(0%);
-  // }
 }
 
 .farmCard__footer__main {

@@ -36,7 +36,7 @@ import dynamic from "next/dynamic";
 import TradehistoryTable from "./TradehistoryTable";
 
 const TVChartContainer = dynamic(
-  () => import("./OrderBookTrading").then((mod) => mod.TVChartContainer),
+  () => import("./OrderBookTrading").then((mod) => mod),
   { ssr: false }
 );
 

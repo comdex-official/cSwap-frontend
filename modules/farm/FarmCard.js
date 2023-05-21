@@ -55,14 +55,15 @@ const FarmCard = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
-  showMoreData,
-  setshowMoreData,
+  isAlign,
+  setAlign,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
     useState(false);
   const [isMasterPoolModalOpen, setMasterPoolModalOpen] = useState(false);
   const [poolExternalIncentiveData, setPoolExternalIncentiveData] = useState();
+  const [showMoreData, setshowMoreData] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -623,51 +624,56 @@ const FarmCard = ({
               {`$${TotalPoolLiquidity}`}
             </div>
           </div>
-          {!getMasterPool() && (
-            <div
-              className={`${styles.farmCard__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.farmCard__element__boost__left} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
+
+          <div
+            className={`${styles.farmCard__element} ${
+              getMasterPool() ? styles.active : ""
+            } ${theme === "dark" ? styles.dark : styles.light}`}
+          >
+            {!getMasterPool() && (
+              <>
                 <div
-                  className={`${styles.farmCard__element__boost__left__title} ${
+                  className={`${styles.farmCard__element__boost__left} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {"MP Boost"}
-                </div>
-                <Tooltip
-                  title={
-                    "Provide equivalent liquidity in the Master pool to earn boost"
-                  }
-                  // className="farm_upto_apr_tooltip"
-                  overlayClassName="farm_upto_apr_tooltip"
-                >
                   <div
                     className={`${
-                      styles.farmCard__element__boost__left__description
+                      styles.farmCard__element__boost__left__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
-                    {`Upto ${commaSeparator(fetchMasterPoolAprData() || 0)} %`}
+                    {"MP Boost"}
                   </div>
-                </Tooltip>
-              </div>
+                  <Tooltip
+                    title={
+                      "Provide equivalent liquidity in the Master pool to earn boost"
+                    }
+                    // className="farm_upto_apr_tooltip"
+                    overlayClassName="farm_upto_apr_tooltip"
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__boost__left__description
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      {`Upto ${commaSeparator(
+                        fetchMasterPoolAprData() || 0
+                      )} %`}
+                    </div>
+                  </Tooltip>
+                </div>
 
-              <div
-                className={`${styles.farmCard__element__boost__right} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-                onClick={() => setMasterPoolModalOpen(true)}
-              >
-                {"Go to Pool"}
-              </div>
-            </div>
-          )}
+                <div
+                  className={`${styles.farmCard__element__boost__right} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                  onClick={() => setMasterPoolModalOpen(true)}
+                >
+                  {"Go to Pool"}
+                </div>
+              </>
+            )}
+          </div>
 
           <div className="farmCard__button">
             <div
@@ -682,7 +688,10 @@ const FarmCard = ({
               className={`${styles.farmCard__details} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
-              onClick={() => setshowMoreData(!showMoreData)}
+              onClick={() => {
+                setshowMoreData(!showMoreData);
+                setAlign(!showMoreData);
+              }}
             >
               <div
                 className={`${styles.farmCard__details__title} ${
@@ -701,9 +710,9 @@ const FarmCard = ({
           </div>
           {showMoreData && (
             <div
-              className={`${styles.farmCard__footer__wrap} ${
-                showMoreData ? styles.active : ""
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              className={`${styles.farmCard__footer__wrap}  ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
               {poolExternalIncentiveData.length > 0 && (
                 <div

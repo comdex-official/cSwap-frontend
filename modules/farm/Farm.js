@@ -288,8 +288,6 @@ const Farm = ({
     setMasterPoolModalOpen(false);
   };
 
-  const [showMoreData, setshowMoreData] = useState(false);
-
   useEffect(() => {
     if (isChildPool) {
       let temp = [];
@@ -308,6 +306,8 @@ const Farm = ({
       updateFilteredData(filterValue);
     }
   }, [displayPools, isChildPool]);
+
+  const [isAlign, setAlign] = useState(false);
 
   return (
     <div
@@ -599,8 +599,8 @@ const Farm = ({
                     poolsApr={poolsApr?.[item?.id?.toNumber()]}
                     poolAprList={poolsApr && poolsApr}
                     masterPoolData={masterPoolData}
-                    showMoreData={showMoreData}
-                    setshowMoreData={setshowMoreData}
+                    isAlign={isAlign}
+                    setAlign={setAlign}
                   />
                 );
               })}
