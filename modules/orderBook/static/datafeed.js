@@ -143,7 +143,7 @@ export const Datafeed = (value) => {
       const urlParameters = {
         pair_id: symbolInfo?.pair_id,
         from: 1633044165,
-        resolution: 21600,
+        resolution: 600,
       };
 
       const query = Object.keys(urlParameters)
