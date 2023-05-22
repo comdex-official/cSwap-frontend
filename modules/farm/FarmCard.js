@@ -532,7 +532,7 @@ const FarmCard = ({
 
                       <div className="upto_apr_tooltip_farm">
                         <span className="text">
-                          Base APR (CMDX. yeild only):
+                          Base APR (CMDX. yield only):
                         </span>
                         <span className="value">
                           {" "}

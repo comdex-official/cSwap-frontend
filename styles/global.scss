@@ -1666,7 +1666,7 @@ a {
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 3px;
     font-weight: 400;
 
     .dark-mode & {
@@ -2002,7 +2002,7 @@ a {
 }
 
 .farmCard__button {
-  // margin-top: auto;
+  margin-top: 10px;
 }
 
 .farm-apr-modal {
@@ -2269,7 +2269,7 @@ a {
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 10px;
     font-weight: 400;
 
     .dark-mode & {
@@ -2280,13 +2280,14 @@ a {
       width: 100%;
       padding: 6px;
       .upto_apr_tooltip_farm {
-        font-size: 10px;
+        font-size: 10.43px;
         margin-bottom: 5px;
         .text {
         }
         .value {
           font-weight: 600;
-          color: #665aa6;
+          color: #f8f8fa;
+          text-shadow: 2px 2px 6px gray;
         }
       }
     }
@@ -2754,13 +2755,24 @@ a {
   cursor: pointer;
   .ant-tooltip-arrow {
     cursor: pointer;
+    &::before {
+      background: gray;
+    }
     .ant-tooltip-arrow-content {
-      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
       border: 2px solid #303950;
       border-radius: 10px;
 
       .dark-mode & {
-        background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
         border: 2px solid #303950;
         border-radius: 10px;
       }
@@ -2769,20 +2781,20 @@ a {
 
   .ant-tooltip-inner {
     cursor: pointer;
-    background-color: $tooltip-bg-light !important;
-    color: $tooltip-color-dark;
+    background: #061e45;
+    border: 1px solid gray;
     font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 15px;
     font-weight: 400;
     padding: 10px;
     .dark-mode & {
-      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-      border: 2px solid #303950;
+      background: #101a35 !important;
+      border: 1px solid gray !important;
       border-radius: 15px;
-      color: $white;
+      color: #b0abab;
     }
   }
 }

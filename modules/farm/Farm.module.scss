@@ -390,10 +390,10 @@
   justify-content: center;
   max-width: 450px;
   transition: all 0.5s ease-in;
-  height: 333px;
+  height: 395px;
   overflow: hidden;
   &.card__active {
-    height: 460px;
+    height: 528px;
   }
 
   @media screen and (max-width: $XL) {
@@ -412,7 +412,7 @@
 .farmCard__element {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   &.active {
     min-height: 32px;
   }
@@ -540,16 +540,16 @@
 
 .farmCard__element__right__basic {
   border-radius: 41px;
-  padding: 2px;
+  padding: 1.2px;
   position: relative;
   background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
   margin-right: 10px;
 }
 
 .farmCard__element__right__basic__title {
-  font-weight: 600;
+  font-weight: 550;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 17px;
   padding: 2px 15px;
   color: #ffffff;
   background: #132239;
@@ -607,15 +607,15 @@
 
 .farmCard__element__right__pool {
   border-radius: 41px;
-  padding: 2px;
+  padding: 1.2px;
   position: relative;
   background: linear-gradient(95.24deg, #70f0af -5.75%, #3fbb7c 110.25%);
 }
 
 .farmCard__element__right__pool__title {
-  font-weight: 600;
+  font-weight: 550;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 17px;
   padding: 2px 15px;
   color: #ffffff;
   background: #132239;
@@ -636,6 +636,8 @@
   // }
 
   &.boost {
+    font-size: 11px;
+    line-height: 18px;
     img {
       margin-left: -5px;
     }
@@ -654,9 +656,9 @@
 }
 
 .farmCard__element__left__title2 {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 22px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 55px;
   color: #b1d2e6;
 
   // @media screen and (max-width: $XXL) {
@@ -681,9 +683,9 @@
 }
 
 .farmCard__element__right__details__title {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 20px;
+  font-weight: 450;
+  font-size: 13px;
+  line-height: 22px;
   color: #ffffff;
   clear: both;
   display: inline-block;
@@ -710,16 +712,16 @@
 
 .farmCard__element__right__incentive {
   border-radius: 41px;
-  padding: 2px;
+  padding: 1.2px;
   position: relative;
   background: linear-gradient(99.47deg, #99e0ef -18.18%, #4e98a8 53.31%);
   margin-top: 10px;
 }
 
 .farmCard__element__right__title {
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 24px;
+  font-weight: 450;
+  font-size: 14px;
+  line-height: 50px;
   color: #ffffff;
 
   // @media screen and (max-width: $XXL) {
@@ -743,9 +745,9 @@
 }
 
 .farmCard__element__boost__left__title {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 22px;
+  font-weight: 520;
+  font-size: 18px;
+  line-height: 27px;
   color: #b1d2e6;
 
   // @media screen and (max-width: $XXL) {
@@ -790,9 +792,9 @@
 
 .farmCard__element__boost__left__description {
   font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 27px;
-  margin-left: 10px;
+  margin-left: 15px;
   color: #68ffc0;
   text-shadow: 2px 2px 8px #68ffc0;
   cursor: pointer;
@@ -814,11 +816,11 @@
 .farmCard__element__boost__right {
   background: #fe4350;
   border: 2px solid #fe4350;
-  border-radius: 40px;
-  font-weight: 400;
-  font-size: 12px;
+  border-radius: 42px;
+  font-weight: 300;
+  font-size: 10px;
   line-height: 19px;
-  padding: 2px 15px;
+  padding: 2.5px 19px;
   text-align: center;
   color: #ffffff;
   cursor: pointer;
