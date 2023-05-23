@@ -5,12 +5,24 @@ const lastBarsCache = new Map();
 // DatafeedConfiguration implementation
 const configurationData = {
   // Represents the resolutions for bars supported by your datafeed
-  supported_resolutions: ["1", "5", "30", "60", "240", "D", "1W", "1M"],
+  supported_resolutions: ["1", "5", "30", "60", "240", "1D", "1W", "1M"],
   // supported_resolutions: ['60', '300', '600', '900', '1800', '3600', '21600', '43200', '64800', '86400', '604800', '2592000'],
 
   resulation: [
     {
-      "1H": "60",
+      1: "60",
+    },
+    {
+      5: "300",
+    },
+    {
+      30: "1800",
+    },
+    {
+      60: "3600",
+    },
+    {
+      240: "3600",
     },
     {
       "1D": "86400",
@@ -19,7 +31,7 @@ const configurationData = {
       "1W": "604800",
     },
     {
-      "1M": "2592000",
+      "1M": "604800",
     },
   ],
   // The `exchanges` arguments are used for the `searchSymbols` method if a user selects the exchange
@@ -44,6 +56,13 @@ const configurationData = {
       value: "crypto",
     },
   ],
+};
+
+const getResolutionValue = (resolution) => {
+  const matchingResolution = configurationData?.resulation.find(
+    (item) => Object.keys(item)[0] === resolution
+  );
+  return matchingResolution ? matchingResolution[resolution] : null;
 };
 
 async function getAllSymbols() {
@@ -139,11 +158,12 @@ export const Datafeed = (value) => {
       // for (const resolutionItem of configurationData?.resulation) {
       //   return (resolutionM = resolutionItem[resolution]);
       // }
-
+      const resolutionValue = getResolutionValue(resolution);
+      console.log(resolutionValue);
       const urlParameters = {
         pair_id: symbolInfo?.pair_id,
         from: 1633044165,
-        resolution: 600,
+        resolution: resolutionValue,
       };
 
       const query = Object.keys(urlParameters)
