@@ -1,10 +1,11 @@
 @import "../../../styles/globalVariable.scss";
 
 .header__wrap {
+  position: relative;
   background: linear-gradient(
     270deg,
-    rgba(26, 37, 94, 0.64) 37.5%,
-    #153356 96.54%
+    rgba(5, 10, 37, 0.64) 37.5%,
+    #0a1d33 96.54%
   );
 }
 
@@ -73,9 +74,9 @@
     }
   }
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
+  @media screen and (max-width: 1130px) {
+    margin-left: 20px;
+  }
 
   // @media screen and (max-width: $XL) {
   //   font-size: 14px;

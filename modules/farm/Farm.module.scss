@@ -4,7 +4,7 @@
   max-width: 1500px;
   margin: auto;
   padding: 40px 80px;
-
+  position: relative;
   @media screen and (max-width: $XS) {
     padding: 20px;
   }
@@ -257,7 +257,7 @@
   // max-width: 90px;
   padding: 2px 20px;
   background: #fe4350;
-  border: 2px solid #fe4350;
+  border: 1px solid #fe4350;
   border-radius: 40px;
   font-weight: 200;
   font-size: 10px;
@@ -269,6 +269,11 @@
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
+
+  &.disabled {
+    cursor: auto;
+    background: transparent;
+  }
 
   // @media screen and (max-width: $XS) {
   //   font-size: 7px;
@@ -382,6 +387,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 22px;
+  margin-left: 10px;
   margin-right: 10px;
   /* identical to box height */
 
@@ -1285,6 +1291,10 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
+
+  &.active {
+    align-items: unset;
+  }
 }
 
 .tradeCard__body__left__item__details {

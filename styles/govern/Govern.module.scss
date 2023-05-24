@@ -4,6 +4,7 @@
   max-width: 1300px;
   margin: auto;
   padding: 0 20px;
+  position: relative;
 
   .govern_main_container {
     .govern_container {
@@ -33,7 +34,7 @@
           display: block;
         }
         .proposal_main_container {
-          background: #020b1ebe;
+          background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
           padding: 25px;
           border-radius: 20px;
           color: white;
@@ -192,8 +193,10 @@
   max-width: 1200px;
   margin: auto;
   padding: 0 20px;
+  position: relative;
 }
 .govern_view_main_container {
+  position: relative;
   max-width: 1200px;
   margin: auto;
   padding: 0 20px;
@@ -203,7 +206,7 @@
   background-color: #020b1e91;
   .govern_view_container {
     .proposal_detail_main_container {
-      background-color: #020b1ebe;
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
       margin-bottom: 2rem;
       padding: 1.2rem 1.4rem;
       border-radius: 20px;
@@ -244,7 +247,7 @@
       }
     }
     .proposal_vote_details_main_container {
-      background-color: #020b1ebe;
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
       padding: 1.2rem 1.4rem;
       border-radius: 20px;
       margin-bottom: 2rem;
@@ -394,6 +397,7 @@
       border: 1px solid white;
       border-radius: 20px;
       padding: 1.2rem 1.4rem;
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
       .proposal_heading {
         font-weight: 700;
         font-size: 1.3rem;
