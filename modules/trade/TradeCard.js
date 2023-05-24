@@ -235,11 +235,11 @@ const TradeCard = ({
         if (result?.pairs[0]?.base_price) {
           setBaseCoinPoolPrice(
             Number(result?.pairs[0]?.base_price) /
-              10 **
-                Math.abs(
-                  getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                    getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-                ),
+            10 **
+            Math.abs(
+              getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+              getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+            ),
             result?.pairs[0]?.base_price
           );
         }
@@ -303,7 +303,7 @@ const TradeCard = ({
             )
           ) +
             Number(value))) *
-          100
+        100
       );
     }
 
@@ -462,11 +462,11 @@ const TradeCard = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value - nativeOfferCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+          amountConversion(
+            value - nativeOfferCoinFee,
+            assetMap[offerCoin?.denom]?.decimals
           )
+        )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance);
@@ -474,11 +474,11 @@ const TradeCard = ({
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value - offerCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+          amountConversion(
+            value - offerCoinFee,
+            assetMap[offerCoin?.denom]?.decimals
           )
+        )
         : handleOfferCoinAmountChange();
     }
   };
@@ -492,8 +492,8 @@ const TradeCard = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
-          )
+          amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
+        )
         : handleOfferCoinAmountChange();
     } else {
       const value = Number(availableBalance / 2);
@@ -501,8 +501,8 @@ const TradeCard = ({
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
-          )
+          amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
+        )
         : handleOfferCoinAmountChange();
     }
   };
@@ -516,11 +516,11 @@ const TradeCard = ({
       setPriceValidationError(
         ValidatePriceInputNumber(
           Number(price) *
-            10 **
-              Math.abs(
-                getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
-                  getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
-              ),
+          10 **
+          Math.abs(
+            getExponent(assetMap[pair?.baseCoinDenom]?.decimals) -
+            getExponent(assetMap[pair?.quoteCoinDenom]?.decimals)
+          ),
           Number(decimalConversion(pair?.lastPrice)),
           Number(decimalConversion(params?.maxPriceLimitRatio))
         )
@@ -646,14 +646,12 @@ const TradeCard = ({
         <Card>
           <div className={styles.tradeCard__main}>
             <div
-              className={`${styles.tradeCard__head} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.tradeCard__head} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               <div
-                className={`${styles.tradeCard__head__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+                className={`${styles.tradeCard__head__title} ${theme === "dark" ? styles.dark : styles.light
+                  }`}
               >
                 <Toggle handleToggleValue={handleToggleValue} />
                 <span>{"Limit Order"}</span>
@@ -680,18 +678,16 @@ const TradeCard = ({
               <div className={styles.tradeCard__body__left}>
                 <div className={styles.tradeCard__body__main}>
                   <div
-                    className={`${styles.tradeCard__body__left__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.tradeCard__body__left__title} ${theme === "dark" ? styles.dark : styles.light
+                      }`}
                   >
                     {toggleValue ? "Sell" : "From"}
                   </div>
 
                   <div className={styles.tradeCard__body__right__el1}>
                     <div
-                      className={`${
-                        styles.tradeCard__body__right__el1__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__right__el1__title
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       {"Available"}{" "}
                       <span>
@@ -703,17 +699,15 @@ const TradeCard = ({
                       </span>
                     </div>
                     <div
-                      className={`${
-                        styles.tradeCard__body__right__el1__description
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__right__el1__description
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                       onClick={() => handleMaxClick()}
                     >
                       {"MAX"}
                     </div>
                     <div
-                      className={`${
-                        styles.tradeCard__body__right__el1__footer
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__right__el1__footer
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                       onClick={() => handleHalfClick()}
                     >
                       {"HALF"}
@@ -740,9 +734,8 @@ const TradeCard = ({
 
                   <div>
                     <div
-                      className={`${styles.tradeCard__body__right__el2} ${
-                        toggleValue ? styles.limit__order : ""
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__right__el2} ${toggleValue ? styles.limit__order : ""
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       <CustomInput
                         value={offerCoin && offerCoin.amount}
@@ -752,16 +745,14 @@ const TradeCard = ({
                       />
                     </div>
                     <div
-                      className={`${styles.tradeCard__body__right__el3} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                      className={`${styles.tradeCard__body__right__el3} ${theme === "dark" ? styles.dark : styles.light
+                        }`}
                     >
                       {pool?.id && showOfferCoinValue()}
                     </div>
                     <div
-                      className={`${styles.tradeCard__body__right__el4} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                      className={`${styles.tradeCard__body__right__el4} ${theme === "dark" ? styles.dark : styles.light
+                        }`}
                     >
                       {pool?.id && showOfferCoinSpotPrice()}
                     </div>
@@ -782,18 +773,16 @@ const TradeCard = ({
               <div className={styles.tradeCard__body__left}>
                 <div className={styles.tradeCard__body__main}>
                   <div
-                    className={`${styles.tradeCard__body__left__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.tradeCard__body__left__title} ${theme === "dark" ? styles.dark : styles.light
+                      }`}
                   >
                     {toggleValue ? "At" : "To"}
                   </div>
 
                   {toggleValue && (
                     <div
-                      className={`${styles.tradeCard__body__limit__body} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                      className={`${styles.tradeCard__body__limit__body} ${theme === "dark" ? styles.dark : styles.light
+                        }`}
                     >
                       {"Base Price: "}
                       <span
@@ -815,9 +804,8 @@ const TradeCard = ({
                 <div className={styles.tradeCard__body__right}>
                   {toggleValue ? (
                     <div
-                      className={`${
-                        styles.tradeCard__body__left__item__toggle_title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__left__item__toggle_title
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       {denomConversion(pair?.quoteCoinDenom)}/
                       {denomConversion(pair?.baseCoinDenom)}
@@ -846,9 +834,8 @@ const TradeCard = ({
                     {toggleValue ? (
                       <>
                         <div
-                          className={`${styles.tradeCard__body__right__el2} ${
-                            toggleValue ? styles.limit__order : ""
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                          className={`${styles.tradeCard__body__right__el2} ${toggleValue ? styles.limit__order : ""
+                            } ${theme === "dark" ? styles.dark : styles.light}`}
                         >
                           <CustomInput
                             onChange={(event) =>
@@ -859,9 +846,8 @@ const TradeCard = ({
                           />
                         </div>
                         <div
-                          className={`${styles.tradeCard__body__limit__body} ${
-                            theme === "dark" ? styles.dark : styles.light
-                          }`}
+                          className={`${styles.tradeCard__body__limit__body} ${theme === "dark" ? styles.dark : styles.light
+                            }`}
                         >
                           {"Tolerance Range: "}{" "}
                           <span className="ml-1 cursor-pointer">
@@ -872,14 +858,14 @@ const TradeCard = ({
                               ),
 
                               10 **
-                                Math.abs(
-                                  getExponent(
-                                    assetMap[pair?.baseCoinDenom]?.decimals
-                                  ) -
-                                    getExponent(
-                                      assetMap[pair?.quoteCoinDenom]?.decimals
-                                    )
+                              Math.abs(
+                                getExponent(
+                                  assetMap[pair?.baseCoinDenom]?.decimals
+                                ) -
+                                getExponent(
+                                  assetMap[pair?.quoteCoinDenom]?.decimals
                                 )
+                              )
                             )}
                           </span>
                         </div>
@@ -887,9 +873,8 @@ const TradeCard = ({
                     ) : (
                       <>
                         <div
-                          className={`${styles.tradeCard__body__right__el2} ${
-                            toggleValue ? styles.limit__order : ""
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                          className={`${styles.tradeCard__body__right__el2} ${toggleValue ? styles.limit__order : ""
+                            } ${theme === "dark" ? styles.dark : styles.light}`}
                         >
                           <CustomInput
                             disabled
@@ -898,16 +883,14 @@ const TradeCard = ({
                           />
                         </div>
                         <div
-                          className={`${styles.tradeCard__body__right__el3} ${
-                            theme === "dark" ? styles.dark : styles.light
-                          }`}
+                          className={`${styles.tradeCard__body__right__el3} ${theme === "dark" ? styles.dark : styles.light
+                            }`}
                         >
                           {pool?.id && showDemandCoinValue()}
                         </div>
                         <div
-                          className={`${styles.tradeCard__body__right__el4} ${
-                            theme === "dark" ? styles.dark : styles.light
-                          }`}
+                          className={`${styles.tradeCard__body__right__el4} ${theme === "dark" ? styles.dark : styles.light
+                            }`}
                         >
                           {pool?.id && showDemandCoinSpotPrice()}
                         </div>
@@ -922,9 +905,8 @@ const TradeCard = ({
               <div className={styles.tradeCard__body__item}>
                 <div className={styles.tradeCard__body__left}>
                   <div
-                    className={`${styles.tradeCard__body__left__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.tradeCard__body__left__title} ${theme === "dark" ? styles.dark : styles.light
+                      }`}
                   >
                     {"And Get"}
                   </div>
@@ -942,9 +924,8 @@ const TradeCard = ({
                       />
                     </div>
                     <div
-                      className={`${styles.tradeCard__body__right__el2} ${
-                        toggleValue ? styles.limit__order : ""
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      className={`${styles.tradeCard__body__right__el2} ${toggleValue ? styles.limit__order : ""
+                        } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
                       <CustomInput
                         disabled
@@ -952,8 +933,8 @@ const TradeCard = ({
                           limitPrice
                             ? reverse
                               ? Number(offerCoin?.amount / limitPrice).toFixed(
-                                  comdex.coinDecimals
-                                )
+                                comdex.coinDecimals
+                              )
                               : demandCoin?.amount
                             : 0
                         }
@@ -969,16 +950,14 @@ const TradeCard = ({
               {toggleValue ? null : (
                 <div className={styles.tradeCard__description__el}>
                   <div
-                    className={`${styles.tradeCard__description__left_title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.tradeCard__description__left_title} ${theme === "dark" ? styles.dark : styles.light
+                      }`}
                   >
                     {"Estimated Slippage"}
                   </div>
                   <div
-                    className={`${styles.tradeCard__description__right_title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${styles.tradeCard__description__right_title} ${theme === "dark" ? styles.dark : styles.light
+                      }`}
                   >
                     {pool?.type === 2 && isFinalSlippage ? ">" : ""}
                     {Number(slippage)?.toFixed(comdex.coinDecimals)}%
@@ -988,16 +967,14 @@ const TradeCard = ({
 
               <div className={styles.tradeCard__description__el}>
                 <div
-                  className={`${styles.tradeCard__description__left_title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.tradeCard__description__left_title} ${theme === "dark" ? styles.dark : styles.light
+                    }`}
                 >
                   {"Swap Fee"}
                 </div>
                 <div
-                  className={`${styles.tradeCard__description__right_title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.tradeCard__description__right_title} ${theme === "dark" ? styles.dark : styles.light
+                    }`}
                 >
                   {Number(decimalConversion(params?.swapFeeRate) || 0) * 100}%
                 </div>
@@ -1005,9 +982,8 @@ const TradeCard = ({
 
               {!toggleValue && (
                 <div
-                  className={`${styles.tradeCard__description__el2} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                  className={`${styles.tradeCard__description__el2} ${theme === "dark" ? styles.dark : styles.light
+                    }`}
                 >
                   {
                     "Note: The requested swap could be completed fully, partially, or cancelled due to price limiting and to maintain pool stability."
@@ -1017,9 +993,8 @@ const TradeCard = ({
             </div>
 
             <div
-              className={`${styles.tradeCard__button__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.tradeCard__button__wrap} ${theme === "dark" ? styles.dark : styles.light
+                }`}
             >
               <CustomButton
                 isLimitOrder={isLimitOrder}
@@ -1046,8 +1021,8 @@ const TradeCard = ({
                   !pool?.id
                     ? "No pool exists"
                     : MAX_SLIPPAGE_TOLERANCE < slippage && !isLimitOrder
-                    ? variables[lang].swap_anyway
-                    : variables[lang].swap
+                      ? variables[lang].swap_anyway
+                      : variables[lang].swap
                 }
               />
             </div>
