@@ -10,12 +10,17 @@ const Timer = ({ expiryTimestamp, text }) => {
 
   return (
     <div className="timer-main">
-      <div className="left-text">{text || ""}</div>
-      <div className="timer-count">
+      <div className="left-text">
+        {text || ""} <span> {hrs?.length === 1 ? "0" + hrs : hrs} Hours</span>
+        <span> {min?.length === 1 ? "0" + min : min} Minutes</span>
+        <span> {sec?.length === 1 ? "0" + sec : sec} Seconds</span>
+      </div>
+      {/* <div className="left-text">{text || ""}</div> */}
+      {/* <div className="timer-count">
         <div className="cols">
           <div className="cols-card">
             <div className="cols-inner">
-              {/* append 0 if length one */}
+            
               {hrs?.length === 1 ? "0" + hrs : hrs}
             </div>
           </div>
@@ -37,7 +42,7 @@ const Timer = ({ expiryTimestamp, text }) => {
           </div>
           <div className="label">Seconds</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

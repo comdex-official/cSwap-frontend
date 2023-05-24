@@ -1,6 +1,7 @@
 @import "../../styles/globalVariable.scss";
 
 .govern_main_container {
+  position: relative;
   .back_button_container {
     display: flex;
     justify-content: flex-end;

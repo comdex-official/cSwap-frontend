@@ -45,7 +45,7 @@
       td {
         border: none;
         overflow: hidden;
-        background: rgba(0, 0, 0, 0.6);
+        background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
         border-top: 1px solid rgba(255, 255, 255, 0.7);
         border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 
@@ -65,7 +65,7 @@
   }
 
   .table__empty__data__wrap {
-    background: rgba(0, 0, 0, 0.6);
+    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0px 4px 14px 3px rgba(128, 99, 138, 0.1);
     border-radius: 20px;

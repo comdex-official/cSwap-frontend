@@ -4,7 +4,7 @@
   max-width: 1500px;
   margin: auto;
   padding: 40px 80px;
-
+  position: relative;
   @media screen and (max-width: $XS) {
     padding: 20px;
   }
@@ -382,6 +382,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 22px;
+  margin-left: 10px;
   margin-right: 10px;
   /* identical to box height */
 
@@ -1285,6 +1286,10 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
+
+  &.active {
+    align-items: unset;
+  }
 }
 
 .tradeCard__body__left__item__details {

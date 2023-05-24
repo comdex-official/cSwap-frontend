@@ -30,6 +30,8 @@ import {
 } from "../../shared/image";
 import Liquidity from "./Liquidity";
 import Lottie from "lottie-react";
+import CreatePool from "./CreatePool/index";
+import Timer from "../../shared/components/Timer";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -321,6 +323,32 @@ const Farm = ({
           theme === "dark" ? styles.dark : styles.light
         }`}
       >
+        {showEligibleDisclaimer && (
+          <div
+            className={
+              isSetOnScroll
+                ? "farm-disclaimer-info"
+                : "fixedHeaderOnScroll farm-disclaimer-info"
+            }
+          >
+            <div className="reward">
+              <Icon className={"bi bi-info-square"} />
+              Users need to farm for 24 hours in order to be eligible for
+              rewards
+              <Icon className={"bi bi-x-lg"} onClick={closeDisclaimer} />
+            </div>
+            <div className="distribution">
+              {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
+                <Timer
+                  text={"Reward distribution in "}
+                  expiryTimestamp={
+                    incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
+                  }
+                />
+              ) : null}
+            </div>
+          </div>
+        )}
         <div
           className={`${styles.farm__header} ${
             theme === "dark" ? styles.dark : styles.light
@@ -637,6 +665,13 @@ const Farm = ({
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
+            <div>
+              <CreatePool
+                refreshData={updatePools}
+                refreshBalance={handleBalanceRefresh}
+              />
+            </div>
+
             <MyDropdown
               items={Items}
               placement={"bottomRight"}

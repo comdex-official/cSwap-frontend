@@ -1,10 +1,11 @@
 @import "../../../styles/globalVariable.scss";
 
 .header__wrap {
+  position: relative;
   background: linear-gradient(
     270deg,
-    rgba(26, 37, 94, 0.64) 37.5%,
-    #153356 96.54%
+    rgba(5, 10, 37, 0.64) 37.5%,
+    #0a1d33 96.54%
   );
 }
 
