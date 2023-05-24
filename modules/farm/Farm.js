@@ -20,13 +20,16 @@ import { denomConversion, fixedDecimal } from "../../utils/coin";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
 import { NextImage } from "../../shared/image/NextImage";
 import {
+  Fire,
   List,
   ListWhite,
   No_Data,
+  Rocket,
   Square,
   SquareWhite,
 } from "../../shared/image";
 import Liquidity from "./Liquidity";
+import Lottie from "lottie-react";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -340,22 +343,129 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
+              <div>
+                {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
+              </div>
+
+              <div
+                className={`${styles.farm__header__left__more} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {"learn more"}
+              </div>
             </div>
             <div
-              className={`${styles.farm__header__left__more} ${
+              className={`${styles.farm__header__right__main} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {"learn more"}
+              <div
+                className={`${styles.farm__header__right__body} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <div
+                  className={`${styles.farm__header__right__body__background} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <div
+                    className={`${styles.farm__header__right__body__step} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div
+                      className={`${styles.farm__header__right__body__title} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {"STEP 1"}
+                    </div>
+                    <div
+                      className={`${styles.farm__header__right__body__button} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                      onClick={() => setMasterPoolModalOpen(true)}
+                    >
+                      {"Go to Pool"}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`${
+                      styles.farm__header__right__body__description
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    {"Provide liquidity in the Master pool"}
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`${styles.farm__header__right__body} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <div
+                  className={`${styles.farm__header__right__body__background} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <div
+                    className={`${styles.farm__header__right__body__step} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div
+                      className={`${styles.farm__header__right__body__title} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {"STEP 2"}
+                    </div>
+                    <div
+                      className={`${styles.farm__header__right__body__button} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                      onClick={() => setChildPool(!isChildPool)}
+                    >
+                      {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`${
+                      styles.farm__header__right__body__description
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    {`Deposit Equal value of assets in Child Pool 
+                    or pools as your Master Pool to 
+                    earn boosted rewards`}
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* <div
+              className={`${styles.farm__header__animation} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
+            >
+              {/* <NextImage src={Fire} alt="Logo" /> */}
+            {/* </div> */}
           </div>
           <div
             className={`${styles.farm__header__body__right} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
-            <div
+            <Lottie
+              animationData={Rocket}
+              loop={true}
+              style={{ height: 300 }}
+            />
+
+            {/* <div
               className={`${styles.farm__header__right__title} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
@@ -433,11 +543,11 @@ const Farm = ({
                     }`}
                     onClick={() => setChildPool(!isChildPool)}
                   >
-                    {isChildPool ? "Go to All Pools" :"Go to Child Pools"}
+                    {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div
@@ -588,18 +698,19 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item) => {
-                return (
-                  <FarmCard
-                    key={item.id}
-                    theme={theme}
-                    pool={item}
-                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                    poolAprList={poolsApr && poolsApr}
-                    masterPoolData={masterPoolData}
-                  />
-                );
-              })}
+              {displayPools &&
+                displayPools.map((item, i) => {
+                  return (
+                    <FarmCard
+                      key={i}
+                      theme={theme}
+                      pool={item}
+                      poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                      poolAprList={poolsApr && poolsApr}
+                      masterPoolData={masterPoolData}
+                    />
+                  );
+                })}
             </div>
           )}
         </div>

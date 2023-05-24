@@ -108,7 +108,21 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
+
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  //   opacity: 0.3;
+  //   border-radius: 20px;
+  // }
 }
+
+
 
 a {
   color: inherit;
@@ -1693,7 +1707,7 @@ a {
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 3px;
     font-weight: 400;
 
     .dark-mode & {
@@ -2029,7 +2043,7 @@ a {
 }
 
 .farmCard__button {
-  margin-top: auto;
+  margin-top: 10px;
 }
 
 .farm-apr-modal {
@@ -2296,7 +2310,7 @@ a {
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 10px;
     font-weight: 400;
 
     .dark-mode & {
@@ -2307,13 +2321,14 @@ a {
       width: 100%;
       padding: 6px;
       .upto_apr_tooltip_farm {
-        font-size: 10px;
+        font-size: 10.43px;
         margin-bottom: 5px;
         .text {
         }
         .value {
           font-weight: 600;
-          color: #665aa6;
+          color: #f8f8fa;
+          text-shadow: 2px 2px 6px gray;
         }
       }
     }
@@ -2368,15 +2383,15 @@ a {
           //   display: none;
           // }
           &:first-child {
-            border-width: 1px 0 1px 1px;
-            left: 0% !important;
+            border-width: 0 0 0 1px;
+            left: 20% !important;
           }
           // &:nth-child(2) {
           //   display: none;
           // }
           &:last-child {
-            border-width: 1px 1px 1px 0;
-            left: 100% !important;
+            border-width: 0 1px 0 0;
+            left: 80% !important;
           }
           .dark-mode & {
             border-color: $white;
@@ -2554,12 +2569,13 @@ a {
 .warn-color {
   color: $error-color;
 }
-.row {
+
+.row1 {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  row-gap: 10px;
 }
-.col {
+.col1 {
   flex: 1;
 }
 
@@ -2780,13 +2796,24 @@ a {
   cursor: pointer;
   .ant-tooltip-arrow {
     cursor: pointer;
+    &::before {
+      background: gray;
+    }
     .ant-tooltip-arrow-content {
-      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
       border: 2px solid #303950;
       border-radius: 10px;
 
       .dark-mode & {
-        background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
         border: 2px solid #303950;
         border-radius: 10px;
       }
@@ -2795,20 +2822,20 @@ a {
 
   .ant-tooltip-inner {
     cursor: pointer;
-    background-color: $tooltip-bg-light !important;
-    color: $tooltip-color-dark;
+    background: #061e45;
+    border: 1px solid gray;
     font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
     line-height: 13px;
-    border-radius: 3px !important;
+    border-radius: 15px;
     font-weight: 400;
     padding: 10px;
     .dark-mode & {
-      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-      border: 2px solid #303950;
+      background: #101a35 !important;
+      border: 1px solid gray !important;
       border-radius: 15px;
-      color: $white;
+      color: #b0abab;
     }
   }
 }
@@ -2821,4 +2848,78 @@ a {
   overflow: auto;
   max-width: 65rem;
   width: 100%;
+}
+
+.order-tabs {
+  .ant-tabs-nav {
+    // margin-bottom: 10px;
+    margin-bottom: 0 !important;
+    margin-top: 20px;
+    width: 240px;
+
+    &:before {
+      display: none;
+    }
+
+    .ant-tabs-nav-wrap {
+      width: 100%;
+
+      .ant-tabs-nav-list {
+        border-radius: 20px;
+        border: 1px solid white;
+        padding: 5px;
+        width: 100%;
+        // max-width: 350px;
+
+        .ant-tabs-ink-bar {
+          display: none;
+        }
+
+        .ant-tabs-tab {
+          width: 100%;
+          text-align: center;
+          color: $primary-color;
+          font-weight: 300;
+          font-size: $font-size-base - 2;
+          margin-left: 0;
+
+          padding: 4px 18px;
+          border-radius: 20px;
+          background: none;
+          border: 0;
+          .ant-tabs-tab-btn {
+            width: 100%;
+            color: white;
+
+            .dark-mode & {
+              color: $white;
+            }
+          }
+
+          &:hover {
+            background: rgba($primary-color, 0.5);
+          }
+
+          &.ant-tabs-tab-active {
+            background: $primary-color;
+            border-color: $primary-color;
+
+            .ant-tabs-tab-btn {
+              font-weight: 400;
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.tooltop-all {
+  .ant-tooltip-content {
+    .ant-tooltip-inner {
+      background-color: rgb(254, 67, 80) !important;
+      border: none !important;
+    }
+  }
 }

@@ -26,6 +26,7 @@ import List from "../../public/assets/images/list.svg";
 import Square from "../../public/assets/images/square.svg";
 import SquareWhite from "../../public/assets/images/squarew.svg";
 import ListWhite from "../../public/assets/images/listw.svg";
+import Rocket from "../../public/assets/animation/rocket.json";
 
 // exports
 export {
@@ -56,4 +57,5 @@ export {
   Square,
   SquareWhite,
   ListWhite,
+  Rocket,
 };

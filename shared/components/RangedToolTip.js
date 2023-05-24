@@ -34,26 +34,30 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           </div>
         </>
       ) : null}
-      <div className="row">
-        <div>Min Price</div>
-        <div className="col">{`:`}</div>
-        <div>{`${min}`}</div>
-      </div>
-      <div className="row">
-        <div>Max Price</div>
-        <div className="col">{`:`}</div>
-        <div>{`${max}`}</div>
-      </div>
-      <div className="row">
-        <div>Current Price</div>
-        <div className="col">{`:`}</div>
-        <div>{`${price}`}</div>
-      </div>
-      <div className="row">
-        <div>AMP</div>
-        <div className="col">{`:`}</div>
-        <div>{amp ? `x${amp}` : ""}</div>
-      </div>
+      <Row>
+        <Col>Min Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {min}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Max Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {max}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Current Price</Col>
+        <Col>
+          <span className="mr-2">:</span> {price}
+        </Col>
+      </Row>
+      <Row>
+        <Col>AMP</Col>
+        <Col>
+          <span className="mr-2">:</span> {amp ? `x${amp}` : ""}
+        </Col>
+      </Row>
     </div>
   );
 };

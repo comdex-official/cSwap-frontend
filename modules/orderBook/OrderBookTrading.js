@@ -11,10 +11,10 @@ function getLanguageFromURL() {
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-export class TVChartContainer extends React.PureComponent {
+export default class TVChartContainer extends React.Component {
   static defaultProps = {
-    symbol: "AAPL",
-    interval: "D",
+    symbol: "ATOM",
+    interval: "1",
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/static/charting_library/",
     chartsStorageUrl: "https://saveload.tradingview.com",
@@ -31,66 +31,66 @@ export class TVChartContainer extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    console.log(this.props.selectedPair);
-    // console.log(Datafeed("CMDX/AKT"));
     this.ref = React.createRef();
   }
 
-  componentDidMount() {
-    const widgetOptions = {
-      width: "100%",
-      height: "100%",
-      symbol: this.props.symbol,
-      datafeed: Datafeed(
-        this.props.selectedPair
-          ? this.props.selectedPair?.pair_symbol
-          : "CMDX/AKT"
-      ),
-      interval: this.props.interval,
-      container: this.ref.current,
-      library_path: this.props.libraryPath,
-      locale: getLanguageFromURL() || "en",
-      theme: "dark",
-      overrides: {
-        "mainSeriesProperties.style": 2,
-      },
-      disabled_features: [
-        "use_localstorage_for_settings",
-        "left_toolbar",
-        "header_symbol_search",
-        "header_compare",
-      ],
-      enabled_features: ["study_templates"],
-      charts_storage_url: this.props.chartsStorageUrl,
-      charts_storage_api_version: this.props.chartsStorageApiVersion,
-      client_id: this.props.clientId,
-      user_id: this.props.userId,
-      fullscreen: this.props.fullscreen,
-      autosize: true,
-      studies_overrides: this.props.studiesOverrides,
-    };
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.selectedPair &&
+      prevProps.selectedPair !== this.props.selectedPair
+    ) {
+      console.log("DDDDD", this.props.selectedPair?.pair_symbol);
+      const widgetOptions = {
+        width: "100%",
+        height: "100%",
+        symbol: this.props.symbol,
+        datafeed: Datafeed(this.props.selectedPair?.pair_symbol),
+        interval: this.props.interval,
+        container: this.ref.current,
+        library_path: this.props.libraryPath,
+        locale: getLanguageFromURL() || "en",
+        theme: "dark",
+        overrides: {
+          "mainSeriesProperties.style": 2,
+        },
+        disabled_features: [
+          "use_localstorage_for_settings",
+          "left_toolbar",
+          "header_symbol_search",
+          "header_compare",
+        ],
+        enabled_features: ["study_templates"],
+        charts_storage_url: this.props.chartsStorageUrl,
+        charts_storage_api_version: this.props.chartsStorageApiVersion,
+        client_id: this.props.clientId,
+        user_id: this.props.userId,
+        fullscreen: this.props.fullscreen,
+        autosize: true,
+        studies_overrides: this.props.studiesOverrides,
+      };
 
-    const tvWidget = new widget(widgetOptions);
-    this.tvWidget = tvWidget;
+      const tvWidget = new widget(widgetOptions);
+      this.tvWidget = tvWidget;
 
-    tvWidget.onChartReady(() => {
-      tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton();
-        button.setAttribute("title", "Click to show a notification popup");
-        button.classList.add("apply-common-tooltip");
-        button.addEventListener("click", () =>
-          tvWidget.showNoticeDialog({
-            title: "Notification",
-            body: "TradingView Charting Library API works correctly",
-            callback: () => {
-              console.log("Noticed!");
-            },
-          })
-        );
+      tvWidget.onChartReady(() => {
+        tvWidget.headerReady().then(() => {
+          const button = tvWidget.createButton();
+          button.setAttribute("title", "Click to show a notification popup");
+          button.classList.add("apply-common-tooltip");
+          button.addEventListener("click", () =>
+            tvWidget.showNoticeDialog({
+              title: "Notification",
+              body: "TradingView Charting Library API works correctly",
+              callback: () => {
+                console.log("Noticed!");
+              },
+            })
+          );
 
-        button.innerHTML = "Check API";
+          button.innerHTML = "Check API";
+        });
       });
-    });
+    }
   }
 
   componentWillUnmount() {

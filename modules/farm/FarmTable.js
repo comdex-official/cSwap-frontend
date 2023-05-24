@@ -253,6 +253,8 @@ const FarmTable = ({
     }
   }, [pool, getUserLiquidity]);
 
+  console.log("_id", poolAprList);
+
   const COLUMNS = [
     {
       Header: "Pool Pair",

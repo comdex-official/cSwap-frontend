@@ -25,7 +25,12 @@ const Copy = ({ text }) => {
         e.stopPropagation();
       }}
     >
-      <Tooltip open={open} color="#FE4350" title="Copied!">
+      <Tooltip
+        open={open}
+        color="#FE4350"
+        title="Copied!"
+        overlayClassName="tooltop-all"
+      >
         <CopyToClipboard onCopy={onCopy} text={text}>
           <div>
             <Icon className={"bi bi-clipboard2"} />
