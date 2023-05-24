@@ -257,7 +257,7 @@
   // max-width: 90px;
   padding: 2px 20px;
   background: #fe4350;
-  border: 2px solid #fe4350;
+  border: 1px solid #fe4350;
   border-radius: 40px;
   font-weight: 200;
   font-size: 10px;
@@ -269,6 +269,11 @@
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
+
+  &.disabled {
+    cursor: auto;
+    background: transparent;
+  }
 
   // @media screen and (max-width: $XS) {
   //   font-size: 7px;

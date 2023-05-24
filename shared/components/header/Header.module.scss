@@ -74,9 +74,9 @@
     }
   }
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
+  @media screen and (max-width: 1130px) {
+    margin-left: 20px;
+  }
 
   // @media screen and (max-width: $XL) {
   //   font-size: 14px;

@@ -9,14 +9,28 @@ import { Input, message, Modal, Radio, Spin, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setPools, setShowEligibleDisclaimer } from "../../actions/liquidity";
+import {
+  setPools,
+  setShowEligibleDisclaimer,
+  setUserLiquidityInPools,
+} from "../../actions/liquidity";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   MASTER_POOL_ID,
 } from "../../constants/common";
-import { fetchRestAPRs, queryPoolsList } from "../../services/liquidity/query";
-import { denomConversion, fixedDecimal } from "../../utils/coin";
+import {
+  fetchRestAPRs,
+  queryPoolCoinDeserialize,
+  queryPoolsList,
+  queryPoolSoftLocks,
+} from "../../services/liquidity/query";
+import {
+  amountConversion,
+  denomConversion,
+  fixedDecimal,
+  getDenomBalance,
+} from "../../utils/coin";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
 import { NextImage } from "../../shared/image/NextImage";
 import {
@@ -32,6 +46,7 @@ import Liquidity from "./Liquidity";
 import Lottie from "lottie-react";
 import CreatePool from "./CreatePool/index";
 import Timer from "../../shared/components/Timer";
+import { marketPrice } from "../../utils/number";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -62,6 +77,12 @@ const Farm = ({
   setShowEligibleDisclaimer,
   showEligibleDisclaimer,
   showMyPool,
+  setUserLiquidityInPools,
+  address,
+  markets,
+  assetMap,
+  balances,
+  pool,
 }) => {
   const theme = "dark";
   const TabData = ["All", "Basic", "Ranged", "My Pools"];
@@ -75,7 +96,7 @@ const Farm = ({
     setActive(item);
   };
 
-  const [inProgress, setInProgress] = useState(false);
+  const [inProgress, setInProgress] = useState(true);
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState("3");
   const [poolsApr, setPoolsApr] = useState();
@@ -97,7 +118,7 @@ const Farm = ({
 
   useEffect(() => {
     const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
-      displayPools?.find(
+      pools?.find(
         (pool) =>
           pool?.id?.toNumber() === Number(poolKey) &&
           Number(userLiquidityInPools[poolKey]) > 0
@@ -105,12 +126,13 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
-    console.log(userPools, userLiquidityInPools);
+    console.log(userLiquidityInPools, pools, "ssssssss");
     setUserPool(userPools);
-  }, [userLiquidityInPools, filterValue, displayPools]);
+  }, [userLiquidityInPools, filterValue, pools, filterValue]);
 
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
+      setChildPool(false);
       if (filterValue !== "3") {
         if (filterValue === "4") {
           setDisplayPools(userPools);
@@ -153,13 +175,14 @@ const Farm = ({
     (offset, limit, countTotal, reverse) => {
       setInProgress(true);
       queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
-        setInProgress(false);
         if (error) {
           message.error(error);
+          setInProgress(false);
           return;
         }
 
         setPools(result.pools);
+        setInProgress(false);
       });
     },
     [setPools]
@@ -222,14 +245,17 @@ const Farm = ({
     {
       key: "1",
       label: "Basic",
+      disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
     {
       key: "2",
       label: "Ranged",
+      disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
     {
       key: "4",
       label: "My Pools",
+      disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
   ];
 
@@ -308,9 +334,9 @@ const Farm = ({
       });
       setDisplayPools(temp);
     } else {
-      updateFilteredData(filterValue);
+      updateFilteredData(filterValue, userPools);
     }
-  }, [displayPools, isChildPool]);
+  }, [isChildPool]);
 
   return (
     <div
@@ -340,7 +366,7 @@ const Farm = ({
             <div className="distribution">
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
                 <Timer
-                  text={"Reward distribution in "}
+                  text={"Next Reward distribution in "}
                   expiryTimestamp={
                     incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
                   }
@@ -453,9 +479,11 @@ const Farm = ({
                     </div>
                     <div
                       className={`${styles.farm__header__right__body__button} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                      onClick={() => setChildPool(!isChildPool)}
+                        filterValue === "2" ?  styles.disabled : ""
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      onClick={() =>
+                        filterValue !== "2" ? setChildPool(!isChildPool) : ""
+                      }
                     >
                       {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
                     </div>
@@ -683,7 +711,7 @@ const Farm = ({
                 }`}
               >
                 <Icon className={"bi bi-funnel-fill"} />
-                {"Filter"}
+                {"Sort By"}
               </div>
             </MyDropdown>
             <div
@@ -720,7 +748,11 @@ const Farm = ({
               />
               {/* ))} */}
             </div>
-          ) : displayPools && displayPools.length <= 0 ? (
+          ) : inProgress ? (
+            <div className={`${styles.table__empty__data__wrap}`}>
+              <Spin size="large" />
+            </div>
+          ) : !inProgress && displayPools.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <div className={`${styles.table__empty__data}`}>
                 <NextImage src={No_Data} alt="Message" />
@@ -733,19 +765,18 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {displayPools &&
-                displayPools.map((item, i) => {
-                  return (
-                    <FarmCard
-                      key={i}
-                      theme={theme}
-                      pool={item}
-                      poolsApr={poolsApr?.[item?.id?.toNumber()]}
-                      poolAprList={poolsApr && poolsApr}
-                      masterPoolData={masterPoolData}
-                    />
-                  );
-                })}
+              {displayPools.map((item, i) => {
+                return (
+                  <FarmCard
+                    key={i}
+                    theme={theme}
+                    pool={item}
+                    poolsApr={poolsApr?.[item?.id?.toNumber()]}
+                    poolAprList={poolsApr && poolsApr}
+                    masterPoolData={masterPoolData}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
@@ -787,7 +818,11 @@ Farm.propTypes = {
 
 const stateToProps = (state) => {
   return {
+    address: state.account.address,
     lang: state.language,
+    markets: state.oracle.market.list,
+    assetMap: state.asset.map,
+    balances: state.account.balances.list,
     pools: state.liquidity.pool.list,
     refreshBalance: state.account.refreshBalance,
     masterPoolMap: state.liquidity.masterPoolMap,
@@ -801,6 +836,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setPools,
   setShowEligibleDisclaimer,
+  setUserLiquidityInPools,
 };
 
 export default connect(stateToProps, actionsToProps)(Farm);

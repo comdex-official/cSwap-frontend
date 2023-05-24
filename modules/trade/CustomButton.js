@@ -229,6 +229,7 @@ const CustomButton = ({
         loading={inProgress}
         className="btn-filled"
         onClick={() => handleSwap()}
+        style={{ padding: "5px 70px" }}
       >
         {name}
       </Button>

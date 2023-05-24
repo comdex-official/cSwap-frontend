@@ -874,10 +874,10 @@ a {
               }
               &:hover {
                 // box-shadow: $box-shadow-inner-light;
-                background: linear-gradient(180deg, #030B1E 0%, #030B1E 100%);
+                background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
                 .dark-mode & {
                   // box-shadow: $box-shadow-inner-dark;
-                  background: linear-gradient(180deg, #030B1E 0%, #030B1E 100%);
+                  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
                 }
               }
             }
@@ -887,15 +887,15 @@ a {
               box-shadow: $box-shadow-inner-light;
               height: 3rem;
               .dark-mode & {
-                background: linear-gradient(180deg, #030B1E 0%, #030B1E 100%);
+                background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
                 box-shadow: none;
               }
               &:hover {
                 // box-shadow: $box-shadow-inner-light-hover;
-                background: linear-gradient(180deg, #030B1E 0%, #030B1E 100%);
+                background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
                 .dark-mode & {
                   // box-shadow: $box-shadow-inner-dark;
-                  background: linear-gradient(180deg, #030B1E 0%, #030B1E 100%);
+                  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
                 }
               }
             }
@@ -3013,6 +3013,8 @@ a {
     align-items: center;
     .left-text {
       span {
+        font-size: 16px;
+        font-weight: 500;
         color: $white;
       }
     }
