@@ -602,16 +602,17 @@ const PortofolioTable = ({
   console.log(checkStar("uatom"));
 
   var res1 = tableData.filter(function (el) {
-    return newTableData && newTableData.indexOf(el?.key) >= 0;
+    return newTableData.length > 0 && newTableData.indexOf(el?.symbol) >= 0;
   });
   var res2 = tableData.filter(function (el) {
-    return newTableData && newTableData.indexOf(el?.key) <= 0;
+    return newTableData.length > 0 && newTableData.indexOf(el?.symbol) < 0;
   });
 
   // const oldTableData =
   //   content !== null &&
   //   tableData?.filter((item) => !content.includes(item?.key));
   const finalTableData = Lodash.concat(res1, res2);
+  console.log(res1, res2, newTableData);
 
   console.log(finalTableData, "fffffff");
   let balanceExists = allTableData?.find(

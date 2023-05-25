@@ -815,9 +815,7 @@
 }
 
 .table__empty__data__wrap {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0px 4px 14px 3px rgba(128, 99, 138, 0.1);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border-radius: 20px;
   display: flex;
   justify-content: center;

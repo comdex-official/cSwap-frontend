@@ -117,8 +117,7 @@ body {
     width: 100%;
     height: 100%;
     background: #000000;
-    opacity: 0.7;
-    // border-radius: 20px;
+    opacity: 0.6;
   }
 }
 
@@ -795,15 +794,30 @@ a {
               color: $dark-color;
               text-align: left !important;
 
-              .ant-table-column-sorter {
-                color: $white;
+              // .ant-table-cell {
+              //   display: flex !important;
+              //   justify-content: flex-start !important;
+              //   align-items: center !important;
+              // }
+              .ant-table-column-sorters{
+                display: flex !important;
+                justify-content: flex-start !important;
+                align-items: center !important;
 
-                .ant-table-column-sorter-inner {
-                  .active {
-                    color: $secondary-color;
+                .ant-table-column-title {
+                  flex: none !important;
+                }
+
+                .ant-table-column-sorter {
+                  color: $white;
+                  .ant-table-column-sorter-inner {
+                    .active {
+                      color: $secondary-color;
+                    }
                   }
                 }
               }
+              
 
               &::before {
                 display: none;
@@ -954,6 +968,10 @@ a {
   display: flex;
   align-items: center;
   gap: 20px;
+
+  &:first-child {
+    cursor: pointer;
+  }
 }
 
 .ant-empty-description {
