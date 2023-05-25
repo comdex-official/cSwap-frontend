@@ -1,7 +1,7 @@
 import { Button, Col, Input, message, Row, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // import NoDataIcon from "../../components/common/NoDataIcon";
 import { setLPPrices, setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -22,7 +22,7 @@ import Withdraw from "./Withdraw";
 import { Icon } from "../../shared/image/Icon";
 import styles from "./Portfolio.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
-import { Hyperlink } from "../../shared/image";
+import { Hyperlink, Star, StarHighlight } from "../../shared/image";
 
 const PortofolioTable = ({
   lang,
@@ -42,10 +42,56 @@ const PortofolioTable = ({
   let theme = "dark";
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
+
   const [searchKey, setSearchKey] = useState();
   const [filterValue, setFilterValue] = useState("1");
 
   const dispatch = useDispatch();
+  const [content, setContent] = useState([]);
+  const newTableData =
+    content !== null &&
+    content.map((el) => {
+      return el.replace(/['"]+/g, "");
+    });
+  const [updateStar, setUpdateStar] = useState(false);
+  // const newTableData2 =
+  //   content !== null &&
+  //   tableData?.filter((item) => {
+  //     newTableData.includes(item?.key);
+  //   });
+
+  const checkStar = (data) => {
+    const dataCheck = newTableData ? newTableData.includes(data) : false;
+    return dataCheck;
+  };
+
+  const onFavourite = (coin) => {
+    console.log(coin);
+
+    if (localStorage.getItem("fav") === null) {
+      localStorage.setItem("fav", JSON.stringify([]));
+    }
+    var old_arr = JSON.parse(localStorage.getItem("fav"));
+    console.log(old_arr);
+    old_arr.push(JSON.stringify(coin));
+    localStorage.setItem("fav", JSON.stringify(old_arr));
+    setUpdateStar(!updateStar);
+  };
+
+  const Delete = (value) => {
+    console.log({ value });
+    let displayItems = JSON.parse(localStorage.getItem("fav"));
+    const index = displayItems.indexOf(value);
+    displayItems.splice(index, 1);
+    localStorage.setItem("fav", JSON.stringify(displayItems));
+    setUpdateStar(!updateStar);
+  };
+
+  useEffect(() => {
+    setContent(JSON.parse(localStorage.getItem("fav")));
+  }, [updateStar]);
+
+  console.log({ content });
 
   const tabItems = [
     {
@@ -100,6 +146,9 @@ const PortofolioTable = ({
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
+      sorter: (a, b) => a?.symbol.localeCompare(b?.symbol),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "No. of Tokens",
@@ -111,6 +160,9 @@ const PortofolioTable = ({
           <p>{commaSeparator(Number(tokens || 0))}</p>
         </>
       ),
+      sorter: (a, b) => Number(a?.noOfTokens) - Number(b?.noOfTokens),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "Price",
@@ -125,6 +177,9 @@ const PortofolioTable = ({
           </p>
         </>
       ),
+      sorter: (a, b) => Number(a?.price?.value) - Number(b?.price?.value),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "Amount",
@@ -141,6 +196,9 @@ const PortofolioTable = ({
           </p>
         </>
       ),
+      sorter: (a, b) => Number(a?.amount?.value) - Number(b?.amount?.value),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "IBC Deposit",
@@ -281,6 +339,23 @@ const PortofolioTable = ({
       asset: (
         <>
           <div className="assets-withicon">
+            {checkStar(comdex?.symbol) ? (
+              <NextImage
+                src={StarHighlight}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => Delete(comdex?.symbol)}
+              />
+            ) : (
+              <NextImage
+                src={Star}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => onFavourite(comdex?.symbol)}
+              />
+            )}
             <div className="assets-icon">
               <div
                 className={`${styles.farmCard__element__left__logo} ${
@@ -322,6 +397,23 @@ const PortofolioTable = ({
       asset: (
         <>
           <div className="assets-withicon">
+            {checkStar(cmst?.symbol) ? (
+              <NextImage
+                src={StarHighlight}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => Delete(cmst?.symbol)}
+              />
+            ) : (
+              <NextImage
+                src={Star}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => onFavourite(cmst?.symbol)}
+              />
+            )}
             <div className="assets-icon">
               <div
                 className={`${styles.farmCard__element__left__logo} ${
@@ -363,6 +455,24 @@ const PortofolioTable = ({
       asset: (
         <>
           <div className="assets-withicon">
+            {checkStar(harbor?.symbol) ? (
+              <NextImage
+                src={StarHighlight}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => Delete(harbor?.symbol)}
+              />
+            ) : (
+              <NextImage
+                src={Star}
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => onFavourite(harbor?.symbol)}
+              />
+            )}
+
             <div className="assets-icon">
               <div
                 className={`${styles.farmCard__element__left__logo} ${
@@ -421,6 +531,23 @@ const PortofolioTable = ({
         asset: (
           <>
             <div className="assets-withicon">
+              {checkStar(item?.symbol) ? (
+                <NextImage
+                  src={StarHighlight}
+                  width={20}
+                  height={20}
+                  alt=""
+                  onClick={() => Delete(item?.symbol)}
+                />
+              ) : (
+                <NextImage
+                  src={Star}
+                  width={20}
+                  height={20}
+                  alt=""
+                  onClick={() => onFavourite(item?.symbol)}
+                />
+              )}
               <div className="assets-icon">
                 <div
                   className={`${styles.farmCard__element__left__logo} ${
@@ -472,6 +599,21 @@ const PortofolioTable = ({
         })
       : tableData;
 
+  console.log(checkStar("uatom"));
+
+  var res1 = tableData.filter(function (el) {
+    return newTableData && newTableData.indexOf(el?.key) >= 0;
+  });
+  var res2 = tableData.filter(function (el) {
+    return newTableData && newTableData.indexOf(el?.key) <= 0;
+  });
+
+  // const oldTableData =
+  //   content !== null &&
+  //   tableData?.filter((item) => !content.includes(item?.key));
+  const finalTableData = Lodash.concat(res1, res2);
+
+  console.log(finalTableData, "fffffff");
   let balanceExists = allTableData?.find(
     (item) => Number(item?.noOfTokens) > 0
   );
@@ -521,7 +663,9 @@ const PortofolioTable = ({
             {/* {filterValue === "1" ? ( */}
             <Table
               className="custom-table assets-table"
-              dataSource={tableData}
+              dataSource={
+                finalTableData.length > 0 ? finalTableData : tableData
+              }
               columns={columns}
               loading={pricesInProgress}
               pagination={false}
