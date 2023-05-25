@@ -22,6 +22,7 @@ import Withdraw from "./Withdraw";
 import { Icon } from "../../shared/image/Icon";
 import styles from "./Portfolio.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
+import { Hyperlink } from "../../shared/image";
 
 const PortofolioTable = ({
   lang,
@@ -158,8 +159,12 @@ const PortofolioTable = ({
               >
                 Deposit{" "}
                 <span className="hyperlink-icon">
-                  {" "}
-                  {/* <SvgIcon name="hyperlink" /> */}
+                  <NextImage
+                    src={Hyperlink}
+                    alt={"Logo"}
+                    height={12}
+                    width={12}
+                  />
                 </span>
               </a>
             </Button>
@@ -189,8 +194,12 @@ const PortofolioTable = ({
               >
                 Withdraw{" "}
                 <span className="hyperlink-icon">
-                  {" "}
-                  {/* <SvgIcon name="hyperlink" /> */}
+                  <NextImage
+                    src={Hyperlink}
+                    alt={"Logo"}
+                    height={12}
+                    width={12}
+                  />
                 </span>
               </a>
             </Button>

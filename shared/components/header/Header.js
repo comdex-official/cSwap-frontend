@@ -10,6 +10,7 @@ import {
   Comodo,
   Faucet,
   Harbor,
+  Hyperlink,
   Logo_Dark,
   Logo_Light,
 } from "../../../shared/image";
@@ -380,10 +381,16 @@ const Header = ({
       key: "item-2",
       label: (
         <div className={styles.dropdown__cSwap__menu}>
-          <button>
+          <button
+            onClick={() =>
+              window.open("https://app.harborprotocol.one/", "_blank")
+            }
+          >
             <NextImage src={Harbor} alt="Logo" />
           </button>
-          <button>
+          <button
+            onClick={() => window.open("https://app.commodo.one/", "_blank")}
+          >
             <NextImage src={Comodo} alt="Logo" />
           </button>
         </div>
@@ -455,6 +462,16 @@ const Header = ({
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
+            <div className={styles.header__faucet}>
+              <div
+                className={`${styles.header__faucet__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {"Buy"}
+              </div>
+            </div>
+
             <MyDropdown
               items={cswapItems}
               placement={"bottomLeft"}
@@ -486,19 +503,27 @@ const Header = ({
             </MyDropdown>
 
             <div
-              className={styles.header__faucet}
+              className={styles.header__cSwap}
               onClick={() =>
                 window.open("https://faucet.comdex.one/", "_blank")
               }
             >
-              <NextImage src={Faucet} alt="Logo_Dark" />
-              <div
-                className={`${styles.header__faucet__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"Faucet"}
+              <div className={styles.header__cSwap__main}>
+                {theme === "dark" ? (
+                  <NextImage src={Faucet} alt="Logo_Dark" />
+                ) : (
+                  <NextImage src={Faucet} alt="Logo_Dark" />
+                )}
+
+                <div
+                  className={`${styles.header__cSwap__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {"Faucet"}
+                </div>
               </div>
+              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
             </div>
 
             {address ? (

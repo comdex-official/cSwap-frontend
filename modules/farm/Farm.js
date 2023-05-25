@@ -479,7 +479,7 @@ const Farm = ({
                     </div>
                     <div
                       className={`${styles.farm__header__right__body__button} ${
-                        filterValue === "2" ?  styles.disabled : ""
+                        filterValue === "2" ? styles.disabled : ""
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                       onClick={() =>
                         filterValue !== "2" ? setChildPool(!isChildPool) : ""
@@ -704,6 +704,7 @@ const Farm = ({
               items={Items}
               placement={"bottomRight"}
               trigger={["click"]}
+              className="farm-sort"
             >
               <div
                 className={`${styles.farm__body__filter__wrap} ${

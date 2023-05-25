@@ -754,3 +754,17 @@
   font-weight: 500;
   color: $white;
 }
+
+.orderbook__wrap__head__title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+
+  span {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #ffffff;
+  }
+}
