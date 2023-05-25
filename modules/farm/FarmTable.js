@@ -343,12 +343,40 @@ const FarmTable = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__basic__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"Ranged"}
+                  <div className="ranged-box">
+                    <div className="ranged-box-inner">
+                      <Tooltip
+                        overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
+                        title={
+                          value?.type === 2 ? (
+                            <RangeTooltipContent
+                              parent={"pool"}
+                              price={Number(
+                                decimalConversion(value?.price)
+                              ).toFixed(PRICE_DECIMALS)}
+                              max={Number(
+                                decimalConversion(value?.maxPrice)
+                              ).toFixed(PRICE_DECIMALS)}
+                              min={Number(
+                                decimalConversion(value?.minPrice)
+                              ).toFixed(PRICE_DECIMALS)}
+                            />
+                          ) : null
+                        }
+                        placement="top"
+                      >
+                        <div
+                          className={`${
+                            styles.farmCard__element__right__basic__title
+                          } ${styles.active} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          <NextImage src={Ranged} />
+                          {"Ranged"}
+                        </div>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
               ) : value?.type === 1 ? (
@@ -429,7 +457,7 @@ const FarmTable = ({
       Cell: ({ value }) => (
         <Tooltip
           title={
-            !getMasterPool() ? (
+            !getMasterPool(value?.id?.toNumber()) ? (
               <>
                 <div className="upto_apr_tooltip_farm_main_container">
                   <div className="upto_apr_tooltip_farm">

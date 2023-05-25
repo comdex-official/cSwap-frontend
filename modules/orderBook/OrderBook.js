@@ -34,13 +34,22 @@ import Sell from "./Sell";
 import Script from "next/script";
 import dynamic from "next/dynamic";
 import TradehistoryTable from "./TradehistoryTable";
+import Toggle from "../../shared/components/toggle/Toggle";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
   { ssr: false }
 );
 
-const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
+const OrderBook = ({
+  markets,
+  balances,
+  assetMap,
+  address,
+  lang,
+  handleToggleValue,
+  toggleValue,
+}) => {
   const theme = "dark";
 
   const TabData = ["Buy", "Sell"];
@@ -503,6 +512,14 @@ const OrderBook = ({ markets, balances, assetMap, address, lang }) => {
         theme === "dark" ? styles.dark : styles.light
       }`}
     >
+      <div
+        className={`${styles.orderbook__wrap__head__title} ${styles.order} ${
+          theme === "dark" ? styles.dark : styles.light
+        }`}
+      >
+        <Toggle value={toggleValue} handleToggleValue={handleToggleValue} />
+        <span>{"Trade"}</span>
+      </div>
       <div
         className={`${styles.orderbook__main} ${
           theme === "dark" ? styles.dark : styles.light

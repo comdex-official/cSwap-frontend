@@ -5,7 +5,7 @@ import { denomConversion } from "../../../utils/coin";
 import NoDataIcon from "../../components/NoDataIcon/index";
 import { Icon } from "../../image/Icon";
 import { NextImage } from "../../image/NextImage";
-import { ATOM } from "../../image";
+import { ATOM, DownArrow } from "../../image";
 
 const Option = Select.Option;
 
@@ -36,7 +36,7 @@ const CustomSelect = ({
       onChange={onChange}
       defaultActiveFirstOption={true}
       notFoundContent={<NoDataIcon />}
-      suffixIcon={<Icon className={"bi bi-chevron-down"} />}
+      suffixIcon={<NextImage src={DownArrow} />}
     >
       {list &&
         list.map((record) => {

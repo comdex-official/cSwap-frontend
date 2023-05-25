@@ -27,6 +27,10 @@ import Square from "../../public/assets/images/square.svg";
 import SquareWhite from "../../public/assets/images/squarew.svg";
 import ListWhite from "../../public/assets/images/listw.svg";
 import Rocket from "../../public/assets/animation/rocket.json";
+import DownArrow from "../../public/assets/images/DownArrow.svg";
+import Hyperlink from "../../public/assets/images/hyperlink.svg";
+import Star from "../../public/assets/images/star.svg";
+import StarHighlight from "../../public/assets/images/star-highlight.svg";
 
 // exports
 export {
@@ -58,4 +62,8 @@ export {
   SquareWhite,
   ListWhite,
   Rocket,
+  DownArrow,
+  Hyperlink,
+  Star,
+  StarHighlight,
 };

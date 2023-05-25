@@ -601,7 +601,8 @@
   border-radius: 41px;
   clear: both;
   display: inline-block;
-
+  display: flex;
+  align-items: center;
   white-space: nowrap;
 
   &.active {
@@ -615,7 +616,10 @@
   // @media screen and (max-width: $XS) {
   //   font-size: 8px;
   // }
-
+  img {
+    height: 14px;
+    margin-right: 5px;
+  }
   &.light {
   }
 

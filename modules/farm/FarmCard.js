@@ -427,6 +427,7 @@ const FarmCard = ({
                               theme === "dark" ? styles.dark : styles.light
                             }`}
                           >
+                            <NextImage src={Ranged} />
                             {"Ranged"}
                           </div>
                         </Tooltip>
@@ -709,45 +710,50 @@ const FarmCard = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {poolExternalIncentiveData.length > 0 && (
-                <div
-                  className={`${styles.farmCard__footer__main} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
+              {poolExternalIncentiveData &&
+                poolExternalIncentiveData.length > 0 && (
                   <div
-                    className={`${styles.farmCard__footer__left__title} ${
+                    className={`${styles.farmCard__footer__main} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {"Estimated rewards earned per day"}
-                  </div>
-                  <div
-                    className={`${styles.farmCard__footer__rewards} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {poolExternalIncentiveData?.map((singleIncentive) => {
-                      return (
-                        <div
-                          className={`${
-                            styles.farmCard__footer__rewards__title
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
-                          key={singleIncentive?.denom}
-                        >
-                          <NextImage
-                            src={
-                              iconList?.[singleIncentive?.denom]?.coinImageUrl
-                            }
-                            width={50}
-                            height={50}
-                            alt=""
-                          />{" "}
-                          ${calculateRewardPerDay(singleIncentive)}
-                        </div>
-                      );
-                    })}
-                    {/* <div
+                    <div
+                      className={`${styles.farmCard__footer__left__title} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {"Estimated rewards earned per day"}
+                    </div>
+                    <div
+                      className={`${styles.farmCard__footer__rewards} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      {poolExternalIncentiveData &&
+                        poolExternalIncentiveData?.map((singleIncentive) => {
+                          return (
+                            <div
+                              className={`${
+                                styles.farmCard__footer__rewards__title
+                              } ${
+                                theme === "dark" ? styles.dark : styles.light
+                              }`}
+                              key={singleIncentive?.denom}
+                            >
+                              <NextImage
+                                src={
+                                  iconList?.[singleIncentive?.denom]
+                                    ?.coinImageUrl
+                                }
+                                width={50}
+                                height={50}
+                                alt=""
+                              />{" "}
+                              ${calculateRewardPerDay(singleIncentive)}
+                            </div>
+                          );
+                        })}
+                      {/* <div
                    className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
                      }`}
                  >
@@ -759,9 +765,9 @@ const FarmCard = ({
                  >
                    <NextImage src={CMDS} alt="" /> {"0.000000"}
                  </div> */}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <div
                 className={`${styles.farmCard__footer__main} ${

@@ -41,7 +41,7 @@ const MyPools = ({
       dataIndex: "assetpair",
       key: "assetpair",
       align: "center",
-      // width: 200,
+      width: 400,
       render: (pool) => <PoolCardRow key={pool?.id} pool={pool} lang={lang} />,
     },
     {
@@ -49,7 +49,7 @@ const MyPools = ({
       dataIndex: "apr",
       key: "apr",
       align: "left",
-      // width: 150,
+      width: 250,
       render: (pool) => (
         <div className="farm-apr-modal portfolio-apr">
           <ShowAPR pool={pool} />
@@ -60,7 +60,7 @@ const MyPools = ({
       title: <>My Liquidity</>,
       dataIndex: "position",
       key: "position",
-      // width: 300,
+      width: 200,
       render: (position) => (
         <div>
           ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}

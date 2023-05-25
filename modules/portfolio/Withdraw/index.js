@@ -242,7 +242,8 @@ const Withdraw = ({
         onClick={showModal}
         className="btn-filled"
       >
-        Withdraw <span className="asset-ibc-btn"> &#62;</span>
+        Withdraw
+        <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
         className="asset-deposit-modal"

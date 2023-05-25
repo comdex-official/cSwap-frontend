@@ -8,6 +8,10 @@
   flex-direction: column;
   width: 100%;
 
+  &.active_orderbook {
+    display: block;
+  }
+
   @media screen and (max-width: $XS) {
     padding: 10px;
   }
@@ -65,6 +69,13 @@
     }
 
     &.dark {
+    }
+
+    &.order {
+      max-width: 1500px;
+      margin: auto;
+      padding: 20px 80px;
+      position: relative;
     }
   }
 }
@@ -683,4 +694,16 @@
   border-radius: 10px;
   padding: 10px;
   color: #ffffff;
+}
+
+.tradeCard__head__orderbook {
+  // margin-top: 20px;
+}
+
+.tradeCard__head__spin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
 }
