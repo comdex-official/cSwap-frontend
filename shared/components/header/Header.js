@@ -462,14 +462,15 @@ const Header = ({
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
-            <div className={styles.header__faucet}>
+            <div className={styles.header__buy}>
               <div
-                className={`${styles.header__faucet__title} ${
+                className={`${styles.header__buy__title} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
                 {"Buy"}
               </div>
+              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
             </div>
 
             <MyDropdown

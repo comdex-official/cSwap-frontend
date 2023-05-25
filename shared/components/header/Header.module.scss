@@ -360,3 +360,55 @@
   text-align: center;
   color: $white;
 }
+
+.header__buy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $red;
+  border-radius: 23px;
+  padding: 5px 10px;
+  width: 70px;
+  margin-right: 10px;
+  cursor: pointer;
+
+  img {
+    height: 15px;
+    width: 15px;
+  }
+
+  // @media screen and (max-width: $XL) {
+  //   width: 110px;
+  // }
+
+  @media screen and (max-width: $XS) {
+    display: none;
+  }
+}
+
+.header__buy__title {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: center;
+
+  &.light {
+    color: $black;
+  }
+
+  &.dark {
+    color: $white;
+  }
+
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 16px;
+  // }
+
+  // @media screen and (max-width: $XL) {
+  //   font-size: 14px;
+  // }
+
+  // @media screen and (max-width: $MIX) {
+  //   font-size: 12px;
+  // }
+}

@@ -518,7 +518,7 @@ const OrderBook = ({
         }`}
       >
         <Toggle value={toggleValue} handleToggleValue={handleToggleValue} />
-        <span>{"Trade"}</span>
+        <span>{"Orderbook"}</span>
       </div>
       <div
         className={`${styles.orderbook__main} ${
