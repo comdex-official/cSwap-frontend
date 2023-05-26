@@ -255,7 +255,7 @@ export const fetchAllTokens = (callback) => {
 export const fetchExchangeRateValue = (appId, pairId, callback) => {
   axios
     .get(
-      `${comdex?.rest}/comdex/liquidity/v1beta1/order_books/${appId}?pair_ids=${pairId}&num_ticks=1`
+      `${comdex?.rest}/comdex/liquidity/v1beta1/order_books/${appId}?pair_ids=${pairId}&num_ticks=50`
     )
     .then((result) => {
       callback(null, result?.data);

@@ -71,7 +71,7 @@
 
 .orderbook__trading__view {
   height: 100%;
-  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
   min-width: 650px;
@@ -98,6 +98,7 @@
 
 .orderbook__trading__part {
   height: 91%;
+
   iframe {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -120,6 +121,13 @@
   // @media screen and (max-width: $XL) {
   //   height: 89%;
   // }
+}
+
+.orderbook__trading__spin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 91%;
 }
 
 .orderbook__tab__wrap {
@@ -154,7 +162,7 @@
 .orderbook__element__middle__upper {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
 }
@@ -220,7 +228,7 @@
   flex-direction: column;
   gap: 8px;
   overflow: auto;
-  max-height: 150px;
+  max-height: 120px;
 
   &.upper {
     margin-top: 10px;
@@ -325,7 +333,7 @@
 .orderbook__element__middle__lower {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
 }
@@ -357,7 +365,7 @@
 .orderbook__element__right {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
   height: 82%;
@@ -626,7 +634,7 @@
 .orderbook__table__body__wrap {
   max-height: 117px;
   overflow: auto;
-  background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
   padding: 12px;
@@ -703,6 +711,9 @@
   letter-spacing: 0.428571px;
 
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 10px;

@@ -648,7 +648,7 @@ const TradeCard = ({
       </div>
     </div>
   );
-  console.log({ toggleValue });
+ 
   return (
     <>
       {loading ? (
