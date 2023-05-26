@@ -21,7 +21,7 @@ import {
   queryUserOrders,
 } from "../../services/liquidity/query";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
-import { Select, Table, Tabs, message } from "antd";
+import { Radio, Select, Spin, Table, Tabs, message, Popover } from "antd";
 import {
   commaSeparator,
   formatNumber,
@@ -35,6 +35,11 @@ import Script from "next/script";
 import dynamic from "next/dynamic";
 import TradehistoryTable from "./TradehistoryTable";
 import Toggle from "../../shared/components/toggle/Toggle";
+import moment from "moment";
+import { orderStatusText } from "../../utils/string";
+import TooltipIcon from "../../shared/components/TooltipIcon";
+import CustomInput from "../../shared/components/CustomInput/index";
+import MyDropdown from "../../shared/components/dropDown/Dropdown";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -63,17 +68,22 @@ const OrderBook = ({
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
   const [myOrders, setMyOrders] = useState([]);
+  const [orderBookData, setOrderBookData] = useState([]);
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState();
   const [cancelInProgress, setCancelInProgress] = useState(false);
+  const [chartLoading, setChartLoading] = useState(true);
+  const [orderLifespan, setOrderLifeSpan] = useState(21600);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
       if (error) {
         return;
+        setChartLoading(false);
       }
 
       setPairs(pairs?.data);
+      setChartLoading(false);
     });
   }, []);
 
@@ -83,6 +93,8 @@ const OrderBook = ({
         if (error) {
           return;
         }
+
+        setOrderBookData(result?.pairs[0]?.order_books);
       });
     }
   }, [selectedPair]);
@@ -456,7 +468,7 @@ const OrderBook = ({
     {
       label: "Open Order",
       key: "1",
-      children: <OrderbookTable openOrdersData={myOrders} />,
+      children: <OrderbookTable openOrdersData={openOrdersData} />,
     },
     {
       label: "Trade History",
@@ -464,26 +476,6 @@ const OrderBook = ({
       children: <TradehistoryTable />,
     },
   ];
-
-  // const dataSource =
-  //   sellOrders.length &&
-  //   sellOrders.map((item, index) => {
-  //     return {
-  //       key: item?.id,
-  //       amount: item?.amount ? amountConversion(item?.amount) : 0,
-  //       price: item?.price ? orderPriceReverseConversion(item.price) : 0,
-  //     };
-  //   });
-
-  // const dataSource2 =
-  //   buyOrders.length &&
-  //   buyOrders.map((item, index) => {
-  //     return {
-  //       key: item?.id,
-  //       amount: item?.amount ? amountConversion(item?.amount) : 0,
-  //       price: item?.price ? orderPriceReverseConversion(item.price) : 0,
-  //     };
-  //   });
 
   // const tabItemsBottom = [
   //   {
@@ -505,6 +497,80 @@ const OrderBook = ({
   //     key: "2",
   //   },
   // ];
+
+  const SettingPopup = (
+    <div className="slippage-tolerance">
+      <div className={"slippage-title"}>
+        <div>Limit order lifespan</div>
+
+        <TooltipIcon text="Your transaction will revert if it is pending for more than this period of time." />
+      </div>
+      <div className="tolerance-bottom">
+        <Radio.Group
+          onChange={(event) => setOrderLifeSpan(event.target.value)}
+          defaultValue="a"
+          value={orderLifespan}
+        >
+          <Radio.Button value={0}>1Block</Radio.Button>
+          <Radio.Button value={21600}>6H</Radio.Button>
+          <Radio.Button value={43200}>12H</Radio.Button>
+          <Radio.Button value={86400}>24H</Radio.Button>
+        </Radio.Group>
+        <div className="input-section lifespan-setting">
+          <CustomInput
+            className="input-cmdx"
+            onChange={(event) => handleOrderLifespanChange(event.target.value)}
+            value={orderLifespan}
+            validationError={false}
+            placeholder="0"
+          />
+          <span className="percent-text">S</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  const [filterValue, setFilterValue] = useState(0);
+
+  useEffect(
+    () => setFilterValue(orderBookData[0]?.price_unit),
+    [orderBookData]
+  );
+
+  const Items = [
+    {
+      key: "item-2",
+      label: (
+        <div className={styles.dropdown__orderbook}>
+          <div className="filter-button-radio">
+            <Radio.Group
+              onChange={(event) => setFilterValue(event.target.value)}
+              defaultValue="a"
+              value={filterValue}
+            >
+              {orderBookData &&
+                orderBookData.map((item) => (
+                  <Radio.Button value={item?.price_unit}>
+                    {Number(item?.price_unit).toFixed(7)}
+                  </Radio.Button>
+                ))}
+            </Radio.Group>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  const checkPrice = (priceUnit) => {
+    const data = orderBookData.filter((item) => item?.price_unit === priceUnit);
+    return data;
+  };
+
+  const BuySellData = checkPrice(filterValue);
+
+  console.log(BuySellData, "result2");
+
+  console.log(orderBookData, "result");
 
   return (
     <div
@@ -579,28 +645,33 @@ const OrderBook = ({
                     styles.header
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {commaSeparator(
-                    formateNumberDecimalsAuto({
-                      price: selectedPair?.price || 0,
-                    })
-                  )}
+                  {"Price"}
                 </div>
                 <div
                   className={`${styles.orderbook__trading__element__title}  ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  =$
-                  {formateNumberDecimalsAuto({
-                    price:
-                      Number(
-                        commaSeparator(
-                          formateNumberDecimalsAuto({
-                            price: selectedPair?.price || 0,
-                          })
-                        )
-                      ) * marketPrice(markets, selectedPair?.base_coin_denom),
-                  })}
+                  <span>
+                    {commaSeparator(
+                      formateNumberDecimalsAuto({
+                        price: selectedPair?.price || 0,
+                      })
+                    )}
+                  </span>
+                  <span>
+                    =$
+                    {formateNumberDecimalsAuto({
+                      price:
+                        Number(
+                          commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: selectedPair?.price || 0,
+                            })
+                          )
+                        ) * marketPrice(markets, selectedPair?.base_coin_denom),
+                    })}
+                  </span>
                 </div>
               </div>
               <div
@@ -683,7 +754,17 @@ const OrderBook = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <TVChartContainer selectedPair={selectedPair} />
+              {chartLoading ? (
+                <div
+                  className={`${styles.orderbook__trading__spin} ${
+                    styles.loos
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  <Spin />
+                </div>
+              ) : (
+                <TVChartContainer selectedPair={selectedPair} />
+              )}
             </div>
           </div>
         </div>
@@ -711,13 +792,22 @@ const OrderBook = ({
                 >
                   {"Order Book"}
                 </div>
-                <div
-                  className={`${styles.orderbook__upper__head__right__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+
+                <MyDropdown
+                  items={Items}
+                  placement={"bottomRight"}
+                  trigger={["click"]}
+                  className="farm-sort"
                 >
-                  {"0.001"} <Icon className={"bi bi-chevron-down"} />
-                </div>
+                  <div
+                    className={`${
+                      styles.orderbook__upper__head__right__title
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    {Number(filterValue).toFixed(7)}{" "}
+                    <Icon className={"bi bi-chevron-down"} />
+                  </div>
+                </MyDropdown>
               </div>
               <div
                 className={`${styles.orderbook__lower__head__main} ${
@@ -745,7 +835,7 @@ const OrderBook = ({
                   </div>
                 </div>
 
-                {sellOrders.length === 0 ? (
+                {BuySellData[0]?.sells.length === 0 ? (
                   <div
                     className={`${
                       styles.orderbook__lower__table__head__title
@@ -756,13 +846,13 @@ const OrderBook = ({
                     {"No Data"}
                   </div>
                 ) : (
-                  sellOrders &&
-                  sellOrders.map((item) => (
+                  BuySellData[0]?.sells &&
+                  BuySellData[0]?.sells.map((item) => (
                     <div
                       className={`${styles.orderbook__lower__head} ${
                         theme === "dark" ? styles.dark : styles.light
                       }`}
-                      key={item.id}
+                      key={item.price}
                     >
                       <div
                         className={`${
@@ -772,7 +862,7 @@ const OrderBook = ({
                         }`}
                       >
                         {item?.price
-                          ? orderPriceReverseConversion(item.price)
+                          ? Number(item.price).toFixed(5).toString()
                           : 0}
                       </div>
                       <div
@@ -780,7 +870,9 @@ const OrderBook = ({
                           styles.orderbook__lower__table__head__title
                         } ${theme === "dark" ? styles.dark : styles.light}`}
                       >
-                        {item?.amount ? amountConversion(item?.amount) : 0}
+                        {item?.user_order_amount
+                          ? amountConversion(item?.user_order_amount)
+                          : 0}
                       </div>
                     </div>
                   ))
@@ -828,7 +920,7 @@ const OrderBook = ({
                 styles.lower
               } ${theme === "dark" ? styles.dark : styles.light}`}
             >
-              {buyOrders.length === 0 ? (
+              {BuySellData[0]?.buys.length === 0 ? (
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
                     styles.no__data
@@ -837,13 +929,13 @@ const OrderBook = ({
                   {"No Data"}
                 </div>
               ) : (
-                buyOrders &&
-                buyOrders.map((item) => (
+                BuySellData[0]?.buys &&
+                BuySellData[0]?.buys.map((item) => (
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
-                    key={item.id}
+                    key={item.price}
                   >
                     <div
                       className={`${
@@ -853,7 +945,7 @@ const OrderBook = ({
                       }`}
                     >
                       {item?.price
-                        ? orderPriceReverseConversion(item.price)
+                        ? Number(item.price).toFixed(5).toString()
                         : 0}
                     </div>
                     <div
@@ -861,7 +953,9 @@ const OrderBook = ({
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {item?.amount ? amountConversion(item?.amount) : 0}
+                      {item?.user_order_amount
+                        ? amountConversion(item?.user_order_amount)
+                        : 0}
                     </div>
                   </div>
                 ))
@@ -974,7 +1068,17 @@ const OrderBook = ({
             >
               {"Spot"}
             </div>
-            <NextImage src={Slider} alt="Logo" />
+            <Popover
+              className="setting-popover"
+              content={SettingPopup}
+              placement="bottomRight"
+              overlayClassName="cmdx-popver"
+              trigger="click"
+            >
+              <div>
+                <NextImage src={Slider} alt="Logo" />
+              </div>
+            </Popover>
           </div>
           <div
             className={`${styles.orderbook__element__right__body__wrap} ${

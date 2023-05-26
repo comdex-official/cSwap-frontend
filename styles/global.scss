@@ -799,7 +799,7 @@ a {
               //   justify-content: flex-start !important;
               //   align-items: center !important;
               // }
-              .ant-table-column-sorters{
+              .ant-table-column-sorters {
                 display: flex !important;
                 justify-content: flex-start !important;
                 align-items: center !important;
@@ -817,7 +817,6 @@ a {
                   }
                 }
               }
-              
 
               &::before {
                 display: none;
@@ -1727,13 +1726,18 @@ a {
   }
 }
 
+.tooltip-icon{
+  cursor: pointer;
+}
+
 .comdex-tooltip {
   cursor: pointer;
+ 
   .ant-tooltip-arrow {
     cursor: pointer;
     .ant-tooltip-arrow-content {
       background: $tooltip-bg-light;
-
+      cursor: pointer;
       .dark-mode & {
         background: $tooltip-bg-light;
       }

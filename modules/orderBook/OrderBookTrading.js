@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from "./OrderBook.module.scss";
-import { widget, version } from "../../public/static/charting_library";
+import { widget } from "../../public/static/charting_library";
 import { Datafeed } from "./static/datafeed";
 
 function getLanguageFromURL() {
@@ -13,8 +13,8 @@ function getLanguageFromURL() {
 
 export default class TVChartContainer extends React.Component {
   static defaultProps = {
-    symbol: "ATOM",
-    interval: "1",
+    symbol: "CMDX/ATOM",
+    interval: "D",
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/static/charting_library/",
     chartsStorageUrl: "https://saveload.tradingview.com",
@@ -39,7 +39,6 @@ export default class TVChartContainer extends React.Component {
       this.props.selectedPair &&
       prevProps.selectedPair !== this.props.selectedPair
     ) {
-      console.log("DDDDD", this.props.selectedPair?.pair_symbol);
       const widgetOptions = {
         width: "100%",
         height: "100%",
@@ -49,6 +48,7 @@ export default class TVChartContainer extends React.Component {
         container: this.ref.current,
         library_path: this.props.libraryPath,
         locale: getLanguageFromURL() || "en",
+
         theme: "dark",
         overrides: {
           "mainSeriesProperties.style": 2,
@@ -59,7 +59,7 @@ export default class TVChartContainer extends React.Component {
           "header_symbol_search",
           "header_compare",
         ],
-        enabled_features: ["study_templates"],
+        enabled_features: ["study_templates", "tick_resolution"],
         charts_storage_url: this.props.chartsStorageUrl,
         charts_storage_api_version: this.props.chartsStorageApiVersion,
         client_id: this.props.clientId,

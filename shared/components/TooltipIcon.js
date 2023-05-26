@@ -9,7 +9,9 @@ const TooltipIcon = (props) => {
       overlayClassName="comdex-tooltip"
       title={props.text || "Tooltip info text"}
     >
-      <Icon className={"bi bi-question-circle"} />
+      <div className="tooltip-icon">
+        <Icon className={"bi bi-question-circle"} />
+      </div>
     </Tooltip>
   );
 };
