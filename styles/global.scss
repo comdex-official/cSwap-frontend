@@ -1726,13 +1726,13 @@ a {
   }
 }
 
-.tooltip-icon{
+.tooltip-icon {
   cursor: pointer;
 }
 
 .comdex-tooltip {
   cursor: pointer;
- 
+
   .ant-tooltip-arrow {
     cursor: pointer;
     .ant-tooltip-arrow-content {
@@ -3304,4 +3304,10 @@ a {
 
 .asset-ibc-btn {
   margin-left: 5px;
+}
+
+.dark-mode:root {
+  --tv-color-platform-background: #222222;
+  --tv-color-pane-background: #222222;
+  --tv-color-pane-background-secondary: #222222;
 }

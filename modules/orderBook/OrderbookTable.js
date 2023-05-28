@@ -2,45 +2,10 @@ import React from "react";
 import styles from "./OrderBook.module.scss";
 import { Table } from "antd";
 
-const OrderbookTable = ({ openOrdersData }) => {
+const OrderbookTable = ({ openOrdersData,ordersTablecolumns }) => {
   const theme = "dark";
 
-  const columns = [
-    {
-      title: "Pair",
-      dataIndex: "Pair",
-      key: "Pair",
-    },
-    {
-      title: "Type",
-      dataIndex: "Type",
-      key: "Type",
-      align: "left",
-    },
-    {
-      title: "Amount",
-      dataIndex: "Amount",
-      key: "Amount",
-      align: "left",
-    },
-    {
-      title: "Price",
-      dataIndex: "Price",
-      key: "Price",
-      align: "left",
-    },
-    {
-      title: "Time",
-      dataIndex: "Time",
-      key: "Time",
-      align: "left",
-    },
-    {
-      title: "Action",
-      dataIndex: "Action",
-      key: "Action",
-    },
-  ];
+  
 
   return (
     <div
@@ -51,7 +16,7 @@ const OrderbookTable = ({ openOrdersData }) => {
       <Table
         className="custom-table assets-table"
         dataSource={openOrdersData}
-        columns={columns}
+        columns={ordersTablecolumns}
         pagination={false}
         scroll={{ x: "100%" }}
       />

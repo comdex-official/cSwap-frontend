@@ -21,7 +21,16 @@ import {
   queryUserOrders,
 } from "../../services/liquidity/query";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
-import { Radio, Select, Spin, Table, Tabs, message, Popover } from "antd";
+import {
+  Radio,
+  Select,
+  Spin,
+  Table,
+  Tabs,
+  message,
+  Popover,
+  Button,
+} from "antd";
 import {
   commaSeparator,
   formatNumber,
@@ -36,10 +45,14 @@ import dynamic from "next/dynamic";
 import TradehistoryTable from "./TradehistoryTable";
 import Toggle from "../../shared/components/toggle/Toggle";
 import moment from "moment";
-import { orderStatusText } from "../../utils/string";
+import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
 import TooltipIcon from "../../shared/components/TooltipIcon";
 import CustomInput from "../../shared/components/CustomInput/index";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
+import { signAndBroadcastTransaction } from "../../services/helper";
+import { defaultFee } from "../../services/transaction";
+import Snack from "../../shared/components/Snack/index";
+import variables from "../../utils/variables";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -297,14 +310,24 @@ const OrderBook = ({
       label: "Buy",
       key: "1",
       children: (
-        <Buy pair={selectedPair} balances={balances} markets={markets} />
+        <Buy
+          pair={selectedPair}
+          balances={balances}
+          markets={markets}
+          orderLifespan={orderLifespan}
+        />
       ),
     },
     {
       label: "Sell",
       key: "2",
       children: (
-        <Sell pair={selectedPair} balances={balances} markets={markets} />
+        <Sell
+          pair={selectedPair}
+          balances={balances}
+          markets={markets}
+          orderLifespan={orderLifespan}
+        />
       ),
     },
   ];
@@ -468,7 +491,12 @@ const OrderBook = ({
     {
       label: "Open Order",
       key: "1",
-      children: <OrderbookTable openOrdersData={openOrdersData} />,
+      children: (
+        <OrderbookTable
+          openOrdersData={openOrdersData}
+          ordersTablecolumns={ordersTablecolumns}
+        />
+      ),
     },
     {
       label: "Trade History",
@@ -551,7 +579,7 @@ const OrderBook = ({
               {orderBookData &&
                 orderBookData.map((item) => (
                   <Radio.Button value={item?.price_unit}>
-                    {Number(item?.price_unit).toFixed(7)}
+                    {Number(item?.price_unit).toFixed(7).replace(/\.?0+$/, "")}
                   </Radio.Button>
                 ))}
             </Radio.Group>
@@ -568,9 +596,9 @@ const OrderBook = ({
 
   const BuySellData = checkPrice(filterValue);
 
-  console.log(BuySellData, "result2");
+  // console.log(BuySellData, "result2");
 
-  console.log(orderBookData, "result");
+  console.log(order, orders, myOrders, "result");
 
   return (
     <div
@@ -804,7 +832,8 @@ const OrderBook = ({
                       styles.orderbook__upper__head__right__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
-                    {Number(filterValue).toFixed(7)}{" "}
+
+                    {!isNaN(Number(filterValue).toFixed(7).replace(/\.?0+$/, '')) ? Number(filterValue).toFixed(7).replace(/\.?0+$/, '') : 0}{" "}
                     <Icon className={"bi bi-chevron-down"} />
                   </div>
                 </MyDropdown>

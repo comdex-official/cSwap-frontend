@@ -20,7 +20,15 @@ import {
 import OrderType from "./OrderType";
 import styles from "./OrderBook.module.scss";
 
-const Buy = ({ pair, balances, markets, address, params, type }) => {
+const Buy = ({
+  pair,
+  balances,
+  markets,
+  orderLifespan,
+  address,
+  params,
+  type,
+}) => {
   const theme = "dark";
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
@@ -57,7 +65,8 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
           : "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
-        orderLifespan: type === "limit" ? { seconds: 21600, nanos: 0 } : "0",
+        orderLifespan:
+          type === "limit" ? { seconds: orderLifespan, nanos: 0 } : "0",
         pairId: Long.fromNumber(pair?.pair_id),
         appId: Long.fromNumber(APP_ID),
         direction: 1,
@@ -324,6 +333,7 @@ const Buy = ({ pair, balances, markets, address, params, type }) => {
 Buy.propTypes = {
   address: PropTypes.string,
   type: PropTypes.string,
+  orderLifespan: PropTypes.number,
   params: PropTypes.shape({
     swapFeeRate: PropTypes.string,
     maxPriceLimitRatio: PropTypes.string,

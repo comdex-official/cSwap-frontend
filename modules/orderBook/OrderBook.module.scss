@@ -97,7 +97,7 @@
 }
 
 .orderbook__trading__part {
-  height: 91%;
+  height: 87.5%;
 
   iframe {
     border-bottom-left-radius: 20px;
@@ -118,9 +118,9 @@
       }
     }
   }
-  // @media screen and (max-width: $XL) {
-  //   height: 89%;
-  // }
+  @media screen and (max-width: $XL) {
+    height: 88.5%;
+  }
 }
 
 .orderbook__trading__spin {
@@ -209,6 +209,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #cdfe43;
+  cursor: pointer;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 10px;
@@ -345,7 +346,7 @@
 
 .orderbook__middle__lower__table {
   padding: 15px;
-  max-height: 270px;
+  max-height: 130px;
   overflow: auto;
   // @media screen and (max-width: $XXL) {
   //   max-height: 228px;
@@ -461,6 +462,9 @@
 }
 
 .orderbook__body__tab__body__balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   font-weight: 600;
   font-size: 10px;
   line-height: 15px;

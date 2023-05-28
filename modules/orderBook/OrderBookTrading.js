@@ -52,7 +52,15 @@ export default class TVChartContainer extends React.Component {
         theme: "dark",
         overrides: {
           "mainSeriesProperties.style": 2,
+          "paneProperties.background": "#030B1E",
+          "paneProperties.backgroundType": "solid",
+          "crossHairProperties.color": "#030B1E",
         },
+        // loading_screen: {
+        //   backgroundColor: "red",
+        // },
+        toolbar_bg: "#030B1E",
+
         disabled_features: [
           "use_localstorage_for_settings",
           "left_toolbar",
