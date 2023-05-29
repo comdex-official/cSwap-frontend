@@ -2,6 +2,7 @@ import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
 import { DEFAULT_FEE } from "../constants/common";
+import axios from "axios";
 
 const httpBatch = new HttpBatchClient(comdex?.rpc, {
   batchSizeLimit: 50,
@@ -122,5 +123,18 @@ export const fetchTxHash = (hash, callback) => {
     })
     .catch((error) => {
       callback(error && error.message);
+    });
+};
+
+export const fetchTradingHistory = (address, type, callback) => {
+  axios
+    .get(
+      `${comdex?.rest}/cosmos/tx/v1beta1/txs?events=message.action='${type}'&message.sender='${address}'&order_by=ORDER_BY_DESC&pagination.offset=0`
+    )
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
     });
 };

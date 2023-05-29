@@ -48,11 +48,13 @@ export default class TVChartContainer extends React.Component {
         container: this.ref.current,
         library_path: this.props.libraryPath,
         locale: getLanguageFromURL() || "en",
-
         theme: "dark",
         overrides: {
           "mainSeriesProperties.style": 2,
+          "paneProperties.background": "#030B1E",
+          "paneProperties.backgroundType": "solid",
         },
+        custom_css_url: "/static/styles/themed.css",
         disabled_features: [
           "use_localstorage_for_settings",
           "left_toolbar",

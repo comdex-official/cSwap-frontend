@@ -16,12 +16,22 @@ import {
 import Long from "long";
 import {
   fetchExchangeRateValue,
+  fetchRecentTrades,
   fetchRestPairs,
   queryOrders,
   queryUserOrders,
 } from "../../services/liquidity/query";
 import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
-import { Radio, Select, Spin, Table, Tabs, message, Popover } from "antd";
+import {
+  Radio,
+  Select,
+  Spin,
+  Table,
+  Tabs,
+  message,
+  Popover,
+  Button,
+} from "antd";
 import {
   commaSeparator,
   formatNumber,
@@ -36,10 +46,14 @@ import dynamic from "next/dynamic";
 import TradehistoryTable from "./TradehistoryTable";
 import Toggle from "../../shared/components/toggle/Toggle";
 import moment from "moment";
-import { orderStatusText } from "../../utils/string";
+import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
 import TooltipIcon from "../../shared/components/TooltipIcon";
 import CustomInput from "../../shared/components/CustomInput/index";
 import MyDropdown from "../../shared/components/dropDown/Dropdown";
+import { signAndBroadcastTransaction } from "../../services/helper";
+import { defaultFee } from "../../services/transaction";
+import Snack from "../../shared/components/Snack/index";
+import variables from "../../utils/variables";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -69,6 +83,7 @@ const OrderBook = ({
   const [selectedPair, setSelectedPair] = useState();
   const [myOrders, setMyOrders] = useState([]);
   const [orderBookData, setOrderBookData] = useState([]);
+  const [recentTrade, setRecentTrade] = useState([]);
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState();
   const [cancelInProgress, setCancelInProgress] = useState(false);
@@ -99,6 +114,18 @@ const OrderBook = ({
     }
   }, [selectedPair]);
 
+  useEffect(() => {
+    if (selectedPair?.pair_id) {
+      fetchRecentTrades(selectedPair?.pair_id, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        setRecentTrade(result);
+      });
+    }
+  }, [selectedPair]);
+  console.log(recentTrade);
   useEffect(() => {
     if (pairs?.length) {
       setSelectedPair(pairs[0]);
@@ -297,14 +324,24 @@ const OrderBook = ({
       label: "Buy",
       key: "1",
       children: (
-        <Buy pair={selectedPair} balances={balances} markets={markets} />
+        <Buy
+          pair={selectedPair}
+          balances={balances}
+          markets={markets}
+          orderLifespan={orderLifespan}
+        />
       ),
     },
     {
       label: "Sell",
       key: "2",
       children: (
-        <Sell pair={selectedPair} balances={balances} markets={markets} />
+        <Sell
+          pair={selectedPair}
+          balances={balances}
+          markets={markets}
+          orderLifespan={orderLifespan}
+        />
       ),
     },
   ];
@@ -468,7 +505,12 @@ const OrderBook = ({
     {
       label: "Open Order",
       key: "1",
-      children: <OrderbookTable openOrdersData={openOrdersData} />,
+      children: (
+        <OrderbookTable
+          openOrdersData={openOrdersData}
+          ordersTablecolumns={ordersTablecolumns}
+        />
+      ),
     },
     {
       label: "Trade History",
@@ -551,7 +593,9 @@ const OrderBook = ({
               {orderBookData &&
                 orderBookData.map((item) => (
                   <Radio.Button value={item?.price_unit}>
-                    {Number(item?.price_unit).toFixed(7)}
+                    {Number(item?.price_unit)
+                      .toFixed(7)
+                      .replace(/\.?0+$/, "")}
                   </Radio.Button>
                 ))}
             </Radio.Group>
@@ -568,9 +612,17 @@ const OrderBook = ({
 
   const BuySellData = checkPrice(filterValue);
 
-  console.log(BuySellData, "result2");
+  const matchBuySell = (baseCoin, assetCoin) => {
+    if (baseCoin === assetCoin) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-  console.log(orderBookData, "result");
+  // console.log(BuySellData, "result2");
+
+  console.log(order, orders, myOrders, "result");
 
   return (
     <div
@@ -804,7 +856,15 @@ const OrderBook = ({
                       styles.orderbook__upper__head__right__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
-                    {Number(filterValue).toFixed(7)}{" "}
+                    {!isNaN(
+                      Number(filterValue)
+                        .toFixed(7)
+                        .replace(/\.?0+$/, "")
+                    )
+                      ? Number(filterValue)
+                          .toFixed(7)
+                          .replace(/\.?0+$/, "")
+                      : 0}{" "}
                     <Icon className={"bi bi-chevron-down"} />
                   </div>
                 </MyDropdown>
@@ -861,15 +921,25 @@ const OrderBook = ({
                           theme === "dark" ? styles.dark : styles.light
                         }`}
                       >
-                        {item?.price
-                          ? Number(item.price).toFixed(5).toString()
-                          : 0}
+                        $
+                        {formateNumberDecimalsAuto({
+                          price:
+                            Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ) *
+                            marketPrice(markets, selectedPair?.base_coin_denom),
+                        })}
                       </div>
                       <div
                         className={`${
                           styles.orderbook__lower__table__head__title
                         } ${theme === "dark" ? styles.dark : styles.light}`}
                       >
+                        $
                         {item?.user_order_amount
                           ? amountConversion(item?.user_order_amount)
                           : 0}
@@ -944,15 +1014,25 @@ const OrderBook = ({
                         theme === "dark" ? styles.dark : styles.light
                       }`}
                     >
-                      {item?.price
-                        ? Number(item.price).toFixed(5).toString()
-                        : 0}
+                      $
+                      {formateNumberDecimalsAuto({
+                        price:
+                          Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ) *
+                          marketPrice(markets, selectedPair?.base_coin_denom),
+                      })}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
+                      $
                       {item?.user_order_amount
                         ? amountConversion(item?.user_order_amount)
                         : 0}
@@ -1014,39 +1094,68 @@ const OrderBook = ({
                 </div>
               </div>
 
-              {recentTradesdataSource &&
-                recentTradesdataSource.map((item) => (
+              {recentTrade.length === 0 ? (
+                <div
+                  className={`${styles.orderbook__lower__table__head__title} ${
+                    styles.no__data
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  {"No Data"}
+                </div>
+              ) : (
+                recentTrade &&
+                recentTrade.map((item, i) => (
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       styles.lower
                     }  ${theme === "dark" ? styles.dark : styles.light}`}
-                    key={item.id}
+                    key={i}
                   >
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
-                      } ${styles.profit}  ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                      } ${
+                        matchBuySell(
+                          item?.pair?.base_coin?.base_denom,
+                          item?.asset_in?.denom
+                        )
+                          ? styles.loss
+                          : styles.profit
+                      }  ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"$100.00"}
+                      $
+                      {formateNumberDecimalsAuto({
+                        price:
+                          Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ) *
+                          marketPrice(markets, selectedPair?.base_coin_denom),
+                      })}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"$855.00"}
+                      $
+                      {item?.asset_in
+                        ? amountConversion(item?.asset_in?.amount)
+                        : 0}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"18:49:44"}
+                      {moment(item?.timestamp).format("h:mm:ss")}
                     </div>
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
         </div>

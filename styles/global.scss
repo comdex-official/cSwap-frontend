@@ -335,7 +335,7 @@ a {
         #030b1e 0%,
         rgba(3, 11, 30, 0.71) 100%
       );
-      border: 2px solid #303950;
+      // border: 2px solid #303950;
       border-radius: 12px;
       padding: 0;
 
@@ -793,6 +793,8 @@ a {
               font-size: $font-size-sm + 3;
               color: $dark-color;
               text-align: left !important;
+              clear: both;
+              white-space: nowrap;
 
               // .ant-table-cell {
               //   display: flex !important;
@@ -1726,13 +1728,13 @@ a {
   }
 }
 
-.tooltip-icon{
+.tooltip-icon {
   cursor: pointer;
 }
 
 .comdex-tooltip {
   cursor: pointer;
- 
+
   .ant-tooltip-arrow {
     cursor: pointer;
     .ant-tooltip-arrow-content {
