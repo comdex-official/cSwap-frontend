@@ -4,11 +4,16 @@ import { Table, message } from "antd";
 import Date from "../portfolio/Date";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { generateHash, truncateString } from "../../utils/string";
-import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
+import {
+  abbreviateMessage,
+  fetchTradingHistory,
+  fetchTxHistory,
+} from "../../services/transaction";
 import { setTransactionHistory } from "../../actions/account";
 import { connect } from "react-redux";
 import { comdex } from "../../config/network";
 import Copy from "../../shared/components/Copy";
+import moment from "moment";
 
 const columns = [
   {
@@ -22,7 +27,7 @@ const columns = [
     dataIndex: "date",
     key: "date",
     width: 300,
-    render: (height) => <Date height={height} />,
+    render: (date) => moment(date).format("MMMM Do YYYY h:mm:ss"),
   },
   // {
   //   title: "Height",
@@ -39,39 +44,78 @@ const columns = [
   },
 ];
 
-const TradehistoryTable = ({ address, setTransactionHistory, history }) => {
+const TradehistoryTable = ({ address }) => {
   const theme = "dark";
 
   const [inProgress, setInProgress] = useState(false);
-  const [pageNumber, setpageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [orderTxResponse, setOrderTxResponse] = useState([]);
+  const [orderTx, setOrderTx] = useState([]);
+  const [limitOrderTx, setLimitOrderTx] = useState([]);
+  const [limitOrderTxResponse, setLimitOrderTxResponse] = useState([]);
+  // const [pageNumber, setpageNumber] = useState(1);
+  // const [pageSize, setPageSize] = useState(5);
 
   const getTransactions = useCallback(
-    (address, pageNumber, pageSize) => {
+    (address) => {
       setInProgress(true);
-      fetchTxHistory(address, pageNumber, pageSize, (error, result) => {
-        setInProgress(false);
-        if (error) {
-          message.error(error);
-          return;
-        }
+      fetchTradingHistory(
+        address,
+        "/comdex.liquidity.v1beta1.MsgMarketOrder",
+        (error, result) => {
+          setInProgress(false);
+          if (error) {
+            message.error(error);
+            return;
+          }
 
-        setTransactionHistory(result.txs, result.totalCount);
-      });
+          setOrderTxResponse(result?.tx_responses);
+          setOrderTx(result?.txs);
+        }
+      );
     },
-    [setTransactionHistory]
+    [address]
+  );
+
+  const getTransactions2 = useCallback(
+    (address) => {
+      setInProgress(true);
+      fetchTradingHistory(
+        address,
+        "/comdex.liquidity.v1beta1.MsgLimitOrder",
+        (error, result) => {
+          setInProgress(false);
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          setLimitOrderTxResponse(result?.tx_responses);
+          setLimitOrderTx(result?.txs);
+        }
+      );
+    },
+    [address]
   );
 
   useEffect(() => {
-    getTransactions(address, pageNumber, pageSize);
-  }, [address, getTransactions, pageNumber, pageSize]);
+    getTransactions(address);
+    getTransactions2(address);
+  }, [address, getTransactions, getTransactions2]);
+
+  const allTx = [...orderTx, ...limitOrderTx];
+  const allTxResponse = [...orderTxResponse, ...limitOrderTxResponse];
+
+  const combinedTx = allTxResponse.map((item, index) => ({
+    tx: item?.txhash,
+    time: item?.timeStamp,
+    details: allTx[index]?.body?.messages[0],
+  }));
+
+  console.log(combinedTx, "hdhhhd");
 
   const tableData =
-    history?.list?.length &&
-    history?.list?.map((item, index) => {
-      const decodedTransaction = decodeTxRaw(item.tx);
-      const hash = generateHash(item.tx);
-
+    combinedTx?.length &&
+    combinedTx?.map((item, index) => {
       return {
         key: index,
         transactionHash: (
@@ -85,38 +129,27 @@ const TradehistoryTable = ({ address, setTransactionHistory, history }) => {
                 <a
                   href={`${comdex.explorerUrlToTx.replace(
                     "{txHash}",
-                    hash?.toUpperCase()
+                    item?.tx?.toUpperCase()
                   )}`}
                   rel="noreferrer"
                   target="_blank"
                   aria-label="explorer"
                 >
                   {" "}
-                  {hash && truncateString(hash, 10, 10)}
+                  {item?.tx && truncateString(item?.tx, 10, 10)}
                 </a>
               }{" "}
             </span>
-            <Copy text={hash} />
+            <Copy text={item?.tx} />
           </div>
         ),
-        msgType: abbreviateMessage(decodedTransaction.body.messages),
-        date: item?.height,
-        // height: item.height,
+        msgType:
+          item?.details["@type"] === "/comdex.liquidity.v1beta1.MsgMarketOrder"
+            ? "Market Order"
+            : "Limit Order",
+        date: item?.time,
       };
     });
-
-  const newTableData =
-    tableData &&
-    tableData.filter(
-      (item) =>
-        item?.msgType === "MarketOrder" || item?.msgType === "LimitOrder"
-    );
-  console.log(newTableData, "history");
-  const handleChange = (value) => {
-    setpageNumber(value.current);
-    setPageSize(value.pageSize);
-    getTransactions(address, value.current, value.pageSize);
-  };
 
   return (
     <div
@@ -127,17 +160,9 @@ const TradehistoryTable = ({ address, setTransactionHistory, history }) => {
       <Table
         className="custom-table assets-table"
         columns={columns}
-        dataSource={newTableData}
+        dataSource={tableData}
         loading={inProgress}
-        pagination={{
-          total: history && history.count,
-          showSizeChanger: true,
-          defaultPageSize: 5,
-          pageSizeOptions: ["5", "10", "20", "50"],
-        }}
-        total={history && history.count}
-        onChange={(event) => handleChange(event)}
-        // locale={{ emptyText: <NoDataIcon /> }}
+        pagination={false}
         scroll={{ x: "100%" }}
       />
     </div>
@@ -147,13 +172,10 @@ const TradehistoryTable = ({ address, setTransactionHistory, history }) => {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    history: state.account.history,
     address: state.account.address,
   };
 };
 
-const actionsToProps = {
-  setTransactionHistory,
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(TradehistoryTable);

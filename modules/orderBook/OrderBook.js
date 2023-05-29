@@ -16,6 +16,7 @@ import {
 import Long from "long";
 import {
   fetchExchangeRateValue,
+  fetchRecentTrades,
   fetchRestPairs,
   queryOrders,
   queryUserOrders,
@@ -82,6 +83,7 @@ const OrderBook = ({
   const [selectedPair, setSelectedPair] = useState();
   const [myOrders, setMyOrders] = useState([]);
   const [orderBookData, setOrderBookData] = useState([]);
+  const [recentTrade, setRecentTrade] = useState([]);
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState();
   const [cancelInProgress, setCancelInProgress] = useState(false);
@@ -112,6 +114,18 @@ const OrderBook = ({
     }
   }, [selectedPair]);
 
+  useEffect(() => {
+    if (selectedPair?.pair_id) {
+      fetchRecentTrades(selectedPair?.pair_id, (error, result) => {
+        if (error) {
+          return;
+        }
+
+        setRecentTrade(result);
+      });
+    }
+  }, [selectedPair]);
+  console.log(recentTrade);
   useEffect(() => {
     if (pairs?.length) {
       setSelectedPair(pairs[0]);
@@ -579,7 +593,9 @@ const OrderBook = ({
               {orderBookData &&
                 orderBookData.map((item) => (
                   <Radio.Button value={item?.price_unit}>
-                    {Number(item?.price_unit).toFixed(7).replace(/\.?0+$/, "")}
+                    {Number(item?.price_unit)
+                      .toFixed(7)
+                      .replace(/\.?0+$/, "")}
                   </Radio.Button>
                 ))}
             </Radio.Group>
@@ -595,6 +611,14 @@ const OrderBook = ({
   };
 
   const BuySellData = checkPrice(filterValue);
+
+  const matchBuySell = (baseCoin, assetCoin) => {
+    if (baseCoin === assetCoin) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   // console.log(BuySellData, "result2");
 
@@ -832,8 +856,15 @@ const OrderBook = ({
                       styles.orderbook__upper__head__right__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
-
-                    {!isNaN(Number(filterValue).toFixed(7).replace(/\.?0+$/, '')) ? Number(filterValue).toFixed(7).replace(/\.?0+$/, '') : 0}{" "}
+                    {!isNaN(
+                      Number(filterValue)
+                        .toFixed(7)
+                        .replace(/\.?0+$/, "")
+                    )
+                      ? Number(filterValue)
+                          .toFixed(7)
+                          .replace(/\.?0+$/, "")
+                      : 0}{" "}
                     <Icon className={"bi bi-chevron-down"} />
                   </div>
                 </MyDropdown>
@@ -890,15 +921,25 @@ const OrderBook = ({
                           theme === "dark" ? styles.dark : styles.light
                         }`}
                       >
-                        {item?.price
-                          ? Number(item.price).toFixed(5).toString()
-                          : 0}
+                        $
+                        {formateNumberDecimalsAuto({
+                          price:
+                            Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ) *
+                            marketPrice(markets, selectedPair?.base_coin_denom),
+                        })}
                       </div>
                       <div
                         className={`${
                           styles.orderbook__lower__table__head__title
                         } ${theme === "dark" ? styles.dark : styles.light}`}
                       >
+                        $
                         {item?.user_order_amount
                           ? amountConversion(item?.user_order_amount)
                           : 0}
@@ -973,15 +1014,25 @@ const OrderBook = ({
                         theme === "dark" ? styles.dark : styles.light
                       }`}
                     >
-                      {item?.price
-                        ? Number(item.price).toFixed(5).toString()
-                        : 0}
+                      $
+                      {formateNumberDecimalsAuto({
+                        price:
+                          Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ) *
+                          marketPrice(markets, selectedPair?.base_coin_denom),
+                      })}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
+                      $
                       {item?.user_order_amount
                         ? amountConversion(item?.user_order_amount)
                         : 0}
@@ -1043,36 +1094,55 @@ const OrderBook = ({
                 </div>
               </div>
 
-              {recentTradesdataSource &&
-                recentTradesdataSource.map((item) => (
+              {recentTrade &&
+                recentTrade.map((item, i) => (
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       styles.lower
                     }  ${theme === "dark" ? styles.dark : styles.light}`}
-                    key={item.id}
+                    key={i}
                   >
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
-                      } ${styles.profit}  ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                      } ${
+                        matchBuySell(
+                          item?.pair?.base_coin?.base_denom,
+                          item?.asset_in?.denom
+                        )
+                          ? styles.loss
+                          : styles.profit
+                      }  ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"$100.00"}
+                      $
+                      {formateNumberDecimalsAuto({
+                        price:
+                          Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ) *
+                          marketPrice(markets, selectedPair?.base_coin_denom),
+                      })}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"$855.00"}
+                      $
+                      {item?.asset_in
+                        ? amountConversion(item?.asset_in?.amount)
+                        : 0}
                     </div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {"18:49:44"}
+                      {moment(item?.timestamp).format("h:mm:ss")}
                     </div>
                   </div>
                 ))}

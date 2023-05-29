@@ -305,3 +305,14 @@ export const fetchRestPair = (pairId, callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRecentTrades = (pairId, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/cswap/recent/trades?pair_id=${pairId}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
