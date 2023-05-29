@@ -435,10 +435,10 @@
   justify-content: center;
   max-width: 450px;
   transition: all 0.5s ease-in;
-  height: 395px;
+  height: 410px;
   overflow: hidden;
   &.card__active {
-    height: 528px;
+    height: 550px;
   }
 
   @media screen and (max-width: $XL) {
@@ -1684,4 +1684,122 @@
     height: 100px;
     width: 100px;
   }
+}
+
+.farmCard__element__left__apr {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.apr__pool {
+  align-items: baseline;
+}
+
+.farmCard__element__apr__poll__wrap {
+  border-radius: 41px;
+  padding: 1.5px;
+  position: relative;
+  background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
+  margin-top: 10px;
+}
+
+.farmCard__element__right__apr_pool__title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 550;
+  font-size: 12px;
+  width: 20px;
+  padding: 2px 2px;
+  color: #ffffff;
+  background: #132239;
+  border-radius: 41px;
+  white-space: nowrap;
+  transition: all 1s ease-in-out;
+  &.show_text {
+    width: 160px;
+    padding: 2px 15px;
+    // line-height: 17px;
+    img {
+      height: 14px;
+      margin-right: 5px;
+    }
+  }
+  span {
+    font-size: 10px;
+  }
+
+  &.boost {
+    font-size: 11px;
+    line-height: 18px;
+    img {
+      margin-left: -5px;
+    }
+  }
+
+  img {
+    height: 14px;
+    // margin-right: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__apr_pool__title__logo {
+  font-weight: 550;
+  font-size: 12px;
+  line-height: 17px;
+  padding: 3px 0px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background: #132239;
+  border-radius: 41px;
+  clear: both;
+  white-space: nowrap;
+
+  img {
+    height: 14px;
+  }
+}
+
+.slider {
+  position: relative;
+}
+
+.image_container {
+  img {
+    height: 14px;
+    width: 15px;
+  }
+  transform: rotateY(180deg);
+  transition: transform 1s ease-in-out;
+}
+
+.show_text .image_container {
+  transform: translateX(-300%);
+}
+
+.text_container {
+  transition: all 1s ease-in-out;
+  opacity: 0;
+  left: 32px;
+  top: 4px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.show_text .text_container {
+  opacity: 1;
+  left: 32px;
+  top: 4px;
 }

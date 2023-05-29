@@ -1094,7 +1094,16 @@ const OrderBook = ({
                 </div>
               </div>
 
-              {recentTrade &&
+              {recentTrade.length === 0 ? (
+                <div
+                  className={`${styles.orderbook__lower__table__head__title} ${
+                    styles.no__data
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  {"No Data"}
+                </div>
+              ) : (
+                recentTrade &&
                 recentTrade.map((item, i) => (
                   <div
                     className={`${styles.orderbook__lower__head} ${
@@ -1145,7 +1154,8 @@ const OrderBook = ({
                       {moment(item?.timestamp).format("h:mm:ss")}
                     </div>
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
         </div>

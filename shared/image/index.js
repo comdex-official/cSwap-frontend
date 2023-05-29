@@ -31,6 +31,7 @@ import DownArrow from "../../public/assets/images/DownArrow.svg";
 import Hyperlink from "../../public/assets/images/hyperlink.svg";
 import Star from "../../public/assets/images/star.svg";
 import StarHighlight from "../../public/assets/images/star-highlight.svg";
+import HirborLogo from "../../public/assets/images/hurbor-logo.svg";
 
 // exports
 export {
@@ -66,4 +67,5 @@ export {
   Hyperlink,
   Star,
   StarHighlight,
+  HirborLogo,
 };

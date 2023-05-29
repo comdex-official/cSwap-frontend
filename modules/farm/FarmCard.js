@@ -5,7 +5,15 @@ import { Icon } from "../../shared/image/Icon";
 import { NextImage } from "../../shared/image/NextImage";
 import { useState } from "react";
 import styles from "./Farm.module.scss";
-import { ATOM, CMDS, Cup, Current, Pyramid, Ranged } from "../../shared/image";
+import {
+  ATOM,
+  CMDS,
+  Cup,
+  Current,
+  HirborLogo,
+  Pyramid,
+  Ranged,
+} from "../../shared/image";
 import dynamic from "next/dynamic";
 import { Modal, Tooltip, message, Slider } from "antd";
 import Liquidity from "./Liquidity";
@@ -297,6 +305,16 @@ const FarmCard = ({
     }
   }, []);
 
+  const [showText, setShowText] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowText((prevValue) => !prevValue);
+    }, 4000); // 10 seconds interval
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div
       className={`${styles.farmCard__wrap} ${
@@ -504,7 +522,7 @@ const FarmCard = ({
             </div>
           </div>
           <div
-            className={`${styles.farmCard__element} ${
+            className={`${styles.farmCard__element} ${styles.apr__pool} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
@@ -516,92 +534,145 @@ const FarmCard = ({
               {"APR"}
             </div>
 
-            <Tooltip
-              title={
-                !getMasterPool() ? (
-                  <>
-                    <div className="upto_apr_tooltip_farm_main_container">
-                      <div className="upto_apr_tooltip_farm">
-                        <span className="text">
-                          Total APR (incl. MP Rewards):
-                        </span>
-                        <span className="value">
-                          {" "}
-                          {commaSeparator(calculateUptoApr() || 0)}%
-                        </span>
-                      </div>
-
-                      <div className="upto_apr_tooltip_farm">
-                        <span className="text">
-                          Base APR (CMDX. yield only):
-                        </span>
-                        <span className="value">
-                          {" "}
-                          {commaSeparator(calculateApr() || 0)}%
-                        </span>
-                      </div>
-
-                      <div className="upto_apr_tooltip_farm">
-                        <span className="text">Swap Fee APR :</span>
-                        <span className="value">
-                          {" "}
-                          {fixedDecimal(
-                            poolsApr?.swap_fee_rewards?.[0]?.apr || 0
-                          )}
-                          %
-                        </span>
-                      </div>
-
-                      <div className="upto_apr_tooltip_farm">
-                        <span className="text">Available MP Boost:</span>
-                        <span className="value">
-                          {" "}
-                          Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
-                          for providing liquidity in the Master Pool
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                ) : null
-              }
-              // className="farm_upto_apr_tooltip"
-              overlayClassName="farm_upto_apr_tooltip"
+            <div
+              className={`${styles.farmCard__element__left__apr} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
             >
-              <div
-                className={`${styles.farmCard__element__right__details} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+              <Tooltip
+                title={
+                  !getMasterPool() ? (
+                    <>
+                      <div className="upto_apr_tooltip_farm_main_container">
+                        <div className="upto_apr_tooltip_farm">
+                          <span className="text">
+                            Total APR (incl. MP Rewards):
+                          </span>
+                          <span className="value">
+                            {" "}
+                            {commaSeparator(calculateUptoApr() || 0)}%
+                          </span>
+                        </div>
+
+                        <div className="upto_apr_tooltip_farm">
+                          <span className="text">
+                            Base APR (CMDX. yield only):
+                          </span>
+                          <span className="value">
+                            {" "}
+                            {commaSeparator(calculateApr() || 0)}%
+                          </span>
+                        </div>
+
+                        <div className="upto_apr_tooltip_farm">
+                          <span className="text">Swap Fee APR :</span>
+                          <span className="value">
+                            {" "}
+                            {fixedDecimal(
+                              poolsApr?.swap_fee_rewards?.[0]?.apr || 0
+                            )}
+                            %
+                          </span>
+                        </div>
+
+                        <div className="upto_apr_tooltip_farm">
+                          <span className="text">Available MP Boost:</span>
+                          <span className="value">
+                            {" "}
+                            Upto {commaSeparator(fetchMasterPoolAprData() || 0)}
+                            % for providing liquidity in the Master Pool
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  ) : null
+                }
+                // className="farm_upto_apr_tooltip"
+                overlayClassName="farm_upto_apr_tooltip"
               >
                 <div
-                  className={`${
-                    styles.farmCard__element__right__details__title
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  className={`${styles.farmCard__element__right__details} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
                 >
-                  {/* {"14.45%"} */}
-                  {commaSeparator(calculateApr() || 0)} %
-                  {!getMasterPool() && <Icon className={"bi bi-arrow-right"} />}
-                </div>
-                {!getMasterPool() && (
                   <div
-                    className={`${styles.farmCard__element__right__pool} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${
+                      styles.farmCard__element__right__details__title
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
+                    {/* {"14.45%"} */}
+                    {commaSeparator(calculateApr() || 0)} %
+                    {!getMasterPool() && (
+                      <Icon className={"bi bi-arrow-right"} />
+                    )}
+                  </div>
+                  {!getMasterPool() && (
                     <div
-                      className={`${
-                        styles.farmCard__element__right__pool__title
-                      } ${styles.boost} ${
+                      className={`${styles.farmCard__element__right__pool} ${
                         theme === "dark" ? styles.dark : styles.light
                       }`}
                     >
-                      <NextImage src={Current} alt="Logo" />
-                      {/* {"Upto 54.45%"} */}
-                      {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
+                      <div
+                        className={`${
+                          styles.farmCard__element__right__pool__title
+                        } ${styles.boost} ${
+                          theme === "dark" ? styles.dark : styles.light
+                        }`}
+                      >
+                        <NextImage src={Current} alt="Logo" />
+                        {/* {"Upto 54.45%"} */}
+                        {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Tooltip>
+
+              <div
+                className={`${styles.farmCard__element__apr__poll__wrap} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {/* {!showText && (
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__apr_pool__title__logo
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                  >
+                    <NextImage src={HirborLogo} alt="Logo" />
+                  </div>
+                )} */}
+                {
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__apr_pool__title
+                    } ${showText ? styles.show_text : ""} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className={`${styles.image_container}`}>
+                      <NextImage src={HirborLogo} alt="Logo" />
+                    </div>
+                    <div className={`${styles.text_container}`}>
+                      4,345,123,768 <span>HARBOR</span>
                     </div>
                   </div>
-                )}
+                }
+
+                {/* <div
+                  className={`${styles.slider} ${
+                    showText ? styles.show_text : ""
+                  }`}
+                >
+                  <div className={`${styles.image_container}`}>
+                    <NextImage src={HirborLogo} alt="Logo" />
+                  </div>
+                  <div className={`${styles.text_container}`}>
+                    4,345,123,768 <span>HARBOR</span>
+                  </div>
+                </div> */}
               </div>
-            </Tooltip>
+            </div>
           </div>
           <div
             className={`${styles.farmCard__element} ${
