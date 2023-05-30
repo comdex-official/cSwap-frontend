@@ -32,6 +32,7 @@ import Hyperlink from "../../public/assets/images/hyperlink.svg";
 import Star from "../../public/assets/images/star.svg";
 import StarHighlight from "../../public/assets/images/star-highlight.svg";
 import HirborLogo from "../../public/assets/images/hurbor-logo.svg";
+import Emission from "../../public/assets/images/emmision.svg";
 
 // exports
 export {
@@ -68,4 +69,5 @@ export {
   Star,
   StarHighlight,
   HirborLogo,
+  Emission,
 };

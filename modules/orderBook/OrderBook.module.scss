@@ -97,7 +97,7 @@
 }
 
 .orderbook__trading__part {
-  height: 87.5%;
+  height: 85.5%;
 
   iframe {
     border-bottom-left-radius: 20px;
@@ -369,7 +369,7 @@
   background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
   border: 2px solid #303950;
   border-radius: 20px;
-  height: 82%;
+  height: 95%;
 
   @media screen and (max-width: $XL) {
     height: 100%;

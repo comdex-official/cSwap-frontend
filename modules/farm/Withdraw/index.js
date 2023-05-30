@@ -50,12 +50,14 @@ const Remove = ({
 
   const [sliderValue, setSliderValue] = useState(0);
   const [removeInProgress, setRemoveInProgress] = useState(false);
+  const [unfarmProgress, setUnfarmProgress] = useState(false);
+  const [withdrawProgress, setWithdrawProgress] = useState(false);
   const [amount, setAmount] = useState(0);
-
-  const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
   const myLiquidity =
     amountConversion(getDenomBalance(balances, pool?.poolCoinDenom)) || 0;
+
+  const userPoolBalance = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
   const onChange = (value) => {
     setSliderValue(value);
@@ -67,7 +69,7 @@ const Remove = ({
     setAmount(amount);
   };
 
-  const handleWithdrawClick = () => {
+  const handleUnfarmWithdrawClick = () => {
     setRemoveInProgress(true);
 
     signAndBroadcastTransaction(
@@ -116,7 +118,98 @@ const Remove = ({
     );
   };
 
-  const userPoolBalance = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+  const handleUnfarmClick = () => {
+    setUnfarmProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarm",
+          value: {
+            farmer: address,
+            poolId: pool?.id,
+            appId: Long.fromNumber(APP_ID),
+            /** soft_lock_coin specifies coins to stake */
+            unfarmingPoolCoin: {
+              amount: Number(userLockedPoolTokens).toFixed(0).toString(),
+              denom: pool?.poolCoinDenom,
+            },
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setUnfarmProgress(false);
+
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.code) {
+          message.info(errorMessageMappingParser(result?.rawLog));
+          return;
+        }
+
+        refreshData(pool);
+        updateBalance();
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
+
+  const handleWithdrawClick = () => {
+    setWithdrawProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgWithdraw",
+          value: {
+            withdrawer: address,
+            poolId: pool?.id,
+            appId: Long.fromNumber(APP_ID),
+            poolCoin: {
+              denom: pool?.poolCoinDenom,
+              amount: getAmount(myLiquidity),
+            },
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setWithdrawProgress(false);
+        refreshData(pool);
+        updateBalance();
+
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.code) {
+          message.info(errorMessageMappingParser(result?.rawLog));
+          return;
+        }
+
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
 
   return (
     <>
@@ -274,7 +367,25 @@ const Remove = ({
 
       <div className={styles.farm__deposit__buttonWrap}>
         <Button
-          onClick={handleWithdrawClick}
+          type="primary"
+          className="btn-filled"
+          disabled={!Number(userLockedPoolTokens) || unfarmProgress}
+          loading={unfarmProgress}
+          onClick={() => handleUnfarmClick()}
+        >
+          Unfarm
+        </Button>
+        <Button
+          type="primary"
+          className="btn-filled"
+          disabled={!myLiquidity || withdrawProgress || !userPoolBalance}
+          loading={withdrawProgress}
+          onClick={() => handleWithdrawClick()}
+        >
+          Withdraw
+        </Button>
+        <Button
+          onClick={() => handleUnfarmWithdrawClick()}
           type="primary"
           disabled={
             !sliderValue ||

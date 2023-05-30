@@ -13,16 +13,21 @@ import {
   CMDS,
   Cup,
   Current,
+  Emission,
   HirborLogo,
   Pyramid,
   Ranged,
 } from "../../shared/image";
 import dynamic from "next/dynamic";
-import { Modal, Tooltip } from "antd";
+import { Modal, Tooltip, message } from "antd";
 import Liquidity from "./Liquidity";
 import Card from "../../shared/components/card/Card";
 import { setUserLiquidityInPools } from "../../actions/liquidity";
-import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  PRICE_DECIMALS,
+  PRODUCT_ID,
+} from "../../constants/common";
 import {
   amountConversion,
   commaSeparatorWithRounding,
@@ -36,8 +41,12 @@ import {
   marketPrice,
 } from "../../utils/number";
 import {
+  emissiondata,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
+  userProposalProjectedEmission,
+  votingCurrentProposal,
+  votingCurrentProposalId,
 } from "../../services/liquidity/query";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
 
@@ -261,17 +270,97 @@ const FarmTable = ({
     }
   }, [pool, getUserLiquidity]);
 
-  console.log("_id", poolAprList);
-
-  const [showText, setShowText] = useState(false);
+  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
+  const [currentProposalAllData, setCurrentProposalAllData] = useState();
+  const [protectedEmission, setProtectedEmission] = useState(0);
+  const [proposalId, setProposalId] = useState();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setShowText((prevValue) => !prevValue);
-    }, 4000); // 10 seconds interval
-
-    return () => clearInterval(interval);
+    fetchVotingCurrentProposalId();
   }, []);
+
+  const fetchVotingCurrentProposalId = () => {
+    votingCurrentProposalId(PRODUCT_ID)
+      .then((res) => {
+        setProposalId(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (proposalId) {
+      fetchuserProposalProjectedEmission(proposalId);
+      fetchVotingCurrentProposal(proposalId);
+    }
+  }, [address, proposalId]);
+
+  useEffect(() => {
+    if (address) {
+      fetchEmissiondata(address);
+    }
+  }, [address]);
+
+  const fetchuserProposalProjectedEmission = (proposalId) => {
+    userProposalProjectedEmission(proposalId)
+      .then((res) => {
+        setProtectedEmission(amountConversion(res));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchVotingCurrentProposal = (proposalId) => {
+    votingCurrentProposal(proposalId)
+      .then((res) => {
+        setCurrentProposalAllData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchEmissiondata = (address) => {
+    emissiondata(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        console.log(error, "Emission Api error");
+        return;
+      }
+      setUserCurrentProposalData(result?.data);
+    });
+  };
+
+  const calculateVaultEmission = (id) => {
+    let totalVoteOfPair = userCurrentProposalData?.filter(
+      (item) => item?.pair_id === Number(id) + 1000000
+    );
+
+    totalVoteOfPair = totalVoteOfPair?.[0]?.total_vote || 0;
+    let totalWeight = currentProposalAllData?.total_voted_weight || 0;
+    let projectedEmission = protectedEmission;
+
+    let calculatedEmission =
+      (Number(totalVoteOfPair) / Number(totalWeight)) * projectedEmission;
+
+    if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
+      return 0;
+    } else {
+      return Number(calculatedEmission);
+    }
+  };
+
+  // const [showText, setShowText] = useState(false);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setShowText((prevValue) => !prevValue);
+  //   }, 4000); // 10 seconds interval
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const COLUMNS = [
     {
@@ -355,6 +444,21 @@ const FarmTable = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
+              {(value?.balances?.quoteCoin?.denom === "ucmst" ||
+                value?.balances?.baseCoin?.denom === "ucmst") && (
+                <Tooltip
+                  title={"HARBOR emissions enabled"}
+                  overlayClassName="farm_upto_apr_tooltip"
+                >
+                  <div
+                    className={`${styles.farmCard__element__right__emission} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <NextImage src={Emission} alt="Emission" />
+                  </div>
+                </Tooltip>
+              )}
               {value?.type === 2 ? (
                 <div
                   className={`${styles.farmCard__element__right__basic} ${
@@ -540,7 +644,7 @@ const FarmTable = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)} %
+                  {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)}%
                   {!getMasterPool(value?.id?.toNumber()) && (
                     <Icon className={"bi bi-arrow-right"} />
                   )}
@@ -561,57 +665,42 @@ const FarmTable = ({
                       <NextImage src={Current} alt="Logo" />
                       {`Upto ${commaSeparator(
                         calculateUptoApr(value?.id?.toNumber()) || 0
-                      )} %`}
+                      )}%`}
                     </div>
                   </div>
                 )}
               </div>
             </Tooltip>
 
-            <div
-              className={`${styles.farmCard__element__apr__poll__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {/* {!showText && (
+            {(value?.balances?.quoteCoin?.denom === "ucmst" ||
+              value?.balances?.baseCoin?.denom === "ucmst") && (
+              <div
+                className={`${styles.farmCard__element__apr__poll__wrap} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <Tooltip
+                  title={
+                    "Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions."
+                  }
+                  overlayClassName="farm_upto_apr_tooltip"
+                >
                   <div
                     className={`${
-                      styles.farmCard__element__right__apr_pool__title__logo
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                      styles.farmCard__element__right__apr_pool__title
+                    }  ${styles.boost} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
                     <NextImage src={HirborLogo} alt="Logo" />
+                    {value?.id &&
+                      commaSeparator(
+                        calculateVaultEmission(value?.id?.toNumber()).toFixed(2)
+                      )}
                   </div>
-                )} */}
-              {
-                <div
-                  className={`${
-                    styles.farmCard__element__right__apr_pool__title
-                  } ${showText ? styles.show_text : ""} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div className={`${styles.image_container}`}>
-                    <NextImage src={HirborLogo} alt="Logo" />
-                  </div>
-                  <div className={`${styles.text_container}`}>
-                    4,345,123,768 <span>HARBOR</span>
-                  </div>
-                </div>
-              }
-
-              {/* <div
-                  className={`${styles.slider} ${
-                    showText ? styles.show_text : ""
-                  }`}
-                >
-                  <div className={`${styles.image_container}`}>
-                    <NextImage src={HirborLogo} alt="Logo" />
-                  </div>
-                  <div className={`${styles.text_container}`}>
-                    4,345,123,768 <span>HARBOR</span>
-                  </div>
-                </div> */}
-            </div>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </>
       ),

@@ -1788,7 +1788,11 @@ a {
 
     &.active {
       .dark-mode & {
-        background: $secondary-color;
+        background: #9b353c;
+
+        &:hover {
+          background: $secondary-color;
+        }
       }
 
       span {
@@ -2352,7 +2356,8 @@ a {
   .ant-tooltip-inner {
     cursor: pointer;
     background-color: $tooltip-bg-light !important;
-    color: $tooltip-color-dark;
+    color: #b0abab;
+   
     font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
@@ -2362,7 +2367,7 @@ a {
 
     .dark-mode & {
       background-color: $dark-color;
-      color: $tooltip-color-dark;
+      color: #b0abab;
     }
     .upto_apr_tooltip_farm_main_container {
       width: 100%;
@@ -2371,6 +2376,7 @@ a {
         font-size: 10.43px;
         margin-bottom: 5px;
         .text {
+          color: #b0abab;
         }
         .value {
           font-weight: 600;
@@ -2880,7 +2886,7 @@ a {
       background: #101a35 !important;
       border: 1px solid gray !important;
       border-radius: 15px;
-      color: #b0abab;
+      color: #ffffff;
     }
   }
 }
@@ -2965,19 +2971,27 @@ a {
     .ant-tooltip-inner {
       background-color: rgb(254, 67, 80) !important;
       border: none !important;
+      color: $white;
+    }
+  }
+
+  .ant-tooltip-arrow {
+    &:before {
+      background-color: rgb(254, 67, 80) !important;
     }
   }
 }
 
 .farm-disclaimer-info {
-  color: #acbfdb;
+  position: sticky;
+  top: 10px;
+  color: #ffffff;
   margin-top: 38px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  position: initial;
   z-index: 999;
   height: 80px;
   padding: 0 20px 0 30px;
@@ -2988,12 +3002,12 @@ a {
   max-width: 630px;
   margin-top: -30px;
   margin-bottom: 10px;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  background: #123c73;
   border-radius: 10px;
 
-  &.fixedHeaderOnScroll {
-    position: initial;
-  }
+  // &.fixedHeaderOnScroll {
+  //   position: initial;
+  // }
 
   @media screen and (max-width: 1540px) {
     font-size: $font-size-base;
@@ -3019,7 +3033,7 @@ a {
     height: 80px;
   }
   .dark-mode & {
-    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+    background: #123c73;
     border-radius: 10px;
   }
   .icon {
@@ -3062,7 +3076,7 @@ a {
       span {
         font-size: 16px;
         font-weight: 500;
-        color: $white;
+        color: #06d6a0;
       }
     }
   }
@@ -3306,4 +3320,11 @@ a {
 
 .asset-ibc-btn {
   margin-left: 5px;
+}
+
+.loading_logo{
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
