@@ -70,11 +70,14 @@ const Deposit = ({
   const [firstInput, setFirstInput] = useState();
   const [secondInput, setSecondInput] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const [depositProgress, setDepositProgress] = useState(false);
+  const [farmProgress, setFarmProgress] = useState(false);
   const [inputValidationError, setInputValidationError] = useState();
   const [outputValidationError, setOutputValidationError] = useState();
 
   const normalPrice = decimalConversion(pool?.price);
-
+  const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+  console.log({ userPoolTokens });
   let poolPrice =
     Number(normalPrice) /
     10 **
@@ -187,7 +190,7 @@ const Deposit = ({
     isFinite(Number(numberOfTokens)) && setFirstInput(numberOfTokens);
   };
 
-  const handleDepositClick = () => {
+  const handleDepositFarmClick = () => {
     setInProgress(true);
 
     const deposits = [
@@ -240,6 +243,116 @@ const Deposit = ({
         }
 
         resetValues();
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
+
+  const handleDepositClick = () => {
+    setDepositProgress(true);
+
+    const deposits = [
+      {
+        denom: pool?.balances?.baseCoin?.denom,
+        amount: getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        ),
+      },
+      {
+        denom: pool?.balances?.quoteCoin?.denom,
+        amount: getAmount(
+          secondInput,
+          assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+        ),
+      },
+    ];
+
+    const sortedDepositCoins = deposits.sort((a, b) =>
+      a.denom.localeCompare(b.denom)
+    );
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgDeposit",
+          value: {
+            depositor: address.toString(),
+            poolId: pool?.id,
+            appId: Long.fromNumber(APP_ID),
+            depositCoins: sortedDepositCoins,
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setDepositProgress(false);
+        refreshData();
+        updateBalance();
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.code) {
+          message.info(errorMessageMappingParser(result?.rawLog));
+          return;
+        }
+
+        resetValues();
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
+    );
+  };
+
+  const handleFarmClick = () => {
+    setFarmProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.liquidity.v1beta1.MsgFarm",
+          value: {
+            farmer: address,
+            poolId: pool?.id,
+            appId: Long.fromNumber(APP_ID),
+            /** soft_lock_coin specifies coins to stake */
+            farmingPoolCoin: {
+              amount: Number(userPoolTokens).toFixed(0).toString(),
+              denom: pool?.poolCoinDenom,
+            },
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setFarmProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.code) {
+          message.info(errorMessageMappingParser(result?.rawLog));
+          return;
+        }
+
+        refreshData(pool);
+        updateBalance();
+
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -595,6 +708,31 @@ const Deposit = ({
         <Button
           type="primary"
           className="btn-filled"
+          loading={depositProgress}
+          disabled={
+            depositProgress ||
+            !pool?.id ||
+            !Number(firstInput) ||
+            !Number(secondInput) ||
+            inputValidationError?.message ||
+            outputValidationError?.message
+          }
+          onClick={() => handleDepositClick()}
+        >
+          Deposit
+        </Button>
+        <Button
+          type="primary"
+          className="btn-filled"
+          loading={farmProgress}
+          disabled={!userPoolTokens || farmProgress}
+          onClick={() => handleFarmClick()}
+        >
+          Farm
+        </Button>
+        <Button
+          type="primary"
+          className="btn-filled"
           loading={inProgress}
           disabled={
             inProgress ||
@@ -604,7 +742,7 @@ const Deposit = ({
             inputValidationError?.message ||
             outputValidationError?.message
           }
-          onClick={() => handleDepositClick()}
+          onClick={() => handleDepositFarmClick()}
         >
           Deposit & Farm
         </Button>

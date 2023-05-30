@@ -462,17 +462,6 @@ const Header = ({
 
         <div className={styles.dropdown}>
           <div className={styles.header__right}>
-            <div className={styles.header__buy}>
-              <div
-                className={`${styles.header__buy__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"Buy"}
-              </div>
-              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
-            </div>
-
             <MyDropdown
               items={cswapItems}
               placement={"bottomLeft"}
@@ -523,6 +512,17 @@ const Header = ({
                 >
                   {"Faucet"}
                 </div>
+              </div>
+              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
+            </div>
+
+            <div className={styles.header__buy}>
+              <div
+                className={`${styles.header__buy__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {"Buy"}
               </div>
               <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
             </div>

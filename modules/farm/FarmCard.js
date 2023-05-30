@@ -10,6 +10,7 @@ import {
   CMDS,
   Cup,
   Current,
+  Emission,
   HirborLogo,
   Pyramid,
   Ranged,
@@ -22,7 +23,11 @@ import {
   setUserLiquidityInPools,
   setShowMyPool,
 } from "../../actions/liquidity";
-import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  PRICE_DECIMALS,
+  PRODUCT_ID,
+} from "../../constants/common";
 import {
   amountConversion,
   commaSeparatorWithRounding,
@@ -33,11 +38,16 @@ import {
 import {
   commaSeparator,
   decimalConversion,
+  formatNumber,
   marketPrice,
 } from "../../utils/number";
 import {
+  emissiondata,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
+  userProposalProjectedEmission,
+  votingCurrentProposal,
+  votingCurrentProposalId,
 } from "../../services/liquidity/query";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
 import { getAMP, rangeToPercentage } from "../../utils/number";
@@ -268,9 +278,7 @@ const FarmCard = ({
                   )
                 ) *
                   marketPrice(markets, providedTokens?.[1]?.denom);
-              console.log("====================================");
-              console.log(totalLiquidityInDollar, pool?.id);
-              console.log("====================================");
+
               setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
           );
@@ -305,15 +313,97 @@ const FarmCard = ({
     }
   }, []);
 
-  const [showText, setShowText] = useState(false);
+  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
+  const [currentProposalAllData, setCurrentProposalAllData] = useState();
+  const [protectedEmission, setProtectedEmission] = useState(0);
+  const [proposalId, setProposalId] = useState();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setShowText((prevValue) => !prevValue);
-    }, 4000); // 10 seconds interval
-
-    return () => clearInterval(interval);
+    fetchVotingCurrentProposalId();
   }, []);
+
+  const fetchVotingCurrentProposalId = () => {
+    votingCurrentProposalId(PRODUCT_ID)
+      .then((res) => {
+        setProposalId(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (proposalId) {
+      fetchuserProposalProjectedEmission(proposalId);
+      fetchVotingCurrentProposal(proposalId);
+    }
+  }, [address, proposalId]);
+
+  useEffect(() => {
+    if (address) {
+      fetchEmissiondata(address);
+    }
+  }, [address]);
+
+  const fetchuserProposalProjectedEmission = (proposalId) => {
+    userProposalProjectedEmission(proposalId)
+      .then((res) => {
+        setProtectedEmission(amountConversion(res));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchVotingCurrentProposal = (proposalId) => {
+    votingCurrentProposal(proposalId)
+      .then((res) => {
+        setCurrentProposalAllData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchEmissiondata = (address) => {
+    emissiondata(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        console.log(error, "Emission Api error");
+        return;
+      }
+      setUserCurrentProposalData(result?.data);
+    });
+  };
+
+  const calculateVaultEmission = (id) => {
+    let totalVoteOfPair = userCurrentProposalData?.filter(
+      (item) => item?.pair_id === Number(id) + 1000000
+    );
+
+    totalVoteOfPair = totalVoteOfPair?.[0]?.total_vote || 0;
+    let totalWeight = currentProposalAllData?.total_voted_weight || 0;
+    let projectedEmission = protectedEmission;
+
+    let calculatedEmission =
+      (Number(totalVoteOfPair) / Number(totalWeight)) * projectedEmission;
+
+    if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
+      return 0;
+    } else {
+      return Number(calculatedEmission);
+    }
+  };
+
+  // const [showText, setShowText] = useState(false);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setShowText((prevValue) => !prevValue);
+  //   }, 4000); // 10 seconds interval
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <div
@@ -410,6 +500,22 @@ const FarmCard = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
+                {(pool?.balances?.quoteCoin?.denom === "ucmst" ||
+                  pool?.balances?.baseCoin?.denom === "ucmst") && (
+                  <Tooltip
+                    title={"HARBOR emissions enabled"}
+                    overlayClassName="farm_upto_apr_tooltip"
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__emission
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Emission} alt="Emission" />
+                    </div>
+                  </Tooltip>
+                )}
+
                 {pool?.type === 2 ? (
                   <div
                     className={`${styles.farmCard__element__right__basic} ${
@@ -534,121 +640,147 @@ const FarmCard = ({
               {"APR"}
             </div>
 
-            <div
-              className={`${styles.farmCard__element__left__apr} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <Tooltip
-                title={
-                  !getMasterPool() ? (
-                    <>
-                      <div className="upto_apr_tooltip_farm_main_container">
-                        <div className="upto_apr_tooltip_farm">
-                          <span className="text">
-                            Total APR (incl. MP Rewards):
-                          </span>
-                          <span className="value">
-                            {" "}
-                            {commaSeparator(calculateUptoApr() || 0)}%
-                          </span>
-                        </div>
-
-                        <div className="upto_apr_tooltip_farm">
-                          <span className="text">
-                            Base APR (CMDX. yield only):
-                          </span>
-                          <span className="value">
-                            {" "}
-                            {commaSeparator(calculateApr() || 0)}%
-                          </span>
-                        </div>
-
-                        <div className="upto_apr_tooltip_farm">
-                          <span className="text">Swap Fee APR :</span>
-                          <span className="value">
-                            {" "}
-                            {fixedDecimal(
-                              poolsApr?.swap_fee_rewards?.[0]?.apr || 0
-                            )}
-                            %
-                          </span>
-                        </div>
-
-                        <div className="upto_apr_tooltip_farm">
-                          <span className="text">Available MP Boost:</span>
-                          <span className="value">
-                            {" "}
-                            Upto {commaSeparator(fetchMasterPoolAprData() || 0)}
-                            % for providing liquidity in the Master Pool
-                          </span>
-                        </div>
+            <Tooltip
+              title={
+                !getMasterPool() ? (
+                  <>
+                    <div className="upto_apr_tooltip_farm_main_container">
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">
+                          Total APR (incl. MP Rewards):
+                        </span>
+                        <span className="value">
+                          {" "}
+                          {commaSeparator(calculateUptoApr() || 0)}%
+                        </span>
                       </div>
-                    </>
-                  ) : null
-                }
-                // className="farm_upto_apr_tooltip"
-                overlayClassName="farm_upto_apr_tooltip"
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">
+                          Base APR (CMDX. yield only):
+                        </span>
+                        <span className="value">
+                          {" "}
+                          {commaSeparator(calculateApr() || 0)}%
+                        </span>
+                      </div>
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">Swap Fee APR :</span>
+                        <span className="value">
+                          {" "}
+                          {fixedDecimal(
+                            poolsApr?.swap_fee_rewards?.[0]?.apr || 0
+                          )}
+                          %
+                        </span>
+                      </div>
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">Available MP Boost:</span>
+                        <span className="value">
+                          {" "}
+                          Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
+                          for providing liquidity in the Master Pool
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : null
+              }
+              // className="farm_upto_apr_tooltip"
+              overlayClassName="farm_upto_apr_tooltip"
+            >
+              <div
+                className={`${styles.farmCard__element__right__details} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
               >
+                <div
+                  className={`${
+                    styles.farmCard__element__right__details__title
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  {/* {"14.45%"} */}
+                  {commaSeparator(calculateApr() || 0)}%
+                  {!getMasterPool() && <Icon className={"bi bi-arrow-right"} />}
+                </div>
+                {!getMasterPool() && (
+                  <div
+                    className={`${styles.farmCard__element__right__pool} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {/* {"Upto 54.45%"} */}
+                      {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Tooltip>
+          </div>
+
+          <div
+            className={`${styles.farmCard__element}  ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
+          >
+            {(pool?.balances?.quoteCoin?.denom === "ucmst" ||
+              pool?.balances?.baseCoin?.denom === "ucmst") && (
+              <>
+                <div
+                  className={`${styles.farmCard__element__left__title2} ${
+                    styles.harbor__emision
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  {"Harbor Emision"}
+                </div>
+
                 <div
                   className={`${styles.farmCard__element__right__details} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
                   <div
-                    className={`${
-                      styles.farmCard__element__right__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    className={`${styles.farmCard__element__apr__poll__wrap} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
                   >
-                    {/* {"14.45%"} */}
-                    {commaSeparator(calculateApr() || 0)} %
-                    {!getMasterPool() && (
-                      <Icon className={"bi bi-arrow-right"} />
-                    )}
-                  </div>
-                  {!getMasterPool() && (
-                    <div
-                      className={`${styles.farmCard__element__right__pool} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
+                    <Tooltip
+                      title={
+                        "Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions."
+                      }
+                      overlayClassName="farm_upto_apr_tooltip"
                     >
                       <div
                         className={`${
-                          styles.farmCard__element__right__pool__title
-                        } ${styles.boost} ${
+                          styles.farmCard__element__right__apr_pool__title
+                        }  ${styles.boost} ${
                           theme === "dark" ? styles.dark : styles.light
                         }`}
                       >
-                        <NextImage src={Current} alt="Logo" />
-                        {/* {"Upto 54.45%"} */}
-                        {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
+                        <NextImage src={HirborLogo} alt="Logo" />
+                        {pool?.id &&
+                          commaSeparator(
+                            calculateVaultEmission(
+                              pool?.id?.toNumber()
+                            ).toFixed(2)
+                          )}
                       </div>
-                    </div>
-                  )}
-                </div>
-              </Tooltip>
-
-              <div
-                className={`${styles.farmCard__element__apr__poll__wrap} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {/* {!showText && (
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__apr_pool__title__logo
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={HirborLogo} alt="Logo" />
-                  </div>
-                )} */}
-                {
+                    </Tooltip>
+                    {/* {
                   <div
                     className={`${
                       styles.farmCard__element__right__apr_pool__title
-                    } ${showText ? styles.show_text : ""} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    }${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     <div className={`${styles.image_container}`}>
                       <NextImage src={HirborLogo} alt="Logo" />
@@ -657,22 +789,11 @@ const FarmCard = ({
                       4,345,123,768 <span>HARBOR</span>
                     </div>
                   </div>
-                }
-
-                {/* <div
-                  className={`${styles.slider} ${
-                    showText ? styles.show_text : ""
-                  }`}
-                >
-                  <div className={`${styles.image_container}`}>
-                    <NextImage src={HirborLogo} alt="Logo" />
+                } */}
                   </div>
-                  <div className={`${styles.text_container}`}>
-                    4,345,123,768 <span>HARBOR</span>
-                  </div>
-                </div> */}
-              </div>
-            </div>
+                </div>
+              </>
+            )}
           </div>
           <div
             className={`${styles.farmCard__element} ${
@@ -726,9 +847,7 @@ const FarmCard = ({
                         styles.farmCard__element__boost__left__description
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      {`Upto ${commaSeparator(
-                        fetchMasterPoolAprData() || 0
-                      )} %`}
+                      {`Upto ${commaSeparator(fetchMasterPoolAprData() || 0)}%`}
                     </div>
                   </Tooltip>
                 </div>
@@ -744,6 +863,20 @@ const FarmCard = ({
               </>
             )}
           </div>
+
+          {!(
+            pool?.balances?.quoteCoin?.denom === "ucmst" ||
+            pool?.balances?.baseCoin?.denom === "ucmst"
+          ) && (
+            <div
+              className={`${styles.farmCard__element} ${
+                !(
+                  pool?.balances?.quoteCoin?.denom === "ucmst" ||
+                  pool?.balances?.baseCoin?.denom === "ucmst"
+                ) && styles.emission
+              }`}
+            ></div>
+          )}
 
           <div className="farmCard__button">
             <div

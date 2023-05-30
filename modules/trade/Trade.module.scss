@@ -380,7 +380,7 @@
 
 .tradeCard__body__right__el1__description {
   margin: 0px 6px;
-  background: #fe4350;
+  background: #9b353c;
   border-radius: 5px;
   padding: 2px 8px;
   font-weight: 400;
@@ -389,6 +389,10 @@
   text-align: center;
   color: #ffffff;
   cursor: pointer;
+
+  &:hover{
+    background: #fe4350;
+  }
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -410,10 +414,14 @@
   line-height: 15px;
   text-align: center;
   color: #ffffff;
-  background: #0f2048;
+  background: #263861 ;
   border-radius: 5px;
   padding: 2px 8px;
   cursor: pointer;
+
+  &:hover{
+    background: #0f2048;
+  }
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }

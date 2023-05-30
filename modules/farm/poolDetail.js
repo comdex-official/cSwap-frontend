@@ -31,6 +31,7 @@ import {
 } from "../../utils/coin";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { commaSeparator, marketPrice } from "../../utils/number";
+import PoolTokenValue from "./PoolTokenValue";
 
 const PoolDetails = ({
   address,
@@ -60,10 +61,22 @@ const PoolDetails = ({
     let denomBalance =
       list && Object.values(list)?.filter((item) => item.denom === denom)[0];
 
-    return `${amountConversionWithComma(
+    return `${
+      (amountConversionWithComma(
       denomBalance?.amount || 0,
       assetMap[denomBalance?.denom]?.decimals
-    )} ${denomConversion(denom)}`;
+    ))} ${denomConversion(denom)}`;
+  };
+
+  const showPoolBalance2 = (list, denom) => {
+    let denomBalance =
+      list && Object.values(list)?.filter((item) => item.denom === denom)[0];
+
+    return `${
+      Number(amountConversionWithComma(
+      denomBalance?.amount || 0,
+      assetMap[denomBalance?.denom]?.decimals
+    )).toFixed(2)} ${denomConversion(denom)}`;
   };
 
   const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
@@ -284,11 +297,26 @@ const PoolDetails = ({
                 }`}
               >
                 {pool?.balances?.baseCoin?.denom &&
-                  showPoolBalance(
+                 ( showPoolBalance2(
                     providedTokens,
                     pool?.balances?.baseCoin?.denom
-                  )}
+                  ))} +  {pool?.balances?.quoteCoin?.denom &&
+                    showPoolBalance2(
+                      providedTokens,
+                      pool?.balances?.quoteCoin?.denom
+                    )}
               </div>
+              {/* <div
+                className={`${styles.liquidityCard__pool__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {pool?.balances?.quoteCoin?.denom &&
+                  showPoolBalance(
+                    providedTokens,
+                    pool?.balances?.quoteCoin?.denom
+                  )}
+              </div> */}
             </div>
             <div
               className={`${styles.liquidityCard__pool__element} ${
@@ -300,18 +328,14 @@ const PoolDetails = ({
                   styles.semiTitle
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
-                {"My Amount"}
+                {"Available LP Amount"}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                {pool?.balances?.quoteCoin?.denom &&
-                  showPoolBalance(
-                    providedTokens,
-                    pool?.balances?.quoteCoin?.denom
-                  )}
+                <PoolTokenValue poolTokens={userPoolTokens} />
               </div>
             </div>
             <div

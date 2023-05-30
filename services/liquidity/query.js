@@ -2,9 +2,13 @@ import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/liquidity/v1beta1/query";
 import Long from "long";
 import { comdex } from "../../config/network";
-import { APP_ID } from "../../constants/common";
+import { APP_ID, HARBOR_ASSET_ID, PRODUCT_ID } from "../../constants/common";
 import { API_URL } from "../../constants/url";
 import { createQueryClient } from "../helper";
+import { CosmWasmClient } from "cosmwasm";
+import { envConfig } from "../../config/envConfig";
+
+export const lockingContractAddress = envConfig?.harbor?.lockingContractAddress;
 
 let myClient = null;
 
@@ -309,6 +313,46 @@ export const fetchRestPair = (pairId, callback) => {
 export const fetchRecentTrades = (pairId, callback) => {
   axios
     .get(`${API_URL}/api/v2/cswap/recent/trades?pair_id=${pairId}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const votingCurrentProposalId = async (productId) => {
+  const client = await CosmWasmClient.connect(comdex?.rpc);
+  const config = await client.queryContractSmart(lockingContractAddress, {
+    current_proposal: { app_id: productId },
+  });
+  return await config;
+};
+
+export const votingCurrentProposal = async (proposalId) => {
+  const client = await CosmWasmClient.connect(comdex?.rpc);
+  const config = await client.queryContractSmart(lockingContractAddress, {
+    proposal: { proposal_id: proposalId },
+  });
+  return await config;
+};
+
+export const userProposalProjectedEmission = async (proposalId) => {
+  const client = await CosmWasmClient.connect(comdex?.rpc);
+  const config = await client.queryContractSmart(lockingContractAddress, {
+    projected_emission: {
+      proposal_id: proposalId,
+      app_id: PRODUCT_ID,
+      gov_token_denom: "uharbor",
+      gov_token_id: HARBOR_ASSET_ID,
+    },
+  });
+  return await config;
+};
+
+export const emissiondata = (address, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/harbor/emissions/${address}`)
     .then((result) => {
       callback(null, result?.data);
     })

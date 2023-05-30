@@ -462,6 +462,14 @@
     min-height: 32px;
   }
 
+  &.apr__pool {
+    margin-bottom: 0;
+  }
+
+  &.emission {
+    min-height: 14px;
+  }
+
   // margin-top: 20px;
   // align-items: center;
 }
@@ -707,7 +715,7 @@
 .farmCard__element__left__title2 {
   font-weight: 500;
   font-size: 13px;
-  line-height: 55px;
+  line-height: 50px;
   color: #b1d2e6;
 
   // @media screen and (max-width: $XXL) {
@@ -717,6 +725,10 @@
   // @media screen and (max-width: $XS) {
   //   font-size: 8px;
   // }
+
+  &.harbor__emision {
+    line-height: 26px;
+  }
 
   &.light {
   }
@@ -1356,6 +1368,7 @@
 
 .farm__deposit__buttonWrap {
   display: flex;
+  gap: 10px;
   justify-content: center;
   align-items: center;
 }
@@ -1462,7 +1475,7 @@
 
 .liquidityCard__pool__title {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 24px;
 
   color: #ffffff;
@@ -1521,7 +1534,7 @@
 .liquidityCard__pool__footer__details {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+
   margin-top: 10px;
 
   @media screen and (max-width: $XS) {
@@ -1690,18 +1703,19 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 10px;
 }
 
-.apr__pool {
-  align-items: baseline;
-}
+// .apr__pool {
+//   align-items: baseline;
+// }
 
 .farmCard__element__apr__poll__wrap {
   border-radius: 41px;
-  padding: 1.5px;
+  padding: 2px;
   position: relative;
   background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
-  margin-top: 10px;
+  // margin-top: 10px;
 }
 
 .farmCard__element__right__apr_pool__title {
@@ -1710,22 +1724,23 @@
   align-items: center;
   font-weight: 550;
   font-size: 12px;
-  width: 20px;
-  padding: 2px 2px;
+  line-height: 10px;
+  padding: 2px 15px;
   color: #ffffff;
   background: #132239;
   border-radius: 41px;
   white-space: nowrap;
   transition: all 1s ease-in-out;
-  &.show_text {
-    width: 160px;
-    padding: 2px 15px;
-    // line-height: 17px;
-    img {
-      height: 14px;
-      margin-right: 5px;
-    }
-  }
+  cursor: pointer;
+  // &.show_text {
+  //   width: 160px;
+  //   padding: 2px 15px;
+  //   // line-height: 17px;
+  //   img {
+  //     height: 14px;
+  //     margin-right: 5px;
+  //   }
+  // }
   span {
     font-size: 10px;
   }
@@ -1740,7 +1755,7 @@
 
   img {
     height: 14px;
-    // margin-right: 5px;
+    margin-right: 5px;
   }
 
   &.light {
@@ -1802,4 +1817,11 @@
   opacity: 1;
   left: 32px;
   top: 4px;
+}
+
+.farmCard__element__right__emission {
+  cursor: pointer;
+  img {
+    height: 20px;
+  }
 }
