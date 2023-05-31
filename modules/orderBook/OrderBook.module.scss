@@ -288,7 +288,11 @@
     color: #ff7b51;
   }
   &.no__data {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     margin-top: 10px;
   }
 }

@@ -47,6 +47,7 @@ import Lottie from "lottie-react";
 import CreatePool from "./CreatePool/index";
 import Timer from "../../shared/components/Timer";
 import { marketPrice } from "../../utils/number";
+import Loading from "../../pages/Loading";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -338,6 +339,8 @@ const Farm = ({
     }
   }, [isChildPool]);
 
+  console.log(incentivesMap?.[MASTER_POOL_ID]?.nextDistribution);
+
   return (
     <div
       className={`${styles.farm__wrap} ${
@@ -360,7 +363,7 @@ const Farm = ({
             <div className="reward">
               <Icon className={"bi bi-info-square"} />
               Users need to farm for 24 hours in order to be eligible for
-              rewards
+              rewards.
               <Icon className={"bi bi-x-lg"} onClick={closeDisclaimer} />
             </div>
             <div className="distribution">
@@ -751,7 +754,7 @@ const Farm = ({
             </div>
           ) : inProgress ? (
             <div className={`${styles.table__empty__data__wrap}`}>
-              <Spin size="large" />
+              <Loading />
             </div>
           ) : !inProgress && displayPools.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>

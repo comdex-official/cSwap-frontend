@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./OrderBook.module.scss";
 import { Table } from "antd";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
-const OrderbookTable = ({ openOrdersData,ordersTablecolumns }) => {
+
+const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
   const theme = "dark";
-
-  
 
   return (
     <div
@@ -19,6 +19,7 @@ const OrderbookTable = ({ openOrdersData,ordersTablecolumns }) => {
         columns={ordersTablecolumns}
         pagination={false}
         scroll={{ x: "100%" }}
+        locale={{ emptyText: <NoDataIcon /> }}
       />
       {/* <div
         className={`${styles.orderbook__table__main} ${

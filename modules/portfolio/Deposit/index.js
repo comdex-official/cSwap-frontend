@@ -28,6 +28,7 @@ import {
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import style from "./Deposit.module.scss";
+import Loading from "../../../pages/Loading";
 
 const Deposit = ({
   lang,
@@ -439,7 +440,7 @@ const Deposit = ({
                 <div className="availabe-balance">
                   Available
                   {balanceInProgress ? (
-                    <Spin />
+                 <Loading />
                   ) : (
                     <>
                       <span className="ml-1 asset_balance">

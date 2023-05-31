@@ -35,6 +35,7 @@ import {
     truncateString,
 } from "../../utils/string";
 import moment from "moment";
+import Loading from "../../pages/Loading";
 
 const GovernViewPage = ({
     address,
@@ -337,7 +338,7 @@ const GovernViewPage = ({
     };
 
     if (inProgress) {
-        return <div className="no_data"> <Spin /></div>
+        return <div className="no_data"><Loading /></div>
     }
 
     return (

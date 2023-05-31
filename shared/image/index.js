@@ -12,7 +12,7 @@ import Current from "../../public/assets/images/current.svg";
 import Pyramid from "../../public/assets/images/piramid.svg";
 import Cup from "../../public/assets/images/cup.svg";
 import ArrowRight from "../../public/assets/images/arrow-right.svg";
-import No_Data from "../../public/assets/images/no_data.svg";
+import No_Data from "../../public/assets/images/no_data.png";
 import Slider from "../../public/assets/images/slider.svg";
 import Ranged from "../../public/assets/images/ranged.svg";
 import Discord from "../../public/assets/images/discord.svg";
@@ -33,6 +33,7 @@ import Star from "../../public/assets/images/star.svg";
 import StarHighlight from "../../public/assets/images/star-highlight.svg";
 import HirborLogo from "../../public/assets/images/hurbor-logo.svg";
 import Emission from "../../public/assets/images/emmision.svg";
+import PageLoader from "../../public/assets/animation/loader.json";
 
 // exports
 export {
@@ -70,4 +71,5 @@ export {
   StarHighlight,
   HirborLogo,
   Emission,
+  PageLoader
 };

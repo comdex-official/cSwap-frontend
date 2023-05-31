@@ -174,7 +174,7 @@ const Buy = ({
             })}{" "}
             {denomConversion(pair?.quote_coin_denom)}
             <label>
-              =$
+              ~$
               {formateNumberDecimalsAuto({ price: getBalanceValue() || 0 })}
             </label>
           </div>
@@ -301,7 +301,7 @@ const Buy = ({
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-                =${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+              ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
               </label>
             </div>
           </div>

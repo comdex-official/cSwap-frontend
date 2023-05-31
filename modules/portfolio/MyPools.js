@@ -15,6 +15,7 @@ import { commaSeparator } from "../../utils/number";
 import ShowAPR from "./ShowAPR";
 import PoolCardRow from "./MyPoolRow";
 import { useRouter } from "next/router";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const MyPools = ({
   pools,
@@ -113,7 +114,7 @@ const MyPools = ({
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
-            // locale={{ emptyText: <NoDataIcon /> }}
+            locale={{ emptyText: <NoDataIcon /> }}
           />
         </Col>
       </Row>
