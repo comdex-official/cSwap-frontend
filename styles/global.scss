@@ -809,10 +809,11 @@ a {
           tr {
             th {
               background: none;
-              font-weight: 400;
               border: 0;
               padding: 10px 15px 0 15px;
-              font-size: $font-size-sm + 3;
+              font-weight: 400;
+              font-size: 16px;
+              line-height: 24px;
               color: $dark-color;
               text-align: left !important;
               clear: both;
@@ -1127,7 +1128,7 @@ a {
 
       .ant-tabs-nav-list {
         border-radius: 20px;
-        border: 1px solid white;
+        border: 2px solid #303950;
         padding: 5px;
         width: 100%;
         // max-width: 350px;
@@ -1192,7 +1193,7 @@ a {
 
         .ant-tabs-nav-list {
           border-radius: 20px;
-          border: 1px solid white;
+          border: 2px solid #303950;
           padding: 5px;
           width: 100%;
           // max-width: 350px;
@@ -2940,7 +2941,7 @@ a {
 
       .ant-tabs-nav-list {
         border-radius: 20px;
-        border: 1px solid white;
+        border: 2px solid #303950;
         padding: 5px;
         width: 100%;
         // max-width: 350px;

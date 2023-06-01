@@ -210,6 +210,10 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     );
   }
 
+  const handleClick = () => {
+    handleTabChange("2");
+  };
+
   return (
     <>
       <div className={`mt-4 govern_max_width`}>
@@ -267,15 +271,20 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                 ) : (
                   <div className={"table__empty__data__wrap"}>
                     <div className={"table__empty__data"}>
-                      <NextImage src={No_Data} alt="Message" height={80} width={80}/>
+                      <NextImage
+                        src={No_Data}
+                        alt="Message"
+                        height={80}
+                        width={80}
+                      />
                       <span>{"No Active Proposals"}</span>
                       <Button
-          type="primary"
-          className="btn-no-data"
-          // onClick={() => OnClick()}
-        >
-          {"View Past Proposals"}
-        </Button>
+                        type="primary"
+                        className="btn-no-data"
+                        onClick={() => handleClick()}
+                      >
+                        {"View Past Proposals"}
+                      </Button>
                     </div>
                   </div>
                 )
@@ -285,7 +294,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                 <div className={"table__empty__data__wrap"}>
                   <div className={"table__empty__data"}>
                     <NextImage src={No_Data} alt="Message" />
-                    <span>{"NO DATA"}</span>
+                    <span>{"No Proposals"}</span>
                   </div>
                 </div>
               )}

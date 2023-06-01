@@ -104,6 +104,10 @@ const MyPools = ({
       };
     });
 
+  const handleClick = () => {
+    navigate.push(`/farm`);
+  };
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -114,7 +118,16 @@ const MyPools = ({
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
-            locale={{ emptyText: <NoDataIcon text="No Liquidity Provided" button={true} buttonText={"Go To Pools"}/> }}
+            locale={{
+              emptyText: (
+                <NoDataIcon
+                  text="No Liquidity Provided"
+                  button={true}
+                  buttonText={"Go To Pools"}
+                  OnClick={() => handleClick()}
+                />
+              ),
+            }}
           />
         </Col>
       </Row>

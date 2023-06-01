@@ -171,29 +171,32 @@ const CustomButton = ({
 
               let data = result?.order;
 
-             
-                  Toaster(
-                    `Received ${amountConversion(
-                      data?.receivedCoin?.amount,
-                      assetMap[data?.receivedCoin?.denom]?.decimals
-                    )} ${denomConversion(
-                      data?.receivedCoin?.denom
-                    )} for ${amountConversion(
-                      Number(data?.offerCoin?.amount) -
-                        Number(data?.remainingOfferCoin?.amount),
-                      assetMap[data?.offerCoin?.denom]?.decimals
-                    )} ${denomConversion(data?.offerCoin?.denom)}`
-                  )
-               
-
-                message
+              message
                 .loading("Processing..", 3)
-                .then(() =>Toaster(
-                <Snack
-                  message={variables[lang].tx_success}
-                  hash={result?.transactionHash}
-                />
-              ));
+                .then(() =>
+                  Toaster(
+                    <Snack
+                      message={variables[lang].tx_success}
+                      hash={result?.transactionHash}
+                    />
+                  )
+                )
+                .then(() =>
+                  setTimeout(() => {
+                    Toaster(
+                      `Received ${amountConversion(
+                        data?.receivedCoin?.amount,
+                        assetMap[data?.receivedCoin?.denom]?.decimals
+                      )} ${denomConversion(
+                        data?.receivedCoin?.denom
+                      )} for ${amountConversion(
+                        Number(data?.offerCoin?.amount) -
+                          Number(data?.remainingOfferCoin?.amount),
+                        assetMap[data?.offerCoin?.denom]?.decimals
+                      )} ${denomConversion(data?.offerCoin?.denom)}`
+                    );
+                  }, 1000)
+                );
 
               // message.success(
               //   `Received ${amountConversion(

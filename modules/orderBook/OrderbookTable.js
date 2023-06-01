@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./OrderBook.module.scss";
 import { Table } from "antd";
 import NoDataIcon from "../../shared/components/NoDataIcon";
+import { useRouter } from "next/router";
 
 const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
   const theme = "dark";
+
+ 
+
+    const handleClick = () =>{
+      const targetElement = document.getElementById('spot');
+      if (targetElement) {
+      
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        
+      }
+    }
+    
 
   return (
     <div
@@ -24,6 +37,7 @@ const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
               text="No Limit Orders"
               button={true}
               buttonText={"Place Limit Order"}
+               OnClick={()=>handleClick()}
             />
           ),
         }}

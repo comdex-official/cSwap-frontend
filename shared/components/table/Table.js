@@ -3,9 +3,9 @@ import { useTable } from "react-table";
 import styles from "./Table.module.scss";
 import { NextImage } from "../../../shared/image/NextImage";
 import { No_Data } from "../../../shared/image";
-import {Button} from "antd";
+import { Button } from "antd";
 
-const Table = ({ columns, data, noDataButton }) => {
+const Table = ({ columns, data, noDataButton, handleClick }) => {
   const columnsData = useMemo(() => columns, [columns]);
   const body = useMemo(() => data, [data]);
 
@@ -60,7 +60,7 @@ const Table = ({ columns, data, noDataButton }) => {
               <Button
                 type="primary"
                 className="btn-no-data"
-                // onClick={() => OnClick()}
+                onClick={() => handleClick()}
               >
                 {"Go To Pools"}
               </Button>

@@ -813,7 +813,7 @@ const OrderBook = ({
                     styles.loos
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                 <Loading />
+                  <Loading />
                 </div>
               ) : (
                 <TVChartContainer selectedPair={selectedPair} />
@@ -894,11 +894,9 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {
-                    selectedPair === undefined
-                    ? `Amount`
-                    : 
-                    `Amount (${selectedPair?.base_coin})`}
+                    {selectedPair === undefined
+                      ? `Amount`
+                      : `Amount (${selectedPair?.base_coin})`}
                   </div>
                 </div>
 
@@ -1081,11 +1079,9 @@ const OrderBook = ({
               </div>
             </div>
             <div
-              className={`${styles.orderbook__middle__lower__table} ${recentTrade.length === 0 ?
-                styles.no_data : ""
-              } ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+              className={`${styles.orderbook__middle__lower__table} ${
+                recentTrade.length === 0 ? styles.no_data : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.orderbook__middle__lower__table__head} ${
@@ -1097,21 +1093,18 @@ const OrderBook = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {
-                   selectedPair === undefined
-                   ? `Price`:
-                  `Price (${selectedPair?.quote_coin})`}
+                  {selectedPair === undefined
+                    ? `Price`
+                    : `Price (${selectedPair?.quote_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {
-                   selectedPair === undefined
-                   ? `Amount`:
-                  
-                  `Amount (${selectedPair?.base_coin})`}
+                  {selectedPair === undefined
+                    ? `Amount`
+                    : `Amount (${selectedPair?.base_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
@@ -1197,6 +1190,7 @@ const OrderBook = ({
           className={`${styles.orderbook__element__right} ${
             theme === "dark" ? styles.dark : styles.light
           }`}
+          id="spot"
         >
           <div
             className={`${styles.orderbook__element__right__head} ${

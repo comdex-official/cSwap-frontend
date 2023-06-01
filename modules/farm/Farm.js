@@ -5,7 +5,17 @@ import Tab from "../../shared/components/tab/Tab";
 import Search from "../../shared/components/search/Search";
 import FarmTable from "./FarmTable";
 import FarmCard from "./FarmCard";
-import { Input, message, Modal, Radio, Spin, Tabs, Tooltip ,Button} from "antd";
+import {
+  Input,
+  message,
+  Modal,
+  Radio,
+  Spin,
+  Tabs,
+  Tooltip,
+  Button,
+  Table,
+} from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -17,6 +27,7 @@ import {
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
   MASTER_POOL_ID,
 } from "../../constants/common";
 import {
@@ -46,8 +57,11 @@ import Liquidity from "./Liquidity";
 import Lottie from "lottie-react";
 import CreatePool from "./CreatePool/index";
 import Timer from "../../shared/components/Timer";
-import { marketPrice } from "../../utils/number";
+import { commaSeparator, marketPrice } from "../../utils/number";
 import Loading from "../../pages/Loading";
+import PoolCardRow from "../portfolio/MyPoolRow";
+import ShowAPR from "../portfolio/ShowAPR";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const MasterPoolsContent = [
   <div key={"1"}>
@@ -339,7 +353,9 @@ const Farm = ({
     }
   }, [isChildPool]);
 
-  console.log(incentivesMap?.[MASTER_POOL_ID]?.nextDistribution);
+  const handleClick = () => {
+    onChange("3");
+  };
 
   return (
     <div
@@ -660,12 +676,15 @@ const Farm = ({
             >
               {!listView ? (
                 <>
-                  <NextImage
-                    src={SquareWhite}
-                    onClick={() => setListView(false)}
-                    height={15}
-                    width={15}
-                  />
+                  {filterValue !== "4" && (
+                    <NextImage
+                      src={SquareWhite}
+                      onClick={() => setListView(false)}
+                      height={15}
+                      width={15}
+                    />
+                  )}
+
                   <NextImage
                     src={List}
                     onClick={() => setListView(true)}
@@ -675,12 +694,15 @@ const Farm = ({
                 </>
               ) : (
                 <>
-                  <NextImage
-                    src={Square}
-                    onClick={() => setListView(false)}
-                    height={15}
-                    width={15}
-                  />
+                  {filterValue !== "4" && (
+                    <NextImage
+                      src={Square}
+                      onClick={() => setListView(false)}
+                      height={15}
+                      width={15}
+                    />
+                  )}
+
                   <NextImage
                     src={ListWhite}
                     onClick={() => setListView(true)}
@@ -743,15 +765,14 @@ const Farm = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              {/* {displayPools && displayPools.map((item) => ( */}
               <FarmTable
                 theme={theme}
                 pool={displayPools}
                 poolsApr={poolsApr}
                 poolAprList={poolsApr && poolsApr}
-                noDataButton={filterValue === "4"? true: false}
+                noDataButton={filterValue === "4" ? true : false}
+                handleClick={handleClick}
               />
-              {/* ))} */}
             </div>
           ) : inProgress ? (
             <div className={`${styles.table__empty__data__wrap}`}>
@@ -760,17 +781,21 @@ const Farm = ({
           ) : !inProgress && displayPools.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <div className={`${styles.table__empty__data}`}>
-                <NextImage src={No_Data} alt="Message" height={80} width={80}/>
-                <span>{filterValue === "4" ? "No Liquidity Provided": "No Pool Available"}</span>
+                <NextImage src={No_Data} alt="Message" height={80} width={80} />
+                <span>
+                  {filterValue === "4"
+                    ? "No Liquidity Provided"
+                    : "No Pool Available"}
+                </span>
                 {filterValue === "4" && (
-        <Button
-          type="primary"
-          className="btn-no-data"
-          // onClick={() => OnClick()}
-        >
-          {"Go To Pools"}
-        </Button>
-      )}
+                  <Button
+                    type="primary"
+                    className="btn-no-data"
+                    onClick={() => handleClick()}
+                  >
+                    {"Go To Pools"}
+                  </Button>
+                )}
               </div>
             </div>
           ) : (
@@ -780,7 +805,9 @@ const Farm = ({
               }`}
             >
               {displayPools.map((item, i) => {
-                return (
+                return filterValue === "4" ? (
+                  setListView(true)
+                ) : (
                   <FarmCard
                     key={i}
                     theme={theme}
