@@ -11,7 +11,7 @@ function getLanguageFromURL() {
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-export default class TVChartContainer extends React.Component {
+export default class TVChartContainer extends React.PureComponent {
   static defaultProps = {
     symbol: "CMDX/ATOM",
     interval: "D",

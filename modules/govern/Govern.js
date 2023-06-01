@@ -29,6 +29,9 @@ import { Icon } from "../../shared/image/Icon";
 import GovernOpenProposal from "./openProposal/index";
 import GovernPastProposal from "./pastProposal/index";
 import { comdex } from "../../config/network";
+import { No_Data } from "../../shared/image";
+import { NextImage } from "../../shared/image/NextImage";
+import Loading from "../../pages/Loading";
 
 const { Option } = Select;
 
@@ -174,7 +177,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const tabItems = [
     {
       key: "1",
-      label: "Open Proposals",
+      label: "Active Proposals",
     },
     {
       key: "2",
@@ -202,8 +205,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   if (inProgress) {
     return (
       <div className="no_data">
-        {" "}
-        <Spin />
+        <Loading />
       </div>
     );
   }
@@ -263,12 +265,22 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                 filteredProposal?.length > 0 ? (
                   <GovernOpenProposal proposals={filteredProposal} />
                 ) : (
-                  <h1 className="no_data">No Active proposal</h1>
+                  <div className={"table__empty__data__wrap"}>
+                    <div className={"table__empty__data"}>
+                      <NextImage src={No_Data} alt="Message" />
+                      <span>{"NO DATA"}</span>
+                    </div>
+                  </div>
                 )
               ) : filteredProposal?.length > 0 ? (
                 <GovernPastProposal proposals={filteredProposal} />
               ) : (
-                <h1 className="no_data">No data found</h1>
+                <div className={"table__empty__data__wrap"}>
+                  <div className={"table__empty__data"}>
+                    <NextImage src={No_Data} alt="Message" />
+                    <span>{"NO DATA"}</span>
+                  </div>
+                </div>
               )}
             </div>
           </div>

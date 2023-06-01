@@ -12,6 +12,7 @@ import style from "./Govern.moduleOld.scss";
 import { Progress } from "@mantine/core";
 import NoDataIcon from "../../shared/components/NoDataIcon";
 import { Icon } from "../../shared/image/Icon";
+import Loading from "../../pages/Loading";
 
 const { Option } = Select;
 
@@ -83,7 +84,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     <>
       {inProgress && !proposals?.length ? (
         <div className="loader">
-          <Spin />
+     <Loading />
         </div>
       ) : (
         <div className={`${style.govern_main_container} ${style.max_width}`}>

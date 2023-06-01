@@ -2357,7 +2357,7 @@ a {
     cursor: pointer;
     background-color: $tooltip-bg-light !important;
     color: #b0abab;
-   
+
     font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
@@ -2847,8 +2847,9 @@ a {
   cursor: pointer;
   .ant-tooltip-arrow {
     cursor: pointer;
+    bottom: -3px !important;
     &::before {
-      background: gray;
+      background: $white;
     }
     .ant-tooltip-arrow-content {
       background: linear-gradient(
@@ -2874,7 +2875,7 @@ a {
   .ant-tooltip-inner {
     cursor: pointer;
     background: #061e45;
-    border: 1px solid gray;
+    border: none;
     font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
@@ -2884,7 +2885,7 @@ a {
     padding: 10px;
     .dark-mode & {
       background: #101a35 !important;
-      border: 1px solid gray !important;
+      border: none;
       border-radius: 15px;
       color: #ffffff;
     }
@@ -3322,9 +3323,13 @@ a {
   margin-left: 5px;
 }
 
-.loading_logo{
+.loading_logo {
   display: flex;
   height: 100vh;
   justify-content: center;
   align-items: center;
+}
+
+.table__loader{
+  height: 20vh;
 }

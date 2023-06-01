@@ -155,7 +155,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
             })}{" "}
             {denomConversion(pair?.base_coin_denom)}
             <label>
-              =$
+            ~$
               {formateNumberDecimalsAuto({ price: getBalanceValue() || 0 })}
             </label>
           </div>
@@ -283,7 +283,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-                =${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+              ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
               </label>
             </div>
           </div>

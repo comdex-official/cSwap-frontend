@@ -2,7 +2,7 @@ import { Icon } from "../../shared/image/Icon";
 import React, { useEffect, useState } from "react";
 import styles from "./OrderBook.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
-import { ArrowRL, Slider } from "../../shared/image";
+import { ArrowRL, No_Data, Slider } from "../../shared/image";
 import { OrderCustomData, OrderCustomData2 } from "./Data";
 import Tab from "../../shared/components/tab/Tab";
 import OrderbookTable from "../../modules/orderBook/OrderbookTable";
@@ -54,6 +54,7 @@ import { signAndBroadcastTransaction } from "../../services/helper";
 import { defaultFee } from "../../services/transaction";
 import Snack from "../../shared/components/Snack/index";
 import variables from "../../utils/variables";
+import Loading from "../../pages/Loading";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -87,18 +88,18 @@ const OrderBook = ({
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState();
   const [cancelInProgress, setCancelInProgress] = useState(false);
-  const [chartLoading, setChartLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(false);
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
       if (error) {
+        // setChartLoading(false);
         return;
-        setChartLoading(false);
       }
 
       setPairs(pairs?.data);
-      setChartLoading(false);
+      // setChartLoading(false);
     });
   }, []);
 
@@ -622,7 +623,7 @@ const OrderBook = ({
 
   // console.log(BuySellData, "result2");
 
-  console.log(order, orders, myOrders, "result");
+  console.log(BuySellData[0]?.sells, "result");
 
   return (
     <div
@@ -712,7 +713,7 @@ const OrderBook = ({
                     )}
                   </span>
                   <span>
-                    =$
+                    ~$
                     {formateNumberDecimalsAuto({
                       price:
                         Number(
@@ -812,7 +813,7 @@ const OrderBook = ({
                     styles.loos
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  <Spin />
+                 <Loading />
                 </div>
               ) : (
                 <TVChartContainer selectedPair={selectedPair} />
@@ -884,18 +885,25 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {"Price (CMST)"}
+                    {selectedPair === undefined
+                      ? `Price`
+                      : `Price (${selectedPair?.quote_coin})`}
                   </div>
                   <div
                     className={`${styles.orderbook__lower__head__title} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {"Amount (CMDX)"}
+                    {
+                    selectedPair === undefined
+                    ? `Amount`
+                    : 
+                    `Amount (${selectedPair?.base_coin})`}
                   </div>
                 </div>
 
-                {BuySellData[0]?.sells.length === 0 ? (
+                {BuySellData[0]?.sells.length <= 0 ||
+                BuySellData[0]?.sells === undefined ? (
                   <div
                     className={`${
                       styles.orderbook__lower__table__head__title
@@ -903,7 +911,13 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {"No Data"}
+                    <NextImage
+                      src={No_Data}
+                      alt="Message"
+                      height={50}
+                      width={50}
+                    />
+                    {"NO DATA"}
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
@@ -939,7 +953,6 @@ const OrderBook = ({
                           styles.orderbook__lower__table__head__title
                         } ${theme === "dark" ? styles.dark : styles.light}`}
                       >
-                        $
                         {item?.user_order_amount
                           ? amountConversion(item?.user_order_amount)
                           : 0}
@@ -990,13 +1003,20 @@ const OrderBook = ({
                 styles.lower
               } ${theme === "dark" ? styles.dark : styles.light}`}
             >
-              {BuySellData[0]?.buys.length === 0 ? (
+              {BuySellData[0]?.buys.length <= 0 ||
+              BuySellData[0]?.buys === undefined ? (
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {"No Data"}
+                  <NextImage
+                    src={No_Data}
+                    alt="Message"
+                    height={50}
+                    width={50}
+                  />
+                  {"NO DATA"}
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
@@ -1032,7 +1052,6 @@ const OrderBook = ({
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      $
                       {item?.user_order_amount
                         ? amountConversion(item?.user_order_amount)
                         : 0}
@@ -1076,14 +1095,21 @@ const OrderBook = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {"Price (CMST)"}
+                  {
+                   selectedPair === undefined
+                   ? `Price`:
+                  `Price (${selectedPair?.quote_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {"Amount (CMDX)"}
+                  {
+                   selectedPair === undefined
+                   ? `Amount`:
+                  
+                  `Amount (${selectedPair?.base_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
@@ -1100,7 +1126,13 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {"No Data"}
+                  <NextImage
+                    src={No_Data}
+                    alt="Message"
+                    height={50}
+                    width={50}
+                  />
+                  {"NO DATA"}
                 </div>
               ) : (
                 recentTrade &&
@@ -1141,7 +1173,6 @@ const OrderBook = ({
                         styles.orderbook__lower__table__head__title
                       } ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      $
                       {item?.asset_in
                         ? amountConversion(item?.asset_in?.amount)
                         : 0}

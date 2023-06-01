@@ -31,7 +31,10 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-    {isLoading ? <Loading /> :
+    {isLoading ? 
+    <div className="loading_logo">
+    <Loading /> 
+    </div>:
     <Layout>
       <Head>
         <title>cSwap Exchange</title>

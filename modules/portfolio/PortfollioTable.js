@@ -23,6 +23,7 @@ import { Icon } from "../../shared/image/Icon";
 import styles from "./Portfolio.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
 import { Hyperlink, Star, StarHighlight } from "../../shared/image";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const PortofolioTable = ({
   lang,
@@ -670,7 +671,7 @@ const PortofolioTable = ({
               columns={columns}
               loading={pricesInProgress}
               pagination={false}
-              // locale={{ emptyText: <NoDataIcon /> }}
+              locale={{ emptyText: <NoDataIcon /> }}
               scroll={{ x: "100%" }}
             />
             {/* ) : (

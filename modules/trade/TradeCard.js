@@ -73,6 +73,7 @@ import CustomButton from "./CustomButton";
 import variables from "../../utils/variables";
 import Order from "./OrderTable";
 import OrderBook from "../orderBook/OrderBook";
+import Loading from "../../pages/Loading";
 
 const TradeCard = ({
   lang,
@@ -658,7 +659,7 @@ const TradeCard = ({
             theme === "dark" ? styles.dark : styles.light
           }`}
         >
-             <Spin size="large" />
+             <Loading />
         </div>
       ) : !toggleValue ? (
         <div className={`${styles.trade__wrap}  `}>

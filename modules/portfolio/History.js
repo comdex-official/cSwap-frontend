@@ -9,6 +9,8 @@ import { comdex } from "../../config/network";
 import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
 import { generateHash, truncateString } from "../../utils/string";
 import Date from "./Date";
+import NoDataIcon from "../../shared/components/NoDataIcon";
+import Loading from "../../pages/Loading";
 
 const columns = [
   {
@@ -73,7 +75,10 @@ const History = ({ address, setTransactionHistory, history }) => {
       return {
         key: index,
         transactionHash: (
-          <div className="tx-hash-col d-flex" style={{ columnGap: "5px", justifyContent: "flex-end" }}>
+          <div
+            className="tx-hash-col d-flex"
+            style={{ columnGap: "5px", justifyContent: "flex-end" }}
+          >
             <span>
               {" "}
               {
@@ -114,7 +119,7 @@ const History = ({ address, setTransactionHistory, history }) => {
             <Table
               columns={columns}
               dataSource={tableData}
-              loading={inProgress}
+              loading={{ indicator: <Loading />, spinning: inProgress }}
               pagination={{
                 total: history && history.count,
                 showSizeChanger: true,
@@ -123,7 +128,7 @@ const History = ({ address, setTransactionHistory, history }) => {
               }}
               total={history && history.count}
               onChange={(event) => handleChange(event)}
-              // locale={{ emptyText: <NoDataIcon /> }}
+              locale={{ emptyText: <NoDataIcon /> }}
               scroll={{ x: "100%" }}
             />
           </div>

@@ -741,7 +741,7 @@ const FarmCard = ({
                     styles.harbor__emision
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {"Harbor Emision"}
+                  {"Harbor Emission"}
                 </div>
 
                 <div

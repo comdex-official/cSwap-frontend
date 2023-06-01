@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { comdex } from "../../config/network";
 import Copy from "../../shared/components/Copy";
 import moment from "moment";
+import NoDataIcon from "../../shared/components/NoDataIcon";
+import Loading from '../../pages/Loading';
 
 const columns = [
   {
@@ -161,9 +163,10 @@ const TradehistoryTable = ({ address }) => {
         className="custom-table assets-table"
         columns={columns}
         dataSource={tableData}
-        loading={inProgress}
         pagination={false}
         scroll={{ x: "100%" }}
+        locale={{ emptyText: <NoDataIcon /> }}
+        loading={{indicator: <Loading />, spinning: inProgress}}
       />
     </div>
   );

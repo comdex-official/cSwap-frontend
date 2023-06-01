@@ -68,7 +68,7 @@ const getResolutionValue = (resolution) => {
 };
 
 const handleIncreaseLength = (dataArray) => {
-  if (dataArray.length < 200) {
+  if (dataArray.length <= 200) {
     const newArray = [...dataArray];
 
     for (let i = 0; i < 500; i++) {
@@ -188,7 +188,7 @@ export const Datafeed = (value) => {
         .join("&");
 
       try {
-        if (from < 0) return;
+  
         const data = await makeApiRequest(`pair/analytical/data?${query}`);
 
         if (data.result !== "success" || data?.data?.data.length === 0) {

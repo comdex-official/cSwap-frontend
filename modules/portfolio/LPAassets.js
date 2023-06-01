@@ -10,6 +10,7 @@ import { fetchRestLPPrices } from "../../services/oracle/query";
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator, formateNumberDecimalsAuto } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const LPAsssets = ({
   balances,
@@ -202,6 +203,7 @@ const LPAsssets = ({
       columns={lpColumns}
       pagination={false}
       scroll={{ x: "100%" }}
+      locale={{ emptyText: <NoDataIcon /> }}
     />
   );
 };
