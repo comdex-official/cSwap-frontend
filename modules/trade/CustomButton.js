@@ -1,7 +1,7 @@
-import { Button, message } from "antd";
+import { Button, message, Alert } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import Snack from "../../shared/components/Snack/index";
 import { APP_ID, DEFAULT_FEE } from "../../constants/common";
@@ -16,6 +16,7 @@ import {
 import { decimalConversion, getExponent } from "../../utils/number";
 import variables from "../../utils/variables";
 import { errorMessageMappingParser } from "../../utils/string";
+import { Toaster } from "../../shared/components/toaster/Toaster";
 
 const CustomButton = ({
   offerCoin,
@@ -39,6 +40,7 @@ const CustomButton = ({
   params,
 }) => {
   const [inProgress, setInProgress] = useState(false);
+
   const dispatch = useDispatch();
 
   const poolPrice = Number(baseCoinPoolPriceWithoutConversion);
@@ -142,6 +144,7 @@ const CustomButton = ({
       address,
       (error, result) => {
         setInProgress(false);
+
         if (error) {
           message.error(error?.rawLog || error);
           return;
@@ -168,18 +171,45 @@ const CustomButton = ({
 
               let data = result?.order;
 
-              message.success(
-                `Received ${amountConversion(
-                  data?.receivedCoin?.amount,
-                  assetMap[data?.receivedCoin?.denom]?.decimals
-                )} ${denomConversion(
-                  data?.receivedCoin?.denom
-                )} for ${amountConversion(
-                  Number(data?.offerCoin?.amount) -
-                    Number(data?.remainingOfferCoin?.amount),
-                  assetMap[data?.offerCoin?.denom]?.decimals
-                )} ${denomConversion(data?.offerCoin?.denom)}`
-              );
+              message
+                .loading("Processing..", 3)
+                .then(() =>
+                  Toaster(
+                    <Snack
+                      message={variables[lang].tx_success}
+                      hash={result?.transactionHash}
+                    />
+                  )
+                )
+                .then(() =>
+                  setTimeout(() => {
+                    Toaster(
+                      `Received ${amountConversion(
+                        data?.receivedCoin?.amount,
+                        assetMap[data?.receivedCoin?.denom]?.decimals
+                      )} ${denomConversion(
+                        data?.receivedCoin?.denom
+                      )} for ${amountConversion(
+                        Number(data?.offerCoin?.amount) -
+                          Number(data?.remainingOfferCoin?.amount),
+                        assetMap[data?.offerCoin?.denom]?.decimals
+                      )} ${denomConversion(data?.offerCoin?.denom)}`
+                    );
+                  }, 1000)
+                );
+
+              // message.success(
+              //   `Received ${amountConversion(
+              //     data?.receivedCoin?.amount,
+              //     assetMap[data?.receivedCoin?.denom]?.decimals
+              //   )} ${denomConversion(
+              //     data?.receivedCoin?.denom
+              //   )} for ${amountConversion(
+              //     Number(data?.offerCoin?.amount) -
+              //       Number(data?.remainingOfferCoin?.amount),
+              //     assetMap[data?.offerCoin?.denom]?.decimals
+              //   )} ${denomConversion(data?.offerCoin?.denom)}`
+              // );
             });
           }
         }
@@ -191,12 +221,13 @@ const CustomButton = ({
 
         updateValues();
         refreshDetails();
-        message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
-        );
+
+        // message.success(
+        //   <Snack
+        //     message={variables[lang].tx_success}
+        //     hash={result?.transactionHash}
+        //   />
+        // );
       }
     );
   };

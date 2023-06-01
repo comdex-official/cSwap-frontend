@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./OrderBook.module.scss";
 import { Table } from "antd";
 import NoDataIcon from "../../shared/components/NoDataIcon";
-
+import { useRouter } from "next/router";
 
 const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
   const theme = "dark";
+
+ 
+
+    const handleClick = () =>{
+      const targetElement = document.getElementById('spot');
+      if (targetElement) {
+      
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        
+      }
+    }
+    
 
   return (
     <div
@@ -19,7 +31,16 @@ const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
         columns={ordersTablecolumns}
         pagination={false}
         scroll={{ x: "100%" }}
-        locale={{ emptyText: <NoDataIcon /> }}
+        locale={{
+          emptyText: (
+            <NoDataIcon
+              text="No Limit Orders"
+              button={true}
+              buttonText={"Place Limit Order"}
+               OnClick={()=>handleClick()}
+            />
+          ),
+        }}
       />
       {/* <div
         className={`${styles.orderbook__table__main} ${

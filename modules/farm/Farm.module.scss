@@ -828,6 +828,7 @@
 
 .table__empty__data__wrap {
   background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border: 2px solid #303950;
   border-radius: 20px;
   display: flex;
   justify-content: center;
@@ -1702,7 +1703,7 @@
 .farmCard__element__left__apr {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 10px;
 }
 

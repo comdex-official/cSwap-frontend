@@ -1,20 +1,16 @@
-import { useMemo } from "react"
-import { useTable } from "react-table"
-import styles from "./Table.module.scss"
-import { NextImage } from "../../../shared/image/NextImage"
-import { No_Data } from "../../../shared/image"
+import { useMemo } from "react";
+import { useTable } from "react-table";
+import styles from "./Table.module.scss";
+import { NextImage } from "../../../shared/image/NextImage";
+import { No_Data } from "../../../shared/image";
+import { Button } from "antd";
 
-const Table = ({ columns, data }) => {
-  const columnsData = useMemo(() => columns, [columns])
-  const body = useMemo(() => data, [data])
+const Table = ({ columns, data, noDataButton, handleClick }) => {
+  const columnsData = useMemo(() => columns, [columns]);
+  const body = useMemo(() => data, [data]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable({ columns: columnsData, data: body })
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns: columnsData, data: body });
 
   return (
     <div className={`${styles.table__wrap}`}>
@@ -38,7 +34,7 @@ const Table = ({ columns, data }) => {
         {data.length > 0 && (
           <tbody {...getTableBodyProps()}>
             {rows.map((row, i) => {
-              prepareRow(row)
+              prepareRow(row);
               return (
                 <tr {...row.getRowProps()} key={i}>
                   {row.cells.map((cell, i) => {
@@ -46,10 +42,10 @@ const Table = ({ columns, data }) => {
                       <td {...cell.getCellProps()} key={i}>
                         {cell.render("Cell")}
                       </td>
-                    )
+                    );
                   })}
                 </tr>
-              )
+              );
             })}
           </tbody>
         )}
@@ -59,12 +55,21 @@ const Table = ({ columns, data }) => {
         <div className={`${styles.table__empty__data__wrap}`}>
           <div className={`${styles.table__empty__data}`}>
             <NextImage src={No_Data} alt="Message" />
-            <span>{"NO DATA"}</span>
+            <span>{"No Liquidity Provided"}</span>
+            {noDataButton && (
+              <Button
+                type="primary"
+                className="btn-no-data"
+                onClick={() => handleClick()}
+              >
+                {"Go To Pools"}
+              </Button>
+            )}
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

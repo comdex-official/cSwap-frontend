@@ -1,4 +1,4 @@
-import Table from "../../shared/components/table/Table";
+import TableNew from "../../shared/components/table/Table";
 // import Table from "@/shared/components/table/Table"
 
 import * as PropTypes from "prop-types";
@@ -19,7 +19,7 @@ import {
   Ranged,
 } from "../../shared/image";
 import dynamic from "next/dynamic";
-import { Modal, Tooltip, message } from "antd";
+import { Modal, Tooltip, message, Table, Button } from "antd";
 import Liquidity from "./Liquidity";
 import Card from "../../shared/components/card/Card";
 import { setUserLiquidityInPools } from "../../actions/liquidity";
@@ -49,6 +49,9 @@ import {
   votingCurrentProposalId,
 } from "../../services/liquidity/query";
 import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
+import PoolCardRow from "../portfolio/MyPoolRow";
+import ShowAPR from "../portfolio/ShowAPR";
+import NoDataIcon from "../../shared/components/NoDataIcon";
 
 const FarmTable = ({
   theme,
@@ -65,6 +68,8 @@ const FarmTable = ({
   poolsApr,
   iconList,
   poolAprList,
+  noDataButton,
+  handleClick
 }) => {
   const [showMoreData, setshowMoreData] = useState(false);
 
@@ -726,13 +731,21 @@ const FarmTable = ({
             )}
           </div>
 
-          <div
+          <Button
+            type="primary"
+            onClick={() => showModal(value)}
+            className="btn-filled"
+            size="small"
+          >
+            Add Liquidity
+          </Button>
+          {/* <div
             className={`${styles.farmCard__buttonWrap} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
             <button onClick={() => showModal(value)}>Add Liquidity</button>
-          </div>
+          </div> */}
         </div>
       ),
     },
@@ -750,9 +763,269 @@ const FarmTable = ({
       };
     });
 
+  const COLUMNS2 = [
+    {
+      Header: "Pool Pair",
+      accessor: "PoolPair",
+      Cell: ({ row, value }) => (
+        <div
+          className={`${styles.farmCard__table__data__wrap} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
+        >
+          <div
+            className={`${styles.farmCard__element__left__title__logo} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
+          >
+            <div
+              className={`${styles.farmCard__element__left__logo__wrap} ${
+                theme === "dark" ? styles.dark : styles.light
+              }`}
+            >
+              <div
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.first
+                } ${theme === "dark" ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={
+                      iconList?.[value?.balances?.baseCoin?.denom]?.coinImageUrl
+                    }
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div
+                className={`${styles.farmCard__element__left__logo} ${
+                  styles.last
+                } ${theme === "dark" ? styles.dark : styles.light}`}
+              >
+                <div
+                  className={`${styles.farmCard__element__left__logo__main} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage
+                    src={
+                      iconList?.[value?.balances?.quoteCoin?.denom]
+                        ?.coinImageUrl
+                    }
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`${styles.farmCard__element__left__title} ${
+                styles.tableActive
+              } ${theme === "dark" ? styles.dark : styles.light}`}
+            >
+              {showPairDenoms(value)}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      Header: "APR",
+      accessor: "APR",
+      Cell: ({ value }) => (
+        <>
+          <div
+            className={`${styles.farmCard__element__left__apr} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
+          >
+            <Tooltip
+              title={
+                !getMasterPool(value?.id?.toNumber()) ? (
+                  <>
+                    <div className="upto_apr_tooltip_farm_main_container">
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">
+                          Total APR (incl. MP Rewards):
+                        </span>
+                        <span className="value">
+                          {" "}
+                          {commaSeparator(calculateUptoApr() || 0)}%
+                        </span>
+                      </div>
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">
+                          Base APR (CMDX. yeild only):
+                        </span>
+                        <span className="value">
+                          {" "}
+                          {commaSeparator(calculateApr() || 0)}%
+                        </span>
+                      </div>
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">Swap Fee APR :</span>
+                        <span className="value">
+                          {" "}
+                          {fixedDecimal(
+                            poolsApr?.swap_fee_rewards?.[0]?.apr || 0
+                          )}
+                          %
+                        </span>
+                      </div>
+
+                      <div className="upto_apr_tooltip_farm">
+                        <span className="text">Available MP Boost:</span>
+                        <span className="value">
+                          {" "}
+                          Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
+                          for providing liquidity in the Master Pool
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : null
+              }
+              // className="farm_upto_apr_tooltip"
+              overlayClassName="farm_upto_apr_tooltip"
+            >
+              <div
+                className={`${styles.farmCard__element__right__details} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <div
+                  className={`${
+                    styles.farmCard__element__right__details__title
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                >
+                  {commaSeparator(calculateApr(value?.id?.toNumber()) || 0)}%
+                  {!getMasterPool(value?.id?.toNumber()) && (
+                    <Icon className={"bi bi-arrow-right"} />
+                  )}
+                </div>
+                {!getMasterPool(value?.id?.toNumber()) && (
+                  <div
+                    className={`${styles.farmCard__element__right__pool} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {`Upto ${commaSeparator(
+                        calculateUptoApr(value?.id?.toNumber()) || 0
+                      )}%`}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Tooltip>
+
+            {(value?.balances?.quoteCoin?.denom === "ucmst" ||
+              value?.balances?.baseCoin?.denom === "ucmst") && (
+              <div
+                className={`${styles.farmCard__element__apr__poll__wrap} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                <Tooltip
+                  title={
+                    "Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions."
+                  }
+                  overlayClassName="farm_upto_apr_tooltip"
+                >
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__apr_pool__title
+                    }  ${styles.boost} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <NextImage src={HirborLogo} alt="Logo" />
+                    {value?.id &&
+                      commaSeparator(
+                        calculateVaultEmission(value?.id?.toNumber()).toFixed(2)
+                      )}
+                  </div>
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        </>
+      ),
+    },
+    {
+      Header: "My Liquidity",
+      accessor: "TotalLiquidity",
+      Cell: ({ value }) => (
+        <div
+          className={`${styles.liquidity__wrap} ${
+            theme === "dark" ? styles.dark : styles.light
+          }`}
+        >
+          <div
+            className={`${styles.farmCard__element__right__title} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
+          >
+            ${commaSeparator(Number(value || 0).toFixed(DOLLAR_DECIMALS))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      Header: "Action",
+      accessor: "Action",
+      Cell: ({ value }) => (
+        <>
+          <Button
+            type="primary"
+            onClick={() => showModal(value)}
+            className="btn-filled"
+            size="small"
+          >
+            Add Liquidity
+          </Button>
+        </>
+      ),
+    },
+  ];
+
+  const DATA2 =
+    pool &&
+    pool?.map((item) => {
+      return {
+        PoolPair: item,
+        Image1: CMDS,
+        Image2: ATOM,
+        APR: item,
+        TotalLiquidity: userLiquidityInPools[item?.id],
+        Action: item,
+      };
+    });
+
   return (
     <>
-      <Table columns={COLUMNS} data={DATA} />
+      {noDataButton ? (
+        <TableNew columns={COLUMNS2} data={DATA2} noDataButton={noDataButton} handleClick={handleClick}/>
+      ) : (
+        <TableNew columns={COLUMNS} data={DATA} noDataButton={noDataButton} />
+      )}
 
       <Modal
         className={"liquidity__modal"}

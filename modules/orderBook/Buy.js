@@ -321,7 +321,7 @@ const Buy = ({
             onClick={() => handleSwap()}
           >
             {type === "limit"
-              ? "Place Order"
+              ? "Buy"
               : `Buy ${denomConversion(pair?.base_coin_denom)}`}
           </Button>
         </div>

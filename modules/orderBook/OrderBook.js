@@ -813,7 +813,7 @@ const OrderBook = ({
                     styles.loos
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                 <Loading />
+                  <Loading />
                 </div>
               ) : (
                 <TVChartContainer selectedPair={selectedPair} />
@@ -894,11 +894,9 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {
-                    selectedPair === undefined
-                    ? `Amount`
-                    : 
-                    `Amount (${selectedPair?.base_coin})`}
+                    {selectedPair === undefined
+                      ? `Amount`
+                      : `Amount (${selectedPair?.base_coin})`}
                   </div>
                 </div>
 
@@ -911,13 +909,13 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    <NextImage
+                    {/* <NextImage
                       src={No_Data}
                       alt="Message"
                       height={50}
                       width={50}
-                    />
-                    {"NO DATA"}
+                    /> */}
+                    {"No Data"}
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
@@ -1010,13 +1008,13 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  <NextImage
+                  {/* <NextImage
                     src={No_Data}
                     alt="Message"
                     height={50}
                     width={50}
-                  />
-                  {"NO DATA"}
+                  /> */}
+                  {"No Data"}
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
@@ -1082,8 +1080,8 @@ const OrderBook = ({
             </div>
             <div
               className={`${styles.orderbook__middle__lower__table} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
+                recentTrade.length === 0 ? styles.no_data : ""
+              } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.orderbook__middle__lower__table__head} ${
@@ -1095,21 +1093,18 @@ const OrderBook = ({
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {
-                   selectedPair === undefined
-                   ? `Price`:
-                  `Price (${selectedPair?.quote_coin})`}
+                  {selectedPair === undefined
+                    ? `Price`
+                    : `Price (${selectedPair?.quote_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  {
-                   selectedPair === undefined
-                   ? `Amount`:
-                  
-                  `Amount (${selectedPair?.base_coin})`}
+                  {selectedPair === undefined
+                    ? `Amount`
+                    : `Amount (${selectedPair?.base_coin})`}
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
@@ -1126,13 +1121,13 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  <NextImage
+                  {/* <NextImage
                     src={No_Data}
                     alt="Message"
                     height={50}
                     width={50}
-                  />
-                  {"NO DATA"}
+                  /> */}
+                  {"No Recent Trades"}
                 </div>
               ) : (
                 recentTrade &&
@@ -1195,6 +1190,7 @@ const OrderBook = ({
           className={`${styles.orderbook__element__right} ${
             theme === "dark" ? styles.dark : styles.light
           }`}
+          id="spot"
         >
           <div
             className={`${styles.orderbook__element__right__head} ${
