@@ -5,7 +5,7 @@ import Tab from "../../shared/components/tab/Tab";
 import Search from "../../shared/components/search/Search";
 import FarmTable from "./FarmTable";
 import FarmCard from "./FarmCard";
-import { Input, message, Modal, Radio, Spin, Tabs, Tooltip } from "antd";
+import { Input, message, Modal, Radio, Spin, Tabs, Tooltip ,Button} from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
@@ -749,6 +749,7 @@ const Farm = ({
                 pool={displayPools}
                 poolsApr={poolsApr}
                 poolAprList={poolsApr && poolsApr}
+                noDataButton={filterValue === "4"? true: false}
               />
               {/* ))} */}
             </div>
@@ -759,8 +760,17 @@ const Farm = ({
           ) : !inProgress && displayPools.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <div className={`${styles.table__empty__data}`}>
-                <NextImage src={No_Data} alt="Message" />
-                <span>{"NO DATA"}</span>
+                <NextImage src={No_Data} alt="Message" height={80} width={80}/>
+                <span>{filterValue === "4" ? "No Liquidity Provided": "No Pool Available"}</span>
+                {filterValue === "4" && (
+        <Button
+          type="primary"
+          className="btn-no-data"
+          // onClick={() => OnClick()}
+        >
+          {"Go To Pools"}
+        </Button>
+      )}
               </div>
             </div>
           ) : (

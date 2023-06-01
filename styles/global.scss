@@ -266,6 +266,28 @@ a {
         cursor: not-allowed;
       }
     }
+
+    &.btn-no-data {
+      margin-top: 10px;
+      background-color: $primary-color;
+      color: $white;
+      text-transform: capitalize;
+      &:hover:not(&[disabled]),
+      &:active,
+      &:focus {
+        background-color: rgba($primary-color, 0.3);
+        color: $white;
+        border-color: rgba($primary-color, 0.3);
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      span {
+        margin: 0 !important;
+      }
+    }
   }
 
   .voote__now {
@@ -853,8 +875,8 @@ a {
               }
 
               color: $text-color-light2;
-              border-top: 1px solid;
-              border-bottom: 1px solid;
+              border-top: 2px solid;
+              border-bottom: 2px solid;
               border-left: 0;
               border-right: 0;
               padding: 8px 15px;
@@ -871,7 +893,7 @@ a {
                 border-radius: 15px 0 0 15px !important;
 
                 .dark-mode & {
-                  border-left: 1px solid white;
+                  border-left: 2px solid #303950;
                 }
               }
 
@@ -879,13 +901,13 @@ a {
                 border-radius: 0 15px 15px 0 !important;
 
                 .dark-mode & {
-                  border-right: 1px solid white;
+                  border-right: 2px solid #303950;
                 }
               }
 
               .dark-mode & {
                 color: $white;
-                border-color: white;
+                border-color: #303950;
               }
             }
 
@@ -3330,6 +3352,46 @@ a {
   align-items: center;
 }
 
-.table__loader{
+.table__loader {
   height: 20vh;
+}
+
+.ant-message {
+  .ant-message-notice {
+    &:first-child {
+      margin-top: 50px !important;
+    }
+    .ant-message-notice-content {
+      background: #223164 !important;
+      padding: 3px 10px !important;
+      .ant-message-custom-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          color: $white !important;
+        }
+      }
+    }
+  }
+}
+
+.ant-alert {
+  width: 180px;
+  margin: auto;
+  border: none;
+  margin-top: 10px;
+  background: #223164 !important;
+  padding: 3px 10px !important;
+  .ant-alert-icon {
+    margin: 0;
+  }
+  .ant-alert-content {
+    .ant-alert-message {
+      color: $white !important;
+    }
+  }
+}
+
+.btn-no_data {
 }

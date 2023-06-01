@@ -3,7 +3,6 @@ import styles from "./OrderBook.module.scss";
 import { Table } from "antd";
 import NoDataIcon from "../../shared/components/NoDataIcon";
 
-
 const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
   const theme = "dark";
 
@@ -19,7 +18,15 @@ const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
         columns={ordersTablecolumns}
         pagination={false}
         scroll={{ x: "100%" }}
-        locale={{ emptyText: <NoDataIcon /> }}
+        locale={{
+          emptyText: (
+            <NoDataIcon
+              text="No Limit Orders"
+              button={true}
+              buttonText={"Place Limit Order"}
+            />
+          ),
+        }}
       />
       {/* <div
         className={`${styles.orderbook__table__main} ${

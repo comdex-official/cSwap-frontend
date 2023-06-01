@@ -303,7 +303,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
             onClick={() => handleSwap()}
           >
             {type === "limit"
-              ? "Place Order"
+              ? "Sell"
               : `Sell ${denomConversion(pair?.base_coin_denom)}`}
           </Button>
         </div>

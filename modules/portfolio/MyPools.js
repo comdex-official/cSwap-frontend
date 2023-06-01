@@ -114,7 +114,7 @@ const MyPools = ({
             columns={columns}
             pagination={false}
             scroll={{ x: "100%" }}
-            locale={{ emptyText: <NoDataIcon /> }}
+            locale={{ emptyText: <NoDataIcon text="No Liquidity Provided" button={true} buttonText={"Go To Pools"}/> }}
           />
         </Col>
       </Row>

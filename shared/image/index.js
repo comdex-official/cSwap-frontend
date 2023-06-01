@@ -34,6 +34,7 @@ import StarHighlight from "../../public/assets/images/star-highlight.svg";
 import HirborLogo from "../../public/assets/images/hurbor-logo.svg";
 import Emission from "../../public/assets/images/emmision.svg";
 import PageLoader from "../../public/assets/animation/loader.json";
+import Done from "../../public/assets/animation/done.json";
 
 // exports
 export {
@@ -71,5 +72,6 @@ export {
   StarHighlight,
   HirborLogo,
   Emission,
-  PageLoader
+  PageLoader,
+  Done,
 };

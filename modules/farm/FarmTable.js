@@ -65,6 +65,7 @@ const FarmTable = ({
   poolsApr,
   iconList,
   poolAprList,
+  noDataButton
 }) => {
   const [showMoreData, setshowMoreData] = useState(false);
 
@@ -752,7 +753,7 @@ const FarmTable = ({
 
   return (
     <>
-      <Table columns={COLUMNS} data={DATA} />
+      <Table columns={COLUMNS} data={DATA} noDataButton={noDataButton}/>
 
       <Modal
         className={"liquidity__modal"}

@@ -3,12 +3,13 @@ import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Icon } from "../../shared/image/Icon";
 import { NextImage } from "../../shared/image/NextImage";
-import { Arrow } from "../../shared/image";
+import { Arrow, PageLoader } from "../../shared/image";
 import Toggle from "../../shared/components/toggle/Toggle";
 import Card from "../../shared/components/card/Card";
 import CustomInput from "../../shared/components/CustomInput";
 import TooltipIcon from "../../shared/components/tooltip/TooltipIcon";
-import { Button, message, Popover, Radio, Spin } from "antd";
+import Lottie from "lottie-react";
+import { Alert, Button, message, Popover, Radio, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { comdex } from "../../config/network";
 import {
@@ -649,17 +650,16 @@ const TradeCard = ({
       </div>
     </div>
   );
- 
+
   return (
     <>
       {loading ? (
-        
-           <div
+        <div
           className={`${styles.tradeCard__head__spin} ${
             theme === "dark" ? styles.dark : styles.light
           }`}
         >
-             <Loading />
+          <Loading />
         </div>
       ) : !toggleValue ? (
         <div className={`${styles.trade__wrap}  `}>
@@ -1092,6 +1092,7 @@ const TradeCard = ({
                         ? variables[lang].swap_anyway
                         : variables[lang].swap
                     }
+                   
                   />
                 </div>
               </div>

@@ -1,4 +1,6 @@
 import { comdex } from "../../../config/network";
+import { Hyperlink } from "../../image";
+import { NextImage } from "../../image/NextImage";
 
 const Snack = ({ message, explorerUrlToTx = comdex.explorerUrlToTx, hash }) => {
   return (
@@ -12,7 +14,8 @@ const Snack = ({ message, explorerUrlToTx = comdex.explorerUrlToTx, hash }) => {
         aria-label="explorer"
       >
         {" "}
-        View Explorer
+        View Explorer{" "}
+        <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
       </a>
     </span>
   );

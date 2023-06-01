@@ -267,8 +267,15 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                 ) : (
                   <div className={"table__empty__data__wrap"}>
                     <div className={"table__empty__data"}>
-                      <NextImage src={No_Data} alt="Message" />
-                      <span>{"NO DATA"}</span>
+                      <NextImage src={No_Data} alt="Message" height={80} width={80}/>
+                      <span>{"No Active Proposals"}</span>
+                      <Button
+          type="primary"
+          className="btn-no-data"
+          // onClick={() => OnClick()}
+        >
+          {"View Past Proposals"}
+        </Button>
                     </div>
                   </div>
                 )

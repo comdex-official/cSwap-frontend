@@ -911,13 +911,13 @@ const OrderBook = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    <NextImage
+                    {/* <NextImage
                       src={No_Data}
                       alt="Message"
                       height={50}
                       width={50}
-                    />
-                    {"NO DATA"}
+                    /> */}
+                    {"No Data"}
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
@@ -1010,13 +1010,13 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  <NextImage
+                  {/* <NextImage
                     src={No_Data}
                     alt="Message"
                     height={50}
                     width={50}
-                  />
-                  {"NO DATA"}
+                  /> */}
+                  {"No Data"}
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
@@ -1081,7 +1081,9 @@ const OrderBook = ({
               </div>
             </div>
             <div
-              className={`${styles.orderbook__middle__lower__table} ${
+              className={`${styles.orderbook__middle__lower__table} ${recentTrade.length === 0 ?
+                styles.no_data : ""
+              } ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
@@ -1126,13 +1128,13 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  <NextImage
+                  {/* <NextImage
                     src={No_Data}
                     alt="Message"
                     height={50}
                     width={50}
-                  />
-                  {"NO DATA"}
+                  /> */}
+                  {"No Recent Trades"}
                 </div>
               ) : (
                 recentTrade &&

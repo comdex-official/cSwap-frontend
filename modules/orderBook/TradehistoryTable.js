@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import styles from "./OrderBook.module.scss";
 import { Table, message } from "antd";
-import Date from "../portfolio/Date";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { generateHash, truncateString } from "../../utils/string";
 import {
@@ -15,7 +14,7 @@ import { comdex } from "../../config/network";
 import Copy from "../../shared/components/Copy";
 import moment from "moment";
 import NoDataIcon from "../../shared/components/NoDataIcon";
-import Loading from '../../pages/Loading';
+import Loading from "../../pages/Loading";
 
 const columns = [
   {
@@ -107,13 +106,15 @@ const TradehistoryTable = ({ address }) => {
   const allTx = [...orderTx, ...limitOrderTx];
   const allTxResponse = [...orderTxResponse, ...limitOrderTxResponse];
 
-  const combinedTx = allTxResponse.map((item, index) => ({
+  let combinedTx = allTxResponse.map((item, index) => ({
     tx: item?.txhash,
-    time: item?.timeStamp,
+    time: item?.timestamp,
     details: allTx[index]?.body?.messages[0],
   }));
 
-  console.log(combinedTx, "hdhhhd");
+  combinedTx = combinedTx.sort(function (a, b) {
+    return new Date(b.time) - new Date(a.time);
+  });
 
   const tableData =
     combinedTx?.length &&
@@ -165,8 +166,8 @@ const TradehistoryTable = ({ address }) => {
         dataSource={tableData}
         pagination={false}
         scroll={{ x: "100%" }}
-        locale={{ emptyText: <NoDataIcon /> }}
-        loading={{indicator: <Loading />, spinning: inProgress}}
+        locale={{ emptyText: <NoDataIcon  text="Trading History Not Available"/> }}
+        loading={{ indicator: <Loading />, spinning: inProgress }}
       />
     </div>
   );
