@@ -180,7 +180,7 @@ a {
                 margin-left: 13px;
                 color: white;
                 p {
-                  font-weight: 200;
+                  font-weight: 400;
                   font-size: 12px;
                 }
                 h3 {
@@ -288,6 +288,11 @@ a {
         margin: 0 !important;
       }
     }
+
+    &.btn-width-fixed {
+      padding: 0;
+      width: 200px;
+    }
   }
 
   .voote__now {
@@ -299,7 +304,7 @@ a {
     padding: 0 15px;
     line-height: 100%;
     font-size: $font-size-sm - 1;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   &.ant-btn-lg {
@@ -307,7 +312,7 @@ a {
     height: 42px;
     line-height: 42px;
     font-size: $font-size-lg;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   &.success-btn {
@@ -492,10 +497,11 @@ a {
 }
 
 .ant-dropdown {
+  z-index: 999999999;
   .ant-dropdown-menu {
     background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
     border: 2px solid #303950 !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     margin-top: 4px;
 
     .ant-dropdown-menu-item {
@@ -508,7 +514,7 @@ a {
   .ant-dropdown-menu {
     background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
     border: 2px solid #303950 !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     margin-top: 4px;
 
     .ant-dropdown-menu-item {
@@ -1141,7 +1147,7 @@ a {
           width: 100%;
           text-align: center;
           color: $primary-color;
-          font-weight: 300;
+          font-weight: 400;
           font-size: $font-size-base - 2;
           margin-left: 0;
 
@@ -1206,7 +1212,7 @@ a {
             width: 100%;
             text-align: center;
             color: $primary-color;
-            font-weight: 300;
+            font-weight: 400;
             font-size: $font-size-base - 2;
             margin-left: 0;
 
@@ -1308,7 +1314,7 @@ a {
 
       .ant-modal-title {
         font-size: 1.3rem;
-        font-weight: 300;
+        font-weight: 400;
 
         .dark-mode & {
           color: $white;
@@ -2715,7 +2721,7 @@ a {
 
       span {
         font-size: $font-size-sm;
-        font-weight: 300;
+        font-weight: 400;
 
         .dark-mode & {
           color: $text-color-light;
@@ -2954,7 +2960,7 @@ a {
           width: 100%;
           text-align: center;
           color: $primary-color;
-          font-weight: 300;
+          font-weight: 400;
           font-size: $font-size-base - 2;
           margin-left: 0;
 
@@ -3216,7 +3222,7 @@ a {
     }
   }
   .pool-denom {
-    font-weight: 300;
+    font-weight: 400;
     .dark-mode & {
       color: $text-color-label-dark;
     }
@@ -3236,7 +3242,7 @@ a {
 
 .poolcreation-fee {
   background: #101b2f;
-  border-radius: 20px;
+  border-radius: 10px;
   // padding: 1px;
 
   .poolcreationfee-inner {
@@ -3394,5 +3400,17 @@ a {
   }
 }
 
-.btn-no_data {
+.header_cswap {
+  .ant-dropdown-menu {
+    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
+    border: 2px solid #303950 !important;
+    border-radius: 8px !important;
+    margin-top: 4px;
+    width: 111px;
+
+    .ant-dropdown-menu-item {
+      background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
+      padding: 5px;
+    }
+  }
 }

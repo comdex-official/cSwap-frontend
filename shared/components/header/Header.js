@@ -99,12 +99,40 @@ const Header = ({
   const [mobileHam, setMobileHam] = useState(false);
 
   const router = useRouter();
-
+  const headerRef = useRef(null);
   const isActive = (pathname) => {
     return router.pathname === pathname;
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isSetOnScroll, setOnScroll] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = headerRef.current.getBoundingClientRect().top;
+
+      if (scrollTop > 10) {
+        setOnScroll(true);
+      } else {
+        setOnScroll(false);
+      }
+    };
+
+    const handleRouteChange = () => {
+      setOnScroll(false);
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", handleScroll);
+      router.events.on("routeChangeStart", handleRouteChange);
+
+      // return () => {
+      //   window.removeEventListener("scroll", handleScroll);
+      //   router.events.off("routeChangeStart", handleRouteChange);
+      // };
+    }
+  }, [router.events, isSetOnScroll]);
+  console.log(isSetOnScroll, "SSSDDDDDD");
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -419,7 +447,12 @@ const Header = ({
   ];
 
   return (
-    <div className={`${styles.header__wrap} dark`}>
+    <div
+      className={`${styles.header__wrap} ${
+        isSetOnScroll ? styles.header__bg : ""
+      } dark`}
+      ref={headerRef}
+    >
       <div className={styles.header__main}>
         <div
           className={styles.hamburger}
@@ -466,6 +499,7 @@ const Header = ({
               items={cswapItems}
               placement={"bottomLeft"}
               trigger={["click"]}
+              className={"header_cswap"}
             >
               <div className={styles.header__cSwap}>
                 <div className={styles.header__cSwap__main}>

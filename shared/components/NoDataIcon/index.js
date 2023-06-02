@@ -7,7 +7,12 @@ import { Button } from "antd";
 const NoDataIcon = ({ text, button, buttonText, OnClick }) => {
   return (
     <div className={styles.no_data_card}>
-      <NextImage src={No_Data} alt={"logo"} height={80} width={80}/>
+      <NextImage
+                        src={No_Data}
+                        alt="Message"
+                        height={60}
+                        width={60}
+                      />
       <div className={styles.empty_text}>{text ? `${text}` : "No Data"}</div>
 
       {button && (

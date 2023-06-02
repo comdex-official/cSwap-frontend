@@ -707,7 +707,7 @@ const Deposit = ({
       <div className={styles.farm__deposit__buttonWrap}>
         <Button
           type="primary"
-          className="btn-filled"
+          className="btn-filled btn-width-fixed"
           loading={depositProgress}
           disabled={
             depositProgress ||
@@ -723,7 +723,7 @@ const Deposit = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled"
+          className="btn-filled btn-width-fixed"
           loading={farmProgress}
           disabled={!userPoolTokens || farmProgress}
           onClick={() => handleFarmClick()}
@@ -732,7 +732,7 @@ const Deposit = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled"
+          className="btn-filled btn-width-fixed"
           loading={inProgress}
           disabled={
             inProgress ||

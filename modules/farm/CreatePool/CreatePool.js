@@ -247,7 +247,7 @@ const CreatePoolModal = ({
       title: "",
       content: (
         <>
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
@@ -282,7 +282,7 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
@@ -373,7 +373,7 @@ const CreatePoolModal = ({
       title: "",
       content: (
         <>
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
@@ -441,7 +441,7 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
@@ -631,7 +631,7 @@ const CreatePoolModal = ({
       title: "",
       content: (
         <>
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div
                 className={`${styles.tradeCard__body__right} ${styles.active}`}
@@ -669,7 +669,7 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={styles.tradeCard__body__item}>
+          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
             <div className={styles.tradeCard__body__left}>
               <div
                 className={`${styles.tradeCard__body__right} ${styles.active}`}
