@@ -1,9 +1,9 @@
 @import "../../../styles/globalVariable.scss";
 
 .header__wrap {
-  position: sticky;
-  top: 0;
-  z-index: 99999999;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
   background: linear-gradient(
     270deg,
     rgba(5, 10, 37, 0.64) 37.5%,

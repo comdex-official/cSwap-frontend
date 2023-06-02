@@ -90,7 +90,7 @@ const handleIncreaseLength = (dataArray) => {
 async function getAllSymbols() {
   const data = await makeApiRequest("pairs/all");
 
-  const allSymbols = data.data.map((item) => {
+  const allSymbols = data?.data?.map((item) => {
     return {
       pairId: item?.pair_id,
       symbol: item.pair_symbol,
@@ -188,7 +188,6 @@ export const Datafeed = (value) => {
         .join("&");
 
       try {
-  
         const data = await makeApiRequest(`pair/analytical/data?${query}`);
 
         if (data.result !== "success" || data?.data?.data.length === 0) {

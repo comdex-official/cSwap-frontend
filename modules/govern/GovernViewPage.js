@@ -343,7 +343,7 @@ const GovernViewPage = ({
 
     return (
         <>
-            <div className="proposal_view_back_button_container mt-4">
+            <div className="proposal_view_back_button_container">
                 <Link href="/govern">
                     <Button type="primary">Back</Button>
                 </Link>

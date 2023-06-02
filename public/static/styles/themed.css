@@ -1,6 +1,7 @@
 :root:not(.theme-dark) {
 	--tv-color-platform-background: #030B1E;
 	--tv-color-pane-background: #030B1E;
+	--tv-color-item-active-text: #fe4350;
 	/* --tv-color-toolbar-button-background-hover: rgb(244, 143, 177);
 	--tv-color-toolbar-button-background-expanded: rgb(244, 143, 177);
 	--tv-color-toolbar-button-background-active: rgb(249, 185, 233);
@@ -34,6 +35,8 @@
 .theme-dark:root {
 	--tv-color-platform-background: #030B1E;
 	--tv-color-pane-background: #030B1E;
+	--tv-color-item-active-text: #fe4350;
+	--tv-color-popup-element-text-active: #fe4350;
 	/* --tv-color-toolbar-button-background-hover: rgb(244, 143, 177);
 	--tv-color-toolbar-button-background-expanded: rgb(244, 143, 177);
 	--tv-color-toolbar-button-background-active: rgb(249, 185, 233);

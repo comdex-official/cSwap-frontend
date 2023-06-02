@@ -97,27 +97,21 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  background: url("../public/assets/images/background.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100vh;
+  min-height: 100vh !important;
+  height: auto !important;
 
   &::before {
+    background: url("../public/assets/images/background.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000000;
-    opacity: 0.6;
+    opacity: 0.5;
   }
 }
 
@@ -841,6 +835,7 @@ a {
 
                 .ant-table-column-sorter {
                   color: $white;
+                  line-height: 0;
                   .ant-table-column-sorter-inner {
                     .active {
                       color: $secondary-color;
@@ -1025,7 +1020,7 @@ a {
 
   border-radius: 25px;
   text-align: left;
-  border: 1px solid white;
+  border: 2px solid #303950;
   padding: 8px 10px;
 
   &::-webkit-placeholder {
@@ -1039,6 +1034,17 @@ a {
     .dark-mode & {
       color: white;
     }
+  }
+  &:hover {
+    border: 2px solid #303950 !important;
+  }
+
+  &:active {
+    border: 2px solid #303950 !important;
+  }
+
+  &:focus {
+    border: 2px solid #303950 !important;
   }
 
   &::-webkit-inner-spin-button {
@@ -1070,8 +1076,8 @@ a {
   .ant-input {
     text-align: left;
     background: transparent;
-    border: none !important;
-    outline: none !important;
+    border: none;
+    outline: none;
     &:active {
       border: none !important;
       outline: none !important;
@@ -2997,6 +3003,7 @@ a {
 }
 
 .tooltop-all {
+  z-index: 9999999999999999;
   .ant-tooltip-content {
     .ant-tooltip-inner {
       background-color: rgb(254, 67, 80) !important;
@@ -3013,8 +3020,8 @@ a {
 }
 
 .farm-disclaimer-info {
-  position: sticky;
-  top: 10px;
+  position: fixed;
+  top: 100px;
   color: #ffffff;
   margin-top: 38px;
   display: flex;
@@ -3055,7 +3062,7 @@ a {
   }
   @media screen and (max-width: 840px) {
     // max-width: 90%;
-    margin-top: -8px;
+    // margin-top: -8px;
     margin-bottom: 15px;
   }
   @media screen and (max-width: 576px) {

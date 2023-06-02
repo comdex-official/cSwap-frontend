@@ -216,7 +216,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
 
   return (
     <>
-      <div className={`mt-4 govern_max_width`}>
+      <div className={`govern_max_width`}>
         <div className="govern_main_container">
           <div className="govern_container">
             <div className="govern_tab_main_container">
