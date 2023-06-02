@@ -1,12 +1,18 @@
 @import "../../../styles/globalVariable.scss";
 
 .header__wrap {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 99999999;
   background: linear-gradient(
     270deg,
     rgba(5, 10, 37, 0.64) 37.5%,
     #0a1d33 96.54%
   );
+
+  &.header__bg {
+    background: #0a1d33;
+  }
 }
 
 .header__main {
@@ -289,6 +295,7 @@
 
     img {
       height: 15px;
+      width: 90px;
     }
 
     &:first-child {

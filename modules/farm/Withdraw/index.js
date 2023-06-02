@@ -368,7 +368,7 @@ const Remove = ({
       <div className={styles.farm__deposit__buttonWrap}>
         <Button
           type="primary"
-          className="btn-filled"
+          className="btn-filled btn-width-fixed"
           disabled={!Number(userLockedPoolTokens) || unfarmProgress}
           loading={unfarmProgress}
           onClick={() => handleUnfarmClick()}
@@ -377,7 +377,7 @@ const Remove = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled"
+          className="btn-filled btn-width-fixed"
           disabled={!myLiquidity || withdrawProgress || !userPoolBalance}
           loading={withdrawProgress}
           onClick={() => handleWithdrawClick()}
@@ -394,7 +394,7 @@ const Remove = ({
             !userPoolBalance
           }
           loading={removeInProgress}
-          className="btn-filled px-4"
+          className="btn-filled btn-width-fixed"
         >
           Unfarm & Withdraw
         </Button>

@@ -7,6 +7,7 @@
   position: relative;
 
   .govern_main_container {
+    margin-bottom: 10px;
     .govern_container {
       .govern_tab_main_container {
         display: flex;
@@ -139,7 +140,7 @@
               .para_container {
                 color: #d1d1da;
                 font-size: 0.9rem;
-                font-weight: 300;
+                font-weight: 400;
                 line-height: 21px;
                 word-break: break-all;
               }
@@ -201,10 +202,8 @@
   max-width: 1200px;
   margin: auto;
   padding: 0 20px;
-  border: 2px solid #303950;
   border-radius: 20px;
   padding: 20px;
-  background-color: #020b1e91;
   .govern_view_container {
     .proposal_detail_main_container {
       background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
@@ -237,7 +236,7 @@
             .title {
               margin-bottom: 5px;
               font-size: 0.85rem;
-              font-weight: 300;
+              font-weight: 400;
               color: #d1d1da;
             }
             .value {
@@ -284,7 +283,7 @@
               .title {
                 color: rgba(255, 255, 255, 0.801);
                 font-size: 0.85rem;
-                font-weight: 300;
+                font-weight: 400;
                 line-height: 20px;
               }
               .value {
@@ -298,7 +297,7 @@
                 .title {
                   color: rgba(255, 255, 255, 0.801);
                   font-size: 0.85rem;
-                  font-weight: 300;
+                  font-weight: 400;
                   line-height: 20px;
                 }
                 .value {
@@ -371,7 +370,7 @@
                   }
                   .value {
                     color: rgba(255, 255, 255, 0.801);
-                    font-weight: 300;
+                    font-weight: 400;
                     font-size: 0.7rem;
                   }
                 }

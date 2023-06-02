@@ -170,7 +170,6 @@
 .orderbook__element__middle__upper__head {
   display: flex;
   flex-direction: column;
-  padding: 15px;
   border-bottom: 1px solid #303950;
 }
 
@@ -179,12 +178,13 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #303950;
-  padding: 10px 0px;
+  padding: 15px 0px;
+  margin: 0px 15px;
 }
 
 .orderbook__upper__head__left__title {
   font-weight: 700;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 16px;
   /* identical to box height */
 
@@ -231,6 +231,8 @@
   overflow: auto;
   height: 100px;
   max-height: 120px;
+  padding: 0px 15px;
+  padding-bottom: 15px;
 
   &.upper {
     margin-top: 10px;
@@ -355,7 +357,7 @@
   overflow: auto;
   height: 120px;
 
-  &.no_data{
+  &.no_data {
     overflow: hidden;
   }
   // @media screen and (max-width: $XXL) {
@@ -411,7 +413,7 @@
 
 .orderbook__element__right__head__title {
   font-weight: 700;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 16px;
   /* identical to box height */
 

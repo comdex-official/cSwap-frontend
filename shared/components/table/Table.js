@@ -54,8 +54,17 @@ const Table = ({ columns, data, noDataButton, handleClick }) => {
       {data.length <= 0 && (
         <div className={`${styles.table__empty__data__wrap}`}>
           <div className={`${styles.table__empty__data}`}>
-            <NextImage src={No_Data} alt="Message" />
-            <span>{"No Liquidity Provided"}</span>
+          <NextImage
+                        src={No_Data}
+                        alt="Message"
+                        height={60}
+                        width={60}
+                      />
+            <span>
+            {noDataButton
+                    ? "No Liquidity Provided"
+                    : "No Pools Exist"}
+             </span>
             {noDataButton && (
               <Button
                 type="primary"

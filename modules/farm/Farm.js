@@ -461,7 +461,7 @@ const Farm = ({
                       }`}
                       onClick={() => setMasterPoolModalOpen(true)}
                     >
-                      {"Go to Pool"}
+                      {"Go to master pool"}
                     </div>
                   </div>
 
@@ -504,7 +504,7 @@ const Farm = ({
                         filterValue !== "2" ? setChildPool(!isChildPool) : ""
                       }
                     >
-                      {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
+                      {isChildPool ? "Go to all pools" : "Go to child pools"}
                     </div>
                   </div>
 
@@ -781,11 +781,11 @@ const Farm = ({
           ) : !inProgress && displayPools.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <div className={`${styles.table__empty__data}`}>
-                <NextImage src={No_Data} alt="Message" height={80} width={80} />
+                <NextImage src={No_Data} alt="Message" height={60} width={60} />
                 <span>
                   {filterValue === "4"
                     ? "No Liquidity Provided"
-                    : "No Pool Available"}
+                    : "No Pools Exist"}
                 </span>
                 {filterValue === "4" && (
                   <Button
