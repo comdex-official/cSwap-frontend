@@ -3,7 +3,9 @@
 .orderbook__wrap {
   max-width: 1500px;
   margin: auto;
-  padding: 20px 80px;
+  padding: 0px 80px;
+  padding-top: 80px;
+  padding-bottom: 20px;
   position: relative;
 
   @media screen and (max-width: $XS) {
@@ -353,9 +355,9 @@
 
 .orderbook__middle__lower__table {
   padding: 15px;
-  max-height: 130px;
+  max-height: 135px;
   overflow: auto;
-  height: 120px;
+  height: 135px;
 
   &.no_data {
     overflow: hidden;
@@ -450,7 +452,7 @@
   font-size: 10px;
   line-height: 17px;
   /* identical to box height */
-
+cursor: pointer;
   text-transform: uppercase;
 
   // @media screen and (max-width: $XXL) {
@@ -666,7 +668,6 @@
 .orderbook__trading__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 15px;
   border-bottom: 1px solid #28385f;
 
@@ -691,6 +692,7 @@
   &.element__child {
     flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
   }
 
   i {

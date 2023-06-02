@@ -3,9 +3,10 @@
 .portfolio__wrap {
   max-width: 1500px;
   margin: auto;
-  padding: 40px 80px;
+  padding: 0px 80px;
   position: relative;
-
+  padding-top: 100px;
+  padding-bottom: 40px;
   @media screen and (max-width: $XS) {
     padding: 20px;
   }

@@ -69,6 +69,7 @@ const OrderBook = ({
   lang,
   handleToggleValue,
   toggleValue,
+  params,
 }) => {
   const theme = "dark";
 
@@ -520,6 +521,17 @@ const OrderBook = ({
     },
   ];
 
+  const handleOrderLifespanChange = (value) => {
+    value = value.toString().trim();
+
+    if (
+      value >= 0 &&
+      Number(value) <= params?.maxOrderLifespan?.seconds.toNumber()
+    ) {
+      setOrderLifeSpan(value);
+    }
+  };
+
   // const tabItemsBottom = [
   //   {
   //     label: "Open Order (0)",
@@ -664,7 +676,7 @@ const OrderBook = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                <NextImage src={ArrowRL} alt="" />
+                {/* <NextImage src={ArrowRL} alt="" /> */}
                 <Select
                   onChange={handlePairChange}
                   value={selectedPair?.pair_id || null}
@@ -1414,6 +1426,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     assetMap: state.asset.map,
     lang: state.language,
+    params: state.swap.params,
   };
 };
 

@@ -7,7 +7,7 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-
+  padding-top: 60px;
   &.active_orderbook {
     display: block;
   }
@@ -390,7 +390,7 @@
   color: #ffffff;
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     background: #fe4350;
   }
   // @media screen and (max-width: $XXL) {
@@ -414,12 +414,12 @@
   line-height: 15px;
   text-align: center;
   color: #ffffff;
-  background: #263861 ;
+  background: #263861;
   border-radius: 5px;
   padding: 2px 8px;
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     background: #0f2048;
   }
   // @media screen and (max-width: $XXL) {

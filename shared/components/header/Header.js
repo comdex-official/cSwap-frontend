@@ -106,33 +106,24 @@ const Header = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isSetOnScroll, setOnScroll] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = headerRef.current.getBoundingClientRect().top;
-
-      if (scrollTop > 10) {
-        setOnScroll(true);
-      } else {
-        setOnScroll(false);
-      }
+      const isScrolled = window?.scrollY > 0;
+      setScrolled(isScrolled);
     };
-
-    const handleRouteChange = () => {
-      setOnScroll(false);
+    
+   
+    window.addEventListener('scroll', handleScroll,{ passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+ 
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleScroll);
-      router.events.on("routeChangeStart", handleRouteChange);
 
-      // return () => {
-      //   window.removeEventListener("scroll", handleScroll);
-      //   router.events.off("routeChangeStart", handleRouteChange);
-      // };
-    }
-  }, [router.events, isSetOnScroll]);
-  console.log(isSetOnScroll, "SSSDDDDDD");
+  
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -449,7 +440,7 @@ const Header = ({
   return (
     <div
       className={`${styles.header__wrap} ${
-        isSetOnScroll ? styles.header__bg : ""
+        scrolled ? styles.header__bg : ""
       } dark`}
       ref={headerRef}
     >

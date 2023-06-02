@@ -53,6 +53,9 @@ export default class TVChartContainer extends React.PureComponent {
           "mainSeriesProperties.style": 2,
           "paneProperties.background": "#030B1E",
           "paneProperties.backgroundType": "solid",
+          "paneProperties.vertGridProperties.color": "#030B1E",
+          "paneProperties.horzGridProperties.color": "#030B1E",
+          "mainSeriesProperties.lineStyle.color": "#90BFF9",
         },
         custom_css_url: "/static/styles/themed.css",
         disabled_features: [
@@ -68,7 +71,6 @@ export default class TVChartContainer extends React.PureComponent {
         user_id: this.props.userId,
         fullscreen: this.props.fullscreen,
         autosize: true,
-        studies_overrides: this.props.studiesOverrides,
       };
 
       const tvWidget = new widget(widgetOptions);
