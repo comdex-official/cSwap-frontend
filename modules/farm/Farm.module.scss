@@ -4,11 +4,17 @@
   max-width: 1500px;
   margin: auto;
   padding: 0px 80px;
-  padding-top: 145px;
   padding-bottom: 40px;
   position: relative;
   @media screen and (max-width: $XS) {
     padding: 20px;
+  }
+
+  &.show__text__alert {
+    padding-top: 160px;
+  }
+  &.text__alert {
+    padding-top: 100px;
   }
 }
 
@@ -147,6 +153,7 @@
   color: #ffffff;
   text-transform: capitalize;
   text-decoration: underline;
+  margin-left: 6px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 13px;
   // }
@@ -288,7 +295,7 @@
   align-items: center;
   margin: 20px 0px;
   flex: 20px;
-  @media screen and (max-width: $M) {
+  @media screen and (max-width: $L) {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -313,7 +320,7 @@
   width: 100%;
   justify-content: flex-end;
 
-  @media screen and (max-width: $M) {
+  @media screen and (max-width: $L) {
     justify-content: flex-start;
   }
 }
@@ -408,6 +415,10 @@
   i {
     margin-right: 10px;
     color: #ffffff;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 62%;
   }
 }
 

@@ -999,7 +999,7 @@ const FarmTable = ({
             className="btn-filled"
             size="small"
           >
-            Add Liquidity
+            Manage
           </Button>
         </>
       ),

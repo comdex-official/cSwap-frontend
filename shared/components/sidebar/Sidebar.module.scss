@@ -90,12 +90,13 @@
     border-radius: 5px;
     border: none;
     outline: none;
-    padding: 8px 12px;
+    padding: 2px 0px;
     cursor: pointer;
     width: 100%;
 
     img {
-      height: 18px;
+      height: 15px;
+      width: 90px;
     }
 
     &:first-child {
@@ -128,9 +129,9 @@
     color: #ffffff;
   }
 
-  // @media screen and (max-width: $XL) {
-  //   width: 140px;
-  // }
+  @media screen and (min-width: $XS) {
+    display: none;
+  }
 }
 
 .header__faucet {
@@ -150,9 +151,9 @@
     width: 15px;
   }
 
-  // @media screen and (max-width: $XL) {
-  //   width: 110px;
-  // }
+  @media screen and (min-width: $XS) {
+    display: none;
+  }
 }
 
 .header__cSwap__main {
@@ -198,6 +199,59 @@
   font-size: 12px;
   line-height: 22px;
   margin-left: 8px;
+  text-align: center;
+
+  &.light {
+    color: $black;
+  }
+
+  &.dark {
+    color: $white;
+  }
+
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 16px;
+  // }
+
+  // @media screen and (max-width: $XL) {
+  //   font-size: 14px;
+  // }
+
+  // @media screen and (max-width: $MIX) {
+  //   font-size: 12px;
+  // }
+}
+
+.header__buy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $red;
+  border-radius: 23px;
+  padding: 5px 10px;
+  width: 70px;
+  margin-right: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  
+  img {
+    height: 15px;
+    width: 15px;
+  }
+
+  // @media screen and (max-width: $XL) {
+  //   width: 110px;
+  // }
+
+  @media screen and (min-width: $XS) {
+    display: none;
+  }
+}
+
+.header__buy__title {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 22px;
   text-align: center;
 
   &.light {

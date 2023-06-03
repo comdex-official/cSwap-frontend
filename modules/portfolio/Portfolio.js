@@ -156,7 +156,7 @@ const Portfolio = ({
 
   const getTotalValue = useCallback(() => {
     const total = Number(assetBalance) + Number(totalFarmBalance);
-    return commaSeparator((total || 0).toFixed(DOLLAR_DECIMALS));
+    return ((total || 0).toFixed(DOLLAR_DECIMALS));
   }, [assetBalance, totalFarmBalance]);
 
   const handleActive = (item) => {
@@ -258,6 +258,7 @@ const Portfolio = ({
       },
     ],
   };
+
 
   return (
     <div

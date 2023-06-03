@@ -1,8 +1,14 @@
 import { Icon } from "../../shared/image/Icon";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./OrderBook.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
-import { ArrowRL, No_Data, Slider } from "../../shared/image";
+import {
+  ArrowRL,
+  No_Data,
+  Slider,
+  Star,
+  StarHighlight,
+} from "../../shared/image";
 import { OrderCustomData, OrderCustomData2 } from "./Data";
 import Tab from "../../shared/components/tab/Tab";
 import OrderbookTable from "../../modules/orderBook/OrderbookTable";
@@ -31,6 +37,8 @@ import {
   message,
   Popover,
   Button,
+  Dropdown,
+  Input,
 } from "antd";
 import {
   commaSeparator,
@@ -55,6 +63,7 @@ import { defaultFee } from "../../services/transaction";
 import Snack from "../../shared/components/Snack/index";
 import variables from "../../utils/variables";
 import Loading from "../../pages/Loading";
+import Lodash from "lodash";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -91,6 +100,7 @@ const OrderBook = ({
   const [cancelInProgress, setCancelInProgress] = useState(false);
   const [chartLoading, setChartLoading] = useState(false);
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
+  const [filteredPair, setFilteredPair] = useState();
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
@@ -100,6 +110,7 @@ const OrderBook = ({
       }
 
       setPairs(pairs?.data);
+      setFilteredPair(pairs?.data);
       // setChartLoading(false);
     });
   }, []);
@@ -348,8 +359,13 @@ const OrderBook = ({
     },
   ];
 
+  const ref = useRef(null);
+
   const handlePairChange = (value) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
+    if (ref?.current) {
+      ref.current.value = "";
+    }
   };
 
   const handleCancel = (order) => {
@@ -633,9 +649,267 @@ const OrderBook = ({
     }
   };
 
-  // console.log(BuySellData, "result2");
+  const onSearchChange = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj = pairs.filter((item) => {
+        return (
+          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, "g")) ||
+          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, "g"))
+        );
+      });
 
-  console.log(BuySellData[0]?.sells, "result");
+      setFilteredPair(resultsObj);
+    } else {
+      setFilteredPair(pairs);
+    }
+  };
+
+  const [content, setContent] = useState([]);
+  const [updateStar, setUpdateStar] = useState(false);
+
+  useEffect(() => {
+    setContent(JSON.parse(localStorage.getItem("market")));
+  }, [updateStar]);
+
+  const newTableData =
+    content !== null &&
+    content.map((el) => {
+      return el.replace(/['"]+/g, "");
+    });
+
+  var res1 =
+    filteredPair &&
+    filteredPair.filter(function (el) {
+      return (
+        newTableData.length > 0 && newTableData.indexOf(el?.pair_symbol) >= 0
+      );
+    });
+  var res2 =
+    filteredPair &&
+    filteredPair.filter(function (el) {
+      return (
+        newTableData.length > 0 && newTableData.indexOf(el?.pair_symbol) < 0
+      );
+    });
+
+  const finalTableData = Lodash.concat(res1, res2);
+
+  const checkStar = (data) => {
+    const dataCheck = newTableData ? newTableData.includes(data) : false;
+    return dataCheck;
+  };
+
+  const onFavourite = (coin) => {
+    if (localStorage.getItem("market") === null) {
+      localStorage.setItem("market", JSON.stringify([]));
+    }
+    var old_arr = JSON.parse(localStorage.getItem("market"));
+    console.log(old_arr);
+    old_arr.push(JSON.stringify(coin));
+    localStorage.setItem("market", JSON.stringify(old_arr));
+    setUpdateStar(!updateStar);
+  };
+
+  const Delete = (value) => {
+    let displayItems = JSON.parse(localStorage.getItem("market"));
+    const index = displayItems.indexOf(value);
+    displayItems.splice(index, 1);
+    localStorage.setItem("market", JSON.stringify(displayItems));
+    setUpdateStar(!updateStar);
+  };
+
+  const items = [
+    {
+      label: (
+        <div className={`${styles.dropdown__orderbook__wrap}`}>
+          <div
+            className={`${styles.dropdown__orderbook__search}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Input
+              className="pair__input"
+              placeholder="Search market...."
+              onChange={(event) => onSearchChange(event.target.value)}
+              prefix={<Icon className={"bi bi-search"} />}
+              ref={ref}
+            />
+          </div>
+          <div className={`${styles.dropdown__orderbook__table}`}>
+            <div className={`${styles.dropdown__orderbook__table__head}`}>
+              <div className={`${styles.dropdown__orderbook__head__title}`}>
+                Pair
+              </div>
+              <div className={`${styles.dropdown__orderbook__head__title}`}>
+                {`Price (${selectedPair?.base_coin})`}
+              </div>
+              <div className={`${styles.dropdown__orderbook__head__title}`}>
+                24h Change
+              </div>
+            </div>
+            <div className={`${styles.dropdown__orderbook__table__body__wrap}`}>
+              {finalTableData.length > 0 ? (
+                <>
+                  {finalTableData?.map((item) => (
+                    <div
+                      className={`${styles.dropdown__orderbook__table__body}`}
+                      key={item?.pair_id}
+                      onClick={() => handlePairChange(item?.pair_id)}
+                    >
+                      <div
+                        className={`${styles.dropdown__orderbook__body__title} ${styles.flex}`}
+                      >
+                        <div
+                          className={`${styles.dropdown__orderbook__body__img}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {checkStar(item?.pair_symbol) ? (
+                            <NextImage
+                              src={StarHighlight}
+                              width={10}
+                              height={10}
+                              alt="Star"
+                              onClick={() => Delete(item?.pair_symbol)}
+                            />
+                          ) : (
+                            <NextImage
+                              src={Star}
+                              width={10}
+                              height={10}
+                              alt="Star"
+                              onClick={() => onFavourite(item?.pair_symbol)}
+                            />
+                          )}
+                        </div>
+                        <div
+                          className={`${styles.dropdown__orderbook__body__pair}`}
+                        >
+                          {item?.pair_symbol}
+                        </div>
+                      </div>
+                      <div
+                        className={`${styles.dropdown__orderbook__body__title}`}
+                      >
+                        $
+                        {formateNumberDecimalsAuto({
+                          price:
+                            Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ) * marketPrice(markets, item?.base_coin_denom),
+                        })}
+                      </div>
+                      <div
+                        className={`${
+                          styles.dropdown__orderbook__body__title
+                        } ${
+                          Number(item?.total_volume_24h_change || 0).toFixed(
+                            DOLLAR_DECIMALS
+                          ) >= 0
+                            ? styles.profit
+                            : styles.loss
+                        }`}
+                      >
+                        {commaSeparator(
+                          Math.abs(
+                            Number(item?.total_volume_24h_change || 0).toFixed(
+                              DOLLAR_DECIMALS
+                            )
+                          )
+                        )}
+                        %
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {filteredPair?.map((item) => (
+                    <div
+                      className={`${styles.dropdown__orderbook__table__body}`}
+                      key={item?.pair_id}
+                      onClick={() => handlePairChange(item?.pair_id)}
+                    >
+                      <div
+                        className={`${styles.dropdown__orderbook__body__title} ${styles.flex}`}
+                      >
+                        <div
+                          className={`${styles.dropdown__orderbook__body__img}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {checkStar(item?.pair_symbol) ? (
+                            <NextImage
+                              src={StarHighlight}
+                              width={10}
+                              height={10}
+                              alt="Star"
+                              onClick={() => Delete(item?.pair_symbol)}
+                            />
+                          ) : (
+                            <NextImage
+                              src={Star}
+                              width={10}
+                              height={10}
+                              alt="Star"
+                              onClick={() => onFavourite(item?.pair_symbol)}
+                            />
+                          )}
+                        </div>
+                        <div
+                          className={`${styles.dropdown__orderbook__body__pair}`}
+                        >
+                          {item?.pair_symbol}
+                        </div>
+                      </div>
+                      <div
+                        className={`${styles.dropdown__orderbook__body__title}`}
+                      >
+                        $
+                        {formateNumberDecimalsAuto({
+                          price:
+                            Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ) * marketPrice(markets, item?.base_coin_denom),
+                        })}
+                      </div>
+                      <div
+                        className={`${
+                          styles.dropdown__orderbook__body__title
+                        } ${
+                          Number(item?.total_volume_24h_change || 0).toFixed(
+                            DOLLAR_DECIMALS
+                          ) >= 0
+                            ? styles.profit
+                            : styles.loss
+                        }`}
+                      >
+                        {commaSeparator(
+                          Math.abs(
+                            Number(item?.total_volume_24h_change || 0).toFixed(
+                              DOLLAR_DECIMALS
+                            )
+                          )
+                        )}
+                        %
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ),
+      key: "item-1",
+    },
+  ];
 
   return (
     <div
@@ -671,13 +945,31 @@ const OrderBook = ({
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
-              <div
-                className={`${styles.orderbook__trading__element}  ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+              <Dropdown
+                menu={{ items }}
+                placement="bottomLeft"
+                trigger={["click"]}
+                overlayClassName="dropconnect-overlay"
               >
-                {/* <NextImage src={ArrowRL} alt="" /> */}
-                <Select
+                <div
+                  className={`${styles.orderbook__trading__element} ${
+                    styles.gap
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <NextImage src={ArrowRL} alt="" />
+
+                  <div
+                    className={`${styles.orderbook__trading__title}  ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    {selectedPair?.pair_symbol || null}
+                  </div>
+                  <Icon className={"bi bi-chevron-down"} size={"0.5rem"} />
+
+                  {/* <NextImage src={ArrowRL} alt="" /> */}
+                  {/* <Select
                   onChange={handlePairChange}
                   value={selectedPair?.pair_id || null}
                   options={pairs?.map((item) => {
@@ -688,18 +980,9 @@ const OrderBook = ({
                     };
                   })}
                   className="orderbook__select"
-                />
-
-                {/* <NextImage src={ArrowRL} alt="" />
-                <div
-                  className={`${styles.orderbook__trading__title}  ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  {"CMDX/CMST"}
+                /> */}
                 </div>
-                <Icon className={"bi bi-chevron-down"} size={"0.5rem"} /> */}
-              </div>
+              </Dropdown>
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
@@ -828,7 +1111,7 @@ const OrderBook = ({
                   <Loading />
                 </div>
               ) : (
-                <TVChartContainer selectedPair={selectedPair} />
+                <TVChartContainer selectedPair={selectedPair} symbol={selectedPair?.pair_symbol}/>
               )}
             </div>
           </div>

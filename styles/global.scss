@@ -95,10 +95,29 @@ body {
   overflow-x: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  min-height: 100vh !important;
   height: auto !important;
+  min-height: 100vh !important;
+  background: #000000;
+  
 
   &::before {
     background: url("../public/assets/images/background.svg");
@@ -111,7 +130,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.5;
+    opacity: 0.7;
   }
 }
 
@@ -2856,7 +2875,18 @@ a {
   &.ant-input {
     border: none;
     &:active {
-      border: none;
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:hover {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:focus {
+      border: none !important;
+      outline: none !important;
     }
   }
 }
@@ -2872,6 +2902,20 @@ a {
   }
   .ant-input {
     background: none;
+    &:active {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:hover {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
   }
   // .ant-input-affix-wrapper {
   //   background: rgba(31, 42, 69, 0.7);
@@ -3031,12 +3075,11 @@ a {
   gap: 10px;
   z-index: 999;
   height: 80px;
-  padding: 0 20px 0 30px;
   border-radius: 16px;
   margin: auto;
   left: 0;
   right: 0;
-  max-width: 630px;
+  max-width: 572px;
   margin-top: -30px;
   margin-bottom: 10px;
   background: #123c73;
@@ -3048,25 +3091,24 @@ a {
 
   @media screen and (max-width: 1540px) {
     font-size: $font-size-base;
-    // max-width: 550px;
+    max-width: 510px;
     height: 60px;
-    padding: 0 16px 0 20px;
   }
   @media screen and (max-width: 1280px) {
     font-size: $font-size-sm - 1;
-    // max-width: 266px;
+    max-width: 466px;
     padding: 0 16px 0 14px;
   }
   @media screen and (max-width: 991px) {
     font-size: $font-size-sm - 1;
   }
   @media screen and (max-width: 840px) {
-    // max-width: 90%;
+    //  max-width: 90%;
     // margin-top: -8px;
     margin-bottom: 15px;
   }
   @media screen and (max-width: 576px) {
-    // max-width: 90%;
+    max-width: 90%;
     height: 80px;
   }
   .dark-mode & {
@@ -3420,4 +3462,52 @@ a {
       padding: 5px;
     }
   }
+}
+
+.pair__input {
+  width: 100%;
+  max-width: 350px;
+  background: transparent;
+  border: none !important;
+  color: $white;
+  padding: 0;
+
+  box-shadow: none;
+  &:active {
+    border: none !important;
+    outline: none !important;
+  }
+
+  .ant-input {
+    background: none;
+    text-align: left;
+    padding: 0px 10px !important;
+
+    &::placeholder {
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 12px;
+      
+      color: #6B758D;
+      
+    }
+
+    &:active {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:hover {
+      border: none !important;
+      outline: none !important;
+    }
+
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+  // .ant-input-affix-wrapper {
+  //   background: rgba(31, 42, 69, 0.7);
+  // }
 }

@@ -134,7 +134,7 @@ export const Datafeed = (value) => {
     ) => {
       const symbols = await getAllSymbols();
 
-      const symbolItem = symbols.find(({ symbol }) => symbol === value);
+      const symbolItem =symbols&& symbols.find(({ symbol }) => symbol === value);
       if (!symbolItem) {
         onResolveErrorCallback("cannot resolve symbol");
         return;
