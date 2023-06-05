@@ -93,11 +93,14 @@ const DisConnectModal = ({
   ];
 
   return (
-    <>
+    <div id={"topRightToogle"}>
       <Dropdown
         menu={{ items }}
         trigger={["click"]}
+        placement="bottomRight"
         overlayClassName="dropconnect-overlay"
+        autoAdjustOverflow={false}
+        getPopupContainer={() => document.getElementById("topRightToogle")}
       >
         <div className="connected_button">
           <Icon className={"bi bi-person-circle"} />
@@ -139,7 +142,7 @@ const DisConnectModal = ({
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 

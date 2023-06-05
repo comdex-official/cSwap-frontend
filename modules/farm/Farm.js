@@ -359,8 +359,8 @@ const Farm = ({
 
   return (
     <div
-      className={`${styles.farm__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
+      className={`${styles.farm__wrap}  ${
+        showEligibleDisclaimer ? styles.show__text__alert : styles.text__alert
       }`}
     >
       <div
@@ -418,15 +418,16 @@ const Farm = ({
             >
               <div>
                 {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
-              </div>
-
-              <div
+                <span
                 className={`${styles.farm__header__left__more} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
                 {"learn more"}
+              </span>
               </div>
+
+             
             </div>
             <div
               className={`${styles.farm__header__right__main} ${
@@ -498,11 +499,9 @@ const Farm = ({
                     </div>
                     <div
                       className={`${styles.farm__header__right__body__button} ${
-                        filterValue === "2" ? styles.disabled : ""
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                      onClick={() =>
-                        filterValue !== "2" ? setChildPool(!isChildPool) : ""
-                      }
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                      onClick={() => setChildPool(!isChildPool)}
                     >
                       {isChildPool ? "Go to all pools" : "Go to child pools"}
                     </div>

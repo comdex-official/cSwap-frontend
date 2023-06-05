@@ -113,17 +113,12 @@ const Header = ({
       const isScrolled = window?.scrollY > 0;
       setScrolled(isScrolled);
     };
-    
-   
-    window.addEventListener('scroll', handleScroll,{ passive: true });
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
- 
-
-
-  
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -484,13 +479,16 @@ const Header = ({
           ))}
         </div>
 
-        <div className={styles.dropdown}>
-          <div className={styles.header__right}>
+        <div className={styles.dropdown} >
+          <div className={styles.header__right} id="topRightToogle">
             <MyDropdown
               items={cswapItems}
               placement={"bottomLeft"}
               trigger={["click"]}
               className={"header_cswap"}
+              getPopupContainer={() =>
+                document.getElementById("topRightToogle")
+              }
             >
               <div className={styles.header__cSwap}>
                 <div className={styles.header__cSwap__main}>
@@ -560,23 +558,31 @@ const Header = ({
                 <DisconnectModal />
               </div>
             ) : (
-              <>
+              <div id="topRightToogle2">
                 <Dropdown
                   menu={{ items }}
                   placement="bottomRight"
                   trigger={["click"]}
                   overlayClassName="dropconnect-overlay"
+                  getPopupContainer={() =>
+                    document.getElementById("topRightToogle2")
+                  }
+                  autoAdjustOverflow={false}
                 >
                   <div className={styles.header__wallet}>
                     {variables[lang]?.connect}
                   </div>
                 </Dropdown>
-              </>
+              </div>
             )}
+            <div id={"topRightToogle3"}>
             <MyDropdown
               items={threeDotItems}
               placement={"bottomRight"}
               trigger={["click"]}
+              getPopupContainer={() =>
+                document.getElementById("topRightToogle3")
+              }
             >
               <Icon
                 className={`bi bi-three-dots-vertical cursor ${
@@ -585,6 +591,8 @@ const Header = ({
                 size={"1.5rem"}
               />
             </MyDropdown>
+              </div>
+        
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>
         </div>

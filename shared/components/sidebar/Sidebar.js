@@ -7,7 +7,13 @@ import Link from "next/link";
 import { Icon } from "../../../shared/image/Icon";
 import { useSelector } from "react-redux";
 import MyDropdown from "../dropDown/Dropdown";
-import { C_Logo, Comodo, Faucet, Harbor } from "../../../shared/image";
+import {
+  C_Logo,
+  Comodo,
+  Faucet,
+  Harbor,
+  Hyperlink,
+} from "../../../shared/image";
 import { Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
 
@@ -114,35 +120,39 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           ))}
         </div>
 
-        <MyDropdown
-          items={cswapItems}
-          placement={"topRight"}
-          trigger={["click"]}
-        >
-          <div className={styles.header__cSwap}>
-            <div className={styles.header__cSwap__main}>
-              {theme === "dark" ? (
-                <NextImage src={C_Logo} alt="Logo_Dark" />
-              ) : (
-                <NextImage src={C_Logo} alt="Logo_Dark" />
-              )}
+        <div id="topRightToogle">
+          <MyDropdown
+            items={cswapItems}
+            placement={"topRight"}
+            trigger={["click"]}
+            className={"header_cswap"}
+            getPopupContainer={() => document.getElementById("topRightToogle")}
+          >
+            <div className={styles.header__cSwap}>
+              <div className={styles.header__cSwap__main}>
+                {theme === "dark" ? (
+                  <NextImage src={C_Logo} alt="Logo_Dark" />
+                ) : (
+                  <NextImage src={C_Logo} alt="Logo_Dark" />
+                )}
 
-              <div
-                className={`${styles.header__cSwap__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"cSwap"}
+                <div
+                  className={`${styles.header__cSwap__title} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {"cSwap"}
+                </div>
               </div>
+              <Icon
+                className={`bi bi-grid-fill ${
+                  theme === "dark" ? styles.icon_dark : styles.icon_light
+                }`}
+                size={"0.8rem"}
+              />
             </div>
-            <Icon
-              className={`bi bi-grid-fill ${
-                theme === "dark" ? styles.icon_dark : styles.icon_light
-              }`}
-              size={"0.8rem"}
-            />
-          </div>
-        </MyDropdown>
+          </MyDropdown>
+        </div>
 
         <div
           className={styles.header__faucet}
@@ -156,6 +166,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           >
             {"Faucet"}
           </div>
+        </div>
+
+        <div className={styles.header__buy}>
+          <div
+            className={`${styles.header__buy__title} ${
+              theme === "dark" ? styles.dark : styles.light
+            }`}
+          >
+            {"Buy"}
+          </div>
+          <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
         </div>
 
         <Modal

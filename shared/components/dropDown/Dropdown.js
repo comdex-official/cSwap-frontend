@@ -1,6 +1,13 @@
 import { Dropdown } from "antd";
 
-const MyDropdown = ({ children, items, placement, trigger, className }) => {
+const MyDropdown = ({
+  children,
+  items,
+  placement,
+  trigger,
+  className,
+  getPopupContainer,
+}) => {
   return (
     <>
       <Dropdown
@@ -8,6 +15,8 @@ const MyDropdown = ({ children, items, placement, trigger, className }) => {
         placement={placement}
         trigger={trigger}
         overlayClassName={className}
+        getPopupContainer={getPopupContainer}
+        autoAdjustOverflow={false}
       >
         {children}
       </Dropdown>
