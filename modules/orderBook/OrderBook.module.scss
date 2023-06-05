@@ -230,7 +230,7 @@
 .orderbook__lower__head__main {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  // gap: 8px;
   overflow: auto;
   height: 100px;
   max-height: 120px;
@@ -250,6 +250,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  padding: 5px 0px;
 
   &.lower {
     margin-top: 10px;
@@ -277,7 +279,7 @@
   font-size: 10px;
   line-height: 13px;
   color: #ffffff;
-
+  z-index: 1;
   // @media screen and (max-width: $XXL) {
   //   font-size: 8px;
   // }
@@ -902,4 +904,21 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.orderbook__buy__width__wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  // width: 52%;
+  z-index: 0;
+
+  &.profit {
+    background-color: #255e4d;
+  }
+
+  &.loss {
+    background-color: #602c1c;
+  }
 }

@@ -22,7 +22,7 @@ import dynamic from "next/dynamic";
 import { Modal, Tooltip, message, Table, Button } from "antd";
 import Liquidity from "./Liquidity";
 import Card from "../../shared/components/card/Card";
-import { setUserLiquidityInPools } from "../../actions/liquidity";
+import { setUserLiquidityInPools,setShowMyPool } from "../../actions/liquidity";
 import {
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
@@ -69,10 +69,14 @@ const FarmTable = ({
   iconList,
   poolAprList,
   noDataButton,
-  handleClick
+  handleClick,
+  showMyPool,
+  selectedManagePool,
+  setShowMyPool,
 }) => {
   const [showMoreData, setshowMoreData] = useState(false);
-
+  const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
+  useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSinglePool, setSelectedSinglePool] = useState();
 
@@ -88,6 +92,19 @@ const FarmTable = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handlePortofolioManageCancel = () => {
+    setIsPortifolioManageModalOpen(false);
+    setShowMyPool(false);
+  };
+
+
+  useEffect(() => {
+    if (showMyPool) {
+      // showPortofolioManageModal()
+      setIsPortifolioManageModalOpen(true);
+    }
+  }, []);
 
   // console.log(pool, "pool");
   // console.log(poolsApr, "poolsApr");
@@ -1028,14 +1045,25 @@ const FarmTable = ({
       )}
 
       <Modal
-        className={"liquidity__modal"}
-        title="Liquidity"
+        className={"modal__wrap2"}
         open={isModalOpen}
         onCancel={handleCancel}
         centered={true}
       >
         <Liquidity theme={theme} pool={selectedSinglePool} />
       </Modal>
+
+
+      {showMyPool && (
+            <Modal
+              className={"modal__wrap2"}
+              open={isPortifolioManageModalOpen}
+              onCancel={handlePortofolioManageCancel}
+              centered={true}
+            >
+              <Liquidity theme={theme} pool={selectedManagePool} />
+            </Modal>
+          )}
     </>
   );
 };
@@ -1078,11 +1106,14 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     assetMap: state.asset.map,
     iconList: state.config?.iconList,
+    selectedManagePool: state.liquidity.selectedManagePool,
+    showMyPool: state.liquidity.showMyPool,
   };
 };
 
 const actionsToProps = {
   setUserLiquidityInPools,
+  setShowMyPool,
 };
 
 export default connect(stateToProps, actionsToProps)(FarmTable);
