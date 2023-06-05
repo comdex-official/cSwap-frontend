@@ -1221,6 +1221,10 @@ const OrderBook = ({
                       }`}
                       key={item.price}
                     >
+                         <div
+                        className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
+                        style={{width: `${(amountConversion(item?.user_order_amount) * 100) / 200}%`}}
+                      ></div>
                       <div
                         className={`${
                           styles.orderbook__lower__table__head__title
@@ -1320,6 +1324,10 @@ const OrderBook = ({
                     }`}
                     key={item.price}
                   >
+                     <div
+                        className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
+                        style={{width: `${(amountConversion(item?.user_order_amount) * 100) / 200}%`}}
+                      ></div>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title

@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   setFirstReserveCoinDenom,
-  setPool,
   setPoolBalance,
   setSecondReserveCoinDenom,
 } from "../../../actions/liquidity";
@@ -231,7 +230,7 @@ const Deposit = ({
       address,
       (error, result) => {
         setInProgress(false);
-        refreshData();
+        refreshData(pool);
         updateBalance();
         if (error) {
           message.error(error);
@@ -294,8 +293,9 @@ const Deposit = ({
       address,
       (error, result) => {
         setDepositProgress(false);
-        refreshData();
+        refreshData(pool);
         updateBalance();
+        
         if (error) {
           message.error(error);
           return;
@@ -340,6 +340,9 @@ const Deposit = ({
       address,
       (error, result) => {
         setFarmProgress(false);
+        refreshData(pool);
+        updateBalance();
+        
         if (error) {
           message.error(error);
           return;
@@ -350,8 +353,7 @@ const Deposit = ({
           return;
         }
 
-        refreshData(pool);
-        updateBalance();
+      
 
         message.success(
           <Snack
@@ -756,7 +758,6 @@ Deposit.propTypes = {
   refreshData: PropTypes.func.isRequired,
   setFirstReserveCoinDenom: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
-  setPool: PropTypes.func.isRequired,
   setReverse: PropTypes.func.isRequired,
   setSecondReserveCoinDenom: PropTypes.func.isRequired,
   updateBalance: PropTypes.func.isRequired,
@@ -830,7 +831,6 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setPoolBalance,
-  setPool,
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
   setReverse,

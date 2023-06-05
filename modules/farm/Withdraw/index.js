@@ -53,6 +53,7 @@ const Remove = ({
   const [unfarmProgress, setUnfarmProgress] = useState(false);
   const [withdrawProgress, setWithdrawProgress] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [withdrawAmount, setWithdrawAmount] = useState(0);
 
   const myLiquidity =
     amountConversion(getDenomBalance(balances, pool?.poolCoinDenom)) || 0;
@@ -62,11 +63,17 @@ const Remove = ({
   const onChange = (value) => {
     setSliderValue(value);
     calculateBondAmount(value);
+    calculateAmount(value);
   };
 
   const calculateBondAmount = (input) => {
     const amount = (input / 100) * userLockedPoolTokens;
     setAmount(amount);
+  };
+
+  const calculateAmount = (input) => {
+    const amount = (input / 100) * myLiquidity;
+    setWithdrawAmount(amount && getAmount(amount));
   };
 
   const handleUnfarmWithdrawClick = () => {
@@ -97,6 +104,7 @@ const Remove = ({
         setAmount();
         refreshData(pool);
         updateBalance();
+        setWithdrawAmount();
 
         if (error) {
           message.error(error);
@@ -131,7 +139,7 @@ const Remove = ({
             appId: Long.fromNumber(APP_ID),
             /** soft_lock_coin specifies coins to stake */
             unfarmingPoolCoin: {
-              amount: Number(userLockedPoolTokens).toFixed(0).toString(),
+              amount: Number(amount).toFixed(0).toString(),
               denom: pool?.poolCoinDenom,
             },
           },
@@ -142,6 +150,11 @@ const Remove = ({
       address,
       (error, result) => {
         setUnfarmProgress(false);
+        setSliderValue();
+        setAmount();
+        setWithdrawAmount();
+        refreshData(pool);
+        updateBalance();
 
         if (error) {
           message.error(error);
@@ -153,8 +166,6 @@ const Remove = ({
           return;
         }
 
-        refreshData(pool);
-        updateBalance();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -178,7 +189,7 @@ const Remove = ({
             appId: Long.fromNumber(APP_ID),
             poolCoin: {
               denom: pool?.poolCoinDenom,
-              amount: getAmount(myLiquidity),
+              amount: withdrawAmount,
             },
           },
         },
@@ -190,6 +201,9 @@ const Remove = ({
         setWithdrawProgress(false);
         refreshData(pool);
         updateBalance();
+        setSliderValue();
+        setAmount();
+        setWithdrawAmount();
 
         if (error) {
           message.error(error);
@@ -369,7 +383,12 @@ const Remove = ({
         <Button
           type="primary"
           className="btn-filled btn-width-fixed"
-          disabled={!Number(userLockedPoolTokens) || unfarmProgress}
+          disabled={
+            !sliderValue ||
+            sliderValue > 100 ||
+            !Number(userLockedPoolTokens) ||
+            unfarmProgress
+          }
           loading={unfarmProgress}
           onClick={() => handleUnfarmClick()}
         >
@@ -378,7 +397,12 @@ const Remove = ({
         <Button
           type="primary"
           className="btn-filled btn-width-fixed"
-          disabled={!myLiquidity || withdrawProgress || !userPoolBalance}
+          disabled={
+            !sliderValue ||
+            sliderValue > 100 ||
+            withdrawProgress ||
+            !Number(userPoolBalance)
+          }
           loading={withdrawProgress}
           onClick={() => handleWithdrawClick()}
         >
@@ -391,7 +415,7 @@ const Remove = ({
             !sliderValue ||
             removeInProgress ||
             sliderValue > 100 ||
-            !userPoolBalance
+            !Number(userLockedPoolTokens)
           }
           loading={removeInProgress}
           className="btn-filled btn-width-fixed"

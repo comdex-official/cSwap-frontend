@@ -38,6 +38,7 @@ const PoolDetails = ({
   theme,
   active,
   pool,
+  poolDetails,
   iconList,
   assetMap,
   balances,
@@ -45,6 +46,7 @@ const PoolDetails = ({
   userLiquidityInPools,
   setTradeData,
 }) => {
+  console.log(pool, "plllllll");
   const [providedTokens, setProvidedTokens] = useState();
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
   const [activeSoftLock, setActiveSoftLock] = useState(0);
@@ -61,22 +63,24 @@ const PoolDetails = ({
     let denomBalance =
       list && Object.values(list)?.filter((item) => item.denom === denom)[0];
 
-    return `${
-      (amountConversionWithComma(
+    return `${amountConversionWithComma(
       denomBalance?.amount || 0,
       assetMap[denomBalance?.denom]?.decimals
-    ))} ${denomConversion(denom)}`;
+    )} ${denomConversion(denom)}`;
   };
 
   const showPoolBalance2 = (list, denom) => {
     let denomBalance =
       list && Object.values(list)?.filter((item) => item.denom === denom)[0];
 
-    return `${
-      Number(amountConversionWithComma(
-      denomBalance?.amount || 0,
-      assetMap[denomBalance?.denom]?.decimals
-    )).toFixed(2)} ${denomConversion(denom)}`;
+    return `${Number(
+      amountConversion(
+        denomBalance?.amount || 0,
+        assetMap[denomBalance?.denom]?.decimals
+      )
+    )
+      .toFixed(2)
+      .toString()} ${denomConversion(denom)}`;
   };
 
   const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
@@ -232,7 +236,7 @@ const PoolDetails = ({
             >
               {pool?.balances?.baseCoin?.denom &&
                 showPoolBalance(
-                  pool?.balances,
+                  poolDetails?.balances? poolDetails?.balances:   pool?.balances ,
                   pool?.balances?.baseCoin?.denom
                 )}
             </div>
@@ -256,7 +260,7 @@ const PoolDetails = ({
             >
               {pool?.balances?.quoteCoin?.denom &&
                 showPoolBalance(
-                  pool?.balances,
+                  poolDetails?.balances? poolDetails?.balances:   pool?.balances ,
                   pool?.balances?.quoteCoin?.denom
                 )}
             </div>
@@ -297,14 +301,16 @@ const PoolDetails = ({
                 }`}
               >
                 {pool?.balances?.baseCoin?.denom &&
-                 ( showPoolBalance2(
+                  showPoolBalance2(
                     providedTokens,
                     pool?.balances?.baseCoin?.denom
-                  ))} +  {pool?.balances?.quoteCoin?.denom &&
-                    showPoolBalance2(
-                      providedTokens,
-                      pool?.balances?.quoteCoin?.denom
-                    )}
+                  )}{" "}
+                +{" "}
+                {pool?.balances?.quoteCoin?.denom &&
+                  showPoolBalance2(
+                    providedTokens,
+                    pool?.balances?.quoteCoin?.denom
+                  )}
               </div>
               {/* <div
                 className={`${styles.liquidityCard__pool__title} ${
@@ -355,12 +361,13 @@ const PoolDetails = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                $
+                <PoolTokenValue poolTokens={userLockedPoolTokens} />
+                {/* $
                 {commaSeparator(
                   Number(userLiquidityInPools[pool?.id] || 0).toFixed(
                     DOLLAR_DECIMALS
                   )
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -408,6 +415,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     assetMap: state.asset.map,
+    poolDetails: state.liquidity.pool._,
     iconList: state.config?.iconList,
     assetMap: state.asset.map,
     balances: state.account.balances.list,

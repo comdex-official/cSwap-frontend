@@ -109,7 +109,7 @@ const Liquidity = ({
     }
   }, [address, pool, refreshBalance, fetchSoftLock]);
 
-  const fetchPool = useCallback(() => {
+  const fetchPool = useCallback((id) => {
     queryPool(id, (error, result) => {
       if (error) {
         return;
@@ -146,7 +146,7 @@ const Liquidity = ({
     }
   }, [pool?.id, fetchProvidedCoins]);
 
-  const queryPoolBalance = () => {
+  const queryPoolBalance = (pool) => {
     if (pool?.reserveAccountAddress) {
       fetchPoolBalance(pool?.reserveAccountAddress);
     }
