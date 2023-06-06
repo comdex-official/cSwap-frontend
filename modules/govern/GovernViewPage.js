@@ -1,6 +1,6 @@
 // import style from "./Govern.moduleOld.scss";
 import { useRouter } from "next/router";
-import { Button, List, Spin } from "antd";
+import { Button, List, Spin, Tooltip } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Link from "next/link";
@@ -386,8 +386,22 @@ const GovernViewPage = ({
                 <div className="proposal_stats_container">
                   <div className="title">Proposer</div>
                   <div className="value">
-                    {truncateString(proposer, 6, 6)}
-                    <NextImage src={Hyperlink} alt={"HyperLink"} height={20} weight={20}/>
+                    <a
+                      href={`https://www.mintscan.io/comdex/account/${proposer?.toUpperCase()}
+              
+                  `}
+                      rel="noreferrer"
+                      target="_blank"
+                      aria-label="explorer"
+                    >
+                      {truncateString(proposer, 6, 6)}
+                      <NextImage
+                        src={Hyperlink}
+                        alt={"HyperLink"}
+                        height={20}
+                        weight={20}
+                      />
+                    </a>
                   </div>
                 </div>
                 <div className="proposal_stats_container">
@@ -430,16 +444,22 @@ const GovernViewPage = ({
                       <div className="title">Current Quorum</div>
                       {/* <div className="title">Current Quorum: {calculateCurrentThreshold() || 0} %</div> */}
                       {/* <div className="value">{calculateQuoremThreshold() || 0} CMDX</div> */}
-                      <div
-                        className={
-                          calculateCurrentThreshold() < 100
-                            ? "value error-color"
-                            : "value green-color"
-                        }
+
+                      <Tooltip
+                        title={"Min Quorum threshold: 33%."}
+                        placement="top"
                       >
-                        {" "}
-                        {calculateCurrentThreshold() || 0} %
-                      </div>
+                        <div
+                          className={
+                            calculateCurrentThreshold() < 100
+                              ? "value error-color"
+                              : "value green-color"
+                          }
+                        >
+                          {" "}
+                          {calculateCurrentThreshold() || 0} %
+                        </div>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>

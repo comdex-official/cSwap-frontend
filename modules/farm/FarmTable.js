@@ -22,7 +22,10 @@ import dynamic from "next/dynamic";
 import { Modal, Tooltip, message, Table, Button } from "antd";
 import Liquidity from "./Liquidity";
 import Card from "../../shared/components/card/Card";
-import { setUserLiquidityInPools,setShowMyPool } from "../../actions/liquidity";
+import {
+  setUserLiquidityInPools,
+  setShowMyPool,
+} from "../../actions/liquidity";
 import {
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
@@ -76,7 +79,7 @@ const FarmTable = ({
 }) => {
   const [showMoreData, setshowMoreData] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
-  useState(false);
+    useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSinglePool, setSelectedSinglePool] = useState();
 
@@ -97,7 +100,6 @@ const FarmTable = ({
     setIsPortifolioManageModalOpen(false);
     setShowMyPool(false);
   };
-
 
   useEffect(() => {
     if (showMyPool) {
@@ -456,141 +458,147 @@ const FarmTable = ({
             </div>
           </div>
 
-          <div
-            className={`${styles.farmCard__element__right} ${
-              styles.tableActive
-            } ${theme === "dark" ? styles.dark : styles.light}`}
-          >
-            <div
-              className={`${styles.farmCard__element__right__main} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {(value?.balances?.quoteCoin?.denom === "ucmst" ||
-                value?.balances?.baseCoin?.denom === "ucmst") && (
-                <Tooltip
-                  title={"HARBOR emissions enabled"}
-                  overlayClassName="farm_upto_apr_tooltip"
-                >
-                  <div
-                    className={`${styles.farmCard__element__right__emission} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <NextImage src={Emission} alt="Emission" />
-                  </div>
-                </Tooltip>
-              )}
-              {value?.type === 2 ? (
+          <div  className={`${styles.farmCard__element__right__wholetab} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}>
+            {(value?.balances?.quoteCoin?.denom === "ucmst" ||
+              value?.balances?.baseCoin?.denom === "ucmst") && (
+              <Tooltip
+                title={"HARBOR emissions enabled"}
+                overlayClassName="farm_upto_apr_tooltip"
+              >
                 <div
-                  className={`${styles.farmCard__element__right__basic} ${
+                  className={`${styles.farmCard__element__right__emission} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 >
-                  <div className="ranged-box">
-                    <div className="ranged-box-inner">
-                      <Tooltip
-                        overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
-                        title={
-                          value?.type === 2 ? (
-                            <RangeTooltipContent
-                              parent={"pool"}
-                              price={Number(
-                                decimalConversion(value?.price)
-                              ).toFixed(PRICE_DECIMALS)}
-                              max={Number(
-                                decimalConversion(value?.maxPrice)
-                              ).toFixed(PRICE_DECIMALS)}
-                              min={Number(
-                                decimalConversion(value?.minPrice)
-                              ).toFixed(PRICE_DECIMALS)}
-                            />
-                          ) : null
-                        }
-                        placement="top"
-                      >
-                        <div
-                          className={`${
-                            styles.farmCard__element__right__basic__title
-                          } ${styles.active} ${
-                            theme === "dark" ? styles.dark : styles.light
-                          }`}
-                        >
-                          <NextImage src={Ranged} />
-                          {"Ranged"}
-                        </div>
-                      </Tooltip>
-                    </div>
-                  </div>
+                  <NextImage src={Emission} alt="Emission" />
                 </div>
-              ) : value?.type === 1 ? (
-                <div
-                  className={`${styles.farmCard__element__right__basic} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__basic__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"Basic"}
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
+              </Tooltip>
+            )}
 
+            <div
+              className={`${styles.farmCard__element__right} ${
+                styles.tableActive
+              } ${theme === "dark" ? styles.dark : styles.light}`}
+            >
               <div
-                className={`${styles.farmCard__element__right__pool} ${
+                className={`${styles.farmCard__element__right__main} ${
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                {/* <div
+                {value?.type === 2 ? (
+                  <div
+                    className={`${styles.farmCard__element__right__basic} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  >
+                    <div className="ranged-box">
+                      <div className="ranged-box-inner">
+                        <Tooltip
+                          overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
+                          title={
+                            value?.type === 2 ? (
+                              <RangeTooltipContent
+                                parent={"pool"}
+                                price={Number(
+                                  decimalConversion(value?.price)
+                                ).toFixed(PRICE_DECIMALS)}
+                                max={Number(
+                                  decimalConversion(value?.maxPrice)
+                                ).toFixed(PRICE_DECIMALS)}
+                                min={Number(
+                                  decimalConversion(value?.minPrice)
+                                ).toFixed(PRICE_DECIMALS)}
+                              />
+                            ) : null
+                          }
+                          placement="top"
+                        >
+                          <div
+                            className={`${
+                              styles.farmCard__element__right__basic__title
+                            } ${styles.active} ${
+                              theme === "dark" ? styles.dark : styles.light
+                            }`}
+                          >
+                            <NextImage src={Ranged} />
+                            {"Ranged"}
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                ) : value?.type === 1 ? (
+                  ""
+                ) : (
+                  // <div
+                  //   className={`${styles.farmCard__element__right__basic} ${
+                  //     theme === "dark" ? styles.dark : styles.light
+                  //   }`}
+                  // >
+                  //   <div
+                  //     className={`${
+                  //       styles.farmCard__element__right__basic__title
+                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
+                  //   >
+                  //     {"Basic"}
+                  //   </div>
+                  // </div>
+                  ""
+                )}
+
+                <div
+                  className={`${styles.farmCard__element__right__pool} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {/* <div
                   className={`${styles.farmCard__element__right__pool__title} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
                 > */}
-                {getMasterPool(value?.id?.toNumber()) ? (
+                  {getMasterPool(value?.id?.toNumber()) ? (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Pyramid} alt="Logo" />
+                      {"Master Pool"}
+                    </div>
+                  ) : (
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === "dark" ? styles.dark : styles.light
+                      }`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+                      {"MP Boost"}
+                    </div>
+                  )}
+                </div>
+                {/* </div> */}
+              </div>
+              {checkExternalIncentives(value?.id?.toNumber()) && (
+                <div
+                  className={`${styles.farmCard__element__right__incentive} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
                   <div
                     className={`${
                       styles.farmCard__element__right__pool__title
                     } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
-                    <NextImage src={Pyramid} alt="Logo" />
-                    {"Master Pool"}
+                    <NextImage src={Cup} alt="Logo" />
+                    {"External Incentives"}
                   </div>
-                ) : (
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${styles.boost} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <NextImage src={Current} alt="Logo" />
-                    {"MP Boost"}
-                  </div>
-                )}
-              </div>
-              {/* </div> */}
-            </div>
-            {checkExternalIncentives(value?.id?.toNumber()) && (
-              <div
-                className={`${styles.farmCard__element__right__incentive} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                <div
-                  className={`${styles.farmCard__element__right__pool__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <NextImage src={Cup} alt="Logo" />
-                  {"External Incentives"}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       ),
@@ -671,58 +679,67 @@ const FarmTable = ({
                     <Icon className={"bi bi-arrow-right"} />
                   )}
                 </div>
-                {!getMasterPool(value?.id?.toNumber()) && (
-                  <div
-                    className={`${styles.farmCard__element__right__pool} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
+
+                <div
+                  className={`${styles.farmCard__element__wrap__right} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {!getMasterPool(value?.id?.toNumber()) && (
                     <div
-                      className={`${
-                        styles.farmCard__element__right__pool__title
-                      } ${styles.boost} ${
+                      className={`${styles.farmCard__element__right__pool} ${
                         theme === "dark" ? styles.dark : styles.light
                       }`}
                     >
-                      <NextImage src={Current} alt="Logo" />
-                      {`Upto ${commaSeparator(
-                        calculateUptoApr(value?.id?.toNumber()) || 0
-                      )}%`}
+                      <div
+                        className={`${
+                          styles.farmCard__element__right__pool__title
+                        } ${styles.boost} ${
+                          theme === "dark" ? styles.dark : styles.light
+                        }`}
+                      >
+                        <NextImage src={Current} alt="Logo" />
+                        {`Upto ${commaSeparator(
+                          calculateUptoApr(value?.id?.toNumber()) || 0
+                        )}%`}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                  {(value?.balances?.quoteCoin?.denom === "ucmst" ||
+                    value?.balances?.baseCoin?.denom === "ucmst") && (
+                    <div
+                      className={`${
+                        styles.farmCard__element__apr__poll__wrap
+                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                    >
+                      <Tooltip
+                        title={
+                          "Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions."
+                        }
+                        overlayClassName="farm_upto_apr_tooltip"
+                      >
+                        <div
+                          className={`${
+                            styles.farmCard__element__right__apr_pool__title
+                          }  ${styles.boost} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          <NextImage src={HirborLogo} alt="Logo" />
+                          {value?.id &&
+                            commaSeparator(
+                              calculateVaultEmission(
+                                value?.id?.toNumber()
+                              ).toFixed(2)
+                            )}
+                        </div>
+                      </Tooltip>
+                    </div>
+                  )}
+                </div>
               </div>
             </Tooltip>
-
-            {(value?.balances?.quoteCoin?.denom === "ucmst" ||
-              value?.balances?.baseCoin?.denom === "ucmst") && (
-              <div
-                className={`${styles.farmCard__element__apr__poll__wrap} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                <Tooltip
-                  title={
-                    "Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions."
-                  }
-                  overlayClassName="farm_upto_apr_tooltip"
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__apr_pool__title
-                    }  ${styles.boost} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <NextImage src={HirborLogo} alt="Logo" />
-                    {value?.id &&
-                      commaSeparator(
-                        calculateVaultEmission(value?.id?.toNumber()).toFixed(2)
-                      )}
-                  </div>
-                </Tooltip>
-              </div>
-            )}
           </div>
         </>
       ),
@@ -1039,7 +1056,12 @@ const FarmTable = ({
   return (
     <>
       {noDataButton ? (
-        <TableNew columns={COLUMNS2} data={DATA2} noDataButton={noDataButton} handleClick={handleClick}/>
+        <TableNew
+          columns={COLUMNS2}
+          data={DATA2}
+          noDataButton={noDataButton}
+          handleClick={handleClick}
+        />
       ) : (
         <TableNew columns={COLUMNS} data={DATA} noDataButton={noDataButton} />
       )}
@@ -1053,17 +1075,16 @@ const FarmTable = ({
         <Liquidity theme={theme} pool={selectedSinglePool} />
       </Modal>
 
-
       {showMyPool && (
-            <Modal
-              className={"modal__wrap2"}
-              open={isPortifolioManageModalOpen}
-              onCancel={handlePortofolioManageCancel}
-              centered={true}
-            >
-              <Liquidity theme={theme} pool={selectedManagePool} />
-            </Modal>
-          )}
+        <Modal
+          className={"modal__wrap2"}
+          open={isPortifolioManageModalOpen}
+          onCancel={handlePortofolioManageCancel}
+          centered={true}
+        >
+          <Liquidity theme={theme} pool={selectedManagePool} />
+        </Modal>
+      )}
     </>
   );
 };

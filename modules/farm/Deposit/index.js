@@ -472,6 +472,7 @@ const Deposit = ({
                     />
                   }
                   placement="bottom"
+                  autoAdjustOverflow={false}
                 >
                   <>
                     <Icon className={"bi bi-info-circle"} />

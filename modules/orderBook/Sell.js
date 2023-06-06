@@ -20,7 +20,18 @@ import {
 import OrderType from "./OrderType";
 import styles from "./OrderBook.module.scss";
 
-const Sell = ({ pair, balances, markets, orderLifespan, address, params, type }) => {
+const Sell = ({
+  pair,
+  balances,
+  markets,
+  orderLifespan,
+  address,
+  params,
+  type,
+  clickedValue,
+  setRefresh,
+  refresh,
+}) => {
   const theme = "dark";
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
@@ -31,10 +42,10 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
   useEffect(() => {
     setPrice(
       formateNumberDecimalsAuto({
-        price: pair?.price || 0,
+        price: clickedValue ? clickedValue : pair?.price || 0,
       })
     );
-  }, [pair]);
+  }, [pair, clickedValue]);
 
   let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
   const offerCoinFee = amount * swapFeeRate;
@@ -47,7 +58,8 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
           : "/comdex.liquidity.v1beta1.MsgMarketOrder",
       value: {
         orderer: address,
-        orderLifespan: type === "limit" ? { seconds: orderLifespan, nanos: 0 } : "0",
+        orderLifespan:
+          type === "limit" ? { seconds: orderLifespan, nanos: 0 } : "0",
         pairId: Long.fromNumber(pair?.pair_id),
         appId: Long.fromNumber(APP_ID),
         direction: 2,
@@ -90,6 +102,8 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
       address,
       (error, result) => {
         setInProgress(false);
+        setRefresh(!refresh);
+        
         if (error) {
           message.error(error?.rawLog || error);
           return;
@@ -101,6 +115,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
         }
         message.success("Transaction success");
         updateValues();
+        
       }
     );
   };
@@ -155,7 +170,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
             })}{" "}
             {denomConversion(pair?.base_coin_denom)}
             <label>
-            ~$
+              ~$
               {formateNumberDecimalsAuto({ price: getBalanceValue() || 0 })}
             </label>
           </div>
@@ -283,7 +298,7 @@ const Sell = ({ pair, balances, markets, orderLifespan, address, params, type })
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-              ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+                ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
               </label>
             </div>
           </div>

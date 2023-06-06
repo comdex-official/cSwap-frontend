@@ -134,7 +134,8 @@ export const Datafeed = (value) => {
     ) => {
       const symbols = await getAllSymbols();
 
-      const symbolItem =symbols&& symbols.find(({ symbol }) => symbol === value);
+      const symbolItem =
+        symbols && symbols.find(({ symbol }) => symbol === value);
       if (!symbolItem) {
         onResolveErrorCallback("cannot resolve symbol");
         return;
@@ -189,7 +190,7 @@ export const Datafeed = (value) => {
 
       try {
         const data = await makeApiRequest(`pair/analytical/data?${query}`);
-
+        console.log(data?.data?.data);
         if (data.result !== "success" || data?.data?.data.length === 0) {
           onHistoryCallback([], {
             noData: true,
@@ -198,6 +199,7 @@ export const Datafeed = (value) => {
         }
         const newData = handleIncreaseLength(data?.data?.data);
         let bars = [];
+        console.log(newData);
         newData.forEach((bar) => {
           bars.push({
             time: moment(bar.timestamp).unix() * 1000,

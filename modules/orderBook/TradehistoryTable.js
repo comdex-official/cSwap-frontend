@@ -18,7 +18,7 @@ import Loading from "../../pages/Loading";
 
 const columns = [
   {
-    title: "Message Type",
+    title: "Order Type",
     dataIndex: "msgType",
     key: "msgType",
     width: 300,
@@ -166,7 +166,9 @@ const TradehistoryTable = ({ address }) => {
         dataSource={tableData}
         pagination={false}
         scroll={{ x: "100%" }}
-        locale={{ emptyText: <NoDataIcon  text="Trading History Not Available"/> }}
+        locale={{
+          emptyText: <NoDataIcon text="Trading History Not Available" />,
+        }}
         loading={{ indicator: <Loading />, spinning: inProgress }}
       />
     </div>
