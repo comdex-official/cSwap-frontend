@@ -28,6 +28,9 @@ const Buy = ({
   address,
   params,
   type,
+  clickedValue,
+  setRefresh,
+  refresh,
 }) => {
   const theme = "dark";
   const [price, setPrice] = useState();
@@ -38,10 +41,10 @@ const Buy = ({
   useEffect(() => {
     setPrice(
       formateNumberDecimalsAuto({
-        price: pair?.price || 0,
+        price: clickedValue ? clickedValue : pair?.price || 0,
       })
     );
-  }, [pair]);
+  }, [pair, clickedValue]);
 
   const calculateBuyAmount = () => {
     let swapFeeRate = Number(decimalConversion(params?.swapFeeRate));
@@ -107,6 +110,7 @@ const Buy = ({
       address,
       (error, result) => {
         setInProgress(false);
+        setRefresh(!refresh);
         if (error) {
           message.error(error?.rawLog || error);
           return;
@@ -118,6 +122,7 @@ const Buy = ({
         }
         message.success("Transaction success");
         updateValues();
+       
       }
     );
   };
@@ -301,7 +306,7 @@ const Buy = ({
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-              ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+                ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
               </label>
             </div>
           </div>

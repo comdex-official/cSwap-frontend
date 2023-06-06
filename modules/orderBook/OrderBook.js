@@ -39,6 +39,7 @@ import {
   Button,
   Dropdown,
   Input,
+  Tooltip,
 } from "antd";
 import {
   commaSeparator,
@@ -64,6 +65,7 @@ import Snack from "../../shared/components/Snack/index";
 import variables from "../../utils/variables";
 import Loading from "../../pages/Loading";
 import Lodash from "lodash";
+import OrderBookTooltipContent from "../../shared/components/OrderBookToolTip";
 
 const TVChartContainer = dynamic(
   () => import("./OrderBookTrading").then((mod) => mod),
@@ -101,6 +103,8 @@ const OrderBook = ({
   const [chartLoading, setChartLoading] = useState(false);
   const [orderLifespan, setOrderLifeSpan] = useState(21600);
   const [filteredPair, setFilteredPair] = useState();
+  const [clickedValue, setClickedValue] = useState(0);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     fetchRestPairs((error, pairs) => {
@@ -125,7 +129,7 @@ const OrderBook = ({
         setOrderBookData(result?.pairs[0]?.order_books);
       });
     }
-  }, [selectedPair]);
+  }, [selectedPair, refresh]);
 
   useEffect(() => {
     if (selectedPair?.pair_id) {
@@ -137,8 +141,8 @@ const OrderBook = ({
         setRecentTrade(result);
       });
     }
-  }, [selectedPair]);
-  console.log(recentTrade);
+  }, [selectedPair, refresh]);
+
   useEffect(() => {
     if (pairs?.length) {
       setSelectedPair(pairs[0]);
@@ -153,14 +157,14 @@ const OrderBook = ({
     );
 
     return () => clearInterval(intervalId);
-  }, [address, selectedPair?.pair_id]);
+  }, [address, selectedPair?.pair_id, refresh]);
 
   useEffect(() => {
     fetchOrders(selectedPair);
     let intervalId = setInterval(() => fetchOrders(selectedPair), 10000);
 
     return () => clearInterval(intervalId);
-  }, [selectedPair]);
+  }, [selectedPair, refresh]);
 
   const fetchUserOrders = async (address, pairId) => {
     if (address && pairId) {
@@ -342,6 +346,9 @@ const OrderBook = ({
           balances={balances}
           markets={markets}
           orderLifespan={orderLifespan}
+          clickedValue={clickedValue}
+          setRefresh={setRefresh}
+          refresh={refresh}
         />
       ),
     },
@@ -354,6 +361,9 @@ const OrderBook = ({
           balances={balances}
           markets={markets}
           orderLifespan={orderLifespan}
+          clickedValue={clickedValue}
+          setRefresh={setRefresh}
+          refresh={refresh}
         />
       ),
     },
@@ -519,9 +529,21 @@ const OrderBook = ({
     return b.price - a.price; // sort descending.
   });
 
+  let recentTradeFilter = recentTrade.sort((a, b) => {
+    const dateA = new Date(a?.timestamp);
+    const dateB = new Date(b?.timestamp);
+    if (dateA.getTime() > dateB.getTime()) {
+      return -1;
+    } else if (dateA.getTime() < dateB.getTime()) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
   const orderItems = [
     {
-      label: "Open Order",
+      label: "Open Orders",
       key: "1",
       children: (
         <OrderbookTable
@@ -805,7 +827,7 @@ const OrderBook = ({
                       <div
                         className={`${
                           styles.dropdown__orderbook__body__title
-                        } ${
+                        } ${styles.flex2} ${
                           Number(item?.total_volume_24h_change || 0).toFixed(
                             DOLLAR_DECIMALS
                           ) >= 0
@@ -813,6 +835,21 @@ const OrderBook = ({
                             : styles.loss
                         }`}
                       >
+                        {Number(item?.total_volume_24h_change || 0).toFixed(
+                          DOLLAR_DECIMALS
+                        ) >= 0 ? (
+                          <div
+                            className={`${styles.dropdown__orderbook__profit__arrow}`}
+                          >
+                            <Icon className={"bi bi-arrow-up-short"} />
+                          </div>
+                        ) : (
+                          <div
+                            className={`${styles.dropdown__orderbook__loss__arrow}`}
+                          >
+                            <Icon className={"bi bi-arrow-down-short"} />
+                          </div>
+                        )}
                         {commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
@@ -882,7 +919,7 @@ const OrderBook = ({
                       <div
                         className={`${
                           styles.dropdown__orderbook__body__title
-                        } ${
+                        } ${styles.flex2} ${
                           Number(item?.total_volume_24h_change || 0).toFixed(
                             DOLLAR_DECIMALS
                           ) >= 0
@@ -890,6 +927,21 @@ const OrderBook = ({
                             : styles.loss
                         }`}
                       >
+                        {Number(item?.total_volume_24h_change || 0).toFixed(
+                          DOLLAR_DECIMALS
+                        ) >= 0 ? (
+                          <div
+                            className={`${styles.dropdown__orderbook__profit__arrow}`}
+                          >
+                            <Icon className={"bi bi-arrow-up-short"} />
+                          </div>
+                        ) : (
+                          <div
+                            className={`${styles.dropdown__orderbook__loss__arrow}`}
+                          >
+                            <Icon className={"bi bi-arrow-down-short"} />
+                          </div>
+                        )}
                         {commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
@@ -910,6 +962,16 @@ const OrderBook = ({
       key: "item-1",
     },
   ];
+
+  const calculateWidth = (user_order_amount) => {
+    const maxValue = Math.max(
+      ...BuySellData[0]?.sells.map((obj) => obj.user_order_amount)
+    );
+    const amount =
+      (amountConversion(user_order_amount) / amountConversion(maxValue)) * 100;
+
+    return amount;
+  };
 
   return (
     <div
@@ -1111,7 +1173,10 @@ const OrderBook = ({
                   <Loading />
                 </div>
               ) : (
-                <TVChartContainer selectedPair={selectedPair} symbol={selectedPair?.pair_symbol}/>
+                <TVChartContainer
+                  selectedPair={selectedPair}
+                  symbol={selectedPair?.pair_symbol}
+                />
               )}
             </div>
           </div>
@@ -1219,32 +1284,57 @@ const OrderBook = ({
                       className={`${styles.orderbook__lower__head} ${
                         theme === "dark" ? styles.dark : styles.light
                       }`}
-                      key={item.price}
-                    >
-                         <div
-                        className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
-                        style={{width: `${(amountConversion(item?.user_order_amount) * 100) / 200}%`}}
-                      ></div>
-                      <div
-                        className={`${
-                          styles.orderbook__lower__table__head__title
-                        } ${styles.loss} ${
-                          theme === "dark" ? styles.dark : styles.light
-                        }`}
-                      >
-                        $
-                        {formateNumberDecimalsAuto({
-                          price:
-                            Number(
+                      onClick={() =>
+                        setClickedValue(
+                          formateNumberDecimalsAuto({
+                            price: Number(
                               commaSeparator(
                                 formateNumberDecimalsAuto({
                                   price: item?.price || 0,
                                 })
                               )
-                            ) *
-                            marketPrice(markets, selectedPair?.base_coin_denom),
-                        })}
-                      </div>
+                            ),
+                          })
+                        )
+                      }
+                      key={item.price}
+                    >
+                      
+                      <div
+                        className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
+                        style={{
+                          width: `${calculateWidth(item?.user_order_amount)}%`,
+                        }}
+                      ></div>
+
+<Tooltip
+                        title={
+                          <>
+                            <OrderBookTooltipContent />
+                          </>
+                        }
+                        overlayClassName="farm_upto_apr_tooltip"
+                        placement="left"
+                        autoAdjustOverflow={false}
+                      >
+                        <div
+                          className={`${
+                            styles.orderbook__lower__table__head__title
+                          } ${styles.loss} ${
+                            theme === "dark" ? styles.dark : styles.light
+                          }`}
+                        >
+                          {formateNumberDecimalsAuto({
+                            price: Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ),
+                          })}
+                        </div>
+                        </Tooltip>
                       <div
                         className={`${
                           styles.orderbook__lower__table__head__title
@@ -1254,6 +1344,7 @@ const OrderBook = ({
                           ? amountConversion(item?.user_order_amount)
                           : 0}
                       </div>
+                      
                     </div>
                   ))
                 )}
@@ -1322,12 +1413,38 @@ const OrderBook = ({
                     className={`${styles.orderbook__lower__head} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
+                    onClick={() =>
+                      setClickedValue(
+                        formateNumberDecimalsAuto({
+                          price: Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ),
+                        })
+                      )
+                    }
                     key={item.price}
                   >
-                     <div
-                        className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
-                        style={{width: `${(amountConversion(item?.user_order_amount) * 100) / 200}%`}}
-                      ></div>
+                    
+                    <div
+                      className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
+                      style={{
+                        width: `${calculateWidth(item?.user_order_amount)}%`,
+                      }}
+                    ></div>
+                     <Tooltip
+                        title={
+                          <>
+                            <OrderBookTooltipContent />
+                          </>
+                        }
+                        overlayClassName="farm_upto_apr_tooltip"
+                        placement="left"
+                        autoAdjustOverflow={false}
+                      >
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
@@ -1335,19 +1452,17 @@ const OrderBook = ({
                         theme === "dark" ? styles.dark : styles.light
                       }`}
                     >
-                      $
                       {formateNumberDecimalsAuto({
-                        price:
-                          Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                              })
-                            )
-                          ) *
-                          marketPrice(markets, selectedPair?.base_coin_denom),
+                        price: Number(
+                          commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: item?.price || 0,
+                            })
+                          )
+                        ),
                       })}
                     </div>
+                    </Tooltip>
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
@@ -1357,6 +1472,7 @@ const OrderBook = ({
                         ? amountConversion(item?.user_order_amount)
                         : 0}
                     </div>
+                 
                   </div>
                 ))
               )}
@@ -1383,7 +1499,7 @@ const OrderBook = ({
             </div>
             <div
               className={`${styles.orderbook__middle__lower__table} ${
-                recentTrade.length === 0 ? styles.no_data : ""
+                recentTradeFilter.length === 0 ? styles.no_data : ""
               } ${theme === "dark" ? styles.dark : styles.light}`}
             >
               <div
@@ -1418,7 +1534,7 @@ const OrderBook = ({
                 </div>
               </div>
 
-              {recentTrade.length === 0 ? (
+              {recentTradeFilter.length === 0 ? (
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
                     styles.no__data
@@ -1433,8 +1549,8 @@ const OrderBook = ({
                   {"No Recent Trades"}
                 </div>
               ) : (
-                recentTrade &&
-                recentTrade.map((item, i) => (
+                recentTradeFilter &&
+                recentTradeFilter.map((item, i) => (
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       styles.lower
@@ -1453,17 +1569,14 @@ const OrderBook = ({
                           : styles.profit
                       }  ${theme === "dark" ? styles.dark : styles.light}`}
                     >
-                      $
                       {formateNumberDecimalsAuto({
-                        price:
-                          Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                              })
-                            )
-                          ) *
-                          marketPrice(markets, selectedPair?.base_coin_denom),
+                        price: Number(
+                          commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: item?.price || 0,
+                            })
+                          )
+                        ),
                       })}
                     </div>
                     <div

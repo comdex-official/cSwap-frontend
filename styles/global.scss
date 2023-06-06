@@ -106,6 +106,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 4px;
+  z-index: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -117,10 +118,9 @@ body {
   height: auto !important;
   min-height: 100vh !important;
   background: #000000;
-  
 
   &::before {
-    background: url("../public/assets/images/background.svg");
+    background: url("../public/assets/images/background.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1039,7 +1039,7 @@ a {
 
   border-radius: 25px;
   text-align: left;
-  border: 2px solid #303950;
+  border: 2px solid #96a4c8;
   padding: 8px 10px;
 
   &::-webkit-placeholder {
@@ -1055,15 +1055,15 @@ a {
     }
   }
   &:hover {
-    border: 2px solid #303950 !important;
+    border: 2px solid #96a4c8 !important;
   }
 
   &:active {
-    border: 2px solid #303950 !important;
+    border: 2px solid #96a4c8 !important;
   }
 
   &:focus {
-    border: 2px solid #303950 !important;
+    border: 2px solid #96a4c8 !important;
   }
 
   &::-webkit-inner-spin-button {
@@ -1159,7 +1159,7 @@ a {
 
       .ant-tabs-nav-list {
         border-radius: 20px;
-        border: 2px solid #303950;
+        border: 2px solid #96a4c8;
         padding: 5px;
         width: 100%;
         // max-width: 350px;
@@ -2435,7 +2435,6 @@ a {
         .value {
           font-weight: 600;
           color: #f8f8fa;
-          text-shadow: 2px 2px 6px gray;
         }
       }
     }
@@ -2616,6 +2615,7 @@ a {
       padding-bottom: 10px;
       font-size: $font-size-base;
       color: $text-color-dark2;
+
       .dark-mode & {
         color: $white;
       }
@@ -2625,6 +2625,11 @@ a {
       &:last-child {
         padding-bottom: 0;
       }
+    }
+
+    .ant-row {
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
   }
   &.ranged-tooltip-small {
@@ -2997,7 +3002,7 @@ a {
 
       .ant-tabs-nav-list {
         border-radius: 20px;
-        border: 2px solid #303950;
+        border: 2px solid #96a4c8;
         padding: 5px;
         width: 100%;
         // max-width: 350px;
@@ -3487,9 +3492,8 @@ a {
       font-weight: 500;
       font-size: 10px;
       line-height: 12px;
-      
-      color: #6B758D;
-      
+
+      color: #6b758d;
     }
 
     &:active {

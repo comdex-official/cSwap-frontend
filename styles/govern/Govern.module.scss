@@ -171,7 +171,6 @@
                       .value {
                         font-weight: 600;
                         font-size: 1rem;
-                       
                       }
                     }
                   }
@@ -245,7 +244,10 @@
             .value {
               font-weight: 600;
               font-size: 1.25rem;
-              img{
+              &:hover{
+                color: #37729d;
+              }
+              img {
                 margin-left: 10px;
               }
             }
@@ -310,6 +312,8 @@
                   font-weight: 600;
                   font-size: 1.25rem;
                   line-height: 27px;
+                  cursor: pointer;
+                  width: 40px;
                 }
                 .error-color {
                   color: $error-color;
@@ -453,11 +457,11 @@
       margin-bottom: 10px;
     }
     .ant-select-selector {
-      height: 32px !important;
+      height: 35px !important;
       width: 100px !important;
       align-items: center;
       background: transparent !important;
-      border: 2px solid #303950 !important;
+      border: 2px solid #96a4c8 !important;
       @media only screen and (max-width: 725px) {
         height: 30px !important;
       }

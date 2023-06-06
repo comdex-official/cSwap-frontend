@@ -525,6 +525,7 @@ const FarmCard = ({
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
                         <Tooltip
+                         
                           overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
                           title={
                             pool?.type === 2 ? (
@@ -543,6 +544,7 @@ const FarmCard = ({
                             ) : null
                           }
                           placement="top"
+                          
                         >
                           <div
                             className={`${
@@ -559,20 +561,21 @@ const FarmCard = ({
                     </div>
                   </div>
                 ) : pool?.type === 1 ? (
-                  <div
-                    className={`${styles.farmCard__element__right__basic} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        styles.farmCard__element__right__basic__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      {"Basic"}
-                    </div>
-                  </div>
+                  ""
                 ) : (
+                  // <div
+                  //   className={`${styles.farmCard__element__right__basic} ${
+                  //     theme === "dark" ? styles.dark : styles.light
+                  //   }`}
+                  // >
+                  //   <div
+                  //     className={`${
+                  //       styles.farmCard__element__right__basic__title
+                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
+                  //   >
+                  //     {"Basic"}
+                  //   </div>
+                  // </div>
                   ""
                 )}
                 {/* {pool?.type === 2 ? (
@@ -693,8 +696,8 @@ const FarmCard = ({
             >
               <div
                 className={`${styles.farmCard__element__right__details} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
+                  styles.card__center
+                } ${theme === "dark" ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${
@@ -746,8 +749,8 @@ const FarmCard = ({
 
                 <div
                   className={`${styles.farmCard__element__right__details} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                    styles.card__center
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
                     className={`${styles.farmCard__element__apr__poll__wrap} ${
@@ -1009,12 +1012,12 @@ const FarmCard = ({
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
-                    {/* {`${showPairDenoms()} LP Farmed (Master Pool)`} */}
-                    {`${denomConversion(
+                    {`Master Pool Liquidity`}
+                    {/* {`${denomConversion(
                       masterPoolData?.balances?.baseCoin?.denom
                     )}-${denomConversion(
                       masterPoolData?.balances?.quoteCoin?.denom
-                    )} LP Farmed (Master Pool)`}
+                    )} LP Farmed (Master Pool)`} */}
                   </div>
                   <div
                     className={`${styles.farmCard__footer__right__title} ${

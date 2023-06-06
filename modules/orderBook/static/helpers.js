@@ -1,9 +1,9 @@
+import { API_URL } from "../../../constants/url";
+
 // Makes requests to CryptoCompare API
 export async function makeApiRequest(path) {
   try {
-    const response = await fetch(
-      `https://stat.comdex.one/api/v2/cswap/${path}`
-    );
+    const response = await fetch(`${API_URL}/api/v2/cswap/${path}`);
     return response.json();
   } catch (error) {
     throw new Error(`CryptoCompare request error: ${error.status}`);
