@@ -98,6 +98,7 @@ const Farm = ({
   assetMap,
   balances,
   pool,
+  rewardsMap,
 }) => {
   const theme = "dark";
   const TabData = ["All", "Basic", "Ranged", "My Pools"];
@@ -300,7 +301,7 @@ const Farm = ({
     }
   }, []);
 
-  const [filterValue1, setFilterValue1] = useState("APR");
+  const [filterValue1, setFilterValue1] = useState("");
 
   const Items = [
     {
@@ -309,14 +310,13 @@ const Farm = ({
         <div className={styles.dropdown__farm}>
           <div className="filter-button-radio">
             <Radio.Group
-              onChange={(event) => setFilterValue1(event.target.value)}
+              onChange={(event) => handleSortBy(event.target.value, pools)}
               defaultValue="a"
               value={filterValue1}
             >
+              <Radio.Button value={"Pool Pair"}>Pool Pair</Radio.Button>
               <Radio.Button value={"APR"}>APR</Radio.Button>
-              <Radio.Button value={"MyPools"}>My Pools</Radio.Button>
-              <Radio.Button value={"DateCreated"}>Date Created</Radio.Button>
-              <Radio.Button value={"PoolLiquidity"}>
+              <Radio.Button value={"Pool Liquidity"}>
                 Pool Liquidity
               </Radio.Button>
             </Radio.Group>
@@ -353,6 +353,86 @@ const Farm = ({
 
   const handleClick = () => {
     onChange("3");
+  };
+
+  console.log({ displayPools });
+
+  const calculatePoolLiquidity = useCallback((poolBalance) => {
+    if (poolBalance && Object.values(poolBalance)?.length) {
+      const values = Object.values(poolBalance).map(
+        (item) =>
+          Number(
+            amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+          ) * marketPrice(markets, item?.denom)
+      );
+      return values?.reduce((prev, next) => prev + next, 0); // returning sum value
+    } else return 0;
+  }, []);
+
+  const getMasterPool = (_id) => {
+    const hasMasterPool = rewardsMap?.[_id]?.incentive_rewards?.some(
+      (pool) => pool.master_pool
+    );
+    return hasMasterPool;
+  };
+
+  const calculateMasterPoolApr = (_id) => {
+    const totalMasterPoolApr = rewardsMap?.[_id]?.incentive_rewards.filter(
+      (reward) => reward.master_pool
+    );
+    // .reduce((acc, reward) => acc + reward.apr, 0);
+
+    return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
+  };
+
+  const calculateChildPoolApr = (_id) => {
+    const totalApr = rewardsMap?.[_id]?.incentive_rewards
+      .filter((reward) => !reward.master_pool)
+      .reduce((acc, reward) => acc + reward.apr, 0);
+
+    const swapFeeApr = rewardsMap?.[_id]?.swap_fee_rewards.reduce(
+      (acc, reward) => acc + reward.apr,
+      0
+    );
+    const total = totalApr + swapFeeApr;
+    return fixedDecimal(total);
+  };
+
+  const calculateApr = (_id) => {
+    getMasterPool(_id);
+    if (getMasterPool(_id)) {
+      return calculateMasterPoolApr(_id);
+    } else {
+      return calculateChildPoolApr(_id);
+    }
+  };
+
+  const handleSortBy = (value, pools) => {
+    setFilterValue1(value);
+    if (value === "Pool Liquidity") {
+      const sortedCards = displayPools.sort((a, b) => {
+        const aTotalPoolLiquidity = calculatePoolLiquidity(a?.balances);
+        const bTotalPoolLiquidity = calculatePoolLiquidity(b?.balances);
+
+        return bTotalPoolLiquidity - aTotalPoolLiquidity;
+      });
+      setDisplayPools(sortedCards);
+    } else if (value === "APR") {
+      const sortedCards = displayPools.sort((a, b) => {
+        const aTotalPoolLiquidity = calculateApr(a?.id?.toNumber()) || 0;
+
+        const bTotalPoolLiquidity = calculateApr(b?.id?.toNumber()) || 0;
+
+        return bTotalPoolLiquidity - aTotalPoolLiquidity;
+      });
+      setDisplayPools(sortedCards);
+    } else if(value ==="Pool Pair"){
+      const sortedCards = displayPools.sort((a, b) => {
+        return  denomConversion(a?.balances?.quoteCoin?.denom)?.localeCompare(
+          denomConversion(b?.balances?.quoteCoin?.denom));
+      });
+      setDisplayPools(sortedCards);
+    }
   };
 
   return (
@@ -417,15 +497,13 @@ const Farm = ({
               <div>
                 {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
                 <span
-                className={`${styles.farm__header__left__more} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"learn more"}
-              </span>
+                  className={`${styles.farm__header__left__more} ${
+                    theme === "dark" ? styles.dark : styles.light
+                  }`}
+                >
+                  {"learn more"}
+                </span>
               </div>
-
-             
             </div>
             <div
               className={`${styles.farm__header__right__main} ${
@@ -734,7 +812,7 @@ const Farm = ({
                 }`}
               >
                 <Icon className={"bi bi-funnel-fill"} />
-                {"Sort By"}
+                {filterValue1 ? filterValue1 : "Sort By"}
               </div>
             </MyDropdown>
             <div
@@ -868,6 +946,7 @@ const stateToProps = (state) => {
     incentivesMap: state.liquidity.incentivesMap,
     showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
     showMyPool: state.liquidity.showMyPool,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 

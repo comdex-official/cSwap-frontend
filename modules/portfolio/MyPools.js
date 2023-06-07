@@ -85,7 +85,7 @@ const MyPools = ({
       render: (pool) => <PoolCardRow key={pool?.id} pool={pool} lang={lang} />,
       sorter: (a, b) =>
         denomConversion(a?.assetpair?.balances?.baseCoin?.denom)?.localeCompare(
-          denomConversion(b?.assetpair?.balances?.quoteCoin?.denom)?.symbol
+          denomConversion(b?.assetpair?.balances?.quoteCoin?.denom)
         ),
       sortDirections: ["ascend", "descend"],
       showSorterTooltip: false,
