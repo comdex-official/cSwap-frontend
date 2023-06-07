@@ -82,7 +82,7 @@
   // height: 100px;
   position: absolute;
   right: 0;
-  top: -62px;
+  top: -30px;
 
   @media screen and (max-width: $M) {
     display: none;
@@ -333,7 +333,7 @@
 .farm__body__line {
   width: 20px;
   height: 0px;
-  border: 2px solid #6b758d;
+  border: 2px solid #96a4c8;
   transform: rotate(90deg);
   margin: 0px 10px;
 
@@ -535,7 +535,6 @@
   &.dark {
   }
 }
-
 
 .farmCard__element__card__left__logo {
   background: linear-gradient(to bottom, #fe4350, #053c75);

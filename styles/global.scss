@@ -1544,6 +1544,9 @@ a {
     .dark-mode & {
       color: $text-color-label-dark;
     }
+    &:hover {
+      background: #2b3548;
+    }
     &::before {
       display: none;
     }
@@ -3516,7 +3519,7 @@ a {
   // }
 }
 
-.orderbook__tooltip{
+.orderbook__tooltip {
   display: flex;
   flex-direction: column;
   gap: 10px;
