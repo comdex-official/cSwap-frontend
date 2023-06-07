@@ -141,7 +141,6 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
-    console.log(userLiquidityInPools, pools, "ssssssss");
     setUserPool(userPools);
   }, [userLiquidityInPools, filterValue, pools, filterValue]);
 
@@ -342,7 +341,6 @@ const Farm = ({
           item?.id?.toNumber()
         ]?.incentive_rewards?.some((pool) => pool.master_pool);
 
-        console.log(hasMasterPool, "sssss");
         if (!hasMasterPool) {
           temp.push(item);
         }

@@ -3515,3 +3515,10 @@ a {
   //   background: rgba(31, 42, 69, 0.7);
   // }
 }
+
+.orderbook__tooltip{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}

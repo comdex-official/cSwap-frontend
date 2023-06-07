@@ -25,7 +25,7 @@ export function parseFullSymbol(fullSymbol) {
   if (!match) {
     return null;
   }
-  console.log(match);
+
   return {
     exchange: match[1],
     fromSymbol: match[2],

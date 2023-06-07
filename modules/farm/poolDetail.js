@@ -46,7 +46,6 @@ const PoolDetails = ({
   userLiquidityInPools,
   setTradeData,
 }) => {
-  console.log(pool, "plllllll");
   const [providedTokens, setProvidedTokens] = useState();
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
   const [activeSoftLock, setActiveSoftLock] = useState(0);

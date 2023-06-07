@@ -174,7 +174,7 @@ export const Datafeed = (value) => {
       onErrorCallback
     ) => {
       const { from, to, firstDataRequest } = periodParams;
-      console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
+      console.log("[getBars]: Method call",);
 
       const resolutionValue = getResolutionValue(resolution);
 
@@ -190,7 +190,7 @@ export const Datafeed = (value) => {
 
       try {
         const data = await makeApiRequest(`pair/analytical/data?${query}`);
-        console.log(data?.data?.data);
+       
         if (data.result !== "success" || data?.data?.data.length === 0) {
           onHistoryCallback([], {
             noData: true,
@@ -199,7 +199,7 @@ export const Datafeed = (value) => {
         }
         const newData = handleIncreaseLength(data?.data?.data);
         let bars = [];
-        console.log(newData);
+     
         newData.forEach((bar) => {
           bars.push({
             time: moment(bar.timestamp).unix() * 1000,
@@ -217,7 +217,7 @@ export const Datafeed = (value) => {
         //   });
         // }
 
-        console.log(`[getBars]: returned ${bars.length} bar(s)`);
+        console.log(`[getBars]: returned bar(s)`);
         onHistoryCallback(bars, {
           noData: false,
         });

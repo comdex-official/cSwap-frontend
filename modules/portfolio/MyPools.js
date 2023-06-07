@@ -16,6 +16,7 @@ import ShowAPR from "./ShowAPR";
 import PoolCardRow from "./MyPoolRow";
 import { useRouter } from "next/router";
 import NoDataIcon from "../../shared/components/NoDataIcon";
+import { denomConversion, fixedDecimal } from "../../utils/coin";
 
 const MyPools = ({
   pools,
@@ -23,6 +24,7 @@ const MyPools = ({
   userLiquidityInPools,
   setShowMyPool,
   setSelectedManagePool,
+  rewardsMap,
 }) => {
   const navigate = useRouter();
 
@@ -34,6 +36,43 @@ const MyPools = ({
     )
   );
 
+  const getMasterPool = (_id) => {
+    const hasMasterPool = rewardsMap?.[_id]?.incentive_rewards?.some(
+      (pool) => pool.master_pool
+    );
+    return hasMasterPool;
+  };
+
+  const calculateMasterPoolApr = (_id) => {
+    const totalMasterPoolApr = rewardsMap?.[
+      _id
+    ]?.incentive_rewards.filter((reward) => reward.master_pool);
+    // .reduce((acc, reward) => acc + reward.apr, 0);
+
+    return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
+  };
+
+  const calculateChildPoolApr = (_id) => {
+    const totalApr = rewardsMap?.[_id]?.incentive_rewards
+      .filter((reward) => !reward.master_pool)
+      .reduce((acc, reward) => acc + reward.apr, 0);
+
+    const swapFeeApr = rewardsMap?.[
+      _id
+    ]?.swap_fee_rewards.reduce((acc, reward) => acc + reward.apr, 0);
+    const total = totalApr + swapFeeApr;
+    return fixedDecimal(total);
+  };
+
+  const calculateApr = (_id) => {
+    getMasterPool(_id);
+    if (getMasterPool(_id)) {
+      return calculateMasterPoolApr(_id);
+    } else {
+      return calculateChildPoolApr(_id);
+    }
+  };
+
   const userPools = rawUserPools.filter((item) => item);
 
   const columns = [
@@ -44,6 +83,12 @@ const MyPools = ({
       align: "center",
       width: 400,
       render: (pool) => <PoolCardRow key={pool?.id} pool={pool} lang={lang} />,
+      sorter: (a, b) =>
+        denomConversion(a?.assetpair?.balances?.baseCoin?.denom)?.localeCompare(
+          denomConversion(b?.assetpair?.balances?.quoteCoin?.denom)?.symbol
+        ),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "APR",
@@ -56,6 +101,11 @@ const MyPools = ({
           <ShowAPR pool={pool} />
         </div>
       ),
+      sorter: (a, b) =>
+        Number(calculateApr(a?.apr?.id?.toNumber()) || 0) -
+        Number(calculateApr(b?.apr?.id?.toNumber()) || 0),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: <>My Liquidity</>,
@@ -67,6 +117,9 @@ const MyPools = ({
           ${commaSeparator(Number(position || 0).toFixed(DOLLAR_DECIMALS))}
         </div>
       ),
+      sorter: (a, b) => Number(a?.position || 0) - Number(b?.position || 0),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: false,
     },
     {
       title: "Action",
@@ -168,6 +221,7 @@ const stateToProps = (state) => {
     pools: state.liquidity.pool.list,
     markets: state.oracle.market.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
+    rewardsMap: state.liquidity.rewardsMap,
   };
 };
 

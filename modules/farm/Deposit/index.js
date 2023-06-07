@@ -76,7 +76,7 @@ const Deposit = ({
 
   const normalPrice = decimalConversion(pool?.price);
   const userPoolTokens = getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-  console.log({ userPoolTokens });
+
   let poolPrice =
     Number(normalPrice) /
     10 **
