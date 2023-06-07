@@ -252,7 +252,7 @@
   align-items: center;
   position: relative;
   padding: 5px 0px;
-cursor: pointer;
+  cursor: pointer;
   &.lower {
     margin-top: 10px;
   }
@@ -265,6 +265,9 @@ cursor: pointer;
   text-align: right;
   color: #73aed2;
 
+  &.width {
+    width: 90px;
+  }
   // @media screen and (max-width: $XXL) {
   //   font-size: 8px;
   // }
@@ -873,14 +876,11 @@ cursor: pointer;
   line-height: 12px;
   color: #ffffff;
   width: 100px;
-  max-height: 200px;
-  overflow: auto;
 
   &.flex {
     display: flex;
     align-items: center;
     gap: 10px;
-
 
     @media screen and (max-width: $XS) {
       flex-direction: column;
@@ -891,8 +891,8 @@ cursor: pointer;
   &.flex2 {
     display: flex;
     align-items: center;
-  justify-content: flex-end;
-    
+    justify-content: flex-end;
+
     @media screen and (max-width: $XS) {
       flex-direction: column;
       align-items: flex-start;
@@ -916,6 +916,8 @@ cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: auto;
+  max-height: 102px;
 }
 
 .orderbook__buy__width__wrap {
@@ -935,14 +937,14 @@ cursor: pointer;
   }
 }
 
-.dropdown__orderbook__profit__arrow{
-i{
-  color: #3ff4be;
-}
+.dropdown__orderbook__profit__arrow {
+  i {
+    color: #3ff4be;
+  }
 }
 
-.dropdown__orderbook__loss__arrow{
-  i{
+.dropdown__orderbook__loss__arrow {
+  i {
     color: #ff7b51;
-    }
+  }
 }

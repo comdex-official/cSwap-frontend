@@ -117,7 +117,7 @@ const OrderBook = ({
       setFilteredPair(pairs?.data);
       // setChartLoading(false);
     });
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (selectedPair?.pair_id) {
@@ -126,28 +126,39 @@ const OrderBook = ({
           return;
         }
 
+
         setOrderBookData(result?.pairs[0]?.order_books);
       });
     }
   }, [selectedPair, refresh]);
 
   useEffect(() => {
+    fetchRecentTradesData(selectedPair);
+    let intervalId = setInterval(
+      () => fetchRecentTradesData(selectedPair),
+      10000
+    );
+
+    return () => clearInterval(intervalId);
+  }, [selectedPair, refresh]);
+
+  const fetchRecentTradesData = async (selectedPair) => {
     if (selectedPair?.pair_id) {
       fetchRecentTrades(selectedPair?.pair_id, (error, result) => {
         if (error) {
           return;
         }
-
+   
         setRecentTrade(result);
       });
     }
-  }, [selectedPair, refresh]);
+  };
 
   useEffect(() => {
     if (pairs?.length) {
       setSelectedPair(pairs[0]);
     }
-  }, [pairs]);
+  }, [pairs, refresh]);
 
   useEffect(() => {
     fetchUserOrders(address, selectedPair?.pair_id);
@@ -529,6 +540,8 @@ const OrderBook = ({
     return b.price - a.price; // sort descending.
   });
 
+ 
+
   let recentTradeFilter = recentTrade.sort((a, b) => {
     const dateA = new Date(a?.timestamp);
     const dateB = new Date(b?.timestamp);
@@ -663,6 +676,8 @@ const OrderBook = ({
 
   const BuySellData = checkPrice(filterValue);
 
+
+
   const matchBuySell = (baseCoin, assetCoin) => {
     if (baseCoin === assetCoin) {
       return true;
@@ -717,6 +732,8 @@ const OrderBook = ({
 
   const finalTableData = Lodash.concat(res1, res2);
 
+ 
+
   const checkStar = (data) => {
     const dataCheck = newTableData ? newTableData.includes(data) : false;
     return dataCheck;
@@ -727,7 +744,7 @@ const OrderBook = ({
       localStorage.setItem("market", JSON.stringify([]));
     }
     var old_arr = JSON.parse(localStorage.getItem("market"));
-    console.log(old_arr);
+
     old_arr.push(JSON.stringify(coin));
     localStorage.setItem("market", JSON.stringify(old_arr));
     setUpdateStar(!updateStar);
@@ -812,7 +829,7 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-                        $
+               
                         {formateNumberDecimalsAuto({
                           price:
                             Number(
@@ -821,7 +838,7 @@ const OrderBook = ({
                                   price: item?.price || 0,
                                 })
                               )
-                            ) * marketPrice(markets, item?.base_coin_denom),
+                            ) 
                         })}
                       </div>
                       <div
@@ -850,7 +867,12 @@ const OrderBook = ({
                             <Icon className={"bi bi-arrow-down-short"} />
                           </div>
                         )}
-                        {commaSeparator(
+
+{  Number(item?.total_volume_24h_change || 0).toFixed(
+                          DOLLAR_DECIMALS
+                        ) >= 0 ? "+" : "-"}
+                        {                     
+                        commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
                               DOLLAR_DECIMALS
@@ -904,7 +926,7 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-                        $
+             
                         {formateNumberDecimalsAuto({
                           price:
                             Number(
@@ -913,7 +935,7 @@ const OrderBook = ({
                                   price: item?.price || 0,
                                 })
                               )
-                            ) * marketPrice(markets, item?.base_coin_denom),
+                            )
                         })}
                       </div>
                       <div
@@ -942,6 +964,8 @@ const OrderBook = ({
                             <Icon className={"bi bi-arrow-down-short"} />
                           </div>
                         )}
+                        
+                        {Number(item?.total_volume_24h_change || 0).toFixed(DOLLAR_DECIMALS) >= 0 ? "+" : "-"}
                         {commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
@@ -971,6 +995,100 @@ const OrderBook = ({
       (amountConversion(user_order_amount) / amountConversion(maxValue)) * 100;
 
     return amount;
+  };
+
+  const avgPrice = (mouseRowIndex) => {
+    let totalPrice = 0;
+    let count = 0;
+
+    for (let i = 0; i <= mouseRowIndex; i++) {
+      totalPrice += Number(
+        formateNumberDecimalsAuto({
+          price: Number(
+            (
+              formateNumberDecimalsAuto({
+                price: BuySellData[0]?.buys[i]?.price || 0,
+                minDecimal: 3,
+              })
+            )
+          ),
+          minDecimal: 3,
+        })
+      );
+      count++;
+    }
+
+    return Number(totalPrice) / count;
+  };
+
+  const totalAmount = (mouseRowIndex) => {
+    let totalAmount = 0;
+    let count = 0;
+
+    for (let i = 0; i <= mouseRowIndex; i++) {
+      totalAmount += Number(BuySellData[0]?.buys[i]?.user_order_amount);
+      count++;
+    }
+
+    const price = formateNumberDecimalsAuto({
+      price:
+        Number(
+          (
+            formateNumberDecimalsAuto({
+              price: selectedPair?.price || 0,
+            })
+          )
+        ) * marketPrice(markets, selectedPair?.base_coin_denom),
+    });
+
+    return amountConversion(totalAmount) * price;
+  };
+
+  const avgPrice2 = (mouseRowIndex) => {
+    let totalPrice = 0;
+    let count = 0;
+
+    for (let i = mouseRowIndex; i < BuySellData[0]?.sells?.length; i++) {
+      totalPrice += Number(
+        formateNumberDecimalsAuto({
+          price: Number(
+            (
+              formateNumberDecimalsAuto({
+                price: BuySellData[0]?.sells[i]?.price || 0,
+                minDecimal: 3,
+              })
+            )
+          ),
+          minDecimal: 3,
+        })
+      );
+      count++;
+    }
+ 
+    return Number(totalPrice) / count;
+  };
+
+  const totalAmount2 = (mouseRowIndex) => {
+    let totalAmount = 0;
+    let count = 0;
+
+    for (let i = mouseRowIndex; i < BuySellData[0]?.sells?.length; i++) {
+      totalAmount += Number(amountConversion(BuySellData[0]?.sells[i]?.user_order_amount));
+      count++;
+    }
+    
+    const price = formateNumberDecimalsAuto({
+      price:
+        Number(
+          (
+            formateNumberDecimalsAuto({
+              price: selectedPair?.price || 0,
+            })
+          )
+        ) * marketPrice(markets, selectedPair?.base_coin_denom),
+    });
+
+    return (totalAmount) * price;
   };
 
   return (
@@ -1066,6 +1184,7 @@ const OrderBook = ({
                     {commaSeparator(
                       formateNumberDecimalsAuto({
                         price: selectedPair?.price || 0,
+                        minDecimal: 3,
                       })
                     )}
                   </span>
@@ -1279,11 +1398,28 @@ const OrderBook = ({
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
-                  BuySellData[0]?.sells.map((item) => (
+                  BuySellData[0]?.sells.map((item, index) => (
+                    <div>
+ <Tooltip
+ 
+                        title={
+                          <>
+                            <OrderBookTooltipContent
+                              price={avgPrice2(index)}
+                              total={totalAmount2(index)}
+                            />
+                          </>
+                        }
+                        overlayClassName="farm_upto_apr_tooltip"
+                        placement="left"
+                        autoAdjustOverflow={false}
+                      >
+                     
                     <div
                       className={`${styles.orderbook__lower__head} ${
                         theme === "dark" ? styles.dark : styles.light
                       }`}
+              
                       onClick={() =>
                         setClickedValue(
                           formateNumberDecimalsAuto({
@@ -1299,7 +1435,6 @@ const OrderBook = ({
                       }
                       key={item.price}
                     >
-                      
                       <div
                         className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
                         style={{
@@ -1307,16 +1442,7 @@ const OrderBook = ({
                         }}
                       ></div>
 
-<Tooltip
-                        title={
-                          <>
-                            <OrderBookTooltipContent />
-                          </>
-                        }
-                        overlayClassName="farm_upto_apr_tooltip"
-                        placement="left"
-                        autoAdjustOverflow={false}
-                      >
+                     
                         <div
                           className={`${
                             styles.orderbook__lower__table__head__title
@@ -1329,12 +1455,14 @@ const OrderBook = ({
                               commaSeparator(
                                 formateNumberDecimalsAuto({
                                   price: item?.price || 0,
+                                  minDecimal: 3,
                                 })
                               )
                             ),
+                            minDecimal: 3,
                           })}
                         </div>
-                        </Tooltip>
+                      
                       <div
                         className={`${
                           styles.orderbook__lower__table__head__title
@@ -1344,7 +1472,8 @@ const OrderBook = ({
                           ? amountConversion(item?.user_order_amount)
                           : 0}
                       </div>
-                      
+                    </div>
+                    </Tooltip>
                     </div>
                   ))
                 )}
@@ -1364,6 +1493,7 @@ const OrderBook = ({
                 {commaSeparator(
                   formateNumberDecimalsAuto({
                     price: selectedPair?.price || 0,
+                    minDecimal: 3,
                   })
                 )}
               </div>
@@ -1408,11 +1538,27 @@ const OrderBook = ({
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
-                BuySellData[0]?.buys.map((item) => (
+                BuySellData[0]?.buys.map((item, index) => (
+                  <div>
+  <Tooltip
+                      title={
+                        <>
+                          <OrderBookTooltipContent
+                            price={avgPrice(index)}
+                            total={totalAmount(index)}
+                          />
+                        </>
+                      }
+                      overlayClassName="farm_upto_apr_tooltip"
+                      placement="left"
+                      autoAdjustOverflow={false}
+                    >
+                  
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
+                   
                     onClick={() =>
                       setClickedValue(
                         formateNumberDecimalsAuto({
@@ -1428,41 +1574,33 @@ const OrderBook = ({
                     }
                     key={item.price}
                   >
-                    
                     <div
                       className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
                       style={{
                         width: `${calculateWidth(item?.user_order_amount)}%`,
                       }}
                     ></div>
-                     <Tooltip
-                        title={
-                          <>
-                            <OrderBookTooltipContent />
-                          </>
-                        }
-                        overlayClassName="farm_upto_apr_tooltip"
-                        placement="left"
-                        autoAdjustOverflow={false}
+                  
+                      <div
+                        className={`${
+                          styles.orderbook__lower__table__head__title
+                        }  ${styles.profit} ${
+                          theme === "dark" ? styles.dark : styles.light
+                        }`}
                       >
-                    <div
-                      className={`${
-                        styles.orderbook__lower__table__head__title
-                      }  ${styles.profit} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                    >
-                      {formateNumberDecimalsAuto({
-                        price: Number(
-                          commaSeparator(
-                            formateNumberDecimalsAuto({
-                              price: item?.price || 0,
-                            })
-                          )
-                        ),
-                      })}
-                    </div>
-                    </Tooltip>
+                        {formateNumberDecimalsAuto({
+                          price: Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                                minDecimal: 3,
+                              })
+                            )
+                          ),
+                          minDecimal: 3,
+                        })}
+                      </div>
+                   
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
@@ -1472,7 +1610,8 @@ const OrderBook = ({
                         ? amountConversion(item?.user_order_amount)
                         : 0}
                     </div>
-                 
+                  </div>
+                  </Tooltip>
                   </div>
                 ))
               )}
@@ -1518,8 +1657,8 @@ const OrderBook = ({
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                    styles.width
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   {selectedPair === undefined
                     ? `Amount`
@@ -1527,8 +1666,8 @@ const OrderBook = ({
                 </div>
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
+                    styles.width
+                  } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   {"Time"}
                 </div>
@@ -1574,9 +1713,11 @@ const OrderBook = ({
                           commaSeparator(
                             formateNumberDecimalsAuto({
                               price: item?.price || 0,
+                              minDecimal: 3,
                             })
                           )
                         ),
+                        minDecimal: 3,
                       })}
                     </div>
                     <div

@@ -1,41 +1,24 @@
 import { Col, Row, Slider } from "antd";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getAMP, rangeToPercentage } from "../../utils/number";
-// import { Col, Row } from "./common";
 
 const OrderBookTooltipContent = ({
   price,
-  base,
-  quote,
-  sumBase,
-  sumQuote,
   total,
 }) => {
   return (
-    <div>
+    <div className={"orderbook__tooltip"}>
       <Row>
         <Col>
-          Avg Price <span className="ml-2">:</span>
+          Avg Price 
         </Col>
-        <Col>{price}</Col>
+        <Col> <span className="ml-2">~</span> {Number(price).toFixed(3)}</Col>
       </Row>
       <Row>
         <Col>
-          Sum {base} <span className="ml-2">:</span>
+          Total USD
         </Col>
-        <Col>{sumBase}</Col>
-      </Row>
-      <Row>
-        <Col>
-          Sum {quote} <span className="ml-2">:</span>
-        </Col>
-        <Col>{sumQuote}</Col>
-      </Row>
-      <Row>
-        <Col>
-          Total <span className="ml-2">:</span>{" "}
-        </Col>
-        <Col>{total ? `${total}` : ""}</Col>
+        <Col><span className="ml-2">~</span> ${Number(total).toFixed(2)}</Col>
       </Row>
     </div>
   );

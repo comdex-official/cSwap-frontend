@@ -15,6 +15,8 @@ import Copy from "../../shared/components/Copy";
 import moment from "moment";
 import NoDataIcon from "../../shared/components/NoDataIcon";
 import Loading from "../../pages/Loading";
+import { commaSeparator, formateNumberDecimalsAuto } from "../../utils/number";
+import { amountConversion } from "../../utils/coin";
 
 const columns = [
   {
@@ -24,18 +26,30 @@ const columns = [
     width: 300,
   },
   {
+    title: "Buy/Sell",
+    dataIndex: "buySell",
+    key: "buySell",
+    width: 300,
+  },
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
+    width: 300,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    width: 300,
+  },
+  {
     title: "Date",
     dataIndex: "date",
     key: "date",
     width: 300,
     render: (date) => moment(date).format("MMMM Do YYYY h:mm:ss"),
   },
-  // {
-  //   title: "Height",
-  //   dataIndex: "height",
-  //   key: "height",
-  //   width: 300,
-  // },
   {
     title: "Transaction Hash",
     dataIndex: "transactionHash",
@@ -150,6 +164,23 @@ const TradehistoryTable = ({ address }) => {
           item?.details["@type"] === "/comdex.liquidity.v1beta1.MsgMarketOrder"
             ? "Market Order"
             : "Limit Order",
+        buySell: item?.details?.direction || "-",
+        amount: amountConversion(item?.details?.amount || 0),
+        price:
+          item?.details["@type"] === "/comdex.liquidity.v1beta1.MsgMarketOrder"
+            ? "-"
+            : formateNumberDecimalsAuto({
+                price: Number(
+                  commaSeparator(
+                    formateNumberDecimalsAuto({
+                      price: item?.details?.price || 0,
+                      minDecimal: 3,
+                    })
+                  )
+                ),
+                minDecimal: 3,
+              }),
+
         date: item?.time,
       };
     });

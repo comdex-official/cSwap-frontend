@@ -41,7 +41,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
     ]?.incentive_rewards.filter((reward) => reward.master_pool);
     // .reduce((acc, reward) => acc + reward.apr, 0);
 
-    // console.log(totalMasterPoolApr?.[0]?.apr, "totalMasterPoolApr");
+   
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -94,6 +94,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
       fixedDecimal(totalMasterPoolApr) + fixedDecimal(totalApr);
     return fixedDecimal(totalMasterPoolApr);
   };
+
 
   const showIndividualAPR = (list) => {
     if (list?.length > 2) {

@@ -240,7 +240,6 @@ const CreatePoolModal = ({
     baseAmountValidationError?.message ||
     quoteAmountValidationError?.message;
 
-  console.log(baseToken);
 
   const steps = [
     {

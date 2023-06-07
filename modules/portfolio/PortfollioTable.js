@@ -67,20 +67,20 @@ const PortofolioTable = ({
   };
 
   const onFavourite = (coin) => {
-    console.log(coin);
+   
 
     if (localStorage.getItem("fav") === null) {
       localStorage.setItem("fav", JSON.stringify([]));
     }
     var old_arr = JSON.parse(localStorage.getItem("fav"));
-    console.log(old_arr);
+  
     old_arr.push(JSON.stringify(coin));
     localStorage.setItem("fav", JSON.stringify(old_arr));
     setUpdateStar(!updateStar);
   };
 
   const Delete = (value) => {
-    console.log({ value });
+  
     let displayItems = JSON.parse(localStorage.getItem("fav"));
     const index = displayItems.indexOf(value);
     displayItems.splice(index, 1);
@@ -92,7 +92,7 @@ const PortofolioTable = ({
     setContent(JSON.parse(localStorage.getItem("fav")));
   }, [updateStar]);
 
-  console.log({ content });
+ 
 
   const tabItems = [
     {
@@ -600,7 +600,7 @@ const PortofolioTable = ({
         })
       : tableData;
 
-  console.log(checkStar("uatom"));
+
 
   var res1 = tableData.filter(function (el) {
     return newTableData.length > 0 && newTableData.indexOf(el?.symbol) >= 0;
@@ -613,9 +613,7 @@ const PortofolioTable = ({
   //   content !== null &&
   //   tableData?.filter((item) => !content.includes(item?.key));
   const finalTableData = Lodash.concat(res1, res2);
-  console.log(res1, res2, newTableData);
 
-  console.log(finalTableData, "fffffff");
   let balanceExists = allTableData?.find(
     (item) => Number(item?.noOfTokens) > 0
   );

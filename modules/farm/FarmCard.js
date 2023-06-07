@@ -92,7 +92,7 @@ const FarmCard = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  // console.log(poolsApr, "poolsApr");
+ 
 
   const handlePortofolioManageCancel = () => {
     setIsPortifolioManageModalOpen(false);
@@ -127,7 +127,6 @@ const FarmCard = ({
     );
     // .reduce((acc, reward) => acc + reward.apr, 0);
 
-    // console.log(totalMasterPoolApr?.[0]?.apr, "totalMasterPoolApr");
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -433,12 +432,12 @@ const FarmCard = ({
                 }`}
               >
                 <div
-                  className={`${styles.farmCard__element__left__logo} ${
+                  className={`${styles.farmCard__element__card__left__logo} ${
                     styles.first
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__left__logo__main} ${
+                    className={`${styles.farmCard__element__card__left__logo__main} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
@@ -454,12 +453,12 @@ const FarmCard = ({
                   </div>
                 </div>
                 <div
-                  className={`${styles.farmCard__element__left__logo} ${
+                  className={`${styles.farmCard__element__card__left__logo} ${
                     styles.last
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__left__logo__main} ${
+                    className={`${styles.farmCard__element__card__left__logo__main} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   >
@@ -525,7 +524,6 @@ const FarmCard = ({
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
                         <Tooltip
-                         
                           overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
                           title={
                             pool?.type === 2 ? (
@@ -544,7 +542,6 @@ const FarmCard = ({
                             ) : null
                           }
                           placement="top"
-                          
                         >
                           <div
                             className={`${
@@ -744,7 +741,7 @@ const FarmCard = ({
                     styles.harbor__emision
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
-                  {"Harbor Emission"}
+                  {"Harbor Emissions"}
                 </div>
 
                 <div
