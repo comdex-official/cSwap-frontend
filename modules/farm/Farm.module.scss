@@ -154,6 +154,7 @@
   text-transform: capitalize;
   text-decoration: underline;
   margin-left: 6px;
+  cursor: pointer;
   // @media screen and (max-width: $XXL) {
   //   font-size: 13px;
   // }
@@ -448,10 +449,10 @@
   justify-content: center;
   max-width: 450px;
   transition: all 0.5s ease-in;
-  height: 420px;
+  height: 430px;
   overflow: hidden;
   &.card__active {
-    height: 550px;
+    height: 560px;
   }
 
   @media screen and (max-width: 1414px) {
@@ -472,7 +473,7 @@
   justify-content: space-between;
   margin-bottom: 8px;
   &.active {
-    min-height: 32px;
+    min-height: 28px;
   }
 
   &.apr__pool {
@@ -480,7 +481,15 @@
   }
 
   &.emission {
-    min-height: 14px;
+    min-height: 20px;
+  }
+
+  &.emission__master {
+    min-height: 19px;
+  }
+
+  &.emission__master2 {
+    min-height: 22px;
   }
 
   // margin-top: 20px;
@@ -1105,7 +1114,7 @@
 .farmCard__footer__rewards__title {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+
   font-weight: 600;
   font-size: 12px;
   line-height: 20px;
@@ -1118,6 +1127,14 @@
   // @media screen and (max-width: $XS) {
   //   font-size: 9px;
   // }
+
+  &.margin {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 
   img {
     height: 27px;

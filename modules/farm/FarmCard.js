@@ -92,7 +92,6 @@ const FarmCard = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
- 
 
   const handlePortofolioManageCancel = () => {
     setIsPortifolioManageModalOpen(false);
@@ -437,9 +436,9 @@ const FarmCard = ({
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__card__left__logo__main} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${
+                      styles.farmCard__element__card__left__logo__main
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     <NextImage
                       src={
@@ -458,9 +457,9 @@ const FarmCard = ({
                   } ${theme === "dark" ? styles.dark : styles.light}`}
                 >
                   <div
-                    className={`${styles.farmCard__element__card__left__logo__main} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${
+                      styles.farmCard__element__card__left__logo__main
+                    } ${theme === "dark" ? styles.dark : styles.light}`}
                   >
                     <NextImage
                       src={
@@ -870,10 +869,16 @@ const FarmCard = ({
           ) && (
             <div
               className={`${styles.farmCard__element} ${
-                !(
-                  pool?.balances?.quoteCoin?.denom === "ucmst" ||
-                  pool?.balances?.baseCoin?.denom === "ucmst"
-                ) && styles.emission
+                getMasterPool()
+                  ? showMoreData
+                    ? styles.emission__master2
+                    : styles.emission__master
+                  : !(
+                      pool?.balances?.quoteCoin?.denom === "ucmst" ||
+                      pool?.balances?.baseCoin?.denom === "ucmst"
+                    )
+                  ? styles.emission
+                  : ""
               }`}
             ></div>
           )}
@@ -939,9 +944,13 @@ const FarmCard = ({
                             <div
                               className={`${
                                 styles.farmCard__footer__rewards__title
-                              } ${
-                                theme === "dark" ? styles.dark : styles.light
-                              }`}
+                              }
+                              ${
+                                poolExternalIncentiveData.length > 1
+                                  ? styles.margin
+                                  : ""
+                              }
+                              ${theme === "dark" ? styles.dark : styles.light}`}
                               key={singleIncentive?.denom}
                             >
                               <NextImage

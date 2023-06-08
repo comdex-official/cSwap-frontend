@@ -149,3 +149,17 @@ export const fetchRestBondexTokens = (callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRestVotingPower = (address,callback) => {
+  axios
+    .get(
+      `${comdex?.rest}/cosmos/staking/v1beta1/delegations/${address}`
+    )
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+

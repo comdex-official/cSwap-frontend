@@ -200,7 +200,7 @@ const TradehistoryTable = ({ address }) => {
         locale={{
           emptyText: <NoDataIcon text="Trading History Not Available" />,
         }}
-        loading={{ indicator: <Loading />, spinning: inProgress }}
+        loading={{ indicator: <Loading height={60}/>, spinning: inProgress }}
       />
     </div>
   );

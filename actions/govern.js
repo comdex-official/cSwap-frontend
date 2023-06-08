@@ -1,4 +1,5 @@
 import {
+  ACTIVE_TAB_SET,
   ALL_PROPOSALS_SET,
   PROPOSALS_SET,
   PROPOSAL_SET,
@@ -39,6 +40,13 @@ export const setProposer = (value, proposalId) => {
   return {
     type: PROPOSER_SET,
     proposalId,
+    value,
+  };
+};
+
+export const setTab = (value) => {
+  return {
+    type: ACTIVE_TAB_SET,
     value,
   };
 };

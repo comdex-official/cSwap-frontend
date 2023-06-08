@@ -1,17 +1,20 @@
-import { envConfig } from './envConfig.js';
-import { ibcAssets } from './ibc_asset_api.js';
+import { envConfig } from "./envConfig.js";
+import { ibcAssets } from "./ibc_asset_api.js";
 
 const getIbcDenomsMap = () => {
   let myMap = {};
-  ibcAssets().then((result) => {
-    for (let i = 0; i < result?.tokens?.length; i++) {
-      if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
-        myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+  ibcAssets()
+    .then((result) => {
+      console.log({ result });
+      for (let i = 0; i < result?.tokens?.length; i++) {
+        if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
+          myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+        }
       }
-    }
-  }).catch((error) => {
-    console.log(error, "error in assetList Api");
-  });
+    })
+    .catch((error) => {
+      console.log(error, "error in assetList Api");
+    });
 
   return myMap;
 };
@@ -33,35 +36,35 @@ export const comdex = {
 };
 
 export const cmst = {
-  coinDenom: 'CMST',
-  coinMinimalDenom: 'ucmst',
+  coinDenom: "CMST",
+  coinMinimalDenom: "ucmst",
   coinDecimals: 6,
-  symbol: 'CMST',
+  symbol: "CMST",
 };
 
 export const harbor = {
-  coinDenom: 'HARBOR',
-  coinMinimalDenom: 'uharbor',
+  coinDenom: "HARBOR",
+  coinMinimalDenom: "uharbor",
   coinDecimals: 6,
-  symbol: 'HARBOR',
+  symbol: "HARBOR",
 };
 
 export const ibcDenoms = getIbcDenomsMap() || {};
 
 export const tokenCoinGeckoIds = [
-  'cosmos',
-  'terra-luna',
-  'ki',
-  'comdex',
-  'kava',
-  'sentinel',
-  'osmosis',
-  'juno-network',
-  'akash-network',
-  'umee',
-  'mantle',
-  'persistence',
-  'chihuahua-token',
-  'secret',
-  'injective-protocol',
+  "cosmos",
+  "terra-luna",
+  "ki",
+  "comdex",
+  "kava",
+  "sentinel",
+  "osmosis",
+  "juno-network",
+  "akash-network",
+  "umee",
+  "mantle",
+  "persistence",
+  "chihuahua-token",
+  "secret",
+  "injective-protocol",
 ];

@@ -1,6 +1,6 @@
 // import style from "./Govern.moduleOld.scss";
 import { useRouter } from "next/router";
-import { Button, List, Spin, Tooltip } from "antd";
+import { Button, List, Spin, Tooltip, message } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
   setProposal,
   setProposalTally,
   setProposer,
+  setTab,
 } from "../../actions/govern";
 import { comdex } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -23,6 +24,7 @@ import {
   fetchRestProposalTally,
   fetchRestProposer,
   fetchRestTallyParamsProposer,
+  fetchRestVotingPower,
   queryUserVote,
 } from "../../services/govern/query";
 import {
@@ -48,6 +50,7 @@ const GovernViewPage = ({
   setProposal,
   proposalMap,
   setProposer,
+  setTab,
   proposerMap,
   setProposalTally,
   proposalTallyMap,
@@ -56,6 +59,7 @@ const GovernViewPage = ({
 
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
+  const [votingPower, setVotingPower] = useState();
 
   const { id } = router.query;
   const [inProgress, setInProgress] = useState(false);
@@ -71,6 +75,8 @@ const GovernViewPage = ({
   let proposal = proposalMap?.[id];
   let proposer = proposerMap?.[id];
   let proposalTally = proposalTallyMap?.[id];
+
+  console.log({ votingPower });
 
   const data = [
     {
@@ -113,6 +119,19 @@ const GovernViewPage = ({
       setTallyParams(result);
     });
   }, []);
+
+  const fetchVotingPower = useCallback(
+    (address) => {
+      fetchRestVotingPower(address, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setVotingPower(result);
+      });
+    },
+    [address]
+  );
 
   const fetchBondexTokens = useCallback(() => {
     setInProgress(true);
@@ -171,6 +190,10 @@ const GovernViewPage = ({
   }, []);
 
   useEffect(() => {
+    fetchVotingPower(address);
+  }, [address]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -196,7 +219,7 @@ const GovernViewPage = ({
         if (error) {
           return;
         }
-
+        console.log(result);
         if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
           setProposer(
             result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
@@ -347,12 +370,22 @@ const GovernViewPage = ({
     );
   }
 
+  const handleClick = () => {
+    router.push("/govern");
+    setTab("2");
+  };
+
+  const totalAmount = votingPower?.delegation_responses?.reduce((sum, response) => {
+    const amount = parseInt(response?.balance?.amount);
+    return sum + amount;
+  }, 0);
+
   return (
     <>
       <div className="proposal_view_back_button_container">
-        <Link href="/govern">
-          <Button type="primary">Back</Button>
-        </Link>
+        <Button type="primary" onClick={() => handleClick()}>
+          Back
+        </Button>
       </div>
 
       <div className="govern_view_main_container mt-4 ">
@@ -383,30 +416,34 @@ const GovernViewPage = ({
                       : "--/--/--"}
                   </div>
                 </div>
-                <div className="proposal_stats_container">
+                <div className="proposal_stats_container ">
                   <div className="title">Proposer</div>
-                  <div className="value">
-                    <a
-                      href={`https://www.mintscan.io/comdex/account/${proposer?.toUpperCase()}
+                  <div className="value active">
+                    {proposer ? (
+                      <a
+                        href={`https://www.mintscan.io/comdex/account/${proposer?.toUpperCase()}
               
                   `}
-                      rel="noreferrer"
-                      target="_blank"
-                      aria-label="explorer"
-                    >
-                      {truncateString(proposer, 6, 6)}
-                      <NextImage
-                        src={Hyperlink}
-                        alt={"HyperLink"}
-                        height={20}
-                        weight={20}
-                      />
-                    </a>
+                        rel="noreferrer"
+                        target="_blank"
+                        aria-label="explorer"
+                      >
+                        {truncateString(proposer, 6, 6)}
+                        <NextImage
+                          src={Hyperlink}
+                          alt={"HyperLink"}
+                          height={20}
+                          weight={20}
+                        />
+                      </a>
+                    ) : (
+                      "-"
+                    )}
                   </div>
                 </div>
                 <div className="proposal_stats_container">
                   <div className="title">My Voting power</div>
-                  <div className="value">0 CMDX</div>
+                  <div className="value">{totalAmount}</div>
                 </div>
               </div>
             </div>
@@ -643,6 +680,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setProposal,
   setProposer,
+  setTab,
   setProposalTally,
 };
 

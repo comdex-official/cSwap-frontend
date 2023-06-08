@@ -35,14 +35,26 @@ import Loading from "../../pages/Loading";
 
 const { Option } = Select;
 
-const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
+const Govern = ({
+  setAllProposals,
+  allProposals,
+  setProposals,
+  proposals,
+  getTab,
+}) => {
   const router = useRouter();
 
   const [inProgress, setInProgress] = useState(false);
-  const [activeKey, setActiveKey] = useState("1");
+  const [activeKey, setActiveKey] = useState(getTab? getTab: "1");
   const [pastProposals, setPastProposals] = useState();
   const [activeProposals, setActiveProposals] = useState();
   const [filteredProposal, setFilteredProposal] = useState();
+
+  // useEffect(() => {
+  //   if (getTab) {
+  //     setActiveKey(getTab);
+  //   } 
+  // }, [getTab]);
 
   const fetchAllProposals = useCallback(() => {
     setInProgress(true);
@@ -200,7 +212,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
         setFilteredProposal(pastProposal);
       }
     }
-  }, [proposals]);
+  }, [proposals, activeKey]);
 
   if (inProgress) {
     return (
@@ -265,7 +277,13 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
             </div>
 
             <div className="proposal_box_parent_container">
-              {activeKey === "1" ? (
+              {activeKey === "1" ?
+              inProgress? 
+              <div className="no_data">
+              <Loading />
+            </div>:
+
+              (
                 filteredProposal?.length > 0 ? (
                   <GovernOpenProposal proposals={filteredProposal} />
                 ) : (
@@ -288,17 +306,25 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                     </div>
                   </div>
                 )
-              ) : filteredProposal?.length > 0 ? (
+              ) :
+              
+              inProgress? 
+              <div className="no_data">
+              <Loading />
+            </div>:
+              filteredProposal?.length > 0 ?
+              
+              (
                 <GovernPastProposal proposals={filteredProposal} />
               ) : (
                 <div className={"table__empty__data__wrap"}>
                   <div className={"table__empty__data"}>
-                  <NextImage
-                        src={No_Data}
-                        alt="Message"
-                        height={60}
-                        width={60}
-                      />
+                    <NextImage
+                      src={No_Data}
+                      alt="Message"
+                      height={60}
+                      width={60}
+                    />
                     <span>{"No Proposals"}</span>
                   </div>
                 </div>
@@ -321,6 +347,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     allProposals: state.govern.allProposals,
+    getTab: state.govern.getTab,
     proposals: state.govern.proposals,
   };
 };

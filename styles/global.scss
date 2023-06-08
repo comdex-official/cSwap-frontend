@@ -1447,7 +1447,7 @@ a {
         // background: $background-dark1;
         background: #00081b;
         // box-shadow: $box-shadow-inner-dark;
-        border: 1px solid white;
+        border: 2px solid #303950;
       }
 
       .modal-btn {
@@ -3081,7 +3081,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  z-index: 999;
+  z-index: 99;
   height: 80px;
   border-radius: 16px;
   margin: auto;
@@ -3524,4 +3524,12 @@ a {
   flex-direction: column;
   gap: 10px;
   align-items: flex-start;
+}
+
+.loading-balance{
+  width: 50px
+}
+
+.ant-spin-spinning{
+  top: 50% !important;
 }

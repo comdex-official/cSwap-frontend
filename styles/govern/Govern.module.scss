@@ -35,6 +35,10 @@
         @media only screen and (max-width: 600px) {
           display: block;
         }
+
+        .openProposal {
+          width: 100%;
+        }
         .proposal_main_container {
           background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
           border: 2px solid #303950;
@@ -244,9 +248,12 @@
             .value {
               font-weight: 600;
               font-size: 1.25rem;
-              &:hover{
-                color: #37729d;
+              &.active {
+                &:hover {
+                  color: #37729d;
+                }
               }
+
               img {
                 margin-left: 10px;
               }
@@ -302,6 +309,9 @@
             }
             .proposal_quorem_container {
               .total_quorem {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
                 .title {
                   color: rgba(255, 255, 255, 0.801);
                   font-size: 0.85rem;
@@ -313,7 +323,7 @@
                   font-size: 1.25rem;
                   line-height: 27px;
                   cursor: pointer;
-                  width: 40px;
+                  // width: 30%;
                 }
                 .error-color {
                   color: $error-color;
