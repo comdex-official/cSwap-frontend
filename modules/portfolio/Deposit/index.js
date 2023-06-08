@@ -440,7 +440,9 @@ const Deposit = ({
                 <div className="availabe-balance">
                   Available
                   {balanceInProgress ? (
-                 <Loading />
+                   
+                 <Loading height={30}/>
+                 
                   ) : (
                     <>
                       <span className="ml-1 asset_balance">

@@ -426,10 +426,11 @@ const Farm = ({
         return bTotalPoolLiquidity - aTotalPoolLiquidity;
       });
       setDisplayPools(sortedCards);
-    } else if(value ==="Pool Pair"){
+    } else if (value === "Pool Pair") {
       const sortedCards = displayPools.sort((a, b) => {
-        return  denomConversion(a?.balances?.quoteCoin?.denom)?.localeCompare(
-          denomConversion(b?.balances?.quoteCoin?.denom));
+        return denomConversion(a?.balances?.quoteCoin?.denom)?.localeCompare(
+          denomConversion(b?.balances?.quoteCoin?.denom)
+        );
       });
       setDisplayPools(sortedCards);
     }
@@ -500,6 +501,12 @@ const Farm = ({
                   className={`${styles.farm__header__left__more} ${
                     theme === "dark" ? styles.dark : styles.light
                   }`}
+                  onClick={() =>
+                    window.open(
+                      "https://docs.cswap.one/farming-rewards",
+                      "_blank"
+                    )
+                  }
                 >
                   {"learn more"}
                 </span>

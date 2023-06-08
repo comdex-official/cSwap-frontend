@@ -41,7 +41,7 @@ const GovernOpenProposal = ({ proposals }) => {
 
     return (
         <>
-            <div className={`mt-4 `}>
+            <div className={`mt-4 openProposal`}>
 
                 <div className="govern_main_container">
                     <div className="govern_container">

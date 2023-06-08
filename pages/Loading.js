@@ -2,14 +2,14 @@
 import Lottie from "lottie-react";
 import { PageLoader } from "../shared/image";
 
-const Loading = () => {
+const Loading = ({height}) => {
   return (
     <>
       
         <Lottie
           animationData={PageLoader}
           loop={true}
-          style={{ height: 130 }}
+          style={{ height: height ? height : 130 }}
         />
       
     </>
