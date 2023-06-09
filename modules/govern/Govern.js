@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import {
   Button,
   Col,
@@ -45,7 +45,7 @@ const Govern = ({
   const router = useRouter();
 
   const [inProgress, setInProgress] = useState(false);
-  const [activeKey, setActiveKey] = useState(getTab? getTab: "1");
+  const [activeKey, setActiveKey] = useState(getTab ? getTab : "1");
   const [pastProposals, setPastProposals] = useState();
   const [activeProposals, setActiveProposals] = useState();
   const [filteredProposal, setFilteredProposal] = useState();
@@ -53,7 +53,7 @@ const Govern = ({
   // useEffect(() => {
   //   if (getTab) {
   //     setActiveKey(getTab);
-  //   } 
+  //   }
   // }, [getTab]);
 
   const fetchAllProposals = useCallback(() => {
@@ -277,14 +277,12 @@ const Govern = ({
             </div>
 
             <div className="proposal_box_parent_container">
-              {activeKey === "1" ?
-              inProgress? 
-              <div className="no_data">
-              <Loading />
-            </div>:
-
-              (
-                filteredProposal?.length > 0 ? (
+              {activeKey === "1" ? (
+                inProgress ? (
+                  <div className="no_data">
+                    <Loading />
+                  </div>
+                ) : filteredProposal?.length > 0 ? (
                   <GovernOpenProposal proposals={filteredProposal} />
                 ) : (
                   <div className={"table__empty__data__wrap"}>
@@ -306,15 +304,11 @@ const Govern = ({
                     </div>
                   </div>
                 )
-              ) :
-              
-              inProgress? 
-              <div className="no_data">
-              <Loading />
-            </div>:
-              filteredProposal?.length > 0 ?
-              
-              (
+              ) : inProgress ? (
+                <div className="no_data">
+                  <Loading />
+                </div>
+              ) : filteredProposal?.length > 0 ? (
                 <GovernPastProposal proposals={filteredProposal} />
               ) : (
                 <div className={"table__empty__data__wrap"}>

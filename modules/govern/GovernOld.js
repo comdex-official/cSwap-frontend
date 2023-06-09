@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button, List, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
@@ -84,7 +84,7 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
     <>
       {inProgress && !proposals?.length ? (
         <div className="loader">
-     <Loading />
+          <Loading />
         </div>
       ) : (
         <div className={`${style.govern_main_container} ${style.max_width}`}>
@@ -178,28 +178,29 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
                               <div className={style.proposal_status_container}>
                                 <div
                                   className={`${style.proposal_status} 
-                                  ${proposalStatusMap[item?.status] ===
+                                  ${
+                                    proposalStatusMap[item?.status] ===
                                       "Rejected" ||
-                                      proposalStatusMap[item?.status] === "Failed"
+                                    proposalStatusMap[item?.status] === "Failed"
                                       ? style.reject_color
                                       : proposalStatusMap[item?.status] ===
                                         "Passed"
-                                        ? style.passed_color
-                                        : style.pending_color
-                                    } 
+                                      ? style.passed_color
+                                      : style.pending_color
+                                  } 
                                   `}
                                 >
                                   <div
                                     className={
                                       proposalStatusMap[item?.status] ===
                                         "Rejected" ||
-                                        proposalStatusMap[item?.status] ===
+                                      proposalStatusMap[item?.status] ===
                                         "Failed"
                                         ? "failed-circle"
                                         : proposalStatusMap[item?.status] ===
                                           "Passed"
-                                          ? "passed-circle"
-                                          : "warning-circle"
+                                        ? "passed-circle"
+                                        : "warning-circle"
                                     }
                                   ></div>
                                   {proposalStatusMap[item?.status]}

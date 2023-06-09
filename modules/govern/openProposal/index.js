@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button, List, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
