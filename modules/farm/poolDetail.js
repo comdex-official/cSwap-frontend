@@ -11,8 +11,6 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import MediaQuery from "react-responsive";
-import { useLocation, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { setTradeData } from "../../actions/tradePair";
 import CustomInput from "../../shared/components/CustomInput";
 
@@ -235,7 +233,9 @@ const PoolDetails = ({
             >
               {pool?.balances?.baseCoin?.denom &&
                 showPoolBalance(
-                  poolDetails?.balances? poolDetails?.balances:   pool?.balances ,
+                  poolDetails?.balances
+                    ? poolDetails?.balances
+                    : pool?.balances,
                   pool?.balances?.baseCoin?.denom
                 )}
             </div>
@@ -259,7 +259,9 @@ const PoolDetails = ({
             >
               {pool?.balances?.quoteCoin?.denom &&
                 showPoolBalance(
-                  poolDetails?.balances? poolDetails?.balances:   pool?.balances ,
+                  poolDetails?.balances
+                    ? poolDetails?.balances
+                    : pool?.balances,
                   pool?.balances?.quoteCoin?.denom
                 )}
             </div>

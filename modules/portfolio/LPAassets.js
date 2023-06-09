@@ -2,7 +2,7 @@ import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useRouter } from "next/router";
 import { setLPPrices } from "../../actions/oracle";
 import { SvgIcon } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -20,7 +20,7 @@ const LPAsssets = ({
   searchKey,
   activeKey,
 }) => {
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   useEffect(() => {
     getLpPrices();
@@ -87,7 +87,7 @@ const LPAsssets = ({
       render: (item) => (
         <Button
           type="primary"
-          onClick={() => navigate(`/farm/${Number(item?.pool_id)}/#farm`)}
+          onClick={() => navigate.push(`/farm/${Number(item?.pool_id)}/#farm`)}
           size="small"
         >
           Farm
@@ -102,7 +102,9 @@ const LPAsssets = ({
       render: (item) => (
         <Button
           type="primary"
-          onClick={() => navigate(`/farm/${Number(item?.pool_id)}/#unfarm`)}
+          onClick={() =>
+            navigate.push(`/farm/${Number(item?.pool_id)}/#unfarm`)
+          }
           size="small"
         >
           Unfarm
@@ -157,7 +159,10 @@ const LPAsssets = ({
                   )}
                 />
               </div>{" "}
-              <div className="assets-icon asset-icon-reverse" style={{ marginLeft: "-18px" }}>
+              <div
+                className="assets-icon asset-icon-reverse"
+                style={{ marginLeft: "-18px" }}
+              >
                 <SvgIcon
                   name={iconNameFromDenom(
                     item?.asset_details?.quote_asset?.denom
@@ -182,13 +187,13 @@ const LPAsssets = ({
   tableData =
     searchKey && activeKey === "2"
       ? tableData?.filter((item) => {
-        return (
-          item?.baseSymbol
-            ?.toLowerCase()
-            .includes(searchKey?.toLowerCase()) ||
-          item?.quoteSymbol?.toLowerCase().includes(searchKey?.toLowerCase())
-        );
-      })
+          return (
+            item?.baseSymbol
+              ?.toLowerCase()
+              .includes(searchKey?.toLowerCase()) ||
+            item?.quoteSymbol?.toLowerCase().includes(searchKey?.toLowerCase())
+          );
+        })
       : tableData;
 
   tableData =
