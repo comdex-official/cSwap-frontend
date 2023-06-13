@@ -62,6 +62,7 @@ const iconMap = {
   [ibcDenoms["stuluna"]]: "stuluna-icon",
   [ibcDenoms["stevmos"]]: "stevmos-icon",
   [ibcDenoms["arb-wei"]]: "arb-icon",
+  [ibcDenoms["stucmdx"]]: "stCmdx-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
