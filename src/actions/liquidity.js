@@ -150,9 +150,8 @@ export const setPoolIncentives = (list) => {
   const masterPoolsIds =
     list.length > 0
       ? list?.filter(
-          (item) =>
-            item?.masterPool === true ||
-            item?.poolId?.toNumber() === MASTER_POOL_ID
+          (item) => item?.masterPool === true
+          // item?.poolId?.toNumber() === MASTER_POOL_ID
         )
       : [];
 
