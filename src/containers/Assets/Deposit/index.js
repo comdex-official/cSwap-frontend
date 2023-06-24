@@ -18,7 +18,7 @@ import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE } from "../../../constants/common";
 import { queryBalance } from "../../../services/bank/query";
-import { aminoSignIBCTx } from "../../../services/helper";
+import { aminoDirectSignIBCTx, aminoSignIBCTx } from "../../../services/helper";
 import { initializeIBCChain } from "../../../services/keplr";
 import { fetchTxHash } from "../../../services/transaction";
 import {
@@ -160,29 +160,29 @@ const Deposit = ({
       const sign =
         walletType === "keplr"
           ? await window?.keplr?.signDirect(
-              chain.chainInfo?.chainId,
-              sourceAddress,
-              {
-                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-                authInfoBytes:
-                  transferMsg.signDirect.authInfo.serializeBinary(),
-                chainId: chainInfoForMsg.cosmosChainId,
-                accountNumber: new Long(sender.accountNumber),
-              },
-              { isEthereum: true }
-            )
+            chain.chainInfo?.chainId,
+            sourceAddress,
+            {
+              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+              authInfoBytes:
+                transferMsg.signDirect.authInfo.serializeBinary(),
+              chainId: chainInfoForMsg.cosmosChainId,
+              accountNumber: new Long(sender.accountNumber),
+            },
+            { isEthereum: true }
+          )
           : await window?.leap?.signDirect(
-              chain.chainInfo?.chainId,
-              sourceAddress,
-              {
-                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-                authInfoBytes:
-                  transferMsg.signDirect.authInfo.serializeBinary(),
-                chainId: chainInfoForMsg.cosmosChainId,
-                accountNumber: new Long(sender.accountNumber),
-              },
-              { isEthereum: true }
-            );
+            chain.chainInfo?.chainId,
+            sourceAddress,
+            {
+              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+              authInfoBytes:
+                transferMsg.signDirect.authInfo.serializeBinary(),
+              chainId: chainInfoForMsg.cosmosChainId,
+              accountNumber: new Long(sender.accountNumber),
+            },
+            { isEthereum: true }
+          );
 
       if (sign !== undefined) {
         let rawTx = createTxRaw(
@@ -222,6 +222,63 @@ const Deposit = ({
     }
   };
 
+
+  const handleStrideIBC = () => {
+    setInProgress(true);
+    const data = {
+      message: {
+        typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
+        value: {
+          sourcePort: "transfer",
+          sourceChannel: chain.destChannelId,
+          token: {
+            denom: chain?.coinMinimalDenom,
+            amount: getAmount(
+              amount,
+              assetMap[chain?.coinMinimalDenom]?.decimals
+            ),
+          },
+          sender: sourceAddress,
+          receiver: address,
+          timeoutHeight: {
+            revisionNumber: Number(proofHeight.revision_number),
+            revisionHeight: Number(proofHeight.revision_height) + 100,
+          },
+          timeout_timestamp: undefined,
+        },
+      },
+      fee: { amount: [{ denom: chain.denom, amount: "25000" }], gas: "200000" },
+      memo: "",
+    };
+
+    aminoDirectSignIBCTx(data, sourceAddress, chain.chainInfo, (error, result) => {
+      if (error) {
+        if (result?.transactionHash) {
+          message.error(
+            <Snack
+              message={variables[lang].tx_failed}
+              explorerUrlToTx={chain?.explorerUrlToTx}
+              hash={result?.transactionHash}
+            />
+          );
+        } else {
+          message.error(error);
+        }
+
+        resetValues();
+        return;
+      }
+
+      if (result?.transactionHash) {
+        message.loading(
+          "Transaction Broadcasting, Waiting for transaction to be included in the block"
+        );
+
+        handleHash(result?.transactionHash);
+      }
+    });
+  }
+
   const signIBCTx = () => {
     if (!proofHeight?.revision_height) {
       message.error("Unable to get the latest block height");
@@ -231,6 +288,11 @@ const Deposit = ({
     if (chain?.chainInfo?.features?.includes("eth-address-gen")) {
       // handle evm based token deposits
       return handleEvmIBC();
+    }
+
+    if (chain?.chainInfo?.features?.includes("stride-hot-fix")) {
+      // handle Stride based token deposits
+      return handleStrideIBC();
     }
 
     setInProgress(true);
