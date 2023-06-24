@@ -215,3 +215,30 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       });
   })();
 };
+
+export const aminoDirectSignIBCTx = async (transaction, address, config, callback) => {
+  const [offlineSigner, accounts] = await KeplrWallet(config.chainId);
+
+  SigningStargateClient.connectWithSigner(config.rpc, offlineSigner, {
+    registry: myRegistry,
+    aminoTypes: aminoTypes,
+  })
+    .then((client) => {
+      client
+        .signAndBroadcast(
+          address,
+          [transaction.message],
+          transaction.fee,
+          transaction.memo
+        )
+        .then((result) => {
+          callback(null, result);
+        })
+        .catch((error) => {
+          callback(error?.message);
+        });
+    })
+    .catch((error) => {
+      callback(error && error.message);
+    });
+}
