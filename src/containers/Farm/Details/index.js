@@ -10,7 +10,7 @@ import {
   setPool,
   setPoolBalance,
   setSpotPrice,
-  setUserLiquidityInPools
+  setUserLiquidityInPools,
 } from "../../../actions/liquidity";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import TooltipIcon from "../../../components/TooltipIcon";
@@ -19,14 +19,14 @@ import { queryAllBalances } from "../../../services/bank/query";
 import {
   queryPool,
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { decode, iconNameFromDenom } from "../../../utils/string";
@@ -106,7 +106,7 @@ const FarmDetails = ({
       setActiveKey("4");
     }
   }, []);
-  
+
   useEffect(() => {
     if (address && pool?.id) {
       fetchSoftLock();
@@ -361,12 +361,19 @@ const FarmDetails = ({
                 <ShowAPR pool={pool} />
                 <div className="swap-apr mt-1">
                   Swap APR -{" "}
-                  {commaSeparator(
+                  {!isNaN(
                     Number(
                       rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
                         ?.apr || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}
+                    )
+                  )
+                    ? commaSeparator(
+                        Number(
+                          rewardsMap?.[pool?.id?.toNumber()]
+                            ?.swap_fee_rewards[0]?.apr || 0
+                        ).toFixed(DOLLAR_DECIMALS)
+                      )
+                    : Number(0).toFixed(DOLLAR_DECIMALS)}
                   %
                 </div>
               </div>
