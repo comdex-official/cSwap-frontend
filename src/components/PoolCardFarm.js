@@ -8,19 +8,19 @@ import { DOLLAR_DECIMALS, PRICE_DECIMALS } from "../constants/common";
 import ShowAPR from "../containers/Farm/ShowAPR";
 import {
   queryPoolCoinDeserialize,
-  queryPoolSoftLocks
+  queryPoolSoftLocks,
 } from "../services/liquidity/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
   getAMP,
-  marketPrice
+  marketPrice,
 } from "../utils/number";
 import { iconNameFromDenom } from "../utils/string";
 import variables from "../utils/variables";
@@ -246,12 +246,19 @@ const PoolCardFarm = ({
                 </div>
                 <div className="swap-apr mt-1">
                   Swap APR -{" "}
-                  {commaSeparator(
+                  {!isNaN(
                     Number(
                       rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards[0]
                         ?.apr || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}
+                    )
+                  )
+                    ? commaSeparator(
+                        Number(
+                          rewardsMap?.[pool?.id?.toNumber()]
+                            ?.swap_fee_rewards[0]?.apr || 0
+                        ).toFixed(DOLLAR_DECIMALS)
+                      )
+                    : Number(0).toFixed(DOLLAR_DECIMALS)}
                   %
                 </div>
               </div>
