@@ -171,16 +171,16 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
     let walletType = localStorage.getItem("loginType");
 
     (walletType === "keplr" ? await window.keplr : await window.wallet) &&
-      walletType === "keplr"
+    walletType === "keplr"
       ? window.keplr.enable(config.chainId)
       : window.leap.enable(config.chainId);
 
     const offlineSigner =
       walletType === "keplr"
         ? window.getOfflineSignerOnlyAmino &&
-        window.getOfflineSignerOnlyAmino(config.chainId)
+          window.getOfflineSignerOnlyAmino(config.chainId)
         : window?.leap?.getOfflineSignerOnlyAmino &&
-        window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
+          window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
 
     const client = await SigningStargateClient.connectWithSigner(
       config.rpc,
@@ -215,32 +215,3 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       });
   })();
 };
-
-export const aminoDirectSignIBCTx = async (transaction, address, config, callback) => {
-  const [offlineSigner, accounts] = await KeplrWallet(config.chainId);
-
-  SigningStargateClient.connectWithSigner(config.rpc, offlineSigner, {
-    registry: myRegistry,
-    aminoTypes: aminoTypes,
-    accountParser: strideAccountParser,
-    preferNoSetFee: true,
-  })
-    .then((client) => {
-      client
-        .signAndBroadcast(
-          address,
-          [transaction.message],
-          transaction.fee,
-          transaction.memo
-        )
-        .then((result) => {
-          callback(null, result);
-        })
-        .catch((error) => {
-          callback(error?.message);
-        });
-    })
-    .catch((error) => {
-      callback(error && error.message);
-    });
-}
