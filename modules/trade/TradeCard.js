@@ -1,21 +1,21 @@
-import styles from "./Trade.module.scss";
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Icon } from "../../shared/image/Icon";
-import { NextImage } from "../../shared/image/NextImage";
-import { Arrow, PageLoader } from "../../shared/image";
-import Toggle from "../../shared/components/toggle/Toggle";
-import Card from "../../shared/components/card/Card";
-import CustomInput from "../../shared/components/CustomInput";
-import TooltipIcon from "../../shared/components/tooltip/TooltipIcon";
-import Lottie from "lottie-react";
-import { Alert, Button, message, Popover, Radio, Spin } from "antd";
-import React, { useEffect, useState } from "react";
-import { comdex } from "../../config/network";
+import styles from './Trade.module.scss';
+import * as PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Icon } from '../../shared/image/Icon';
+import { NextImage } from '../../shared/image/NextImage';
+import { Arrow, PageLoader } from '../../shared/image';
+import Toggle from '../../shared/components/toggle/Toggle';
+import Card from '../../shared/components/card/Card';
+import CustomInput from '../../shared/components/CustomInput';
+import TooltipIcon from '../../shared/components/tooltip/TooltipIcon';
+import Lottie from 'lottie-react';
+import { Alert, Button, message, Popover, Radio, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { comdex } from '../../config/network';
 import {
   ValidateInputNumber,
   ValidatePriceInputNumber,
-} from "../../config/_validation";
+} from '../../config/_validation';
 import {
   APP_ID,
   DEFAULT_FEE,
@@ -23,39 +23,39 @@ import {
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
   MAX_SLIPPAGE_TOLERANCE,
-} from "../../constants/common";
+} from '../../constants/common';
 import {
   fetchExchangeRateValue,
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
   queryPoolsList,
-} from "../../services/liquidity/query";
+} from '../../services/liquidity/query';
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
   getDenomBalance,
-} from "../../utils/coin";
+} from '../../utils/coin';
 import {
   decimalConversion,
   getExponent,
   marketPrice,
-} from "../../utils/number";
+} from '../../utils/number';
 import {
   calculateRangedPoolPrice,
   calculateSlippage,
   getNewRangedPoolRatio,
-} from "../../utils/slippage";
-import { getPairMappings, toDecimals } from "../../utils/string";
-import { setPair, setPairs } from "../../actions/asset";
+} from '../../utils/slippage';
+import { getPairMappings, toDecimals } from '../../utils/string';
+import { setPair, setPairs } from '../../actions/asset';
 import {
   setBaseCoinPoolPrice,
   setPool,
   setPoolBalance,
   setPools,
-} from "../../actions/liquidity";
+} from '../../actions/liquidity';
 import {
   setDemandCoinAmount,
   setDemandCoinDenom,
@@ -67,14 +67,14 @@ import {
   setReverse,
   setSlippage,
   setSlippageTolerance,
-} from "../../actions/swap";
+} from '../../actions/swap';
 
-import CustomSelect from "../../shared/components/CustomSelect";
-import CustomButton from "./CustomButton";
-import variables from "../../utils/variables";
-import Order from "./OrderTable";
-import OrderBook from "../orderBook/OrderBook";
-import Loading from "../../pages/Loading";
+import CustomSelect from '../../shared/components/CustomSelect';
+import CustomButton from './CustomButton';
+import variables from '../../utils/variables';
+import Order from './OrderTable';
+import OrderBook from '../orderBook/OrderBook';
+import Loading from '../../pages/Loading';
 
 const TradeCard = ({
   lang,
@@ -117,16 +117,16 @@ const TradeCard = ({
 
   const handleToggleValue = (e) => {
     setToggleValue(e.target.checked);
-    localStorage.setItem("trade", e.target.checked);
+    localStorage.setItem('trade', e.target.checked);
   };
 
   useEffect(() => {
-    const value = localStorage.getItem("trade");
-    setToggleValue(value === "true" ? true : false);
+    const value = localStorage.getItem('trade');
+    setToggleValue(value === 'true' ? true : false);
     setLoading(false);
   }, []);
 
-  let theme = "dark";
+  let theme = 'dark';
 
   const [validationError, setValidationError] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
@@ -189,8 +189,8 @@ const TradeCard = ({
 
     // returned function will be called on component unmount
     return () => {
-      setOfferCoinDenom("");
-      setDemandCoinDenom("");
+      setOfferCoinDenom('');
+      setDemandCoinDenom('');
     };
   }, []);
 
@@ -325,7 +325,7 @@ const TradeCard = ({
       ValidateInputNumber(
         Number(getAmount(value, assetMap[selectedAsset?.denom]?.decimals)),
         availableBalance,
-        "macro"
+        'macro'
       )
     );
 
@@ -358,7 +358,7 @@ const TradeCard = ({
       const [newRx, newRy, final] = getNewRangedPoolRatio(
         quoteAmount,
         baseAmount,
-        reverse ? "buy" : "sell",
+        reverse ? 'buy' : 'sell',
         currentPrice,
         Number(getAmount(input, assetMap[offerCoin?.denom]?.decimals))
       );
@@ -410,9 +410,9 @@ const TradeCard = ({
 
     const price = reverse ? 1 / baseCoinPoolPrice : baseCoinPoolPrice;
 
-    return `1 ${denomIn || ""} = ${Number(
+    return `1 ${denomIn || ''} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(6)} ${denomOut || ""}`;
+    ).toFixed(6)} ${denomOut || ''}`;
   };
 
   const showOfferCoinValue = () => {
@@ -438,9 +438,9 @@ const TradeCard = ({
 
     const price = reverse ? baseCoinPoolPrice : 1 / baseCoinPoolPrice;
 
-    return `1 ${denomOut || ""} = ${Number(
+    return `1 ${denomOut || ''} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(6)} ${denomIn || ""}`;
+    ).toFixed(6)} ${denomIn || ''}`;
   };
 
   const handleSwapChange = () => {
@@ -621,7 +621,7 @@ const TradeCard = ({
 
   const SettingPopup = (
     <div className="slippage-tolerance">
-      <div className={"slippage-title"}>
+      <div className={'slippage-title'}>
         <div>Limit order lifespan</div>
 
         <TooltipIcon text="Your transaction will revert if it is pending for more than this period of time." />
@@ -656,7 +656,7 @@ const TradeCard = ({
       {loading ? (
         <div
           className={`${styles.tradeCard__head__spin} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <Loading />
@@ -668,22 +668,22 @@ const TradeCard = ({
               <div className={styles.tradeCard__main}>
                 <div
                   className={`${styles.tradeCard__head} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
                     className={`${styles.tradeCard__head__title} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     <Toggle
                       value={toggleValue}
                       handleToggleValue={handleToggleValue}
                     />
-                    <span>{"Orderbook"}</span>
+                    <span>{'Pro-Mode'}</span>
                   </div>
 
-                  <div className={"assets-select-wrapper"}>
+                  <div className={'assets-select-wrapper'}>
                     {toggleValue && (
                       <Popover
                         className="setting-popover"
@@ -693,7 +693,7 @@ const TradeCard = ({
                         trigger="click"
                       >
                         <div>
-                          <Icon className={`bi bi-gear-fill`} size={"1.2rem"} />
+                          <Icon className={`bi bi-gear-fill`} size={'1.2rem'} />
                         </div>
                       </Popover>
                     )}
@@ -705,42 +705,42 @@ const TradeCard = ({
                     <div className={styles.tradeCard__body__main}>
                       <div
                         className={`${styles.tradeCard__body__left__title} ${
-                          theme === "dark" ? styles.dark : styles.light
+                          theme === 'dark' ? styles.dark : styles.light
                         }`}
                       >
-                        {toggleValue ? "Sell" : "From"}
+                        {toggleValue ? 'Sell' : 'From'}
                       </div>
 
                       <div className={styles.tradeCard__body__right__el1}>
-                        <div
+                      <div
                           className={`${
-                            styles.tradeCard__body__right__el1__title
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                            styles.tradeCard__body__right__el1__footer
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
+                          onClick={() => handleHalfClick()}
                         >
-                          {"Available"}{" "}
-                          <span>
-                            {amountConversionWithComma(
-                              availableBalance,
-                              assetMap[offerCoin?.denom]?.decimals
-                            )}{" "}
-                            {denomConversion(offerCoin?.denom)}
-                          </span>
+                          {'HALF'}
                         </div>
                         <div
                           className={`${
                             styles.tradeCard__body__right__el1__description
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
                           onClick={() => handleMaxClick()}
                         >
-                          {"MAX"}
+                          {'MAX'}
                         </div>
                         <div
                           className={`${
-                            styles.tradeCard__body__right__el1__footer
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
-                          onClick={() => handleHalfClick()}
+                            styles.tradeCard__body__right__el1__title
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
                         >
-                          {"HALF"}
+                          {/* {'Available'}{' '} */}
+                          <span>
+                            {amountConversionWithComma(
+                              availableBalance,
+                              assetMap[offerCoin?.denom]?.decimals
+                            )}{' '}
+                            {denomConversion(offerCoin?.denom)}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -767,8 +767,8 @@ const TradeCard = ({
                       <div>
                         <div
                           className={`${styles.tradeCard__body__right__el2} ${
-                            toggleValue ? styles.limit__order : ""
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                            toggleValue ? styles.limit__order : ''
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
                         >
                           <CustomInput
                             value={offerCoin && offerCoin.amount}
@@ -779,14 +779,14 @@ const TradeCard = ({
                         </div>
                         <div
                           className={`${styles.tradeCard__body__right__el3} ${
-                            theme === "dark" ? styles.dark : styles.light
+                            theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
                           {pool?.id && showOfferCoinValue()}
                         </div>
                         <div
                           className={`${styles.tradeCard__body__right__el4} ${
-                            theme === "dark" ? styles.dark : styles.light
+                            theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
                           {pool?.id && showOfferCoinSpotPrice()}
@@ -797,11 +797,15 @@ const TradeCard = ({
                 </div>
 
                 <div className={styles.tradeCard__swap}>
+                  <div className={styles.tradeCard__arrow_swap}>
+
+
                   <NextImage
                     src={Arrow}
                     alt="Logo_Dark"
                     onClick={handleSwapChange}
                   />
+                </div>
                 </div>
 
                 <div className={styles.tradeCard__body__item}>
@@ -809,19 +813,19 @@ const TradeCard = ({
                     <div className={styles.tradeCard__body__main}>
                       <div
                         className={`${styles.tradeCard__body__left__title} ${
-                          theme === "dark" ? styles.dark : styles.light
+                          theme === 'dark' ? styles.dark : styles.light
                         }`}
                       >
-                        {toggleValue ? "At" : "To"}
+                        {toggleValue ? 'At' : 'To'}
                       </div>
 
                       {toggleValue && (
                         <div
                           className={`${styles.tradeCard__body__limit__body} ${
-                            theme === "dark" ? styles.dark : styles.light
+                            theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
-                          {"Base Price: "}
+                          {'Base Price: '}
                           <span
                             className="ml-1 cursor-pointer"
                             onClick={() =>
@@ -833,7 +837,7 @@ const TradeCard = ({
                             }
                           >
                             {showPoolPrice()}
-                          </span>{" "}
+                          </span>{' '}
                         </div>
                       )}
                     </div>
@@ -843,7 +847,7 @@ const TradeCard = ({
                         <div
                           className={`${
                             styles.tradeCard__body__left__item__toggle_title
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
                         >
                           {denomConversion(pair?.quoteCoinDenom)}/
                           {denomConversion(pair?.baseCoinDenom)}
@@ -874,8 +878,8 @@ const TradeCard = ({
                             <div
                               className={`${
                                 styles.tradeCard__body__right__el2
-                              } ${toggleValue ? styles.limit__order : ""} ${
-                                theme === "dark" ? styles.dark : styles.light
+                              } ${toggleValue ? styles.limit__order : ''} ${
+                                theme === 'dark' ? styles.dark : styles.light
                               }`}
                             >
                               <CustomInput
@@ -890,10 +894,10 @@ const TradeCard = ({
                               className={`${
                                 styles.tradeCard__body__limit__body
                               } ${
-                                theme === "dark" ? styles.dark : styles.light
+                                theme === 'dark' ? styles.dark : styles.light
                               }`}
                             >
-                              {"Tolerance Range: "}{" "}
+                              {'Tolerance Range: '}{' '}
                               <span className="ml-1 cursor-pointer">
                                 {priceRange(
                                   Number(decimalConversion(pair?.lastPrice)),
@@ -922,8 +926,8 @@ const TradeCard = ({
                             <div
                               className={`${
                                 styles.tradeCard__body__right__el2
-                              } ${toggleValue ? styles.limit__order : ""} ${
-                                theme === "dark" ? styles.dark : styles.light
+                              } ${toggleValue ? styles.limit__order : ''} ${
+                                theme === 'dark' ? styles.dark : styles.light
                               }`}
                             >
                               <CustomInput
@@ -936,7 +940,7 @@ const TradeCard = ({
                               className={`${
                                 styles.tradeCard__body__right__el3
                               } ${
-                                theme === "dark" ? styles.dark : styles.light
+                                theme === 'dark' ? styles.dark : styles.light
                               }`}
                             >
                               {pool?.id && showDemandCoinValue()}
@@ -945,7 +949,7 @@ const TradeCard = ({
                               className={`${
                                 styles.tradeCard__body__right__el4
                               } ${
-                                theme === "dark" ? styles.dark : styles.light
+                                theme === 'dark' ? styles.dark : styles.light
                               }`}
                             >
                               {pool?.id && showDemandCoinSpotPrice()}
@@ -962,10 +966,10 @@ const TradeCard = ({
                     <div className={styles.tradeCard__body__left}>
                       <div
                         className={`${styles.tradeCard__body__left__title} ${
-                          theme === "dark" ? styles.dark : styles.light
+                          theme === 'dark' ? styles.dark : styles.light
                         }`}
                       >
-                        {"And Get"}
+                        {'And Get'}
                       </div>
                       <div className={styles.tradeCard__body__right}>
                         <div className={styles.settings__dropdown}>
@@ -984,8 +988,8 @@ const TradeCard = ({
                         </div>
                         <div
                           className={`${styles.tradeCard__body__right__el2} ${
-                            toggleValue ? styles.limit__order : ""
-                          } ${theme === "dark" ? styles.dark : styles.light}`}
+                            toggleValue ? styles.limit__order : ''
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
                         >
                           <CustomInput
                             disabled
@@ -1012,16 +1016,16 @@ const TradeCard = ({
                       <div
                         className={`${
                           styles.tradeCard__description__left_title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
                       >
-                        {"Estimated Slippage"}
+                        {'Estimated Slippage'}
                       </div>
                       <div
                         className={`${
                           styles.tradeCard__description__right_title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
                       >
-                        {pool?.type === 2 && isFinalSlippage ? ">" : ""}
+                        {pool?.type === 2 && isFinalSlippage ? '>' : ''}
                         {Number(slippage)?.toFixed(comdex.coinDecimals)}%
                       </div>
                     </div>
@@ -1031,14 +1035,14 @@ const TradeCard = ({
                     <div
                       className={`${
                         styles.tradeCard__description__left_title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {"Swap Fee"}
+                      {'Swap Fee'}
                     </div>
                     <div
                       className={`${
                         styles.tradeCard__description__right_title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
                       {Number(decimalConversion(params?.swapFeeRate) || 0) *
                         100}
@@ -1049,11 +1053,11 @@ const TradeCard = ({
                   {!toggleValue && (
                     <div
                       className={`${styles.tradeCard__description__el2} ${
-                        theme === "dark" ? styles.dark : styles.light
+                        theme === 'dark' ? styles.dark : styles.light
                       }`}
                     >
                       {
-                        "Note: The requested swap could be completed fully, partially, or cancelled due to price limiting and to maintain pool stability."
+                        'Note: The requested swap could be completed fully, partially, or cancelled due to price limiting and to maintain pool stability.'
                       }
                     </div>
                   )}
@@ -1061,7 +1065,7 @@ const TradeCard = ({
 
                 <div
                   className={`${styles.tradeCard__button__wrap} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <CustomButton
@@ -1087,12 +1091,11 @@ const TradeCard = ({
                     max={availableBalance}
                     name={
                       !pool?.id
-                        ? "No pool exists"
+                        ? 'No pool exists'
                         : MAX_SLIPPAGE_TOLERANCE < slippage && !isLimitOrder
                         ? variables[lang].swap_anyway
                         : variables[lang].swap
                     }
-                   
                   />
                 </div>
               </div>
@@ -1102,7 +1105,7 @@ const TradeCard = ({
       ) : (
         <div
           className={`${styles.tradeCard__head__orderbook} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <OrderBook
