@@ -127,10 +127,10 @@ const CustomButton = ({
     return data;
   };
 
-  const handleSwap = () => {
+  const handleSwap = async () => {
     setInProgress(true);
 
-    signAndBroadcastTransaction(
+    await signAndBroadcastTransaction(
       {
         message: getMessage(isLimitOrder),
         fee: {
@@ -140,7 +140,7 @@ const CustomButton = ({
         memo: "",
       },
       address,
-      (error, result) => {
+      async (error, result) => {
         setInProgress(false);
         if (error) {
           message.error(error?.rawLog || error);
@@ -161,12 +161,12 @@ const CustomButton = ({
           )?.value;
 
           if (orderId && pairId) {
-            queryOrder(orderId, pairId, (error, result) => {
+            await queryOrder(orderId, pairId, async (error, result) => {
               if (error) {
                 return;
               }
 
-              let data = result?.order;
+              let data = await result?.order;
 
               message.success(
                 `Received ${amountConversion(
@@ -189,8 +189,8 @@ const CustomButton = ({
           return;
         }
 
-        updateValues();
-        refreshDetails();
+        await updateValues();
+        await refreshDetails();
         message.success(
           <Snack
             message={variables[lang].tx_success}
