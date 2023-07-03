@@ -52,6 +52,7 @@ import {
   Rocket,
   Square,
   SquareWhite,
+  Info2
 } from "../../shared/image";
 import Liquidity from "./Liquidity";
 import Lottie from "lottie-react";
@@ -456,7 +457,13 @@ const Farm = ({
             }
           >
             <div className="reward">
-              <Icon className={"bi bi-info-square"} />
+              {/* <Icon className={"bi bi-info-square"} /> */}
+              <NextImage
+                      src={Info2}
+                      alt="Info"
+                      height={15}
+                      width={15}
+                    />
               Users need to farm for 24 hours in order to be eligible for
               rewards.
               <Icon className={"bi bi-x-lg"} onClick={closeDisclaimer} />

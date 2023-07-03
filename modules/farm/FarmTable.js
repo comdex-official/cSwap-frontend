@@ -1449,7 +1449,7 @@ const FarmTable = ({
           <Button
             type="primary"
             onClick={() => showModal(value)}
-            className="btn-filled"
+            className="btn-filled3"
             size="small"
           >
             Add Liquidity
@@ -1735,7 +1735,7 @@ const FarmTable = ({
           <Button
             type="primary"
             onClick={() => showModal(value)}
-            className="btn-filled"
+            className="btn-filled2"
             size="small"
           >
             Manage

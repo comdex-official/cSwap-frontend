@@ -210,7 +210,7 @@ const PortofolioTable = ({
       render: (value) => {
         if (value) {
           return value?.depositUrlOverride ? (
-            <Button type="primary" size="small" className="btn-filled">
+            <Button type="primary" size="small" className="btn-filled2">
               <a
                 href={value?.depositUrlOverride}
                 target="_blank"
@@ -245,7 +245,7 @@ const PortofolioTable = ({
       render: (value) => {
         if (value) {
           return value?.withdrawUrlOverride ? (
-            <Button type="primary" size="small" className="btn-filled">
+            <Button type="primary" size="small" className="btn-filled2">
               <a
                 href={value?.withdrawUrlOverride}
                 target="_blank"

@@ -41,6 +41,7 @@ import Wallet2 from '../../public/assets/images/wallet2.svg';
 import Keplr from '../../public/assets/images/keplr.svg';
 import Cosmos from '../../public/assets/images/cosmos.svg';
 import Ledger from '../../public/assets/images/ledger.svg';
+import Info2 from '../../public/assets/images/info2.svg';
 
 // exports
 export {
@@ -86,4 +87,5 @@ export {
   Keplr,
   Cosmos,
   Ledger,
+  Info2
 };

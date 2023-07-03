@@ -11,6 +11,32 @@
     rgba(3, 11, 30, 0.7) 100%
   );
   backdrop-filter: blur(20.725688934326172px);
+
+  &.farm__card {
+    border-radius: 16.255px;
+    border: 1px solid #333;
+    background: #111234;
+    box-shadow: 0px 0px 10px 0px rgba(112, 112, 112, 0.2);
+  }
+
+  &.master__card {
+    border-radius: 16.255px;
+    background: #111234;
+    border: none;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16.255px;
+      padding: 2px; /* control the border thickness */
+      background: linear-gradient(to right, #fe2b56, #2a55b1);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  }
 }
 
 .card__main {

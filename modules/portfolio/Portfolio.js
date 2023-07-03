@@ -247,12 +247,12 @@ const Portfolio = ({
           {
             name: variables[lang].farm_balance,
             y: Number(totalFarmBalance) || 0,
-            color: "#1A4F94",
+            color: "#4E5ED6",
           },
           {
             name: variables[lang].asset_balance,
             y: Number(assetBalance) || 0,
-            color: "#123C73",
+            color: "#A1C7FF",
           },
         ],
       },

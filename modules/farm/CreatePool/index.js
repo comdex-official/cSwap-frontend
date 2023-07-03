@@ -14,7 +14,7 @@ const CreatePool = ({ refreshData, refreshBalance }) => {
   return (
     <>
       <Button
-        className="ant-btn-primary btn-filled pool-button"
+        className="ant-btn-primary btn-filled2 pool-button"
         onClick={() => openPool()}
       >
         Create Pool
