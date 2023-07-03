@@ -135,7 +135,7 @@ const MyPools = ({
             setShowMyPool(true);
             navigate.push(`/farm`);
           }}
-          className="btn-filled"
+          className="btn-filled2"
           size="small"
         >
           Manage

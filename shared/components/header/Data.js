@@ -10,22 +10,22 @@ import {
 export const HeaderData = [
   {
     id: 0,
-    name: "TRADE",
+    name: "Trade",
     route: "/",
   },
   {
     id: 1,
-    name: "FARM",
+    name: "Farm",
     route: "/farm",
   },
   {
     id: 2,
-    name: "PORTFOLIO",
+    name: "Portfolio",
     route: "/portfolio",
   },
   {
     id: 3,
-    name: "GOVERN",
+    name: "Govern",
     route: "/govern",
   },
   // {
@@ -35,7 +35,7 @@ export const HeaderData = [
   // },
   {
     id: 5,
-    name: "BRIDGE",
+    name: "Bridge",
     route: "/bridge",
   },
 ];

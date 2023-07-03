@@ -1,10 +1,10 @@
-import styles from "./Header.module.scss";
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { NextImage } from "../../../shared/image/NextImage";
-import { DotDropdownData, HeaderData, cSwapDropdownData } from "./Data";
-import Lodash from "lodash";
+import styles from './Header.module.scss';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import * as PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { NextImage } from '../../../shared/image/NextImage';
+import { DotDropdownData, HeaderData, cSwapDropdownData } from './Data';
+import Lodash from 'lodash';
 import {
   C_Logo,
   Comodo,
@@ -13,63 +13,65 @@ import {
   Hyperlink,
   Logo_Dark,
   Logo_Light,
-} from "../../../shared/image";
-import { Icon } from "../../../shared/image/Icon";
-import Link from "next/link";
-import Sidebar from "../sidebar/Sidebar";
-import { decode, encode } from "js-base64";
+  Shop,
+  Wallet,
+} from '../../../shared/image';
+import { Icon } from '../../../shared/image/Icon';
+import Link from 'next/link';
+import Sidebar from '../sidebar/Sidebar';
+import { decode, encode } from 'js-base64';
 import {
   fetchKeplrAccountName,
   initializeChain,
-} from "../../../services/keplr";
-import { Dropdown, Modal, message } from "antd";
-import { marketPrice } from "../../../utils/number";
-import { cmst, comdex, harbor } from "../../../config/network";
-import { amountConversion } from "../../../utils/coin";
-import { queryAllBalances } from "../../../services/bank/query";
+} from '../../../services/keplr';
+import { Dropdown, Modal, message } from 'antd';
+import { marketPrice } from '../../../utils/number';
+import { cmst, comdex, harbor } from '../../../config/network';
+import { amountConversion } from '../../../utils/coin';
+import { queryAllBalances } from '../../../services/bank/query';
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   NETWORK_TAG,
-} from "../../../constants/common";
-import ConnectModal from "./ConnectModal";
-import variables from "../../../utils/variables";
+} from '../../../constants/common';
+import ConnectModal from './ConnectModal';
+import variables from '../../../utils/variables';
 import {
   fetchAllTokens,
   fetchRestAPRs,
   queryLiquidityParams,
   queryPoolIncentives,
-} from "../../../services/liquidity/query.js";
-import { fetchRestPrices } from "../../../services/oracle/query";
+} from '../../../services/liquidity/query.js';
+import { fetchRestPrices } from '../../../services/oracle/query';
 import {
   envConfigResult,
   ibcAssets,
   queryAssets,
   inconsResult,
-} from "../../../services/asset/query";
+} from '../../../services/asset/query';
 import {
   setAccountAddress,
   setAccountBalances,
   setAccountName,
   setAssetBalance,
   showAccountConnectModal,
-} from "../../../actions/account";
+} from '../../../actions/account';
 import {
   setAppAssets,
   setAssets,
   setAssetsInPrgoress,
-} from "../../../actions/asset.js";
+} from '../../../actions/asset.js';
 import {
   setEnvConfig,
   setAssetList,
   setIconList,
-} from "../../../actions/config";
-import { setPoolIncentives, setPoolRewards } from "../../../actions/liquidity";
-import { setMarkets } from "../../../actions/oracle";
-import { setParams } from "../../../actions/swap";
-import { useRouter } from "next/router";
-import DisconnectModal from "./DisconnectModal";
-import MyDropdown from "../dropDown/Dropdown";
+} from '../../../actions/config';
+import { setPoolIncentives, setPoolRewards } from '../../../actions/liquidity';
+import { setMarkets } from '../../../actions/oracle';
+import { setParams } from '../../../actions/swap';
+import { useRouter } from 'next/router';
+import DisconnectModal from './DisconnectModal';
+import MyDropdown from '../dropDown/Dropdown';
 
 const Header = ({
   setAccountAddress,
@@ -94,7 +96,7 @@ const Header = ({
   setIconList,
   setEnvConfig,
 }) => {
-  const theme = "dark";
+  const theme = 'dark';
 
   const [mobileHam, setMobileHam] = useState(false);
 
@@ -114,9 +116,9 @@ const Header = ({
       setScrolled(isScrolled);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -135,17 +137,17 @@ const Header = ({
   const [addressFromLocal, setAddressFromLocal] = useState();
 
   const subscription = {
-    jsonrpc: "2.0",
-    method: "subscribe",
-    id: "0",
+    jsonrpc: '2.0',
+    method: 'subscribe',
+    id: '0',
     params: {
       query: `coin_spent.spender='${address}'`,
     },
   };
   const subscription2 = {
-    jsonrpc: "2.0",
-    method: "subscribe",
-    id: "0",
+    jsonrpc: '2.0',
+    method: 'subscribe',
+    id: '0',
     params: {
       query: `coin_received.receiver='${address}'`,
     },
@@ -178,15 +180,15 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    let addressAlreadyExist = localStorage.getItem("ac");
+    let addressAlreadyExist = localStorage.getItem('ac');
     addressAlreadyExist = addressAlreadyExist
       ? decode(addressAlreadyExist)
-      : "";
+      : '';
     setAddressFromLocal(addressAlreadyExist);
   }, []);
 
   useEffect(() => {
-    let walletType = localStorage.getItem("loginType");
+    let walletType = localStorage.getItem('loginType');
 
     if (addressFromLocal) {
       initializeChain(walletType, (error, account) => {
@@ -198,8 +200,8 @@ const Header = ({
         fetchKeplrAccountName().then((name) => {
           setAccountName(name);
         });
-        localStorage.setItem("ac", encode(account.address));
-        localStorage.setItem("loginType", walletType || "keplr");
+        localStorage.setItem('ac', encode(account.address));
+        localStorage.setItem('loginType', walletType || 'keplr');
       });
     }
   }, [addressFromLocal, setAccountAddress, setAccountName]);
@@ -233,7 +235,7 @@ const Header = ({
   // }, [address]);
 
   useEffect(() => {
-    const savedAddress = localStorage.getItem("ac");
+    const savedAddress = localStorage.getItem('ac');
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
     if (userAddress) {
@@ -256,7 +258,7 @@ const Header = ({
     (balances) => {
       const assetBalances = balances.filter(
         (item) =>
-          item.denom.substr(0, 4) === "ibc/" ||
+          item.denom.substr(0, 4) === 'ibc/' ||
           item.denom === comdex.coinMinimalDenom ||
           item.denom === cmst.coinMinimalDenom ||
           item.denom === harbor.coinMinimalDenom
@@ -388,22 +390,22 @@ const Header = ({
     getAPRs();
   }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
-  const items = [{ label: <ConnectModal />, key: "item-1" }];
+  const items = [{ label: <ConnectModal />, key: 'item-1' }];
 
   const cswapItems = [
     {
-      key: "item-2",
+      key: 'item-2',
       label: (
         <div className={styles.dropdown__cSwap__menu}>
           <button
             onClick={() =>
-              window.open("https://app.harborprotocol.one/", "_blank")
+              window.open('https://app.harborprotocol.one/', '_blank')
             }
           >
             <NextImage src={Harbor} alt="Logo" />
           </button>
           <button
-            onClick={() => window.open("https://app.commodo.one/", "_blank")}
+            onClick={() => window.open('https://app.commodo.one/', '_blank')}
           >
             <NextImage src={Comodo} alt="Logo" />
           </button>
@@ -414,7 +416,7 @@ const Header = ({
 
   const threeDotItems = [
     {
-      key: "1",
+      key: '1',
       label: (
         <div className={styles.dropdown__dot__menu}>
           {DotDropdownData.map((item) => (
@@ -435,7 +437,7 @@ const Header = ({
   return (
     <div
       className={`${styles.header__wrap} ${
-        scrolled ? styles.header__bg : ""
+        scrolled ? styles.header__bg : ''
       } dark`}
       ref={headerRef}
     >
@@ -446,26 +448,29 @@ const Header = ({
         >
           <Icon
             className={`bi bi-list ${
-              theme === "dark" ? styles.icon_dark : styles.icon_light
+              theme === 'dark' ? styles.icon_dark : styles.icon_light
             }`}
-            size={"1.5rem"}
+            size={'1.5rem'}
           />
         </div>
 
         <div className={styles.header__left}>
-          <div className={styles.header__logo} onClick={() => router.push("/")}>
-            {theme === "dark" ? (
+          <div className={styles.header__logo} onClick={() => router.push('/')}>
+            {theme === 'dark' ? (
               <NextImage src={Logo_Dark} alt="Logo_Dark" />
             ) : (
               <NextImage src={Logo_Light} alt="Logo_Dark" />
             )}
           </div>
+        </div>
+
+        <div className={styles.header__title__section}>
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
               className={`${styles.header__left__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              } ${isActive(item.route) ? styles.active : ""}`}
+                theme === 'dark' ? styles.dark : styles.light
+              } ${isActive(item.route) ? styles.active : ''}`}
             >
               <div
                 className={styles.header__name}
@@ -479,20 +484,20 @@ const Header = ({
           ))}
         </div>
 
-        <div className={styles.dropdown} >
+        <div className={styles.dropdown}>
           <div className={styles.header__right} id="topRightToogle">
             <MyDropdown
               items={cswapItems}
-              placement={"bottomLeft"}
-              trigger={["click"]}
-              className={"header_cswap"}
+              placement={'bottomLeft'}
+              trigger={['click']}
+              className={'header_cswap'}
               getPopupContainer={() =>
-                document.getElementById("topRightToogle")
+                document.getElementById('topRightToogle')
               }
             >
               <div className={styles.header__cSwap}>
-                <div className={styles.header__cSwap__main}>
-                  {theme === "dark" ? (
+                {/* <div className={styles.header__cSwap__main}>
+                  {theme === 'dark' ? (
                     <NextImage src={C_Logo} alt="Logo_Dark" />
                   ) : (
                     <NextImage src={C_Logo} alt="Logo_Dark" />
@@ -500,17 +505,17 @@ const Header = ({
 
                   <div
                     className={`${styles.header__cSwap__title} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {"cSwap"}
+                    {'cSwap'}
                   </div>
-                </div>
+                </div> */}
                 <Icon
                   className={`bi bi-grid-fill ${
-                    theme === "dark" ? styles.icon_dark : styles.icon_light
+                    theme === 'dark' ? styles.icon_dark : styles.icon_light
                   }`}
-                  size={"0.8rem"}
+                  size={'1.1rem'}
                 />
               </div>
             </MyDropdown>
@@ -518,42 +523,62 @@ const Header = ({
             <div
               className={styles.header__cSwap}
               onClick={() =>
-                window.open("https://faucet.comdex.one/", "_blank")
+                window.open('https://faucet.comdex.one/', '_blank')
               }
             >
               <div className={styles.header__cSwap__main}>
-                {theme === "dark" ? (
+                {theme === 'dark' ? (
                   <NextImage src={Faucet} alt="Logo_Dark" />
                 ) : (
                   <NextImage src={Faucet} alt="Logo_Dark" />
                 )}
 
-                <div
+                {/* <div
                   className={`${styles.header__cSwap__title} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  {"Faucet"}
-                </div>
+                  {'Faucet'}
+                </div> */}
               </div>
-              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
+              {/* <NextImage src={Hyperlink} alt={'Logo'} height={15} width={15} /> */}
             </div>
 
             <div className={styles.header__buy}>
-              <div
+              {/* <div
                 className={`${styles.header__buy__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {"Buy"}
-              </div>
-              <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
+                {'Buy'}
+              </div> */}
+              <NextImage src={Shop} alt={'Logo'} />
+            </div>
+
+            <div id={'topRightToogle3'}>
+              <MyDropdown
+                items={threeDotItems}
+                placement={'bottomRight'}
+                trigger={['click']}
+                getPopupContainer={() =>
+                  document.getElementById('topRightToogle3')
+                }
+              >
+                <div className={styles.header__dot}>
+                  <Icon
+                    className={`bi bi-three-dots-vertical cursor ${
+                      theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
+                    size={'1.2rem'}
+                  />
+                </div>
+              </MyDropdown>
             </div>
 
             {address ? (
               <div className="connected_div">
                 <div className="connected_left">
-                  <div className="testnet-top">{NETWORK_TAG || "Testnet"}</div>
+                  <div className="testnet-top">{NETWORK_TAG || 'Testnet'}</div>
                 </div>
                 <DisconnectModal />
               </div>
@@ -562,43 +587,27 @@ const Header = ({
                 <Dropdown
                   menu={{ items }}
                   placement="bottomRight"
-                  trigger={["click"]}
+                  trigger={['click']}
                   overlayClassName="dropconnect-overlay"
                   getPopupContainer={() =>
-                    document.getElementById("topRightToogle2")
+                    document.getElementById('topRightToogle2')
                   }
                   autoAdjustOverflow={false}
                 >
                   <div className={styles.header__wallet}>
                     {variables[lang]?.connect}
+                    <NextImage src={Wallet} alt={'Wallet'} />
                   </div>
                 </Dropdown>
               </div>
             )}
-            <div id={"topRightToogle3"}>
-            <MyDropdown
-              items={threeDotItems}
-              placement={"bottomRight"}
-              trigger={["click"]}
-              getPopupContainer={() =>
-                document.getElementById("topRightToogle3")
-              }
-            >
-              <Icon
-                className={`bi bi-three-dots-vertical cursor ${
-                  theme === "dark" ? styles.icon_dark : styles.icon_light
-                }`}
-                size={"1.5rem"}
-              />
-            </MyDropdown>
-              </div>
-        
+
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>
         </div>
 
         <Modal
-          className={"modal__wrap"}
+          className={'modal__wrap'}
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -609,9 +618,9 @@ const Header = ({
           <iframe
             src="https://dev-transit.comdex.one/"
             frameBorder="0"
-            width={"100%"}
-            height={"700px"}
-            style={{ borderRadius: "10px", background: "#030b1e" }}
+            width={'100%'}
+            height={'700px'}
+            style={{ borderRadius: '10px', background: '#030b1e' }}
           ></iframe>
         </Modal>
       </div>

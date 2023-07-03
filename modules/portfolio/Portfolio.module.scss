@@ -1,4 +1,4 @@
-@import "../../styles/globalVariable.scss";
+@import '../../styles/globalVariable.scss';
 
 .portfolio__wrap {
   max-width: 1500px;
@@ -22,9 +22,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  border: 2px solid #303950;
-  border-radius: 20px;
+  // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  // border: 2px solid #303950;
+  // border-radius: 20px;
+  border-radius: 15px;
+  border: 1px solid #4f4f4f;
+  background: linear-gradient(85deg, #070e1b 0%, #161440 48.59%, #070e1c 100%);
   padding: 20px 50px;
   gap: 60px;
 
@@ -102,7 +105,7 @@
   div {
     height: 14px;
     width: 14px;
-    background: #123c73;
+    background: #A1C7FF;
     border-radius: 2px;
     margin-right: 10px;
   }
@@ -110,7 +113,7 @@
   .farm {
     height: 14px;
     width: 14px;
-    background: #1a4f94;
+    background: #4E5ED6;
     border-radius: 2px;
     margin-right: 10px;
   }
@@ -155,14 +158,14 @@
 }
 
 .farmCard__element__left__logo {
-  background: linear-gradient(to bottom, #fe4350, #053c75);
+  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 42px;
   width: 42px;
   padding: 1px;
 
   &.first {
-    margin-right: -10px;
+    margin-right: -15px;
     z-index: 1;
   }
 
@@ -174,7 +177,7 @@
 }
 
 .farmCard__element__left__logo__main {
-  background: #030b1e;
+  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;

@@ -409,7 +409,7 @@ const FarmCard = ({
         showMoreData ? styles.card__active : ""
       } ${theme === "dark" ? styles.dark : styles.light}`}
     >
-      <Card>
+      <Card farm={true} mpool={getMasterPool()}>
         <div
           className={`${styles.farmCard__main} ${
             theme === "dark" ? styles.dark : styles.light
@@ -707,7 +707,7 @@ const FarmCard = ({
                 {!getMasterPool() && (
                   <div
                     className={`${styles.farmCard__element__right__pool} ${
-                      theme === "dark" ? styles.dark : styles.light
+                       styles.upto 
                     }`}
                   >
                     <div

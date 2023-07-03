@@ -383,7 +383,7 @@ const GovernViewPage = ({
   return (
     <>
       <div className="proposal_view_back_button_container">
-        <Button type="primary" onClick={() => handleClick()}>
+        <Button type="primary"   className="btn-filled" onClick={() => handleClick()}>
           Back
         </Button>
       </div>
