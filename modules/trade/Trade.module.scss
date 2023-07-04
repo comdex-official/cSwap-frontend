@@ -7,7 +7,8 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  padding-top: 60px;
+  // padding-top: 60px;
+  height: 100vh;
   &.active_orderbook {
     display: block;
   }
@@ -52,8 +53,8 @@
 
   span {
     margin-left: 10px;
-    font-weight: 400;
-    font-size: 17px;
+    font-weight: 200;
+    font-size: 16px;
     line-height: 22px;
     text-align: center;
     color: #ffffff;
@@ -161,8 +162,8 @@
 }
 
 .tradeCard__body__left__title {
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: 200;
+  font-size: 13px;
   line-height: 22px;
   color: #ffffff;
 
@@ -320,8 +321,8 @@
 }
 
 .tradeCard__body__right__el3 {
-  font-weight: 530;
-  font-size: 11px;
+  font-weight: 500;
+  font-size: 10px;
   line-height: 15px;
   text-align: right;
   // color: #acbfdb;
@@ -343,8 +344,8 @@
 }
 
 .tradeCard__body__right__el4 {
-  font-weight: 530;
-  font-size: 11px;
+  font-weight: 500;
+  font-size: 10px;
   line-height: 15px;
   text-align: right;
   // color: #acbfdb;
@@ -367,8 +368,8 @@
 }
 
 .tradeCard__body__right__el1__title {
-  font-weight: 400;
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 12px;
   line-height: 20px;
   text-align: right;
   // color: #acbfdb;
@@ -406,14 +407,14 @@
   border-radius: 5px;
   padding: 2px 8px;
   font-weight: 400;
-  font-size: 10px;
+  font-size: 7.166px;
   line-height: 15px;
   text-align: center;
   color: #ffffff;
   cursor: pointer;
 
   &:hover {
-    background: #6592d5;
+    background: #122b4f;
   }
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
@@ -432,7 +433,7 @@
 
 .tradeCard__body__right__el1__footer {
   font-weight: 400;
-  font-size: 10px;
+  font-size: 7.166px;
   line-height: 15px;
   text-align: center;
   color: #ffffff;
@@ -442,7 +443,7 @@
   cursor: pointer;
 
   &:hover {
-    background: #949fec;
+    background: #36429b;
   }
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
@@ -476,6 +477,7 @@
   font-weight: 35;
   font-size: 12px;
   line-height: 22px;
+  font-weight: 200;
   // width: 90%;
   text-align: center;
   // color: #80acce;
@@ -497,8 +499,8 @@
 }
 
 .tradeCard__description__left_title {
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: 200;
+  font-size: 13px;
   line-height: 20px;
   // color: #80acce;
   margin-bottom: 10px;
@@ -520,7 +522,7 @@
 }
 
 .tradeCard__description__right_title {
-  font-weight: 400;
+  font-weight: 200;
   font-size: 13px;
   line-height: 20px;
   text-align: right;

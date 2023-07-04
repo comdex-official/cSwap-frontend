@@ -1,9 +1,9 @@
-import { Button, Checkbox, Modal } from "antd";
-import React, { useState, useEffect } from "react";
+import { Button, Checkbox, Modal } from 'antd';
+import React, { useState, useEffect } from 'react';
 
 const CautionNotice = () => {
   const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("agreement_accepted") === null
+    localStorage.getItem('agreement_accepted') === null
   );
   const [isChecked, setIsChecked] = useState(false);
 
@@ -33,9 +33,9 @@ const CautionNotice = () => {
                 command line, locally installed programs, Software Development
                 Kits, software code and blockchain and smart contract explorers
                 shall be subject to Terms of Use of cSwap (the “Terms”)
-                (accessible at{" "}
+                (accessible at{' '}
                 <a href="https://terms.comdex.one/Comdex_Cswap_Terms_and_Conditions.pdf">
-                  Terms of Use of cSwap{" "}
+                  Terms of Use of cSwap{' '}
                 </a>
                 ) and in particular, to the various disclaimers and liability
                 limitation set out in the section of the Terms entitled
@@ -100,7 +100,7 @@ const CautionNotice = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setIsOpen(false);
-                localStorage.setItem("agreement_accepted", "true");
+                localStorage.setItem('agreement_accepted', 'true');
               }}
               disabled={!isChecked}
               name="Agree"

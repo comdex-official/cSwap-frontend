@@ -45,8 +45,8 @@
   --card-border-rgb: 131, 134, 135;
 
   @font-face {
-    font-family: Montserrat, sans-serif;
-    src: url('../public/assets/fonts/static/Montserrat-Regular.ttf');
+    font-family: 'Lato', sans-serif;
+    src: url('../public/assets/fonts/static/Lato-Thin.ttf');
   }
 }
 
@@ -452,6 +452,92 @@ a {
   }
 }
 
+.modal__wallet__connect {
+  &.ant-modal {
+    max-width: 420px !important;
+
+    .ant-modal-content {
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+      // border: 2px solid #303950;
+      border-radius: 12px;
+      padding: 0;
+
+      .ant-modal-header {
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
+
+        .ant-modal-title {
+          color: #ffffff;
+        }
+      }
+
+      .ant-modal-body {
+        height: 369px !important;
+      }
+      .ant-modal-close-x {
+        // position: absolute;
+        // right: 35px;
+        // top: 35px;
+        color: #bebebe !important;
+      }
+
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
+}
+
+.modal__wallet__connect2 {
+  &.ant-modal {
+    max-width: 420px !important;
+
+    .ant-modal-content {
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+      // border: 2px solid #303950;
+      border-radius: 12px;
+      padding: 0;
+
+      .ant-modal-header {
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
+
+        .ant-modal-title {
+          color: #ffffff;
+        }
+      }
+
+      .ant-modal-body {
+        // height: 323px !important;
+      }
+      .ant-modal-close-x {
+        // position: absolute;
+        // right: 35px;
+        // top: 35px;
+        color: #bebebe !important;
+      }
+
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
+}
+
 .modal__wrap2 {
   &.ant-modal {
     // max-width: 00px !important;
@@ -621,8 +707,9 @@ a {
 
 .ant-input {
   background: #000000;
-  font-size: 1.2rem;
-  line-height: 1.2;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: normal;
   text-align: right;
   max-width: 170px;
   margin-bottom: 0;
@@ -811,8 +898,9 @@ a {
           .name {
             .dark-mode & {
               color: $white;
-              font-size: 15px;
-              font-weight: 700;
+              font-size: 17.881px;
+              font-style: normal;
+              font-weight: 200;
             }
           }
         }
@@ -1838,8 +1926,9 @@ a {
           .name {
             .dark-mode & {
               color: $white;
-              font-size: 15px;
-              font-weight: 700;
+              font-size: 17.881px;
+              font-style: normal;
+              font-weight: 200;
             }
           }
         }
@@ -2023,11 +2112,16 @@ a {
 
 .wallet-connect-dropdown {
   font-size: $font-size-base;
-  max-width: 230px;
+  // max-width: 230px;
   min-width: 230px;
   width: 100%;
   background: $background-light;
   border-radius: $base-border-radius - 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  gap: 15px;
 
   .dark-mode & {
     background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
@@ -2036,10 +2130,12 @@ a {
 
   .wallet-connect-upper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     font-size: $font-size-sm;
     margin-bottom: 10px;
+    flex-direction: column;
+    gap: 15px;
     .text-center {
       .dark-mode & {
         color: $white;
@@ -2053,6 +2149,61 @@ a {
       display: block;
       margin-right: 7px;
     }
+  }
+
+  .wallet-connect-wrap2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+background: #101B2F;
+padding: 10px;
+gap: 15px;
+  }
+
+  .wallet-connect-up {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .wallet-connect-down {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .wallet-connect-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .wallet-connect-tl {
+    color: #fff;
+    font-size: 22px;
+   
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .wallet-connect-des {
+    color: #7b7b8b;
+    font-size: 16px;
+   
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .wallet-connect-title2 {
+    color: #fff;
+    font-size: 18px;
+   
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
 
   .wallet-address {
@@ -2194,8 +2345,9 @@ a {
         .name {
           .dark-mode & {
             color: $white;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 17.881px;
+            font-style: normal;
+            font-weight: 200;
           }
         }
       }
@@ -2407,6 +2559,10 @@ a {
     // border-radius: 10px;
     border-radius: 15px;
     background: #0b0d2a;
+
+    .ant-modal-close {
+      display: none;
+    }
 
     .ant-modal-body {
       padding: 0;

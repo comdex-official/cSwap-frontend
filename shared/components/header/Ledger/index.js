@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchLedgerAddress } from '../../../../actions/ledger';
 import { getAccountNumber } from '../../../../utils/number';
 
-const ButtonSubmit = () => {
+const ButtonSubmit = ({handleCancel}) => {
   const dispatch = useDispatch();
   const accountIndex = useSelector((state) => state.ledger.accountIndex);
   const accountNumber = useSelector((state) => state.ledger.accountNumber);
@@ -15,6 +15,7 @@ const ButtonSubmit = () => {
         getAccountNumber(accountIndex.value)
       )
     );
+    handleCancel()
   };
 
   return <div onClick={onClick}>Ledger</div>;

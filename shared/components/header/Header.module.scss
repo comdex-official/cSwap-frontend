@@ -58,7 +58,7 @@
   background: #19192f;
   backdrop-filter: blur(20.725000381469727px);
   padding: 20px;
-  gap: 30px;
+  gap: 40px;
 }
 
 .right__item {
@@ -67,7 +67,7 @@
 }
 
 .header__left__element {
-  font-weight: 500;
+  font-weight: 300;
   font-size: 16px;
   line-height: 18px;
   text-align: center;
@@ -83,7 +83,7 @@
   }
 
   &.active {
-    font-weight: 700;
+    font-weight: 500;
     color: #fe2b56;
     // opacity: 1;
 
@@ -181,15 +181,16 @@
   padding: 15px;
   // width: 110px;
   // margin-right: 10px;
-  font-weight: 600;
-  font-size: 12px;
+  font-weight: 400;
+  font-size: 16px;
   line-height: 20px;
   text-align: center;
-  color: $white;
+  // color: $white;
+  color: #d9d9d9;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   & > * {
     pointer-events: none;
   }
@@ -341,8 +342,12 @@
 }
 
 .dropdown__wallet__menu {
-  width: 280px;
-
+  // width: 280px;
+  padding: 35px 25px;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
   button {
     border: none;
     outline: none;
@@ -391,7 +396,7 @@
 }
 
 .dropdown__wallet__title {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 22px;
   line-height: 24px;
   // text-align: center;
@@ -400,6 +405,9 @@
   &.span {
     color: #7b7b8b;
     font-size: 16px;
+    font-weight: 300;
+    width: 85%;
+    margin-top: 10px;
   }
 }
 
@@ -474,22 +482,41 @@
   align-items: center;
   border-radius: 10px;
   background: #101b2f;
-  padding: 15px;
+  padding: 10px;
   gap: 10px;
   margin: 10px 0px;
   cursor: pointer;
 }
 
 .dropdown__wallet__logo {
+  &.active {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+ 
+
+  
   img {
-    width: 42px;
+    width: 40px;
     height: 40px;
     border-radius: 10px;
   }
 }
 
+.activeImage {
+  width: 32px !important;
+  height: 32px !important;
+  
+}
+
 .dropdown__wallet__title2 {
   color: #fff;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 400;
 }
