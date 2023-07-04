@@ -390,6 +390,20 @@ const Header = ({
     getAPRs();
   }, [fetchParams, fetchPoolIncentives, getAPRs]);
 
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+
+  const showModal2 = () => {
+    setIsModalOpen2(true);
+  };
+
+  const handleOk2 = () => {
+    setIsModalOpen2(false);
+  };
+
+  const handleCancel2 = () => {
+    setIsModalOpen2(false);
+  };
+
   const items = [{ label: <ConnectModal />, key: 'item-1' }];
 
   const cswapItems = [
@@ -583,8 +597,8 @@ const Header = ({
                 <DisconnectModal />
               </div>
             ) : (
-              <div id="topRightToogle2">
-                <Dropdown
+              <div id="topRightToogle2" onClick={showModal2}>
+                {/* <Dropdown
                   menu={{ items }}
                   placement="bottomRight"
                   trigger={['click']}
@@ -593,18 +607,31 @@ const Header = ({
                     document.getElementById('topRightToogle2')
                   }
                   autoAdjustOverflow={false}
-                >
-                  <div className={styles.header__wallet}>
-                    {variables[lang]?.connect}
-                    <NextImage src={Wallet} alt={'Wallet'} />
-                  </div>
-                </Dropdown>
+                > */}
+
+                <div className={styles.header__wallet}>
+                  {variables[lang]?.connect}
+                  <NextImage src={Wallet} alt={'Wallet'} />
+                </div>
+                {/* </Dropdown> */}
               </div>
             )}
 
             <Sidebar isOpen={mobileHam} setIsOpen={setMobileHam} />
           </div>
         </div>
+
+        <Modal
+          className={'modal__wallet__connect'}
+          open={isModalOpen2}
+          onOk={handleOk2}
+          onCancel={handleCancel2}
+          centered={true}
+          footer={null}
+          header={null}
+        >
+          <ConnectModal handleCancel={handleCancel2}/>
+        </Modal>
 
         <Modal
           className={'modal__wrap'}

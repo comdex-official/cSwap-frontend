@@ -1,22 +1,22 @@
-import { Button, message, Alert } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import Snack from "../../shared/components/Snack/index";
-import { APP_ID, DEFAULT_FEE } from "../../constants/common";
-import { signAndBroadcastTransaction } from "../../services/helper";
-import { queryOrder } from "../../services/liquidity/query";
+import { Button, message, Alert } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import Snack from '../../shared/components/Snack/index';
+import { APP_ID, DEFAULT_FEE } from '../../constants/common';
+import { signAndBroadcastTransaction } from '../../services/helper';
+import { queryOrder } from '../../services/liquidity/query';
 import {
   amountConversion,
   denomConversion,
   getAmount,
   orderPriceConversion,
-} from "../../utils/coin";
-import { decimalConversion, getExponent } from "../../utils/number";
-import variables from "../../utils/variables";
-import { errorMessageMappingParser } from "../../utils/string";
-import { Toaster } from "../../shared/components/toaster/Toaster";
+} from '../../utils/coin';
+import { decimalConversion, getExponent } from '../../utils/number';
+import variables from '../../utils/variables';
+import { errorMessageMappingParser } from '../../utils/string';
+import { Toaster } from '../../shared/components/toaster/Toaster';
 
 const CustomButton = ({
   offerCoin,
@@ -85,13 +85,13 @@ const CustomButton = ({
 
     let data = {
       typeUrl: isLimitOrder
-        ? "/comdex.liquidity.v1beta1.MsgLimitOrder"
-        : "/comdex.liquidity.v1beta1.MsgMarketOrder",
+        ? '/comdex.liquidity.v1beta1.MsgLimitOrder'
+        : '/comdex.liquidity.v1beta1.MsgMarketOrder',
       value: {
         orderer: address,
         orderLifespan: isLimitOrder
           ? { seconds: orderLifespan, nanos: 0 }
-          : "0",
+          : '0',
         pairId: pair?.id,
         appId: Long.fromNumber(APP_ID),
         direction: orderDirection,
@@ -136,10 +136,10 @@ const CustomButton = ({
       {
         message: getMessage(isLimitOrder),
         fee: {
-          amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
-          gas: "500000",
+          amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
+          gas: '500000',
         },
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -154,13 +154,13 @@ const CustomButton = ({
           let parsedData = JSON.parse(result?.rawLog)?.[0];
 
           let order = parsedData?.events?.find(
-            (item) => item?.type === "market_order"
+            (item) => item?.type === 'market_order'
           );
           let orderId = order?.attributes?.find(
-            (item) => item?.key === "order_id"
+            (item) => item?.key === 'order_id'
           )?.value;
           let pairId = order?.attributes?.find(
-            (item) => item?.key === "pair_id"
+            (item) => item?.key === 'pair_id'
           )?.value;
 
           if (orderId && pairId) {
@@ -172,7 +172,7 @@ const CustomButton = ({
               let data = result?.order;
 
               message
-                .loading("Processing..", 3)
+                .loading('Processing..', 3)
                 .then(() =>
                   Toaster(
                     <Snack
@@ -234,15 +234,15 @@ const CustomButton = ({
 
   const updateValues = () => {
     dispatch({
-      type: "BALANCE_REFRESH_SET",
+      type: 'BALANCE_REFRESH_SET',
       value: refreshBalance + 1,
     });
     dispatch({
-      type: "DEMAND_COIN_AMOUNT_SET",
+      type: 'DEMAND_COIN_AMOUNT_SET',
       value: 0,
     });
     dispatch({
-      type: "OFFER_COIN_AMOUNT_SET",
+      type: 'OFFER_COIN_AMOUNT_SET',
       value: 0,
     });
   };
@@ -258,9 +258,9 @@ const CustomButton = ({
         }
         type="primary"
         loading={inProgress}
-        className="btn-filled"
+        className="btn-filled2"
         onClick={() => handleSwap()}
-        style={{ padding: "5px 70px" }}
+        style={{ padding: '5px 70px' }}
       >
         {name}
       </Button>

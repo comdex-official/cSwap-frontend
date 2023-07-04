@@ -16,13 +16,14 @@ import variables from '../../../utils/variables';
 import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
-import { Keplr, Wallet2 } from '../../image';
+import { Keplr, Wallet2, Cosmos, Ledger } from '../../image';
 
 const ConnectModal = ({
   setAccountAddress,
   setAccountName,
   lang,
   showAccountConnectModal,
+  handleCancel
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
@@ -44,6 +45,7 @@ const ConnectModal = ({
       localStorage.setItem('ac', encode(account.address));
       localStorage.setItem('loginType', walletType || 'keplr');
       showAccountConnectModal(false);
+      handleCancel()
     });
   };
 
@@ -62,7 +64,10 @@ const ConnectModal = ({
           <NextImage src={Wallet2} alt="Wallet" />
         </div>
 
-        <div className={styles.dropdown__wallet__title__wrap} onClick={() => handleConnectToWallet("keplr")}>
+        <div
+          className={styles.dropdown__wallet__title__wrap}
+          onClick={() => handleConnectToWallet('keplr')}
+        >
           <div className={styles.dropdown__wallet__logo}>
             <NextImage src={Keplr} alt="Keplr" />
           </div>
@@ -71,9 +76,12 @@ const ConnectModal = ({
           </div>
         </div>
 
-        <div className={styles.dropdown__wallet__title__wrap} onClick={() => handleConnectToWallet("leap")}>
+        <div
+          className={styles.dropdown__wallet__title__wrap}
+          onClick={() => handleConnectToWallet('leap')}
+        >
           <div className={styles.dropdown__wallet__logo}>
-            <NextImage src={Keplr} alt="Keplr" />
+            <NextImage src={Cosmos} alt="Keplr" />
           </div>
           <div className={styles.dropdown__wallet__title2}>
             {'Leap Cosmos Wallet'}
@@ -81,11 +89,15 @@ const ConnectModal = ({
         </div>
 
         <div className={styles.dropdown__wallet__title__wrap}>
-          <div className={styles.dropdown__wallet__logo}>
-            <NextImage src={Keplr} alt="Keplr" />
+          <div className={`${styles.dropdown__wallet__logo} ${styles.active}`}>
+            <NextImage
+              src={Ledger}
+              alt="Keplr"
+              className={styles.activeImage}
+            />
           </div>
           <div className={styles.dropdown__wallet__title2}>
-          <ButtonSubmit />
+            <ButtonSubmit   handleCancel={handleCancel}/>
           </div>
         </div>
 
