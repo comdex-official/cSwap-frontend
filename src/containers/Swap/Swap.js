@@ -8,7 +8,7 @@ import TooltipIcon from "../../components/TooltipIcon";
 import { comdex } from "../../config/network";
 import {
   ValidateInputNumber,
-  ValidatePriceInputNumber
+  ValidatePriceInputNumber,
 } from "../../config/_validation";
 import {
   APP_ID,
@@ -16,31 +16,31 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
-  MAX_SLIPPAGE_TOLERANCE
+  MAX_SLIPPAGE_TOLERANCE,
 } from "../../constants/common";
 import {
   fetchExchangeRateValue,
   queryLiquidityPair,
   queryLiquidityPairs,
   queryPool,
-  queryPoolsList
+  queryPoolsList,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../utils/coin";
 import {
   decimalConversion,
   getExponent,
-  marketPrice
+  marketPrice,
 } from "../../utils/number";
 import {
   calculateRangedPoolPrice,
   calculateSlippage,
-  getNewRangedPoolRatio
+  getNewRangedPoolRatio,
 } from "../../utils/slippage";
 import { getPairMappings, toDecimals } from "../../utils/string";
 import variables from "../../utils/variables";
@@ -361,6 +361,14 @@ const Swap = ({
       price && isFinite(price) ? price : 0
     ).toFixed(6)} ${denomOut || ""}`;
   };
+
+  var handle = setInterval(showOfferCoinSpotPrice, 6000);
+
+  clearInterval(handle);
+
+  var balanceava = setInterval(availableBalance, 6000);
+
+  clearInterval(balanceava);
 
   const showOfferCoinValue = () => {
     const total = marketPrice(markets, offerCoin?.denom) * offerCoin?.amount;
