@@ -2955,6 +2955,12 @@ a {
   }
 }
 
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .votenow-modal-element-main {
   display: flex;
   flex-direction: column;
@@ -3143,14 +3149,20 @@ a {
       width: 100%;
       padding: 6px;
       .upto_apr_tooltip_farm {
-        font-size: 10.43px;
+        // font-size: 10.43px;
+
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 200;
+        line-height: normal;
         margin-bottom: 5px;
         .text {
-          color: #b0abab;
+          // color: #b0abab;
+          color: #d0d0d0;
         }
         .value {
-          font-weight: 600;
-          color: #f8f8fa;
+          font-weight: 500;
+          color: #ffffff;
         }
       }
     }
@@ -3205,13 +3217,15 @@ a {
           //   display: none;
           // }
           &:first-child {
-            border-width: 1px 0 1px 1px;
+            border-width: 0 1px 0 0;
+            left: -8px;
           }
           // &:nth-child(2) {
           //   display: none;
           // }
           &:last-child {
-            border-width: 1px 1px 1px 0;
+            right: -8px;
+            border-width: 0 1px 0 0;
           }
           .dark-mode & {
             border-color: $white;
@@ -3242,18 +3256,24 @@ a {
         }
       }
       .ant-slider-rail {
-        height: 8px;
+        height: 2px;
         border-radius: 10px;
         position: relative;
-        background: rgb(255, 255, 255);
         background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 1) 8%,
-          rgba(254, 67, 80, 1) 46%,
-          rgba(255, 255, 255, 1) 92%
+          45deg,
+          rgba(0, 0, 0, 0) 0%,
+          #fe2b56 52.52%,
+          #000 100%
         );
+        // background: rgb(255, 255, 255);
+        // background: linear-gradient(
+        //   90deg,
+        //   rgba(255, 255, 255, 1) 8%,
+        //   rgba(254, 67, 80, 1) 46%,
+        //   rgba(255, 255, 255, 1) 92%
+        // );
         @media screen and (max-width: 1540px) {
-          height: 6px;
+          height: 2px;
         }
         .dark-mode & {
           background: rgb(3, 11, 30);
@@ -3267,26 +3287,26 @@ a {
         &::after {
           position: absolute;
           content: '';
-          height: 1px;
+          height: 0;
           display: inline-block;
           top: 50%;
           width: 100%;
           transform: translateY(-50%);
-          background: rgb(3, 11, 30);
-          background: linear-gradient(
-            270deg,
-            #ffffff 0%,
-            #ffffff 46.7%,
-            #ffffff 98.53%
-          );
+          // background: rgb(3, 11, 30);
+          // background: linear-gradient(
+          //   270deg,
+          //   #ffffff 0%,
+          //   #ffffff 46.7%,
+          //   #ffffff 98.53%
+          // );
           .dark-mode & {
-            background: rgb(3, 11, 30);
-            background: linear-gradient(
-              270deg,
-              #030b1e 0%,
-              #ffffff 46.7%,
-              #030b1e 98.53%
-            );
+            // background: rgb(3, 11, 30);
+            // background: linear-gradient(
+            //   270deg,
+            //   #030b1e 0%,
+            //   #ffffff 46.7%,
+            //   #030b1e 98.53%
+            // );
           }
         }
       }
@@ -3303,7 +3323,7 @@ a {
         // display: none;
       }
       .ant-slider-rail {
-        height: 5px;
+        height: 2px;
       }
     }
   }
@@ -3533,25 +3553,59 @@ a {
 
 .ant-pagination {
   .ant-pagination-prev {
+    border-radius: 39.784px;
+    background: #15133e;
     button {
+      border-radius: 39.784px;
+      background: #15133e;
       color: $white !important;
     }
   }
 
   .ant-pagination-next {
+    border-radius: 39.784px;
+    background: #15133e;
     button {
+      border-radius: 39.784px;
+      background: #15133e;
       color: $white !important;
     }
   }
-
+  .ant-pagination-item-active {
+    border-radius: 39.784px;
+    background: #15133e;
+  }
   .ant-pagination-item {
-    background: rgba(0, 0, 0, 0.5);
+    // background: rgba(0, 0, 0, 0.5);
+
+    &:hover {
+      border-radius: 39.784px;
+      background: #15133e;
+    }
+
     border: none;
     a {
       color: $white;
       &:hover {
+        border-radius: 39.784px;
+        background: #15133e;
         color: $white;
       }
+    }
+  }
+
+  .ant-pagination-item-container {
+    color: $white;
+
+    span {
+      color: $white;
+      svg {
+        color: $white;
+        fill: $white;
+      }
+    }
+    .ant-pagination-item-ellipsis {
+      color: $white !important;
     }
   }
 
@@ -3660,9 +3714,9 @@ a {
   cursor: pointer;
   .ant-tooltip-arrow {
     cursor: pointer;
-    bottom: -3px !important;
+    // bottom: -3px !important;
     &::before {
-      background: $white;
+      background: #101a35;
     }
     .ant-tooltip-arrow-content {
       background: linear-gradient(
@@ -3687,19 +3741,24 @@ a {
 
   .ant-tooltip-inner {
     cursor: pointer;
-    background: #061e45;
+    // background: #061e45;
+    background: #101a35;
     border: none;
-    font-size: 10px;
+    // font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
-    line-height: 13px;
-    border-radius: 15px;
-    font-weight: 400;
+    // line-height: 13px;
+    border-radius: 10px;
+    // font-weight: 400;
     padding: 10px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
     .dark-mode & {
       background: #101a35 !important;
       border: none;
-      border-radius: 15px;
+      border-radius: 10px;
       color: #ffffff;
     }
   }
@@ -3806,10 +3865,11 @@ a {
 }
 
 .farm-disclaimer-info {
-  position: fixed;
-  top: 100px;
+  // position: fixed;
+  position: relative;
+  // top: 100px;
   color: #ffffff;
-  margin-top: 38px;
+  // margin-top: 38px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3822,8 +3882,8 @@ a {
   left: 0;
   right: 0;
   max-width: 572px;
-  margin-top: -15px;
-  margin-bottom: 10px;
+  // margin-top: -15px;
+  margin-bottom: 20px;
   // background: #123c73;
   // border-radius: 10px;
   border-radius: 15px;
@@ -3838,6 +3898,7 @@ a {
     font-size: $font-size-base;
     max-width: 510px;
     height: 60px;
+    padding: 0 16px 0 14px;
   }
   @media screen and (max-width: 1280px) {
     font-size: $font-size-sm - 1;

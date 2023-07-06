@@ -5,8 +5,10 @@
   margin: auto;
   padding: 0px 115px;
   position: relative;
-  padding-top: 100px;
-
+  // padding-top: 100px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  
   .govern_main_container {
     margin-bottom: 10px;
     .govern_container {
@@ -211,19 +213,21 @@
 .proposal_view_back_button_container {
   display: flex;
   justify-content: flex-end;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: auto;
-  padding: 0 20px;
+  padding: 0px 115px;
   position: relative;
-  padding-top: 80px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
 }
 .govern_view_main_container {
   position: relative;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: auto;
-  padding: 0 20px;
+  padding: 0px 115px;
   border-radius: 20px;
-  padding: 20px;
+  padding-bottom: 20px;
   .govern_view_container {
     .proposal_detail_main_container {
       // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
@@ -479,10 +483,11 @@
     margin-left: 8px;
   }
   .govern-filter-search {
-    position: absolute;
-    right: 85%;
+     position: absolute;
+     right: 85%;
     .ant-select-arrow {
-      display: none !important;
+      // display: none !important;
+      left: 70px;
     }
 
     @media only screen and (max-width: 725px) {

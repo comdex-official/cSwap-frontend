@@ -388,7 +388,7 @@ const GovernViewPage = ({
         </Button>
       </div>
 
-      <div className="govern_view_main_container mt-4 ">
+      <div className="govern_view_main_container">
         <div className="govern_view_container">
           <div className="proposal_detail_main_container">
             <div className="proposal_detail_container">

@@ -30,7 +30,7 @@ import { Icon } from '../../shared/image/Icon';
 import GovernOpenProposal from './openProposal/index';
 import GovernPastProposal from './pastProposal/index';
 import { comdex } from '../../config/network';
-import { No_Data } from '../../shared/image';
+import { No_Data, Slider } from '../../shared/image';
 import { NextImage } from '../../shared/image/NextImage';
 import Loading from '../../pages/Loading';
 
@@ -50,7 +50,8 @@ const Govern = ({
   const [pastProposals, setPastProposals] = useState();
   const [activeProposals, setActiveProposals] = useState();
   const [filteredProposal, setFilteredProposal] = useState();
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   // useEffect(() => {
   //   if (getTab) {
   //     setActiveKey(getTab);
@@ -86,12 +87,16 @@ const Govern = ({
         if (value === 'all') {
           return oldProposals;
         } else {
-          return item.status === value;
+          return item?.status === value;
         }
       });
+
     setFilteredProposal(allFilteredProposal);
+    setCurrentPage(1);
     setInProgress(false);
   };
+
+  console.log(filteredProposal);
 
   const calculateVotes = useCallback((value, final_tally_result) => {
     let yes = Number(final_tally_result?.yes);
@@ -122,9 +127,6 @@ const Govern = ({
     },
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(4);
-
   useEffect(() => {
     const fetchData = async () => {
       let nextPage = '';
@@ -152,7 +154,7 @@ const Govern = ({
   const getCurrentData = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return filteredProposal.slice(indexOfFirstItem, indexOfLastItem);
+    return filteredProposal?.slice(indexOfFirstItem, indexOfLastItem);
   };
 
   const handlePageChange = (pageNumber) => {
@@ -170,6 +172,7 @@ const Govern = ({
           (item?.proposal_id).includes(searchKey)
       );
       setFilteredProposal(oldProposals);
+      setCurrentPage(1);
     } else {
       let ActiveProposals = proposals?.filter(
         (item) => item?.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
@@ -179,7 +182,9 @@ const Govern = ({
           item?.content?.title?.toLowerCase().includes(searchKey) ||
           (item?.proposal_id).includes(searchKey)
       );
+
       setFilteredProposal(ActiveProposals);
+      setCurrentPage(1);
     }
   };
 
@@ -191,9 +196,11 @@ const Govern = ({
       (item) => item?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'
     );
     if (key === '1') {
+      setCurrentPage(1);
       setFilteredProposal(openProposal);
       setActiveProposals(openProposal);
     } else {
+      setCurrentPage(1);
       setFilteredProposal(pastProposal);
       setPastProposals(pastProposal);
     }
@@ -222,8 +229,10 @@ const Govern = ({
 
       if (activeKey === '1') {
         setFilteredProposal(openProposal);
+        setActiveProposals(openProposal);
       } else {
         setFilteredProposal(pastProposal);
+        setPastProposals(pastProposal);
       }
     }
   }, [proposals, activeKey]);
@@ -268,7 +277,14 @@ const Govern = ({
                     className="select-primary filter-select govern-filter-search"
                     style={{ width: 150 }}
                     onChange={(e) => filterAllProposal(e)}
-                    suffixIcon={<Icon className={'bi bi-chevron-down'} />}
+                    suffixIcon={
+                      <NextImage
+                        src={Slider}
+                        alt="Message"
+                        height={15}
+                        width={15}
+                      />
+                    }
                   >
                     <Option value="all" className="govern-select-option">
                       All
@@ -338,7 +354,7 @@ const Govern = ({
                 </div>
               )}
 
-              <div>
+              <div className={'pagination'}>
                 <Pagination
                   current={currentPage}
                   total={filteredProposal?.length}

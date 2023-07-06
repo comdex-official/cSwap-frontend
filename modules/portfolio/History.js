@@ -122,7 +122,7 @@ const History = ({ address, setTransactionHistory, history }) => {
               loading={{ indicator: <Loading />, spinning: inProgress }}
               pagination={{
                 total: history && history.count,
-                showSizeChanger: true,
+                showSizeChanger: false,
                 defaultPageSize: 5,
                 pageSizeOptions: ["5", "10", "20", "50"],
               }}
