@@ -1,24 +1,24 @@
-import { Button, Col, Input, Row, message } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { APP_ID, DEFAULT_FEE } from "../../constants/common";
-import { signAndBroadcastTransaction } from "../../services/helper";
+import { Button, Col, Input, Row, message } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { APP_ID, DEFAULT_FEE } from '../../constants/common';
+import { signAndBroadcastTransaction } from '../../services/helper';
 import {
   amountConversion,
   denomConversion,
   getAmount,
   getDenomBalance,
   orderPriceConversion,
-} from "../../utils/coin";
+} from '../../utils/coin';
 import {
   decimalConversion,
   formateNumberDecimalsAuto,
   marketPrice,
-} from "../../utils/number";
-import OrderType from "./OrderType";
-import styles from "./OrderBook.module.scss";
+} from '../../utils/number';
+import OrderType from './OrderType';
+import styles from './OrderBook.module.scss';
 
 const Sell = ({
   pair,
@@ -32,7 +32,7 @@ const Sell = ({
   setRefresh,
   refresh,
 }) => {
-  const theme = "dark";
+  const theme = 'dark';
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
   const [total, setTotal] = useState(0);
@@ -53,13 +53,13 @@ const Sell = ({
   const getMessage = () => {
     let data = {
       typeUrl:
-        type === "limit"
-          ? "/comdex.liquidity.v1beta1.MsgLimitOrder"
-          : "/comdex.liquidity.v1beta1.MsgMarketOrder",
+        type === 'limit'
+          ? '/comdex.liquidity.v1beta1.MsgLimitOrder'
+          : '/comdex.liquidity.v1beta1.MsgMarketOrder',
       value: {
         orderer: address,
         orderLifespan:
-          type === "limit" ? { seconds: orderLifespan, nanos: 0 } : "0",
+          type === 'limit' ? { seconds: orderLifespan, nanos: 0 } : '0',
         pairId: Long.fromNumber(pair?.pair_id),
         appId: Long.fromNumber(APP_ID),
         direction: 2,
@@ -77,7 +77,7 @@ const Sell = ({
         ),
       },
     };
-    if (type === "limit") {
+    if (type === 'limit') {
       data.value.price = orderPriceConversion(
         price *
           10 ** Math.abs(pair?.base_coin_exponent - pair?.quote_coin_exponent)
@@ -94,16 +94,16 @@ const Sell = ({
       {
         message: getMessage(),
         fee: {
-          amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
-          gas: "500000",
+          amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
+          gas: '500000',
         },
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
         setInProgress(false);
         setRefresh(!refresh);
-        
+
         if (error) {
           message.error(error?.rawLog || error);
           return;
@@ -113,9 +113,8 @@ const Sell = ({
           message.info(result?.rawLog);
           return;
         }
-        message.success("Transaction success");
+        message.success('Transaction success');
         updateValues();
-        
       }
     );
   };
@@ -156,18 +155,18 @@ const Sell = ({
 
         <div
           className={`${styles.orderbook__body__tab__body} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.orderbook__body__tab__body__balance} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             Balance:
             {formateNumberDecimalsAuto({
               price: amountConversion(available || 0),
-            })}{" "}
+            })}{' '}
             {denomConversion(pair?.base_coin_denom)}
             <label>
               ~$
@@ -177,32 +176,32 @@ const Sell = ({
 
           <div
             className={`${styles.orderbook__body__tab__body__input__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__body__tab__body__input__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"Price"}
+              {'Price'}
             </div>
             <div
               className={`${styles.orderbook__body__tab__body__input} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {type === "market" ? (
+              {type === 'market' ? (
                 <div
                   className={`${styles.orderbook__body__tab__body__balance} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   Market Price
                 </div>
               ) : (
                 <Input
-                  type={"number"}
+                  type={'number'}
                   value={price}
                   className="order_input"
                   step={
@@ -212,7 +211,7 @@ const Sell = ({
                         price: pair?.price || 0,
                       })
                         .toString()
-                        ?.split(".")[1]?.length
+                        ?.split('.')[1]?.length
                   }
                   placeholder="0"
                   onChange={(event) => handlePriceChange(event.target.value)}
@@ -222,19 +221,19 @@ const Sell = ({
           </div>
           <div
             className={`${styles.orderbook__body__tab__body__input__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__body__tab__body__input__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"Quantity"}
+              {'Quantity'}
             </div>
             <div
               className={`${styles.orderbook__body__tab__body__input} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <Input
@@ -249,52 +248,52 @@ const Sell = ({
 
           <div
             className={`${styles.orderbook__body__tab__footer} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
-                active === 10 ? styles.active : ""
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+                active === 10 ? styles.active : ''
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
               onClick={() => handleAmountPercentage(10)}
             >
-              {"10%"}
+              {'10%'}
             </div>
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              } ${active === 25 ? styles.active : ""}`}
+                theme === 'dark' ? styles.dark : styles.light
+              } ${active === 25 ? styles.active : ''}`}
               onClick={() => handleAmountPercentage(25)}
             >
-              {"25%"}
+              {'25%'}
             </div>
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }  ${active === 50 ? styles.active : ""}`}
+                theme === 'dark' ? styles.dark : styles.light
+              }  ${active === 50 ? styles.active : ''}`}
               onClick={() => handleAmountPercentage(50)}
             >
-              {"50%"}
+              {'50%'}
             </div>
             <div
               className={`${styles.orderbook__body__tab__footer__element} ${
-                theme === "dark" ? styles.dark : styles.light
-              }  ${active === 100 ? styles.active : ""}`}
+                theme === 'dark' ? styles.dark : styles.light
+              }  ${active === 100 ? styles.active : ''}`}
               onClick={() => handleAmountPercentage(100)}
             >
-              {"100%"}
+              {'100%'}
             </div>
           </div>
         </div>
 
-        {type === "market" ? null : (
+        {type === 'market' ? null : (
           <div className={`${styles.total__row}`}>
             <div className={`${styles.total__title}`}>Total</div>
             <div className={`${styles.orderbook__body__tab__body__balance}`}>
               <p>
                 {formateNumberDecimalsAuto({
                   price: total || 0,
-                })}{" "}
+                })}{' '}
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
@@ -306,19 +305,21 @@ const Sell = ({
 
         <div
           className={`${styles.orderbook__body__tab__button} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <Button
             type="primary"
-            className="btn-filled"
+            className="btn-filled2"
+            style={{width: "120px"}}
+           
             block
             loading={inProgress}
             disabled={inProgress || !price || !total}
             onClick={() => handleSwap()}
           >
-            {type === "limit"
-              ? "Sell"
+            {type === 'limit'
+              ? 'Sell'
               : `Sell ${denomConversion(pair?.base_coin_denom)}`}
           </Button>
         </div>

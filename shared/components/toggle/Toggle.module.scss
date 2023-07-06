@@ -27,17 +27,18 @@
     left: 4px;
     width: 14px;
     height: 14px;
-    background: #FE2B56;
+    background: #fe2b56;
     border-radius: 50px;
     transition: 0.4s;
   }
 
   input:checked + label {
-    background: #0c1e4b;
+    background: #fe2b56;
   }
 
   input:checked + label:after {
     left: calc(100% - 4px);
     transform: translateX(-100%);
+    background: #ffffff;
   }
 }

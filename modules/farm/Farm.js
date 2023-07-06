@@ -1,10 +1,10 @@
-import { Icon } from "../../shared/image/Icon";
-import { FarmCustomData } from "./Data";
-import styles from "./Farm.module.scss";
-import Tab from "../../shared/components/tab/Tab";
-import Search from "../../shared/components/search/Search";
-import FarmTable from "./FarmTable";
-import FarmCard from "./FarmCard";
+import { Icon } from '../../shared/image/Icon';
+import { FarmCustomData } from './Data';
+import styles from './Farm.module.scss';
+import Tab from '../../shared/components/tab/Tab';
+import Search from '../../shared/components/search/Search';
+import FarmTable from './FarmTable';
+import FarmCard from './FarmCard';
 import {
   Input,
   message,
@@ -15,35 +15,36 @@ import {
   Tooltip,
   Button,
   Table,
-} from "antd";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
+} from 'antd';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import {
   setPools,
   setShowEligibleDisclaimer,
   setUserLiquidityInPools,
-} from "../../actions/liquidity";
+  setShowEligibleLive,
+} from '../../actions/liquidity';
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
   MASTER_POOL_ID,
-} from "../../constants/common";
+} from '../../constants/common';
 import {
   fetchRestAPRs,
   queryPoolCoinDeserialize,
   queryPoolsList,
   queryPoolSoftLocks,
-} from "../../services/liquidity/query";
+} from '../../services/liquidity/query';
 import {
   amountConversion,
   denomConversion,
   fixedDecimal,
   getDenomBalance,
-} from "../../utils/coin";
-import MyDropdown from "../../shared/components/dropDown/Dropdown";
-import { NextImage } from "../../shared/image/NextImage";
+} from '../../utils/coin';
+import MyDropdown from '../../shared/components/dropDown/Dropdown';
+import { NextImage } from '../../shared/image/NextImage';
 import {
   Fire,
   List,
@@ -52,32 +53,32 @@ import {
   Rocket,
   Square,
   SquareWhite,
-  Info2
-} from "../../shared/image";
-import Liquidity from "./Liquidity";
-import Lottie from "lottie-react";
-import CreatePool from "./CreatePool/index";
-import Timer from "../../shared/components/Timer";
-import { commaSeparator, marketPrice } from "../../utils/number";
-import Loading from "../../pages/Loading";
-import PoolCardRow from "../portfolio/MyPoolRow";
-import ShowAPR from "../portfolio/ShowAPR";
-import NoDataIcon from "../../shared/components/NoDataIcon";
+  Info2,
+} from '../../shared/image';
+import Liquidity from './Liquidity';
+import Lottie from 'lottie-react';
+import CreatePool from './CreatePool/index';
+import Timer from '../../shared/components/Timer';
+import { commaSeparator, marketPrice } from '../../utils/number';
+import Loading from '../../pages/Loading';
+import PoolCardRow from '../portfolio/MyPoolRow';
+import ShowAPR from '../portfolio/ShowAPR';
+import NoDataIcon from '../../shared/components/NoDataIcon';
 
 const MasterPoolsContent = [
-  <div key={"1"}>
+  <div key={'1'}>
     Providing liquidity only in Master pool makes you eligible for the External
     APR on Master pool. To be eligible to Earn ‘Master pool’ APR an equal amount
     of liquidity has to be provided in any of the child pools. Read more about
-    the mechanism{" "}
+    the mechanism{' '}
     <a
       aria-label="here"
       target="_blank"
       rel="noreferrer"
       href="https://docs.cswap.one/farming-rewards"
     >
-      {" "}
-      here{" "}
+      {' '}
+      here{' '}
     </a>
   </div>,
 ];
@@ -100,22 +101,23 @@ const Farm = ({
   balances,
   pool,
   rewardsMap,
+  setShowEligibleLive,
+  showEligibleLive,
 }) => {
-  const theme = "dark";
-  const TabData = ["All", "Basic", "Ranged", "My Pools"];
+  const theme = 'dark';
+  const TabData = ['All', 'Basic', 'Ranged', 'My Pools'];
 
-  const [active, setActive] = useState("All");
+  const [active, setActive] = useState('All');
   const [listView, setListView] = useState(false);
   const [masterPoolData, setMasterPoolData] = useState(0);
   const [userPools, setUserPool] = useState();
-
   const handleActive = (item) => {
     setActive(item);
   };
 
   const [inProgress, setInProgress] = useState(true);
   const [displayPools, setDisplayPools] = useState([]);
-  const [filterValue, setFilterValue] = useState("3");
+  const [filterValue, setFilterValue] = useState('3');
   const [poolsApr, setPoolsApr] = useState();
 
   const dispatch = useDispatch();
@@ -124,13 +126,17 @@ const Farm = ({
     setShowEligibleDisclaimer(false);
   };
 
+  const closeDisclaimer2 = () => {
+    setShowEligibleLive(false);
+  };
+
   const [isSetOnScroll, setOnScroll] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       setOnScroll(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -149,8 +155,8 @@ const Farm = ({
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
       setChildPool(false);
-      if (filterValue !== "3") {
-        if (filterValue === "4") {
+      if (filterValue !== '3') {
+        if (filterValue === '4') {
           setDisplayPools(userPools);
         } else {
           let filteredPools = pools.filter(
@@ -224,7 +230,7 @@ const Farm = ({
 
   const handleBalanceRefresh = () => {
     dispatch({
-      type: "BALANCE_REFRESH_SET",
+      type: 'BALANCE_REFRESH_SET',
       value: refreshBalance + 1,
     });
   };
@@ -255,22 +261,22 @@ const Farm = ({
 
   const tabItems = [
     {
-      key: "3",
-      label: "All",
+      key: '3',
+      label: 'All',
     },
     {
-      key: "1",
-      label: "Basic",
+      key: '1',
+      label: 'Basic',
       disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
     {
-      key: "2",
-      label: "Ranged",
+      key: '2',
+      label: 'Ranged',
       disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
     {
-      key: "4",
-      label: "My Pools",
+      key: '4',
+      label: 'My Pools',
       disabled: Object.keys(userLiquidityInPools).length === 0 ? true : false,
     },
   ];
@@ -282,11 +288,11 @@ const Farm = ({
         return (
           denomConversion(pool?.balances?.baseCoin?.denom)
             ?.toLowerCase()
-            .match(new RegExp(searchTerm, "g")) ||
+            .match(new RegExp(searchTerm, 'g')) ||
           denomConversion(pool?.balances?.quoteCoin?.denom)
             ?.toLowerCase()
-            .match(new RegExp(searchTerm, "g")) ||
-          String(pool.id?.toNumber()).match(new RegExp(searchTerm, "g"))
+            .match(new RegExp(searchTerm, 'g')) ||
+          String(pool.id?.toNumber()).match(new RegExp(searchTerm, 'g'))
         );
       });
 
@@ -298,15 +304,15 @@ const Farm = ({
 
   useEffect(() => {
     if (showMyPool) {
-      setFilterValue("4");
+      setFilterValue('4');
     }
   }, []);
 
-  const [filterValue1, setFilterValue1] = useState("");
+  const [filterValue1, setFilterValue1] = useState('');
 
   const Items = [
     {
-      key: "item-2",
+      key: 'item-2',
       label: (
         <div className={styles.dropdown__farm}>
           <div className="filter-button-radio">
@@ -315,9 +321,9 @@ const Farm = ({
               defaultValue="a"
               value={filterValue1}
             >
-              <Radio.Button value={"Pool Pair"}>Pool Pair</Radio.Button>
-              <Radio.Button value={"APR"}>APR</Radio.Button>
-              <Radio.Button value={"Pool Liquidity"}>
+              <Radio.Button value={'Pool Pair'}>Pool Pair</Radio.Button>
+              <Radio.Button value={'APR'}>APR</Radio.Button>
+              <Radio.Button value={'Pool Liquidity'}>
                 Pool Liquidity
               </Radio.Button>
             </Radio.Group>
@@ -353,7 +359,7 @@ const Farm = ({
   }, [isChildPool]);
 
   const handleClick = () => {
-    onChange("3");
+    onChange('3');
   };
 
   console.log({ displayPools });
@@ -410,7 +416,7 @@ const Farm = ({
 
   const handleSortBy = (value, pools) => {
     setFilterValue1(value);
-    if (value === "Pool Liquidity") {
+    if (value === 'Pool Liquidity') {
       const sortedCards = displayPools.sort((a, b) => {
         const aTotalPoolLiquidity = calculatePoolLiquidity(a?.balances);
         const bTotalPoolLiquidity = calculatePoolLiquidity(b?.balances);
@@ -418,7 +424,7 @@ const Farm = ({
         return bTotalPoolLiquidity - aTotalPoolLiquidity;
       });
       setDisplayPools(sortedCards);
-    } else if (value === "APR") {
+    } else if (value === 'APR') {
       const sortedCards = displayPools.sort((a, b) => {
         const aTotalPoolLiquidity = calculateApr(a?.id?.toNumber()) || 0;
 
@@ -427,7 +433,7 @@ const Farm = ({
         return bTotalPoolLiquidity - aTotalPoolLiquidity;
       });
       setDisplayPools(sortedCards);
-    } else if (value === "Pool Pair") {
+    } else if (value === 'Pool Pair') {
       const sortedCards = displayPools.sort((a, b) => {
         return denomConversion(a?.balances?.quoteCoin?.denom)?.localeCompare(
           denomConversion(b?.balances?.quoteCoin?.denom)
@@ -437,6 +443,22 @@ const Farm = ({
     }
   };
 
+  const [poolAll, setPoolAll] = useState([])
+
+  useEffect(() => {
+    const combinedTx = displayPools.sort((a, b) => {
+      const aHasMasterPool = getMasterPool(a?.id?.toNumber()) || 0;
+  
+      const bHasMasterPool = getMasterPool(b?.id?.toNumber()) || 0;
+  
+      return aHasMasterPool === bHasMasterPool ? 0 : aHasMasterPool ? -1 : 1;
+    });
+
+    setPoolAll(combinedTx)
+  }, [displayPools])
+
+  
+
   return (
     <div
       className={`${styles.farm__wrap}  ${
@@ -445,33 +467,28 @@ const Farm = ({
     >
       <div
         className={`${styles.farm__main} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         {showEligibleDisclaimer && (
           <div
             className={
               isSetOnScroll
-                ? "farm-disclaimer-info"
-                : "fixedHeaderOnScroll farm-disclaimer-info"
+                ? 'farm-disclaimer-info'
+                : 'fixedHeaderOnScroll farm-disclaimer-info'
             }
           >
             <div className="reward">
               {/* <Icon className={"bi bi-info-square"} /> */}
-              <NextImage
-                      src={Info2}
-                      alt="Info"
-                      height={15}
-                      width={15}
-                    />
+              <NextImage src={Info2} alt="Info" height={15} width={15} />
               Users need to farm for 24 hours in order to be eligible for
               rewards.
-              <Icon className={"bi bi-x-lg"} onClick={closeDisclaimer} />
+              <Icon className={'bi bi-x-lg'} onClick={closeDisclaimer} />
             </div>
             <div className="distribution">
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
                 <Timer
-                  text={"Next Reward distribution in "}
+                  text={'Next Reward distribution in '}
                   expiryTimestamp={
                     incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
                   }
@@ -480,156 +497,167 @@ const Farm = ({
             </div>
           </div>
         )}
-        <div
-          className={`${styles.farm__header} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
-        >
+
+        {showEligibleLive && (
           <div
-            className={`${styles.farm__header__body__left} ${
-              theme === "dark" ? styles.dark : styles.light
+            className={`${styles.farm__header} ${
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
-              className={`${styles.farm__header__left__title} ${
-                theme === "dark" ? styles.dark : styles.light
+              className={`${styles.farm__crosss} ${
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"cSwap v2 Live"}
+              <Icon className={'bi bi-x-lg'} onClick={closeDisclaimer2} />
             </div>
             <div
-              className={`${styles.farm__header__left__description} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <div>
-                {"Supercharge Your LP Earnings with boosted rewards on cSwap."}
-                <span
-                  className={`${styles.farm__header__left__more} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                  onClick={() =>
-                    window.open(
-                      "https://docs.cswap.one/farming-rewards",
-                      "_blank"
-                    )
-                  }
-                >
-                  {"learn more"}
-                </span>
-              </div>
-            </div>
-            <div
-              className={`${styles.farm__header__right__main} ${
-                theme === "dark" ? styles.dark : styles.light
+              className={`${styles.farm__header__body__left} ${
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === "dark" ? styles.dark : styles.light
+                className={`${styles.farm__header__left__title} ${
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${styles.farm__header__right__body__step} ${
-                      theme === "dark" ? styles.dark : styles.light
+                {'cSwap v2 Live'}
+              </div>
+              <div
+                className={`${styles.farm__header__left__description} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
+                <div>
+                  {
+                    'Supercharge Your LP Earnings with boosted rewards on cSwap.'
+                  }
+                  <span
+                    className={`${styles.farm__header__left__more} ${
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
+                    onClick={() =>
+                      window.open(
+                        'https://docs.cswap.one/farming-rewards',
+                        '_blank'
+                      )
+                    }
                   >
-                    <div
-                      className={`${styles.farm__header__right__body__title} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                    >
-                      {"STEP 1"}
-                    </div>
-                    <div
-                      className={`${styles.farm__header__right__body__button} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                      onClick={() => setMasterPoolModalOpen(true)}
-                    >
-                      {"Go to master pool"}
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"Provide liquidity in the Master pool"}
-                  </div>
+                    {'learn more'}
+                  </span>
                 </div>
               </div>
               <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === "dark" ? styles.dark : styles.light
+                className={`${styles.farm__header__right__main} ${
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === "dark" ? styles.dark : styles.light
+                  className={`${styles.farm__header__right__body} ${
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
-                    className={`${styles.farm__header__right__body__step} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
+                    className={`${
+                      styles.farm__header__right__body__background
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     <div
-                      className={`${styles.farm__header__right__body__title} ${
-                        theme === "dark" ? styles.dark : styles.light
+                      className={`${styles.farm__header__right__body__step} ${
+                        theme === 'dark' ? styles.dark : styles.light
                       }`}
                     >
-                      {"STEP 2"}
+                      <div
+                        className={`${
+                          styles.farm__header__right__body__title
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                      >
+                        {'STEP 1'}
+                      </div>
+                      <div
+                        className={`${
+                          styles.farm__header__right__body__button
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                        onClick={() => setMasterPoolModalOpen(true)}
+                      >
+                        {'Go to master pool'}
+                      </div>
                     </div>
+
                     <div
-                      className={`${styles.farm__header__right__body__button} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                      onClick={() => setChildPool(!isChildPool)}
+                      className={`${
+                        styles.farm__header__right__body__description
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {isChildPool ? "Go to all pools" : "Go to child pools"}
+                      {'Provide liquidity in the Master pool'}
                     </div>
                   </div>
-
+                </div>
+                <div
+                  className={`${styles.farm__header__right__body} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
                   <div
                     className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                      styles.farm__header__right__body__background
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
-                    {`Deposit Equal value of assets in Child Pool 
+                    <div
+                      className={`${styles.farm__header__right__body__step} ${
+                        theme === 'dark' ? styles.dark : styles.light
+                      }`}
+                    >
+                      <div
+                        className={`${
+                          styles.farm__header__right__body__title
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                      >
+                        {'STEP 2'}
+                      </div>
+                      <div
+                        className={`${
+                          styles.farm__header__right__body__button
+                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                        onClick={() => setChildPool(!isChildPool)}
+                      >
+                        {isChildPool ? 'Go to all pools' : 'Go to child pools'}
+                      </div>
+                    </div>
+
+                    <div
+                      className={`${
+                        styles.farm__header__right__body__description
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      {`Deposit Equal value of assets in Child Pool 
                     or pools as your Master Pool to 
                     earn boosted rewards`}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* <div
+              {/* <div
               className={`${styles.farm__header__animation} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
             >
               {/* <NextImage src={Fire} alt="Logo" /> */}
-            {/* </div> */}
-          </div>
-          <div
-            className={`${styles.farm__header__body__right} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            <Lottie
-              animationData={Rocket}
-              loop={true}
-              style={{ height: 300 }}
-            />
+              {/* </div> */}
+            </div>
+            <div
+              className={`${styles.farm__header__body__right} ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <Lottie
+                animationData={Rocket}
+                loop={true}
+                style={{ height: 300 }}
+              />
 
-            {/* <div
+              {/* <div
               className={`${styles.farm__header__right__title} ${
                 theme === "dark" ? styles.dark : styles.light
               }`}
@@ -712,21 +740,22 @@ const Farm = ({
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
-        </div>
+        )}
         <div
           className={`${styles.farm__body} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.farm__body__left} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.farm__body__tab__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {/* <Tab data={TabData} active={active} handleActive={handleActive} /> */}
@@ -755,17 +784,17 @@ const Farm = ({
             </div>
             <div
               className={`${styles.farm__body__line} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             />
             <div
               className={`${styles.farm__body__icon__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {!listView ? (
                 <>
-                  {filterValue !== "4" && (
+                  {filterValue !== '4' && (
                     <NextImage
                       src={SquareWhite}
                       onClick={() => setListView(false)}
@@ -783,7 +812,7 @@ const Farm = ({
                 </>
               ) : (
                 <>
-                  {filterValue !== "4" && (
+                  {filterValue !== '4' && (
                     <NextImage
                       src={Square}
                       onClick={() => setListView(false)}
@@ -804,7 +833,7 @@ const Farm = ({
           </div>
           <div
             className={`${styles.farm__body__right} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div>
@@ -816,22 +845,22 @@ const Farm = ({
 
             <MyDropdown
               items={Items}
-              placement={"bottomRight"}
-              trigger={["click"]}
+              placement={'bottomRight'}
+              trigger={['click']}
               className="farm-sort"
             >
               <div
                 className={`${styles.farm__body__filter__wrap} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                <Icon className={"bi bi-funnel-fill"} />
-                {filterValue1 ? filterValue1 : "Sort By"}
+                <Icon className={'bi bi-funnel-fill'} />
+                {filterValue1 ? filterValue1 : 'Sort By'}
               </div>
             </MyDropdown>
             <div
               className={`${styles.farm__body__search__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <Input
@@ -839,27 +868,27 @@ const Farm = ({
                 onChange={(event) => onSearchChange(event.target.value)}
                 className="asset_search_input"
               />
-              <Icon className={"bi bi-search"} />
+              <Icon className={'bi bi-search'} />
             </div>
           </div>
         </div>
         <div
           className={`${styles.farm__footer} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           {listView ? (
             <div
               className={`${styles.farm__table__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <FarmTable
                 theme={theme}
-                pool={displayPools}
+                pool={poolAll}
                 poolsApr={poolsApr}
                 poolAprList={poolsApr && poolsApr}
-                noDataButton={filterValue === "4" ? true : false}
+                noDataButton={filterValue === '4' ? true : false}
                 handleClick={handleClick}
               />
             </div>
@@ -872,17 +901,17 @@ const Farm = ({
               <div className={`${styles.table__empty__data}`}>
                 <NextImage src={No_Data} alt="Message" height={60} width={60} />
                 <span>
-                  {filterValue === "4"
-                    ? "No Liquidity Provided"
-                    : "No Pools Exist"}
+                  {filterValue === '4'
+                    ? 'No Liquidity Provided'
+                    : 'No Pools Exist'}
                 </span>
-                {filterValue === "4" && (
+                {filterValue === '4' && (
                   <Button
                     type="primary"
                     className="btn-no-data"
                     onClick={() => handleClick()}
                   >
-                    {"Go To Pools"}
+                    {'Go To Pools'}
                   </Button>
                 )}
               </div>
@@ -890,11 +919,11 @@ const Farm = ({
           ) : (
             <div
               className={`${styles.farm__footer__card__wrap} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {displayPools.map((item, i) => {
-                return filterValue === "4" ? (
+              {poolAll.map((item, i) => {
+                return filterValue === '4' ? (
                   setListView(true)
                 ) : (
                   <FarmCard
@@ -911,7 +940,7 @@ const Farm = ({
           )}
         </div>
         <Modal
-          className={"modal__wrap2"}
+          className={'modal__wrap2'}
           open={isMasterPoolModalOpen}
           onCancel={handleMasterPoolCancel}
           centered={true}
@@ -959,6 +988,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     incentivesMap: state.liquidity.incentivesMap,
     showEligibleDisclaimer: state.liquidity.showEligibleDisclaimer,
+    showEligibleLive: state.liquidity.showEligibleLive,
     showMyPool: state.liquidity.showMyPool,
     rewardsMap: state.liquidity.rewardsMap,
   };
@@ -967,6 +997,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setPools,
   setShowEligibleDisclaimer,
+  setShowEligibleLive,
   setUserLiquidityInPools,
 };
 

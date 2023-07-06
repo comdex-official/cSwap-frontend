@@ -1,29 +1,29 @@
-import { Button, Col, Input, message, Row, Switch, Table } from "antd";
-import Lodash from "lodash";
-import * as PropTypes from "prop-types";
-import React, { useEffect, useState, useRef } from "react";
+import { Button, Col, Input, message, Row, Switch, Table } from 'antd';
+import Lodash from 'lodash';
+import * as PropTypes from 'prop-types';
+import React, { useEffect, useState, useRef } from 'react';
 // import NoDataIcon from "../../components/common/NoDataIcon";
-import { setLPPrices, setMarkets } from "../../actions/oracle";
-import { cmst, comdex, harbor } from "../../config/network";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { getChainConfig } from "../../services/keplr";
-import { fetchRestPrices } from "../../services/oracle/query";
-import { amountConversion, denomConversion } from "../../utils/coin";
-import { connect, useDispatch } from "react-redux";
-import { setAccountBalances } from "../../actions/account";
+import { setLPPrices, setMarkets } from '../../actions/oracle';
+import { cmst, comdex, harbor } from '../../config/network';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { getChainConfig } from '../../services/keplr';
+import { fetchRestPrices } from '../../services/oracle/query';
+import { amountConversion, denomConversion } from '../../utils/coin';
+import { connect, useDispatch } from 'react-redux';
+import { setAccountBalances } from '../../actions/account';
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   marketPrice,
-} from "../../utils/number";
-import Deposit from "./Deposit";
-import "./Portfolio.module.scss";
-import Withdraw from "./Withdraw";
-import { Icon } from "../../shared/image/Icon";
-import styles from "./Portfolio.module.scss";
-import { NextImage } from "../../shared/image/NextImage";
-import { Hyperlink, Star, StarHighlight } from "../../shared/image";
-import NoDataIcon from "../../shared/components/NoDataIcon";
+} from '../../utils/number';
+import Deposit from './Deposit';
+import './Portfolio.module.scss';
+import Withdraw from './Withdraw';
+import { Icon } from '../../shared/image/Icon';
+import styles from './Portfolio.module.scss';
+import { NextImage } from '../../shared/image/NextImage';
+import { Hyperlink, Star, StarHighlight } from '../../shared/image';
+import NoDataIcon from '../../shared/components/NoDataIcon';
 
 const PortofolioTable = ({
   lang,
@@ -40,19 +40,19 @@ const PortofolioTable = ({
   iconList,
   AssetList,
 }) => {
-  let theme = "dark";
+  let theme = 'dark';
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
 
   const [searchKey, setSearchKey] = useState();
-  const [filterValue, setFilterValue] = useState("1");
+  const [filterValue, setFilterValue] = useState('1');
 
   const dispatch = useDispatch();
   const [content, setContent] = useState([]);
   const newTableData =
     content !== null &&
     content.map((el) => {
-      return el.replace(/['"]+/g, "");
+      return el.replace(/['"]+/g, '');
     });
   const [updateStar, setUpdateStar] = useState(false);
   // const newTableData2 =
@@ -67,47 +67,42 @@ const PortofolioTable = ({
   };
 
   const onFavourite = (coin) => {
-   
-
-    if (localStorage.getItem("fav") === null) {
-      localStorage.setItem("fav", JSON.stringify([]));
+    if (localStorage.getItem('fav') === null) {
+      localStorage.setItem('fav', JSON.stringify([]));
     }
-    var old_arr = JSON.parse(localStorage.getItem("fav"));
-  
+    var old_arr = JSON.parse(localStorage.getItem('fav'));
+
     old_arr.push(JSON.stringify(coin));
-    localStorage.setItem("fav", JSON.stringify(old_arr));
+    localStorage.setItem('fav', JSON.stringify(old_arr));
     setUpdateStar(!updateStar);
   };
 
   const Delete = (value) => {
-  
-    let displayItems = JSON.parse(localStorage.getItem("fav"));
+    let displayItems = JSON.parse(localStorage.getItem('fav'));
     const index = displayItems.indexOf(value);
     displayItems.splice(index, 1);
-    localStorage.setItem("fav", JSON.stringify(displayItems));
+    localStorage.setItem('fav', JSON.stringify(displayItems));
     setUpdateStar(!updateStar);
   };
 
   useEffect(() => {
-    setContent(JSON.parse(localStorage.getItem("fav")));
+    setContent(JSON.parse(localStorage.getItem('fav')));
   }, [updateStar]);
-
- 
 
   const tabItems = [
     {
-      key: "1",
-      label: "Assets",
+      key: '1',
+      label: 'Assets',
     },
     {
-      key: "2",
-      label: "LF Tokens",
+      key: '2',
+      label: 'LF Tokens',
     },
   ];
 
   const handleBalanceRefresh = () => {
     dispatch({
-      type: "BALANCE_REFRESH_SET",
+      type: 'BALANCE_REFRESH_SET',
       value: refreshBalance + 1,
     });
 
@@ -115,11 +110,11 @@ const PortofolioTable = ({
   };
 
   useEffect(() => {
-    setHideToggle(localStorage.getItem("hideToggle") === "true");
+    setHideToggle(localStorage.getItem('hideToggle') === 'true');
   }, []);
 
   const handleHideSwitchChange = (value) => {
-    localStorage.setItem("hideToggle", value);
+    localStorage.setItem('hideToggle', value);
     setHideToggle(value);
   };
 
@@ -144,32 +139,32 @@ const PortofolioTable = ({
 
   const columns = [
     {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
+      title: 'Asset',
+      dataIndex: 'asset',
+      key: 'asset',
       sorter: (a, b) => a?.symbol.localeCompare(b?.symbol),
-      sortDirections: ["ascend", "descend"],
+      sortDirections: ['ascend', 'descend'],
       showSorterTooltip: false,
     },
     {
-      title: "No. of Tokens",
-      dataIndex: "noOfTokens",
-      key: "noOfTokens",
-      align: "left",
+      title: 'No. of Tokens',
+      dataIndex: 'noOfTokens',
+      key: 'noOfTokens',
+      align: 'left',
       render: (tokens) => (
         <>
           <p>{commaSeparator(Number(tokens || 0))}</p>
         </>
       ),
       sorter: (a, b) => Number(a?.noOfTokens) - Number(b?.noOfTokens),
-      sortDirections: ["ascend", "descend"],
+      sortDirections: ['ascend', 'descend'],
       showSorterTooltip: false,
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      align: "left",
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+      align: 'left',
       width: 150,
       render: (price) => (
         <>
@@ -179,14 +174,14 @@ const PortofolioTable = ({
         </>
       ),
       sorter: (a, b) => Number(a?.price?.value) - Number(b?.price?.value),
-      sortDirections: ["ascend", "descend"],
+      sortDirections: ['ascend', 'descend'],
       showSorterTooltip: false,
     },
     {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-      align: "left",
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      align: 'left',
       render: (amount) => (
         <>
           <p>
@@ -198,14 +193,14 @@ const PortofolioTable = ({
         </>
       ),
       sorter: (a, b) => Number(a?.amount?.value) - Number(b?.amount?.value),
-      sortDirections: ["ascend", "descend"],
+      sortDirections: ['ascend', 'descend'],
       showSorterTooltip: false,
     },
     {
-      title: "IBC Deposit",
-      dataIndex: "ibcdeposit",
-      key: "ibcdeposit",
-      align: "left",
+      title: 'IBC Deposit',
+      dataIndex: 'ibcdeposit',
+      key: 'ibcdeposit',
+      align: 'left',
       // width: 210,
       render: (value) => {
         if (value) {
@@ -216,11 +211,11 @@ const PortofolioTable = ({
                 target="_blank"
                 rel="noreferrer"
               >
-                Deposit{" "}
+                Deposit{' '}
                 <span className="hyperlink-icon">
                   <NextImage
                     src={Hyperlink}
-                    alt={"Logo"}
+                    alt={'Logo'}
                     height={12}
                     width={12}
                   />
@@ -238,9 +233,9 @@ const PortofolioTable = ({
       },
     },
     {
-      title: "IBC Withdraw",
-      dataIndex: "ibcwithdraw",
-      key: "ibcwithdraw",
+      title: 'IBC Withdraw',
+      dataIndex: 'ibcwithdraw',
+      key: 'ibcwithdraw',
       width: 110,
       render: (value) => {
         if (value) {
@@ -251,11 +246,11 @@ const PortofolioTable = ({
                 target="_blank"
                 rel="noreferrer"
               >
-                Withdraw{" "}
+                Withdraw{' '}
                 <span className="hyperlink-icon">
                   <NextImage
                     src={Hyperlink}
-                    alt={"Logo"}
+                    alt={'Logo'}
                     height={12}
                     width={12}
                   />
@@ -361,11 +356,11 @@ const PortofolioTable = ({
               <div
                 className={`${styles.farmCard__element__left__logo} ${
                   styles.first
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.farmCard__element__left__logo__main} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <NextImage
@@ -376,8 +371,8 @@ const PortofolioTable = ({
                   />
                 </div>
               </div>
-            </div>{" "}
-            {denomConversion(comdex?.coinMinimalDenom)}{" "}
+            </div>{' '}
+            {denomConversion(comdex?.coinMinimalDenom)}{' '}
           </div>
         </>
       ),
@@ -419,11 +414,11 @@ const PortofolioTable = ({
               <div
                 className={`${styles.farmCard__element__left__logo} ${
                   styles.first
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.farmCard__element__left__logo__main} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <NextImage
@@ -434,8 +429,8 @@ const PortofolioTable = ({
                   />
                 </div>
               </div>
-            </div>{" "}
-            {denomConversion(cmst?.coinMinimalDenom)}{" "}
+            </div>{' '}
+            {denomConversion(cmst?.coinMinimalDenom)}{' '}
           </div>
         </>
       ),
@@ -478,11 +473,11 @@ const PortofolioTable = ({
               <div
                 className={`${styles.farmCard__element__left__logo} ${
                   styles.first
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.farmCard__element__left__logo__main} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <NextImage
@@ -519,7 +514,7 @@ const PortofolioTable = ({
   ];
 
   ibcBalances =
-    parent && parent === "portfolio"
+    parent && parent === 'portfolio'
       ? ibcBalances.filter((item) => item?.balance?.amount > 0)
       : ibcBalances;
 
@@ -553,11 +548,11 @@ const PortofolioTable = ({
                 <div
                   className={`${styles.farmCard__element__left__logo} ${
                     styles.first
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   <div
                     className={`${styles.farmCard__element__left__logo__main} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     <NextImage
@@ -568,8 +563,8 @@ const PortofolioTable = ({
                     />
                   </div>
                 </div>
-              </div>{" "}
-              {denomConversion(item?.ibcDenomHash)}{" "}
+              </div>{' '}
+              {denomConversion(item?.ibcDenomHash)}{' '}
             </div>
           </>
         ),
@@ -589,18 +584,16 @@ const PortofolioTable = ({
   let allTableData = Lodash.concat(currentChainData, tableIBCData);
 
   let tableData =
-    isHideToggleOn && filterValue === "1"
+    isHideToggleOn && filterValue === '1'
       ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
       : allTableData;
 
   tableData =
-    searchKey && filterValue === "1"
+    searchKey && filterValue === '1'
       ? tableData?.filter((item) => {
           return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
         })
       : tableData;
-
-
 
   var res1 = tableData.filter(function (el) {
     return newTableData.length > 0 && newTableData.indexOf(el?.symbol) >= 0;
@@ -628,19 +621,20 @@ const PortofolioTable = ({
         <Row className={styles.portifolio_toggle_main_row}>
           <Col
             className="assets-search-section"
-            style={{ alignItems: "center", display: "flex", gap: "10px" }}
+            style={{ alignItems: 'center', display: 'flex', gap: '10px' }}
           >
             {/* {parent && parent === "portfolio" ? null : ( */}
             <div
               className="text"
               style={{
-                display: "flex",
-                width: "110%",
-                gap: "3px",
-                color: "white",
+                display: 'flex',
+                width: '110%',
+                gap: '3px',
+                color: 'white',
               }}
             >
-              Hide 0 Balances{" "}
+              <div className={"hideBalance"}>Hide 0 Balances</div>
+
               <Switch
                 disabled={!balanceExists}
                 onChange={(value) => handleHideSwitchChange(value)}
@@ -653,13 +647,13 @@ const PortofolioTable = ({
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
               // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-              suffix={<Icon className={"bi bi-search"} />}
+              suffix={<Icon className={'bi bi-search'} />}
               className="asset_search_input"
             />
           </Col>
         </Row>
-        <Row style={{ width: "100%" }}>
-          <Col style={{ width: "100%" }}>
+        <Row style={{ width: '100%' }}>
+          <Col style={{ width: '100%' }}>
             {/* {filterValue === "1" ? ( */}
             <Table
               className="custom-table assets-table"
@@ -670,7 +664,7 @@ const PortofolioTable = ({
               loading={pricesInProgress}
               pagination={false}
               locale={{ emptyText: <NoDataIcon /> }}
-              scroll={{ x: "100%" }}
+              scroll={{ x: '100%' }}
             />
             {/* ) : (
               <LPAsssets

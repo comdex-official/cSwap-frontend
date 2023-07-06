@@ -1,14 +1,14 @@
-import { Button, message, Modal, Radio, Space } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import Snack from "../../../shared/components/Snack/index";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { defaultFee } from "../../../services/transaction";
-import { errorMessageMappingParser } from "../../../utils/string";
-import variables from "../../../utils/variables";
-import { Icon } from "../../../shared/image/Icon";
+import { Button, message, Modal, Radio, Space } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import Snack from '../../../shared/components/Snack/index';
+import { signAndBroadcastTransaction } from '../../../services/helper';
+import { defaultFee } from '../../../services/transaction';
+import { errorMessageMappingParser } from '../../../utils/string';
+import variables from '../../../utils/variables';
+import { Icon } from '../../../shared/image/Icon';
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +24,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/cosmos.gov.v1beta1.MsgVote",
+          typeUrl: '/cosmos.gov.v1beta1.MsgVote',
           value: {
             option: userVote,
             proposalId: Long.fromNumber(proposal?.proposal_id),
@@ -32,7 +32,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -69,7 +69,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
     <>
       <Button
         type="primary"
-        className="btn-filled voote__now"
+        className="btn-filled2 voote__now"
         onClick={showModal}
         loading={inProgress}
         disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
@@ -85,16 +85,59 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         width={550}
         onOk={handleOk}
         onCancel={handleCancel}
-        closeIcon={<Icon className={"bi bi-x-lg"} />}
+        closeIcon={<Icon className={'bi bi-x-lg'} />}
       >
         <div className="votenow-modal-inner">
           <div>
             <div sm="12">
-              <h3>Your Vote</h3>
-              <p>
+              <h3>Vote Now</h3>
+              {/* <p>
                 #{proposal?.proposal_id} {proposal?.content?.title}
-              </p>
-              <Radio.Group
+              </p> */}
+
+              <div className="votenow-modal-element-main">
+                <div
+                  className={
+                    'votenow-modal-element ' + (userVote === 1 ? 'active' : '')
+                  }
+                  onClick={(e) => {
+                    setUserVote(1);
+                  }}
+                >
+                  Yes
+                </div>
+                <div
+                  className={
+                    'votenow-modal-element ' + (userVote === 3 ? 'active' : '')
+                  }
+                  onClick={(e) => {
+                    setUserVote(3);
+                  }}
+                >
+                  No
+                </div>
+                <div
+                  className={
+                    'votenow-modal-element ' + (userVote === 4 ? 'active' : '')
+                  }
+                  onClick={(e) => {
+                    setUserVote(4);
+                  }}
+                >
+                  No With Veto
+                </div>
+                <div
+                  className={
+                    'votenow-modal-element ' + (userVote === 2 ? 'active' : '')
+                  }
+                  onClick={(e) => {
+                    setUserVote(2);
+                  }}
+                >
+                  Abstain
+                </div>
+              </div>
+              {/* <Radio.Group
                 value={userVote}
                 name="radiogroup"
                 onChange={(e) => {
@@ -107,19 +150,19 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
                   <Radio value={4}>No With Veto</Radio>
                   <Radio value={2}>Abstain</Radio>
                 </Space>
-              </Radio.Group>
+              </Radio.Group> */}
             </div>
           </div>
           <div className="p-0">
-            <div className="text-right mt-3">
-              <Button
+            <div className="button__vote mt-3">
+              {/* <Button
                 type="primary"
                 className="px-5 mr-3"
                 size="large"
                 onClick={handleCancel}
               >
                 Cancel
-              </Button>
+              </Button> */}
               <Button
                 type="primary"
                 loading={inProgress}

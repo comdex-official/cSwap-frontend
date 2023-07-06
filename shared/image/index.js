@@ -42,6 +42,9 @@ import Keplr from '../../public/assets/images/keplr.svg';
 import Cosmos from '../../public/assets/images/cosmos.svg';
 import Ledger from '../../public/assets/images/ledger.svg';
 import Info2 from '../../public/assets/images/info2.svg';
+import Pin from '../../public/assets/images/pin.svg';
+import Drop from '../../public/assets/images/drop.svg';
+import TradePair from '../../public/assets/images/tradeP.svg';
 
 // exports
 export {
@@ -87,5 +90,8 @@ export {
   Keplr,
   Cosmos,
   Ledger,
-  Info2
+  Info2,
+  Pin,
+  Drop,
+  TradePair
 };

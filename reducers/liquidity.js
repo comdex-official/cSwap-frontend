@@ -20,7 +20,8 @@ import {
   USER_LIQUIDITY_IN_DOLLAR_SET,
   USER_LIQUIDITY_IN_POOLS_SET,
   SET_SHOW_MY_POOL,
-  SET_SELECTED_MANAGE_POOL
+  SET_SELECTED_MANAGE_POOL,
+  SHOW_ELIGIBLE_LIVE_SET
 } from "../constants/liquidity";
 
 const pool = (
@@ -230,6 +231,14 @@ const showEligibleDisclaimer = (state = true, action) => {
   return state;
 };
 
+const showEligibleLive = (state = true, action) => {
+  if (action.type === SHOW_ELIGIBLE_LIVE_SET) {
+    return action.value;
+  }
+
+  return state;
+};
+
 const showMyPool = (state = false, action) => {
   if (action.type === SET_SHOW_MY_POOL) {
     return action.value;
@@ -270,4 +279,5 @@ export default combineReducers({
   showEligibleDisclaimer,
   showMyPool,
   selectedManagePool,
+  showEligibleLive
 });

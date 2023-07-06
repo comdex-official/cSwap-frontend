@@ -291,7 +291,7 @@ const PoolDetails = ({
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  styles.semiTitle
+                  styles.semiTitle2
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
                 {"My Amount"}
@@ -332,7 +332,7 @@ const PoolDetails = ({
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  styles.semiTitle
+                  styles.semiTitle2
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
                 {"Available LP Amount"}
@@ -352,7 +352,7 @@ const PoolDetails = ({
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  styles.semiTitle
+                  styles.semiTitle2
                 } ${theme === "dark" ? styles.dark : styles.light}`}
               >
                 {"Farming Amount"}

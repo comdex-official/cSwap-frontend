@@ -3,7 +3,7 @@
 .portfolio__wrap {
   max-width: 1500px;
   margin: auto;
-  padding: 0px 80px;
+  padding: 0px 115px;
   position: relative;
   padding-top: 100px;
   padding-bottom: 40px;
@@ -59,11 +59,15 @@
 }
 
 .portfolio__element__title {
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 44px;
+  // font-weight: 600;
+  // font-size: 25px;
+  // line-height: 44px;
   text-align: center;
   color: #ffffff;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 
   @media screen and (max-width: $M) {
     font-size: 15px;
@@ -87,12 +91,19 @@
 .portfolio__element__upper__title {
   display: flex;
   align-items: center;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 24px;
+  // font-weight: 400;
+  // font-size: 15px;
+  // line-height: 24px;
   text-align: center;
   flex-wrap: wrap;
-  color: #9badc7;
+  // color: #9badc7;
+
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 15px;
@@ -105,7 +116,7 @@
   div {
     height: 14px;
     width: 14px;
-    background: #A1C7FF;
+    background: #a1c7ff;
     border-radius: 2px;
     margin-right: 10px;
   }
@@ -113,7 +124,7 @@
   .farm {
     height: 14px;
     width: 14px;
-    background: #4E5ED6;
+    background: #4e5ed6;
     border-radius: 2px;
     margin-right: 10px;
   }

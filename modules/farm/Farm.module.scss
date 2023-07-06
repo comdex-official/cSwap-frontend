@@ -3,7 +3,7 @@
 .farm__wrap {
   max-width: 1500px;
   margin: auto;
-  padding: 0px 80px;
+  padding: 0px 115px;
   padding-bottom: 40px;
   position: relative;
   @media screen and (max-width: 530px) {
@@ -79,6 +79,17 @@
   // }
 }
 
+.farm__crosss {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 10;
+  i {
+    color: #ffffff;
+  }
+}
+
 .farm__header__body__right {
   // height: 100px;
   position: absolute;
@@ -114,11 +125,14 @@
 
 .farm__header__left__title {
   position: relative;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 133.3%;
+  // font-size: 32px;
+  // font-weight: 700;
+  // line-height: 133.3%;
   color: #ffffff;
-
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 37px;
   // }
@@ -130,13 +144,17 @@
 
 .farm__header__left__description {
   position: relative;
-  font-size: 14px;
-  line-height: 20px;
+  // font-size: 14px;
+  // line-height: 20px;
   color: #ffffff;
   opacity: 0.8;
   display: flex;
   align-items: center;
   gap: 2px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
 
   @media screen and (max-width: $XS) {
     flex-direction: column;
@@ -230,11 +248,14 @@
 }
 
 .farm__header__right__body__title {
-  font-weight: 900;
-  font-size: 15px;
-  line-height: 27px;
+  // font-weight: 900;
+  // font-size: 15px;
+  // line-height: 27px;
   color: #ffffff;
-
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 17px;
   // }
@@ -246,11 +267,15 @@
 
 .farm__header__right__body__description {
   height: 20px;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 15px;
+  // font-weight: 400;
+  // font-size: 12px;
+  // line-height: 15px;
   color: #ffffff;
   margin-top: 8px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
@@ -266,11 +291,15 @@
   background: #fe4350;
   border: 1px solid #fe4350;
   border-radius: 40px;
-  font-weight: 400;
-  font-size: 12px;
+  // font-weight: 400;
+  // font-size: 12px;
   // line-height: 19px;
   text-align: center;
   color: #ffffff;
+  font-size: 14.609px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
   // margin-top: 25px;
   cursor: pointer;
   // @media screen and (max-width: $XXL) {
@@ -425,8 +454,8 @@
 .farm__footer__card__wrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 1rem;
-  row-gap: 1rem;
+  column-gap: 1.7rem;
+  row-gap: 1.7rem;
 
   @media screen and (max-width: 1414px) {
     grid-template-columns: repeat(2, 1fr);
@@ -442,17 +471,30 @@
 .farmCard__wrap {
   display: flex;
   justify-content: center;
-  max-width: 450px;
+  max-width: 400px;
   transition: all 0.5s ease-in;
-  height: 430px;
+  height: 321px;
   overflow: hidden;
   &.card__active {
-    height: 560px;
+    height: 480px;
+  }
+
+  &.card__active2 {
+    height: 430px;
   }
 
   @media screen and (max-width: 1414px) {
     max-width: 100%;
   }
+}
+
+.pin__card {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border-radius: 100.628px;
+  border: 0.913px solid #fe2b56;
+  padding: 5px;
 }
 
 .farmCard__main {
@@ -467,12 +509,14 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  margin-top: 10px;
   &.active {
     min-height: 28px;
   }
 
   &.apr__pool {
     margin-bottom: 0;
+  height: 16px;
   }
 
   &.emission {
@@ -494,6 +538,10 @@
 .farmCard__element__left {
   display: flex;
   flex-direction: column;
+
+  &.active {
+    width: 100%;
+  }
 }
 
 .farmCard__element__left__logo__wrap {
@@ -580,12 +628,15 @@
 }
 
 .farmCard__element__left__title {
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 25px;
+  // font-weight: 600;
+  // font-size: 17px;
+  // line-height: 25px;
   color: #ffffff;
-  margin-top: 5px;
-  margin-bottom: 8px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
   clear: both;
   display: inline-block;
 
@@ -611,11 +662,14 @@
 }
 
 .farmCard__element__left__description {
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 20px;
+  // font-weight: 500;
+  // font-size: 12px;
+  // line-height: 20px;
   color: #ffffff;
-
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
@@ -635,7 +689,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  width: 250px;
+  // width: 250px;
 
   &.card__view {
   }
@@ -650,6 +704,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: -25px;
 }
 
 .farmCard__element__right__basic {
@@ -658,7 +713,16 @@
   position: relative;
   // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
   background: #507fe5;
-  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.farmCard__element__left__name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  // margin-bottom: 8px;
 }
 
 .farmCard__element__right__basic__title {
@@ -737,9 +801,13 @@
 }
 
 .farmCard__element__right__pool__title {
-  font-weight: 550;
-  font-size: 12px;
-  line-height: 17px;
+  // font-weight: 550;
+  // font-size: 12px;
+  // line-height: 17px;
+  font-size: 14.609px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
   padding: 2px 15px;
   color: #ffffff;
   background: #132239;
@@ -780,10 +848,14 @@
 }
 
 .farmCard__element__left__title2 {
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 50px;
+  // font-weight: 500;
+  // font-size: 13px;
+  // line-height: 50px;
   color: #ffffff;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 13px;
@@ -814,9 +886,13 @@
 }
 
 .farmCard__element__right__details__title {
-  font-weight: 450;
-  font-size: 13px;
-  line-height: 22px;
+  // font-weight: 450;
+  // font-size: 13px;
+  // line-height: 22px;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   color: #ffffff;
   clear: both;
   display: inline-block;
@@ -853,7 +929,7 @@
 .farmCard__element__right__title {
   font-weight: 450;
   font-size: 14px;
-  line-height: 50px;
+  // line-height: 50px;
   color: #ffffff;
 
   // @media screen and (max-width: $XXL) {
@@ -877,9 +953,13 @@
 }
 
 .farmCard__element__boost__left__title {
-  font-weight: 520;
-  font-size: 15px;
-  line-height: 27px;
+  // font-weight: 520;
+  // font-size: 15px;
+  // line-height: 27px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   color: #ffffff;
 
   // @media screen and (max-width: $XXL) {
@@ -922,9 +1002,13 @@
 }
 
 .farmCard__element__boost__left__description {
-  font-weight: 800;
-  font-size: 16px;
-  line-height: 27px;
+  // font-weight: 800;
+  // font-size: 16px;
+  // line-height: 27px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   margin-left: 15px;
   // color: #68ffc0;
   color: #a1c7ff;
@@ -948,7 +1032,7 @@
   // background: #fe4350;
   background: transparent;
   // border: 2px solid #fe4350;
-  border: 1px solid #FE2B56;
+  border: 1px solid #fe2b56;
   border-radius: 42px;
   font-weight: 400;
   font-size: 10px;
@@ -956,17 +1040,17 @@
   padding: 2.5px 19px;
   text-align: center;
   // color: #ffffff;
-  color: #FE2B56;
+  color: #fe2b56;
   cursor: pointer;
   clear: both;
   white-space: nowrap;
   height: 28px;
 
-  &:hover{
-    background: #FE2B56;
+  &:hover {
+    background: #fe2b56;
     color: #ffffff;
   }
-  
+
   // @media screen and (max-width: $XXL) {
   //   font-size: 9px;
   // }
@@ -1027,13 +1111,12 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 24px;
-    border: 1px solid #FE2B56;
+    border: 1px solid #fe2b56;
     outline: none;
-    color: #FE2B56;
+    color: #fe2b56;
 
-
-    &:hover{
-      background: #FE2B56;
+    &:hover {
+      background: #fe2b56;
       color: #ffffff;
     }
 
@@ -1072,12 +1155,16 @@
 }
 
 .farmCard__details__title {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 21px;
+  // font-weight: 400;
+  // font-size: 12px;
+  // line-height: 21px;
   text-align: right;
   // color: #bec9f8;
   color: #ffffff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 11px;
   // }
@@ -1105,9 +1192,13 @@
 }
 
 .farmCard__footer__left__title {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 22px;
+  // font-weight: 700;
+  // font-size: 12px;
+  // line-height: 22px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   // color: #b1d2e6;
   color: #ffffff;
   // @media screen and (max-width: $XXL) {
@@ -1133,10 +1224,13 @@
 .farmCard__footer__rewards__title {
   display: flex;
   align-items: center;
-
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  // font-weight: 600;
+  // font-size: 12px;
+  // line-height: 20px;
   color: #ffffff;
 
   // @media screen and (max-width: $XXL) {
@@ -1169,10 +1263,14 @@
 }
 
 .farmCard__footer__right__title {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 24px;
+  // font-weight: 700;
+  // font-size: 12px;
+  // line-height: 24px;
   color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 15px;
@@ -1235,9 +1333,13 @@
   border-radius: 57px;
   padding: 6px 20px;
   cursor: pointer;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 17px;
+  // font-weight: 400;
+  // font-size: 12px;
+  // line-height: 17px;
+  font-size: 14.26px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
   /* identical to box height */
 
   display: flex;
@@ -1291,11 +1393,14 @@
 }
 
 .tradeCard__body__left__title {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 22px;
-  color: #acbfdb;
-
+  // font-weight: 600;
+  // font-size: 12px;
+  // line-height: 22px;
+  color: #ffffff;
+  font-size: 10.359px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
   // @media screen and (max-width: $XXL) {
   //   font-size: 13px;
   // }
@@ -1318,14 +1423,24 @@
 }
 
 .tradeCard__body__right__el1__title {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 20px;
+  // font-weight: 400;
+  // font-size: 12px;
+  // line-height: 20px;
   text-align: right;
-  color: #acbfdb;
+  // color: #acbfdb;
+  color: #FFF;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
 
   span {
     margin-left: 10px;
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
   }
 
   // @media screen and (max-width: $XXL) {
@@ -1343,8 +1458,12 @@
   }
 
   span {
-    color: #fe4350;
-
+    // color: #fe4350;
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
     &.light {
     }
 
@@ -1432,7 +1551,7 @@
 }
 
 .tradeCard__logo__wrap {
-  background: linear-gradient(to bottom, #fe4350, #053c75);
+  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 42px;
   width: 42px;
@@ -1445,7 +1564,7 @@
 }
 
 .tradeCard__logo {
-  background: #030b1e;
+  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;
@@ -1477,9 +1596,13 @@
 }
 
 .tradeCard__body__left__item__details__title {
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 28px;
+  // font-weight: 700;
+  // font-size: 15px;
+  // line-height: 28px;
+  font-size: 17.265px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
   color: #ffffff;
   margin: 0px 10px;
 
@@ -1527,12 +1650,17 @@
 }
 
 .tradeCard__body__right__el3 {
-  font-weight: 600;
-  font-size: 8px;
-  line-height: 15px;
+  // font-weight: 600;
+  // font-size: 8px;
+  // line-height: 15px;
   text-align: right;
-  color: #acbfdb;
-
+  // color: #acbfdb;
+  color: #FFF;
+font-size: 8.632px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+margin-top: 6px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -1549,11 +1677,17 @@
 }
 
 .tradeCard__body__right__el4 {
-  font-weight: 600;
-  font-size: 8px;
-  line-height: 15px;
+  // font-weight: 600;
+  // font-size: 8px;
+  // line-height: 15px;
   text-align: right;
-  color: #acbfdb;
+  // color: #acbfdb;
+  color: #FFF;
+font-size: 8.632px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+margin-top: 6px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -1577,20 +1711,29 @@
 }
 
 .liquidityCard__pool__title {
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 24px;
+  // font-weight: 700;
+  // font-size: 13px;
+  // line-height: 24px;
 
+  font-size: 16.265px;
+  font-style: normal;
+font-weight: 300;
+line-height: normal;
   color: #ffffff;
 
   &.title {
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 20px;
+    // font-weight: 700;
+    // font-size: 12px;
+    // line-height: 20px;
     /* identical to box height */
-
+   
+    font-size: 12.085px;
+    
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
     color: #ffffff;
-    border-bottom: 2px solid #202e50;
+    border-bottom: 0.863px solid #343434;
     padding-bottom: 10px;
     // @media screen and (max-width: $XXL) {
     //   font-size: 12px;
@@ -1602,13 +1745,17 @@
   }
 
   &.semiTitle {
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 20px;
-    /* identical to box height */
+    // font-weight: 600;
+    // font-size: 12px;
+    // line-height: 20px;
+    // /* identical to box height */
 
-    color: #acbfdb;
-
+    // color: #acbfdb;
+    color: #A1C7FF;
+    font-size: 12.812px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
     // @media screen and (max-width: $XXL) {
     //   font-size: 12px;
     // }
@@ -1617,6 +1764,28 @@
     //   font-size: 10px;
     // }
   }
+
+  &.semiTitle2 {
+    // font-weight: 600;
+    // font-size: 12px;
+    // line-height: 20px;
+    // /* identical to box height */
+
+    // color: #acbfdb;
+    color: #FFFFFF;
+    font-size: 12.812px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    // @media screen and (max-width: $XXL) {
+    //   font-size: 12px;
+    // }
+
+    // @media screen and (max-width: $XS) {
+    //   font-size: 10px;
+    // }
+  }
+
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 15px;
@@ -1697,12 +1866,17 @@
 }
 
 .liquidityCard__pool__withdraw__title {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 20px;
+  // font-weight: 600;
+  // font-size: 12px;
+  // line-height: 20px;
   /* identical to box height */
 
-  color: #acbfdb;
+  // color: #acbfdb;
+  color: #FFF;
+font-size: 12.085px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
 
   margin-top: 10px;
 
@@ -1754,11 +1928,14 @@
 }
 
 .liquidityCard__pool__withdraw__element__title {
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 22px;
+  // font-weight: 500;
+  // font-size: 12px;
+  // line-height: 22px;
   /* identical to box height */
-
+  font-size: 14.26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
   text-align: right;
 
   color: #ffffff;
@@ -1772,12 +1949,16 @@
   // }
 
   &.title {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
+    // font-weight: 400;
+    // font-size: 12px;
+    // line-height: 20px;
     /* identical to box height */
-
-    color: #acbfdb;
+    font-size: 12.085px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    // color: #acbfdb;
+    color: #ffffff;
 
     // @media screen and (max-width: $XXL) {
     //   font-size: 12px;

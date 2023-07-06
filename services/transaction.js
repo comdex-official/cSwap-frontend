@@ -129,7 +129,7 @@ export const fetchTxHash = (hash, callback) => {
 export const fetchTradingHistory = (address, type, callback) => {
   axios
     .get(
-      `${comdex?.rest}/cosmos/tx/v1beta1/txs?events=message.action='${type}'&message.sender='${address}'&order_by=ORDER_BY_DESC&pagination.offset=0`
+      `${comdex?.rest}/cosmos/tx/v1beta1/txs?events=${type}.orderer='${address}'&order_by=ORDER_BY_DESC&pagination.offset=0`
     )
     .then((result) => {
       callback(null, result?.data);

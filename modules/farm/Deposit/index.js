@@ -508,20 +508,7 @@ const Deposit = ({
             </div>
 
             <div className={styles.tradeCard__body__right__el1}>
-              <div
-                className={`${styles.tradeCard__body__right__el1__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"Available"}
-                <span>
-                  {amountConversionWithComma(
-                    firstAssetAvailableBalance,
-                    assetMap[pool?.balances?.baseCoin?.denom]?.decimals
-                  )}{" "}
-                  {denomConversion(pool?.balances?.baseCoin?.denom)}
-                </span>
-              </div>
+              
 
               <div className=" maxhalf">
                 <Button
@@ -544,6 +531,20 @@ const Deposit = ({
                 >
                   {variables[lang].max}
                 </Button>
+              </div>
+              <div
+                className={`${styles.tradeCard__body__right__el1__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {/* {"Available"} */}
+                <span>
+                  {amountConversionWithComma(
+                    firstAssetAvailableBalance,
+                    assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+                  )}{" "}
+                  {denomConversion(pool?.balances?.baseCoin?.denom)}
+                </span>
               </div>
             </div>
           </div>
@@ -613,20 +614,7 @@ const Deposit = ({
             </div>
 
             <div className={styles.tradeCard__body__right__el1}>
-              <div
-                className={`${styles.tradeCard__body__right__el1__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {"Available"}
-                <span className="ml-1">
-                  {amountConversionWithComma(
-                    secondAssetAvailableBalance,
-                    assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
-                  )}{" "}
-                  {denomConversion(pool?.balances?.quoteCoin?.denom)}
-                </span>
-              </div>
+             
               <div className="maxhalf">
                 <Button
                   className="active"
@@ -647,6 +635,20 @@ const Deposit = ({
                 >
                   {variables[lang].max}
                 </Button>
+              </div>
+              <div
+                className={`${styles.tradeCard__body__right__el1__title} ${
+                  theme === "dark" ? styles.dark : styles.light
+                }`}
+              >
+                {/* {"Available"} */}
+                <span className="ml-1">
+                  {amountConversionWithComma(
+                    secondAssetAvailableBalance,
+                    assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+                  )}{" "}
+                  {denomConversion(pool?.balances?.quoteCoin?.denom)}
+                </span>
               </div>
             </div>
           </div>
@@ -710,7 +712,7 @@ const Deposit = ({
       <div className={styles.farm__deposit__buttonWrap}>
         <Button
           type="primary"
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
           loading={depositProgress}
           disabled={
             depositProgress ||
@@ -726,7 +728,7 @@ const Deposit = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
           loading={farmProgress}
           disabled={!userPoolTokens || farmProgress}
           onClick={() => handleFarmClick()}
@@ -735,7 +737,7 @@ const Deposit = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
           loading={inProgress}
           disabled={
             inProgress ||
