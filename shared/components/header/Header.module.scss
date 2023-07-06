@@ -1,7 +1,8 @@
 @import '../../../styles/globalVariable.scss';
 
 .header__wrap {
-  position: fixed;
+  // position: fixed;
+  position: relative;
   width: 100%;
   z-index: 999;
   // background: linear-gradient(
@@ -345,9 +346,9 @@
   // width: 280px;
   padding: 35px 25px;
   display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
+  flex-direction: column;
+  justify-content: center;
+
   button {
     border: none;
     outline: none;
@@ -499,9 +500,6 @@
     align-items: center;
   }
 
- 
-
-  
   img {
     width: 40px;
     height: 40px;
@@ -512,7 +510,6 @@
 .activeImage {
   width: 32px !important;
   height: 32px !important;
-  
 }
 
 .dropdown__wallet__title2 {

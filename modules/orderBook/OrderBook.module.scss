@@ -4,7 +4,7 @@
   max-width: 1500px;
   margin: auto;
   padding: 0px 115px;
-  padding-top: 80px;
+  // padding-top: 80px;
   padding-bottom: 20px;
   position: relative;
 
@@ -336,12 +336,12 @@
 
   &.profit {
     // color: #3ff4be;
-    color: #127350;
+    color: #0EE29B;
   }
 
   &.loss {
     // color: #ff7b51;
-    color: #86303e;
+    color: rgb(246, 70, 93);
   }
   &.no__data {
     display: flex;

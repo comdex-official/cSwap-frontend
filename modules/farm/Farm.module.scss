@@ -4,17 +4,18 @@
   max-width: 1500px;
   margin: auto;
   padding: 0px 115px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   position: relative;
   @media screen and (max-width: 530px) {
     padding: 20px;
   }
 
   &.show__text__alert {
-    padding-top: 160px;
+    // padding-top: 160px;
   }
   &.text__alert {
-    padding-top: 100px;
+    // padding-top: 100px;
   }
 }
 
@@ -793,10 +794,10 @@
   padding: 1px;
   position: relative;
   // background: linear-gradient(95.24deg, #70f0af -5.75%, #3fbb7c 110.25%);
-  background: #a1c7ff;
+  // background: #a1c7ff;
 
   &.upto {
-    background: #2a55b1;
+    // background: #2a55b1;
   }
 }
 
@@ -810,7 +811,8 @@
   line-height: normal;
   padding: 2px 15px;
   color: #ffffff;
-  background: #132239;
+  // background: #132239;
+  border: 0.913px solid #2A55B1;
   border-radius: 41px;
   display: flex;
   align-items: center;
@@ -878,7 +880,7 @@
 
 .farmCard__element__right__details {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   cursor: pointer;
   &.card__center {
     align-items: center;
