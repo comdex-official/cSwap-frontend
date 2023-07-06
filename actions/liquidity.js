@@ -18,6 +18,7 @@ import {
   SHOW_ELIGIBLE_DISCLAIMER_SET,
   SET_SHOW_MY_POOL,
   SET_SELECTED_MANAGE_POOL,
+  SHOW_ELIGIBLE_LIVE_SET,
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -190,6 +191,13 @@ export const setPoolRewards = (value) => {
 export const setShowEligibleDisclaimer = (value) => {
   return {
     type: SHOW_ELIGIBLE_DISCLAIMER_SET,
+    value,
+  };
+};
+
+export const setShowEligibleLive = (value) => {
+  return {
+    type: SHOW_ELIGIBLE_LIVE_SET,
     value,
   };
 };

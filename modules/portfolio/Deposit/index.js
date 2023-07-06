@@ -1,34 +1,34 @@
-import { createTxRaw } from "@tharsis/proto";
-import { generateEndpointAccount } from "@tharsis/provider";
+import { createTxRaw } from '@tharsis/proto';
+import { generateEndpointAccount } from '@tharsis/provider';
 import {
   generateEndpointBroadcast,
   generatePostBodyBroadcast,
-} from "@tharsis/provider/dist/rest/broadcast";
-import { createTxIBCMsgTransfer } from "@tharsis/transactions";
-import { Button, Col, Form, message, Modal, Row, Spin } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import Snack from "../../../shared/components/Snack";
-import { fetchProofHeight } from "../../../actions/asset";
-import CustomInput from "../../../shared/components/CustomInput";
-import { comdex } from "../../../config/network";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { DEFAULT_FEE } from "../../../constants/common";
-import { queryBalance } from "../../../services/bank/query";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { initializeIBCChain } from "../../../services/keplr";
-import { fetchTxHash } from "../../../services/transaction";
+} from '@tharsis/provider/dist/rest/broadcast';
+import { createTxIBCMsgTransfer } from '@tharsis/transactions';
+import { Button, Col, Form, message, Modal, Row, Spin } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import Snack from '../../../shared/components/Snack';
+import { fetchProofHeight } from '../../../actions/asset';
+import CustomInput from '../../../shared/components/CustomInput';
+import { comdex } from '../../../config/network';
+import { ValidateInputNumber } from '../../../config/_validation';
+import { DEFAULT_FEE } from '../../../constants/common';
+import { queryBalance } from '../../../services/bank/query';
+import { aminoSignIBCTx } from '../../../services/helper';
+import { initializeIBCChain } from '../../../services/keplr';
+import { fetchTxHash } from '../../../services/transaction';
 import {
   amountConversion,
   denomConversion,
   getAmount,
-} from "../../../utils/coin";
-import { toDecimals, truncateString } from "../../../utils/string";
-import variables from "../../../utils/variables";
-import style from "./Deposit.module.scss";
-import Loading from "../../../pages/Loading";
+} from '../../../utils/coin';
+import { toDecimals, truncateString } from '../../../utils/string';
+import variables from '../../../utils/variables';
+import style from './Deposit.module.scss';
+import Loading from '../../../pages/Loading';
 
 const Deposit = ({
   lang,
@@ -39,7 +39,7 @@ const Deposit = ({
   assetMap,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
-  const [sourceAddress, setSourceAddress] = useState("");
+  const [sourceAddress, setSourceAddress] = useState('');
   const [inProgress, setInProgress] = useState(false);
   const [amount, setAmount] = useState();
   const [availableBalance, setAvailableBalance] = useState(0);
@@ -97,7 +97,7 @@ const Deposit = ({
 
   const showModal = () => {
     if (!address) {
-      message.info("Please connect your wallet");
+      message.info('Please connect your wallet');
       return;
     }
 
@@ -117,7 +117,7 @@ const Deposit = ({
         receiver: address,
         sender: sourceAddress,
         sourceChannel: chain.destChannelId,
-        sourcePort: "transfer",
+        sourcePort: 'transfer',
         timeoutTimestamp: String(timeoutTimestampNanoseconds),
         amount: getAmount(amount, assetMap[chain?.ibcDenomHash]?.decimals),
         denom: chain?.coinMinimalDenom,
@@ -138,27 +138,27 @@ const Deposit = ({
         accountAddress: accountResult.account.base_account.address,
         sequence: accountResult.account.base_account.sequence,
         accountNumber: accountResult.account.base_account.account_number,
-        pubkey: accountResult.account.base_account.pub_key?.key || "",
+        pubkey: accountResult.account.base_account.pub_key?.key || '',
       };
 
       const fee = {
-        amount: "20",
+        amount: '20',
         denom: chain.chainInfo?.coinMinimalDenom,
-        gas: "200000",
+        gas: '200000',
       };
 
       const transferMsg = createTxIBCMsgTransfer(
         chainInfoForMsg,
         sender,
         fee,
-        "ibc_transfer",
+        'ibc_transfer',
         ibcMsg
       );
 
-      let walletType = localStorage.getItem("loginType");
+      let walletType = localStorage.getItem('loginType');
 
       const sign =
-        walletType === "keplr"
+        walletType === 'keplr'
           ? await window?.keplr?.signDirect(
               chain.chainInfo?.chainId,
               sourceAddress,
@@ -188,13 +188,13 @@ const Deposit = ({
         let rawTx = createTxRaw(
           sign.signed.bodyBytes,
           sign.signed.authInfoBytes,
-          [new Uint8Array(Buffer.from(sign.signature.signature, "base64"))]
+          [new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))]
         );
 
         // Broadcast it
         const postOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: generatePostBodyBroadcast(rawTx),
         };
         try {
@@ -206,7 +206,7 @@ const Deposit = ({
 
           if (response.tx_response?.txhash) {
             message.loading(
-              "Transaction Broadcasting, Waiting for transaction to be included in the block"
+              'Transaction Broadcasting, Waiting for transaction to be included in the block'
             );
 
             handleHash(response.tx_response?.txhash);
@@ -224,11 +224,11 @@ const Deposit = ({
 
   const signIBCTx = () => {
     if (!proofHeight?.revision_height) {
-      message.error("Unable to get the latest block height");
+      message.error('Unable to get the latest block height');
       return;
     }
 
-    if (chain?.chainInfo?.features?.includes("eth-address-gen")) {
+    if (chain?.chainInfo?.features?.includes('eth-address-gen')) {
       // handle evm based token deposits
       return handleEvmIBC();
     }
@@ -237,9 +237,9 @@ const Deposit = ({
 
     const data = {
       msg: {
-        typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
+        typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
         value: {
-          source_port: "transfer",
+          source_port: 'transfer',
           source_channel: chain.destChannelId,
           token: {
             denom: chain?.coinMinimalDenom,
@@ -258,8 +258,8 @@ const Deposit = ({
           timeout_timestamp: undefined,
         },
       },
-      fee: { amount: [{ denom: chain.denom, amount: "25000" }], gas: "200000" },
-      memo: "",
+      fee: { amount: [{ denom: chain.denom, amount: '25000' }], gas: '200000' },
+      memo: '',
     };
 
     aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
@@ -282,7 +282,7 @@ const Deposit = ({
 
       if (result?.transactionHash) {
         message.loading(
-          "Transaction Broadcasting, Waiting for transaction to be included in the block"
+          'Transaction Broadcasting, Waiting for transaction to be included in the block'
         );
 
         handleHash(result?.transactionHash);
@@ -341,7 +341,7 @@ const Deposit = ({
 
           message.success(
             <Snack
-              message={"Transaction Successful. Token Transfer in progress."}
+              message={'Transaction Successful. Token Transfer in progress.'}
               explorerUrlToTx={chain?.explorerUrlToTx}
               hash={txhash}
             />
@@ -367,7 +367,7 @@ const Deposit = ({
                   handleRefresh();
                   resetValues();
 
-                  message.success("IBC Transfer Complete");
+                  message.success('IBC Transfer Complete');
 
                   clearInterval(fetchTime);
                 }
@@ -393,7 +393,7 @@ const Deposit = ({
         type="primary"
         size="small"
         onClick={showModal}
-        className="btn-filled"
+        className="btn-filled2"
       >
         Deposit <span className="asset-ibc-btn"> &#62;</span>
       </Button>
@@ -410,7 +410,7 @@ const Deposit = ({
         title="IBC Deposit"
       >
         <Form layout="vertical">
-          <Row style={{ justifyContent: "space-between" }}>
+          <Row style={{ justifyContent: 'space-between' }}>
             <Col>
               <Form.Item label="From">
                 <CustomInput
@@ -432,31 +432,18 @@ const Deposit = ({
             </Col>
           </Row>
           <Row>
-            <Col className="position-relative mt-3" style={{ width: "100%" }}>
+            <Col className="position-relative mt-3" style={{ width: '100%' }}>
               <div className={style.available_main_container}>
                 <div className={style.available_main_container_text}>
                   Amount to Deposit
                 </div>
                 <div className="availabe-balance">
-                  Available
+                  {/* Available */}
                   {balanceInProgress ? (
-                   
-                 <Loading height={30}/>
-                 
+                    <Loading height={30} />
                   ) : (
                     <>
-                      <span className="ml-1 asset_balance">
-                        {(address &&
-                          availableBalance &&
-                          availableBalance.amount &&
-                          amountConversion(
-                            availableBalance.amount,
-                            assetMap[chain?.ibcDenomHash]?.decimals
-                          )) ||
-                          0}{" "}
-                        {denomConversion(chain?.coinMinimalDenom || "")}
-                      </span>
-                      <span className="assets-maxhalf">
+                    <span className="assets-maxhalf">
                         <Button
                           className=" active"
                           onClick={() => {
@@ -476,6 +463,18 @@ const Deposit = ({
                           Max
                         </Button>
                       </span>
+                      <span className="ml-1 asset_balance">
+                        {(address &&
+                          availableBalance &&
+                          availableBalance.amount &&
+                          amountConversion(
+                            availableBalance.amount,
+                            assetMap[chain?.ibcDenomHash]?.decimals
+                          )) ||
+                          0}{' '}
+                        {denomConversion(chain?.coinMinimalDenom || '')}
+                      </span>
+                      
                     </>
                   )}
                 </div>
@@ -490,7 +489,7 @@ const Deposit = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row style={{ justifyContent: "center" }}>
+          <Row style={{ justifyContent: 'center' }}>
             <Col className="text-center mt-2">
               <Button
                 loading={inProgress}

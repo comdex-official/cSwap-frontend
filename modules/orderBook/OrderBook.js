@@ -1,33 +1,34 @@
-import { Icon } from "../../shared/image/Icon";
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./OrderBook.module.scss";
-import { NextImage } from "../../shared/image/NextImage";
+import { Icon } from '../../shared/image/Icon';
+import React, { useEffect, useRef, useState } from 'react';
+import styles from './OrderBook.module.scss';
+import { NextImage } from '../../shared/image/NextImage';
 import {
   ArrowRL,
+  Drop,
   No_Data,
   Slider,
   Star,
   StarHighlight,
-} from "../../shared/image";
-import { OrderCustomData, OrderCustomData2 } from "./Data";
-import Tab from "../../shared/components/tab/Tab";
-import OrderbookTable from "../../modules/orderBook/OrderbookTable";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
+} from '../../shared/image';
+import { OrderCustomData, OrderCustomData2 } from './Data';
+import Tab from '../../shared/components/tab/Tab';
+import OrderbookTable from '../../modules/orderBook/OrderbookTable';
+import { connect } from 'react-redux';
+import * as PropTypes from 'prop-types';
 import {
   amountConversion,
   denomConversion,
   orderPriceReverseConversion,
-} from "../../utils/coin";
-import Long from "long";
+} from '../../utils/coin';
+import Long from 'long';
 import {
   fetchExchangeRateValue,
   fetchRecentTrades,
   fetchRestPairs,
   queryOrders,
   queryUserOrders,
-} from "../../services/liquidity/query";
-import { APP_ID, DOLLAR_DECIMALS } from "../../constants/common";
+} from '../../services/liquidity/query';
+import { APP_ID, DOLLAR_DECIMALS } from '../../constants/common';
 import {
   Radio,
   Select,
@@ -40,35 +41,35 @@ import {
   Dropdown,
   Input,
   Tooltip,
-} from "antd";
+} from 'antd';
 import {
   commaSeparator,
   formatNumber,
   formateNumberDecimalsAuto,
   marketPrice,
-} from "../../utils/number";
-import NoDataIcon from "../../shared/components/NoDataIcon";
-import Buy from "./Buy";
-import Sell from "./Sell";
-import Script from "next/script";
-import dynamic from "next/dynamic";
-import TradehistoryTable from "./TradehistoryTable";
-import Toggle from "../../shared/components/toggle/Toggle";
-import moment from "moment";
-import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
-import TooltipIcon from "../../shared/components/TooltipIcon";
-import CustomInput from "../../shared/components/CustomInput/index";
-import MyDropdown from "../../shared/components/dropDown/Dropdown";
-import { signAndBroadcastTransaction } from "../../services/helper";
-import { defaultFee } from "../../services/transaction";
-import Snack from "../../shared/components/Snack/index";
-import variables from "../../utils/variables";
-import Loading from "../../pages/Loading";
-import Lodash from "lodash";
-import OrderBookTooltipContent from "../../shared/components/OrderBookToolTip";
+} from '../../utils/number';
+import NoDataIcon from '../../shared/components/NoDataIcon';
+import Buy from './Buy';
+import Sell from './Sell';
+import Script from 'next/script';
+import dynamic from 'next/dynamic';
+import TradehistoryTable from './TradehistoryTable';
+import Toggle from '../../shared/components/toggle/Toggle';
+import moment from 'moment';
+import { errorMessageMappingParser, orderStatusText } from '../../utils/string';
+import TooltipIcon from '../../shared/components/TooltipIcon';
+import CustomInput from '../../shared/components/CustomInput/index';
+import MyDropdown from '../../shared/components/dropDown/Dropdown';
+import { signAndBroadcastTransaction } from '../../services/helper';
+import { defaultFee } from '../../services/transaction';
+import Snack from '../../shared/components/Snack/index';
+import variables from '../../utils/variables';
+import Loading from '../../pages/Loading';
+import Lodash from 'lodash';
+import OrderBookTooltipContent from '../../shared/components/OrderBookToolTip';
 
 const TVChartContainer = dynamic(
-  () => import("./OrderBookTrading").then((mod) => mod),
+  () => import('./OrderBookTrading').then((mod) => mod),
   { ssr: false }
 );
 
@@ -82,11 +83,11 @@ const OrderBook = ({
   toggleValue,
   params,
 }) => {
-  const theme = "dark";
+  const theme = 'dark';
 
-  const TabData = ["Buy", "Sell"];
+  const TabData = ['Buy', 'Sell'];
 
-  const [active, setActive] = useState("Buy");
+  const [active, setActive] = useState('Buy');
 
   const handleActive = (item) => {
     setActive(item);
@@ -126,7 +127,6 @@ const OrderBook = ({
           return;
         }
 
-
         setOrderBookData(result?.pairs[0]?.order_books);
       });
     }
@@ -148,7 +148,7 @@ const OrderBook = ({
         if (error) {
           return;
         }
-   
+
         setRecentTrade(result);
       });
     }
@@ -206,151 +206,151 @@ const OrderBook = ({
   const columns = [
     {
       title: `Price (${denomConversion(selectedPair?.quote_coin_denom)})`,
-      dataIndex: "price",
-      key: "price",
-      className: "text-red",
+      dataIndex: 'price',
+      key: 'price',
+      className: 'text-red',
     },
     {
       title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
-      dataIndex: "amount",
-      key: "amount",
-      align: "right",
+      dataIndex: 'amount',
+      key: 'amount',
+      align: 'right',
     },
   ];
 
   const columns2 = [
     {
-      title: "Price (CMST)",
-      dataIndex: "price",
-      key: "price",
-      className: "text-green",
+      title: 'Price (CMST)',
+      dataIndex: 'price',
+      key: 'price',
+      className: 'text-green',
     },
     {
       title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
-      dataIndex: "amount",
-      key: "amount",
-      align: "right",
+      dataIndex: 'amount',
+      key: 'amount',
+      align: 'right',
     },
   ];
 
   const recentTradesdataSource = [
     {
-      key: "1",
-      price: "$100.00",
-      agamount: "$855.00",
-      time: "18:49:44",
+      key: '1',
+      price: '$100.00',
+      agamount: '$855.00',
+      time: '18:49:44',
     },
     {
-      key: "2",
-      price: "$200.00",
-      agamount: "$2,500.00",
-      time: "18:44:34",
+      key: '2',
+      price: '$200.00',
+      agamount: '$2,500.00',
+      time: '18:44:34',
     },
     {
-      key: "3",
-      price: "$55.00",
-      agamount: "$680.00",
-      time: "18:44:34",
+      key: '3',
+      price: '$55.00',
+      agamount: '$680.00',
+      time: '18:44:34',
     },
     {
-      key: "4",
-      price: "$75.00",
-      agamount: "$349.00",
-      time: "18:44:34",
+      key: '4',
+      price: '$75.00',
+      agamount: '$349.00',
+      time: '18:44:34',
     },
     {
-      key: "5",
-      price: "$5.00",
-      agamount: "$96.00",
-      time: "18:44:34",
+      key: '5',
+      price: '$5.00',
+      agamount: '$96.00',
+      time: '18:44:34',
     },
     {
-      key: "6",
-      price: "$200.00",
-      agamount: "$2,500.00",
-      time: "18:44:34",
+      key: '6',
+      price: '$200.00',
+      agamount: '$2,500.00',
+      time: '18:44:34',
     },
     {
-      key: "7",
-      price: "$55.00",
-      agamount: "$680.00",
-      time: "18:44:34",
+      key: '7',
+      price: '$55.00',
+      agamount: '$680.00',
+      time: '18:44:34',
     },
     {
-      key: "8",
-      price: "$75.00",
-      agamount: "$349.00",
-      time: "18:44:34",
+      key: '8',
+      price: '$75.00',
+      agamount: '$349.00',
+      time: '18:44:34',
     },
     {
-      key: "9",
-      price: "$5.00",
-      agamount: "$96.00",
-      time: "18:44:34",
+      key: '9',
+      price: '$5.00',
+      agamount: '$96.00',
+      time: '18:44:34',
     },
     {
-      key: "10",
-      price: "$5.00",
-      agamount: "$96.00",
-      time: "18:44:34",
+      key: '10',
+      price: '$5.00',
+      agamount: '$96.00',
+      time: '18:44:34',
     },
     {
-      key: "11",
-      price: "$200.00",
-      agamount: "$2,500.00",
-      time: "18:44:34",
+      key: '11',
+      price: '$200.00',
+      agamount: '$2,500.00',
+      time: '18:44:34',
     },
     {
-      key: "12",
-      price: "$55.00",
-      agamount: "$680.00",
-      time: "18:44:34",
+      key: '12',
+      price: '$55.00',
+      agamount: '$680.00',
+      time: '18:44:34',
     },
     {
-      key: "13",
-      price: "$75.00",
-      agamount: "$349.00",
-      time: "18:44:34",
+      key: '13',
+      price: '$75.00',
+      agamount: '$349.00',
+      time: '18:44:34',
     },
     {
-      key: "14",
-      price: "$5.00",
-      agamount: "$96.00",
-      time: "18:44:34",
+      key: '14',
+      price: '$5.00',
+      agamount: '$96.00',
+      time: '18:44:34',
     },
     {
-      key: "15",
-      price: "$5.00",
-      agamount: "$96.00",
-      time: "18:44:34",
+      key: '15',
+      price: '$5.00',
+      agamount: '$96.00',
+      time: '18:44:34',
     },
   ];
 
   const recentTradescolumns = [
     {
-      title: "Price (CMST)",
-      dataIndex: "price",
-      key: "price",
-      className: "text-green",
+      title: 'Price (CMST)',
+      dataIndex: 'price',
+      key: 'price',
+      className: 'text-green',
     },
     {
-      title: "Amount (CMDX)",
-      dataIndex: "agamount",
-      key: "agamount",
-      align: "right",
+      title: 'Amount (CMDX)',
+      dataIndex: 'agamount',
+      key: 'agamount',
+      align: 'right',
     },
     {
-      title: "Time",
-      dataIndex: "time",
-      key: "time",
-      align: "right",
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+      align: 'right',
     },
   ];
 
   const tabItems = [
     {
-      label: "Buy",
-      key: "1",
+      label: 'Buy',
+      key: '1',
       children: (
         <Buy
           pair={selectedPair}
@@ -364,8 +364,8 @@ const OrderBook = ({
       ),
     },
     {
-      label: "Sell",
-      key: "2",
+      label: 'Sell',
+      key: '2',
       children: (
         <Sell
           pair={selectedPair}
@@ -385,7 +385,7 @@ const OrderBook = ({
   const handlePairChange = (value) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
     if (ref?.current) {
-      ref.current.value = "";
+      ref.current.value = '';
     }
   };
 
@@ -396,7 +396,7 @@ const OrderBook = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgCancelOrder",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgCancelOrder',
           value: {
             orderer: address.toString(),
             appId: Long.fromNumber(APP_ID),
@@ -405,7 +405,7 @@ const OrderBook = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -433,51 +433,83 @@ const OrderBook = ({
 
   const ordersTablecolumns = [
     {
-      title: "Order ID",
-      dataIndex: "order_id",
-      key: "order_id",
+      title: 'Order ID',
+      dataIndex: 'order_id',
+      key: 'order_id',
+      render: (value) => <>{`#${value}`}</>,
+      sorter: (a, b) => Number(a?.order_id) - Number(b?.order_id),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Expire Time",
-      dataIndex: "expire_time",
-      key: "expire_time",
+      title: 'Expire Time',
+      dataIndex: 'expire_time',
+      key: 'expire_time',
+      sorter: (a, b) =>
+        moment(a?.expire_time).unix() - moment(b?.expire_time).unix(),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Pair",
-      dataIndex: "pair",
-      key: "pair",
+      title: 'Pair',
+      dataIndex: 'pair',
+      key: 'pair',
+      sorter: (a, b) => a?.pair?.localeCompare(b?.pair),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Direction",
-      dataIndex: "direction",
-      key: "direction",
+      title: 'Type',
+      dataIndex: 'direction',
+      key: 'direction',
+      render: (value) => (
+        <>
+          {value === 'Buy' ? (
+            <div className="buy">{'Buy'}</div>
+          ) : (
+            <div className="sell">{'Sell'}</div> || '-'
+          )}
+        </>
+      ),
+      sorter: (a, b) => a?.direction?.localeCompare(b?.direction),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+      sorter: (a, b) => Number(a?.price) - Number(b?.price),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Amount",
-      dataIndex: "trade_amount",
-      key: "trade_amount",
+      title: 'Amount',
+      dataIndex: 'trade_amount',
+      key: 'trade_amount',
+      sorter: (a, b) => Number(a?.trade_amount) - Number(b?.trade_amount),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a, b) => a?.status?.localeCompare(b?.status),
+      sortDirections: ['ascend', 'descend'],
+      showSorterTooltip: false,
     },
     {
-      title: "Action",
-      dataIndex: "cancel",
-      key: "cancel",
-      align: "right",
+      title: 'Action',
+      dataIndex: 'cancel',
+      key: 'cancel',
+      align: 'right',
       render: (item) => (
         <Button
           type="primary"
           loading={order?.id === item?.id && cancelInProgress}
           onClick={() => handleCancel(item)}
-          className="btn-filled"
+          className="btn-filled4"
           size="small"
         >
           Cancel
@@ -491,11 +523,11 @@ const OrderBook = ({
     myOrders.map((item, index) => {
       return {
         key: index,
-        id: item?.id ? item?.id?.toNumber() : "",
+        id: item?.id ? item?.id?.toNumber() : '',
         expire_time: item?.expireAt
-          ? moment(item.expireAt).format("MMM DD, YYYY HH:mm")
-          : "",
-        direction: item?.direction === 1 ? "BUY" : "SELL",
+          ? moment(item.expireAt).format('MMM DD, YYYY HH:mm')
+          : '',
+        direction: item?.direction === 1 ? 'Buy' : 'Sell',
         pair:
           item?.direction === 1
             ? `${denomConversion(item?.receivedCoin?.denom)}/${denomConversion(
@@ -509,7 +541,7 @@ const OrderBook = ({
               item?.offerCoin?.amount,
               assetMap[item?.offerCoin?.denom]?.decimals
             )} ${denomConversion(item?.offerCoin?.denom)}`
-          : "",
+          : '',
         trade_amount: item?.amount ? amountConversion(item?.amount) : 0,
         price: item?.price ? orderPriceReverseConversion(item.price) : 0,
         received: item?.receivedCoin
@@ -517,15 +549,15 @@ const OrderBook = ({
               item?.receivedCoin?.amount,
               assetMap[item?.receivedCoin?.denom]?.decimals
             )} ${denomConversion(item?.receivedCoin?.denom)}`
-          : "",
+          : '',
         remaining: item?.remainingOfferCoin
           ? `${amountConversion(
               item?.remainingOfferCoin?.amount,
               assetMap[item?.remainingOfferCoin?.denom]?.decimals
             )} ${denomConversion(item?.remainingOfferCoin?.denom)}`
-          : "",
+          : '',
         order_id: item?.id?.toNumber(),
-        status: item?.status ? orderStatusText(item.status) : "",
+        status: item?.status ? orderStatusText(item.status) : '',
         cancel: item,
       };
     });
@@ -539,8 +571,6 @@ const OrderBook = ({
   sellOrders = sellOrders.sort((a, b) => {
     return b.price - a.price; // sort descending.
   });
-
- 
 
   let recentTradeFilter = recentTrade.sort((a, b) => {
     const dateA = new Date(a?.timestamp);
@@ -556,8 +586,8 @@ const OrderBook = ({
 
   const orderItems = [
     {
-      label: "Open Orders",
-      key: "1",
+      label: `Open Orders(${openOrdersData.length > 0 ? openOrdersData.length: 0})`,
+      key: '1',
       children: (
         <OrderbookTable
           openOrdersData={openOrdersData}
@@ -566,9 +596,9 @@ const OrderBook = ({
       ),
     },
     {
-      label: "Trade History",
-      key: "2",
-      children: <TradehistoryTable />,
+      label: 'Trade History',
+      key: '2',
+      children: <TradehistoryTable pairs={pairs} />,
     },
   ];
 
@@ -606,7 +636,7 @@ const OrderBook = ({
 
   const SettingPopup = (
     <div className="slippage-tolerance">
-      <div className={"slippage-title"}>
+      <div className={'slippage-title'}>
         <div>Limit order lifespan</div>
 
         <TooltipIcon text="Your transaction will revert if it is pending for more than this period of time." />
@@ -645,7 +675,7 @@ const OrderBook = ({
 
   const Items = [
     {
-      key: "item-2",
+      key: 'item-2',
       label: (
         <div className={styles.dropdown__orderbook}>
           <div className="filter-button-radio">
@@ -659,7 +689,7 @@ const OrderBook = ({
                   <Radio.Button value={item?.price_unit}>
                     {Number(item?.price_unit)
                       .toFixed(7)
-                      .replace(/\.?0+$/, "")}
+                      .replace(/\.?0+$/, '')}
                   </Radio.Button>
                 ))}
             </Radio.Group>
@@ -676,8 +706,6 @@ const OrderBook = ({
 
   const BuySellData = checkPrice(filterValue);
 
-
-
   const matchBuySell = (baseCoin, assetCoin) => {
     if (baseCoin === assetCoin) {
       return true;
@@ -691,8 +719,8 @@ const OrderBook = ({
     if (searchTerm) {
       let resultsObj = pairs.filter((item) => {
         return (
-          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, "g")) ||
-          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, "g"))
+          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, 'g')) ||
+          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, 'g'))
         );
       });
 
@@ -706,13 +734,13 @@ const OrderBook = ({
   const [updateStar, setUpdateStar] = useState(false);
 
   useEffect(() => {
-    setContent(JSON.parse(localStorage.getItem("market")));
+    setContent(JSON.parse(localStorage.getItem('market')));
   }, [updateStar]);
 
   const newTableData =
     content !== null &&
     content.map((el) => {
-      return el.replace(/['"]+/g, "");
+      return el.replace(/['"]+/g, '');
     });
 
   var res1 =
@@ -732,29 +760,27 @@ const OrderBook = ({
 
   const finalTableData = Lodash.concat(res1, res2);
 
- 
-
   const checkStar = (data) => {
     const dataCheck = newTableData ? newTableData.includes(data) : false;
     return dataCheck;
   };
 
   const onFavourite = (coin) => {
-    if (localStorage.getItem("market") === null) {
-      localStorage.setItem("market", JSON.stringify([]));
+    if (localStorage.getItem('market') === null) {
+      localStorage.setItem('market', JSON.stringify([]));
     }
-    var old_arr = JSON.parse(localStorage.getItem("market"));
+    var old_arr = JSON.parse(localStorage.getItem('market'));
 
     old_arr.push(JSON.stringify(coin));
-    localStorage.setItem("market", JSON.stringify(old_arr));
+    localStorage.setItem('market', JSON.stringify(old_arr));
     setUpdateStar(!updateStar);
   };
 
   const Delete = (value) => {
-    let displayItems = JSON.parse(localStorage.getItem("market"));
+    let displayItems = JSON.parse(localStorage.getItem('market'));
     const index = displayItems.indexOf(value);
     displayItems.splice(index, 1);
-    localStorage.setItem("market", JSON.stringify(displayItems));
+    localStorage.setItem('market', JSON.stringify(displayItems));
     setUpdateStar(!updateStar);
   };
 
@@ -770,7 +796,7 @@ const OrderBook = ({
               className="pair__input"
               placeholder="Search market...."
               onChange={(event) => onSearchChange(event.target.value)}
-              prefix={<Icon className={"bi bi-search"} />}
+              prefix={<Icon className={'bi bi-search'} />}
               ref={ref}
             />
           </div>
@@ -829,16 +855,14 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-               
                         {formateNumberDecimalsAuto({
-                          price:
-                            Number(
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                })
-                              )
-                            ) 
+                          price: Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
+                            )
+                          ),
                         })}
                       </div>
                       <div
@@ -858,21 +882,21 @@ const OrderBook = ({
                           <div
                             className={`${styles.dropdown__orderbook__profit__arrow}`}
                           >
-                            <Icon className={"bi bi-arrow-up-short"} />
+                            <Icon className={'bi bi-arrow-up-short'} />
                           </div>
                         ) : (
                           <div
                             className={`${styles.dropdown__orderbook__loss__arrow}`}
                           >
-                            <Icon className={"bi bi-arrow-down-short"} />
+                            <Icon className={'bi bi-arrow-down-short'} />
                           </div>
                         )}
-
-{  Number(item?.total_volume_24h_change || 0).toFixed(
+                        {Number(item?.total_volume_24h_change || 0).toFixed(
                           DOLLAR_DECIMALS
-                        ) >= 0 ? "+" : "-"}
-                        {                     
-                        commaSeparator(
+                        ) >= 0
+                          ? '+'
+                          : '-'}
+                        {commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
                               DOLLAR_DECIMALS
@@ -926,16 +950,14 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-             
                         {formateNumberDecimalsAuto({
-                          price:
-                            Number(
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                })
-                              )
+                          price: Number(
+                            commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price: item?.price || 0,
+                              })
                             )
+                          ),
                         })}
                       </div>
                       <div
@@ -955,17 +977,20 @@ const OrderBook = ({
                           <div
                             className={`${styles.dropdown__orderbook__profit__arrow}`}
                           >
-                            <Icon className={"bi bi-arrow-up-short"} />
+                            <Icon className={'bi bi-arrow-up-short'} />
                           </div>
                         ) : (
                           <div
                             className={`${styles.dropdown__orderbook__loss__arrow}`}
                           >
-                            <Icon className={"bi bi-arrow-down-short"} />
+                            <Icon className={'bi bi-arrow-down-short'} />
                           </div>
                         )}
-                        
-                        {Number(item?.total_volume_24h_change || 0).toFixed(DOLLAR_DECIMALS) >= 0 ? "+" : "-"}
+                        {Number(item?.total_volume_24h_change || 0).toFixed(
+                          DOLLAR_DECIMALS
+                        ) >= 0
+                          ? '+'
+                          : '-'}
                         {commaSeparator(
                           Math.abs(
                             Number(item?.total_volume_24h_change || 0).toFixed(
@@ -983,7 +1008,7 @@ const OrderBook = ({
           </div>
         </div>
       ),
-      key: "item-1",
+      key: 'item-1',
     },
   ];
 
@@ -1005,12 +1030,10 @@ const OrderBook = ({
       totalPrice += Number(
         formateNumberDecimalsAuto({
           price: Number(
-            (
-              formateNumberDecimalsAuto({
-                price: BuySellData[0]?.buys[i]?.price || 0,
-                minDecimal: 3,
-              })
-            )
+            formateNumberDecimalsAuto({
+              price: BuySellData[0]?.buys[i]?.price || 0,
+              minDecimal: 3,
+            })
           ),
           minDecimal: 3,
         })
@@ -1033,11 +1056,9 @@ const OrderBook = ({
     const price = formateNumberDecimalsAuto({
       price:
         Number(
-          (
-            formateNumberDecimalsAuto({
-              price: selectedPair?.price || 0,
-            })
-          )
+          formateNumberDecimalsAuto({
+            price: selectedPair?.price || 0,
+          })
         ) * marketPrice(markets, selectedPair?.base_coin_denom),
     });
 
@@ -1052,19 +1073,17 @@ const OrderBook = ({
       totalPrice += Number(
         formateNumberDecimalsAuto({
           price: Number(
-            (
-              formateNumberDecimalsAuto({
-                price: BuySellData[0]?.sells[i]?.price || 0,
-                minDecimal: 3,
-              })
-            )
+            formateNumberDecimalsAuto({
+              price: BuySellData[0]?.sells[i]?.price || 0,
+              minDecimal: 3,
+            })
           ),
           minDecimal: 3,
         })
       );
       count++;
     }
- 
+
     return Number(totalPrice) / count;
   };
 
@@ -1073,80 +1092,81 @@ const OrderBook = ({
     let count = 0;
 
     for (let i = mouseRowIndex; i < BuySellData[0]?.sells?.length; i++) {
-      totalAmount += Number(amountConversion(BuySellData[0]?.sells[i]?.user_order_amount));
+      totalAmount += Number(
+        amountConversion(BuySellData[0]?.sells[i]?.user_order_amount)
+      );
       count++;
     }
-    
+
     const price = formateNumberDecimalsAuto({
       price:
         Number(
-          (
-            formateNumberDecimalsAuto({
-              price: selectedPair?.price || 0,
-            })
-          )
+          formateNumberDecimalsAuto({
+            price: selectedPair?.price || 0,
+          })
         ) * marketPrice(markets, selectedPair?.base_coin_denom),
     });
 
-    return (totalAmount) * price;
+    return totalAmount * price;
   };
 
   return (
     <div
       className={`${styles.orderbook__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
+        theme === 'dark' ? styles.dark : styles.light
       }`}
     >
       <div
         className={`${styles.orderbook__wrap__head__title} ${styles.order} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <Toggle value={toggleValue} handleToggleValue={handleToggleValue} />
-        <span>{"Orderbook"}</span>
+        <span>{'Pro-Mode'}</span>
       </div>
       <div
         className={`${styles.orderbook__main} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <div
           className={`${styles.orderbook__element__left} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.orderbook__trading__view}  ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__trading__header}  ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <Dropdown
                 menu={{ items }}
                 placement="bottomLeft"
-                trigger={["click"]}
+                trigger={['click']}
                 overlayClassName="dropconnect-overlay"
               >
                 <div
                   className={`${styles.orderbook__trading__element} ${
                     styles.gap
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                   onClick={(e) => e.preventDefault()}
                 >
-                  <NextImage src={ArrowRL} alt="" />
+                  <NextImage src={ArrowRL} alt="ArrowRL" />
 
                   <div
                     className={`${styles.orderbook__trading__title}  ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     {selectedPair?.pair_symbol || null}
                   </div>
-                  <Icon className={"bi bi-chevron-down"} size={"0.5rem"} />
+                  <NextImage src={Drop} alt="Drop" />
+                  {/* <Icon className={'bi bi-chevron-down'} size={'0.5rem'} /> */}
 
                   {/* <NextImage src={ArrowRL} alt="" /> */}
                   {/* <Select
@@ -1166,18 +1186,18 @@ const OrderBook = ({
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
                     styles.header
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {"Price"}
+                  {'Price'}
                 </div>
                 <div
                   className={`${styles.orderbook__trading__element__title}  ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <span>
@@ -1206,18 +1226,18 @@ const OrderBook = ({
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
                     styles.header
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {"24h Volume"}
+                  {'24h Volume'}
                 </div>
                 <div
                   className={`${styles.orderbook__trading__element__title}  ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   {commaSeparator(
@@ -1232,19 +1252,19 @@ const OrderBook = ({
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
                     styles.header
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {"24h High"}
+                  {'24h High'}
                 </div>
                 <div
                   className={`${styles.orderbook__trading__element__title}  ${
                     styles.profit
-                  }  ${theme === "dark" ? styles.dark : styles.light}`}
+                  }  ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {commaSeparator(
                     formateNumberDecimalsAuto({
@@ -1256,19 +1276,19 @@ const OrderBook = ({
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
                     styles.header
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {"24h Low"}
+                  {'24h Low'}
                 </div>
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
                     styles.loos
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {commaSeparator(
                     formateNumberDecimalsAuto({
@@ -1280,14 +1300,14 @@ const OrderBook = ({
             </div>
             <div
               className={`${styles.orderbook__trading__part} ${styles.loos} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {chartLoading ? (
                 <div
                   className={`${styles.orderbook__trading__spin} ${
                     styles.loos
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   <Loading />
                 </div>
@@ -1304,64 +1324,64 @@ const OrderBook = ({
         <div className={`${styles.middle__row}`}>
           <div
             className={`${styles.orderbook__element__middle__upper} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__element__middle__upper__head} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.orderbook__upper__head__main} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <div
                   className={`${styles.orderbook__upper__head__left__title} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  {"Order Book"}
+                  {'Order Book'}
                 </div>
 
                 <MyDropdown
                   items={Items}
-                  placement={"bottomRight"}
-                  trigger={["click"]}
+                  placement={'bottomRight'}
+                  trigger={['click']}
                   className="farm-sort"
                 >
                   <div
                     className={`${
                       styles.orderbook__upper__head__right__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {!isNaN(
                       Number(filterValue)
                         .toFixed(7)
-                        .replace(/\.?0+$/, "")
+                        .replace(/\.?0+$/, '')
                     )
                       ? Number(filterValue)
                           .toFixed(7)
-                          .replace(/\.?0+$/, "")
-                      : 0}{" "}
-                    <Icon className={"bi bi-chevron-down"} />
+                          .replace(/\.?0+$/, '')
+                      : 0}{' '}
+                    <Icon className={'bi bi-chevron-down'} />
                   </div>
                 </MyDropdown>
               </div>
               <div
                 className={`${styles.orderbook__lower__head__main} ${
                   styles.upper
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 <div
                   className={`${styles.orderbook__lower__head}  ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
                     className={`${styles.orderbook__lower__head__title} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     {selectedPair === undefined
@@ -1370,7 +1390,7 @@ const OrderBook = ({
                   </div>
                   <div
                     className={`${styles.orderbook__lower__head__title} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     {selectedPair === undefined
@@ -1385,7 +1405,7 @@ const OrderBook = ({
                     className={`${
                       styles.orderbook__lower__table__head__title
                     } ${styles.no__data} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     {/* <NextImage
@@ -1394,14 +1414,13 @@ const OrderBook = ({
                       height={50}
                       width={50}
                     /> */}
-                    {"No Data"}
+                    {'No Data'}
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
                   BuySellData[0]?.sells.map((item, index) => (
                     <div>
- <Tooltip
- 
+                      <Tooltip
                         title={
                           <>
                             <OrderBookTooltipContent
@@ -1414,66 +1433,65 @@ const OrderBook = ({
                         placement="left"
                         autoAdjustOverflow={false}
                       >
-                     
-                    <div
-                      className={`${styles.orderbook__lower__head} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-              
-                      onClick={() =>
-                        setClickedValue(
-                          formateNumberDecimalsAuto({
-                            price: Number(
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                })
-                              )
-                            ),
-                          })
-                        )
-                      }
-                      key={item.price}
-                    >
-                      <div
-                        className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
-                        style={{
-                          width: `${calculateWidth(item?.user_order_amount)}%`,
-                        }}
-                      ></div>
-
-                     
                         <div
-                          className={`${
-                            styles.orderbook__lower__table__head__title
-                          } ${styles.loss} ${
-                            theme === "dark" ? styles.dark : styles.light
+                          className={`${styles.orderbook__lower__head} ${
+                            theme === 'dark' ? styles.dark : styles.light
                           }`}
+                          onClick={() =>
+                            setClickedValue(
+                              formateNumberDecimalsAuto({
+                                price: Number(
+                                  commaSeparator(
+                                    formateNumberDecimalsAuto({
+                                      price: item?.price || 0,
+                                    })
+                                  )
+                                ),
+                              })
+                            )
+                          }
+                          key={item.price}
                         >
-                          {formateNumberDecimalsAuto({
-                            price: Number(
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                  minDecimal: 3,
-                                })
-                              )
-                            ),
-                            minDecimal: 3,
-                          })}
+                          <div
+                            className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
+                            style={{
+                              width: `${calculateWidth(
+                                item?.user_order_amount
+                              )}%`,
+                            }}
+                          ></div>
+
+                          <div
+                            className={`${
+                              styles.orderbook__lower__table__head__title
+                            } ${styles.loss} ${
+                              theme === 'dark' ? styles.dark : styles.light
+                            }`}
+                          >
+                            {formateNumberDecimalsAuto({
+                              price: Number(
+                                commaSeparator(
+                                  formateNumberDecimalsAuto({
+                                    price: item?.price || 0,
+                                    minDecimal: 3,
+                                  })
+                                )
+                              ),
+                              minDecimal: 3,
+                            })}
+                          </div>
+
+                          <div
+                            className={`${
+                              styles.orderbook__lower__table__head__title
+                            } ${theme === 'dark' ? styles.dark : styles.light}`}
+                          >
+                            {item?.user_order_amount
+                              ? amountConversion(item?.user_order_amount)
+                              : 0}
+                          </div>
                         </div>
-                      
-                      <div
-                        className={`${
-                          styles.orderbook__lower__table__head__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {item?.user_order_amount
-                          ? amountConversion(item?.user_order_amount)
-                          : 0}
-                      </div>
-                    </div>
-                    </Tooltip>
+                      </Tooltip>
                     </div>
                   ))
                 )}
@@ -1482,13 +1500,13 @@ const OrderBook = ({
 
             <div
               className={`${styles.orderbook__middle__head__main} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.orderbook__middle__head__main__title} ${
                   styles.active
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 {commaSeparator(
                   formateNumberDecimalsAuto({
@@ -1499,10 +1517,10 @@ const OrderBook = ({
               </div>
               <div
                 className={`${styles.orderbook__middle__head__main__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {" "}
+                {' '}
                 $
                 {formateNumberDecimalsAuto({
                   price:
@@ -1519,14 +1537,14 @@ const OrderBook = ({
             <div
               className={`${styles.orderbook__lower__head__main} ${
                 styles.lower
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               {BuySellData[0]?.buys.length <= 0 ||
               BuySellData[0]?.buys === undefined ? (
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
                     styles.no__data
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {/* <NextImage
                     src={No_Data}
@@ -1534,13 +1552,13 @@ const OrderBook = ({
                     height={50}
                     width={50}
                   /> */}
-                  {"No Data"}
+                  {'No Data'}
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
                 BuySellData[0]?.buys.map((item, index) => (
                   <div>
-  <Tooltip
+                    <Tooltip
                       title={
                         <>
                           <OrderBookTooltipContent
@@ -1553,65 +1571,65 @@ const OrderBook = ({
                       placement="left"
                       autoAdjustOverflow={false}
                     >
-                  
-                  <div
-                    className={`${styles.orderbook__lower__head} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                   
-                    onClick={() =>
-                      setClickedValue(
-                        formateNumberDecimalsAuto({
-                          price: Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                              })
-                            )
-                          ),
-                        })
-                      )
-                    }
-                    key={item.price}
-                  >
-                    <div
-                      className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
-                      style={{
-                        width: `${calculateWidth(item?.user_order_amount)}%`,
-                      }}
-                    ></div>
-                  
                       <div
-                        className={`${
-                          styles.orderbook__lower__table__head__title
-                        }  ${styles.profit} ${
-                          theme === "dark" ? styles.dark : styles.light
+                        className={`${styles.orderbook__lower__head} ${
+                          theme === 'dark' ? styles.dark : styles.light
                         }`}
+                        onClick={() =>
+                          setClickedValue(
+                            formateNumberDecimalsAuto({
+                              price: Number(
+                                commaSeparator(
+                                  formateNumberDecimalsAuto({
+                                    price: item?.price || 0,
+                                  })
+                                )
+                              ),
+                            })
+                          )
+                        }
+                        key={item.price}
                       >
-                        {formateNumberDecimalsAuto({
-                          price: Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                                minDecimal: 3,
-                              })
-                            )
-                          ),
-                          minDecimal: 3,
-                        })}
+                        <div
+                          className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
+                          style={{
+                            width: `${calculateWidth(
+                              item?.user_order_amount
+                            )}%`,
+                          }}
+                        ></div>
+
+                        <div
+                          className={`${
+                            styles.orderbook__lower__table__head__title
+                          }  ${styles.profit} ${
+                            theme === 'dark' ? styles.dark : styles.light
+                          }`}
+                        >
+                          {formateNumberDecimalsAuto({
+                            price: Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                  minDecimal: 3,
+                                })
+                              )
+                            ),
+                            minDecimal: 3,
+                          })}
+                        </div>
+
+                        <div
+                          className={`${
+                            styles.orderbook__lower__table__head__title
+                          } ${theme === 'dark' ? styles.dark : styles.light}`}
+                        >
+                          {item?.user_order_amount
+                            ? amountConversion(item?.user_order_amount)
+                            : 0}
+                        </div>
                       </div>
-                   
-                    <div
-                      className={`${
-                        styles.orderbook__lower__table__head__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      {item?.user_order_amount
-                        ? amountConversion(item?.user_order_amount)
-                        : 0}
-                    </div>
-                  </div>
-                  </Tooltip>
+                    </Tooltip>
                   </div>
                 ))
               )}
@@ -1620,35 +1638,35 @@ const OrderBook = ({
 
           <div
             className={`${styles.orderbook__element__middle__lower} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__upper__head__table} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.orderbook__upper__head__left__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {"Recent Trades"}
+                {'Recent Trades'}
               </div>
             </div>
             <div
               className={`${styles.orderbook__middle__lower__table} ${
-                recentTradeFilter.length === 0 ? styles.no_data : ""
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+                recentTradeFilter.length === 0 ? styles.no_data : ''
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.orderbook__middle__lower__table__head} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   {selectedPair === undefined
@@ -1658,7 +1676,7 @@ const OrderBook = ({
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
                     styles.width
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {selectedPair === undefined
                     ? `Amount`
@@ -1667,9 +1685,9 @@ const OrderBook = ({
                 <div
                   className={`${styles.orderbook__lower__head__title} ${
                     styles.width
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {"Time"}
+                  {'Time'}
                 </div>
               </div>
 
@@ -1677,7 +1695,7 @@ const OrderBook = ({
                 <div
                   className={`${styles.orderbook__lower__table__head__title} ${
                     styles.no__data
-                  } ${theme === "dark" ? styles.dark : styles.light}`}
+                  } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
                   {/* <NextImage
                     src={No_Data}
@@ -1685,7 +1703,7 @@ const OrderBook = ({
                     height={50}
                     width={50}
                   /> */}
-                  {"No Recent Trades"}
+                  {'No Recent Trades'}
                 </div>
               ) : (
                 recentTradeFilter &&
@@ -1693,7 +1711,7 @@ const OrderBook = ({
                   <div
                     className={`${styles.orderbook__lower__head} ${
                       styles.lower
-                    }  ${theme === "dark" ? styles.dark : styles.light}`}
+                    }  ${theme === 'dark' ? styles.dark : styles.light}`}
                     key={i}
                   >
                     <div
@@ -1706,7 +1724,7 @@ const OrderBook = ({
                         )
                           ? styles.loss
                           : styles.profit
-                      }  ${theme === "dark" ? styles.dark : styles.light}`}
+                      }  ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
                       {formateNumberDecimalsAuto({
                         price: Number(
@@ -1723,7 +1741,7 @@ const OrderBook = ({
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
                       {item?.asset_in
                         ? amountConversion(item?.asset_in?.amount)
@@ -1732,9 +1750,9 @@ const OrderBook = ({
                     <div
                       className={`${
                         styles.orderbook__lower__table__head__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {moment(item?.timestamp).format("h:mm:ss")}
+                      {moment(item?.timestamp).format('h:mm:ss')}
                     </div>
                   </div>
                 ))
@@ -1745,21 +1763,21 @@ const OrderBook = ({
 
         <div
           className={`${styles.orderbook__element__right} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
           id="spot"
         >
           <div
             className={`${styles.orderbook__element__right__head} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.orderbook__element__right__head__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"Spot"}
+              {'Spot'}
             </div>
             <Popover
               className="setting-popover"
@@ -1775,7 +1793,7 @@ const OrderBook = ({
           </div>
           <div
             className={`${styles.orderbook__element__right__body__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <Tabs className="comdex-tabs" type="card" items={tabItems} />
@@ -1921,7 +1939,7 @@ const OrderBook = ({
       </div> */}
       <div
         className={`${styles.orderbook__table__view} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <Tabs className="order-tabs" type="card" items={orderItems} />

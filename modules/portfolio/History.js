@@ -76,7 +76,7 @@ const History = ({ address, setTransactionHistory, history }) => {
         key: index,
         transactionHash: (
           <div
-            className="tx-hash-col d-flex"
+            className="tx-hash-col2 d-flex"
             style={{ columnGap: "5px", justifyContent: "flex-end" }}
           >
             <span>

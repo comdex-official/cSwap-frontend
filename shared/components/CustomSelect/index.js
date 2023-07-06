@@ -1,11 +1,11 @@
-import { Select } from "antd";
-import * as PropTypes from "prop-types";
-import React from "react";
-import { denomConversion } from "../../../utils/coin";
-import NoDataIcon from "../../components/NoDataIcon/index";
-import { Icon } from "../../image/Icon";
-import { NextImage } from "../../image/NextImage";
-import { ATOM, DownArrow } from "../../image";
+import { Select } from 'antd';
+import * as PropTypes from 'prop-types';
+import React from 'react';
+import { denomConversion } from '../../../utils/coin';
+import NoDataIcon from '../../components/NoDataIcon/index';
+import { Icon } from '../../image/Icon';
+import { NextImage } from '../../image/NextImage';
+import { ATOM, DownArrow, Drop } from '../../image';
 
 const Option = Select.Option;
 
@@ -36,7 +36,7 @@ const CustomSelect = ({
       onChange={onChange}
       defaultActiveFirstOption={true}
       notFoundContent={<NoDataIcon />}
-      suffixIcon={<NextImage src={DownArrow} />}
+      suffixIcon={<NextImage src={Drop} alt={'Drop'} />}
     >
       {list &&
         list.map((record) => {
@@ -48,7 +48,7 @@ const CustomSelect = ({
                   <div className="svg-icon-inner swap-svg-icon-inner">
                     <NextImage
                       src={iconList?.[item]?.coinImageUrl}
-                      alt={"logo"}
+                      alt={'logo'}
                       height={25}
                       width={25}
                     />

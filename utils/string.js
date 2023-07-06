@@ -71,23 +71,22 @@ export const iconNameFromDenom = (denom) => {
   }
 };
 
-
 export const orderStatusText = (key) => {
   switch (key) {
     case 0:
-      return 'UNSPECIFIED';
+      return 'Unspecified';
     case 1:
-      return 'NOT EXECUTED';
+      return 'Not Executed';
     case 2:
-      return 'NOT MATCHED';
+      return 'Not Matched';
     case 3:
-      return 'PARTIALLY MATCHED';
+      return 'Partially Matched';
     case 4:
-      return 'COMPLETED';
+      return 'Completed';
     case 5:
-      return 'CANCELED';
+      return 'Canceled';
     case 6:
-      return 'EXPIRED';
+      return 'Expired';
     default:
       return '';
   }
@@ -112,12 +111,12 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal) =>
   value.indexOf('.') >= 0
     ? value.substr(0, value.indexOf('.')) +
-    value.substr(
-      value.indexOf('.'),
-      Number(decimal)
-        ? Number(getExponent(decimal)) + 1
-        : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
-    )
+      value.substr(
+        value.indexOf('.'),
+        Number(decimal)
+          ? Number(getExponent(decimal)) + 1
+          : comdex?.coinDecimals + 1 //  characters from start to end (exclusive), so adding extra 1
+      )
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -137,8 +136,8 @@ export const uniqueLiquidityPairDenoms = (list, type) => {
     ...new Set(
       list && list.length > 0
         ? list.map((item) =>
-          type === 'in' ? item.baseCoinDenom : item.quoteCoinDenom
-        )
+            type === 'in' ? item.baseCoinDenom : item.quoteCoinDenom
+          )
         : []
     ),
   ];
@@ -148,10 +147,10 @@ export const uniqueQuoteDenomsForBase = (list, type, denom) => {
   const quoteList =
     list && list.length > 0
       ? list.filter((item) =>
-        type === 'in'
-          ? item.baseCoinDenom === denom
-          : item.quoteCoinDenom === denom
-      )
+          type === 'in'
+            ? item.baseCoinDenom === denom
+            : item.quoteCoinDenom === denom
+        )
       : [];
 
   const quoteMap = quoteList.map((item) =>

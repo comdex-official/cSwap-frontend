@@ -383,7 +383,7 @@ const Remove = ({
       <div className={styles.farm__deposit__buttonWrap}>
         <Button
           type="primary"
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
           disabled={
             !sliderValue ||
             sliderValue > 100 ||
@@ -397,7 +397,7 @@ const Remove = ({
         </Button>
         <Button
           type="primary"
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
           disabled={
             !sliderValue ||
             sliderValue > 100 ||
@@ -419,7 +419,7 @@ const Remove = ({
             !Number(userLockedPoolTokens)
           }
           loading={removeInProgress}
-          className="btn-filled btn-width-fixed"
+          className="btn-filled2 btn-width-fixed"
         >
           Unfarm & Withdraw
         </Button>

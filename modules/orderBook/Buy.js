@@ -319,7 +319,8 @@ const Buy = ({
         >
           <Button
             type="primary"
-            className="btn-filled"
+            className="btn-filled2"
+            style={{width: "120px"}}
             block
             loading={inProgress}
             disabled={inProgress || !price || !total}

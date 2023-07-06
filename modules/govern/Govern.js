@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import {
   Button,
   Col,
@@ -9,29 +9,30 @@ import {
   Select,
   Spin,
   Tabs,
-} from "antd";
-import * as PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { setAllProposals, setProposals } from "../../actions/govern";
+  Pagination,
+} from 'antd';
+import * as PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { setAllProposals, setProposals } from '../../actions/govern';
 import {
   fetchRestBondexTokens,
   fetchRestProposals,
   fetchRestTallyParamsProposer,
-} from "../../services/govern/query";
-import { formatTime } from "../../utils/date";
-import { proposalStatusMap, stringTagParser } from "../../utils/string";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+} from '../../services/govern/query';
+import { formatTime } from '../../utils/date';
+import { proposalStatusMap, stringTagParser } from '../../utils/string';
+import { DOLLAR_DECIMALS } from '../../constants/common';
 // import style from "./Govern.moduleOld.scss";
-import { Progress } from "@mantine/core";
-import NoDataIcon from "../../shared/components/NoDataIcon";
-import { Icon } from "../../shared/image/Icon";
-import GovernOpenProposal from "./openProposal/index";
-import GovernPastProposal from "./pastProposal/index";
-import { comdex } from "../../config/network";
-import { No_Data } from "../../shared/image";
-import { NextImage } from "../../shared/image/NextImage";
-import Loading from "../../pages/Loading";
+import { Progress } from '@mantine/core';
+import NoDataIcon from '../../shared/components/NoDataIcon';
+import { Icon } from '../../shared/image/Icon';
+import GovernOpenProposal from './openProposal/index';
+import GovernPastProposal from './pastProposal/index';
+import { comdex } from '../../config/network';
+import { No_Data } from '../../shared/image';
+import { NextImage } from '../../shared/image/NextImage';
+import Loading from '../../pages/Loading';
 
 const { Option } = Select;
 
@@ -45,7 +46,7 @@ const Govern = ({
   const router = useRouter();
 
   const [inProgress, setInProgress] = useState(false);
-  const [activeKey, setActiveKey] = useState(getTab ? getTab : "1");
+  const [activeKey, setActiveKey] = useState(getTab ? getTab : '1');
   const [pastProposals, setPastProposals] = useState();
   const [activeProposals, setActiveProposals] = useState();
   const [filteredProposal, setFilteredProposal] = useState();
@@ -77,12 +78,12 @@ const Govern = ({
   const filterAllProposal = (value) => {
     setInProgress(true);
     let oldProposals = proposals?.filter(
-      (item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"
+      (item) => item?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'
     );
     let allFilteredProposal =
       pastProposals &&
       pastProposals?.filter((item) => {
-        if (value === "all") {
+        if (value === 'all') {
           return oldProposals;
         } else {
           return item.status === value;
@@ -108,22 +109,25 @@ const Govern = ({
 
   const data = [
     {
-      title: "Total Staked",
+      title: 'Total Staked',
       counts: 1234,
     },
     {
-      title: "Total Proposals",
+      title: 'Total Proposals',
       counts: 7,
     },
     {
-      title: "Average Participation",
-      counts: "123%",
+      title: 'Average Participation',
+      counts: '123%',
     },
   ];
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
+
   useEffect(() => {
     const fetchData = async () => {
-      let nextPage = "";
+      let nextPage = '';
       let allProposals = [];
 
       do {
@@ -145,10 +149,20 @@ const Govern = ({
     fetchData();
   }, []);
 
+  const getCurrentData = () => {
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return filteredProposal.slice(indexOfFirstItem, indexOfLastItem);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const onSearchChange = (searchKey) => {
-    if (activeKey === "2") {
+    if (activeKey === '2') {
       let oldProposals = proposals?.filter(
-        (item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"
+        (item) => item?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'
       );
       oldProposals = oldProposals?.filter(
         (item) =>
@@ -158,7 +172,7 @@ const Govern = ({
       setFilteredProposal(oldProposals);
     } else {
       let ActiveProposals = proposals?.filter(
-        (item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD"
+        (item) => item?.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
       );
       ActiveProposals = ActiveProposals?.filter(
         (item) =>
@@ -171,12 +185,12 @@ const Govern = ({
 
   const handleTabChange = (key) => {
     let openProposal = proposals?.filter(
-      (item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD"
+      (item) => item?.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
     );
     let pastProposal = proposals?.filter(
-      (item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"
+      (item) => item?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'
     );
-    if (key === "1") {
+    if (key === '1') {
       setFilteredProposal(openProposal);
       setActiveProposals(openProposal);
     } else {
@@ -188,25 +202,25 @@ const Govern = ({
 
   const tabItems = [
     {
-      key: "1",
-      label: "Active Proposals",
+      key: '1',
+      label: 'Active Proposals',
     },
     {
-      key: "2",
-      label: "Past Proposals",
+      key: '2',
+      label: 'Past Proposals',
     },
   ];
 
   useEffect(() => {
     if (proposals) {
       let openProposal = proposals?.filter(
-        (item) => item?.status === "PROPOSAL_STATUS_VOTING_PERIOD"
+        (item) => item?.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
       );
       let pastProposal = proposals?.filter(
-        (item) => item?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"
+        (item) => item?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'
       );
 
-      if (activeKey === "1") {
+      if (activeKey === '1') {
         setFilteredProposal(openProposal);
       } else {
         setFilteredProposal(pastProposal);
@@ -223,7 +237,7 @@ const Govern = ({
   }
 
   const handleClick = () => {
-    handleTabChange("2");
+    handleTabChange('2');
   };
 
   return (
@@ -248,13 +262,13 @@ const Govern = ({
                 </Row>
               </div>
               <div className="govern_search ">
-                {activeKey === "2" && (
+                {activeKey === '2' && (
                   <Select
                     defaultValue="Filter"
                     className="select-primary filter-select govern-filter-search"
                     style={{ width: 150 }}
                     onChange={(e) => filterAllProposal(e)}
-                    suffixIcon={<Icon className={"bi bi-chevron-down"} />}
+                    suffixIcon={<Icon className={'bi bi-chevron-down'} />}
                   >
                     <Option value="all" className="govern-select-option">
                       All
@@ -271,35 +285,35 @@ const Govern = ({
                   placeholder="Search..."
                   onChange={(event) => onSearchChange(event.target.value)}
                   className="asset_search_input"
-                  suffix={<Icon className={"bi bi-search"} />}
+                  suffix={<Icon className={'bi bi-search'} />}
                 />
               </div>
             </div>
 
             <div className="proposal_box_parent_container">
-              {activeKey === "1" ? (
+              {activeKey === '1' ? (
                 inProgress ? (
                   <div className="no_data">
                     <Loading />
                   </div>
                 ) : filteredProposal?.length > 0 ? (
-                  <GovernOpenProposal proposals={filteredProposal} />
+                  <GovernOpenProposal proposals={getCurrentData()} />
                 ) : (
-                  <div className={"table__empty__data__wrap"}>
-                    <div className={"table__empty__data"}>
+                  <div className={'table__empty__data__wrap'}>
+                    <div className={'table__empty__data'}>
                       <NextImage
                         src={No_Data}
                         alt="Message"
                         height={60}
                         width={60}
                       />
-                      <span>{"No Active Proposals"}</span>
+                      <span>{'No Active Proposals'}</span>
                       <Button
                         type="primary"
                         className="btn-no-data"
                         onClick={() => handleClick()}
                       >
-                        {"View Past Proposals"}
+                        {'View Past Proposals'}
                       </Button>
                     </div>
                   </div>
@@ -309,20 +323,30 @@ const Govern = ({
                   <Loading />
                 </div>
               ) : filteredProposal?.length > 0 ? (
-                <GovernPastProposal proposals={filteredProposal} />
+                <GovernPastProposal proposals={getCurrentData()} />
               ) : (
-                <div className={"table__empty__data__wrap"}>
-                  <div className={"table__empty__data"}>
+                <div className={'table__empty__data__wrap'}>
+                  <div className={'table__empty__data'}>
                     <NextImage
                       src={No_Data}
                       alt="Message"
                       height={60}
                       width={60}
                     />
-                    <span>{"No Proposals"}</span>
+                    <span>{'No Proposals'}</span>
                   </div>
                 </div>
               )}
+
+              <div>
+                <Pagination
+                  current={currentPage}
+                  total={filteredProposal?.length}
+                  pageSize={itemsPerPage}
+                  onChange={handlePageChange}
+                  showSizeChanger={false}
+                />
+              </div>
             </div>
           </div>
         </div>

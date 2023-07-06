@@ -1,43 +1,38 @@
-import React, { useEffect } from "react";
-import styles from "./OrderBook.module.scss";
-import { Table } from "antd";
-import NoDataIcon from "../../shared/components/NoDataIcon";
-import { useRouter } from "next/router";
+import React, { useEffect } from 'react';
+import styles from './OrderBook.module.scss';
+import { Table } from 'antd';
+import NoDataIcon from '../../shared/components/NoDataIcon';
+import { useRouter } from 'next/router';
 
 const OrderbookTable = ({ openOrdersData, ordersTablecolumns }) => {
-  const theme = "dark";
+  const theme = 'dark';
 
- 
-
-    const handleClick = () =>{
-      const targetElement = document.getElementById('spot');
-      if (targetElement) {
-      
-          targetElement.scrollIntoView({ behavior: 'smooth' });
-        
-      }
+  const handleClick = () => {
+    const targetElement = document.getElementById('spot');
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
-    
+  };
 
   return (
     <div
       className={`${styles.orderbook__table__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
+        theme === 'dark' ? styles.dark : styles.light
       }`}
     >
       <Table
-        className="custom-table assets-table"
+        className="custom-table2 assets-table"
         dataSource={openOrdersData}
         columns={ordersTablecolumns}
         pagination={false}
-        scroll={{ x: "100%" }}
+        scroll={{ x: '100%' }}
         locale={{
           emptyText: (
             <NoDataIcon
               text="No Limit Orders"
               button={true}
-              buttonText={"Place Limit Order"}
-               OnClick={()=>handleClick()}
+              buttonText={'Place Limit Order'}
+              OnClick={() => handleClick()}
             />
           ),
         }}
