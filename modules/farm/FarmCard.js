@@ -564,7 +564,6 @@ const FarmCard = ({
                   <Tooltip
                     title={'HARBOR emissions enabled'}
                     overlayClassName="farm_upto_apr_tooltip"
-              
                   >
                     <div
                       className={`${
@@ -652,7 +651,7 @@ const FarmCard = ({
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
                         <Tooltip
-                              // visible={true}
+                          // visible={true}
                           overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
                           title={
                             pool?.type === 2 ? (
@@ -738,7 +737,6 @@ const FarmCard = ({
             </div>
 
             <Tooltip
-                 
               title={
                 !getMasterPool() ? (
                   <>

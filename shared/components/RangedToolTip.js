@@ -18,15 +18,15 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
           <div className="text-center ranged2">
             <small>
               {price > min && price < max ? (
-                <span className="success-color">In range</span>
+                <span className="success-color2">In range</span>
               ) : (
-                <span className="warn-color">Out of range</span>
+                <span className="warn-color2">Out of range</span>
               )}
             </small>
           </div>
           <div className="ranged-slider-over">
             <Slider
-              className="farm-slider farm-slider-small"
+              className="farm-slider"
               tooltip={{ open: false }}
               value={rangeToPercentage(min, max, price)}
               marks={marks}
@@ -35,26 +35,26 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
         </>
       ) : null}
       <Row>
-        <Col>Min Price  <span className="ml-2">:</span></Col>
-        <Col>
+        <Col className="ranged-tooltip-title">Min Price  <span className="ml-2">:</span></Col>
+        <Col className="ranged-tooltip-title">
           {min}
         </Col>
       </Row>
       <Row>
-        <Col>Max Price <span className="ml-2">:</span></Col>
-        <Col>
+        <Col className="ranged-tooltip-title">Max Price <span className="ml-2">:</span></Col>
+        <Col className="ranged-tooltip-title">
            {max}
         </Col>
       </Row>
       <Row>
-        <Col>Current Price  <span className="ml-2">:</span></Col>
-        <Col>
+        <Col className="ranged-tooltip-title">Current Price  <span className="ml-2">:</span></Col>
+        <Col className="ranged-tooltip-title">
           {price}
         </Col>
       </Row>
       <Row>
-        <Col>AMP <span className="ml-2">:</span> </Col>
-        <Col>
+        <Col className="ranged-tooltip-title">AMP <span className="ml-2">:</span> </Col>
+        <Col className="ranged-tooltip-title">
           {amp ? `x${amp}` : ""}
         </Col>
       </Row>

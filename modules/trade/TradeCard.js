@@ -378,6 +378,8 @@ const TradeCard = ({
   };
 
   const handleDemandCoinDenomChange = (value) => {
+    setoutputOptions(pairsMapping[offerCoin?.denom]);
+    setoutputOptions2([]);
     setDemandCoinDenom(value);
 
     if (isLimitOrder) {
@@ -390,6 +392,8 @@ const TradeCard = ({
   };
 
   const handleOfferCoinDenomChange = (value) => {
+    setinputOptions(Object.keys(pairsMapping));
+    setinputOptions2([]);
     setOfferCoinDenom(value);
 
     setDemandCoinDenom(pairsMapping[value]?.[0]);
@@ -651,6 +655,39 @@ const TradeCard = ({
     </div>
   );
 
+  const [inputOptions2, setinputOptions2] = useState([]);
+  const [outputOptions2, setoutputOptions2] = useState([]);
+
+  const onSearchChange1 = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj = inputOptions.filter((item) => {
+        return denomConversion(item)
+          ?.toLowerCase()
+          .match(new RegExp(searchTerm, 'g'));
+      });
+
+      setinputOptions2(resultsObj);
+    } else {
+      setinputOptions2([]);
+    }
+  };
+
+  const onSearchChange2 = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj = outputOptions.filter((item) => {
+        return denomConversion(item)
+          ?.toLowerCase()
+          .match(new RegExp(searchTerm, 'g'));
+      });
+
+      setoutputOptions2(resultsObj);
+    } else {
+      setoutputOptions2([]);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -712,7 +749,7 @@ const TradeCard = ({
                       </div>
 
                       <div className={styles.tradeCard__body__right__el1}>
-                      <div
+                        <div
                           className={`${
                             styles.tradeCard__body__right__el1__footer
                           } ${theme === 'dark' ? styles.dark : styles.light}`}
@@ -757,9 +794,12 @@ const TradeCard = ({
                                 : null
                             }
                             onChange={handleOfferCoinDenomChange}
-                            list={
+                            list={ inputOptions2.length > 0
+                              ? inputOptions2
+                              : 
                               inputOptions?.length > 0 ? inputOptions : null
                             }
+                            onSearchChange={onSearchChange1}
                           />
                         </div>
                       </div>
@@ -798,14 +838,12 @@ const TradeCard = ({
 
                 <div className={styles.tradeCard__swap}>
                   <div className={styles.tradeCard__arrow_swap}>
-
-
-                  <NextImage
-                    src={Arrow}
-                    alt="Logo_Dark"
-                    onClick={handleSwapChange}
-                  />
-                </div>
+                    <NextImage
+                      src={Arrow}
+                      alt="Logo_Dark"
+                      onClick={handleSwapChange}
+                    />
+                  </div>
                 </div>
 
                 <div className={styles.tradeCard__body__item}>
@@ -865,8 +903,12 @@ const TradeCard = ({
                               }
                               onChange={handleDemandCoinDenomChange}
                               list={
+                                outputOptions2.length > 0
+                                ? outputOptions2
+                                : 
                                 outputOptions?.length > 0 ? outputOptions : null
                               }
+                              onSearchChange={onSearchChange2}
                             />
                           </div>
                         </div>

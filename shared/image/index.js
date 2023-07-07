@@ -45,6 +45,7 @@ import Info2 from '../../public/assets/images/info2.svg';
 import Pin from '../../public/assets/images/pin.svg';
 import Drop from '../../public/assets/images/drop.svg';
 import TradePair from '../../public/assets/images/tradeP.svg';
+import OrderSlider from '../../public/assets/images/order-slider.svg';
 
 // exports
 export {
@@ -93,5 +94,6 @@ export {
   Info2,
   Pin,
   Drop,
-  TradePair
+  TradePair,
+  OrderSlider
 };

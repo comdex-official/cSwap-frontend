@@ -6,6 +6,7 @@ import {
   ArrowRL,
   Drop,
   No_Data,
+  OrderSlider,
   Slider,
   Star,
   StarHighlight,
@@ -586,7 +587,9 @@ const OrderBook = ({
 
   const orderItems = [
     {
-      label: `Open Orders(${openOrdersData.length > 0 ? openOrdersData.length: 0})`,
+      label: `Open Orders(${
+        openOrdersData.length > 0 ? openOrdersData.length : 0
+      })`,
       key: '1',
       children: (
         <OrderbookTable
@@ -719,7 +722,7 @@ const OrderBook = ({
     if (searchTerm) {
       let resultsObj = pairs.filter((item) => {
         return (
-          item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, 'g')) ||
+          item?.pair_symbol?.replace(/\//g, '-')?.toLowerCase().match(new RegExp(searchTerm, 'g')) ||
           item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, 'g'))
         );
       });
@@ -849,7 +852,7 @@ const OrderBook = ({
                         <div
                           className={`${styles.dropdown__orderbook__body__pair}`}
                         >
-                          {item?.pair_symbol}
+                          {item?.pair_symbol?.replace(/\//g, '-')}
                         </div>
                       </div>
                       <div
@@ -944,7 +947,7 @@ const OrderBook = ({
                         <div
                           className={`${styles.dropdown__orderbook__body__pair}`}
                         >
-                          {item?.pair_symbol}
+                          {item?.pair_symbol?.replace(/\//g, '-')}
                         </div>
                       </div>
                       <div
@@ -1163,7 +1166,7 @@ const OrderBook = ({
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {selectedPair?.pair_symbol || null}
+                    {(selectedPair?.pair_symbol)?.replace(/\//g, '-') || null}
                   </div>
                   <NextImage src={Drop} alt="Drop" />
                   {/* <Icon className={'bi bi-chevron-down'} size={'0.5rem'} /> */}
@@ -1431,7 +1434,7 @@ const OrderBook = ({
                         }
                         overlayClassName="farm_upto_apr_tooltip"
                         placement="left"
-                        autoAdjustOverflow={false}
+                        // autoAdjustOverflow={false}
                       >
                         <div
                           className={`${styles.orderbook__lower__head} ${
@@ -1787,7 +1790,7 @@ const OrderBook = ({
               trigger="click"
             >
               <div>
-                <NextImage src={Slider} alt="Logo" />
+                <NextImage src={OrderSlider} alt="Logo" />
               </div>
             </Popover>
           </div>

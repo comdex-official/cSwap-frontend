@@ -6,7 +6,7 @@ import { Icon } from "../image/Icon";
 const TooltipIcon = (props) => {
   return (
     <Tooltip
-      overlayClassName="comdex-tooltip"
+      overlayClassName="farm_upto_apr_tooltip"
       title={props.text || "Tooltip info text"}
     >
       <div className="tooltip-icon">

@@ -336,7 +336,7 @@
 
   &.profit {
     // color: #3ff4be;
-    color: #0EE29B;
+    color: #0ee29b;
   }
 
   &.loss {
@@ -579,18 +579,18 @@
   line-height: normal;
   color: #ffffff;
 
-  p{
+  p {
     font-size: 14.15px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
   }
 
-  label{
+  label {
     font-size: 9.4px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
   }
   // @media screen and (max-width: $XXL) {
   //   font-size: 10px;
@@ -663,19 +663,19 @@ line-height: normal;
   // border: 1px solid #293656;
   // border-radius: 4px;
   border-radius: 6.774px;
-border: 0.587px solid #727272;
+  border: 0.587px solid #727272;
   padding: 5px 10px;
   // font-weight: 500;
   // font-size: 11px;
   // line-height: 13px;
   text-align: center;
   cursor: pointer;
-   color: #eaeaea;
+  color: #eaeaea;
 
   font-size: 10.612px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 
   &.active {
     background: #293656;
@@ -927,9 +927,9 @@ line-height: normal;
   // font-weight: 500;
   color: $white;
   font-size: 15.918px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .orderbook__wrap__head__title {
@@ -960,10 +960,14 @@ line-height: normal;
 }
 
 .dropdown__orderbook__search {
-  border-bottom: 0.6px solid #6b758d;
-
+  // border-bottom: 0.6px solid #6b758d;
+  border-radius: 10px;
+  border: 1px solid #181a23;
+  background: #101b2f;
+padding: 10px;
   i {
-    color: #6b758d;
+    // color: #6b758d;
+    color: #B0B0B0;
   }
 }
 
@@ -999,10 +1003,15 @@ line-height: normal;
 }
 
 .dropdown__orderbook__head__title {
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 15px;
-  color: #b1d2e5;
+  // font-weight: 500;
+  // font-size: 10px;
+  // line-height: 15px;
+  color: #FFF;
+font-size: 14px;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+  // color: #b1d2e5;
   width: 100px;
 
   &:last-child {
@@ -1011,12 +1020,17 @@ line-height: normal;
 }
 
 .dropdown__orderbook__body__title {
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 12px;
+  // font-weight: 400;
+  // font-size: 10px;
+  // line-height: 12px;
 
   width: 100px;
 
+  color: #FFF;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
   &.flex {
     display: flex;
     align-items: center;

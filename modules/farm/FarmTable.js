@@ -1128,7 +1128,7 @@ const FarmTable = ({
             }`}
           >
             {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
-              value?.balances?.baseCoin?.denom === 'ucmst') && (
+                    value?.balances?.baseCoin?.denom === 'ucmst') && (
               <Tooltip
                 title={'HARBOR emissions enabled'}
                 overlayClassName="farm_upto_apr_tooltip"
@@ -1671,7 +1671,7 @@ const FarmTable = ({
               </div>
             </Tooltip>
 
-            {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
+            {/* {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
               value?.balances?.baseCoin?.denom === 'ucmst') && (
               <div
                 className={`${styles.farmCard__element__apr__poll__wrap} ${
@@ -1699,7 +1699,7 @@ const FarmTable = ({
                   </div>
                 </Tooltip>
               </div>
-            )}
+            )} */}
           </div>
         </>
       ),
