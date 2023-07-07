@@ -1,40 +1,40 @@
-import { Button, Checkbox, Col, message, Modal, Row, Steps } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { setPoolTokenSupply } from "../../../actions/liquidity";
-import CustomInput from "../../../shared/components/CustomInput";
-import CustomSelect from "../../../shared/components/CustomSelect";
-import { comdex } from "../../../config/network";
-import { ValidateInputNumber } from "../../../config/_validation";
+import { Button, Checkbox, Col, message, Modal, Row, Steps } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { setPoolTokenSupply } from '../../../actions/liquidity';
+import CustomInput from '../../../shared/components/CustomInput';
+import CustomSelect from '../../../shared/components/CustomSelect';
+import { comdex } from '../../../config/network';
+import { ValidateInputNumber } from '../../../config/_validation';
 import {
   APP_ID,
   DEFAULT_FEE,
   DOLLAR_DECIMALS,
-} from "../../../constants/common";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { queryLiquidityPairs } from "../../../services/liquidity/query";
-import { defaultFee } from "../../../services/transaction";
+} from '../../../constants/common';
+import { signAndBroadcastTransaction } from '../../../services/helper';
+import { queryLiquidityPairs } from '../../../services/liquidity/query';
+import { defaultFee } from '../../../services/transaction';
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
   getDenomBalance,
-} from "../../../utils/coin";
+} from '../../../utils/coin';
 import {
   errorMessageMappingParser,
   iconNameFromDenom,
   toDecimals,
   uniqueLiquidityPairDenoms,
   uniqueQuoteDenomsForBase,
-} from "../../../utils/string";
-import variables from "../../../utils/variables";
-import { Icon } from "../../../shared/image/Icon";
-import Snack from "../../../shared/components/Snack";
-import styles from "../Farm.module.scss";
-import { NextImage } from "../../../shared/image/NextImage";
+} from '../../../utils/string';
+import variables from '../../../utils/variables';
+import { Icon } from '../../../shared/image/Icon';
+import Snack from '../../../shared/components/Snack';
+import styles from '../Farm.module.scss';
+import { NextImage } from '../../../shared/image/NextImage';
 const CreatePoolModal = ({
   openPoolModal,
   closePool,
@@ -47,7 +47,7 @@ const CreatePoolModal = ({
   assetMap,
   iconList,
 }) => {
-  const theme = "dark";
+  const theme = 'dark';
   const [current, setCurrent] = useState(0);
   const [baseToken, setBaseToken] = useState();
   const [quoteToken, setQuoteToken] = useState();
@@ -158,7 +158,7 @@ const CreatePoolModal = ({
       signAndBroadcastTransaction(
         {
           message: {
-            typeUrl: "/comdex.liquidity.v1beta1.MsgCreatePool",
+            typeUrl: '/comdex.liquidity.v1beta1.MsgCreatePool',
             value: {
               creator: address.toString(),
               appId: Long.fromNumber(APP_ID),
@@ -167,7 +167,7 @@ const CreatePoolModal = ({
             },
           },
           fee: defaultFee(),
-          memo: "",
+          memo: '',
         },
         address,
         (error, result) => {
@@ -193,7 +193,7 @@ const CreatePoolModal = ({
         }
       );
     } else {
-      message.info("No pair exists");
+      message.info('No pair exists');
     }
   };
 
@@ -227,12 +227,22 @@ const CreatePoolModal = ({
     }
   };
 
-  const inputOptions = uniqueLiquidityPairDenoms(liquidityPairs, "in");
-  const outputOptions = uniqueQuoteDenomsForBase(
-    liquidityPairs,
-    "in",
-    baseToken
-  );
+  // const inputOptions = uniqueLiquidityPairDenoms(liquidityPairs, "in");
+  // const outputOptions = uniqueQuoteDenomsForBase(
+  //   liquidityPairs,
+  //   "in",
+  //   baseToken
+  // );
+
+  const [inputOptions, setinputOptions] = useState([]);
+  const [outputOptions, setoutputOptions] = useState([]);
+  const [inputOptions2, setinputOptions2] = useState([]);
+  const [outputOptions2, setoutputOptions2] = useState([]);
+
+  useEffect(() => {
+    setinputOptions(uniqueLiquidityPairDenoms(liquidityPairs, 'in'));
+    setoutputOptions(uniqueQuoteDenomsForBase(liquidityPairs, 'in', baseToken));
+  }, [liquidityPairs, baseToken]);
 
   const disableConditions =
     (current === 0 && (!baseToken || !quoteToken)) ||
@@ -240,30 +250,72 @@ const CreatePoolModal = ({
     baseAmountValidationError?.message ||
     quoteAmountValidationError?.message;
 
+  const onSearchChange1 = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj =
+        inputOptions &&
+        inputOptions?.filter((item) => {
+          return denomConversion(item)
+            ?.toLowerCase()
+            .match(new RegExp(searchTerm, 'g'));
+        });
+
+      setinputOptions2(resultsObj);
+    } else {
+      setinputOptions2([]);
+    }
+  };
+
+  const onSearchChange2 = (searchKey) => {
+    const searchTerm = searchKey.trim().toLowerCase();
+    if (searchTerm) {
+      let resultsObj =
+        outputOptions &&
+        outputOptions?.filter((item) => {
+          return denomConversion(item)
+            ?.toLowerCase()
+            .match(new RegExp(searchTerm, 'g'));
+        });
+
+      setoutputOptions2(resultsObj);
+    } else {
+      setoutputOptions2([]);
+    }
+  };
 
   const steps = [
     {
-      title: "",
+      title: '',
       content: (
         <>
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     <CustomSelect
                       iconList={iconList}
                       onChange={handleBaseTokenChange}
-                      list={inputOptions.length > 0 ? inputOptions : null}
+                      list={
+                        inputOptions2.length > 0
+                          ? inputOptions2
+                          : inputOptions.length > 0
+                          ? inputOptions
+                          : null
+                      }
                       value={baseToken || null}
+                      onSearchChange={onSearchChange1}
                     />
                   </div>
                 </div>
@@ -281,25 +333,34 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     <CustomSelect
                       iconList={iconList}
                       disabled={!baseToken}
                       onChange={handleQuoteTokenChange}
-                      list={outputOptions.length > 0 ? outputOptions : null}
+                      list={
+                        outputOptions2.length > 0
+                          ? outputOptions2
+                          : outputOptions.length > 0
+                          ? outputOptions
+                          : null
+                      }
                       value={quoteToken || null}
+                      onSearchChange={onSearchChange2}
                     />
                   </div>
                 </div>
@@ -369,15 +430,17 @@ const CreatePoolModal = ({
       ),
     },
     {
-      title: "",
+      title: '',
       content: (
         <>
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -394,7 +457,7 @@ const CreatePoolModal = ({
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {denomConversion(baseToken)}
                     <div className="pool-denom">{BASE_PERCENTAGE}%</div>
@@ -406,14 +469,14 @@ const CreatePoolModal = ({
                     <div
                       className={`${
                         styles.tradeCard__body__right__el1__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {"Available"}
+                      {'Available'}
                       <span>
                         {amountConversionWithComma(
                           baseAvailable || 0,
                           assetMap[baseToken]?.decimals
-                        )}{" "}
+                        )}{' '}
                         {denomConversion(baseToken)}
                       </span>
                     </div>
@@ -440,12 +503,14 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div className={styles.tradeCard__body__right}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -462,7 +527,7 @@ const CreatePoolModal = ({
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {denomConversion(quoteToken)}
                     <div className="pool-denom">{QUOTE_PERCENTAGE}%</div>
@@ -474,14 +539,14 @@ const CreatePoolModal = ({
                     <div
                       className={`${
                         styles.tradeCard__body__right__el1__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {"Available"}
+                      {'Available'}
                       <span className="ml-1">
                         {amountConversionWithComma(
                           quoteAvailable || 0,
                           assetMap[quoteToken]?.decimals
-                        )}{" "}
+                        )}{' '}
                         {denomConversion(quoteToken)}
                       </span>
                     </div>
@@ -627,17 +692,19 @@ const CreatePoolModal = ({
       ),
     },
     {
-      title: "",
+      title: '',
       content: (
         <>
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div
                 className={`${styles.tradeCard__body__right} ${styles.active}`}
               >
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -654,7 +721,7 @@ const CreatePoolModal = ({
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {denomConversion(baseToken)}
                     <div className="pool-denom">{BASE_PERCENTAGE}%</div>
@@ -668,14 +735,16 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          <div className={`${styles.tradeCard__body__item} ${styles.border__radius}`}>
+          <div
+            className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
+          >
             <div className={styles.tradeCard__body__left}>
               <div
                 className={`${styles.tradeCard__body__right} ${styles.active}`}
               >
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -692,7 +761,7 @@ const CreatePoolModal = ({
                   <div
                     className={`${
                       styles.tradeCard__body__left__item__details__title
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
                     {denomConversion(quoteToken)}
                     <div className="pool-denom">{QUOTE_PERCENTAGE}%</div>
@@ -776,13 +845,13 @@ const CreatePoolModal = ({
           <div className="checkbox-container mt-3 text-center ml-3">
             <Checkbox onChange={onCheckChange} checked={isAccepted}>
               <p>
-                I understand that creating a new pool will cost{" "}
+                I understand that creating a new pool will cost{' '}
                 {`${amountConversionWithComma(
                   params?.poolCreationFee?.[0]?.amount,
                   assetMap[params?.poolCreationFee?.[0]?.denom]?.decimals
                 )} 
-              ${denomConversion(params?.poolCreationFee?.[0]?.denom)}`}{" "}
-              </p>{" "}
+              ${denomConversion(params?.poolCreationFee?.[0]?.denom)}`}{' '}
+              </p>{' '}
             </Checkbox>
           </div>
         </>
@@ -799,7 +868,7 @@ const CreatePoolModal = ({
         footer={false}
         centered={true}
         className="create-pool-modal"
-        closeIcon={<Icon className={"bi bi-x-lg"} />}
+        closeIcon={<Icon className={'bi bi-x-lg'} />}
       >
         <h2 className="pool-denom">Create New Pool</h2>
         <Steps className="comdex-steps" current={current}>
@@ -832,7 +901,7 @@ const CreatePoolModal = ({
         <div className="steps-action text-right mt-3">
           {current > 0 && (
             <Button
-              style={{ margin: "0 8px" }}
+              style={{ margin: '0 8px' }}
               type="primary"
               onClick={() => prev()}
             >

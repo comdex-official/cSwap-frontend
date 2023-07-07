@@ -212,6 +212,7 @@
   justify-content: space-between;
   padding: 20px 0px;
   gap: 20px;
+  width: 90%;
 
   @media screen and (max-width: $MIX) {
     flex-direction: column;
@@ -517,7 +518,7 @@
 
   &.apr__pool {
     margin-bottom: 0;
-  height: 16px;
+    height: 16px;
   }
 
   &.emission {
@@ -812,7 +813,7 @@
   padding: 2px 15px;
   color: #ffffff;
   // background: #132239;
-  border: 0.913px solid #2A55B1;
+  border: 0.913px solid #2a55b1;
   border-radius: 41px;
   display: flex;
   align-items: center;
@@ -1339,9 +1340,9 @@
   // font-size: 12px;
   // line-height: 17px;
   font-size: 14.26px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   /* identical to box height */
 
   display: flex;
@@ -1430,15 +1431,15 @@ line-height: normal;
   // line-height: 20px;
   text-align: right;
   // color: #acbfdb;
-  color: #FFF;
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 
   span {
     margin-left: 10px;
-    color: #FFF;
+    color: #fff;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -1461,7 +1462,7 @@ line-height: normal;
 
   span {
     // color: #fe4350;
-    color: #FFF;
+    color: #fff;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -1602,9 +1603,9 @@ line-height: normal;
   // font-size: 15px;
   // line-height: 28px;
   font-size: 17.265px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
   color: #ffffff;
   margin: 0px 10px;
 
@@ -1657,12 +1658,12 @@ line-height: normal;
   // line-height: 15px;
   text-align: right;
   // color: #acbfdb;
-  color: #FFF;
-font-size: 8.632px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
-margin-top: 6px;
+  color: #fff;
+  font-size: 8.632px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin-top: 6px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -1684,12 +1685,12 @@ margin-top: 6px;
   // line-height: 15px;
   text-align: right;
   // color: #acbfdb;
-  color: #FFF;
-font-size: 8.632px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
-margin-top: 6px;
+  color: #fff;
+  font-size: 8.632px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin-top: 6px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -1719,8 +1720,8 @@ margin-top: 6px;
 
   font-size: 16.265px;
   font-style: normal;
-font-weight: 300;
-line-height: normal;
+  font-weight: 300;
+  line-height: normal;
   color: #ffffff;
 
   &.title {
@@ -1728,9 +1729,9 @@ line-height: normal;
     // font-size: 12px;
     // line-height: 20px;
     /* identical to box height */
-   
+
     font-size: 12.085px;
-    
+
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -1753,7 +1754,7 @@ line-height: normal;
     // /* identical to box height */
 
     // color: #acbfdb;
-    color: #A1C7FF;
+    color: #a1c7ff;
     font-size: 12.812px;
     font-style: normal;
     font-weight: 400;
@@ -1774,7 +1775,7 @@ line-height: normal;
     // /* identical to box height */
 
     // color: #acbfdb;
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 12.812px;
     font-style: normal;
     font-weight: 400;
@@ -1787,7 +1788,6 @@ line-height: normal;
     //   font-size: 10px;
     // }
   }
-
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 15px;
@@ -1874,11 +1874,11 @@ line-height: normal;
   /* identical to box height */
 
   // color: #acbfdb;
-  color: #FFF;
-font-size: 12.085px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
+  color: #fff;
+  font-size: 12.085px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 
   margin-top: 10px;
 
@@ -2125,5 +2125,7 @@ line-height: normal;
 
 .farmCard__element__right__wholetab {
   display: flex;
-  align-items: flex-start;
+  // align-items: flex-start;
+  align-items: center;
+  gap: 30px;
 }

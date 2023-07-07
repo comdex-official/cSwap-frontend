@@ -452,9 +452,9 @@ const Deposit = ({
               <div className="farmrange-title">
                 {Number(pool?.price) > Number(pool?.minPrice) &&
                 Number(pool?.price) < Number(pool?.maxPrice) ? (
-                  <span className="success-color">In range</span>
+                  <span className="success-color2">In range</span>
                 ) : (
-                  <span className="warn-color">Out of range</span>
+                  <span className="warn-color2">Out of range</span>
                 )}
                 <Tooltip
                   overlayClassName="ranged-tooltip"

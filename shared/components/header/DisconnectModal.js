@@ -17,7 +17,7 @@ import variables from '../../../utils/variables';
 import Copy from '../Copy';
 import { Icon } from '../../../shared/image/Icon';
 import { NextImage } from '../../image/NextImage';
-import { Cosmos, Keplr,Ledger } from '../../image';
+import { Cosmos, Keplr, Ledger } from '../../image';
 import styles from './Header.module.scss';
 
 const DisConnectModal = ({
@@ -103,35 +103,40 @@ const DisConnectModal = ({
             <div className="wallet-connect-tl">Account </div>
             <div className="wallet-connect-des">
               {`Connected with
-              ${localStorage.getItem('loginType') === 'ledger'
-                ? 'Native-ledger'
-                : localStorage.getItem('loginType') === 'keplr'
-                ? 'Keplr'
-                : "Leap Cosmos Wallet"}`}
+              ${
+                localStorage.getItem('loginType') === 'ledger'
+                  ? 'Native-ledger'
+                  : localStorage.getItem('loginType') === 'keplr'
+                  ? 'Keplr'
+                  : 'Leap Cosmos Wallet'
+              }`}
             </div>
           </div>
           <div className="wallet-connect-wrap2">
             <div className="wallet-connect-up">
               <div className="wallet-connect-left">
                 <div className="wallet-connect-logo">
-                {localStorage.getItem('loginType') === 'keplr'
-                ?<div className={styles.dropdown__wallet__logo}>
-                <NextImage src={Keplr} alt="Keplr" />
-              </div>
-                : localStorage.getItem('loginType') === 'leap'
-                ?  <div className={styles.dropdown__wallet__logo}>
-                <NextImage src={Cosmos} alt="Keplr" />
-              </div>
-                :  <div className={`${styles.dropdown__wallet__logo} ${styles.active}`}>
-                <NextImage
-                  src={Ledger}
-                  alt="Keplr"
-                  className={styles.activeImage}
-                />
-              </div>}
-                 
+                  {localStorage.getItem('loginType') === 'keplr' ? (
+                    <div className={styles.dropdown__wallet__logo}>
+                      <NextImage src={Keplr} alt="Keplr" />
+                    </div>
+                  ) : localStorage.getItem('loginType') === 'leap' ? (
+                    <div className={styles.dropdown__wallet__logo}>
+                      <NextImage src={Cosmos} alt="Keplr" />
+                    </div>
+                  ) : (
+                    <div
+                      className={`${styles.dropdown__wallet__logo} ${styles.active}`}
+                    >
+                      <NextImage
+                        src={Ledger}
+                        alt="Keplr"
+                        className={styles.activeImage}
+                      />
+                    </div>
+                  )}
                 </div>
-                <div className="wallet-connect-title2">Cryptoworld</div>
+                <div className="wallet-connect-title2">{name}</div>
               </div>
               <div className="wallet-connect-wrap">
                 <Button
@@ -146,7 +151,7 @@ const DisConnectModal = ({
               </div>
             </div>
             <div className="wallet-connect-down">
-              <div >
+              <div>
                 <div> {variables[lang].balance_wallet}</div>
                 <div className="balance__value__data">
                   {amountConversionWithComma(

@@ -215,7 +215,7 @@ const TradehistoryTable = ({ address, pairs }) => {
 
         date: moment(item?.time).format('LLL'),
         pair: getPair(item?.details?.pair_id)
-          ? getPair(item?.details?.pair_id)
+          ? getPair(item?.details?.pair_id)?.replace(/\//g, '-')
           : '-',
       };
     });
