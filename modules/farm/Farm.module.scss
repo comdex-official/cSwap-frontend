@@ -512,13 +512,15 @@
   justify-content: space-between;
   margin-bottom: 8px;
   margin-top: 10px;
+  align-items: center;
+
   &.active {
     min-height: 28px;
   }
 
   &.apr__pool {
     margin-bottom: 0;
-    height: 16px;
+    height: 20px;
   }
 
   &.emission {
@@ -806,7 +808,7 @@
   // font-weight: 550;
   // font-size: 12px;
   // line-height: 17px;
-  font-size: 14.609px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 200;
   line-height: normal;
@@ -831,8 +833,9 @@
   // }
 
   &.boost {
-    font-size: 11px;
+    font-size: 14px;
     line-height: 18px;
+
     img {
       margin-left: -5px;
     }
@@ -892,10 +895,10 @@
   // font-weight: 450;
   // font-size: 13px;
   // line-height: 22px;
-  font-size: 15px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 300;
-  line-height: normal;
+  line-height: 18px;
   color: #ffffff;
   clear: both;
   display: inline-block;
@@ -1659,9 +1662,9 @@
   text-align: right;
   // color: #acbfdb;
   color: #fff;
-  font-size: 8.632px;
+  font-size: 10.632px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   line-height: normal;
   margin-top: 6px;
   // @media screen and (max-width: $XXL) {
@@ -1686,9 +1689,9 @@
   text-align: right;
   // color: #acbfdb;
   color: #fff;
-  font-size: 8.632px;
+  font-size: 10.632px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   line-height: normal;
   margin-top: 6px;
   // @media screen and (max-width: $XXL) {
