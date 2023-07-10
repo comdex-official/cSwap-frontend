@@ -898,11 +898,11 @@ const CreatePoolModal = ({
           </div>
         </div>
         <div className="steps-content">{steps[current].content}</div>
-        <div className="steps-action text-right mt-3">
+        <div className="steps-action mt-3">
           {current > 0 && (
             <Button
-              style={{ margin: '0 8px' }}
-              type="primary"
+              style={{ margin: '0 8px',height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              type="primary btn-filled2"
               onClick={() => prev()}
             >
               Previous
@@ -911,7 +911,8 @@ const CreatePoolModal = ({
           {current < steps.length - 1 && (
             <Button
               disabled={disableConditions}
-              type="primary"
+              style={{ height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              type="primary btn-filled2"
               onClick={() => next()}
             >
               Next
@@ -921,7 +922,8 @@ const CreatePoolModal = ({
             <Button
               loading={inProgress}
               disabled={!isAccepted}
-              type="primary"
+              style={{ height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              type="primary btn-filled2"
               onClick={() => handleCreate()}
             >
               Create

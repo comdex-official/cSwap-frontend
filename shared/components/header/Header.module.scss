@@ -5,6 +5,8 @@
   position: relative;
   width: 100%;
   z-index: 999;
+  max-width: 1500px;
+  margin: auto;
   // background: linear-gradient(
   //   270deg,
   //   rgba(5, 10, 37, 0.64) 37.5%,
@@ -42,7 +44,7 @@
 
 .header__logo {
   img {
-    height: 30px;
+    height: 42px;
     width: 120px;
     cursor: pointer;
 
@@ -65,11 +67,11 @@
 .right__item {
   width: 60%;
   text-align: left;
-  color: #FFF;
-font-size: 12px;
-font-style: normal;
-font-weight: 300;
-text-transform: capitalize;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 300;
+  text-transform: capitalize;
 }
 
 .header__left__element {

@@ -1128,7 +1128,7 @@ const FarmTable = ({
             }`}
           >
             {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
-                    value?.balances?.baseCoin?.denom === 'ucmst') && (
+              value?.balances?.baseCoin?.denom === 'ucmst') && (
               <Tooltip
                 title={'HARBOR emissions enabled'}
                 overlayClassName="farm_upto_apr_tooltip"
@@ -1153,19 +1153,18 @@ const FarmTable = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-               
-  {getMasterPool(value?.id?.toNumber()) ? (
-                <div
-                  className={`${styles.farmCard__element__right__pool} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  {/* <div
+                {getMasterPool(value?.id?.toNumber()) ? (
+                  <div
+                    className={`${styles.farmCard__element__right__pool} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    {/* <div
                     className={`${styles.farmCard__element__right__pool__title} ${
                       theme === "dark" ? styles.dark : styles.light
                     }`}
                   > */}
-                
+
                     <div
                       className={`${
                         styles.farmCard__element__right__pool__title
@@ -1174,7 +1173,7 @@ const FarmTable = ({
                       <NextImage src={Pyramid} alt="Logo" />
                       {'Master Pool'}
                     </div>
-                  
+
                     {/* // <div
                     //   className={`${
                     //     styles.farmCard__element__right__pool__title
@@ -1185,45 +1184,44 @@ const FarmTable = ({
                     //   <NextImage src={Current} alt="Logo" />
                     //   {"MP Boost"}
                     // </div> */}
-                  
-                </div>
+                  </div>
                 ) : (
                   ''
-                  )}
+                )}
 
-{(value?.balances?.quoteCoin?.denom === 'ucmst' ||
-                    value?.balances?.baseCoin?.denom === 'ucmst') && (
-                    <div
-                      className={`${
-                        styles.farmCard__element__apr__poll__wrap
-                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
+                  value?.balances?.baseCoin?.denom === 'ucmst') && (
+                  <div
+                    className={`${styles.farmCard__element__apr__poll__wrap} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    <Tooltip
+                      title={
+                        'Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions.'
+                      }
+                      overlayClassName="farm_upto_apr_tooltip"
                     >
-                      <Tooltip
-                        title={
-                          'Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions.'
-                        }
-                        overlayClassName="farm_upto_apr_tooltip"
+                      <div
+                        className={`${
+                          styles.farmCard__element__right__apr_pool__title
+                        }  ${styles.boost} ${
+                          theme === 'dark' ? styles.dark : styles.light
+                        }`}
                       >
-                        <div
-                          className={`${
-                            styles.farmCard__element__right__apr_pool__title
-                          }  ${styles.boost} ${
-                            theme === 'dark' ? styles.dark : styles.light
-                          }`}
-                        >
-                          <NextImage src={HirborLogo} alt="Logo" />
-                          {value?.id &&
-                            commaSeparator(
-                              calculateVaultEmission(
-                                value?.id?.toNumber()
-                              ).toFixed(2)
-                            )}
-                        </div>
-                      </Tooltip>
-                    </div>
-                  )}
+                        <NextImage src={HirborLogo} alt="Logo" />
+                        {value?.id &&
+                          commaSeparator(
+                            calculateVaultEmission(
+                              value?.id?.toNumber()
+                            ).toFixed(2)
+                          )}
+                      </div>
+                    </Tooltip>
+                  </div>
+                )}
 
-{value?.type === 2 ? (
+                {value?.type === 2 ? (
                   <div
                     className={`${styles.farmCard__element__right__basic} ${
                       theme === 'dark' ? styles.dark : styles.light
@@ -1285,7 +1283,6 @@ const FarmTable = ({
                 )}
                 {/* </div> */}
               </div>
-
 
               {/* {checkExternalIncentives(value?.id?.toNumber()) && (
                 <div
@@ -1417,8 +1414,6 @@ const FarmTable = ({
                       </div>
                     </div>
                   )}
-
-                
                 </div>
               </div>
             </Tooltip>
@@ -1765,14 +1760,24 @@ const FarmTable = ({
       };
     });
 
+  const tableClassName = (record) => {
+    if (getMasterPool(Number(record?.APR?.id))) {
+      return 'master__card'; // Custom CSS class for the highlighted row
+    }
+    return ''; // Empty string for default row class
+  };
+
+  console.log(tableClassName());
+
   return (
     <>
       {noDataButton ? (
         <Table
-          className="custom-table assets-table"
+          className={'custom-table assets-table'}
           dataSource={DATA2}
           columns={COLUMNS2}
           pagination={false}
+          rowClassName={tableClassName}
           locale={{
             emptyText: (
               <NoDataIcon
@@ -1787,9 +1792,10 @@ const FarmTable = ({
         />
       ) : (
         <Table
-          className="custom-table assets-table"
+          className={'custom-table assets-table'}
           dataSource={DATA}
           columns={COLUMNS}
+          rowClassName={tableClassName}
           pagination={false}
           locale={{
             emptyText: <NoDataIcon text="No Pools Exist" button={false} />,
