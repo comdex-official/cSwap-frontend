@@ -66,6 +66,7 @@
   // height: 275px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   // justify-content: center;
 
   // &::before {
@@ -222,8 +223,8 @@
 .farm__header__right__body {
   display: flex;
   flex-direction: column;
-  padding: 10px 20px;
-  padding-bottom: 40px;
+  padding: 20px;
+  // padding-bottom: 40px;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(2px);
   width: 100%;
@@ -254,7 +255,7 @@
   // font-size: 15px;
   // line-height: 27px;
   color: #ffffff;
-  font-size: 25px;
+  font-size: 23px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -268,7 +269,7 @@
 }
 
 .farm__header__right__body__description {
-  height: 20px;
+  // height: 20px;
   // font-weight: 400;
   // font-size: 12px;
   // line-height: 15px;
@@ -511,8 +512,9 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-  margin-top: 10px;
-  align-items: center;
+  margin-top: 12px;
+
+  // align-items: center;
 
   &.active {
     min-height: 28px;
@@ -551,6 +553,10 @@
 .farmCard__element__left__logo__wrap {
   display: flex;
   align-items: center;
+
+  &.active__card {
+    margin-top: -11px;
+  }
 }
 
 .farmCard__element__left__logo {
@@ -716,7 +722,7 @@
   padding: 1px;
   position: relative;
   // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
-  background: #507fe5;
+  background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
   margin-left: 10px;
 }
 
@@ -725,7 +731,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
   // margin-bottom: 8px;
 }
 
@@ -733,9 +739,9 @@
   font-weight: 550;
   font-size: 12px;
   line-height: 17px;
-  padding: 2px 15px;
+  padding: 4px 15px;
   color: #ffffff;
-  background: #132239;
+  background: #111234;
   border-radius: 41px;
   clear: both;
   display: inline-block;
@@ -796,11 +802,15 @@
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(95.24deg, #70f0af -5.75%, #3fbb7c 110.25%);
+  background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
   // background: #a1c7ff;
 
   &.upto {
     // background: #2a55b1;
+  }
+
+  &.active {
+    margin-right: 35px;
   }
 }
 
@@ -812,10 +822,10 @@
   font-style: normal;
   font-weight: 200;
   line-height: normal;
-  padding: 2px 15px;
+  padding: 4px 15px;
   color: #ffffff;
-  // background: #132239;
-  border: 0.913px solid #2a55b1;
+  background: #111234;
+  // border: 0.913px solid #2a55b1;
   border-radius: 41px;
   display: flex;
   align-items: center;
@@ -1011,9 +1021,9 @@
   // font-weight: 800;
   // font-size: 16px;
   // line-height: 27px;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 500;
   line-height: normal;
   margin-left: 15px;
   // color: #68ffc0;
@@ -1534,6 +1544,10 @@
   justify-content: space-between;
   width: 100%;
 
+  &.center{
+    align-items: center;
+  }
+
   &.active {
     align-items: unset;
   }
@@ -1666,7 +1680,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: 6px;
+  margin-top: 10px;
   // @media screen and (max-width: $XXL) {
   //   font-size: 7px;
   // }
@@ -1713,7 +1727,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .liquidityCard__pool__title {
@@ -1883,7 +1897,7 @@
   font-weight: 300;
   line-height: normal;
 
-  margin-top: 10px;
+  margin-top: 25px;
 
   // @media screen and (max-width: $XXL) {
   //   font-size: 12px;
@@ -1922,8 +1936,13 @@
 }
 
 .liquidityCard__pool__withdraw__footer {
-  margin-top: 20px;
+  // margin-top: 20px;
+  // margin-bottom: 20px;
+  margin-top: 25px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .liquidityCard__pool__withdraw__element {
@@ -2007,7 +2026,7 @@
   padding: 1px;
   position: relative;
   // background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
-  background: linear-gradient(99.47deg, #615b9d -18.18%, #7873a9 53.31%);
+  background: linear-gradient(182deg, #8481a2 -18.18%, #443da2 53.31%);
   // margin-top: 10px;
 }
 
@@ -2018,9 +2037,9 @@
   font-weight: 550;
   font-size: 12px;
   line-height: 10px;
-  padding: 2px 15px;
+  padding: 4px 15px;
   color: #ffffff;
-  background: #132239;
+  background: #111234;
   border-radius: 41px;
   white-space: nowrap;
   transition: all 1s ease-in-out;

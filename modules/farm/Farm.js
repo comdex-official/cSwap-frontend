@@ -530,7 +530,7 @@ const Farm = ({
               >
                 <div>
                   {
-                    'Supercharge Your LP Earnings with boosted rewards on cSwap.'
+                    'Supercharge your LP earnings with boosted rewards on cSwap.'
                   }
                   <span
                     className={`${styles.farm__header__left__more} ${

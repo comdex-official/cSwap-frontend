@@ -1,42 +1,42 @@
-import styles from "./Portfolio.module.scss";
-import { HighchartsReact } from "highcharts-react-official";
-import Highcharts from "highcharts";
-import Tab from "../../shared/components/tab/Tab";
-import Search from "../../shared/components/search/Search";
-import PortfolioTable from "./PortfollioTable";
-import { Button, Input, message, Switch, Table, Tabs } from "antd";
-import Lodash from "lodash";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import { setAccountBalances } from "../../actions/account";
-import { setLPPrices, setMarkets } from "../../actions/oracle";
-import { cmst, comdex, harbor } from "../../config/network";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { getChainConfig } from "../../services/keplr";
-import { fetchRestPrices } from "../../services/oracle/query";
+import styles from './Portfolio.module.scss';
+import { HighchartsReact } from 'highcharts-react-official';
+import Highcharts from 'highcharts';
+import Tab from '../../shared/components/tab/Tab';
+import Search from '../../shared/components/search/Search';
+import PortfolioTable from './PortfollioTable';
+import { Button, Input, message, Switch, Table, Tabs } from 'antd';
+import Lodash from 'lodash';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { setAccountBalances } from '../../actions/account';
+import { setLPPrices, setMarkets } from '../../actions/oracle';
+import { cmst, comdex, harbor } from '../../config/network';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { getChainConfig } from '../../services/keplr';
+import { fetchRestPrices } from '../../services/oracle/query';
 import {
   amountConversion,
   commaSeparatorWithRounding,
   denomConversion,
   getDenomBalance,
-} from "../../utils/coin";
+} from '../../utils/coin';
 import {
   commaSeparator,
   formateNumberDecimalsAuto,
   formatNumber,
   marketPrice,
-} from "../../utils/number";
-import { Icon } from "../../shared/image/Icon";
-import PortifolioTab from "./PortofolioTab";
+} from '../../utils/number';
+import { Icon } from '../../shared/image/Icon';
+import PortifolioTab from './PortofolioTab';
 import {
   queryPoolCoinDeserialize,
   queryPoolsList,
   queryPoolSoftLocks,
-} from "../../services/liquidity/query";
-import { setPools, setUserLiquidityInPools } from "../../actions/liquidity";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
-import variables from "../../utils/variables";
+} from '../../services/liquidity/query';
+import { setPools, setUserLiquidityInPools } from '../../actions/liquidity';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../../constants/common';
+import variables from '../../utils/variables';
 
 const Portfolio = ({
   lang,
@@ -49,9 +49,9 @@ const Portfolio = ({
   setUserLiquidityInPools,
   userLiquidityInPools,
 }) => {
-  const theme = "dark";
+  const theme = 'dark';
 
-  const [active, setActive] = useState("Assets");
+  const [active, setActive] = useState('Assets');
 
   const getUserLiquidity = useCallback(
     (pool) => {
@@ -156,7 +156,7 @@ const Portfolio = ({
 
   const getTotalValue = useCallback(() => {
     const total = Number(assetBalance) + Number(totalFarmBalance);
-    return ((total || 0).toFixed(DOLLAR_DECIMALS));
+    return (total || 0).toFixed(DOLLAR_DECIMALS);
   }, [assetBalance, totalFarmBalance]);
 
   const handleActive = (item) => {
@@ -165,7 +165,7 @@ const Portfolio = ({
 
   const Options = {
     chart: {
-      type: "pie",
+      type: 'pie',
       backgroundColor: null,
       height: 200,
       width: 200,
@@ -175,35 +175,35 @@ const Portfolio = ({
       enabled: false,
     },
     title: {
-      text: `${formatNumber(getTotalValue() || 0)} <br /> ${
-        variables[lang].USD
-      }`,
-      verticalAlign: "middle",
+      text: `$${
+        formatNumber(getTotalValue() || 0)}
+     `,
+      verticalAlign: 'middle',
       floating: true,
       style: {
-        fontSize: "25px",
-        fontWeight: "600",
-        color: "#FFFFFF",
-        fontFamily: "Montserrat, sans-serif",
+        fontSize: '25px',
+        fontWeight: '600',
+        color: '#FFFFFF',
+        fontFamily: 'Montserrat, sans-serif',
       },
     },
     subtitle: {
       floating: true,
       style: {
-        fontSize: "25px",
-        fontWeight: "500",
-        fontFamily: "Montserrat, sans-serif",
-        color: "#fff",
+        fontSize: '25px',
+        fontWeight: '500',
+        fontFamily: 'Montserrat, sans-serif',
+        color: '#fff',
       },
       y: 70,
     },
     plotOptions: {
       pie: {
         showInLegend: false,
-        size: "100%",
-        innerSize: "75%",
+        size: '100%',
+        innerSize: '75%',
         borderWidth: 0,
-        className: "highchart_chart",
+        className: 'highchart_chart',
         dataLabels: {
           enabled: false,
           distance: -14,
@@ -217,22 +217,22 @@ const Portfolio = ({
       formatter: function () {
         return (
           '<div style="text-align:center; font-weight:800; ">' +
-          "$" +
+          '$' +
           formatNumber(this.y.toFixed(DOLLAR_DECIMALS)) +
-          "<br />" +
+          '<br />' +
           '<small style="font-size: 10px; font-weight:400;">' +
           this.key +
-          "</small>" +
-          "</div>"
+          '</small>' +
+          '</div>'
         );
       },
       useHTML: true,
-      backgroundColor: "#222A49",
-      borderColor: "#222A49",
+      backgroundColor: '#222A49',
+      borderColor: '#222A49',
       borderRadius: 10,
       zIndex: 99,
       style: {
-        color: "#fff",
+        color: '#fff',
       },
     },
     series: [
@@ -242,43 +242,42 @@ const Portfolio = ({
             enabled: true,
           },
         },
-        name: "",
+        name: '',
         data: [
           {
             name: variables[lang].farm_balance,
             y: Number(totalFarmBalance) || 0,
-            color: "#4E5ED6",
+            color: '#4E5ED6',
           },
           {
             name: variables[lang].asset_balance,
             y: Number(assetBalance) || 0,
-            color: "#A1C7FF",
+            color: '#A1C7FF',
           },
         ],
       },
     ],
   };
 
-
   return (
     <div
       className={`${styles.portfolio__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
+        theme === 'dark' ? styles.dark : styles.light
       }`}
     >
       <div
         className={`${styles.portfolio__main} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <div
           className={`${styles.portfolio__header__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.portfolio__header__element__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <HighchartsReact highcharts={Highcharts} options={Options} />
@@ -286,79 +285,81 @@ const Portfolio = ({
 
           <div
             className={`${styles.portfolio__element__footer__down} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.portfolio__element} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.portfolio__element__upper__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {"Total Value"}
+                {'Total Value'}
               </div>
               <div
                 className={`${styles.portfolio__element__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {getTotalValue()} {variables[lang].USD}
+                ${formatNumber(getTotalValue() || 0)}
+                {/* {variables[lang].USD} */}
               </div>
             </div>
             <div
               className={`${styles.portfolio__element} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.portfolio__element__upper__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <div />
-                {"Asset Balance"}
+                {'Asset Balance'}
               </div>
               <div
                 className={`${styles.portfolio__element__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)}{" "}
-                {variables[lang].USD}
+                ${formatNumber(commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS) || 0)}{' '}
+                {/* {variables[lang].USD} */}
               </div>
             </div>
             <div
               className={`${styles.portfolio__element} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.portfolio__element__upper__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                <div className={`${styles.farm}`} /> {"Farm Balance"}
+                <div className={`${styles.farm}`} /> {'Farm Balance'}
               </div>
               <div
                 className={`${styles.portfolio__element__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {commaSeparator(
+                $
+                {formatNumber((
                   Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
-                )}{" "}
-                {variables[lang].USD}
+                ) || 0)}
+                {/* {variables[lang].USD} */}
               </div>
             </div>
           </div>
         </div>
         <div
           className={`${styles.portfolio__table} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <PortifolioTab />

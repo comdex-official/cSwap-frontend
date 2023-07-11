@@ -722,7 +722,10 @@ const OrderBook = ({
     if (searchTerm) {
       let resultsObj = pairs.filter((item) => {
         return (
-          item?.pair_symbol?.replace(/\//g, '-')?.toLowerCase().match(new RegExp(searchTerm, 'g')) ||
+          item?.pair_symbol
+            ?.replace(/\//g, '-')
+            ?.toLowerCase()
+            .match(new RegExp(searchTerm, 'g')) ||
           item?.pair_symbol?.toLowerCase().match(new RegExp(searchTerm, 'g'))
         );
       });
@@ -797,7 +800,7 @@ const OrderBook = ({
           >
             <Input
               className="pair__input"
-              placeholder="Search market...."
+              placeholder="Search a token by symbol"
               onChange={(event) => onSearchChange(event.target.value)}
               prefix={<Icon className={'bi bi-search'} />}
               ref={ref}
@@ -913,98 +916,102 @@ const OrderBook = ({
                 </>
               ) : (
                 <>
-                  {filteredPair?.map((item) => (
-                    <div
-                      className={`${styles.dropdown__orderbook__table__body}`}
-                      key={item?.pair_id}
-                      onClick={() => handlePairChange(item?.pair_id)}
-                    >
+                  {filteredPair?.length <= 0 ? (
+                    <NoDataIcon />
+                  ) : (
+                    filteredPair?.map((item) => (
                       <div
-                        className={`${styles.dropdown__orderbook__body__title} ${styles.flex}`}
+                        className={`${styles.dropdown__orderbook__table__body}`}
+                        key={item?.pair_id}
+                        onClick={() => handlePairChange(item?.pair_id)}
                       >
                         <div
-                          className={`${styles.dropdown__orderbook__body__img}`}
-                          onClick={(e) => e.stopPropagation()}
+                          className={`${styles.dropdown__orderbook__body__title} ${styles.flex}`}
                         >
-                          {checkStar(item?.pair_symbol) ? (
-                            <NextImage
-                              src={StarHighlight}
-                              width={10}
-                              height={10}
-                              alt="Star"
-                              onClick={() => Delete(item?.pair_symbol)}
-                            />
-                          ) : (
-                            <NextImage
-                              src={Star}
-                              width={10}
-                              height={10}
-                              alt="Star"
-                              onClick={() => onFavourite(item?.pair_symbol)}
-                            />
-                          )}
+                          <div
+                            className={`${styles.dropdown__orderbook__body__img}`}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {checkStar(item?.pair_symbol) ? (
+                              <NextImage
+                                src={StarHighlight}
+                                width={10}
+                                height={10}
+                                alt="Star"
+                                onClick={() => Delete(item?.pair_symbol)}
+                              />
+                            ) : (
+                              <NextImage
+                                src={Star}
+                                width={10}
+                                height={10}
+                                alt="Star"
+                                onClick={() => onFavourite(item?.pair_symbol)}
+                              />
+                            )}
+                          </div>
+                          <div
+                            className={`${styles.dropdown__orderbook__body__pair}`}
+                          >
+                            {item?.pair_symbol?.replace(/\//g, '-')}
+                          </div>
                         </div>
                         <div
-                          className={`${styles.dropdown__orderbook__body__pair}`}
+                          className={`${styles.dropdown__orderbook__body__title}`}
                         >
-                          {item?.pair_symbol?.replace(/\//g, '-')}
+                          {formateNumberDecimalsAuto({
+                            price: Number(
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                            ),
+                          })}
                         </div>
-                      </div>
-                      <div
-                        className={`${styles.dropdown__orderbook__body__title}`}
-                      >
-                        {formateNumberDecimalsAuto({
-                          price: Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                              })
-                            )
-                          ),
-                        })}
-                      </div>
-                      <div
-                        className={`${
-                          styles.dropdown__orderbook__body__title
-                        } ${styles.flex2} ${
-                          Number(item?.total_volume_24h_change || 0).toFixed(
-                            DOLLAR_DECIMALS
-                          ) >= 0
-                            ? styles.profit
-                            : styles.loss
-                        }`}
-                      >
-                        {Number(item?.total_volume_24h_change || 0).toFixed(
-                          DOLLAR_DECIMALS
-                        ) >= 0 ? (
-                          <div
-                            className={`${styles.dropdown__orderbook__profit__arrow}`}
-                          >
-                            <Icon className={'bi bi-arrow-up-short'} />
-                          </div>
-                        ) : (
-                          <div
-                            className={`${styles.dropdown__orderbook__loss__arrow}`}
-                          >
-                            <Icon className={'bi bi-arrow-down-short'} />
-                          </div>
-                        )}
-                        {Number(item?.total_volume_24h_change || 0).toFixed(
-                          DOLLAR_DECIMALS
-                        ) >= 0
-                          ? '+'
-                          : '-'}
-                        {commaSeparator(
-                          Math.abs(
+                        <div
+                          className={`${
+                            styles.dropdown__orderbook__body__title
+                          } ${styles.flex2} ${
                             Number(item?.total_volume_24h_change || 0).toFixed(
                               DOLLAR_DECIMALS
+                            ) >= 0
+                              ? styles.profit
+                              : styles.loss
+                          }`}
+                        >
+                          {Number(item?.total_volume_24h_change || 0).toFixed(
+                            DOLLAR_DECIMALS
+                          ) >= 0 ? (
+                            <div
+                              className={`${styles.dropdown__orderbook__profit__arrow}`}
+                            >
+                              <Icon className={'bi bi-arrow-up-short'} />
+                            </div>
+                          ) : (
+                            <div
+                              className={`${styles.dropdown__orderbook__loss__arrow}`}
+                            >
+                              <Icon className={'bi bi-arrow-down-short'} />
+                            </div>
+                          )}
+                          {Number(item?.total_volume_24h_change || 0).toFixed(
+                            DOLLAR_DECIMALS
+                          ) >= 0
+                            ? '+'
+                            : '-'}
+                          {commaSeparator(
+                            Math.abs(
+                              Number(
+                                item?.total_volume_24h_change || 0
+                              ).toFixed(DOLLAR_DECIMALS)
                             )
-                          )
-                        )}
-                        %
+                          )}
+                          %
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </>
               )}
             </div>
@@ -1166,7 +1173,7 @@ const OrderBook = ({
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {(selectedPair?.pair_symbol)?.replace(/\//g, '-') || null}
+                    {selectedPair?.pair_symbol?.replace(/\//g, '-') || null}
                   </div>
                   <NextImage src={Drop} alt="Drop" />
                   {/* <Icon className={'bi bi-chevron-down'} size={'0.5rem'} /> */}
@@ -1211,7 +1218,11 @@ const OrderBook = ({
                       })
                     )}
                   </span>
-                  <span>
+                  <span
+                    className={`${styles.orderbook__trading__element__price}  ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
                     ~$
                     {formateNumberDecimalsAuto({
                       price:
@@ -1572,7 +1583,7 @@ const OrderBook = ({
                       }
                       overlayClassName="farm_upto_apr_tooltip"
                       placement="left"
-                      autoAdjustOverflow={false}
+                      // autoAdjustOverflow={false}
                     >
                       <div
                         className={`${styles.orderbook__lower__head} ${

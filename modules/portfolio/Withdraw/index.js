@@ -238,7 +238,7 @@ const Withdraw = ({
     <>
       <Button
         type="primary"
-        size="small"
+        size="large"
         onClick={showModal}
         className="btn-filled2"
       >

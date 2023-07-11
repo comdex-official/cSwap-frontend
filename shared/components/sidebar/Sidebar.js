@@ -13,6 +13,7 @@ import {
   Faucet,
   Harbor,
   Hyperlink,
+  Shop
 } from "../../../shared/image";
 import { Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
@@ -47,10 +48,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       key: "item-2",
       label: (
         <div className={styles.dropdown__cSwap__menu}>
-          <button>
+          <button onClick={() =>
+              window.open('https://app.harborprotocol.one/', '_blank')
+            }>
             <NextImage src={Harbor} alt="Logo" />
           </button>
-          <button>
+          <button onClick={() => window.open('https://app.commodo.one/', '_blank')}>
             <NextImage src={Comodo} alt="Logo" />
           </button>
         </div>
@@ -158,6 +161,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           className={styles.header__faucet}
           onClick={() => window.open("https://faucet.comdex.one/", "_blank")}
         >
+          <div>
           <NextImage src={Faucet} alt="Logo_Dark" />
           <div
             className={`${styles.header__faucet__title} ${
@@ -166,15 +170,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           >
             {"Faucet"}
           </div>
+          </div>
+          <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
         </div>
 
         <div className={styles.header__buy}>
+        <div>
+        <NextImage src={Shop} alt={'Logo'} />
           <div
             className={`${styles.header__buy__title} ${
               theme === "dark" ? styles.dark : styles.light
             }`}
           >
             {"Buy"}
+          </div>
           </div>
           <NextImage src={Hyperlink} alt={"Logo"} height={15} width={15} />
         </div>

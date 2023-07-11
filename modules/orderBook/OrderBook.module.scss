@@ -10,7 +10,7 @@
 
   @media screen and (max-width: $XS) {
     padding: 20px;
-    padding-top: 75px;
+    // padding-top: 50px;
   }
 }
 
@@ -303,7 +303,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-
+  width: 50px;
   &.width {
     width: 90px;
   }
@@ -368,7 +368,7 @@
   // line-height: 12px;
   // color: #73aed2;
   color: #4ac9e2;
-  font-size: 8.237px;
+  font-size: 9.237px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -386,7 +386,7 @@
     // line-height: 15px;
     color: #ffffff;
 
-    font-size: 9.884px;
+    font-size: 10.884px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -563,6 +563,11 @@
 .orderbook__body__tab__body {
   padding: 10px 0px;
   // border-bottom: 1px solid #303950;
+
+  &.active {
+    padding: 25px 0px;
+    border-bottom: 1px solid #28385f;
+  }
 }
 
 .orderbook__body__tab__body__balance {
@@ -605,7 +610,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 0px;
+  padding: 10px 0px;
 }
 
 .orderbook__body__tab__body__input__title {
@@ -613,7 +618,7 @@
   // font-size: 10px;
   // line-height: 20px;
   /* identical to box height */
-  font-size: 10.612px;
+  font-size: 12.612px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -692,7 +697,7 @@
 
 .orderbook__body__tab__button {
   text-align: center;
-  padding: 25px 0px;
+  padding: 12px 0px;
 
   button {
     background: #fe4350;
@@ -823,7 +828,7 @@
     background: #09111d;
     gap: 10px;
     // border-radius: 10px;
-    padding: 0px 10px;
+    padding: 10px;
   }
   &.element__child {
     flex-direction: column;
@@ -890,7 +895,7 @@
     // letter-spacing: 0.428571px;
 
     color: #4ac9e2;
-    font-size: 8.635px;
+    font-size: 10.635px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -904,15 +909,20 @@
     // }
   }
   &.profit {
-    color: #127350;
+    color: #0ee29b;
   }
   &.loos {
-    color: #86303e;
+    color: #f3164d;
   }
 
   @media screen and (max-width: $XS) {
     display: none;
   }
+}
+
+.orderbook__trading__element__price {
+  font-size: 9px;
+  color: gray;
 }
 
 .total__row {
@@ -964,10 +974,10 @@
   border-radius: 10px;
   border: 1px solid #181a23;
   background: #101b2f;
-padding: 10px;
+  padding: 10px;
   i {
     // color: #6b758d;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 }
 
@@ -1006,11 +1016,11 @@ padding: 10px;
   // font-weight: 500;
   // font-size: 10px;
   // line-height: 15px;
-  color: #FFF;
-font-size: 14px;
-font-style: normal;
-font-weight: 300;
-line-height: normal;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
   // color: #b1d2e5;
   width: 100px;
 
@@ -1026,11 +1036,11 @@ line-height: normal;
 
   width: 100px;
 
-  color: #FFF;
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
   &.flex {
     display: flex;
     align-items: center;
@@ -1069,9 +1079,9 @@ line-height: normal;
 .dropdown__orderbook__table__body__wrap {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 13px;
   overflow: auto;
-  max-height: 102px;
+  max-height: 140px;
 }
 
 .orderbook__buy__width__wrap {
