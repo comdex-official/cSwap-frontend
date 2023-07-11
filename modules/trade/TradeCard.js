@@ -378,6 +378,7 @@ const TradeCard = ({
   };
 
   const handleDemandCoinDenomChange = (value) => {
+    setsearchKey('');
     setoutputOptions(pairsMapping[offerCoin?.denom]);
     setoutputOptions2([]);
     setDemandCoinDenom(value);
@@ -392,6 +393,7 @@ const TradeCard = ({
   };
 
   const handleOfferCoinDenomChange = (value) => {
+    setsearchKey('');
     setinputOptions(Object.keys(pairsMapping));
     setinputOptions2([]);
     setOfferCoinDenom(value);
@@ -657,9 +659,10 @@ const TradeCard = ({
 
   const [inputOptions2, setinputOptions2] = useState([]);
   const [outputOptions2, setoutputOptions2] = useState([]);
-
+  const [searchKey, setsearchKey] = useState('');
   const onSearchChange1 = (searchKey) => {
     const searchTerm = searchKey.trim().toLowerCase();
+    setsearchKey(searchTerm);
     if (searchTerm) {
       let resultsObj = inputOptions.filter((item) => {
         return denomConversion(item)
@@ -675,6 +678,7 @@ const TradeCard = ({
 
   const onSearchChange2 = (searchKey) => {
     const searchTerm = searchKey.trim().toLowerCase();
+    setsearchKey(searchTerm);
     if (searchTerm) {
       let resultsObj = outputOptions.filter((item) => {
         return denomConversion(item)
@@ -687,6 +691,8 @@ const TradeCard = ({
       setoutputOptions2([]);
     }
   };
+
+  console.log(searchKey);
 
   return (
     <>
@@ -794,12 +800,16 @@ const TradeCard = ({
                                 : null
                             }
                             onChange={handleOfferCoinDenomChange}
-                            list={ inputOptions2.length > 0
-                              ? inputOptions2
-                              : 
-                              inputOptions?.length > 0 ? inputOptions : null
+                            list={
+                              searchKey.length > 0
+                                ? inputOptions2
+                                : inputOptions?.length > 0
+                                ? inputOptions
+                                : null
                             }
                             onSearchChange={onSearchChange1}
+                            assetMap={assetMap}
+                            balances={balances}
                           />
                         </div>
                       </div>
@@ -903,12 +913,15 @@ const TradeCard = ({
                               }
                               onChange={handleDemandCoinDenomChange}
                               list={
-                                outputOptions2.length > 0
-                                ? outputOptions2
-                                : 
-                                outputOptions?.length > 0 ? outputOptions : null
+                                searchKey.length > 0
+                                  ? outputOptions2
+                                  : outputOptions?.length > 0
+                                  ? outputOptions
+                                  : null
                               }
                               onSearchChange={onSearchChange2}
+                              assetMap={assetMap}
+                              balances={balances}
                             />
                           </div>
                         </div>

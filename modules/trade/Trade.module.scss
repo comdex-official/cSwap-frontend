@@ -15,8 +15,8 @@
   }
 
   @media screen and (max-width: $XS) {
-    padding: 10px;
-    padding-top: 40px;
+    padding: 20px;
+    padding-top: 50px;
   }
 }
 
@@ -25,6 +25,9 @@
   margin-top: 40px;
   margin-bottom: 20px;
   max-width: 471px;
+  @media screen and (max-width: $XS) {
+    margin-top: 60px;
+  }
 }
 
 .tradeCard__main {

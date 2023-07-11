@@ -404,6 +404,8 @@ const FarmCard = ({
   //   return () => clearInterval(interval);
   // }, []);
 
+  console.log({ poolsApr });
+
   return (
     <div
       className={`${styles.farmCard__wrap} ${
@@ -445,7 +447,7 @@ const FarmCard = ({
             >
               <div
                 className={`${styles.farmCard__element__left__logo__wrap} ${
-                  theme === 'dark' ? styles.dark : styles.light
+                 styles.active__card
                 }`}
               >
                 <div
@@ -503,7 +505,26 @@ const FarmCard = ({
                 >
                   {showPairDenoms()}
                 </div>
+              </div>
 
+              <div
+                className={`${styles.farmCard__element__left__description} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
+                {`Pool #${pool?.id?.toNumber()}`}
+              </div>
+            </div>
+            <div
+              className={`${styles.farmCard__element__right} ${
+                theme === 'dark' ? styles.dark : styles.light
+              }`}
+            >
+              <div
+                className={`${styles.farmCard__element__right__main} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
                 <div
                   className={`${styles.farmCard__element__left__right} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -511,8 +532,8 @@ const FarmCard = ({
                 >
                   {getMasterPool() ? (
                     <div
-                      className={`${styles.farmCard__element__right__pool} ${
-                        theme === 'dark' ? styles.dark : styles.light
+                      className={`${styles.farmCard__element__right__pool}  ${
+                        getMasterPool() ? styles.active : ''
                       }`}
                     >
                       <div
@@ -539,26 +560,6 @@ const FarmCard = ({
                     ''
                   )}
                 </div>
-              </div>
-
-              <div
-                className={`${styles.farmCard__element__left__description} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {`Pool #${pool?.id?.toNumber()}`}
-              </div>
-            </div>
-            <div
-              className={`${styles.farmCard__element__right} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.farmCard__element__right__main} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
                 {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
                   pool?.balances?.baseCoin?.denom === 'ucmst') && (
                   <Tooltip
@@ -737,6 +738,7 @@ const FarmCard = ({
             </div>
 
             <Tooltip
+              // visible={true}
               title={
                 !getMasterPool() ? (
                   <>
@@ -893,7 +895,7 @@ const FarmCard = ({
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {`$${TotalPoolLiquidity}`}
+              {`$${(TotalPoolLiquidity || 0)}`}
             </div>
           </div>
 

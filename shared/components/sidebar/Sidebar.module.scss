@@ -1,10 +1,14 @@
-@import "../../../styles/globalVariable.scss";
+@import '../../../styles/globalVariable.scss';
 
 .sidebar__wrap {
   position: fixed;
   top: 0;
   left: 0;
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border: 1px solid #393939;
+  background: #111020;
   height: 100%;
   padding: 20px;
   width: 250px;
@@ -36,13 +40,16 @@
   margin-top: 20px;
 
   i {
+    cursor: pointer;
     color: #ffffff;
   }
 }
 .sidebar__logo {
+  cursor: pointer;
   img {
     height: 45.14px;
     width: 130px;
+    cursor: pointer;
   }
 }
 
@@ -54,13 +61,14 @@
 
 .sidebar__element {
   padding: 20px 0px;
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 300;
+  font-size: 16px;
   line-height: 18px;
   text-align: left;
-  opacity: 0.5;
-  text-transform: uppercase;
-
+  // opacity: 0.5;
+  text-transform: capitalize;
+  cursor: pointer;
+  
   &.light {
     color: $black;
   }
@@ -70,13 +78,12 @@
   }
 
   &.active {
-    font-weight: 700;
-    color: $white;
-    opacity: 1;
+    font-weight: 500;
+    color: #fe2b56;
 
-    &::first-letter {
-      text-decoration: underline;
-    }
+    // &::first-letter {
+    //   text-decoration: underline;
+    // }
   }
 }
 
@@ -112,12 +119,12 @@
 }
 
 .header__cSwap {
-  padding: 5px 10px;
-  width: 110px;
+  // padding: 5px 10px;
+  // width: 110px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: $red;
+  background: transparent;
   border-radius: 23px;
   margin-right: 10px;
   cursor: pointer;
@@ -129,31 +136,35 @@
     color: #ffffff;
   }
 
-  @media screen and (min-width: $XS) {
-    display: none;
-  }
+  // @media screen and (min-width: $XS) {
+  //   display: none;
+  // }
 }
 
 .header__faucet {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background: $red;
+  background: transparent;
   border-radius: 23px;
-  padding: 5px 10px;
-  width: 110px;
+  // padding: 5px 10px;
+  // width: 110px;
   margin-right: 10px;
   cursor: pointer;
   margin-top: 20px;
-
+  div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
   img {
     height: 15px;
     width: 15px;
   }
 
-  @media screen and (min-width: $XS) {
-    display: none;
-  }
+  // @media screen and (min-width: $XS) {
+  //   display: none;
+  // }
 }
 
 .header__cSwap__main {
@@ -170,7 +181,7 @@
   font-weight: 700;
   font-size: 12px;
   line-height: 22px;
-  margin-left: 8px;
+  margin-left: 17px;
   text-align: center;
 
   &.light {
@@ -226,14 +237,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: $red;
+  background: transparent;
   border-radius: 23px;
-  padding: 5px 10px;
-  width: 70px;
+  // padding: 5px 10px;
+  // width: 70px;
   margin-right: 10px;
   cursor: pointer;
   margin-top: 20px;
-  
+
+  div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
   img {
     height: 15px;
     width: 15px;
@@ -243,9 +260,9 @@
   //   width: 110px;
   // }
 
-  @media screen and (min-width: $XS) {
-    display: none;
-  }
+  // @media screen and (min-width: $XS) {
+  //   display: none;
+  // }
 }
 
 .header__buy__title {
@@ -253,6 +270,7 @@
   font-size: 12px;
   line-height: 22px;
   text-align: center;
+  margin-left: 8px;
 
   &.light {
     color: $black;

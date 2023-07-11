@@ -155,7 +155,7 @@ const Sell = ({
 
         <div
           className={`${styles.orderbook__body__tab__body} ${
-            theme === 'dark' ? styles.dark : styles.light
+            type === 'market' ? styles.active : ""
           }`}
         >
           <div
@@ -297,7 +297,7 @@ const Sell = ({
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-                ~${Number(total) * marketPrice(markets, pair?.quote_coin_denom)}
+                ~${(Number(total) * marketPrice(markets, pair?.quote_coin_denom)).toFixed(4)}
               </label>
             </div>
           </div>

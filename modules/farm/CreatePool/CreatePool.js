@@ -102,10 +102,12 @@ const CreatePoolModal = ({
   };
 
   const handleBaseTokenChange = (value) => {
+    setsearchKey("");
     setBaseToken(value);
   };
 
   const handleQuoteTokenChange = (value) => {
+    setsearchKey("");
     setQuoteToken(value);
   };
 
@@ -238,6 +240,7 @@ const CreatePoolModal = ({
   const [outputOptions, setoutputOptions] = useState([]);
   const [inputOptions2, setinputOptions2] = useState([]);
   const [outputOptions2, setoutputOptions2] = useState([]);
+  const [searchKey, setsearchKey] = useState('');
 
   useEffect(() => {
     setinputOptions(uniqueLiquidityPairDenoms(liquidityPairs, 'in'));
@@ -252,6 +255,7 @@ const CreatePoolModal = ({
 
   const onSearchChange1 = (searchKey) => {
     const searchTerm = searchKey.trim().toLowerCase();
+    setsearchKey(searchTerm);
     if (searchTerm) {
       let resultsObj =
         inputOptions &&
@@ -269,6 +273,7 @@ const CreatePoolModal = ({
 
   const onSearchChange2 = (searchKey) => {
     const searchTerm = searchKey.trim().toLowerCase();
+    setsearchKey(searchTerm);
     if (searchTerm) {
       let resultsObj =
         outputOptions &&
@@ -293,7 +298,7 @@ const CreatePoolModal = ({
             className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
           >
             <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__right}>
+            <div className={`${styles.tradeCard__body__right} ${styles.center}`}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -308,7 +313,7 @@ const CreatePoolModal = ({
                       iconList={iconList}
                       onChange={handleBaseTokenChange}
                       list={
-                        inputOptions2.length > 0
+                        searchKey.length > 0
                           ? inputOptions2
                           : inputOptions.length > 0
                           ? inputOptions
@@ -316,18 +321,20 @@ const CreatePoolModal = ({
                       }
                       value={baseToken || null}
                       onSearchChange={onSearchChange1}
+                      assetMap={assetMap}
+                      balances={balances}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <CustomInput
+                  {/* <CustomInput
                     decimals={DOLLAR_DECIMALS}
                     value={BASE_PERCENTAGE}
                     disabled
                     className="assets-select-input with-select"
-                  />
-                  <span className="percentage ml-1">%</span>
+                  /> */}
+           <span className="percentage ml-1">{`${BASE_PERCENTAGE} %`}</span>
                 </div>
               </div>
             </div>
@@ -337,7 +344,7 @@ const CreatePoolModal = ({
             className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
           >
             <div className={styles.tradeCard__body__left}>
-              <div className={styles.tradeCard__body__right}>
+            <div className={`${styles.tradeCard__body__right} ${styles.center}`}>
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -353,7 +360,7 @@ const CreatePoolModal = ({
                       disabled={!baseToken}
                       onChange={handleQuoteTokenChange}
                       list={
-                        outputOptions2.length > 0
+                        searchKey.length > 0
                           ? outputOptions2
                           : outputOptions.length > 0
                           ? outputOptions
@@ -361,18 +368,20 @@ const CreatePoolModal = ({
                       }
                       value={quoteToken || null}
                       onSearchChange={onSearchChange2}
+                      assetMap={assetMap}
+                      balances={balances}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <CustomInput
+                  {/* <CustomInput
                     disabled
                     decimals={DOLLAR_DECIMALS}
                     value={QUOTE_PERCENTAGE}
                     className="assets-select-input with-select"
-                  />
-                  <span className="percentage ml-1">%</span>
+                  /> */}
+                <span className="percentage ml-1">{`${QUOTE_PERCENTAGE} %`}</span>
                 </div>
               </div>
             </div>

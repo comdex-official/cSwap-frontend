@@ -1,23 +1,23 @@
 // import style from "./Govern.moduleOld.scss";
-import { useRouter } from "next/router";
-import { Button, List, Spin, Tooltip, message } from "antd";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import Link from "next/link";
-import Copy from "../../shared/components/Copy";
-import VoteNowModal from "./VoteNowModal";
-import * as PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { Progress } from "@mantine/core";
+import { useRouter } from 'next/router';
+import { Button, List, Spin, Tooltip, message } from 'antd';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import Link from 'next/link';
+import Copy from '../../shared/components/Copy';
+import VoteNowModal from './VoteNowModal';
+import * as PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Progress } from '@mantine/core';
 import {
   setProposal,
   setProposalTally,
   setProposer,
   setTab,
-} from "../../actions/govern";
-import { comdex } from "../../config/network";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+} from '../../actions/govern';
+import { comdex } from '../../config/network';
+import { DOLLAR_DECIMALS } from '../../constants/common';
 import {
   fetchRestBondexTokens,
   fetchRestProposal,
@@ -26,24 +26,24 @@ import {
   fetchRestTallyParamsProposer,
   fetchRestVotingPower,
   queryUserVote,
-} from "../../services/govern/query";
+} from '../../services/govern/query';
 import {
   amountConversion,
   denomConversion,
   fixedDecimal,
-} from "../../utils/coin";
-import { formatTime } from "../../utils/date";
-import { formatNumber } from "../../utils/number";
+} from '../../utils/coin';
+import { formatTime } from '../../utils/date';
+import { formatNumber } from '../../utils/number';
 import {
   proposalOptionMap,
   proposalStatusMap,
   stringTagParser,
   truncateString,
-} from "../../utils/string";
-import moment from "moment";
-import Loading from "../../pages/Loading";
-import { NextImage } from "../../shared/image/NextImage";
-import { Hyperlink } from "../../shared/image";
+} from '../../utils/string';
+import moment from 'moment';
+import Loading from '../../pages/Loading';
+import { NextImage } from '../../shared/image/NextImage';
+import { Hyperlink } from '../../shared/image';
 
 const GovernViewPage = ({
   address,
@@ -80,19 +80,19 @@ const GovernViewPage = ({
 
   const data = [
     {
-      title: "Voting Starts",
+      title: 'Voting Starts',
       counts: proposal?.voting_start_time
         ? formatTime(proposal?.voting_start_time)
-        : "--/--/-- 00:00:00",
+        : '--/--/-- 00:00:00',
     },
     {
-      title: "Voting Ends",
+      title: 'Voting Ends',
       counts: proposal?.voting_end_time
         ? formatTime(proposal?.voting_end_time)
-        : "--/--/-- 00:00:00",
+        : '--/--/-- 00:00:00',
     },
     {
-      title: "Proposer",
+      title: 'Proposer',
       counts: (
         <>
           {proposer ? (
@@ -101,7 +101,7 @@ const GovernViewPage = ({
               <Copy text={proposer} />
             </p>
           ) : (
-            "------"
+            '------'
           )}
         </>
       ),
@@ -174,7 +174,7 @@ const GovernViewPage = ({
       (Number(totalValue) / Number(calculateQuoremThreshold)) * 100;
     if (
       isNaN(calculateCurrentThresholdData) ||
-      calculateCurrentThresholdData == "Infinity"
+      calculateCurrentThresholdData == 'Infinity'
     ) {
       return 0;
     }
@@ -290,7 +290,7 @@ const GovernViewPage = ({
 
   const Options = {
     chart: {
-      type: "pie",
+      type: 'pie',
       backgroundColor: null,
       height: 180,
       width: 220,
@@ -305,20 +305,20 @@ const GovernViewPage = ({
     subtitle: {
       floating: true,
       style: {
-        fontSize: "25px",
-        fontWeight: "500",
-        fontFamily: "Lexend Deca",
-        color: "#fff",
+        fontSize: '25px',
+        fontWeight: '500',
+        fontFamily: 'Lexend Deca',
+        color: '#fff',
       },
       y: 70,
     },
     plotOptions: {
       pie: {
         showInLegend: false,
-        size: "105%",
-        innerSize: "75%",
+        size: '105%',
+        innerSize: '75%',
         borderWidth: 0,
-        className: "highchart_chart",
+        className: 'highchart_chart',
         dataLabels: {
           enabled: false,
           distance: -14,
@@ -335,27 +335,27 @@ const GovernViewPage = ({
             enabled: true,
           },
         },
-        name: "",
+        name: '',
         data: [
           {
-            name: "Yes",
+            name: 'Yes',
             y: Number(getVotes?.yes || 0),
-            color: "#52B788",
+            color: '#52B788',
           },
           {
-            name: "No",
+            name: 'No',
             y: Number(getVotes?.no || 0),
-            color: "#F76872",
+            color: '#F76872',
           },
           {
-            name: "No With Veto",
+            name: 'No With Veto',
             y: Number(getVotes?.veto || 0),
-            color: "#AACBB9",
+            color: '#AACBB9',
           },
           {
-            name: "Abstain",
+            name: 'Abstain',
             y: Number(getVotes?.abstain || 0),
-            color: "#6A7B6C",
+            color: '#6A7B6C',
           },
         ],
       },
@@ -371,19 +371,26 @@ const GovernViewPage = ({
   }
 
   const handleClick = () => {
-    router.push("/govern");
-    setTab("2");
+    router.push('/govern');
+    setTab('2');
   };
 
-  const totalAmount = votingPower?.delegation_responses?.reduce((sum, response) => {
-    const amount = parseInt(response?.balance?.amount);
-    return sum + amount;
-  }, 0);
+  const totalAmount = votingPower?.delegation_responses?.reduce(
+    (sum, response) => {
+      const amount = parseInt(response?.balance?.amount);
+      return sum + amount;
+    },
+    0
+  );
 
   return (
     <>
       <div className="proposal_view_back_button_container">
-        <Button type="primary"   className="btn-filled" onClick={() => handleClick()}>
+        <Button
+          type="primary"
+          className="btn-filled"
+          onClick={() => handleClick()}
+        >
           Back
         </Button>
       </div>
@@ -393,27 +400,27 @@ const GovernViewPage = ({
           <div className="proposal_detail_main_container">
             <div className="proposal_detail_container">
               <div className="proposal_id">
-                {" "}
-                #{proposal?.proposal_id || "-"}
+                {' '}
+                #{proposal?.proposal_id || '-'}
               </div>
               <div className="proposal_title">
-                {proposal?.content?.title || "------"}
+                {proposal?.content?.title || '------'}
               </div>
               <div className="proposal_overview_container">
                 <div className="proposal_stats_container">
                   <div className="title">Voting Starts</div>
                   <div className="value">
                     {proposal?.voting_start_time
-                      ? moment(proposal?.voting_start_time).format("DD-MM-YYYY")
-                      : "--/--/--"}
+                      ? moment(proposal?.voting_start_time).format('DD-MM-YYYY')
+                      : '--/--/--'}
                   </div>
                 </div>
                 <div className="proposal_stats_container">
                   <div className="title">Voting Ends</div>
                   <div className="value">
                     {proposal?.voting_end_time
-                      ? moment(proposal?.voting_end_time).format("DD-MM-YYYY")
-                      : "--/--/--"}
+                      ? moment(proposal?.voting_end_time).format('DD-MM-YYYY')
+                      : '--/--/--'}
                   </div>
                 </div>
                 <div className="proposal_stats_container ">
@@ -431,13 +438,13 @@ const GovernViewPage = ({
                         {truncateString(proposer, 6, 6)}
                         <NextImage
                           src={Hyperlink}
-                          alt={"HyperLink"}
+                          alt={'HyperLink'}
                           height={20}
                           weight={20}
                         />
                       </a>
                     ) : (
-                      "-"
+                      '-'
                     )}
                   </div>
                 </div>
@@ -455,7 +462,7 @@ const GovernViewPage = ({
                 <div className="vote_title">Vote Details</div>
                 {/* <div className="user_vote">Your Vote: <span>Yes</span></div> */}
                 <div className="user_vote">
-                  {" "}
+                  {' '}
                   {proposalOptionMap?.[votedOption] && (
                     <span>
                       Your Vote : <span> {proposalOptionMap[votedOption]}</span>
@@ -469,7 +476,7 @@ const GovernViewPage = ({
                     <div className="title">Total Votes</div>
                     <div className="value">
                       <div>
-                        {`${calculateTotalValue() || "0"} ${denomConversion(
+                        {`${calculateTotalValue() || '0'} ${denomConversion(
                           comdex?.coinMinimalDenom
                         )}`}
                       </div>
@@ -483,17 +490,17 @@ const GovernViewPage = ({
                       {/* <div className="value">{calculateQuoremThreshold() || 0} CMDX</div> */}
 
                       <Tooltip
-                        title={"Min Quorum threshold: 33%."}
+                        title={'Min Quorum threshold: 33%.'}
                         placement="top"
                       >
                         <div
                           className={
                             calculateCurrentThreshold() < 100
-                              ? "value error-color"
-                              : "value green-color"
+                              ? 'value error-color'
+                              : 'value green-color'
                           }
                         >
-                          {" "}
+                          {' '}
                           {calculateCurrentThreshold() || 0} %
                         </div>
                       </Tooltip>
@@ -507,50 +514,50 @@ const GovernViewPage = ({
                       <div className="stats_container">
                         <div
                           className="color"
-                          style={{ backgroundColor: "#52B788" }}
+                          style={{ backgroundColor: '#52B788' }}
                         ></div>
                         <div className="data_container">
                           <div className="title">Yes</div>
                           <div className="value">
-                            {" "}
-                            {Number(getVotes?.yes || "0.00")}%
+                            {' '}
+                            {Number(getVotes?.yes || '0.00')}%
                           </div>
                         </div>
                       </div>
                       <div className="stats_container">
                         <div
                           className="color"
-                          style={{ backgroundColor: "#D74A4A" }}
+                          style={{ backgroundColor: '#D74A4A' }}
                         ></div>
                         <div className="data_container">
                           <div className="title">No</div>
                           <div className="value">
-                            {" "}
-                            {Number(getVotes?.no || "0.00")}%
+                            {' '}
+                            {Number(getVotes?.no || '0.00')}%
                           </div>
                         </div>
                       </div>
                       <div className="stats_container">
                         <div
                           className="color"
-                          style={{ backgroundColor: "#C2A3A3" }}
+                          style={{ backgroundColor: '#C2A3A3' }}
                         ></div>
                         <div className="data_container">
                           <div className="title">No With Veto</div>
                           <div className="value">
-                            {Number(getVotes?.veto || "0.00")}%
+                            {Number(getVotes?.veto || '0.00')}%
                           </div>
                         </div>
                       </div>
                       <div className="stats_container">
                         <div
                           className="color"
-                          style={{ backgroundColor: "#9FA4AD" }}
+                          style={{ backgroundColor: '#9FA4AD' }}
                         ></div>
                         <div className="data_container">
                           <div className="title">Abstain</div>
                           <div className="value">
-                            {Number(getVotes?.abstain || "0.00")}%
+                            {Number(getVotes?.abstain || '0.00')}%
                           </div>
                         </div>
                       </div>
@@ -567,17 +574,17 @@ const GovernViewPage = ({
                           sections={[
                             {
                               value: Number(getVotes?.yes || 0),
-                              color: "#52B788",
+                              color: '#52B788',
                               tooltip: `Yes ${Number(getVotes?.yes || 0)} %`,
                             },
                             {
                               value: Number(getVotes?.no || 0),
-                              color: "#D74A4A",
+                              color: '#D74A4A',
                               tooltip: `No ${Number(getVotes?.no || 0)} %`,
                             },
                             {
                               value: Number(getVotes?.veto || 0),
-                              color: "#C2A3A3",
+                              color: '#C2A3A3',
 
                               tooltip: `No With Veto ${Number(
                                 getVotes?.veto || 0
@@ -585,7 +592,7 @@ const GovernViewPage = ({
                             },
                             {
                               value: Number(getVotes?.abstain || 0),
-                              color: "#9FA4AD",
+                              color: '#9FA4AD',
 
                               tooltip: `Abstain ${Number(
                                 getVotes?.abstain || 0
@@ -630,22 +637,28 @@ const GovernViewPage = ({
           <div className="proposal_description_main_container">
             <div className="proposal_heading">Description</div>
             <div className="proposal_para">
-              {stringTagParser(proposal?.content?.description || " ")}
+              {stringTagParser(proposal?.content?.description || ' ')}
             </div>
 
             <div className="proposal_suggest_box">
               <p>No other parameters are being changed.</p>
               <p>
-                {" "}
-                Vote <span>YES</span> to approve the increase of debt ceiling.
+                {' '}
+                Vote <span>Yes</span> to approve the increase of debt ceiling.
               </p>
               <p>
-                {" "}
-                Vote <span>NO</span> to disapprove the increase of debt ceiling.
+                {' '}
+                Vote <span>No</span> to disapprove the increase of debt ceiling.
               </p>
               <p>
-                {" "}
-                Vote <span>ABSTAIN</span> to express no interest in the
+                {' '}
+                Vote <span>No With Veto</span> expresses that you strongly
+                disagree and would like to see depositors penalised by
+                revocation of their proposal deposit.
+              </p>
+              <p>
+                {' '}
+                Vote <span>Abstain</span> to express no interest in the
                 proposal.
               </p>
             </div>

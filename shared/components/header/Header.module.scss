@@ -40,6 +40,10 @@
   align-items: center;
   gap: 10px;
   width: 330px;
+
+  @media screen and (max-width: $L) {
+    width: auto;
+  }
 }
 
 .header__logo {
@@ -62,6 +66,9 @@
   backdrop-filter: blur(20.725000381469727px);
   padding: 20px;
   gap: 40px;
+  @media screen and (max-width: $L) {
+    display: none;
+  }
 }
 
 .right__item {
@@ -133,7 +140,7 @@
   //   width: 140px;
   // }
 
-  @media screen and (max-width: $XS) {
+  @media screen and (max-width: $L) {
     display: none;
   }
 }
@@ -160,14 +167,14 @@
   //   width: 110px;
   // }
 
-  @media screen and (max-width: $XS) {
+  @media screen and (max-width: $L) {
     display: none;
   }
 }
 
 .hamburger {
   display: none;
-
+  cursor: pointer;
   @media screen and (max-width: $L) {
     display: block;
   }
@@ -441,7 +448,7 @@
   //   width: 110px;
   // }
 
-  @media screen and (max-width: $XS) {
+  @media screen and (max-width: $L) {
     display: none;
   }
 }

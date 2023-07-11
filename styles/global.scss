@@ -393,9 +393,9 @@ a {
 
   &.ant-btn-lg {
     padding: 0 22px;
-    height: 42px;
-    line-height: 42px;
-    font-size: $font-size-lg;
+    height: 35px;
+    line-height: 30px;
+    font-size: $font-size-lg - 2;
     font-weight: 400;
   }
 
@@ -581,6 +581,7 @@ a {
       border-radius: 12.949px;
       border: 0.863px solid #393939;
       background: linear-gradient(180deg, #050a1c 0%, #030a1d 100%);
+      padding: 30px 24px;
 
       .ant-modal-header {
         // background: linear-gradient(
@@ -689,6 +690,7 @@ a {
     border: 1px solid #393939 !important;
     background: #04091b !important;
     margin-top: 4px;
+    box-shadow: 0px 4px 153px 0px #221129;
 
     .ant-dropdown-menu-item {
       // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
@@ -903,6 +905,10 @@ a {
 
         .dark-mode & {
           color: $white;
+        }
+
+        .select-pair-end-content {
+          display: none;
         }
 
         .select-inner {
@@ -1770,11 +1776,11 @@ a {
 }
 
 .buy {
-  color: #fe2b56;
+  color: #f3164d;
 }
 
 .sell {
-  color: #127350;
+  color: #0ee29b;
 }
 
 .tx-hash-col {
@@ -2833,6 +2839,11 @@ a {
   .connected_left {
     padding-right: 10px;
     text-align: right;
+
+    @media screen and (max-width: $L) {
+      display: none;
+    }
+
     .testnet-top {
       color: $text-color-light2;
       text-transform: uppercase;
@@ -3102,14 +3113,14 @@ a {
       &:nth-child(odd) {
         .select-inner {
           .select-pair-end-content {
-            height: 14px;
-            border-radius: 43px;
-            background: linear-gradient(
-              180deg,
-              rgba(114, 114, 114, 0.4) 0%,
-              rgba(114, 114, 114, 0) 100%
-            );
-            width: 62px;
+            // height: 14px;
+            // border-radius: 43px;
+            // background: linear-gradient(
+            //   180deg,
+            //   rgba(114, 114, 114, 0.4) 0%,
+            //   rgba(114, 114, 114, 0) 100%
+            // );
+            // width: 62px;
           }
         }
       }
@@ -3117,14 +3128,14 @@ a {
       &:nth-child(even) {
         .select-inner {
           .select-pair-end-content {
-            height: 14px;
-            border-radius: 43px;
-            background: linear-gradient(
-              180deg,
-              rgba(114, 114, 114, 0.4) 0%,
-              rgba(114, 114, 114, 0) 100%
-            );
-            width: 38px;
+            // height: 14px;
+            // border-radius: 43px;
+            // background: linear-gradient(
+            //   180deg,
+            //   rgba(114, 114, 114, 0.4) 0%,
+            //   rgba(114, 114, 114, 0) 100%
+            // );
+            // width: 38px;
           }
         }
       }
@@ -3556,6 +3567,8 @@ a {
     line-height: 13px;
     border-radius: 10px;
     font-weight: 400;
+    border: 1px solid #393939 !important;
+    box-shadow: 0px 4px 153px 0px #2c1635;
 
     .dark-mode & {
       // background-color: $dark-color;
@@ -3792,6 +3805,9 @@ a {
     box-shadow: none;
     position: relative;
     min-width: 200px;
+    border: 1px solid #393939;
+    box-shadow: 0px 4px 153px 0px #2c1635;
+
     .dark-mode & {
       // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
 
@@ -4134,7 +4150,7 @@ a {
   max-width: 130px;
   border-radius: 8.543px !important;
   background: rgba(16, 27, 47, 0.699999988079071) !important;
-  font-size: 8.225px !important;
+  font-size: 11.225px !important;
   font-style: normal !important;
   font-weight: 700 !important;
   line-height: normal !important;
@@ -4163,12 +4179,13 @@ a {
 .order_input2 {
   width: 100%;
   max-width: 130px;
+  padding: 6px 10px;
   // background: rgba(31, 42, 69, 0.7);
   border: none;
   color: $white;
   border-radius: 8.543px !important;
   background: rgba(16, 27, 47, 0.699999988079071) !important;
-  font-size: 8.225px !important;
+  font-size: 11.225px !important;
   font-style: normal !important;
   font-weight: 700 !important;
   line-height: normal !important;
@@ -4203,7 +4220,7 @@ a {
     cursor: pointer;
     // bottom: -3px !important;
     &::before {
-      background: #101a35;
+      background: #393939;
     }
     .ant-tooltip-arrow-content {
       background: linear-gradient(
@@ -4230,7 +4247,7 @@ a {
     cursor: pointer;
     // background: #061e45;
     background: #101a35;
-    border: none;
+    // border: none;
     // font-size: 10px;
     min-height: 18px;
     padding: 2px 3px;
@@ -4242,11 +4259,16 @@ a {
     font-style: normal;
     font-weight: 300;
     line-height: normal;
+    border: 1px solid #393939;
+    box-shadow: 0px 4px 153px 0px #2c1635;
+
     .dark-mode & {
       background: #101a35;
-      border: none;
+      // border: none;
       border-radius: 10px;
       color: #ffffff;
+      border: 1px solid #393939;
+      box-shadow: 0px 4px 153px 0px #2c1635;
     }
   }
 }

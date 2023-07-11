@@ -1,7 +1,7 @@
 import { Select, Input } from 'antd';
 import * as PropTypes from 'prop-types';
 import React from 'react';
-import { denomConversion } from '../../../utils/coin';
+import { amountConversionWithComma, denomConversion, getDenomBalance } from '../../../utils/coin';
 import NoDataIcon from '../../components/NoDataIcon/index';
 import { Icon } from '../../image/Icon';
 import { NextImage } from '../../image/NextImage';
@@ -16,11 +16,10 @@ const CustomSelect = ({
   list,
   loading,
   disabled,
-  onSearchChange
+  onSearchChange,
+  assetMap,
+  balances
 }) => {
-  
- 
-
   return (
     <Select
       aria-label="Select"
@@ -42,7 +41,7 @@ const CustomSelect = ({
       notFoundContent={<NoDataIcon />}
       suffixIcon={<NextImage src={Drop} alt={'Drop'} />}
       dropdownRender={(menu) => (
-        <> 
+        <>
           <div
             className={'select-pair-wrap'}
             onClick={(e) => e.stopPropagation()}
@@ -63,7 +62,7 @@ const CustomSelect = ({
             >
               <Input
                 className="pair__input2"
-                placeholder="Select a token by name, symbol or address"
+                placeholder="Select a token by symbol"
                 onChange={(event) => onSearchChange(event.target.value)}
                 // prefix={<Icon className={'bi bi-search'} />}
                 // ref={ref}
@@ -89,11 +88,13 @@ const CustomSelect = ({
                         height={25}
                         width={25}
                       />
-                       <div className="name">{denomConversion(item)}</div>
+                      <div className="name">{denomConversion(item)}</div>
                     </div>
-                   
                   </div>
-                  <div className={'select-pair-end-content'}></div>
+                  <div className={'select-pair-end-content'}>{amountConversionWithComma(
+                              getDenomBalance(balances, item) || 0,
+                              assetMap[item]?.decimals
+                            )}</div>
                 </div>
               </Option>
             </>
