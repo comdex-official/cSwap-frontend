@@ -269,15 +269,15 @@ a {
     }
 
     &.btn-filled {
-      background-color: $primary-color;
+      background-color: #FE2B56;
       color: $white;
       text-transform: capitalize;
       &:hover:not(&[disabled]),
       &:active,
       &:focus {
-        background-color: rgba($primary-color, 0.3);
+        background-color: rgba(#FE2B56, 0.3);
         color: $white;
-        border-color: rgba($primary-color, 0.3);
+        border-color: rgba(#FE2B56, 0.3);
       }
 
       &[disabled] {
@@ -291,6 +291,8 @@ a {
       color: $white;
       border: 1px solid #fe2b56;
       text-transform: capitalize;
+      line-height: 0;
+
       &:hover:not(&[disabled]),
       &:active,
       &:focus {
@@ -351,17 +353,55 @@ a {
       }
     }
 
+    &.btn-filled5 {
+      border-radius: 5.016px;
+      background: #4e5ed6;
+      color: $white;
+      border: none;
+      text-transform: capitalize;
+      padding: 2px 8px;
+      font-weight: 400;
+      font-size: 7.166px;
+      text-align: center;
+      height: 15.766px;
+      &:hover:not(&[disabled]),
+      &:active,
+      &:focus {
+        border-radius: 5.016px;
+        border: 1px solid #9d9d9d !important;
+        background: #36429b !important;
+        line-height: normal !important;
+        outline: none !important;
+        height: 15.766px !important;
+        padding: 2px 8px !important;
+      }
+
+      &:hover {
+        border: 1px solid #9d9d9d !important;
+        background: #36429b !important;
+        line-height: normal !important;
+        outline: none !important;
+        height: 15.766px !important;
+        padding: 2px 8px !important;
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
     &.btn-no-data {
       margin-top: 10px;
-      background-color: $primary-color;
+      background-color: #fe2b56;
       color: $white;
       text-transform: capitalize;
       &:hover:not(&[disabled]),
       &:active,
       &:focus {
-        background-color: rgba($primary-color, 0.3);
+        background-color: rgba(#fe2b56, 0.3);
         color: $white;
-        border-color: rgba($primary-color, 0.3);
+        border-color: rgba(#fe2b56, 0.3);
       }
 
       &[disabled] {
@@ -1145,6 +1185,10 @@ a {
                   }
                 }
               }
+            }
+
+            &.dim__card{
+              opacity: 0.6000000238418579;
             }
 
             td {
@@ -1998,12 +2042,12 @@ a {
           }
 
           &:hover {
-            background: rgba($primary-color, 0.5);
+            background: rgba(#fe2b56, 0.5);
           }
 
           &.ant-tabs-tab-active {
-            background: $primary-color;
-            border-color: $primary-color;
+            background: #fe2b56;
+            border-color: #fe2b56;
             opacity: 1;
 
             .ant-tabs-tab-btn {
@@ -2305,7 +2349,8 @@ a {
                 // background: $primary-color;
               }
 
-              &:hover {
+              &:focus {
+                border: 1px solid #9d9d9d;
                 background: #122b4f;
               }
 
@@ -2782,26 +2827,79 @@ a {
   }
 }
 
-// Max Button
-.maxhalf {
+.halfButton {
   display: flex;
   align-items: center;
-  margin-left: 4px;
+  // margin-left: 4px;
 
   .ant-btn {
     font-size: $font-size-sm - 1;
     padding: 1px 0;
-    margin-left: 4px;
+    // margin-left: 4px;
     line-height: 1;
     text-align: center;
     width: 30px;
     height: 15px;
     border: 0;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 5.016px;
     font-weight: 400;
     font-size: 7.166px;
-    line-height: 15px;
+    // line-height: 15px;
+
+    .dark-mode & {
+      // background: #132239;
+      background: #4e5ed6;
+      color: $white;
+    }
+
+    &.active {
+      .dark-mode & {
+        // background: #9b353c;
+        background: #4e5ed6;
+        // &:hover {
+        //   // background: $secondary-color;
+        //   background: #122b4f;
+        // }
+
+        &:focus {
+          border: 1px solid #9d9d9d;
+          background: #36429b;
+        }
+      }
+
+      span {
+        .dark-mode & {
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+// Max Button
+.maxhalf {
+  display: flex;
+  align-items: center;
+  // margin-left: 4px;
+  &.margin {
+    margin-left: 4px;
+  }
+
+  .ant-btn {
+    font-size: $font-size-sm - 1;
+    padding: 1px 0;
+    // margin-left: 4px;
+    line-height: 1;
+    text-align: center;
+    width: 30px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    border-radius: 5.016px;
+    font-weight: 400;
+    font-size: 7.166px;
+    // line-height: 15px;
 
     .dark-mode & {
       // background: #132239;
@@ -2813,8 +2911,13 @@ a {
       .dark-mode & {
         // background: #9b353c;
         background: #234e8d;
-        &:hover {
-          // background: $secondary-color;
+        // &:hover {
+        //   // background: $secondary-color;
+        //   background: #122b4f;
+        // }
+
+        &:focus {
+          border: 1px solid #9d9d9d;
           background: #122b4f;
         }
       }
@@ -3585,6 +3688,10 @@ a {
         font-weight: 200;
         line-height: normal;
         margin-bottom: 5px;
+        &.active {
+          display: flex;
+          justify-content: space-between;
+        }
         .text {
           // color: #b0abab;
           color: #d0d0d0;
@@ -3592,6 +3699,12 @@ a {
         .value {
           font-weight: 500;
           color: #ffffff;
+
+          .eApr {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+          }
         }
       }
     }
@@ -4338,12 +4451,12 @@ a {
           }
 
           &:hover {
-            background: rgba($primary-color, 0.5);
+            background: rgba(#fe2b56, 0.5);
           }
 
           &.ant-tabs-tab-active {
-            background: $primary-color;
-            border-color: $primary-color;
+            background: #fe2b56;
+            border-color: #fe2b56;
 
             .ant-tabs-tab-btn {
               font-weight: 400;
@@ -4979,4 +5092,13 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.emission-amount {
+  margin-right: 5px;
+  color: #b0c9ee;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }

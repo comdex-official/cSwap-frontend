@@ -692,7 +692,7 @@ const TradeCard = ({
     }
   };
 
-  console.log(searchKey);
+ 
 
   return (
     <>
@@ -755,22 +755,40 @@ const TradeCard = ({
                       </div>
 
                       <div className={styles.tradeCard__body__right__el1}>
-                        <div
+                        {/* <div
                           className={`${
                             styles.tradeCard__body__right__el1__footer
-                          } ${theme === 'dark' ? styles.dark : styles.light}`}
+                          } ${divClass === "active" ? styles.active : ""}`}
                           onClick={() => handleHalfClick()}
+                          ref={divRef}
                         >
                           {'HALF'}
-                        </div>
-                        <div
+                        </div> */}
+                        {/* <div
                           className={`${
                             styles.tradeCard__body__right__el1__description
-                          } ${theme === 'dark' ? styles.dark : styles.light}`}
+                          } ${divClass2 === "active" ? styles.active : ""}`}
                           onClick={() => handleMaxClick()}
+                        ref={divRef2}
                         >
                           {'MAX'}
-                        </div>
+                        </div> */}
+                         <div className="halfButton">
+                      <Button
+                        className="active"
+                        onClick={() => handleHalfClick()}
+                      >
+                        {'HALF'}
+                      </Button>
+                      </div>
+                        <div className="maxhalf">
+                      <Button
+                        className="active"
+                        onClick={() => handleMaxClick()}
+                      >
+                        {'MAX'}
+                      </Button>
+                    </div>
                         <div
                           className={`${
                             styles.tradeCard__body__right__el1__title
@@ -1078,7 +1096,7 @@ const TradeCard = ({
                       <div
                         className={`${
                           styles.tradeCard__description__right_title
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
+                        } ${MAX_SLIPPAGE_TOLERANCE < slippage ? styles.red : ""}`}
                       >
                         {pool?.type === 2 && isFinalSlippage ? '>' : ''}
                         {Number(slippage)?.toFixed(comdex.coinDecimals)}%

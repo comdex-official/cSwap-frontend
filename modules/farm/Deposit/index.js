@@ -510,7 +510,7 @@ const Deposit = ({
             <div className={styles.tradeCard__body__right__el1}>
               
 
-              <div className=" maxhalf">
+              <div className="maxhalf">
                 <Button
                   className="active"
                   onClick={() =>
@@ -529,7 +529,7 @@ const Deposit = ({
                     )
                   }
                 >
-                  {variables[lang].max}
+                  MAX
                 </Button>
               </div>
               <div
@@ -633,7 +633,7 @@ const Deposit = ({
                     )
                   }
                 >
-                  {variables[lang].max}
+                 MAX
                 </Button>
               </div>
               <div
@@ -642,7 +642,7 @@ const Deposit = ({
                 }`}
               >
                 {/* {"Available"} */}
-                <span className="ml-1">
+                <span className="">
                   {amountConversionWithComma(
                     secondAssetAvailableBalance,
                     assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
