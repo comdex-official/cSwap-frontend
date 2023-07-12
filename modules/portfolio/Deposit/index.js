@@ -445,7 +445,7 @@ const Deposit = ({
                     <>
                     <span className="assets-maxhalf">
                         <Button
-                          className=" active"
+                          className="active"
                           onClick={() => {
                             setAmount(
                               availableBalance?.amount > DEFAULT_FEE
@@ -460,7 +460,7 @@ const Deposit = ({
                             );
                           }}
                         >
-                          Max
+                          MAX
                         </Button>
                       </span>
                       <span className="ml-1 asset_balance">

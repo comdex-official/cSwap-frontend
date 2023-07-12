@@ -294,10 +294,10 @@ const Withdraw = ({
                         setAmount(chain?.balance?.amount || 0);
                       }}
                     >
-                      Max
+                      MAX
                     </Button>
                   </span>
-                  <span className="ml-1">
+                  <span className="ml-1 asset_balance">
                     {chain?.balance?.amount || 0}{' '}
                     {denomConversion(chain?.coinMinimalDenom) || ''}
                   </span>

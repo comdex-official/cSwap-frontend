@@ -291,8 +291,8 @@
 .farm__header__right__body__button {
   // max-width: 90px;
   padding: 6px 20px;
-  background: #fe4350;
-  border: 1px solid #fe4350;
+  background: #fe2b56;
+  border: 1px solid #fe2b56;
   border-radius: 40px;
   // font-weight: 400;
   // font-size: 12px;
@@ -484,6 +484,10 @@
 
   &.card__active2 {
     height: 430px;
+  }
+
+  &.card__dim {
+    opacity: 0.6000000238418579;
   }
 
   @media screen and (max-width: 1414px) {
@@ -722,8 +726,15 @@
   padding: 1px;
   position: relative;
   // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
-  background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
+  // background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
   margin-left: 10px;
+
+  &.red {
+    background: #fe2b56;
+  }
+  &.green {
+    background: rgba(82, 183, 136, 1);
+  }
 }
 
 .farmCard__element__left__name {
@@ -761,7 +772,7 @@
   //   font-size: 8px;
   // }
   img {
-    height: 14px;
+    height: 17px;
     margin-right: 5px;
   }
   &.light {
@@ -1027,7 +1038,7 @@
   line-height: normal;
   margin-left: 15px;
   // color: #68ffc0;
-  color: #a1c7ff;
+  color: #b0c9ee;
   cursor: pointer;
   // @media screen and (max-width: $XXL) {
   //   font-size: 17px;
@@ -1344,7 +1355,7 @@
 }
 
 .liquidityCard__trade__pair {
-  background: #fe4350;
+  background: #FE2B56;
   box-shadow: 0px 4px 12px rgba(254, 67, 80, 0.25);
   border-radius: 57px;
   padding: 6px 20px;
@@ -1544,7 +1555,7 @@
   justify-content: space-between;
   width: 100%;
 
-  &.center{
+  &.center {
     align-items: center;
   }
 

@@ -490,12 +490,12 @@ const CreatePoolModal = ({
                       </span>
                     </div>
 
-                    <div className=" maxhalf">
+                    <div className="maxhalf margin">
                       <Button
                         className="active"
                         onClick={() => handleBaseInputMax()}
                       >
-                        {variables[lang].max}
+                       MAX
                       </Button>
                     </div>
                   </div>
@@ -559,12 +559,12 @@ const CreatePoolModal = ({
                         {denomConversion(quoteToken)}
                       </span>
                     </div>
-                    <div className="maxhalf">
+                    <div className="maxhalf margin">
                       <Button
                         className="active"
                         onClick={() => handleQuoteInputMax()}
                       >
-                        {variables[lang].max}
+                       MAX
                       </Button>
                     </div>
                   </div>
