@@ -827,7 +827,7 @@ const FarmTable = ({
                             height={15}
                             width={15}
                           />{' '}
-                          CMDX yeild only):
+                          CMDX yield only):
                         </span>
 
                         {calculateExternalBasePoolApr(Number(value?.id))?.length > 0 ? (
@@ -1101,6 +1101,257 @@ const FarmTable = ({
               {showPairDenoms(value)}
             </div>
           </div>
+
+          <div
+            className={`${styles.farmCard__element__right__wholetab} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
+          >
+            {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
+              value?.balances?.baseCoin?.denom === 'ucmst') && (
+              <Tooltip
+                title={'HARBOR emissions enabled'}
+                overlayClassName="farm_upto_apr_tooltip"
+              >
+                <div
+                  className={`${styles.farmCard__element__right__emission} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
+                  <NextImage src={Emission} alt="Emission" />
+                </div>
+              </Tooltip>
+            )}
+
+            <div
+              className={`${styles.farmCard__element__right} ${
+                styles.tableActive
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
+            >
+              <div
+                className={`${styles.farmCard__element__right__main} ${
+                  theme === 'dark' ? styles.dark : styles.light
+                }`}
+              >
+                {getMasterPool(value?.id?.toNumber()) ? (
+                  <div
+                    className={`${styles.farmCard__element__right__pool} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    {/* <div
+                    className={`${styles.farmCard__element__right__pool__title} ${
+                      theme === "dark" ? styles.dark : styles.light
+                    }`}
+                  > */}
+
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <NextImage src={Pyramid} alt="Logo" />
+                      {'Master Pool'}
+                    </div>
+
+                    {/* // <div
+                    //   className={`${
+                    //     styles.farmCard__element__right__pool__title
+                    //   } ${styles.boost} ${
+                    //     theme === "dark" ? styles.dark : styles.light
+                    //   }`}
+                    // >
+                    //   <NextImage src={Current} alt="Logo" />
+                    //   {"MP Boost"}
+                    // </div> */}
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
+                  value?.balances?.baseCoin?.denom === 'ucmst') && (
+                  <div
+                    className={`${styles.farmCard__element__apr__poll__wrap} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    <Tooltip
+                      title={
+                        calculateAPY(
+                          calculatePoolLiquidity(value?.balances),
+                          Number(value?.id)
+                        ) ? (
+                          <>
+                            {`For every $1 of liquidity, you will receive `}
+                            <span className="emission-amount">
+                              {calculatePerDollorEmissioAmount(
+                                Number(value?.id),
+                                calculatePoolLiquidity(value?.balances)
+                              )}
+                            </span>
+                            <NextImage
+                              src={iconList?.['uharbor']?.coinImageUrl}
+                              alt={'logo'}
+                              height={15}
+                              width={15}
+                            />
+                            {` at the end of this week's emissions.`}
+                          </>
+                        ) : (
+                          <>
+                            {`Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions.`}
+                          </>
+                        )
+                      }
+                      overlayClassName="farm_upto_apr_tooltip"
+                    >
+                      <div
+                        className={`${
+                          styles.farmCard__element__right__apr_pool__title
+                        }  ${styles.boost} ${
+                          theme === 'dark' ? styles.dark : styles.light
+                        }`}
+                      >
+                        <NextImage src={HirborLogo} alt="Logo" />
+                        {value?.id &&
+                          commaSeparator(
+                            calculateVaultEmission(
+                              value?.id?.toNumber()
+                            ).toFixed(2)
+                          )}
+                      </div>
+                    </Tooltip>
+                  </div>
+                )}
+
+                {value?.type === 2 ? (
+                  <div
+                  className={`${styles.farmCard__element__right__basic} ${
+                    Number(decimalConversion(value?.price)).toFixed(
+                      PRICE_DECIMALS
+                    ) >
+                      Number(decimalConversion(value?.minPrice)).toFixed(
+                        PRICE_DECIMALS
+                      ) &&
+                    Number(decimalConversion(value?.price)).toFixed(
+                      PRICE_DECIMALS
+                    ) <
+                      Number(decimalConversion(value?.maxPrice)).toFixed(
+                        PRICE_DECIMALS
+                      )
+                      ? styles.green
+                      : styles.red
+                  }`}
+                  >
+                    <div className="ranged-box">
+                      <div className="ranged-box-inner">
+                        <Tooltip
+                          overlayClassName="ranged-tooltip ranged-tooltip-small ranged"
+                          title={
+                            value?.type === 2 ? (
+                              <RangeTooltipContent
+                                parent={'pool'}
+                                price={Number(
+                                  decimalConversion(value?.price)
+                                ).toFixed(PRICE_DECIMALS)}
+                                max={Number(
+                                  decimalConversion(value?.maxPrice)
+                                ).toFixed(PRICE_DECIMALS)}
+                                min={Number(
+                                  decimalConversion(value?.minPrice)
+                                ).toFixed(PRICE_DECIMALS)}
+                              />
+                            ) : null
+                          }
+                          placement="top"
+                        >
+                          <div
+                            className={`${
+                              styles.farmCard__element__right__basic__title
+                            } ${styles.active} ${
+                              theme === 'dark' ? styles.dark : styles.light
+                            }`}
+                          >
+                           
+
+                            {Number(decimalConversion(value?.price)).toFixed(
+                              PRICE_DECIMALS
+                            ) >
+                              Number(decimalConversion(value?.minPrice)).toFixed(
+                                PRICE_DECIMALS
+                              ) &&
+                            Number(decimalConversion(value?.price)).toFixed(
+                              PRICE_DECIMALS
+                            ) <
+                              Number(decimalConversion(value?.maxPrice)).toFixed(
+                                PRICE_DECIMALS
+                              ) ? (
+                              <NextImage src={RangeGreen} />
+                            ) : (
+                              <NextImage src={RangeRed} />
+                            )}
+                            {/* <NextImage src={Ranged} /> */}
+                            {Number(decimalConversion(value?.price)).toFixed(
+                              PRICE_DECIMALS
+                            ) >
+                              Number(decimalConversion(value?.minPrice)).toFixed(
+                                PRICE_DECIMALS
+                              ) &&
+                            Number(decimalConversion(value?.price)).toFixed(
+                              PRICE_DECIMALS
+                            ) <
+                              Number(decimalConversion(value?.maxPrice)).toFixed(
+                                PRICE_DECIMALS
+                              ) ? (
+                              <div className="success-color">{'In Range'}</div>
+                            ) : (
+                              <div className="warn-color">{'Out of Range'}</div>
+                            )}
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                ) : value?.type === 1 ? (
+                  ''
+                ) : (
+                  // <div
+                  //   className={`${styles.farmCard__element__right__basic} ${
+                  //     theme === "dark" ? styles.dark : styles.light
+                  //   }`}
+                  // >
+                  //   <div
+                  //     className={`${
+                  //       styles.farmCard__element__right__basic__title
+                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
+                  //   >
+                  //     {"Basic"}
+                  //   </div>
+                  // </div>
+                  ''
+                )}
+                {/* </div> */}
+              </div>
+
+              {/* {checkExternalIncentives(value?.id?.toNumber()) && (
+                <div
+                  className={`${styles.farmCard__element__right__incentive} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
+                  <div
+                    className={`${
+                      styles.farmCard__element__right__pool__title
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
+                  >
+                    <NextImage src={Cup} alt="Logo" />
+                    {'External Incentives'}
+                  </div>
+                </div>
+              )} */}
+            </div>
+          </div>
         </div>
       ),
       sorter: (a, b) =>
@@ -1123,7 +1374,7 @@ const FarmTable = ({
           >
             <Tooltip
               title={
-                !getMasterPool(value?.id?.toNumber()) ? (
+                 (
                   <>
                     <div className="upto_apr_tooltip_farm_main_container">
                       <div className="upto_apr_tooltip_farm active">
@@ -1224,7 +1475,7 @@ const FarmTable = ({
                       </div>
                     </div>
                   </>
-                ) : null
+                ) 
               }
               // className="farm_upto_apr_tooltip"
               overlayClassName="farm_upto_apr_tooltip"
@@ -1239,12 +1490,17 @@ const FarmTable = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {commaSeparator(calculateApr(Number(value?.id), value) || 0)}%
-                  {!getMasterPool(value?.id?.toNumber()) && (
+                  {
+                   
+            `${commaSeparator(calculateChildPoolApr(Number(value?.id), value) || 0)}%`
+               
+                  }
+                  {/* {commaSeparator(calculateApr(Number(value?.id), value) || 0)}% */}
+                  {(
                     <Icon className={'bi bi-arrow-right'} />
                   )}
                 </div>
-                {!getMasterPool(value?.id?.toNumber()) && (
+                { (
                   <div
                     className={`${styles.farmCard__element__right__pool} ${
                       theme === 'dark' ? styles.dark : styles.light

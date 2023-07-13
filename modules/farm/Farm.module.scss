@@ -479,11 +479,23 @@
   height: 321px;
   overflow: hidden;
   &.card__active {
+    height: 440px;
+  }
+
+  &.card__active4 {
     height: 480px;
   }
 
+  // &.card__active5 {
+  //   height: 610px;
+  // }
+
   &.card__active2 {
     height: 430px;
+  }
+
+  &.card__active3 {
+    height: 510px;
   }
 
   &.card__dim {
@@ -719,6 +731,7 @@
   justify-content: space-between;
   align-items: center;
   margin-left: -25px;
+  flex-wrap: wrap;
 }
 
 .farmCard__element__right__basic {
@@ -1276,6 +1289,14 @@
     }
   }
 
+  &.marginTop {
+    margin-top: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   img {
     height: 27px;
     width: 27px;
@@ -1355,7 +1376,7 @@
 }
 
 .liquidityCard__trade__pair {
-  background: #FE2B56;
+  background: #fe2b56;
   box-shadow: 0px 4px 12px rgba(254, 67, 80, 0.25);
   border-radius: 57px;
   padding: 6px 20px;

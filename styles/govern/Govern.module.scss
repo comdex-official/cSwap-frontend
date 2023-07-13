@@ -229,6 +229,10 @@
   position: relative;
   padding-top: 20px;
   padding-bottom: 20px;
+
+  @media screen and (max-width: 530px) {
+    padding: 20px;
+  }
 }
 .govern_view_main_container {
   position: relative;
@@ -237,6 +241,11 @@
   padding: 0px 115px;
   border-radius: 20px;
   padding-bottom: 20px;
+
+  @media screen and (max-width: 530px) {
+    padding: 20px;
+  }
+  
   .govern_view_container {
     .proposal_detail_main_container {
       // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
@@ -470,6 +479,7 @@
         color: rgba(255, 255, 255, 0.808);
         // margin-bottom: 20px;
         margin-top: 20px;
+        word-wrap: break-word;
       }
       .proposal_suggest_box {
         p {
