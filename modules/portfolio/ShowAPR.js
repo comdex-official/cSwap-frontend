@@ -1,19 +1,37 @@
-import { message, Skeleton, Tooltip } from "antd";
-import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import uuid from "react-uuid";
-import { setPoolRewards } from "../../actions/liquidity";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { fetchRestAPRs } from "../../services/liquidity/query";
-import { commaSeparator } from "../../utils/number";
-import { NextImage } from "../../shared/image/NextImage";
-import styles from "../farm/Farm.module.scss";
-import { Icon } from "../../shared/image/Icon";
-import { Current } from "../../shared/image";
-import { fixedDecimal } from "../../utils/coin";
-const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
-  const theme = "dark";
+import { message, Skeleton, Tooltip } from 'antd';
+import PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import uuid from 'react-uuid';
+import { setPoolRewards } from '../../actions/liquidity';
+import { DOLLAR_DECIMALS, PRODUCT_ID } from '../../constants/common';
+import {
+  emissiondata,
+  fetchRestAPRs,
+  userProposalProjectedEmission,
+  votingCurrentProposal,
+  votingCurrentProposalId,
+} from '../../services/liquidity/query';
+import { commaSeparator, formatNumber, marketPrice } from '../../utils/number';
+import { NextImage } from '../../shared/image/NextImage';
+import styles from '../farm/Farm.module.scss';
+import { Icon } from '../../shared/image/Icon';
+import { Current } from '../../shared/image';
+import { amountConversion, fixedDecimal } from '../../utils/coin';
+const ShowAPR = ({
+  pool,
+  rewardsMap,
+  setPoolRewards,
+  iconList,
+  markets,
+  userLiquidityInPools,
+  calculateVaultEmission,
+  calculateExternalPoolApr,
+  calculateExternalBasePoolApr,
+  calculateAPY,
+  getMasterPool,
+}) => {
+  const theme = 'dark';
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
 
   const getAPRs = useCallback(() => {
@@ -41,7 +59,6 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
     ]?.incentive_rewards.filter((reward) => reward.master_pool);
     // .reduce((acc, reward) => acc + reward.apr, 0);
 
-   
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -54,7 +71,14 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
       pool?.id?.toNumber()
     ]?.swap_fee_rewards.reduce((acc, reward) => acc + reward.apr, 0);
     const total = totalApr + swapFeeApr;
-    return fixedDecimal(total);
+
+    let harborTokenPrice = marketPrice(markets, 'uharbor') || 0; //harborPrice;
+    let _totalLiquidity = userLiquidityInPools[pool?.id];
+    let harborQTY = calculateVaultEmission(Number(pool?.id));
+    let calculatedAPY =
+      (365 * ((harborQTY / 7) * harborTokenPrice)) / Number(_totalLiquidity);
+
+    return fixedDecimal(total + calculatedAPY);
   };
 
   const fetchMasterPoolAprData = () => {
@@ -89,15 +113,23 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
     rewardsMap?.[pool?.id?.toNumber()]?.swap_fee_rewards.forEach((reward) => {
       totalApr += reward.apr;
     });
+    let harborTokenPrice = marketPrice(markets, 'uharbor') || 0; //harborPrice;
+    let _totalLiquidity = userLiquidityInPools[pool?.id];
+    let harborQTY = calculateVaultEmission(Number(pool?.id));
+    let calculatedAPY =
+      (365 * ((harborQTY / 7) * harborTokenPrice)) / Number(_totalLiquidity);
 
-    totalMasterPoolApr =
-      fixedDecimal(totalMasterPoolApr) + fixedDecimal(totalApr);
-    return fixedDecimal(totalMasterPoolApr);
+    let totalMasterPoolAprFinal =
+      fixedDecimal(totalMasterPoolApr) +
+      fixedDecimal(totalApr) +
+      fixedDecimal(calculatedAPY);
+
+    console.log(totalMasterPoolApr, totalApr + calculatedAPY);
+    return fixedDecimal(totalMasterPoolAprFinal);
   };
 
-
   const showIndividualAPR = (list) => {
-    if (list?.length > 2) {
+ if (list?.length > 2) {
       return (
         <>
           {Object.keys(list)?.map((key, index) => (
@@ -108,33 +140,111 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                     !list[key]?.master_pool ? (
                       <>
                         <div className="upto_apr_tooltip_farm_main_container">
-                          <div className="upto_apr_tooltip_farm">
+                          <div className="upto_apr_tooltip_farm active">
                             <span className="text">
                               Total APR (incl. MP Rewards):
                             </span>
                             <span className="value">
-                              {" "}
+                              {' '}
                               {commaSeparator(calculateUptoApr() || 0)}%
                             </span>
                           </div>
 
-                          <div className="upto_apr_tooltip_farm">
+                          <div className="upto_apr_tooltip_farm active">
                             <span className="text">
-                              Base APR (CMDX. yeild only):
+                              Base APR ({' '}
+                              <NextImage
+                                src={iconList?.['ucmdx']?.coinImageUrl}
+                                alt={'logo'}
+                                height={15}
+                                width={15}
+                              />{' '}
+                              CMDX yield only):
                             </span>
                             <span className="value">
-                              {" "}
-                              {list[key]?.master_pool
-                                ? commaSeparator(calculateMasterPoolApr()) || 0
-                                : commaSeparator(calculateChildPoolApr()) || 0}
-                              %
+                              {' '}
+                              {
+                                list[key]?.master_pool ? (
+                                  commaSeparator(calculateMasterPoolApr()) || 0
+                                ) : calculateExternalBasePoolApr(
+                                    Number(pool?.id)
+                                  )?.length > 0 ? (
+                                  calculateExternalBasePoolApr(
+                                    Number(pool?.id)
+                                  ).map((item) => (
+                                    <span className="value">
+                                      {commaSeparator(
+                                        fixedDecimal(item?.apr) || 0
+                                      )}
+                                      %
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="value">0%</span>
+                                )
+
+                                // commaSeparator(calculateChildPoolApr()) || 0
+                              }
+                              {/* % */}
                             </span>
                           </div>
 
-                          <div className="upto_apr_tooltip_farm">
+                          {calculateExternalPoolApr(Number(pool?.id))?.length >
+                            0 && (
+                            <div className="upto_apr_tooltip_farm active">
+                              <span className="text">External APR:</span>
+                              <span className="value">
+                                <div className="eApr">
+                                  {calculateExternalPoolApr(
+                                    Number(pool?.id)
+                                  ).map((item) => (
+                                    <>
+                                      <NextImage
+                                        src={
+                                          iconList?.[item?.denom]?.coinImageUrl
+                                        }
+                                        alt={'logo'}
+                                        height={15}
+                                        width={15}
+                                      />
+                                      {commaSeparator(
+                                        fixedDecimal(item?.apr) || 0
+                                      )}
+                                      %
+                                    </>
+                                  ))}
+                                </div>
+                              </span>
+                            </div>
+                          )}
+
+                          {calculateAPY(
+                            userLiquidityInPools[pool?.id],
+                            Number(pool?.id)
+                          ) ? (
+                            <div className="upto_apr_tooltip_farm active">
+                              <span className="text">Emission APY:</span>
+
+                              <span className="value">
+                                {calculateAPY(
+                                  userLiquidityInPools[pool?.id],
+                                  Number(pool?.id)
+                                )
+                                  ? calculateAPY(
+                                      userLiquidityInPools[pool?.id],
+                                      Number(pool?.id)
+                                    ) + '%'
+                                  : null}
+                              </span>
+                            </div>
+                          ) : (
+                            ''
+                          )}
+
+                          <div className="upto_apr_tooltip_farm active">
                             <span className="text">Swap Fee APR :</span>
                             <span className="value">
-                              {" "}
+                              {' '}
                               {fixedDecimal(
                                 rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
                               )}
@@ -145,8 +255,8 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                           <div className="upto_apr_tooltip_farm">
                             <span className="text">Available MP Boost:</span>
                             <span className="value">
-                              {" "}
-                              Upto{" "}
+                              {' '}
+                              Upto{' '}
                               {commaSeparator(fetchMasterPoolAprData() || 0)}%
                               for providing liquidity in the Master Pool
                             </span>
@@ -160,49 +270,53 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                 >
                   <div
                     className={`${styles.farmCard__element__right__details} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     <div
                       className={`${
                         styles.farmCard__element__right__details__title
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
                       {list[key]?.master_pool
-                        ? commaSeparator(calculateMasterPoolApr()) || 0
-                        : commaSeparator(calculateChildPoolApr()) || 0}
-                      %
-                      {!list[key]?.master_pool && (
-                        <Icon className={"bi bi-arrow-right"} />
+                  ? ""
+                  : `${commaSeparator(calculateChildPoolApr()) || 0}%`}
+
+                      {!list[key]?.master_pool ? (
+                        <Icon className={'bi bi-arrow-right'} />
+                      ) : (
+                        ''
                       )}
                     </div>
-                    {!list[key]?.master_pool && (
+                    {!list[key]?.master_pool ? (
                       <div
                         className={`${styles.farmCard__element__right__pool} ${
-                          theme === "dark" ? styles.dark : styles.light
+                          theme === 'dark' ? styles.dark : styles.light
                         }`}
                       >
                         <div
                           className={`${
                             styles.farmCard__element__right__pool__title
                           } ${styles.boost} ${
-                            theme === "dark" ? styles.dark : styles.light
+                            theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
                           <NextImage src={Current} alt="Logo" />
                           {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
                         </div>
                       </div>
+                    ) : (
+                      ''
                     )}
                   </div>
                 </Tooltip>
               ) : (
-                ""
+                ''
               )}
             </div>
           ))}
 
-          <span className="comdex-tooltip ">
+          {/* <span className="comdex-tooltip ">
             <Tooltip
               overlayClassName=" farm-apr-modal "
               title={Object.keys(list)?.map((key) => (
@@ -213,8 +327,8 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                       width={30}
                       height={30}
                       alt=""
-                    />{" "}
-                    {list[key]?.master_pool ? "Master Pool - " : "External - "}
+                    />{' '}
+                    {list[key]?.master_pool ? 'Master Pool - ' : 'External - '}
                     {commaSeparator((Number(list[key]?.apr) || 0).toFixed())}%
                   </span>
                 </div>
@@ -222,7 +336,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
             >
               <span className="view-all-farm-apr"> View All</span>
             </Tooltip>
-          </span>
+          </span> */}
         </>
       );
     } else {
@@ -238,26 +352,94 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                         Total APR (incl. MP Rewards):
                       </span>
                       <span className="value">
-                        {" "}
+                        {' '}
                         {commaSeparator(calculateUptoApr() || 0)}%
                       </span>
                     </div>
 
                     <div className="upto_apr_tooltip_farm">
-                      <span className="text">Base APR (CMDX. yeild only):</span>
+                      <span className="text">
+                        Base APR ({' '}
+                        <NextImage
+                          src={iconList?.['ucmdx']?.coinImageUrl}
+                          alt={'logo'}
+                          height={15}
+                          width={15}
+                        />{' '}
+                        CMDX yield only):
+                      </span>
                       <span className="value">
-                        {" "}
-                        {list[key]?.master_pool
-                          ? commaSeparator(calculateMasterPoolApr()) || 0
-                          : commaSeparator(calculateChildPoolApr()) || 0}
-                        %
+                        {' '}
+                        {list[key]?.master_pool ? (
+                          commaSeparator(calculateMasterPoolApr()) || 0
+                        ) : // commaSeparator(calculateChildPoolApr()) || 0
+                        calculateExternalBasePoolApr(Number(pool?.id))?.length >
+                          0 ? (
+                          calculateExternalBasePoolApr(Number(pool?.id)).map(
+                            (item) => (
+                              <span className="value">
+                                {commaSeparator(fixedDecimal(item?.apr) || 0)}%
+                              </span>
+                            )
+                          )
+                        ) : (
+                          <span className="value">0%</span>
+                        )}
+                        {/* % */}
                       </span>
                     </div>
+
+                    {calculateExternalPoolApr(Number(pool?.id))?.length > 0 && (
+                      <div className="upto_apr_tooltip_farm active">
+                        <span className="text">External APR:</span>
+                        <span className="value">
+                          <div className="eApr">
+                            {calculateExternalPoolApr(Number(pool?.id)).map(
+                              (item) => (
+                                <>
+                                  <NextImage
+                                    src={iconList?.[item?.denom]?.coinImageUrl}
+                                    alt={'logo'}
+                                    height={15}
+                                    width={15}
+                                  />
+                                  {commaSeparator(fixedDecimal(item?.apr) || 0)}
+                                  %
+                                </>
+                              )
+                            )}
+                          </div>
+                        </span>
+                      </div>
+                    )}
+
+                    {calculateAPY(
+                      userLiquidityInPools[pool?.id],
+                      Number(pool?.id)
+                    ) ? (
+                      <div className="upto_apr_tooltip_farm active">
+                        <span className="text">Emission APY:</span>
+
+                        <span className="value">
+                          {calculateAPY(
+                            userLiquidityInPools[pool?.id],
+                            Number(pool?.id)
+                          )
+                            ? calculateAPY(
+                                userLiquidityInPools[pool?.id],
+                                Number(pool?.id)
+                              ) + '%'
+                            : null}
+                        </span>
+                      </div>
+                    ) : (
+                      ''
+                    )}
 
                     <div className="upto_apr_tooltip_farm">
                       <span className="text">Swap Fee APR :</span>
                       <span className="value">
-                        {" "}
+                        {' '}
                         {fixedDecimal(
                           rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
                         )}
@@ -268,7 +450,7 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
                     <div className="upto_apr_tooltip_farm">
                       <span className="text">Available MP Boost:</span>
                       <span className="value">
-                        {" "}
+                        {' '}
                         Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
                         for providing liquidity in the Master Pool
                       </span>
@@ -282,39 +464,43 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
           >
             <div
               className={`${styles.farmCard__element__right__details} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${
                   styles.farmCard__element__right__details__title
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 {list[key]?.master_pool
-                  ? commaSeparator(calculateMasterPoolApr()) || 0
-                  : commaSeparator(calculateChildPoolApr()) || 0}
-                %
-                {!list[key]?.master_pool && (
-                  <Icon className={"bi bi-arrow-right"} />
+                  ? ""
+                  : `${commaSeparator(calculateChildPoolApr()) || 0}%`}
+               
+                {!list[key]?.master_pool ? (
+                  <Icon className={'bi bi-arrow-right'} />
+                ) : (
+                  ''
                 )}
               </div>
-              {!list[key]?.master_pool && (
+              {!list[key]?.master_pool ? (
                 <div
                   className={`${styles.farmCard__element__right__pool} ${
-                    theme === "dark" ? styles.dark : styles.light
+                    theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
                   <div
                     className={`${
                       styles.farmCard__element__right__pool__title
                     } ${styles.boost} ${
-                      theme === "dark" ? styles.dark : styles.light
+                      theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
                     <NextImage src={Current} alt="Logo" />
                     {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
                   </div>
                 </div>
+              ) : (
+                ''
               )}
             </div>
           </Tooltip>
@@ -342,14 +528,14 @@ const ShowAPR = ({ pool, rewardsMap, setPoolRewards, iconList }) => {
         <Skeleton.Button
           className="apr-skeleton"
           active={true}
-          size={"small"}
+          size={'small'}
         />
       ) : Number(
           rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards[0]?.apr
         ) ? (
         showIndividualAPR(rewardsMap?.[pool?.id?.toNumber()]?.incentive_rewards)
       ) : (
-        `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
+         `${commaSeparator(Number(0).toFixed(DOLLAR_DECIMALS))}%`
       )}
     </>
   );
@@ -374,6 +560,8 @@ const stateToProps = (state) => {
   return {
     rewardsMap: state.liquidity.rewardsMap,
     iconList: state.config?.iconList,
+    markets: state.oracle.market.list,
+    userLiquidityInPools: state.liquidity.userLiquidityInPools,
   };
 };
 

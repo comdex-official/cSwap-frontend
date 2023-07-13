@@ -48,6 +48,7 @@ import TradePair from '../../public/assets/images/tradeP.svg';
 import OrderSlider from '../../public/assets/images/order-slider.svg';
 import RangeRed from '../../public/assets/images/range-red.svg';
 import RangeGreen from '../../public/assets/images/range-green.svg';
+import Docs from '../../public/assets/images/Docs.svg';
 
 // exports
 export {
@@ -99,5 +100,6 @@ export {
   TradePair,
   OrderSlider,
   RangeRed,
-  RangeGreen
+  RangeGreen,
+  Docs
 };

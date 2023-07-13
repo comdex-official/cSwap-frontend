@@ -169,6 +169,15 @@ const FarmCard = ({
     return fixedDecimal(calculateReward);
   };
 
+  const calculateRewardPerDay2 = (_totalApr) => {
+    console.log(_totalApr, "_totalApr")
+    let calculateReward =
+      (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
+        (Number(_totalApr) / 100)) /
+      365;
+    return fixedDecimal(calculateReward);
+  };
+
   const fetchMasterPoolAprData = () => {
     let totalMasterPoolApr = 0;
     // This will output the total APR value for all incentive_rewards where master_pool=true
@@ -492,8 +501,21 @@ const FarmCard = ({
         poolExternalIncentiveData &&
         showMoreData &&
         poolExternalIncentiveData.length <= 0 &&
-        styles.card__active2
-      } ${getMasterPool() && showMoreData && styles.card__active2}  ${
+        styles.card__active 
+      } 
+      ${
+        poolExternalIncentiveData &&
+        showMoreData &&
+        poolExternalIncentiveData.length > 0 &&
+       styles.card__active4
+      } 
+      ${ showMoreData &&
+        calculateAPY(
+          calculatePoolLiquidity(pool?.balances),
+          Number(pool?.id)
+        ) && styles.card__active3
+      }
+      ${getMasterPool() && showMoreData && styles.card__active2}  ${
         theme === 'dark' ? styles.dark : styles.light
       }
         ${
@@ -1173,7 +1195,10 @@ const FarmCard = ({
               }`}
             >
               {poolExternalIncentiveData &&
-                poolExternalIncentiveData.length > 0 && (
+                (poolExternalIncentiveData.length > 0 || calculateAPY(
+                  calculatePoolLiquidity(pool?.balances),
+                  Number(pool?.id)
+                )) ? (
                   <div
                     className={`${styles.farmCard__footer__main} ${
                       theme === 'dark' ? styles.dark : styles.light
@@ -1185,13 +1210,13 @@ const FarmCard = ({
                       }`}
                     >
                       {'Estimated rewards earned per day'}
-                    </div>
+                    </div> 
                     <div
                       className={`${styles.farmCard__footer__rewards} ${
                         theme === 'dark' ? styles.dark : styles.light
                       }`}
                     >
-                      {poolExternalIncentiveData &&
+                      {poolExternalIncentiveData && poolExternalIncentiveData.length > 0 &&
                         poolExternalIncentiveData?.map((singleIncentive) => {
                           return (
                             <div
@@ -1219,21 +1244,41 @@ const FarmCard = ({
                             </div>
                           );
                         })}
-                      {/* <div
-                   className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
-                     }`}
-                 >
-                   <NextImage src={ATOM} alt="" /> {"0.000000"}
-                 </div>
-                 <div
-                   className={`${styles.farmCard__footer__rewards__title} ${theme === "dark" ? styles.dark : styles.light
-                     }`}
-                 >
-                   <NextImage src={CMDS} alt="" /> {"0.000000"}
-                 </div> */}
+
+                          {calculateAPY(
+                              calculatePoolLiquidity(pool?.balances),
+                              Number(pool?.id)
+                            ) ? <div
+                              className={`${
+                                styles.farmCard__footer__rewards__title
+                              }
+                              ${poolExternalIncentiveData.length > 0 ? styles.marginTop : ""}
+                              ${theme === 'dark' ? styles.dark : styles.light}`}
+                              
+                            >
+                              <NextImage
+                                src={
+                                  iconList?.["uharbor"]
+                                    ?.coinImageUrl
+                                }
+                                width={50}
+                                height={50}
+                                alt=""
+                              />{' '}
+                              ${calculateRewardPerDay2(
+                                  calculateAPY(
+                                    calculatePoolLiquidity(pool?.balances),
+                                    Number(pool?.id)
+                                  )  
+                             )}
+                            </div>
+                            :
+                            null}
                     </div>
                   </div>
-                )}
+
+
+                ) :null}
 
               <div
                 className={`${styles.farmCard__footer__main} ${

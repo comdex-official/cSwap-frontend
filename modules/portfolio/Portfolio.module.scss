@@ -330,3 +330,218 @@
     align-items: flex-start;
   }
 }
+
+.farmCard__element__right__wholetab {
+  display: flex;
+  // align-items: flex-start;
+  align-items: center;
+  gap: 30px;
+}
+
+.farmCard__element__right__emission {
+  cursor: pointer;
+  img {
+    height: 20px;
+  }
+}
+
+.farmCard__element__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  // width: 250px;
+
+  &.card__view {
+  }
+  &.tableActive {
+    // margin-left: 40px;
+    // width: 100%;
+    align-items: flex-start;
+  }
+}
+
+.farmCard__element__right__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -25px;
+}
+
+.farmCard__element__right__pool {
+  border-radius: 41px;
+  padding: 1px;
+  position: relative;
+  background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
+  // background: #a1c7ff;
+
+  &.upto {
+    // background: #2a55b1;
+  }
+
+  &.active {
+    margin-right: 35px;
+  }
+}
+
+.farmCard__element__right__pool__title {
+  // font-weight: 550;
+  // font-size: 12px;
+  // line-height: 17px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: normal;
+  padding: 4px 15px;
+  color: #ffffff;
+  background: #111234;
+  // border: 0.913px solid #2a55b1;
+  border-radius: 41px;
+  display: flex;
+  align-items: center;
+  clear: both;
+  display: inline-block;
+
+  white-space: nowrap;
+
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
+
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
+
+  &.boost {
+    font-size: 14px;
+    line-height: 18px;
+
+    img {
+      margin-left: -5px;
+    }
+  }
+
+  img {
+    height: 13px;
+    margin-right: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__apr__poll__wrap {
+  border-radius: 41px;
+  padding: 1px;
+  position: relative;
+  // background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
+  background: linear-gradient(182deg, #8481a2 -18.18%, #443da2 53.31%);
+  // margin-top: 10px;
+}
+
+.farmCard__element__right__apr_pool__title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 550;
+  font-size: 12px;
+  line-height: 10px;
+  padding: 4px 15px;
+  color: #ffffff;
+  background: #111234;
+  border-radius: 41px;
+  white-space: nowrap;
+  transition: all 1s ease-in-out;
+  cursor: pointer;
+  // &.show_text {
+  //   width: 160px;
+  //   padding: 2px 15px;
+  //   // line-height: 17px;
+  //   img {
+  //     height: 14px;
+  //     margin-right: 5px;
+  //   }
+  // }
+  span {
+    font-size: 10px;
+  }
+
+  &.boost {
+    font-size: 11px;
+    line-height: 18px;
+    img {
+      margin-left: -5px;
+    }
+  }
+
+  img {
+    height: 14px;
+    margin-right: 5px;
+  }
+
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__right__basic {
+  border-radius: 41px;
+  padding: 1px;
+  position: relative;
+  // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
+  // background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
+  margin-left: 10px;
+
+  &.red {
+    background: #fe2b56;
+  }
+  &.green {
+    background: rgba(82, 183, 136, 1);
+  }
+}
+
+.farmCard__element__right__basic__title {
+  font-weight: 550;
+  font-size: 12px;
+  line-height: 17px;
+  padding: 4px 15px;
+  color: #ffffff;
+  background: #111234;
+  border-radius: 41px;
+  clear: both;
+  display: inline-block;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  &.active {
+    cursor: pointer;
+  }
+
+  // @media screen and (max-width: $XXL) {
+  //   font-size: 10px;
+  // }
+
+  // @media screen and (max-width: $XS) {
+  //   font-size: 8px;
+  // }
+  img {
+    height: 17px;
+    margin-right: 5px;
+  }
+  &.light {
+  }
+
+  &.dark {
+  }
+}
+
+.farmCard__element__wrap{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
