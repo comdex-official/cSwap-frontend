@@ -269,15 +269,15 @@ a {
     }
 
     &.btn-filled {
-      background-color: #FE2B56;
+      background-color: #fe2b56;
       color: $white;
       text-transform: capitalize;
       &:hover:not(&[disabled]),
       &:active,
       &:focus {
-        background-color: rgba(#FE2B56, 0.3);
+        background-color: rgba(#fe2b56, 0.3);
         color: $white;
-        border-color: rgba(#FE2B56, 0.3);
+        border-color: rgba(#fe2b56, 0.3);
       }
 
       &[disabled] {
@@ -1187,7 +1187,7 @@ a {
               }
             }
 
-            &.dim__card{
+            &.dim__card {
               opacity: 0.6000000238418579;
             }
 
@@ -4056,14 +4056,14 @@ a {
       }
     }
     .ant-slider-track {
-      background: $secondary-color;
+      background: #fe2b56;
       height: 6px;
       border-radius: 6px;
     }
 
     .ant-slider-handle {
-      background-color: $secondary-color;
-      border: 3px solid $secondary-color;
+      background-color: #fe2b56;
+      border: 3px solid #fe2b56;
       width: 14px;
       height: 14px;
       border-radius: 14px;
@@ -4119,11 +4119,11 @@ a {
     }
     &:hover {
       .ant-slider-track {
-        background: $secondary-color;
+        background: #fe2b56;
       }
       .ant-slider-handle {
-        background-color: $secondary-color;
-        border: 3px solid $secondary-color !important;
+        background-color: #fe2b56;
+        border: 3px solid #fe2b56 !important;
       }
     }
   }
@@ -4617,9 +4617,12 @@ a {
 .create-pool-modal {
   .ant-modal-content {
     // padding: 10px 15px !important;
-    background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
-    border: 2px solid #303950;
-    border-radius: 12px;
+    // background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
+    // border: 2px solid #303950;
+    // border-radius: 12px;
+    border-radius: 12.636px;
+    border: 0.842px solid #393939;
+    background: #030a1c;
     box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
       0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
     pointer-events: auto;
@@ -4668,8 +4671,13 @@ a {
   }
   .pool-fee-container {
     .pool-denom {
-      font-size: 1.3rem;
-      color: #acbfdb;
+      // font-size: 1.3rem;
+      // color: #acbfdb;
+      color: #fff;
+      font-size: 21.071px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
     }
     .pool-paira {
       font-size: 0.7rem;
@@ -4699,9 +4707,13 @@ a {
     }
   }
   .pool-denom {
-    font-weight: 400;
+    color: #fff;
+    font-size: 21.071px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
     .dark-mode & {
-      color: $text-color-label-dark;
+      color: #fff;
     }
   }
   .selected-amount {
@@ -4735,10 +4747,13 @@ a {
     }
     .poolcreationfree-left {
       .pool-denom {
+        color: #fff;
+        font-size: 21.071px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
         .dark-mode & {
-          color: $white;
-          font-weight: 500;
-          font-size: 1rem;
+          color: #fff;
         }
       }
       .pool-paira {
