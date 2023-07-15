@@ -1,9 +1,5 @@
-// import style from "./Govern.moduleOld.scss";
 import { useRouter } from 'next/router';
-import { Button, List, Spin, Tooltip, message } from 'antd';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import Link from 'next/link';
+import { Button, Tooltip, message } from 'antd';
 import Copy from '../../shared/components/Copy';
 import VoteNowModal from './VoteNowModal';
 import * as PropTypes from 'prop-types';
@@ -36,7 +32,6 @@ import { formatTime } from '../../utils/date';
 import { formatNumber } from '../../utils/number';
 import {
   proposalOptionMap,
-  proposalStatusMap,
   stringTagParser,
   truncateString,
 } from '../../utils/string';
@@ -56,14 +51,12 @@ const GovernViewPage = ({
   proposalTallyMap,
 }) => {
   const router = useRouter();
+  const { id } = router.query;
 
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
   const [votingPower, setVotingPower] = useState();
-
-  const { id } = router.query;
   const [inProgress, setInProgress] = useState(false);
-
   const [votedOption, setVotedOption] = useState();
   const [getVotes, setGetVotes] = useState({
     yes: 0,
@@ -75,38 +68,6 @@ const GovernViewPage = ({
   let proposal = proposalMap?.[id];
   let proposer = proposerMap?.[id];
   let proposalTally = proposalTallyMap?.[id];
-
-  console.log({ votingPower });
-
-  const data = [
-    {
-      title: 'Voting Starts',
-      counts: proposal?.voting_start_time
-        ? formatTime(proposal?.voting_start_time)
-        : '--/--/-- 00:00:00',
-    },
-    {
-      title: 'Voting Ends',
-      counts: proposal?.voting_end_time
-        ? formatTime(proposal?.voting_end_time)
-        : '--/--/-- 00:00:00',
-    },
-    {
-      title: 'Proposer',
-      counts: (
-        <>
-          {proposer ? (
-            <p className="wrap__proposer">
-              <span className="mr-1">{truncateString(proposer, 6, 6)}</span>
-              <Copy text={proposer} />
-            </p>
-          ) : (
-            '------'
-          )}
-        </>
-      ),
-    },
-  ];
 
   const fetchTallyParamsProposer = useCallback(() => {
     setInProgress(true);
@@ -219,7 +180,6 @@ const GovernViewPage = ({
         if (error) {
           return;
         }
-        console.log(result);
         if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
           setProposer(
             result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
@@ -287,80 +247,6 @@ const GovernViewPage = ({
       calculateVotes();
     }
   }, [proposalTallyMap, calculateVotes, proposalTally?.yes]);
-
-  const Options = {
-    chart: {
-      type: 'pie',
-      backgroundColor: null,
-      height: 180,
-      width: 220,
-      margin: 5,
-    },
-    credits: {
-      enabled: false,
-    },
-    title: {
-      text: null,
-    },
-    subtitle: {
-      floating: true,
-      style: {
-        fontSize: '25px',
-        fontWeight: '500',
-        fontFamily: 'Lexend Deca',
-        color: '#fff',
-      },
-      y: 70,
-    },
-    plotOptions: {
-      pie: {
-        showInLegend: false,
-        size: '105%',
-        innerSize: '75%',
-        borderWidth: 0,
-        className: 'highchart_chart',
-        dataLabels: {
-          enabled: false,
-          distance: -14,
-          style: {
-            fontsize: 50,
-          },
-        },
-      },
-    },
-    series: [
-      {
-        states: {
-          hover: {
-            enabled: true,
-          },
-        },
-        name: '',
-        data: [
-          {
-            name: 'Yes',
-            y: Number(getVotes?.yes || 0),
-            color: '#52B788',
-          },
-          {
-            name: 'No',
-            y: Number(getVotes?.no || 0),
-            color: '#F76872',
-          },
-          {
-            name: 'No With Veto',
-            y: Number(getVotes?.veto || 0),
-            color: '#AACBB9',
-          },
-          {
-            name: 'Abstain',
-            y: Number(getVotes?.abstain || 0),
-            color: '#6A7B6C',
-          },
-        ],
-      },
-    ],
-  };
 
   if (inProgress) {
     return (
@@ -460,7 +346,6 @@ const GovernViewPage = ({
             <div className="proposal_vote_details_container">
               <div className="title_and_user_vote_container">
                 <div className="vote_title">Vote Details</div>
-                {/* <div className="user_vote">Your Vote: <span>Yes</span></div> */}
                 <div className="user_vote">
                   {' '}
                   {proposalOptionMap?.[votedOption] && (
@@ -486,9 +371,6 @@ const GovernViewPage = ({
                   <div className="proposal_quorem_container">
                     <div className="total_quorem">
                       <div className="title">Current Quorum</div>
-                      {/* <div className="title">Current Quorum: {calculateCurrentThreshold() || 0} %</div> */}
-                      {/* <div className="value">{calculateQuoremThreshold() || 0} CMDX</div> */}
-
                       <Tooltip
                         title={'Min Quorum threshold: 33%.'}
                         placement="top"
@@ -601,33 +483,10 @@ const GovernViewPage = ({
                           ]}
                         />
                       </div>
-                      <div className="mask_container">
-                        {/* <div className="quorem_container">
-                                                    <div className="line"></div>
-                                                    <div className="arrow">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="value">Quorum: 33%</div>
-                                                </div> */}
-
-                        {/* <div className="quorem_container threshold_container">
-                                                    <div className="line"></div>
-                                                    <div className="arrow">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="value">Threshold: 50%</div>
-                                                </div> */}
-                      </div>
                     </div>
                   </div>
                 </div>
-
                 <div className="proposal_vote_btn_container">
-                  {/* <Button type="primary" className="btn-filled"> Vote</Button> */}
                   <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
                 </div>
               </div>

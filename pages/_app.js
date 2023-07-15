@@ -1,12 +1,11 @@
-"use client";
-import Head from "next/head";
-import Layout from "../modules/layout";
-import "../styles/global.scss";
-import "antd/dist/reset.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import { message } from "antd";
-import Loading from "./Loading";
-import {useState, useEffect } from "react"
+import Head from 'next/head';
+import Layout from '../modules/layout';
+import '../styles/global.scss';
+import 'antd/dist/reset.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { message } from 'antd';
+import Loading from './Loading';
+import { useState, useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
   message.config({
@@ -16,14 +15,14 @@ function MyApp({ Component, pageProps }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (document.readyState === "complete") {
+    if (document.readyState === 'complete') {
       setIsLoading(false);
     } else {
-      window.addEventListener("load", () => {
+      window.addEventListener('load', () => {
         setIsLoading(false);
       });
       return () =>
-        document.removeEventListener("load", () => {
+        document.removeEventListener('load', () => {
           setIsLoading(false);
         });
     }
@@ -31,19 +30,20 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-    {isLoading ? 
-    <div className="loading_logo">
-    <Loading /> 
-    </div>:
-    <Layout>
-      <Head>
-        <title>cSwap Exchange</title>
-        <link rel="shortcut icon" href="/assets/favicon.ico" />
-      </Head>
-       <Component {...pageProps} />
-    </Layout>
-  }
-  </>
+      {isLoading ? (
+        <div className="loading_logo">
+          <Loading />
+        </div>
+      ) : (
+        <Layout>
+          <Head>
+            <title>cSwap Exchange</title>
+            <link rel="shortcut icon" href="/assets/favicon.ico" />
+          </Head>
+          <Component {...pageProps} />
+        </Layout>
+      )}
+    </>
   );
 }
 

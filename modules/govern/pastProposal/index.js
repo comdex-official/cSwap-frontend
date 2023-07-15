@@ -1,17 +1,10 @@
-import { useRouter } from "next/router";
-import { Button, List, message, Select, Spin } from "antd";
-import * as PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { proposalStatusMap, stringTagParser } from "../../../utils/string";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-// import style from "./Govern.moduleOld.scss";
-import { Progress } from "@mantine/core";
-import { useTimer } from "react-timer-hook";
-import MyTimer from "../../../shared/components/governTimer";
-import { formatTime } from "../../../utils/date";
-
-const { Option } = Select;
+import { useRouter } from 'next/router';
+import * as PropTypes from 'prop-types';
+import { useCallback } from 'react';
+import { connect } from 'react-redux';
+import { proposalStatusMap, stringTagParser } from '../../../utils/string';
+import { DOLLAR_DECIMALS } from '../../../constants/common';
+import { Progress } from '@mantine/core';
 
 const GovernPastProposal = ({ proposals }) => {
   const router = useRouter();
@@ -30,19 +23,6 @@ const GovernPastProposal = ({ proposals }) => {
     return result;
   }, []);
 
-  const parsedVotingStatustext = (text) => {
-    if (text === "open") {
-      return "voting Period";
-    }
-    return text;
-  };
-
-  const proposalEndDate = (_date) => {
-    const enddate = new Date(_date);
-    enddate.setSeconds(enddate.getSeconds());
-    return enddate;
-  };
-
   return (
     <>
       <div className={`mt-4 openProposal`}>
@@ -52,7 +32,7 @@ const GovernPastProposal = ({ proposals }) => {
               <div className="govern_tab"></div>
               <div className="govern_search"></div>
             </div>
-            {/* ist container start */}
+
             <div className="proposal_box_parent_container">
               {proposals?.length > 0
                 ? proposals?.map((item) => {
@@ -65,7 +45,6 @@ const GovernPastProposal = ({ proposals }) => {
                         }
                       >
                         <div className="proposal_container">
-                          {/* Id and Timer Container  */}
                           <div className="id_timer_container">
                             <div className="proposal_id">
                               #{item?.proposal_id}
@@ -74,36 +53,34 @@ const GovernPastProposal = ({ proposals }) => {
                               <div className="proposal-status-container">
                                 <div
                                   className={
-                                    proposalStatusMap[item?.status] === "Open"
-                                      ? "proposal-status open-color"
+                                    proposalStatusMap[item?.status] === 'Open'
+                                      ? 'proposal-status open-color'
                                       : proposalStatusMap[item?.status] ===
-                                          "Passed" ||
+                                          'Passed' ||
                                         proposalStatusMap[item?.status] ===
-                                          "Executed"
-                                      ? "proposal-status passed-color"
+                                          'Executed'
+                                      ? 'proposal-status passed-color'
                                       : proposalStatusMap[item?.status] ===
-                                          "Rejected" ||
+                                          'Rejected' ||
                                         proposalStatusMap[item?.status] ===
-                                          "Failed"
-                                      ? "proposal-status reject-color"
+                                          'Failed'
+                                      ? 'proposal-status reject-color'
                                       : proposalStatusMap[item?.status] ===
-                                          "Pending" ||
+                                          'Pending' ||
                                         proposalStatusMap[item?.status] ===
-                                          "Deposit Period"
-                                      ? "proposal-status pending-color"
-                                      : "proposal-status"
+                                          'Deposit Period'
+                                      ? 'proposal-status pending-color'
+                                      : 'proposal-status'
                                   }
                                 >
-                                  {" "}
+                                  {' '}
                                   {item
                                     ? proposalStatusMap[item?.status]
-                                    : "-" || "-"}
+                                    : '-' || '-'}
                                 </div>
                               </div>
                             </div>
                           </div>
-
-                          {/* Title Container  */}
 
                           <div className="haeading_container">
                             <div className="heading">
@@ -111,17 +88,14 @@ const GovernPastProposal = ({ proposals }) => {
                             </div>
                           </div>
 
-                          {/* Pairagraph container  */}
                           <div className="para_main_container">
                             <div className="para_container">
                               {stringTagParser(
                                 item?.content?.description.substring(0, 150) ||
-                                  " "
-                              ) + "......"}{" "}
+                                  ' '
+                              ) + '......'}{' '}
                             </div>
                           </div>
-
-                          {/* Progress bar container  */}
 
                           <div className="progress_bar_main_container">
                             <div className="progress_bar_container">
@@ -129,12 +103,12 @@ const GovernPastProposal = ({ proposals }) => {
                                 <div className="stats_container">
                                   <div
                                     className="color"
-                                    style={{ backgroundColor: "#52B788" }}
+                                    style={{ backgroundColor: '#52B788' }}
                                   ></div>
                                   <div className="data_container">
                                     <div className="title">Yes</div>
                                     <div className="value">
-                                      {" "}
+                                      {' '}
                                       {`${calculateVotes(
                                         item?.final_tally_result?.yes,
                                         item?.final_tally_result
@@ -145,7 +119,7 @@ const GovernPastProposal = ({ proposals }) => {
                                 <div className="stats_container">
                                   <div
                                     className="color"
-                                    style={{ backgroundColor: "#D74A4A" }}
+                                    style={{ backgroundColor: '#D74A4A' }}
                                   ></div>
                                   <div className="data_container">
                                     <div className="title">No</div>
@@ -158,12 +132,12 @@ const GovernPastProposal = ({ proposals }) => {
                                 <div className="stats_container">
                                   <div
                                     className="color"
-                                    style={{ backgroundColor: "#C2A3A3" }}
+                                    style={{ backgroundColor: '#C2A3A3' }}
                                   ></div>
                                   <div className="data_container">
                                     <div className="title">No With Veto</div>
                                     <div className="value">
-                                      {" "}
+                                      {' '}
                                       {`${calculateVotes(
                                         item?.final_tally_result?.no_with_veto,
                                         item?.final_tally_result
@@ -174,12 +148,12 @@ const GovernPastProposal = ({ proposals }) => {
                                 <div className="stats_container">
                                   <div
                                     className="color"
-                                    style={{ backgroundColor: "#C58E3D" }}
+                                    style={{ backgroundColor: '#C58E3D' }}
                                   ></div>
                                   <div className="data_container">
                                     <div className="title">Abstain</div>
                                     <div className="value">
-                                      {" "}
+                                      {' '}
                                       {`${calculateVotes(
                                         item?.final_tally_result?.abstain,
                                         item?.final_tally_result
@@ -204,7 +178,7 @@ const GovernPastProposal = ({ proposals }) => {
                                               item?.final_tally_result
                                             )
                                           ),
-                                          color: "#52B788",
+                                          color: '#52B788',
                                           tooltip: `Yes ${calculateVotes(
                                             item?.final_tally_result?.yes,
                                             item?.final_tally_result
@@ -217,7 +191,7 @@ const GovernPastProposal = ({ proposals }) => {
                                               item?.final_tally_result
                                             )
                                           ),
-                                          color: "#D74A4A",
+                                          color: '#D74A4A',
                                           tooltip: `No ${calculateVotes(
                                             item?.final_tally_result?.no,
                                             item?.final_tally_result
@@ -231,7 +205,7 @@ const GovernPastProposal = ({ proposals }) => {
                                               item?.final_tally_result
                                             )
                                           ),
-                                          color: "#C2A3A3",
+                                          color: '#C2A3A3',
 
                                           tooltip: `No With Veto ${calculateVotes(
                                             item?.final_tally_result
@@ -246,7 +220,7 @@ const GovernPastProposal = ({ proposals }) => {
                                               item?.final_tally_result
                                             )
                                           ),
-                                          color: "#C58E3D",
+                                          color: '#C58E3D',
 
                                           tooltip: `Abstain ${calculateVotes(
                                             item?.final_tally_result?.abstain,
@@ -265,7 +239,6 @@ const GovernPastProposal = ({ proposals }) => {
                     );
                   })
                 : null}
-              {/* 1st container end  */}
             </div>
           </div>
         </div>
@@ -284,7 +257,6 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     allProposals: state.govern.allProposals,
-    // proposals: state.govern.proposals,
   };
 };
 

@@ -1,4 +1,4 @@
-import { Button, Col, Input, Row, message } from 'antd';
+import { Button, Input, message } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -33,6 +33,7 @@ const Sell = ({
   refresh,
 }) => {
   const theme = 'dark';
+
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
   const [total, setTotal] = useState(0);
@@ -148,6 +149,7 @@ const Sell = ({
       marketPrice(markets, pair?.base_coin_denom)
     );
   };
+
   return (
     <>
       <div className="spot-card-dtl">
@@ -155,7 +157,7 @@ const Sell = ({
 
         <div
           className={`${styles.orderbook__body__tab__body} ${
-            type === 'market' ? styles.active : ""
+            type === 'market' ? styles.active : ''
           }`}
         >
           <div
@@ -204,15 +206,6 @@ const Sell = ({
                   type={'number'}
                   value={price}
                   className="order_input"
-                  step={
-                    1 /
-                    10 **
-                      formateNumberDecimalsAuto({
-                        price: pair?.price || 0,
-                      })
-                        .toString()
-                        ?.split('.')[1]?.length
-                  }
                   placeholder="0"
                   onChange={(event) => handlePriceChange(event.target.value)}
                 />
@@ -297,7 +290,10 @@ const Sell = ({
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
-                ~${(Number(total) * marketPrice(markets, pair?.quote_coin_denom)).toFixed(4)}
+                ~$
+                {(
+                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                ).toFixed(4)}
               </label>
             </div>
           </div>
@@ -311,8 +307,7 @@ const Sell = ({
           <Button
             type="primary"
             className="btn-filled2"
-            style={{width: "120px"}}
-           
+            style={{ width: '120px' }}
             block
             loading={inProgress}
             disabled={inProgress || !price || !total}

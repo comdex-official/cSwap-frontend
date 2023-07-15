@@ -7,8 +7,6 @@ import { AxelarData, GravityData, IBCData, TabData } from "./Data";
 import dynamic from "next/dynamic";
 import Card from "../../shared/components/card/Card";
 
-// const Card = dynamic(() => import("@/shared/components/card/Card"))
-
 const BridgeCard = ({ theme }) => {
   const [activeTab, setActiveTab] = useState("IBC Transfer");
 

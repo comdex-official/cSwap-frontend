@@ -5,7 +5,6 @@
   margin: auto;
   padding: 0px 115px;
   position: relative;
-  // padding-top: 100px;
   padding-top: 20px;
   padding-bottom: 20px;
 
@@ -34,7 +33,6 @@
       }
       .proposal_box_parent_container {
         display: flex;
-        // gap: 1rem;
         row-gap: 0.7rem;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -46,8 +44,6 @@
           width: 100%;
         }
         .proposal_main_container {
-          // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-          // border: 2px solid #303950;
           width: 100%;
           padding: 25px;
           border-radius: 15px;
@@ -58,7 +54,6 @@
             #161440 48.59%,
             #070e1c 100%
           );
-          // border-radius: 20px;
           color: white;
           flex-basis: 49.5%;
           //   flex-basis: 49.2%;
@@ -87,11 +82,6 @@
                 font-size: 1.1rem;
               }
               .proposal_timer {
-                // background: linear-gradient(
-                //   90.55deg,
-                //   #6359e9 -33.82%,
-                //   rgba(114, 9, 183, 0.76) 334.79%
-                // );
                 background: $primary-color;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
@@ -126,25 +116,15 @@
                   }
 
                   .reject-color {
-                    // background-color: #f6d9d9;
-                    // border: 1px solid #8e353c;
                     border-radius: 113.788px;
                     border: 1px solid #fe2b56;
                     background: rgba(254, 43, 86, 0.12);
-                    // .dark-mode & {
-                    //   background-color: #422234;
-                    // }
                   }
 
                   .passed-color {
-                    // background-color: #cce7de;
-                    // border: 1px solid #02865b;
                     border-radius: 113.788px;
                     border: 1px solid #08614b;
                     background: rgba(8, 97, 75, 0.23);
-                    // .dark-mode & {
-                    //   background-color: #19323a;
-                    // }
                   }
 
                   .pending-color {
@@ -245,17 +225,15 @@
   @media screen and (max-width: 530px) {
     padding: 20px;
   }
-  
+
   .govern_view_container {
     .proposal_detail_main_container {
-      // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-      // border: 2px solid #303950;
       border-radius: 10px;
       border: 1px solid #383838;
       background: #111234;
       margin-bottom: 2rem;
       padding: 1.2rem 1.4rem;
-      // border-radius: 20px;
+
       color: white;
 
       .proposal_detail_container {
@@ -302,13 +280,11 @@
       }
     }
     .proposal_vote_details_main_container {
-      // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-      // border: 2px solid #303950;
       border-radius: 10px;
       border: 1px solid #383838;
       background: #111234;
       padding: 1.2rem 1.4rem;
-      // border-radius: 20px;
+
       margin-bottom: 2rem;
       color: white;
       .proposal_vote_details_container {
@@ -380,7 +356,7 @@
             flex-basis: 60%;
             display: flex;
             flex-direction: column;
-            // justify-content: space-around;
+
             .proposal_vote_up_row {
               .stata_main_container {
                 display: flex;
@@ -459,10 +435,7 @@
     .proposal_description_main_container {
       color: white;
       border: 1px solid white;
-      // border-radius: 20px;
       padding: 1.2rem 1.4rem;
-      // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-      // border: 2px solid #303950;
       border-radius: 10px;
       border: 1px solid #383838;
       background: #111234;
@@ -477,7 +450,6 @@
         font-size: 0.85rem;
         line-height: 21px;
         color: rgba(255, 255, 255, 0.808);
-        // margin-bottom: 20px;
         margin-top: 20px;
         word-wrap: break-word;
       }
@@ -506,7 +478,6 @@
     position: absolute;
     right: 85%;
     .ant-select-arrow {
-      // display: none !important;
       left: 70px;
 
       @media only screen and (max-width: 838px) {
@@ -523,7 +494,6 @@
       width: 100px !important;
       align-items: center;
       background: transparent !important;
-      // border: 2px solid #96a4c8 !important;
       border: 1px solid #707070 !important;
       @media only screen and (max-width: 725px) {
         height: 35px !important;
@@ -544,9 +514,6 @@
 .table__empty__data__wrap {
   width: 100%;
   margin-top: 15px;
-  // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  // border: 2px solid #303950;
-  // border-radius: 20px;
   border-radius: 15px;
   border: 1px solid #4f4f4f;
   background: linear-gradient(85deg, #070e1b 0%, #161440 48.59%, #070e1c 100%);

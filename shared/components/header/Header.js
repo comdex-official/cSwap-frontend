@@ -33,6 +33,7 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   NETWORK_TAG,
+  TRANSIT_URL,
 } from '../../../constants/common';
 import ConnectModal from './ConnectModal';
 import variables from '../../../utils/variables';
@@ -671,12 +672,12 @@ const Header = ({
           header={null}
         >
           <iframe
-            src="https://dev-transit.comdex.one/"
+            src={TRANSIT_URL}
             frameBorder="0"
             width={'100%'}
             height={'700px'}
             style={{ borderRadius: '10px', background: '#030b1e' }}
-          ></iframe>
+          />
         </Modal>
       </div>
     </div>

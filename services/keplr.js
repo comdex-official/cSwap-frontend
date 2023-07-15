@@ -180,7 +180,6 @@ export const fetchKeplrAccountName = async () => {
 
   // Need wait some time to get the Keplr.
   await (() => {
-    // eslint-disable-next-line no-undef
     return new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });

@@ -7,12 +7,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    staticFolder: '/static',
-  },
-  // Add the following line to specify the custom server file
-  server: './server.js',
 };
 
 module.exports = nextConfig;

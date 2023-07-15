@@ -5,6 +5,7 @@ import styles from "./OrderBook.module.scss";
 
 const OrderType = ({ setType, type }) => {
   const theme = "dark";
+
   return (
     <div
       className={`${styles.orderbook__element__right__body__tab} ${
@@ -33,8 +34,6 @@ const OrderType = ({ setType, type }) => {
           {"MARKET"}
         </div>
       </div>
-
-      {/* <SvgIcon name="info-icon-alt" viewbox="0 0 26 26" /> */}
     </div>
   );
 };

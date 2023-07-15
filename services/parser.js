@@ -11,7 +11,6 @@ import {
   DelayedVestingAccount,
   PeriodicVestingAccount
 } from "cosmjs-types/cosmos/vesting/v1beta1/vesting";
-// import { stride } from "stridejs/module/codegen";
 import { stride } from "stridejs";
 
 const uint64FromProto = (input) => {

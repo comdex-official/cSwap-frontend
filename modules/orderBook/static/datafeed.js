@@ -1,61 +1,55 @@
-import {
-  detectBestDecimalsDisplay,
-  makeApiRequest,
-  parseFullSymbol,
-} from "./helpers.js";
-import moment from "moment";
-const lastBarsCache = new Map();
+import { detectBestDecimalsDisplay, makeApiRequest } from './helpers.js';
+import moment from 'moment';
 
 // DatafeedConfiguration implementation
 const configurationData = {
   // Represents the resolutions for bars supported by your datafeed
-  supported_resolutions: ["1", "5", "30", "60", "1D", "1W", "1M"],
-  // supported_resolutions: ['60', '300', '600', '900', '1800', '3600', '21600', '43200', '64800', '86400', '604800', '2592000'],
+  supported_resolutions: ['1', '5', '30', '60', '1D', '1W', '1M'],
 
   resulation: [
     {
-      1: "60",
+      1: '60',
     },
     {
-      5: "300",
+      5: '300',
     },
     {
-      30: "1800",
+      30: '1800',
     },
     {
-      60: "3600",
+      60: '3600',
     },
 
     {
-      "1D": "86400",
+      '1D': '86400',
     },
     {
-      "1W": "604800",
+      '1W': '604800',
     },
     {
-      "1M": "2592000",
+      '1M': '2592000',
     },
   ],
+
   // The `exchanges` arguments are used for the `searchSymbols` method if a user selects the exchange
   exchanges: [
     {
-      value: "Bitfinex",
-      name: "Bitfinex",
-      desc: "Bitfinex",
+      value: 'Bitfinex',
+      name: 'Bitfinex',
+      desc: 'Bitfinex',
     },
     {
-      value: "Kraken",
-      // Filter name
-      name: "Kraken",
-      // Full exchange name displayed in the filter popup
-      desc: "Kraken bitcoin exchange",
+      value: 'Kraken',
+      name: 'Kraken',
+      desc: 'Kraken bitcoin exchange',
     },
   ],
+
   // The `symbols_types` arguments are used for the `searchSymbols` method if a user selects this symbol type
   symbols_types: [
     {
-      name: "crypto",
-      value: "crypto",
+      name: 'crypto',
+      value: 'crypto',
     },
   ],
 };
@@ -77,7 +71,7 @@ const handleIncreaseLength = (dataArray) => {
         high_price: 0,
         low_price: 0,
         open_price: 0,
-        timestamp: "2020-02-08T00:00:27.131819Z",
+        timestamp: '2020-02-08T00:00:27.131819Z',
         volume: 0,
       });
     }
@@ -88,16 +82,16 @@ const handleIncreaseLength = (dataArray) => {
 };
 
 async function getAllSymbols() {
-  const data = await makeApiRequest("pairs/all");
+  const data = await makeApiRequest('pairs/all');
 
   const allSymbols = data?.data?.map((item) => {
     return {
       pairId: item?.pair_id,
       symbol: item.pair_symbol,
-      full_name: "",
+      full_name: '',
       description: item.pair_symbol,
-      exchange: "",
-      type: "crypto",
+      exchange: '',
+      type: 'crypto',
     };
   });
 
@@ -137,7 +131,7 @@ export const Datafeed = (value) => {
       const symbolItem =
         symbols && symbols.find(({ symbol }) => symbol === value);
       if (!symbolItem) {
-        onResolveErrorCallback("cannot resolve symbol");
+        onResolveErrorCallback('cannot resolve symbol');
         return;
       }
 
@@ -147,11 +141,11 @@ export const Datafeed = (value) => {
         name: symbolItem.symbol,
         description: symbolItem.description,
         type: symbolItem.type,
-        session: "24x7",
+        session: '24x7',
         exchange: symbolItem.exchange,
         minmov: 1,
-        style: "2",
-        min_bar_spacing: "0.0000000",
+        style: '2',
+        min_bar_spacing: '0.0000000',
         has_seconds: true,
         has_ticks: true,
         pricescale: Math.pow(10, detectBestDecimalsDisplay(0.00434)),
@@ -174,7 +168,6 @@ export const Datafeed = (value) => {
       onErrorCallback
     ) => {
       const { from, to, firstDataRequest } = periodParams;
-      console.log("[getBars]: Method call",);
 
       const resolutionValue = getResolutionValue(resolution);
 
@@ -186,12 +179,12 @@ export const Datafeed = (value) => {
 
       const query = Object.keys(urlParameters)
         .map((name) => `${name}=${encodeURIComponent(urlParameters[name])}`)
-        .join("&");
+        .join('&');
 
       try {
         const data = await makeApiRequest(`pair/analytical/data?${query}`);
-       
-        if (data.result !== "success" || data?.data?.data.length === 0) {
+
+        if (data.result !== 'success' || data?.data?.data.length === 0) {
           onHistoryCallback([], {
             noData: true,
           });
@@ -199,7 +192,7 @@ export const Datafeed = (value) => {
         }
         const newData = handleIncreaseLength(data?.data?.data);
         let bars = [];
-     
+
         newData.forEach((bar) => {
           bars.push({
             time: moment(bar.timestamp).unix() * 1000,
@@ -211,18 +204,11 @@ export const Datafeed = (value) => {
           });
         });
 
-        // if (firstDataRequest) {
-        //   lastBarsCache.set(symbolInfo.full_name, {
-        //     ...bars[bars.length - 1],
-        //   });
-        // }
-
-        console.log(`[getBars]: returned bar(s)`);
         onHistoryCallback(bars, {
           noData: false,
         });
       } catch (error) {
-        console.log("[getBars]: Get error", error);
+        console.log('[getBars]: Get error', error);
         onErrorCallback(error);
       }
     },
@@ -237,7 +223,3 @@ export const Datafeed = (value) => {
     unsubscribeBars: (subscriberUID) => {},
   };
 };
-
-// export default {
-
-// };
