@@ -1,33 +1,19 @@
 import styles from './Portfolio.module.scss';
 import { HighchartsReact } from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import Tab from '../../shared/components/tab/Tab';
-import Search from '../../shared/components/search/Search';
-import PortfolioTable from './PortfollioTable';
-import { Button, Input, message, Switch, Table, Tabs } from 'antd';
-import Lodash from 'lodash';
+import { message } from 'antd';
 import * as PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { setAccountBalances } from '../../actions/account';
 import { setLPPrices, setMarkets } from '../../actions/oracle';
-import { cmst, comdex, harbor } from '../../config/network';
 import { DOLLAR_DECIMALS } from '../../constants/common';
-import { getChainConfig } from '../../services/keplr';
-import { fetchRestPrices } from '../../services/oracle/query';
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion,
   getDenomBalance,
 } from '../../utils/coin';
-import {
-  commaSeparator,
-  formateNumberDecimalsAuto,
-  formatNumber,
-  marketPrice,
-} from '../../utils/number';
-import { Icon } from '../../shared/image/Icon';
+import { formatNumber, marketPrice } from '../../utils/number';
 import PortifolioTab from './PortofolioTab';
 import {
   queryPoolCoinDeserialize,
@@ -50,8 +36,6 @@ const Portfolio = ({
   userLiquidityInPools,
 }) => {
   const theme = 'dark';
-
-  const [active, setActive] = useState('Assets');
 
   const getUserLiquidity = useCallback(
     (pool) => {
@@ -159,10 +143,6 @@ const Portfolio = ({
     return (total || 0).toFixed(DOLLAR_DECIMALS);
   }, [assetBalance, totalFarmBalance]);
 
-  const handleActive = (item) => {
-    setActive(item);
-  };
-
   const Options = {
     chart: {
       type: 'pie',
@@ -175,8 +155,7 @@ const Portfolio = ({
       enabled: false,
     },
     title: {
-      text: `$${
-        formatNumber(getTotalValue() || 0)}
+      text: `$${formatNumber(getTotalValue() || 0)}
      `,
       verticalAlign: 'middle',
       floating: true,
@@ -306,7 +285,6 @@ const Portfolio = ({
                 }`}
               >
                 ${formatNumber(getTotalValue() || 0)}
-                {/* {variables[lang].USD} */}
               </div>
             </div>
             <div
@@ -327,8 +305,10 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                ${formatNumber(commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS) || 0)}{' '}
-                {/* {variables[lang].USD} */}
+                $
+                {formatNumber(
+                  commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS) || 0
+                )}{' '}
               </div>
             </div>
             <div
@@ -349,10 +329,9 @@ const Portfolio = ({
                 }`}
               >
                 $
-                {formatNumber((
-                  Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS)
-                ) || 0)}
-                {/* {variables[lang].USD} */}
+                {formatNumber(
+                  Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS) || 0
+                )}
               </div>
             </div>
           </div>

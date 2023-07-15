@@ -1,4 +1,4 @@
-import { Button, Col, Input, Row, message } from 'antd';
+import { Button, Input, message } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -33,6 +33,7 @@ const Buy = ({
   refresh,
 }) => {
   const theme = 'dark';
+
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
   const [total, setTotal] = useState(0);
@@ -164,7 +165,7 @@ const Buy = ({
         <OrderType />
         <div
           className={`${styles.orderbook__body__tab__body} ${
-            type === 'market' ? styles.active : ""
+            type === 'market' ? styles.active : ''
           }`}
         >
           <div
@@ -213,15 +214,6 @@ const Buy = ({
                   type={'number'}
                   value={price}
                   className="order_input"
-                  step={
-                    1 /
-                    10 **
-                      formateNumberDecimalsAuto({
-                        price: pair?.price || 0,
-                      })
-                        .toString()
-                        ?.split('.')[1]?.length
-                  }
                   placeholder="0"
                   onChange={(event) => handlePriceChange(event.target.value)}
                 />

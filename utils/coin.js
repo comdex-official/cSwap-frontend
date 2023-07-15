@@ -6,21 +6,22 @@ import { lowercaseFirstLetter } from './string';
 
 const getDenomToDisplaySymbolMap = () => {
   let myMap = {};
-  ibcAssets().then((result) => {
-    for (let i = 0; i < result?.tokens?.length; i++) {
-      if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
-        myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+  ibcAssets()
+    .then((result) => {
+      for (let i = 0; i < result?.tokens?.length; i++) {
+        if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
+          myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;
+        }
       }
-    }
-  }).catch((error) => {
-    console.log(error, "error in assetList Api");
-  });
+    })
+    .catch((error) => {
+      console.log(error, 'error in assetList Api');
+    });
 
   return myMap;
 };
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
-
 
 export const getAmount = (selectedAmount, decimal) => {
   let result =
@@ -40,7 +41,7 @@ export const amountConversionWithComma = (amount, decimals) => {
 
   return commaSeparator(
     Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
-    Math.pow(10, comdex.coinDecimals)
+      Math.pow(10, comdex.coinDecimals)
   );
 };
 
@@ -55,7 +56,7 @@ export const amountConversion = (amount, decimals) => {
 
   return String(
     Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
-    Math.pow(10, comdex.coinDecimals)
+      Math.pow(10, comdex.coinDecimals)
   );
 };
 
@@ -123,10 +124,7 @@ export const getDenomBalance = (balances, denom) =>
   balances.find((item) => item.denom === denom).amount;
 
 export const fixedDecimal = (_number = 0, _decimal = DOLLAR_DECIMALS) => {
-  return (
-    Number(
-      Math.floor(_number * Math.pow(10, _decimal)) /
-      Math.pow(10, _decimal)
-    )
-  )
-}
+  return Number(
+    Math.floor(_number * Math.pow(10, _decimal)) / Math.pow(10, _decimal)
+  );
+};

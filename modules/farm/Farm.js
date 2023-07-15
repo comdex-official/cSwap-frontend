@@ -1,21 +1,8 @@
 import { Icon } from '../../shared/image/Icon';
-import { FarmCustomData } from './Data';
 import styles from './Farm.module.scss';
-import Tab from '../../shared/components/tab/Tab';
-import Search from '../../shared/components/search/Search';
 import FarmTable from './FarmTable';
 import FarmCard from './FarmCard';
-import {
-  Input,
-  message,
-  Modal,
-  Radio,
-  Spin,
-  Tabs,
-  Tooltip,
-  Button,
-  Table,
-} from 'antd';
+import { Input, message, Modal, Radio, Tabs, Button } from 'antd';
 import * as PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
@@ -28,25 +15,25 @@ import {
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
   MASTER_POOL_ID,
+  PRODUCT_ID,
 } from '../../constants/common';
 import {
   fetchRestAPRs,
-  queryPoolCoinDeserialize,
   queryPoolsList,
-  queryPoolSoftLocks,
+  userProposalProjectedEmission,
+  votingCurrentProposal,
+  votingCurrentProposalId,
+  emissiondata,
 } from '../../services/liquidity/query';
 import {
   amountConversion,
   denomConversion,
   fixedDecimal,
-  getDenomBalance,
 } from '../../utils/coin';
 import MyDropdown from '../../shared/components/dropDown/Dropdown';
 import { NextImage } from '../../shared/image/NextImage';
 import {
-  Fire,
   List,
   ListWhite,
   No_Data,
@@ -59,29 +46,8 @@ import Liquidity from './Liquidity';
 import Lottie from 'lottie-react';
 import CreatePool from './CreatePool/index';
 import Timer from '../../shared/components/Timer';
-import { commaSeparator, marketPrice } from '../../utils/number';
+import { marketPrice } from '../../utils/number';
 import Loading from '../../pages/Loading';
-import PoolCardRow from '../portfolio/MyPoolRow';
-import ShowAPR from '../portfolio/ShowAPR';
-import NoDataIcon from '../../shared/components/NoDataIcon';
-
-const MasterPoolsContent = [
-  <div key={'1'}>
-    Providing liquidity only in Master pool makes you eligible for the External
-    APR on Master pool. To be eligible to Earn ‘Master pool’ APR an equal amount
-    of liquidity has to be provided in any of the child pools. Read more about
-    the mechanism{' '}
-    <a
-      aria-label="here"
-      target="_blank"
-      rel="noreferrer"
-      href="https://docs.cswap.one/farming-rewards"
-    >
-      {' '}
-      here{' '}
-    </a>
-  </div>,
-];
 
 const Farm = ({
   setPools,
@@ -105,16 +71,10 @@ const Farm = ({
   showEligibleLive,
 }) => {
   const theme = 'dark';
-  const TabData = ['All', 'Basic', 'Ranged', 'My Pools'];
 
-  const [active, setActive] = useState('All');
   const [listView, setListView] = useState(false);
   const [masterPoolData, setMasterPoolData] = useState(0);
   const [userPools, setUserPool] = useState();
-  const handleActive = (item) => {
-    setActive(item);
-  };
-
   const [inProgress, setInProgress] = useState(true);
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState('3');
@@ -148,7 +108,6 @@ const Farm = ({
       )
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
-    // setUserPool(rawUserPools?.filter((item) => item)); // removes undefined values from array
     setUserPool(userPools);
   }, [userLiquidityInPools, filterValue, pools, filterValue]);
 
@@ -362,8 +321,6 @@ const Farm = ({
     onChange('3');
   };
 
-  console.log({ displayPools });
-
   const calculatePoolLiquidity = useCallback((poolBalance) => {
     if (poolBalance && Object.values(poolBalance)?.length) {
       const values = Object.values(poolBalance).map(
@@ -387,7 +344,6 @@ const Farm = ({
     const totalMasterPoolApr = rewardsMap?.[_id]?.incentive_rewards.filter(
       (reward) => reward.master_pool
     );
-    // .reduce((acc, reward) => acc + reward.apr, 0);
 
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
@@ -443,21 +399,82 @@ const Farm = ({
     }
   };
 
-  const [poolAll, setPoolAll] = useState([])
+  const [poolAll, setPoolAll] = useState([]);
 
   useEffect(() => {
     const combinedTx = displayPools.sort((a, b) => {
       const aHasMasterPool = getMasterPool(a?.id?.toNumber()) || 0;
-  
+
       const bHasMasterPool = getMasterPool(b?.id?.toNumber()) || 0;
-  
+
       return aHasMasterPool === bHasMasterPool ? 0 : aHasMasterPool ? -1 : 1;
     });
 
-    setPoolAll(combinedTx)
-  }, [displayPools])
+    setPoolAll(combinedTx);
+  }, [displayPools]);
 
-  
+  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
+  const [currentProposalAllData, setCurrentProposalAllData] = useState();
+  const [protectedEmission, setProtectedEmission] = useState(0);
+  const [proposalId, setProposalId] = useState();
+
+  useEffect(() => {
+    fetchVotingCurrentProposalId();
+  }, []);
+
+  const fetchVotingCurrentProposalId = () => {
+    votingCurrentProposalId(PRODUCT_ID)
+      .then((res) => {
+        setProposalId(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (proposalId) {
+      fetchuserProposalProjectedEmission(proposalId);
+      fetchVotingCurrentProposal(proposalId);
+    }
+  }, [address, proposalId]);
+
+  useEffect(() => {
+    if (address) {
+      fetchEmissiondata(address);
+    }
+  }, [address]);
+
+  const fetchuserProposalProjectedEmission = (proposalId) => {
+    userProposalProjectedEmission(proposalId)
+      .then((res) => {
+        setProtectedEmission(amountConversion(res));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchVotingCurrentProposal = (proposalId) => {
+    votingCurrentProposal(proposalId)
+      .then((res) => {
+        setCurrentProposalAllData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchEmissiondata = (address) => {
+    emissiondata(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        console.log(error);
+        return;
+      }
+      setUserCurrentProposalData(result?.data);
+    });
+  };
 
   return (
     <div
@@ -479,7 +496,6 @@ const Farm = ({
             }
           >
             <div className="reward">
-              {/* <Icon className={"bi bi-info-square"} /> */}
               <NextImage src={Info2} alt="Info" height={15} width={15} />
               Users need to farm for 24 hours in order to be eligible for
               rewards.
@@ -637,14 +653,6 @@ const Farm = ({
                   </div>
                 </div>
               </div>
-
-              {/* <div
-              className={`${styles.farm__header__animation} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {/* <NextImage src={Fire} alt="Logo" /> */}
-              {/* </div> */}
             </div>
             <div
               className={`${styles.farm__header__body__right} ${
@@ -656,90 +664,6 @@ const Farm = ({
                 loop={true}
                 style={{ height: 300 }}
               />
-
-              {/* <div
-              className={`${styles.farm__header__right__title} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {"How to earn boosted rewards in 2 steps?"}
-            </div>
-            <div
-              className={`${styles.farm__header__right__main} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${styles.farm__header__right__body__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {"STEP 1"}
-                  </div>
-                  <div
-                    className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {"Provide liquidity in the Master pool"}
-                  </div>
-                  <div
-                    className={`${styles.farm__header__right__body__button} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                    onClick={() => setMasterPoolModalOpen(true)}
-                  >
-                    {"Go to Pool"}
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`${styles.farm__header__right__body} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                <div
-                  className={`${styles.farm__header__right__body__background} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${styles.farm__header__right__body__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    {"STEP 2"}
-                  </div>
-                  <div
-                    className={`${
-                      styles.farm__header__right__body__description
-                    } ${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    {`Deposit Equal value of assets in Child Pool 
-                    or pools as your Master Pool to 
-                    earn boosted rewards`}
-                  </div>
-                  <div
-                    className={`${styles.farm__header__right__body__button} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                    onClick={() => setChildPool(!isChildPool)}
-                  >
-                    {isChildPool ? "Go to All Pools" : "Go to Child Pools"}
-                  </div>
-                </div>
-              </div>
-            </div> */}
             </div>
           </div>
         )}
@@ -758,27 +682,13 @@ const Farm = ({
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {/* <Tab data={TabData} active={active} handleActive={handleActive} /> */}
-              <div className="">
+              <div>
                 <Tabs
                   defaultActiveKey="1"
                   items={tabItems}
                   activeKey={filterValue}
                   onChange={onChange}
                   className="comdex-tabs farm-details-tabmain"
-                  // tabBarExtraContent={
-                  //   <div className="farmtab-right-action">
-                  //     <CreatePool
-                  //       refreshData={updatePools}
-                  //       refreshBalance={handleBalanceRefresh}
-                  //     />
-                  //     <Input
-                  //       placeholder="Search Pools.."
-                  //       onChange={(event) => onSearchChange(event.target.value)}
-                  //     suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
-                  //     />
-                  //   </div>
-                  // }
                 />
               </div>
             </div>
@@ -797,6 +707,7 @@ const Farm = ({
                   {filterValue !== '4' && (
                     <NextImage
                       src={SquareWhite}
+                      alt="Square"
                       onClick={() => setListView(false)}
                       height={15}
                       width={15}
@@ -805,6 +716,7 @@ const Farm = ({
 
                   <NextImage
                     src={List}
+                    alt="List"
                     onClick={() => setListView(true)}
                     height={15}
                     width={15}
@@ -815,6 +727,7 @@ const Farm = ({
                   {filterValue !== '4' && (
                     <NextImage
                       src={Square}
+                      alt="Square"
                       onClick={() => setListView(false)}
                       height={15}
                       width={15}
@@ -823,6 +736,7 @@ const Farm = ({
 
                   <NextImage
                     src={ListWhite}
+                    alt="List"
                     onClick={() => setListView(true)}
                     height={15}
                     width={15}
@@ -933,6 +847,10 @@ const Farm = ({
                     poolsApr={poolsApr?.[item?.id?.toNumber()]}
                     poolAprList={poolsApr && poolsApr}
                     masterPoolData={masterPoolData}
+                    userCurrentProposalData={userCurrentProposalData}
+                    currentProposalAllData={currentProposalAllData}
+                    protectedEmission={protectedEmission}
+                    proposalId={proposalId}
                   />
                 );
               })}

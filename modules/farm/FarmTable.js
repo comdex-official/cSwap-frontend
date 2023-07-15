@@ -1,6 +1,3 @@
-import TableNew from '../../shared/components/table/Table';
-// import Table from "@/shared/components/table/Table"
-
 import * as PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -9,21 +6,15 @@ import { NextImage } from '../../shared/image/NextImage';
 import { useState } from 'react';
 import styles from './Farm.module.scss';
 import {
-  ATOM,
-  CMDS,
-  Cup,
   Current,
   Emission,
   HirborLogo,
   Pyramid,
-  Ranged,
   RangeGreen,
-  RangeRed
+  RangeRed,
 } from '../../shared/image';
-import dynamic from 'next/dynamic';
 import { Modal, Tooltip, message, Table, Button } from 'antd';
 import Liquidity from './Liquidity';
-import Card from '../../shared/components/card/Card';
 import {
   setUserLiquidityInPools,
   setShowMyPool,
@@ -55,8 +46,6 @@ import {
   votingCurrentProposalId,
 } from '../../services/liquidity/query';
 import RangeTooltipContent from '../../shared/components/range/RangedToolTip';
-import PoolCardRow from '../portfolio/MyPoolRow';
-import ShowAPR from '../portfolio/ShowAPR';
 import NoDataIcon from '../../shared/components/NoDataIcon';
 
 const FarmTable = ({
@@ -80,7 +69,6 @@ const FarmTable = ({
   selectedManagePool,
   setShowMyPool,
 }) => {
-  const [showMoreData, setshowMoreData] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
     useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,10 +77,6 @@ const FarmTable = ({
   const showModal = (_value) => {
     setSelectedSinglePool(_value);
     setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
@@ -106,7 +90,6 @@ const FarmTable = ({
 
   useEffect(() => {
     if (showMyPool) {
-      // showPortofolioManageModal()
       setIsPortifolioManageModalOpen(true);
     }
   }, []);
@@ -144,11 +127,6 @@ const FarmTable = ({
     [markets, assetMap]
   );
 
-  // const TotalPoolLiquidity = commaSeparatorWithRounding(
-  //   calculatePoolLiquidity(pool?.balances),
-  //   DOLLAR_DECIMALS
-  // );
-
   const showPairDenoms = (_item) => {
     if (_item?.balances?.baseCoin?.denom) {
       return `${denomConversion(
@@ -161,7 +139,6 @@ const FarmTable = ({
     const totalMasterPoolApr = poolsApr?.[_id]?.incentive_rewards.filter(
       (reward) => reward.master_pool
     );
-    // .reduce((acc, reward) => acc + reward.apr, 0);
 
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
@@ -233,7 +210,9 @@ const FarmTable = ({
       (365 * ((harborQTY / 7) * harborTokenPrice)) / Number(_totalLiquidity);
 
     totalMasterPoolApr =
-      fixedDecimal(totalMasterPoolApr) + fixedDecimal(totalApr) + fixedDecimal(calculatedAPY);
+      fixedDecimal(totalMasterPoolApr) +
+      fixedDecimal(totalApr) +
+      fixedDecimal(calculatedAPY);
 
     return fixedDecimal(totalMasterPoolApr);
   };
@@ -299,7 +278,6 @@ const FarmTable = ({
   );
 
   useEffect(() => {
-    // fetching user liquidity for my pools.
     if (pool?.id) {
       getUserLiquidity(pool);
     }
@@ -361,7 +339,7 @@ const FarmTable = ({
     emissiondata(address, (error, result) => {
       if (error) {
         message.error(error);
-        console.log(error, 'Emission Api error');
+        console.log(error);
         return;
       }
       setUserCurrentProposalData(result?.data);
@@ -449,17 +427,6 @@ const FarmTable = ({
     }
   };
 
-  // const [showText, setShowText] = useState(false);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setShowText((prevValue) => !prevValue);
-  //   }, 4000); // 10 seconds interval
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-
   const COLUMNS = [
     {
       title: 'Pool Pair',
@@ -495,9 +462,9 @@ const FarmTable = ({
                     src={
                       iconList?.[value?.balances?.baseCoin?.denom]?.coinImageUrl
                     }
+                    alt="Logo"
                     width={50}
                     height={50}
-                    alt=""
                   />
                 </div>
               </div>
@@ -516,9 +483,9 @@ const FarmTable = ({
                       iconList?.[value?.balances?.quoteCoin?.denom]
                         ?.coinImageUrl
                     }
+                    alt="Logo"
                     width={50}
                     height={50}
-                    alt=""
                   />
                 </div>
               </div>
@@ -570,12 +537,6 @@ const FarmTable = ({
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {/* <div
-                    className={`${styles.farmCard__element__right__pool__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  > */}
-
                     <div
                       className={`${
                         styles.farmCard__element__right__pool__title
@@ -584,17 +545,6 @@ const FarmTable = ({
                       <NextImage src={Pyramid} alt="Logo" />
                       {'Master Pool'}
                     </div>
-
-                    {/* // <div
-                    //   className={`${
-                    //     styles.farmCard__element__right__pool__title
-                    //   } ${styles.boost} ${
-                    //     theme === "dark" ? styles.dark : styles.light
-                    //   }`}
-                    // >
-                    //   <NextImage src={Current} alt="Logo" />
-                    //   {"MP Boost"}
-                    // </div> */}
                   </div>
                 ) : (
                   ''
@@ -658,22 +608,22 @@ const FarmTable = ({
 
                 {value?.type === 2 ? (
                   <div
-                  className={`${styles.farmCard__element__right__basic} ${
-                    Number(decimalConversion(value?.price)).toFixed(
-                      PRICE_DECIMALS
-                    ) >
-                      Number(decimalConversion(value?.minPrice)).toFixed(
+                    className={`${styles.farmCard__element__right__basic} ${
+                      Number(decimalConversion(value?.price)).toFixed(
                         PRICE_DECIMALS
-                      ) &&
-                    Number(decimalConversion(value?.price)).toFixed(
-                      PRICE_DECIMALS
-                    ) <
-                      Number(decimalConversion(value?.maxPrice)).toFixed(
+                      ) >
+                        Number(decimalConversion(value?.minPrice)).toFixed(
+                          PRICE_DECIMALS
+                        ) &&
+                      Number(decimalConversion(value?.price)).toFixed(
                         PRICE_DECIMALS
-                      )
-                      ? styles.green
-                      : styles.red
-                  }`}
+                      ) <
+                        Number(decimalConversion(value?.maxPrice)).toFixed(
+                          PRICE_DECIMALS
+                        )
+                        ? styles.green
+                        : styles.red
+                    }`}
                   >
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
@@ -704,37 +654,34 @@ const FarmTable = ({
                               theme === 'dark' ? styles.dark : styles.light
                             }`}
                           >
-                           
-
                             {Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) >
-                              Number(decimalConversion(value?.minPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) &&
+                              Number(
+                                decimalConversion(value?.minPrice)
+                              ).toFixed(PRICE_DECIMALS) &&
                             Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) <
-                              Number(decimalConversion(value?.maxPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) ? (
-                              <NextImage src={RangeGreen} />
+                              Number(
+                                decimalConversion(value?.maxPrice)
+                              ).toFixed(PRICE_DECIMALS) ? (
+                              <NextImage src={RangeGreen} alt="Logo" />
                             ) : (
-                              <NextImage src={RangeRed} />
+                              <NextImage src={RangeRed} alt="Logo" />
                             )}
-                            {/* <NextImage src={Ranged} /> */}
                             {Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) >
-                              Number(decimalConversion(value?.minPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) &&
+                              Number(
+                                decimalConversion(value?.minPrice)
+                              ).toFixed(PRICE_DECIMALS) &&
                             Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) <
-                              Number(decimalConversion(value?.maxPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) ? (
+                              Number(
+                                decimalConversion(value?.maxPrice)
+                              ).toFixed(PRICE_DECIMALS) ? (
                               <div className="success-color">{'In Range'}</div>
                             ) : (
                               <div className="warn-color">{'Out of Range'}</div>
@@ -747,40 +694,9 @@ const FarmTable = ({
                 ) : value?.type === 1 ? (
                   ''
                 ) : (
-                  // <div
-                  //   className={`${styles.farmCard__element__right__basic} ${
-                  //     theme === "dark" ? styles.dark : styles.light
-                  //   }`}
-                  // >
-                  //   <div
-                  //     className={`${
-                  //       styles.farmCard__element__right__basic__title
-                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
-                  //   >
-                  //     {"Basic"}
-                  //   </div>
-                  // </div>
                   ''
                 )}
-                {/* </div> */}
               </div>
-
-              {/* {checkExternalIncentives(value?.id?.toNumber()) && (
-                <div
-                  className={`${styles.farmCard__element__right__incentive} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Cup} alt="Logo" />
-                    {'External Incentives'}
-                  </div>
-                </div>
-              )} */}
             </div>
           </div>
         </div>
@@ -814,7 +730,10 @@ const FarmTable = ({
                         </span>
                         <span className="value">
                           {' '}
-                          {commaSeparator(calculateUptoApr(Number(value?.id), value) || 0)}%
+                          {commaSeparator(
+                            calculateUptoApr(Number(value?.id), value) || 0
+                          )}
+                          %
                         </span>
                       </div>
 
@@ -830,39 +749,44 @@ const FarmTable = ({
                           CMDX yield only):
                         </span>
 
-                        {calculateExternalBasePoolApr(Number(value?.id))?.length > 0 ? (
-                          calculateExternalBasePoolApr(Number(value?.id)).map((item) => (
-                            <span className="value">
-                              {commaSeparator(fixedDecimal(item?.apr) || 0)}%
-                            </span>
-                          ))
+                        {calculateExternalBasePoolApr(Number(value?.id))
+                          ?.length > 0 ? (
+                          calculateExternalBasePoolApr(Number(value?.id)).map(
+                            (item, i) => (
+                              <span className="value" key={i}>
+                                {commaSeparator(fixedDecimal(item?.apr) || 0)}%
+                              </span>
+                            )
+                          )
                         ) : (
                           <span className="value">0%</span>
                         )}
-
-                        {/* <span className="value">
-                        
-                          {commaSeparator(calculateApr() || 0)}%
-                        </span> */}
                       </div>
 
-                      {calculateExternalPoolApr(Number(value?.id))?.length > 0 && (
+                      {calculateExternalPoolApr(Number(value?.id))?.length >
+                        0 && (
                         <div className="upto_apr_tooltip_farm active">
                           <span className="text">External APR:</span>
                           <span className="value">
                             <div className="eApr">
-                              {calculateExternalPoolApr(Number(value?.id)).map((item) => (
-                                <>
-                                  <NextImage
-                                    src={iconList?.[item?.denom]?.coinImageUrl}
-                                    alt={'logo'}
-                                    height={15}
-                                    width={15}
-                                  />
-                                  {commaSeparator(fixedDecimal(item?.apr) || 0)}
-                                  %
-                                </>
-                              ))}
+                              {calculateExternalPoolApr(Number(value?.id)).map(
+                                (item, i) => (
+                                  <div key={i}>
+                                    <NextImage
+                                      src={
+                                        iconList?.[item?.denom]?.coinImageUrl
+                                      }
+                                      alt={'logo'}
+                                      height={15}
+                                      width={15}
+                                    />
+                                    {commaSeparator(
+                                      fixedDecimal(item?.apr) || 0
+                                    )}
+                                    %
+                                  </div>
+                                )
+                              )}
                             </div>
                           </span>
                         </div>
@@ -896,7 +820,8 @@ const FarmTable = ({
                         <span className="value">
                           {' '}
                           {fixedDecimal(
-                            poolsApr?.[Number(value?.id)]?.swap_fee_rewards?.[0]?.apr || 0
+                            poolsApr?.[Number(value?.id)]?.swap_fee_rewards?.[0]
+                              ?.apr || 0
                           )}
                           %
                         </span>
@@ -914,7 +839,6 @@ const FarmTable = ({
                   </>
                 ) : null
               }
-              // className="farm_upto_apr_tooltip"
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
@@ -985,13 +909,12 @@ const FarmTable = ({
               theme === 'dark' ? styles.dark : styles.light
             }`}
           >
-            {/* ${value} */}$
+            $
             {commaSeparatorWithRounding(
               calculatePoolLiquidity(value?.balances),
               DOLLAR_DECIMALS
             )}
           </div>
-
           <Button
             type="primary"
             onClick={() => showModal(value)}
@@ -1000,13 +923,6 @@ const FarmTable = ({
           >
             Add Liquidity
           </Button>
-          {/* <div
-              className={`${styles.farmCard__buttonWrap} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              <button onClick={() => showModal(value)}>Add Liquidity</button>
-            </div> */}
         </div>
       ),
       sorter: (a, b) =>
@@ -1022,8 +938,6 @@ const FarmTable = ({
     pool?.map((item) => {
       return {
         PoolPair: item,
-        Image1: CMDS,
-        Image2: ATOM,
         APR: item,
         TotalLiquidity: item,
       };
@@ -1064,9 +978,9 @@ const FarmTable = ({
                     src={
                       iconList?.[value?.balances?.baseCoin?.denom]?.coinImageUrl
                     }
+                    alt="Logo"
                     width={50}
                     height={50}
-                    alt=""
                   />
                 </div>
               </div>
@@ -1087,7 +1001,7 @@ const FarmTable = ({
                     }
                     width={50}
                     height={50}
-                    alt=""
+                    alt="Logo"
                   />
                 </div>
               </div>
@@ -1139,12 +1053,6 @@ const FarmTable = ({
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {/* <div
-                    className={`${styles.farmCard__element__right__pool__title} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  > */}
-
                     <div
                       className={`${
                         styles.farmCard__element__right__pool__title
@@ -1153,17 +1061,6 @@ const FarmTable = ({
                       <NextImage src={Pyramid} alt="Logo" />
                       {'Master Pool'}
                     </div>
-
-                    {/* // <div
-                    //   className={`${
-                    //     styles.farmCard__element__right__pool__title
-                    //   } ${styles.boost} ${
-                    //     theme === "dark" ? styles.dark : styles.light
-                    //   }`}
-                    // >
-                    //   <NextImage src={Current} alt="Logo" />
-                    //   {"MP Boost"}
-                    // </div> */}
                   </div>
                 ) : (
                   ''
@@ -1227,22 +1124,22 @@ const FarmTable = ({
 
                 {value?.type === 2 ? (
                   <div
-                  className={`${styles.farmCard__element__right__basic} ${
-                    Number(decimalConversion(value?.price)).toFixed(
-                      PRICE_DECIMALS
-                    ) >
-                      Number(decimalConversion(value?.minPrice)).toFixed(
+                    className={`${styles.farmCard__element__right__basic} ${
+                      Number(decimalConversion(value?.price)).toFixed(
                         PRICE_DECIMALS
-                      ) &&
-                    Number(decimalConversion(value?.price)).toFixed(
-                      PRICE_DECIMALS
-                    ) <
-                      Number(decimalConversion(value?.maxPrice)).toFixed(
+                      ) >
+                        Number(decimalConversion(value?.minPrice)).toFixed(
+                          PRICE_DECIMALS
+                        ) &&
+                      Number(decimalConversion(value?.price)).toFixed(
                         PRICE_DECIMALS
-                      )
-                      ? styles.green
-                      : styles.red
-                  }`}
+                      ) <
+                        Number(decimalConversion(value?.maxPrice)).toFixed(
+                          PRICE_DECIMALS
+                        )
+                        ? styles.green
+                        : styles.red
+                    }`}
                   >
                     <div className="ranged-box">
                       <div className="ranged-box-inner">
@@ -1273,37 +1170,34 @@ const FarmTable = ({
                               theme === 'dark' ? styles.dark : styles.light
                             }`}
                           >
-                           
-
                             {Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) >
-                              Number(decimalConversion(value?.minPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) &&
+                              Number(
+                                decimalConversion(value?.minPrice)
+                              ).toFixed(PRICE_DECIMALS) &&
                             Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) <
-                              Number(decimalConversion(value?.maxPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) ? (
-                              <NextImage src={RangeGreen} />
+                              Number(
+                                decimalConversion(value?.maxPrice)
+                              ).toFixed(PRICE_DECIMALS) ? (
+                              <NextImage src={RangeGreen} alt="Logo" />
                             ) : (
-                              <NextImage src={RangeRed} />
+                              <NextImage src={RangeRed} alt="Logo" />
                             )}
-                            {/* <NextImage src={Ranged} /> */}
                             {Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) >
-                              Number(decimalConversion(value?.minPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) &&
+                              Number(
+                                decimalConversion(value?.minPrice)
+                              ).toFixed(PRICE_DECIMALS) &&
                             Number(decimalConversion(value?.price)).toFixed(
                               PRICE_DECIMALS
                             ) <
-                              Number(decimalConversion(value?.maxPrice)).toFixed(
-                                PRICE_DECIMALS
-                              ) ? (
+                              Number(
+                                decimalConversion(value?.maxPrice)
+                              ).toFixed(PRICE_DECIMALS) ? (
                               <div className="success-color">{'In Range'}</div>
                             ) : (
                               <div className="warn-color">{'Out of Range'}</div>
@@ -1316,40 +1210,9 @@ const FarmTable = ({
                 ) : value?.type === 1 ? (
                   ''
                 ) : (
-                  // <div
-                  //   className={`${styles.farmCard__element__right__basic} ${
-                  //     theme === "dark" ? styles.dark : styles.light
-                  //   }`}
-                  // >
-                  //   <div
-                  //     className={`${
-                  //       styles.farmCard__element__right__basic__title
-                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
-                  //   >
-                  //     {"Basic"}
-                  //   </div>
-                  // </div>
                   ''
                 )}
-                {/* </div> */}
               </div>
-
-              {/* {checkExternalIncentives(value?.id?.toNumber()) && (
-                <div
-                  className={`${styles.farmCard__element__right__incentive} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Cup} alt="Logo" />
-                    {'External Incentives'}
-                  </div>
-                </div>
-              )} */}
             </div>
           </div>
         </div>
@@ -1374,48 +1237,55 @@ const FarmTable = ({
           >
             <Tooltip
               title={
-                 (
-                  <>
-                    <div className="upto_apr_tooltip_farm_main_container">
-                      <div className="upto_apr_tooltip_farm active">
-                        <span className="text">
-                          Total APR (incl. MP Rewards):
-                        </span>
-                        <span className="value">
-                          {' '}
-                          {commaSeparator(calculateUptoApr(Number(value?.id), value) || 0)}%
-                        </span>
-                      </div>
+                <>
+                  <div className="upto_apr_tooltip_farm_main_container">
+                    <div className="upto_apr_tooltip_farm active">
+                      <span className="text">
+                        Total APR (incl. MP Rewards):
+                      </span>
+                      <span className="value">
+                        {' '}
+                        {commaSeparator(
+                          calculateUptoApr(Number(value?.id), value) || 0
+                        )}
+                        %
+                      </span>
+                    </div>
 
-                      <div className="upto_apr_tooltip_farm active">
-                        <span className="text">
-                          Base APR ({' '}
-                          <NextImage
-                            src={iconList?.['ucmdx']?.coinImageUrl}
-                            alt={'logo'}
-                            height={15}
-                            width={15}
-                          />{' '}
-                          CMDX yield only):
-                        </span>
-                        {calculateExternalBasePoolApr(Number(value?.id))?.length > 0 ? (
-                          calculateExternalBasePoolApr(Number(value?.id)).map((item) => (
-                            <span className="value">
+                    <div className="upto_apr_tooltip_farm active">
+                      <span className="text">
+                        Base APR ({' '}
+                        <NextImage
+                          src={iconList?.['ucmdx']?.coinImageUrl}
+                          alt={'logo'}
+                          height={15}
+                          width={15}
+                        />{' '}
+                        CMDX yield only):
+                      </span>
+                      {calculateExternalBasePoolApr(Number(value?.id))?.length >
+                      0 ? (
+                        calculateExternalBasePoolApr(Number(value?.id)).map(
+                          (item, i) => (
+                            <span className="value" key={i}>
                               {commaSeparator(fixedDecimal(item?.apr) || 0)}%
                             </span>
-                          ))
-                        ) : (
-                          <span className="value">0%</span>
-                        )}
-                      </div>
+                          )
+                        )
+                      ) : (
+                        <span className="value">0%</span>
+                      )}
+                    </div>
 
-                      {calculateExternalPoolApr(Number(value?.id))?.length > 0 && (
-                        <div className="upto_apr_tooltip_farm active">
-                          <span className="text">External APR:</span>
-                          <span className="value">
-                            <div className="eApr">
-                              {calculateExternalPoolApr(Number(value?.id)).map((item) => (
-                                <>
+                    {calculateExternalPoolApr(Number(value?.id))?.length >
+                      0 && (
+                      <div className="upto_apr_tooltip_farm active">
+                        <span className="text">External APR:</span>
+                        <span className="value">
+                          <div className="eApr">
+                            {calculateExternalPoolApr(Number(value?.id)).map(
+                              (item, i) => (
+                                <div key={i}>
                                   <NextImage
                                     src={iconList?.[item?.denom]?.coinImageUrl}
                                     alt={'logo'}
@@ -1424,60 +1294,60 @@ const FarmTable = ({
                                   />
                                   {commaSeparator(fixedDecimal(item?.apr) || 0)}
                                   %
-                                </>
-                              ))}
-                            </div>
-                          </span>
-                        </div>
-                      )}
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </span>
+                      </div>
+                    )}
 
-                      {calculateAPY(
-                        calculatePoolLiquidity(value?.balances),
-                        Number(value?.id)
-                      ) ? (
-                        <div className="upto_apr_tooltip_farm active">
-                          <span className="text">Emission APY:</span>
-
-                          <span className="value">
-                            {calculateAPY(
-                              calculatePoolLiquidity(value?.balances),
-                              Number(value?.id)
-                            )
-                              ? calculateAPY(
-                                  calculatePoolLiquidity(value?.balances),
-                                  Number(value?.id)
-                                ) + '%'
-                              : null}
-                          </span>
-                        </div>
-                      ) : (
-                        ''
-                      )}
-
+                    {calculateAPY(
+                      calculatePoolLiquidity(value?.balances),
+                      Number(value?.id)
+                    ) ? (
                       <div className="upto_apr_tooltip_farm active">
-                        <span className="text">Swap Fee APR :</span>
-                        <span className="value">
-                          {' '}
-                          {fixedDecimal(
-                            poolsApr?.[Number(value?.id)]?.swap_fee_rewards?.[0]?.apr || 0
-                          )}
-                          %
-                        </span>
-                      </div>
+                        <span className="text">Emission APY:</span>
 
-                      <div className="upto_apr_tooltip_farm">
-                        <span className="text">Available MP Boost:</span>
                         <span className="value">
-                          {' '}
-                          Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
-                          for providing liquidity in the Master Pool
+                          {calculateAPY(
+                            calculatePoolLiquidity(value?.balances),
+                            Number(value?.id)
+                          )
+                            ? calculateAPY(
+                                calculatePoolLiquidity(value?.balances),
+                                Number(value?.id)
+                              ) + '%'
+                            : null}
                         </span>
                       </div>
+                    ) : (
+                      ''
+                    )}
+
+                    <div className="upto_apr_tooltip_farm active">
+                      <span className="text">Swap Fee APR :</span>
+                      <span className="value">
+                        {' '}
+                        {fixedDecimal(
+                          poolsApr?.[Number(value?.id)]?.swap_fee_rewards?.[0]
+                            ?.apr || 0
+                        )}
+                        %
+                      </span>
                     </div>
-                  </>
-                ) 
+
+                    <div className="upto_apr_tooltip_farm">
+                      <span className="text">Available MP Boost:</span>
+                      <span className="value">
+                        {' '}
+                        Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
+                        for providing liquidity in the Master Pool
+                      </span>
+                    </div>
+                  </div>
+                </>
               }
-              // className="farm_upto_apr_tooltip"
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
@@ -1490,17 +1360,12 @@ const FarmTable = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {
-                   
-            `${commaSeparator(calculateChildPoolApr(Number(value?.id), value) || 0)}%`
-               
-                  }
-                  {/* {commaSeparator(calculateApr(Number(value?.id), value) || 0)}% */}
-                  {(
-                    <Icon className={'bi bi-arrow-right'} />
-                  )}
+                  {`${commaSeparator(
+                    calculateChildPoolApr(Number(value?.id), value) || 0
+                  )}%`}
+                  {<Icon className={'bi bi-arrow-right'} />}
                 </div>
-                { (
+                {
                   <div
                     className={`${styles.farmCard__element__right__pool} ${
                       theme === 'dark' ? styles.dark : styles.light
@@ -1519,39 +1384,9 @@ const FarmTable = ({
                       )}%`}
                     </div>
                   </div>
-                )}
+                }
               </div>
             </Tooltip>
-
-            {/* {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
-              value?.balances?.baseCoin?.denom === 'ucmst') && (
-              <div
-                className={`${styles.farmCard__element__apr__poll__wrap} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                <Tooltip
-                  title={
-                    'Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions.'
-                  }
-                  overlayClassName="farm_upto_apr_tooltip"
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__apr_pool__title
-                    }  ${styles.boost} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                  >
-                    <NextImage src={HirborLogo} alt="Logo" />
-                    {value?.id &&
-                      commaSeparator(
-                        calculateVaultEmission(value?.id?.toNumber()).toFixed(2)
-                      )}
-                  </div>
-                </Tooltip>
-              </div>
-            )} */}
           </div>
         </>
       ),
@@ -1609,8 +1444,6 @@ const FarmTable = ({
     pool?.map((item) => {
       return {
         PoolPair: item,
-        Image1: CMDS,
-        Image2: ATOM,
         APR: item,
         TotalLiquidity: userLiquidityInPools[item?.id],
         Action: item,
@@ -1622,24 +1455,24 @@ const FarmTable = ({
       return 'master__card'; // Custom CSS class for the highlighted row
     }
 
-     if(record?.APR?.type === 2){
-      if (Number(decimalConversion(record?.APR?.price)).toFixed(PRICE_DECIMALS) >
-      Number(decimalConversion(record?.APR?.minPrice)).toFixed(
-        PRICE_DECIMALS
-      ) &&
-    Number(decimalConversion(record?.APR?.price)).toFixed(PRICE_DECIMALS) <
-      Number(decimalConversion(record?.APR?.maxPrice)).toFixed(
-        PRICE_DECIMALS
-      )) {
-        return ''; 
-      }else{
+    if (record?.APR?.type === 2) {
+      if (
+        Number(decimalConversion(record?.APR?.price)).toFixed(PRICE_DECIMALS) >
+          Number(decimalConversion(record?.APR?.minPrice)).toFixed(
+            PRICE_DECIMALS
+          ) &&
+        Number(decimalConversion(record?.APR?.price)).toFixed(PRICE_DECIMALS) <
+          Number(decimalConversion(record?.APR?.maxPrice)).toFixed(
+            PRICE_DECIMALS
+          )
+      ) {
+        return '';
+      } else {
         return 'dim__card';
       }
     }
-    return ''; // Empty string for default row class
+    return '';
   };
-
-
 
   return (
     <>
@@ -1712,16 +1545,6 @@ FarmTable.propTypes = {
   ),
   markets: PropTypes.object,
   parent: PropTypes.string,
-  pool: PropTypes.shape({
-    id: PropTypes.shape({
-      high: PropTypes.number,
-      low: PropTypes.number,
-      unsigned: PropTypes.bool,
-    }),
-    reserveAccountAddress: PropTypes.string,
-    poolCoinDenom: PropTypes.string,
-    reserveCoinDenoms: PropTypes.array,
-  }),
   poolIndex: PropTypes.number,
   rewardsMap: PropTypes.object,
   userLiquidityInPools: PropTypes.object,
@@ -1748,4 +1571,3 @@ const actionsToProps = {
 };
 
 export default connect(stateToProps, actionsToProps)(FarmTable);
-// export default FarmTable

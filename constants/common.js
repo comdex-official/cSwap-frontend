@@ -1,4 +1,4 @@
-import { envConfig } from "../config/envConfig";
+import { envConfig } from '../config/envConfig';
 
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 10;
@@ -13,7 +13,8 @@ export const APP_ID = Number(envConfig?.[app]?.appId);
 export const MASTER_POOL_ID = Number(envConfig?.[app]?.masterPoolId);
 export const NETWORK_TAG = envConfig?.[app]?.networkTag;
 export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT;
+export const TRANSIT_URL = 'https://transit.comdex.one';
 
 //Harbor
 export const HARBOR_ASSET_ID = 9;
-export const PRODUCT_ID = Number(envConfig?.["harbor"]?.appId);
+export const PRODUCT_ID = Number(envConfig?.['harbor']?.appId);

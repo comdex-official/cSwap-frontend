@@ -161,7 +161,6 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = '') {
     chainId: clientChain,
   });
 
-  // eslint-disable-next-line no-undef
   const txBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
 
   return cosmJS.broadcastTx(txBytes);

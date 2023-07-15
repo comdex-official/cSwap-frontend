@@ -37,7 +37,6 @@ import {
 } from "../../../utils/number";
 import {
   errorMessageMappingParser,
-  iconNameFromDenom,
   toDecimals,
 } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -353,8 +352,6 @@ const Deposit = ({
           return;
         }
 
-      
-
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -508,7 +505,6 @@ const Deposit = ({
             </div>
 
             <div className={styles.tradeCard__body__right__el1}>
-              
 
               <div className="maxhalf">
                 <Button
@@ -537,7 +533,6 @@ const Deposit = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                {/* {"Available"} */}
                 <span>
                   {amountConversionWithComma(
                     firstAssetAvailableBalance,
@@ -641,7 +636,6 @@ const Deposit = ({
                   theme === "dark" ? styles.dark : styles.light
                 }`}
               >
-                {/* {"Available"} */}
                 <span className="">
                   {amountConversionWithComma(
                     secondAssetAvailableBalance,
@@ -818,7 +812,6 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     pools: state.liquidity.pool.list,
-    // pool: state.liquidity.pool._,
     address: state.account.address,
     reverse: state.swap.reverse,
     markets: state.oracle.market.list,

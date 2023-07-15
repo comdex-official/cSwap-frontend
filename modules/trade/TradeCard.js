@@ -3,13 +3,12 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Icon } from '../../shared/image/Icon';
 import { NextImage } from '../../shared/image/NextImage';
-import { Arrow, PageLoader } from '../../shared/image';
+import { Arrow } from '../../shared/image';
 import Toggle from '../../shared/components/toggle/Toggle';
 import Card from '../../shared/components/card/Card';
 import CustomInput from '../../shared/components/CustomInput';
 import TooltipIcon from '../../shared/components/tooltip/TooltipIcon';
-import Lottie from 'lottie-react';
-import { Alert, Button, message, Popover, Radio, Spin } from 'antd';
+import { Button, message, Popover, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { comdex } from '../../config/network';
 import {
@@ -68,7 +67,6 @@ import {
   setSlippage,
   setSlippageTolerance,
 } from '../../actions/swap';
-
 import CustomSelect from '../../shared/components/CustomSelect';
 import CustomButton from './CustomButton';
 import variables from '../../utils/variables';
@@ -112,9 +110,10 @@ const TradeCard = ({
   iconList,
   tradeData,
 }) => {
+  let theme = 'dark';
   const [toggleValue, setToggleValue] = useState(false);
   const [loading, setLoading] = useState(true);
-
+ 
   const handleToggleValue = (e) => {
     setToggleValue(e.target.checked);
     localStorage.setItem('trade', e.target.checked);
@@ -125,8 +124,6 @@ const TradeCard = ({
     setToggleValue(value === 'true' ? true : false);
     setLoading(false);
   }, []);
-
-  let theme = 'dark';
 
   const [validationError, setValidationError] = useState();
   const [priceValidationError, setPriceValidationError] = useState();
@@ -692,8 +689,6 @@ const TradeCard = ({
     }
   };
 
- 
-
   return (
     <>
       {loading ? (
@@ -755,46 +750,27 @@ const TradeCard = ({
                       </div>
 
                       <div className={styles.tradeCard__body__right__el1}>
-                        {/* <div
-                          className={`${
-                            styles.tradeCard__body__right__el1__footer
-                          } ${divClass === "active" ? styles.active : ""}`}
-                          onClick={() => handleHalfClick()}
-                          ref={divRef}
-                        >
-                          {'HALF'}
-                        </div> */}
-                        {/* <div
-                          className={`${
-                            styles.tradeCard__body__right__el1__description
-                          } ${divClass2 === "active" ? styles.active : ""}`}
-                          onClick={() => handleMaxClick()}
-                        ref={divRef2}
-                        >
-                          {'MAX'}
-                        </div> */}
-                         <div className="halfButton">
-                      <Button
-                        className="active"
-                        onClick={() => handleHalfClick()}
-                      >
-                        {'HALF'}
-                      </Button>
-                      </div>
+                        <div className="halfButton">
+                          <Button
+                            className="active"
+                            onClick={() => handleHalfClick()}
+                          >
+                            {'HALF'}
+                          </Button>
+                        </div>
                         <div className="maxhalf">
-                      <Button
-                        className="active"
-                        onClick={() => handleMaxClick()}
-                      >
-                        {'MAX'}
-                      </Button>
-                    </div>
+                          <Button
+                            className="active"
+                            onClick={() => handleMaxClick()}
+                          >
+                            {'MAX'}
+                          </Button>
+                        </div>
                         <div
                           className={`${
                             styles.tradeCard__body__right__el1__title
                           } ${theme === 'dark' ? styles.dark : styles.light}`}
                         >
-                          {/* {'Available'}{' '} */}
                           <span>
                             {amountConversionWithComma(
                               availableBalance,
@@ -1096,7 +1072,9 @@ const TradeCard = ({
                       <div
                         className={`${
                           styles.tradeCard__description__right_title
-                        } ${MAX_SLIPPAGE_TOLERANCE < slippage ? styles.red : ""}`}
+                        } ${
+                          MAX_SLIPPAGE_TOLERANCE < slippage ? styles.red : ''
+                        }`}
                       >
                         {pool?.type === 2 && isFinalSlippage ? '>' : ''}
                         {Number(slippage)?.toFixed(comdex.coinDecimals)}%
@@ -1187,10 +1165,6 @@ const TradeCard = ({
           />
         </div>
       )}
-
-      {/* <div className="order_table_section">
-        {toggleValue && <Order lang={lang} assetMap={assetMap} />}
-      </div> */}
     </>
   );
 };
@@ -1268,12 +1242,6 @@ TradeCard.propTypes = {
     poolCoinDenom: PropTypes.string,
     reserveCoinDenoms: PropTypes.array,
   }),
-  poolBalance: PropTypes.arrayOf(
-    PropTypes.shape({
-      amount: PropTypes.string,
-      denom: PropTypes.string,
-    })
-  ),
   pools: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.shape({

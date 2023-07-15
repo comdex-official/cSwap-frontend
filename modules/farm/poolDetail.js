@@ -1,34 +1,20 @@
 import styles from "./Farm.module.scss";
 import { NextImage } from "../../shared/image/NextImage";
-import { ATOM, CMDS } from "../../shared/image";
-import { Icon } from "../../shared/image/Icon";
-import dynamic from "next/dynamic";
-import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
-import Tab from "../../shared/components/tab/Tab";
-
-import { Button, message, Tabs } from "antd";
+import { message } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import MediaQuery from "react-responsive";
+import { connect } from "react-redux";
 import { setTradeData } from "../../actions/tradePair";
-import CustomInput from "../../shared/components/CustomInput";
-
-import { queryAllBalances } from "../../services/bank/query";
 import {
-  queryPool,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
 } from "../../services/liquidity/query";
 import {
   amountConversion,
   amountConversionWithComma,
-  commaSeparatorWithRounding,
   denomConversion,
   getDenomBalance,
 } from "../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { commaSeparator, marketPrice } from "../../utils/number";
 import PoolTokenValue from "./PoolTokenValue";
 
 const PoolDetails = ({
@@ -313,17 +299,6 @@ const PoolDetails = ({
                     pool?.balances?.quoteCoin?.denom
                   )}
               </div>
-              {/* <div
-                className={`${styles.liquidityCard__pool__title} ${
-                  theme === "dark" ? styles.dark : styles.light
-                }`}
-              >
-                {pool?.balances?.quoteCoin?.denom &&
-                  showPoolBalance(
-                    providedTokens,
-                    pool?.balances?.quoteCoin?.denom
-                  )}
-              </div> */}
             </div>
             <div
               className={`${styles.liquidityCard__pool__element} ${
@@ -363,25 +338,9 @@ const PoolDetails = ({
                 }`}
               >
                 <PoolTokenValue poolTokens={userLockedPoolTokens} />
-                {/* $
-                {commaSeparator(
-                  Number(userLiquidityInPools[pool?.id] || 0).toFixed(
-                    DOLLAR_DECIMALS
-                  )
-                )} */}
               </div>
             </div>
           </div>
-        </div>
-
-        <div
-          className={`${styles.tradeCard__button__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
-        >
-          {/* <button>
-                        {active === "DEPOSIT" ? "Deposit & Farm" : "Withdraw & Unfarm"}
-                    </button> */}
         </div>
       </div>
     </div>
@@ -428,4 +387,5 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setTradeData,
 };
+
 export default connect(stateToProps, actionsToProps)(PoolDetails);

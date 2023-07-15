@@ -6,9 +6,6 @@ import { NextImage } from '../../shared/image/NextImage';
 import { useState } from 'react';
 import styles from './Farm.module.scss';
 import {
-  ATOM,
-  CMDS,
-  Cup,
   Current,
   Emission,
   HirborLogo,
@@ -16,10 +13,8 @@ import {
   Pyramid,
   RangeGreen,
   RangeRed,
-  Ranged,
 } from '../../shared/image';
-import dynamic from 'next/dynamic';
-import { Modal, Tooltip, message, Slider } from 'antd';
+import { Modal, Tooltip, message } from 'antd';
 import Liquidity from './Liquidity';
 import Card from '../../shared/components/card/Card';
 import {
@@ -29,7 +24,6 @@ import {
 import {
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
-  PRODUCT_ID,
 } from '../../constants/common';
 import {
   amountConversion,
@@ -45,18 +39,10 @@ import {
   marketPrice,
 } from '../../utils/number';
 import {
-  emissiondata,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
-  userProposalProjectedEmission,
-  votingCurrentProposal,
-  votingCurrentProposalId,
 } from '../../services/liquidity/query';
 import RangeTooltipContent from '../../shared/components/range/RangedToolTip';
-import { getAMP, rangeToPercentage } from '../../utils/number';
-import { comdex } from '../../config/network';
-
-// const Card = dynamic(() => import("@/shared/components/card/Card"))
 
 const FarmCard = ({
   theme,
@@ -77,6 +63,10 @@ const FarmCard = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
+  userCurrentProposalData,
+  currentProposalAllData,
+  protectedEmission,
+  proposalId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
@@ -87,10 +77,6 @@ const FarmCard = ({
 
   const showModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
@@ -128,8 +114,7 @@ const FarmCard = ({
     const totalMasterPoolApr = poolsApr?.incentive_rewards.filter(
       (reward) => reward.master_pool
     );
-    // .reduce((acc, reward) => acc + reward.apr, 0);
-
+   
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -170,7 +155,6 @@ const FarmCard = ({
   };
 
   const calculateRewardPerDay2 = (_totalApr) => {
-    console.log(_totalApr, "_totalApr")
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
@@ -313,7 +297,6 @@ const FarmCard = ({
   );
 
   useEffect(() => {
-    // setPoolExternalIncentiveData(poolsApr?.incentive_rewards.filter((reward) => !reward.master_pool))
     setPoolExternalIncentiveData(poolsApr?.incentive_rewards);
   }, [poolsApr]);
 
@@ -324,7 +307,6 @@ const FarmCard = ({
   }, [poolAprList]);
 
   useEffect(() => {
-    // fetching user liquidity for my pools.
     if (pool?.id) {
       getUserLiquidity(pool);
     }
@@ -332,73 +314,9 @@ const FarmCard = ({
 
   useEffect(() => {
     if (showMyPool) {
-      // showPortofolioManageModal()
       setIsPortifolioManageModalOpen(true);
     }
   }, []);
-
-  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
-  const [currentProposalAllData, setCurrentProposalAllData] = useState();
-  const [protectedEmission, setProtectedEmission] = useState(0);
-  const [proposalId, setProposalId] = useState();
-
-  useEffect(() => {
-    fetchVotingCurrentProposalId();
-  }, []);
-
-  const fetchVotingCurrentProposalId = () => {
-    votingCurrentProposalId(PRODUCT_ID)
-      .then((res) => {
-        setProposalId(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    if (proposalId) {
-      fetchuserProposalProjectedEmission(proposalId);
-      fetchVotingCurrentProposal(proposalId);
-    }
-  }, [address, proposalId]);
-
-  useEffect(() => {
-    if (address) {
-      fetchEmissiondata(address);
-    }
-  }, [address]);
-
-  const fetchuserProposalProjectedEmission = (proposalId) => {
-    userProposalProjectedEmission(proposalId)
-      .then((res) => {
-        setProtectedEmission(amountConversion(res));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchVotingCurrentProposal = (proposalId) => {
-    votingCurrentProposal(proposalId)
-      .then((res) => {
-        setCurrentProposalAllData(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchEmissiondata = (address) => {
-    emissiondata(address, (error, result) => {
-      if (error) {
-        message.error(error);
-        console.log(error, 'Emission Api error');
-        return;
-      }
-      setUserCurrentProposalData(result?.data);
-    });
-  };
 
   const calculateVaultEmission = (id) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
@@ -481,18 +399,6 @@ const FarmCard = ({
     }
   };
 
-  // const [showText, setShowText] = useState(false);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setShowText((prevValue) => !prevValue);
-  //   }, 4000); // 10 seconds interval
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // console.log({ poolsApr });
-
   return (
     <div
       className={`${styles.farmCard__wrap} ${
@@ -501,19 +407,21 @@ const FarmCard = ({
         poolExternalIncentiveData &&
         showMoreData &&
         poolExternalIncentiveData.length <= 0 &&
-        styles.card__active 
+        styles.card__active
       } 
       ${
         poolExternalIncentiveData &&
         showMoreData &&
         poolExternalIncentiveData.length > 0 &&
-       styles.card__active4
+        styles.card__active4
       } 
-      ${ showMoreData &&
+      ${
+        showMoreData &&
         calculateAPY(
           calculatePoolLiquidity(pool?.balances),
           Number(pool?.id)
-        ) && styles.card__active3
+        ) &&
+        styles.card__active3
       }
       ${getMasterPool() && showMoreData && styles.card__active2}  ${
         theme === 'dark' ? styles.dark : styles.light
@@ -581,7 +489,7 @@ const FarmCard = ({
                       }
                       width={50}
                       height={50}
-                      alt=""
+                      alt="Logo"
                     />
                   </div>
                 </div>
@@ -602,7 +510,7 @@ const FarmCard = ({
                       }
                       width={50}
                       height={50}
-                      alt=""
+                      alt="Logo"
                     />
                   </div>
                 </div>
@@ -658,17 +566,6 @@ const FarmCard = ({
                         <NextImage src={Pyramid} alt="Logo" />
                         {'Master Pool'}
                       </div>
-
-                      {/* // <div
-                    //   className={`${
-                    //     styles.farmCard__element__right__pool__title
-                    //   } ${styles.boost} ${
-                    //     theme === "dark" ? styles.dark : styles.light
-                    //   }`}
-                    // >
-                    //   <NextImage src={Current} alt="Logo" />
-                    //   {"MP Boost"}
-                    // </div> */}
                     </div>
                   ) : (
                     ''
@@ -690,22 +587,9 @@ const FarmCard = ({
                   </Tooltip>
                 )}
 
-                {/* {pool?.type === 2 ? (
-                        // <SvgIcon name="info-icon" viewbox="0 0 9 9" /> 
-                        <Icon className={"bi bi-arrow-right"} />
-                      ) : null} */}
-
                 {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
                   pool?.balances?.baseCoin?.denom === 'ucmst') && (
                   <>
-                    {/* <div
-                  className={`${styles.farmCard__element__left__title2} ${
-                    styles.harbor__emision
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
-                >
-                  {'Harbor Emissions'}
-                </div> */}
-
                     <div
                       className={`${styles.farmCard__element__right__details} ${
                         styles.card__center
@@ -762,20 +646,6 @@ const FarmCard = ({
                               )}
                           </div>
                         </Tooltip>
-                        {/* {
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__apr_pool__title
-                    }${theme === "dark" ? styles.dark : styles.light}`}
-                  >
-                    <div className={`${styles.image_container}`}>
-                      <NextImage src={HirborLogo} alt="Logo" />
-                    </div>
-                    <div className={`${styles.text_container}`}>
-                      4,345,123,768 <span>HARBOR</span>
-                    </div>
-                  </div>
-                } */}
                       </div>
                     </div>
                   </>
@@ -842,11 +712,10 @@ const FarmCard = ({
                               Number(decimalConversion(pool?.maxPrice)).toFixed(
                                 PRICE_DECIMALS
                               ) ? (
-                              <NextImage src={RangeGreen} />
+                              <NextImage src={RangeGreen} alt="Logo"/>
                             ) : (
-                              <NextImage src={RangeRed} />
+                              <NextImage src={RangeRed} alt="Logo"/>
                             )}
-                            {/* <NextImage src={Ranged} /> */}
                             {Number(decimalConversion(pool?.price)).toFixed(
                               PRICE_DECIMALS
                             ) >
@@ -871,39 +740,9 @@ const FarmCard = ({
                 ) : pool?.type === 1 ? (
                   ''
                 ) : (
-                  // <div
-                  //   className={`${styles.farmCard__element__right__basic} ${
-                  //     theme === "dark" ? styles.dark : styles.light
-                  //   }`}
-                  // >
-                  //   <div
-                  //     className={`${
-                  //       styles.farmCard__element__right__basic__title
-                  //     } ${theme === "dark" ? styles.dark : styles.light}`}
-                  //   >
-                  //     {"Basic"}
-                  //   </div>
-                  // </div>
                   ''
                 )}
               </div>
-
-              {/* {checkExternalIncentives() && (
-                <div
-                  className={`${styles.farmCard__element__right__incentive} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farmCard__element__right__pool__title
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <NextImage src={Cup} alt="Logo" />
-                    {'External Incentives'}
-                  </div>
-                </div>
-              )} */}
             </div>
           </div>
           <div
@@ -920,7 +759,6 @@ const FarmCard = ({
             </div>
 
             <Tooltip
-              // visible={true}
               title={
                 !getMasterPool() ? (
                   <>
@@ -947,8 +785,8 @@ const FarmCard = ({
                           CMDX yield only):
                         </span>
                         {calculateExternalBasePoolApr()?.length > 0 ? (
-                          calculateExternalBasePoolApr().map((item) => (
-                            <span className="value">
+                          calculateExternalBasePoolApr().map((item, index) => (
+                            <span className="value" key={index}>
                               {commaSeparator(fixedDecimal(item?.apr) || 0)}%
                             </span>
                           ))
@@ -962,8 +800,8 @@ const FarmCard = ({
                           <span className="text">External APR:</span>
                           <span className="value">
                             <div className="eApr">
-                              {calculateExternalPoolApr().map((item) => (
-                                <>
+                              {calculateExternalPoolApr().map((item, index) => (
+                                <div key={index}>
                                   <NextImage
                                     src={iconList?.[item?.denom]?.coinImageUrl}
                                     alt={'logo'}
@@ -972,7 +810,7 @@ const FarmCard = ({
                                   />
                                   {commaSeparator(fixedDecimal(item?.apr) || 0)}
                                   %
-                                </>
+                                </div>
                               ))}
                             </div>
                           </span>
@@ -1025,7 +863,6 @@ const FarmCard = ({
                   </>
                 ) : null
               }
-              // className="farm_upto_apr_tooltip"
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
@@ -1038,7 +875,6 @@ const FarmCard = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {/* {"14.45%"} */}
                   {commaSeparator(calculateApr() || 0)}%
                   {!getMasterPool() && <Icon className={'bi bi-arrow-right'} />}
                 </div>
@@ -1054,7 +890,7 @@ const FarmCard = ({
                       }`}
                     >
                       <NextImage src={Current} alt="Logo" />
-                      {/* {"Upto 54.45%"} */}
+                     
                       {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
                     </div>
                   </div>
@@ -1063,60 +899,6 @@ const FarmCard = ({
             </Tooltip>
           </div>
 
-          {/* <div
-            className={`${styles.farmCard__element}  ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
-          >
-            {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
-              pool?.balances?.baseCoin?.denom === 'ucmst') && (
-              <>
-                <div
-                  className={`${styles.farmCard__element__left__title2} ${
-                    styles.harbor__emision
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
-                >
-                  {'Harbor Emissions'}
-                </div>
-
-                <div
-                  className={`${styles.farmCard__element__right__details} ${
-                    styles.card__center
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
-                >
-                  <div
-                    className={`${styles.farmCard__element__apr__poll__wrap} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                  >
-                    <Tooltip
-                      title={
-                        'Farm in CMST paired pools & receive these additional rewards at the end of this weeks HARBOR emissions.'
-                      }
-                      overlayClassName="farm_upto_apr_tooltip"
-                    >
-                      <div
-                        className={`${
-                          styles.farmCard__element__right__apr_pool__title
-                        }  ${styles.boost} ${
-                          theme === 'dark' ? styles.dark : styles.light
-                        }`}
-                      >
-                        <NextImage src={HirborLogo} alt="Logo" />
-                        {pool?.id &&
-                          commaSeparator(
-                            calculateVaultEmission(
-                              pool?.id?.toNumber()
-                            ).toFixed(2)
-                          )}
-                      </div>
-                    </Tooltip>
-                  
-                  </div>
-                </div>
-              </>
-            )}
-          </div> */}
           <div
             className={`${styles.farmCard__element} ${
               theme === 'dark' ? styles.dark : styles.light
@@ -1137,26 +919,6 @@ const FarmCard = ({
               {`$${TotalPoolLiquidity || 0}`}
             </div>
           </div>
-
-          {/* {!(
-            pool?.balances?.quoteCoin?.denom === 'ucmst' ||
-            pool?.balances?.baseCoin?.denom === 'ucmst'
-          ) && (
-            <div
-              className={`${styles.farmCard__element} ${
-                getMasterPool()
-                  ? showMoreData
-                    ? styles.emission__master2
-                    : styles.emission__master
-                  : !(
-                      pool?.balances?.quoteCoin?.denom === 'ucmst' ||
-                      pool?.balances?.baseCoin?.denom === 'ucmst'
-                    )
-                  ? styles.emission
-                  : ''
-              }`}
-            ></div>
-          )} */}
 
           <div className="farmCard__button">
             <div
@@ -1195,90 +957,88 @@ const FarmCard = ({
               }`}
             >
               {poolExternalIncentiveData &&
-                (poolExternalIncentiveData.length > 0 || calculateAPY(
+              (poolExternalIncentiveData.length > 0 ||
+                calculateAPY(
                   calculatePoolLiquidity(pool?.balances),
                   Number(pool?.id)
                 )) ? (
+                <div
+                  className={`${styles.farmCard__footer__main} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
                   <div
-                    className={`${styles.farmCard__footer__main} ${
+                    className={`${styles.farmCard__footer__left__title} ${
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    <div
-                      className={`${styles.farmCard__footer__left__title} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      {'Estimated rewards earned per day'}
-                    </div> 
-                    <div
-                      className={`${styles.farmCard__footer__rewards} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      {poolExternalIncentiveData && poolExternalIncentiveData.length > 0 &&
-                        poolExternalIncentiveData?.map((singleIncentive) => {
-                          return (
-                            <div
-                              className={`${
-                                styles.farmCard__footer__rewards__title
-                              }
+                    {'Estimated rewards earned per day'}
+                  </div>
+                  <div
+                    className={`${styles.farmCard__footer__rewards} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    {poolExternalIncentiveData &&
+                      poolExternalIncentiveData.length > 0 &&
+                      poolExternalIncentiveData?.map((singleIncentive) => {
+                        return (
+                          <div
+                            className={`${
+                              styles.farmCard__footer__rewards__title
+                            }
                               ${
                                 poolExternalIncentiveData.length > 1
                                   ? styles.margin
                                   : ''
                               }
                               ${theme === 'dark' ? styles.dark : styles.light}`}
-                              key={singleIncentive?.denom}
-                            >
-                              <NextImage
-                                src={
-                                  iconList?.[singleIncentive?.denom]
-                                    ?.coinImageUrl
-                                }
-                                width={50}
-                                height={50}
-                                alt=""
-                              />{' '}
-                              ${calculateRewardPerDay(singleIncentive)}
-                            </div>
-                          );
-                        })}
-
-                          {calculateAPY(
-                              calculatePoolLiquidity(pool?.balances),
-                              Number(pool?.id)
-                            ) ? <div
-                              className={`${
-                                styles.farmCard__footer__rewards__title
+                            key={singleIncentive?.denom}
+                          >
+                            <NextImage
+                              src={
+                                iconList?.[singleIncentive?.denom]?.coinImageUrl
                               }
-                              ${poolExternalIncentiveData.length > 0 ? styles.marginTop : ""}
+                              width={50}
+                              height={50}
+                              alt="Logo"
+                            />{' '}
+                            ${calculateRewardPerDay(singleIncentive)}
+                          </div>
+                        );
+                      })}
+
+                    {calculateAPY(
+                      calculatePoolLiquidity(pool?.balances),
+                      Number(pool?.id)
+                    ) ? (
+                      <div
+                        className={`${styles.farmCard__footer__rewards__title}
+                              ${
+                                poolExternalIncentiveData.length > 0
+                                  ? styles.marginTop
+                                  : ''
+                              }
                               ${theme === 'dark' ? styles.dark : styles.light}`}
-                              
-                            >
-                              <NextImage
-                                src={
-                                  iconList?.["uharbor"]
-                                    ?.coinImageUrl
-                                }
-                                width={50}
-                                height={50}
-                                alt=""
-                              />{' '}
-                              ${calculateRewardPerDay2(
-                                  calculateAPY(
-                                    calculatePoolLiquidity(pool?.balances),
-                                    Number(pool?.id)
-                                  )  
-                             )}
-                            </div>
-                            :
-                            null}
-                    </div>
+                      >
+                        <NextImage
+                          src={iconList?.['uharbor']?.coinImageUrl}
+                          width={50}
+                          height={50}
+                          alt="Logo"
+                        />{' '}
+                        $
+                        {calculateRewardPerDay2(
+                          calculateAPY(
+                            calculatePoolLiquidity(pool?.balances),
+                            Number(pool?.id)
+                          )
+                        )}
+                      </div>
+                    ) : null}
                   </div>
-
-
-                ) :null}
+                </div>
+              ) : null}
 
               <div
                 className={`${styles.farmCard__footer__main} ${
@@ -1317,11 +1077,6 @@ const FarmCard = ({
                     }`}
                   >
                     {`Master Pool Liquidity`}
-                    {/* {`${denomConversion(
-                      masterPoolData?.balances?.baseCoin?.denom
-                    )}-${denomConversion(
-                      masterPoolData?.balances?.quoteCoin?.denom
-                    )} LP Farmed (Master Pool)`} */}
                   </div>
                   <div
                     className={`${styles.farmCard__footer__right__title} ${
@@ -1364,7 +1119,6 @@ const FarmCard = ({
                         title={
                           'Provide equivalent liquidity in the Master pool to earn boost'
                         }
-                        // className="farm_upto_apr_tooltip"
                         overlayClassName="farm_upto_apr_tooltip"
                       >
                         <div

@@ -1,31 +1,8 @@
-import { useRouter } from 'next/router';
-import {
-  Button,
-  Col,
-  Input,
-  List,
-  message,
-  Row,
-  Select,
-  Spin,
-  Tabs,
-  Pagination,
-} from 'antd';
+import { Button, Col, Input, Row, Select, Tabs, Pagination } from 'antd';
 import * as PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAllProposals, setProposals } from '../../actions/govern';
-import {
-  fetchRestBondexTokens,
-  fetchRestProposals,
-  fetchRestTallyParamsProposer,
-} from '../../services/govern/query';
-import { formatTime } from '../../utils/date';
-import { proposalStatusMap, stringTagParser } from '../../utils/string';
-import { DOLLAR_DECIMALS } from '../../constants/common';
-// import style from "./Govern.moduleOld.scss";
-import { Progress } from '@mantine/core';
-import NoDataIcon from '../../shared/components/NoDataIcon';
 import { Icon } from '../../shared/image/Icon';
 import GovernOpenProposal from './openProposal/index';
 import GovernPastProposal from './pastProposal/index';
@@ -43,8 +20,6 @@ const Govern = ({
   proposals,
   getTab,
 }) => {
-  const router = useRouter();
-
   const [inProgress, setInProgress] = useState(false);
   const [activeKey, setActiveKey] = useState(getTab ? getTab : '1');
   const [pastProposals, setPastProposals] = useState();
@@ -52,29 +27,6 @@ const Govern = ({
   const [filteredProposal, setFilteredProposal] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
-  // useEffect(() => {
-  //   if (getTab) {
-  //     setActiveKey(getTab);
-  //   }
-  // }, [getTab]);
-
-  const fetchAllProposals = useCallback(() => {
-    setInProgress(true);
-    fetchRestProposals((error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setProposals(result?.proposals?.reverse());
-      setAllProposals(result?.proposals);
-    });
-  }, [setAllProposals, setProposals]);
-
-  // useEffect(() => {
-  //     fetchAllProposals();
-  // }, [fetchAllProposals]);
 
   const filterAllProposal = (value) => {
     setInProgress(true);
@@ -95,37 +47,6 @@ const Govern = ({
     setCurrentPage(1);
     setInProgress(false);
   };
-
-  console.log(filteredProposal);
-
-  const calculateVotes = useCallback((value, final_tally_result) => {
-    let yes = Number(final_tally_result?.yes);
-    let no = Number(final_tally_result?.no);
-    let veto = Number(final_tally_result?.no_with_veto);
-    let abstain = Number(final_tally_result?.abstain);
-    let totalValue = yes + no + abstain + veto;
-
-    let result = Number((Number(value) / totalValue || 0) * 100).toFixed(
-      DOLLAR_DECIMALS
-    );
-
-    return result;
-  }, []);
-
-  const data = [
-    {
-      title: 'Total Staked',
-      counts: 1234,
-    },
-    {
-      title: 'Total Proposals',
-      counts: 7,
-    },
-    {
-      title: 'Average Participation',
-      counts: '123%',
-    },
-  ];
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,30 +1,30 @@
-import { Button, Col, Form, message, Row, Slider, Tooltip } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import Snack from "../../../shared/components/Snack";
-import CustomInput from "../../../shared/components/CustomInput";
+import { Button, Col, message, Row, Slider, Tooltip } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import Snack from '../../../shared/components/Snack';
+import CustomInput from '../../../shared/components/CustomInput';
 import {
   APP_ID,
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
-} from "../../../constants/common";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { defaultFee } from "../../../services/transaction";
+} from '../../../constants/common';
+import { signAndBroadcastTransaction } from '../../../services/helper';
+import { defaultFee } from '../../../services/transaction';
 import {
   amountConversion,
   getAmount,
   getDenomBalance,
-} from "../../../utils/coin";
-import variables from "../../../utils/variables";
-import { errorMessageMappingParser } from "../../../utils/string";
-import RangeTooltipContent from "../../../shared/components/range/RangedToolTip";
-import styles from "../Farm.module.scss";
-import PoolTokenValue from "../PoolTokenValue";
-import PoolDetails from "../poolDetail";
-import { Icon } from "../../../shared/image/Icon";
-import { decimalConversion, rangeToPercentage } from "../../../utils/number";
+} from '../../../utils/coin';
+import variables from '../../../utils/variables';
+import { errorMessageMappingParser } from '../../../utils/string';
+import RangeTooltipContent from '../../../shared/components/range/RangedToolTip';
+import styles from '../Farm.module.scss';
+import PoolTokenValue from '../PoolTokenValue';
+import PoolDetails from '../poolDetail';
+import { Icon } from '../../../shared/image/Icon';
+import { decimalConversion, rangeToPercentage } from '../../../utils/number';
 
 const Remove = ({
   active,
@@ -43,9 +43,9 @@ const Remove = ({
   };
 
   const marks2 = {
-    0: "0%",
-    50: "50%",
-    100: "100%",
+    0: '0%',
+    50: '50%',
+    100: '100%',
   };
 
   const [sliderValue, setSliderValue] = useState(0);
@@ -82,7 +82,7 @@ const Remove = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgUnfarmAndWithdraw',
           value: {
             farmer: address,
             poolId: pool?.id,
@@ -95,7 +95,7 @@ const Remove = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -132,7 +132,7 @@ const Remove = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgUnfarm",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgUnfarm',
           value: {
             farmer: address,
             poolId: pool?.id,
@@ -145,7 +145,7 @@ const Remove = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -182,7 +182,7 @@ const Remove = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgWithdraw",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgWithdraw',
           value: {
             withdrawer: address,
             poolId: pool?.id,
@@ -194,7 +194,7 @@ const Remove = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -257,7 +257,7 @@ const Remove = ({
                   autoAdjustOverflow={false}
                 >
                   <>
-                    <Icon className={"bi bi-info-circle"} />
+                    <Icon className={'bi bi-info-circle'} />
                   </>
                 </Tooltip>
               </div>
@@ -279,23 +279,22 @@ const Remove = ({
       </div>
       <div
         className={`${styles.liquidityCard__pool__withdraw__wrap} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <div
           className={`${styles.liquidityCard__pool__withdraw__title} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
-          {"Amount to Withdraw"}
+          {'Amount to Withdraw'}
         </div>
         <div
           className={`${styles.liquidityCard__pool__input} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
-          {/* <RangeTooltipContent /> */}
-          <Row style={{ justifyContent: "space-between" }}>
+          <Row style={{ justifyContent: 'space-between' }}>
             <Col span={17}>
               <Slider
                 className="comdex-slider-alt"
@@ -309,7 +308,7 @@ const Remove = ({
             </Col>
             <Col
               span={6}
-              style={{ display: "flex", alignItems: "center", gap: "2px" }}
+              style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
             >
               <CustomInput
                 defaultValue={sliderValue}
@@ -319,60 +318,58 @@ const Remove = ({
                 placeholder="0"
                 value={`${sliderValue}`}
               />
-              {"%"}
+              {'%'}
             </Col>
           </Row>
         </div>
         <div
           className={`${styles.liquidityCard__pool__withdraw__footer} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.liquidityCard__pool__withdraw__element} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${
                 styles.liquidityCard__pool__withdraw__element__title
               } ${styles.title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"You will unfarm"}
+              {'You will unfarm'}
             </div>
             <div
               className={`${
                 styles.liquidityCard__pool__withdraw__element__title
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
-              {/* {"$0.00 ≈ 0 PoolToken"} */}
-              <PoolTokenValue poolTokens={amount} /> ≈{" "}
+              <PoolTokenValue poolTokens={amount} /> ≈{' '}
               {Number(amount).toFixed() || 0} PoolToken
             </div>
           </div>
           <div
             className={`${styles.liquidityCard__pool__withdraw__element} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${
                 styles.liquidityCard__pool__withdraw__element__title
               } ${styles.title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {"Your current farming balance"}
+              {'Your current farming balance'}
             </div>
             <div
               className={`${
                 styles.liquidityCard__pool__withdraw__element__title
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
-              {/* {"$0.00 ≈ 0 PoolToken"} */}
-              <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{" "}
+              <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{' '}
               {Number(userLockedPoolTokens).toFixed() || 0} PoolToken
             </div>
           </div>

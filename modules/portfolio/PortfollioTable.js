@@ -1,8 +1,7 @@
 import { Button, Col, Input, message, Row, Switch, Table } from 'antd';
 import Lodash from 'lodash';
 import * as PropTypes from 'prop-types';
-import React, { useEffect, useState, useRef } from 'react';
-// import NoDataIcon from "../../components/common/NoDataIcon";
+import React, { useEffect, useState } from 'react';
 import { setLPPrices, setMarkets } from '../../actions/oracle';
 import { cmst, comdex, harbor } from '../../config/network';
 import { DOLLAR_DECIMALS } from '../../constants/common';
@@ -41,25 +40,20 @@ const PortofolioTable = ({
   AssetList,
 }) => {
   let theme = 'dark';
+
   const [pricesInProgress, setPricesInProgress] = useState(false);
   const [isHideToggleOn, setHideToggle] = useState(false);
-
   const [searchKey, setSearchKey] = useState();
   const [filterValue, setFilterValue] = useState('1');
-
   const dispatch = useDispatch();
   const [content, setContent] = useState([]);
+  const [updateStar, setUpdateStar] = useState(false);
+
   const newTableData =
     content !== null &&
     content.map((el) => {
       return el.replace(/['"]+/g, '');
     });
-  const [updateStar, setUpdateStar] = useState(false);
-  // const newTableData2 =
-  //   content !== null &&
-  //   tableData?.filter((item) => {
-  //     newTableData.includes(item?.key);
-  //   });
 
   const checkStar = (data) => {
     const dataCheck = newTableData ? newTableData.includes(data) : false;
@@ -88,17 +82,6 @@ const PortofolioTable = ({
   useEffect(() => {
     setContent(JSON.parse(localStorage.getItem('fav')));
   }, [updateStar]);
-
-  const tabItems = [
-    {
-      key: '1',
-      label: 'Assets',
-    },
-    {
-      key: '2',
-      label: 'LF Tokens',
-    },
-  ];
 
   const handleBalanceRefresh = () => {
     dispatch({
@@ -201,7 +184,6 @@ const PortofolioTable = ({
       dataIndex: 'ibcdeposit',
       key: 'ibcdeposit',
       align: 'left',
-      // width: 210,
       render: (value) => {
         if (value) {
           return value?.depositUrlOverride ? (
@@ -302,7 +284,6 @@ const PortofolioTable = ({
         value: value || 0,
         denom: ibcBalance?.denom,
       },
-
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
@@ -381,7 +362,6 @@ const PortofolioTable = ({
         value: getPrice(comdex?.coinMinimalDenom),
         denom: comdex?.coinMinimalDenom,
       },
-
       amount: {
         value: amountConversion(nativeCoinValue || 0),
         denom: comdex?.coinMinimalDenom,
@@ -468,7 +448,6 @@ const PortofolioTable = ({
                 onClick={() => onFavourite(harbor?.symbol)}
               />
             )}
-
             <div className="assets-icon">
               <div
                 className={`${styles.farmCard__element__left__logo} ${
@@ -491,13 +470,6 @@ const PortofolioTable = ({
             </div>
             {denomConversion(harbor?.coinMinimalDenom)}
           </div>
-          {/* <div className="assets-withicon">
-            <div className="assets-icon">
-            
-             
-            </div>{" "}
-           
-          </div> */}
         </>
       ),
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
@@ -505,7 +477,6 @@ const PortofolioTable = ({
         value: getPrice(harbor?.coinMinimalDenom),
         denom: harbor?.coinMinimalDenom,
       },
-
       amount: {
         value: amountConversion(harborCoinValue || 0),
         denom: harbor?.coinMinimalDenom,
@@ -602,9 +573,6 @@ const PortofolioTable = ({
     return newTableData.length > 0 && newTableData.indexOf(el?.symbol) < 0;
   });
 
-  // const oldTableData =
-  //   content !== null &&
-  //   tableData?.filter((item) => !content.includes(item?.key));
   const finalTableData = Lodash.concat(res1, res2);
 
   let balanceExists = allTableData?.find(
@@ -623,7 +591,6 @@ const PortofolioTable = ({
             className="assets-search-section"
             style={{ alignItems: 'center', display: 'flex', gap: '10px' }}
           >
-            {/* {parent && parent === "portfolio" ? null : ( */}
             <div
               className="text"
               style={{
@@ -633,20 +600,17 @@ const PortofolioTable = ({
                 color: 'white',
               }}
             >
-              <div className={"hideBalance"}>Hide 0 Balances</div>
-
+              <div className={'hideBalance'}>Hide 0 Balances</div>
               <Switch
                 disabled={!balanceExists}
                 onChange={(value) => handleHideSwitchChange(value)}
                 checked={isHideToggleOn}
               />
             </div>
-            {/* )} */}
 
             <Input
               placeholder="Search Asset.."
               onChange={(event) => onSearchChange(event.target.value)}
-              // suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
               suffix={<Icon className={'bi bi-search'} />}
               className="asset_search_input"
             />
@@ -654,7 +618,6 @@ const PortofolioTable = ({
         </Row>
         <Row style={{ width: '100%' }}>
           <Col style={{ width: '100%' }}>
-            {/* {filterValue === "1" ? ( */}
             <Table
               className="custom-table assets-table"
               dataSource={
@@ -666,13 +629,6 @@ const PortofolioTable = ({
               locale={{ emptyText: <NoDataIcon /> }}
               scroll={{ x: '100%' }}
             />
-            {/* ) : (
-              <LPAsssets
-                isHideToggleOn={isHideToggleOn}
-                searchKey={searchKey}
-                activeKey={filterValue}
-              />
-            )} */}
           </Col>
         </Row>
       </div>

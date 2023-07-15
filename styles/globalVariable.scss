@@ -5,33 +5,29 @@ $L: 1024px;
 $MIX: 1180px;
 $XL: 1280px;
 $XXL: 1440px;
+
+// Background
+$primary-background: linear-gradient(
+  180deg,
+  #030b1e 0%,
+  rgba(3, 11, 30, 0.71) 100%
+);
+$background-dark1: #211d34;
+$background-dark2: #3c324c;
+$background-light: #ffffff;
+$background-light2: #f2f2f2;
+$background-input-dark: #0c1424;
+$border-color: #303950;
+$border-color-base: rgba(255, 255, 255, 0.7); // major border color
+$base-border-radius: 10px;
+
+// Colors
 $white: #ffffff;
 $black: #000000;
 $navyBlue: #acbfdb;
 $red: #fe4350;
 $inputColor1: #c5cbdb;
 $inputColor2: #6b758d;
-
-// Priyanshu
-
-$primary-background: linear-gradient(
-  180deg,
-  #030b1e 0%,
-  rgba(3, 11, 30, 0.71) 100%
-);
-
-// Background
-$background-dark1: #211d34;
-$background-dark2: #3c324c;
-$background-light: #ffffff;
-$background-light2: #f2f2f2;
-$background-input-dark: #0c1424;
-
-$border-color: #303950;
-$border-color-base: rgba(255, 255, 255, 0.7); // major border color
-$base-border-radius: 10px;
-// Colors
-
 $dark-color: #040517;
 $primary-color-hover: #28292a;
 $primary-color-light: #232231;
@@ -53,7 +49,6 @@ $font-size-sm: $font-size-base - 2px; //12px
 // Box shadow
 $box-shadow-inner-light: 3px 3px 10px rgba(174, 174, 192, 0.4),
   -8px -8px 12px rgba(174, 174, 192, 0.25);
-
 $box-shadow-inner-light-hover: 3px 3px 10px rgba(174, 174, 192, 0.4),
   inset -8px -8px 12px rgba(174, 174, 192, 0.25);
 $box-shadow-inner-dark: inset 5px 5px 12px 1px #262b38;
@@ -71,17 +66,13 @@ $text-color-label-dark2: #2d3748;
 $tooltip-bg-light: #ececec;
 $primary-gradient: linear-gradient(180deg, #fe4350 1.34%, #053c75 100.83%);
 $secondary-color: #fe4350;
-
 $box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15); // major shadow for layers
-
 $form-input-bg-light: #f1f2f7;
 $form-input-bg-dark: #243333;
-
 $tooltip-bg-dark: #464646;
 $tooltip-bg-light: #ececec;
 $tooltip-color-dark: #5a5f63;
 $tooltip-color-light: #ffffff;
-
 $box-shadow-inner-dark: inset 5px 5px 12px 1px #262b38;
 $box-shadow-input-dark: inset 0 4px 12px 6px #1d2330;
 $box-shadow-dark: inset 0 4px 16px 6px #1d2330;
@@ -89,4 +80,4 @@ $box-shadow-inner-light: 3px 3px 10px rgba(174, 174, 192, 0.4),
   inset -8px -8px 12px rgba(174, 174, 192, 0.25);
 $box-shadow-inner-light-hover: 3px 3px 10px rgba(174, 174, 192, 0.4),
   inset -8px -8px 12px rgba(174, 174, 192, 0.25);
-  $background-select-hover-dark: #2b3548;
+$background-select-hover-dark: #2b3548;
