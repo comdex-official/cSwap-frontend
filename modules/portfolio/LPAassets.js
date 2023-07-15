@@ -46,7 +46,6 @@ const LPAsssets = ({
       title: "No. of Tokens",
       dataIndex: "noOfTokens",
       key: "noOfTokens",
-      // align: "center",
       render: (tokens) => (
         <>
           <p>{commaSeparator(Number(tokens || 0))}</p>
@@ -83,7 +82,6 @@ const LPAsssets = ({
       dataIndex: "farm",
       key: "farm",
       align: "left",
-      // width: 210,
       render: (item) => (
         <Button
           type="primary"

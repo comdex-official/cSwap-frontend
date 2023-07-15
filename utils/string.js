@@ -121,7 +121,6 @@ export const toDecimals = (value, decimal) =>
 
 export const uniqueDenoms = (list, type) => {
   return [
-    // eslint-disable-next-line no-undef
     ...new Set(
       list && list.length > 0
         ? list.map((item) => (type === 'in' ? item.denomIn : item.denomOut))
@@ -132,7 +131,6 @@ export const uniqueDenoms = (list, type) => {
 
 export const uniqueLiquidityPairDenoms = (list, type) => {
   return [
-    // eslint-disable-next-line no-undef
     ...new Set(
       list && list.length > 0
         ? list.map((item) =>
@@ -156,7 +154,6 @@ export const uniqueQuoteDenomsForBase = (list, type, denom) => {
   const quoteMap = quoteList.map((item) =>
     type === 'in' ? item.quoteCoinDenom : item.baseCoinDenom
   );
-  // eslint-disable-next-line no-undef
   return [...new Set(quoteMap)];
 };
 

@@ -5,7 +5,6 @@ const getIbcDenomsMap = () => {
   let myMap = {};
   ibcAssets()
     .then((result) => {
-      console.log({ result });
       for (let i = 0; i < result?.tokens?.length; i++) {
         if (myMap[result?.tokens[i].ibcDenomHash] === undefined) {
           myMap[result?.tokens[i].ibcDenomHash] = result?.tokens[i]?.symbol;

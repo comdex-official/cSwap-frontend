@@ -33,6 +33,7 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   NETWORK_TAG,
+  TRANSIT_URL,
 } from '../../../constants/common';
 import ConnectModal from './ConnectModal';
 import variables from '../../../utils/variables';
@@ -448,25 +449,24 @@ const Header = ({
     },
   ];
 
-  const [visible, setVisible] = useState(false)
-  
+  const [visible, setVisible] = useState(false);
+
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 200){
-      setVisible(true)
-    } 
-    else if (scrolled <= 200){
-      setVisible(false)
+    if (scrolled > 200) {
+      setVisible(true);
+    } else if (scrolled <= 200) {
+      setVisible(false);
     }
   };
-  
-  const scrollToTop = () =>{
+
+  const scrollToTop = () => {
     window.scrollTo({
-      top: 0, 
-      behavior: 'smooth'
+      top: 0,
+      behavior: 'smooth',
     });
   };
-  
+
   window.addEventListener('scroll', toggleVisible);
 
   return (
@@ -642,12 +642,12 @@ const Header = ({
           </div>
         </div>
 
-        <div className="top-div" onClick={scrollToTop} style={{display: visible ? '' : 'none'}}>
-          
-        <Icon
-                    className={`bi bi-chevron-up cursor`}
-                    size={'1.5rem'}
-                  />
+        <div
+          className="top-div"
+          onClick={scrollToTop}
+          style={{ display: visible ? '' : 'none' }}
+        >
+          <Icon className={`bi bi-chevron-up cursor`} size={'1.5rem'} />
         </div>
 
         <Modal
@@ -659,7 +659,7 @@ const Header = ({
           footer={null}
           header={null}
         >
-          <ConnectModal handleCancel={handleCancel2}/>
+          <ConnectModal handleCancel={handleCancel2} />
         </Modal>
 
         <Modal
@@ -672,12 +672,12 @@ const Header = ({
           header={null}
         >
           <iframe
-            src="https://dev-transit.comdex.one/"
+            src={TRANSIT_URL}
             frameBorder="0"
             width={'100%'}
             height={'700px'}
             style={{ borderRadius: '10px', background: '#030b1e' }}
-          ></iframe>
+          />
         </Modal>
       </div>
     </div>

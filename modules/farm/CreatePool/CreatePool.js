@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, message, Modal, Row, Steps } from 'antd';
+import { Button, Checkbox, message, Modal, Steps } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -8,11 +8,7 @@ import CustomInput from '../../../shared/components/CustomInput';
 import CustomSelect from '../../../shared/components/CustomSelect';
 import { comdex } from '../../../config/network';
 import { ValidateInputNumber } from '../../../config/_validation';
-import {
-  APP_ID,
-  DEFAULT_FEE,
-  DOLLAR_DECIMALS,
-} from '../../../constants/common';
+import { APP_ID, DEFAULT_FEE } from '../../../constants/common';
 import { signAndBroadcastTransaction } from '../../../services/helper';
 import { queryLiquidityPairs } from '../../../services/liquidity/query';
 import { defaultFee } from '../../../services/transaction';
@@ -25,7 +21,6 @@ import {
 } from '../../../utils/coin';
 import {
   errorMessageMappingParser,
-  iconNameFromDenom,
   toDecimals,
   uniqueLiquidityPairDenoms,
   uniqueQuoteDenomsForBase,
@@ -35,6 +30,7 @@ import { Icon } from '../../../shared/image/Icon';
 import Snack from '../../../shared/components/Snack';
 import styles from '../Farm.module.scss';
 import { NextImage } from '../../../shared/image/NextImage';
+
 const CreatePoolModal = ({
   openPoolModal,
   closePool,
@@ -48,6 +44,7 @@ const CreatePoolModal = ({
   iconList,
 }) => {
   const theme = 'dark';
+
   const [current, setCurrent] = useState(0);
   const [baseToken, setBaseToken] = useState();
   const [quoteToken, setQuoteToken] = useState();
@@ -102,12 +99,12 @@ const CreatePoolModal = ({
   };
 
   const handleBaseTokenChange = (value) => {
-    setsearchKey("");
+    setsearchKey('');
     setBaseToken(value);
   };
 
   const handleQuoteTokenChange = (value) => {
-    setsearchKey("");
+    setsearchKey('');
     setQuoteToken(value);
   };
 
@@ -229,13 +226,6 @@ const CreatePoolModal = ({
     }
   };
 
-  // const inputOptions = uniqueLiquidityPairDenoms(liquidityPairs, "in");
-  // const outputOptions = uniqueQuoteDenomsForBase(
-  //   liquidityPairs,
-  //   "in",
-  //   baseToken
-  // );
-
   const [inputOptions, setinputOptions] = useState([]);
   const [outputOptions, setoutputOptions] = useState([]);
   const [inputOptions2, setinputOptions2] = useState([]);
@@ -298,7 +288,9 @@ const CreatePoolModal = ({
             className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
           >
             <div className={styles.tradeCard__body__left}>
-            <div className={`${styles.tradeCard__body__right} ${styles.center}`}>
+              <div
+                className={`${styles.tradeCard__body__right} ${styles.center}`}
+              >
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -328,13 +320,7 @@ const CreatePoolModal = ({
                 </div>
 
                 <div>
-                  {/* <CustomInput
-                    decimals={DOLLAR_DECIMALS}
-                    value={BASE_PERCENTAGE}
-                    disabled
-                    className="assets-select-input with-select"
-                  /> */}
-           <span className="percentage ml-1">{`${BASE_PERCENTAGE} %`}</span>
+                  <span className="percentage ml-1">{`${BASE_PERCENTAGE} %`}</span>
                 </div>
               </div>
             </div>
@@ -344,7 +330,9 @@ const CreatePoolModal = ({
             className={`${styles.tradeCard__body__item} ${styles.border__radius}`}
           >
             <div className={styles.tradeCard__body__left}>
-            <div className={`${styles.tradeCard__body__right} ${styles.center}`}>
+              <div
+                className={`${styles.tradeCard__body__right} ${styles.center}`}
+              >
                 <div
                   className={`${styles.tradeCard__body__left__item__details} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -375,66 +363,11 @@ const CreatePoolModal = ({
                 </div>
 
                 <div>
-                  {/* <CustomInput
-                    disabled
-                    decimals={DOLLAR_DECIMALS}
-                    value={QUOTE_PERCENTAGE}
-                    className="assets-select-input with-select"
-                  /> */}
-                <span className="percentage ml-1">{`${QUOTE_PERCENTAGE} %`}</span>
+                  <span className="percentage ml-1">{`${QUOTE_PERCENTAGE} %`}</span>
                 </div>
               </div>
             </div>
           </div>
-          {/* <div className="pool-asset-first-container mt-4">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper">
-                  <CustomSelect
-                    onChange={handleBaseTokenChange}
-                    list={inputOptions.length > 0 ? inputOptions : null}
-                    value={baseToken || null}
-                  />
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <CustomInput
-                    decimals={DOLLAR_DECIMALS}
-                    value={BASE_PERCENTAGE}
-                    disabled
-                    className="assets-select-input with-select"
-                  />
-                  <span className="percentage ml-1">%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="pool-asset-second-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper">
-                  <CustomSelect
-                    disabled={!baseToken}
-                    onChange={handleQuoteTokenChange}
-                    list={outputOptions.length > 0 ? outputOptions : null}
-                    value={quoteToken || null}
-                  />
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <CustomInput
-                    disabled
-                    decimals={DOLLAR_DECIMALS}
-                    value={QUOTE_PERCENTAGE}
-                    className="assets-select-input with-select"
-                  />
-                  <span className="percentage ml-1">%</span>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </>
       ),
     },
@@ -495,7 +428,7 @@ const CreatePoolModal = ({
                         className="active"
                         onClick={() => handleBaseInputMax()}
                       >
-                       MAX
+                        MAX
                       </Button>
                     </div>
                   </div>
@@ -564,7 +497,7 @@ const CreatePoolModal = ({
                         className="active"
                         onClick={() => handleQuoteInputMax()}
                       >
-                       MAX
+                        MAX
                       </Button>
                     </div>
                   </div>
@@ -580,123 +513,6 @@ const CreatePoolModal = ({
               </div>
             </div>
           </div>
-
-          {/* <div className="pool-asset-first-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper">
-                  <Row>
-                    <div className="cswap-head">
-                      <div className="header-left circle-icon">
-                        <div className="icon-circle">
-                          <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(baseToken)}
-                              viewbox="0 0 26.229 14"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Col>
-                      <div className="pool-denom">
-                        {denomConversion(baseToken)}
-                      </div>
-                      <div className="pool-denom">{BASE_PERCENTAGE}%</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="label-right">
-                  Available
-                  <span className="ml-1">
-                    {amountConversionWithComma(
-                      baseAvailable || 0,
-                      assetMap[baseToken]?.decimals
-                    )}{" "}
-                    {denomConversion(baseToken)}
-                  </span>{" "}
-                  <div className="maxhalf">
-                    <Button
-                      className="active"
-                      onClick={() => handleBaseInputMax()}
-                    >
-                      Max
-                    </Button>
-                  </div>
-                </div>
-                <div className="input-select validation-input-select">
-                  <CustomInput
-                    value={baseAmount}
-                    validationError={baseAmountValidationError}
-                    className="assets-select-input with-select"
-                    onChange={(event) =>
-                      handleBaseAmountChange(event.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="pool-asset-second-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper ">
-                  <Row>
-                    <div className="cswap-head">
-                      <div className="header-left circle-icon">
-                        <div className="icon-circle">
-                          <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(quoteToken)}
-                              viewbox="0 0 26.229 14"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Col>
-                      <div className="pool-denom">
-                        {denomConversion(quoteToken)}
-                      </div>
-                      <div className="pool-denom">{QUOTE_PERCENTAGE}%</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="label-right">
-                  Available
-                  <span className="ml-1">
-                    {amountConversionWithComma(
-                      quoteAvailable || 0,
-                      assetMap[quoteToken]?.decimals
-                    )}{" "}
-                    {denomConversion(quoteToken)}
-                  </span>{" "}
-                  <div className="maxhalf">
-                    <Button
-                      className="active"
-                      onClick={() => handleQuoteInputMax()}
-                    >
-                      Max
-                    </Button>
-                  </div>
-                </div>
-                <div className="input-select validation-input-select">
-                  <CustomInput
-                    value={quoteAmount}
-                    validationError={quoteAmountValidationError}
-                    className="assets-select-input with-select"
-                    onChange={(event) =>
-                      handleQuoteAmountChange(event.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </div> */}
         </>
       ),
     },
@@ -784,73 +600,6 @@ const CreatePoolModal = ({
             </div>
           </div>
 
-          {/* <div className="pool-asset-first-container mt-4">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper">
-                  <Row>
-                    <div className="cswap-head">
-                      <div className="header-left circle-icon">
-                        <div className="icon-circle">
-                          <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(baseToken)}
-                              viewbox="0 0 26.229 14"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Col>
-                      <div className="pool-denom">
-                        {denomConversion(baseToken)}
-                      </div>
-                      <div className="pool-denom">{BASE_PERCENTAGE}%</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <div className="selected-amount">{baseAmount}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="pool-asset-second-container mt-3">
-            <div className="assets-select-card">
-              <div className="assets-left">
-                <div className="assets-select-wrapper ">
-                  <Row>
-                    <div className="cswap-head">
-                      <div className="header-left circle-icon">
-                        <div className="icon-circle">
-                          <div className="svg-icon-inner">
-                            <SvgIcon
-                              name={iconNameFromDenom(quoteToken)}
-                              viewbox="0 0 26.229 14"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Col>
-                      <div className="pool-denom">
-                        {" "}
-                        {denomConversion(quoteToken)}
-                      </div>
-                      <div className="pool-denom">{QUOTE_PERCENTAGE}%</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-              <div className="assets-right">
-                <div className="input-select">
-                  <div className="selected-amount">{quoteAmount}</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
           <div className="checkbox-container mt-3 text-center ml-3">
             <Checkbox onChange={onCheckChange} checked={isAccepted}>
               <p>
@@ -910,7 +659,12 @@ const CreatePoolModal = ({
         <div className="steps-action mt-3">
           {current > 0 && (
             <Button
-              style={{ margin: '0 8px',height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              style={{
+                margin: '0 8px',
+                height: '46.216px',
+                width: '155.216px',
+                borderRadius: '95.907px',
+              }}
               type="primary btn-filled2"
               onClick={() => prev()}
             >
@@ -920,7 +674,11 @@ const CreatePoolModal = ({
           {current < steps.length - 1 && (
             <Button
               disabled={disableConditions}
-              style={{ height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              style={{
+                height: '46.216px',
+                width: '155.216px',
+                borderRadius: '95.907px',
+              }}
               type="primary btn-filled2"
               onClick={() => next()}
             >
@@ -931,7 +689,11 @@ const CreatePoolModal = ({
             <Button
               loading={inProgress}
               disabled={!isAccepted}
-              style={{ height: "46.216px", width:"155.216px",borderRadius: "95.907px" }}
+              style={{
+                height: '46.216px',
+                width: '155.216px',
+                borderRadius: '95.907px',
+              }}
               type="primary btn-filled2"
               onClick={() => handleCreate()}
             >

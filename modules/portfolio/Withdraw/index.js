@@ -2,8 +2,6 @@ import { Button, Col, Form, message, Modal, Row } from 'antd';
 import * as PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-// import { fetchProofHeight } from "../../../logic/redux/asset"
-// import { Col, Row, SvgIcon } from "../../../components/common";
 import { fetchProofHeight } from '../../../actions/asset';
 import Snack from '../../../shared/components/Snack';
 import CustomInput from '../../../shared/components/CustomInput';
@@ -17,7 +15,6 @@ import { denomConversion, getAmount } from '../../../utils/coin';
 import { toDecimals, truncateString } from '../../../utils/string';
 import variables from '../../../utils/variables';
 import style from './Withdraw.module.scss';
-// import './assetWithdraw.scss';
 
 const Withdraw = ({
   lang,
@@ -254,7 +251,6 @@ const Withdraw = ({
         width={480}
         onCancel={handleCancel}
         onOk={handleOk}
-        // closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
         title="IBC Withdraw"
       >
         <Form layout="vertical">
@@ -268,7 +264,6 @@ const Withdraw = ({
                 />
               </Form.Item>
             </Col>
-            {/* <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" /> */}
             <Col>
               <Form.Item label="To">
                 <CustomInput
@@ -286,7 +281,6 @@ const Withdraw = ({
                   Amount to Withdraw
                 </div>
                 <div className="availabe-balance">
-                  {/* Available */}
                   <span className="assets-maxhalf">
                     <Button
                       className=" active"
@@ -306,7 +300,6 @@ const Withdraw = ({
               </div>
 
               <Form.Item
-                // label="Amount to Withdraw"
                 className="assets-input-box"
               >
                 <CustomInput

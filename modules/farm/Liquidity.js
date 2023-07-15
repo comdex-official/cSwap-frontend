@@ -1,49 +1,36 @@
-// import React, { useState } from "react"
-import styles from "./Farm.module.scss";
-import { NextImage } from "../../shared/image/NextImage";
-import { ArrowRL, ATOM, CMDS,TradePair } from "../../shared/image";
-import { Icon } from "../../shared/image/Icon";
-import dynamic from "next/dynamic";
-import RangeTooltipContent from "../../shared/components/range/RangedToolTip";
-import Tab from "../../shared/components/tab/Tab";
-
-import { Button, message, Tabs } from "antd";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-
+import React, { useCallback, useEffect, useState } from 'react';
+import styles from './Farm.module.scss';
+import { NextImage } from '../../shared/image/NextImage';
+import { TradePair } from '../../shared/image';
+import Tab from '../../shared/components/tab/Tab';
+import { message } from 'antd';
+import * as PropTypes from 'prop-types';
+import { connect, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import {
   setFetchBalanceInProgress,
   setPool,
   setPoolBalance,
   setSpotPrice,
   setUserLiquidityInPools,
-} from "../../actions/liquidity";
-import CustomInput from "../../shared/components/CustomInput";
-
-// import { Col, Row, SvgIcon } from "../../../components/common";
-// import TooltipIcon from "../../../components/TooltipIcon";
-// import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { queryAllBalances } from "../../services/bank/query";
+} from '../../actions/liquidity';
+import { queryAllBalances } from '../../services/bank/query';
 import {
   queryPool,
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
-} from "../../services/liquidity/query";
+} from '../../services/liquidity/query';
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
   denomConversion,
-  getAmount,
   getDenomBalance,
-} from "../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { marketPrice } from "../../utils/number";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
-import PoolDetails from "./poolDetail";
+} from '../../utils/coin';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { marketPrice } from '../../utils/number';
+import Deposit from './Deposit';
+import Withdraw from './Withdraw';
 
 const Liquidity = ({
   theme,
@@ -61,22 +48,14 @@ const Liquidity = ({
   assetMap,
   rewardsMap,
 }) => {
-  const dispatch = useDispatch();
-  const TabData = ["DEPOSIT", "WITHDRAW"];
-
   const router = useRouter();
+  const dispatch = useDispatch();
+  const TabData = ['DEPOSIT', 'WITHDRAW'];
 
-  const [active, setActive] = useState("DEPOSIT");
-
+  const [active, setActive] = useState('DEPOSIT');
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
-
-  const [firstInput, setFirstInput] = useState();
-  const [secondInput, setSecondInput] = useState();
-  const [inProgress, setInProgress] = useState(false);
-  const [inputValidationError, setInputValidationError] = useState();
-  const [outputValidationError, setOutputValidationError] = useState();
 
   const id = pool?.id?.toNumber();
 
@@ -109,15 +88,18 @@ const Liquidity = ({
     }
   }, [address, pool, refreshBalance, fetchSoftLock]);
 
-  const fetchPool = useCallback((id) => {
-    queryPool(id, (error, result) => {
-      if (error) {
-        return;
-      }
+  const fetchPool = useCallback(
+    (id) => {
+      queryPool(id, (error, result) => {
+        if (error) {
+          return;
+        }
 
-      setPool(result?.pool);
-    });
-  }, [id, setPool]);
+        setPool(result?.pool);
+      });
+    },
+    [id, setPool]
+  );
 
   useEffect(() => {
     if (id) {
@@ -173,7 +155,7 @@ const Liquidity = ({
 
   const handleBalanceRefresh = () => {
     dispatch({
-      type: "BALANCE_REFRESH_SET",
+      type: 'BALANCE_REFRESH_SET',
       value: refreshBalance + 1,
     });
   };
@@ -223,33 +205,33 @@ const Liquidity = ({
   return (
     <div
       className={`${styles.liquidityCard__wrap} ${
-        theme === "dark" ? styles.dark : styles.light
+        theme === 'dark' ? styles.dark : styles.light
       }`}
     >
       <div
         className={`${styles.liquidityCard__tab} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <div
           className={`${styles.liquidityCard__tab__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <Tab data={TabData} active={active} handleActive={handleActive} />
         </div>
         <div
           className={`${styles.liquidityCard__trade__pair} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
-          onClick={() => router.push("/")}
+          onClick={() => router.push('/')}
         >
-          <NextImage src={TradePair} alt={"Arrow"} />
-          {"Trade Pair"}
+          <NextImage src={TradePair} alt={'Arrow'} />
+          {'Trade Pair'}
         </div>
       </div>
 
-      {active === "DEPOSIT" ? (
+      {active === 'DEPOSIT' ? (
         <Deposit
           pool={pool}
           active={active}
@@ -265,7 +247,6 @@ const Liquidity = ({
           userLockedPoolTokens={userLockedPoolTokens}
         />
       )}
-      {/* <PoolDetails active={active} pool={pool} /> */}
     </div>
   );
 };
@@ -274,7 +255,6 @@ Liquidity.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setFetchBalanceInProgress: PropTypes.func.isRequired,
   setPool: PropTypes.func.isRequired,
-
   setPoolBalance: PropTypes.func.isRequired,
   setSpotPrice: PropTypes.func.isRequired,
   setUserLiquidityInPools: PropTypes.func.isRequired,
@@ -309,7 +289,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     inProgress: state.liquidity.inProgress,
     pools: state.liquidity.pool.list,
-    // pool: state.liquidity.pool._,
     refreshBalance: state.account.refreshBalance,
     balances: state.account.balances.list,
     userLiquidityInPools: state.liquidity.userLiquidityInPools,

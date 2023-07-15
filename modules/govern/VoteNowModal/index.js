@@ -1,4 +1,4 @@
-import { Button, message, Modal, Radio, Space } from 'antd';
+import { Button, message, Modal } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -91,10 +91,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
           <div>
             <div sm="12">
               <h3>Vote Now</h3>
-              {/* <p>
-                #{proposal?.proposal_id} {proposal?.content?.title}
-              </p> */}
-
+        
               <div className="votenow-modal-element-main">
                 <div
                   className={
@@ -137,32 +134,10 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
                   Abstain
                 </div>
               </div>
-              {/* <Radio.Group
-                value={userVote}
-                name="radiogroup"
-                onChange={(e) => {
-                  setUserVote(e.target.value);
-                }}
-              >
-                <Space direction="vertical">
-                  <Radio value={1}>Yes</Radio>
-                  <Radio value={3}>No</Radio>
-                  <Radio value={4}>No With Veto</Radio>
-                  <Radio value={2}>Abstain</Radio>
-                </Space>
-              </Radio.Group> */}
             </div>
           </div>
           <div className="p-0">
             <div className="button__vote mt-3">
-              {/* <Button
-                type="primary"
-                className="px-5 mr-3"
-                size="large"
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button> */}
               <Button
                 type="primary"
                 loading={inProgress}

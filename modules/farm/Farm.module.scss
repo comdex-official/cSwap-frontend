@@ -730,8 +730,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: -25px;
-  flex-wrap: wrap;
+  margin-left: -30px;
+
+  @media screen and (max-width: $XL) {
+    flex-wrap: wrap;
+  }
 }
 
 .farmCard__element__right__basic {
@@ -1645,6 +1648,7 @@
   gap: 10px;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 
 .tradeCard__body__left__item__details__title {

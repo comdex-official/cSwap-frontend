@@ -20,12 +20,6 @@
   font-size: 27px;
   line-height: 33px;
   color: #ffffff;
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .bridgeCard__toggle__element {
@@ -44,12 +38,6 @@
   padding: 12px 40px;
   color: #ffffff;
   cursor: pointer;
-
-  &.light {
-  }
-
-  &.dark {
-  }
 
   &.activeTab {
     border: 1px solid transparent;
@@ -83,11 +71,7 @@
     width: 30px;
   }
 
-  &.light {
-  }
-
-  &.dark {
-  }
+ 
 }
 
 .bridgeCard__body__item {
@@ -104,12 +88,6 @@
 
   i {
     color: #516285;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 .bridgeCard__body__item__title {
@@ -117,12 +95,6 @@
   font-size: 24px;
   line-height: 29px;
   color: #acbfdb;
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .bridgeCard__body__item__details {
@@ -133,11 +105,7 @@
     color: #516285;
     margin-left: 45px;
 
-    &.light {
-    }
-
-    &.dark {
-    }
+   
   }
 }
 
@@ -148,11 +116,7 @@
   color: #ffffff;
   margin-left: 20px;
 
-  &.light {
-  }
-
-  &.dark {
-  }
+ 
 }
 
 .bridgeCard__swap {
@@ -162,11 +126,7 @@
   i {
     color: #fe4350;
 
-    &.light {
-    }
-
-    &.dark {
-    }
+    
   }
 }
 
@@ -181,11 +141,7 @@
   padding: 20px;
   margin: 20px 0px;
 
-  &.light {
-  }
-
-  &.dark {
-  }
+ 
 }
 
 .bridgeCard__footer {
@@ -201,11 +157,7 @@
   margin: 10px 0px;
   color: #acbfdb;
 
-  &.light {
-  }
-
-  &.dark {
-  }
+ 
 }
 
 .bridgeCard__button__wrap {
@@ -223,11 +175,7 @@
     text-align: center;
     color: #ffffff;
 
-    &.light {
-    }
-
-    &.dark {
-    }
+    
   }
 }
 
@@ -248,11 +196,7 @@
   margin-bottom: 10px;
   color: #ffffff;
 
-  &.light {
-  }
-
-  &.dark {
-  }
+ 
 }
 
 .bridgeCard__footer__element {

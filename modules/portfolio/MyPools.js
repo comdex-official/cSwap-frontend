@@ -1,4 +1,4 @@
-import { Button, Col, Row, Table, Tooltip } from 'antd';
+import { Button, Col, Row, Table } from 'antd';
 import * as PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -8,8 +8,6 @@ import {
   setShowMyPool,
   setSelectedManagePool,
 } from '../../actions/liquidity';
-// import NoDataIcon from "../../components/common/NoDataIcon";
-import TooltipIcon from '../../shared/components/TooltipIcon';
 import {
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
@@ -68,7 +66,6 @@ const MyPools = ({
     const totalMasterPoolApr = rewardsMap?.[_id]?.incentive_rewards.filter(
       (reward) => reward.master_pool
     );
-    // .reduce((acc, reward) => acc + reward.apr, 0);
 
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
@@ -153,7 +150,7 @@ const MyPools = ({
     emissiondata(address, (error, result) => {
       if (error) {
         message.error(error);
-        console.log(error, 'Emission Api error');
+        console.log(error);
         return;
       }
       setUserCurrentProposalData(result?.data);
@@ -365,7 +362,7 @@ const MyPools = ({
         return 'dim__card';
       }
     }
-    return ''; // Empty string for default row class
+    return '';
   };
 
   return (

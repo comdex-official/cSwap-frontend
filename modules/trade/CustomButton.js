@@ -1,7 +1,7 @@
-import { Button, message, Alert } from 'antd';
+import { Button, message } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import Snack from '../../shared/components/Snack/index';
 import { APP_ID, DEFAULT_FEE } from '../../constants/common';
@@ -198,18 +198,6 @@ const CustomButton = ({
                   }, 1000)
                 );
 
-              // message.success(
-              //   `Received ${amountConversion(
-              //     data?.receivedCoin?.amount,
-              //     assetMap[data?.receivedCoin?.denom]?.decimals
-              //   )} ${denomConversion(
-              //     data?.receivedCoin?.denom
-              //   )} for ${amountConversion(
-              //     Number(data?.offerCoin?.amount) -
-              //       Number(data?.remainingOfferCoin?.amount),
-              //     assetMap[data?.offerCoin?.denom]?.decimals
-              //   )} ${denomConversion(data?.offerCoin?.denom)}`
-              // );
             });
           }
         }
@@ -221,13 +209,6 @@ const CustomButton = ({
 
         updateValues();
         refreshDetails();
-
-        // message.success(
-        //   <Snack
-        //     message={variables[lang].tx_success}
-        //     hash={result?.transactionHash}
-        //   />
-        // );
       }
     );
   };

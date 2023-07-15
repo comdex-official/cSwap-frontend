@@ -1,14 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styles from './OrderBook.module.scss';
 import { Table, message } from 'antd';
-import { decodeTxRaw } from '@cosmjs/proto-signing';
-import { generateHash, truncateString } from '../../utils/string';
+import { truncateString } from '../../utils/string';
 import {
-  abbreviateMessage,
   fetchTradingHistory,
-  fetchTxHistory,
 } from '../../services/transaction';
-import { setTransactionHistory } from '../../actions/account';
 import { connect } from 'react-redux';
 import { comdex } from '../../config/network';
 import Copy from '../../shared/components/Copy';
@@ -16,7 +12,7 @@ import moment from 'moment';
 import NoDataIcon from '../../shared/components/NoDataIcon';
 import Loading from '../../pages/Loading';
 import { commaSeparator, formateNumberDecimalsAuto } from '../../utils/number';
-import { amountConversion, denomConversion } from '../../utils/coin';
+import { amountConversion } from '../../utils/coin';
 
 const columns = [
   {
@@ -101,9 +97,7 @@ const TradehistoryTable = ({ address, pairs }) => {
   const [orderTx, setOrderTx] = useState([]);
   const [limitOrderTx, setLimitOrderTx] = useState([]);
   const [limitOrderTxResponse, setLimitOrderTxResponse] = useState([]);
-  // const [pageNumber, setpageNumber] = useState(1);
-  // const [pageSize, setPageSize] = useState(5);
-
+ 
   const getTransactions = useCallback(
     (address) => {
       setInProgress(true);
@@ -147,6 +141,7 @@ const TradehistoryTable = ({ address, pairs }) => {
   const allTxResponse = [...orderTxResponse, ...limitOrderTxResponse];
 
   let combinedTx = allTxResponse.map((item, index) => ({
+    key: index,
     tx: item?.txhash,
     time: item?.timestamp,
     details: allTx[index]?.body?.messages[0],
@@ -164,7 +159,6 @@ const TradehistoryTable = ({ address, pairs }) => {
   const tableData =
     combinedTx?.length &&
     combinedTx?.map((item, index) => {
-      console.log(item?.time);
       return {
         key: index,
         transactionHash: (

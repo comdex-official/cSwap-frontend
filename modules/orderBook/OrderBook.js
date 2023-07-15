@@ -5,14 +5,10 @@ import { NextImage } from '../../shared/image/NextImage';
 import {
   ArrowRL,
   Drop,
-  No_Data,
   OrderSlider,
-  Slider,
   Star,
   StarHighlight,
 } from '../../shared/image';
-import { OrderCustomData, OrderCustomData2 } from './Data';
-import Tab from '../../shared/components/tab/Tab';
 import OrderbookTable from '../../modules/orderBook/OrderbookTable';
 import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
@@ -32,9 +28,6 @@ import {
 import { APP_ID, DOLLAR_DECIMALS } from '../../constants/common';
 import {
   Radio,
-  Select,
-  Spin,
-  Table,
   Tabs,
   message,
   Popover,
@@ -52,7 +45,6 @@ import {
 import NoDataIcon from '../../shared/components/NoDataIcon';
 import Buy from './Buy';
 import Sell from './Sell';
-import Script from 'next/script';
 import dynamic from 'next/dynamic';
 import TradehistoryTable from './TradehistoryTable';
 import Toggle from '../../shared/components/toggle/Toggle';
@@ -85,14 +77,6 @@ const OrderBook = ({
   params,
 }) => {
   const theme = 'dark';
-
-  const TabData = ['Buy', 'Sell'];
-
-  const [active, setActive] = useState('Buy');
-
-  const handleActive = (item) => {
-    setActive(item);
-  };
 
   const [pairs, setPairs] = useState();
   const [selectedPair, setSelectedPair] = useState();
@@ -203,150 +187,6 @@ const OrderBook = ({
       });
     }
   };
-
-  const columns = [
-    {
-      title: `Price (${denomConversion(selectedPair?.quote_coin_denom)})`,
-      dataIndex: 'price',
-      key: 'price',
-      className: 'text-red',
-    },
-    {
-      title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
-      dataIndex: 'amount',
-      key: 'amount',
-      align: 'right',
-    },
-  ];
-
-  const columns2 = [
-    {
-      title: 'Price (CMST)',
-      dataIndex: 'price',
-      key: 'price',
-      className: 'text-green',
-    },
-    {
-      title: `Amount (${denomConversion(selectedPair?.base_coin_denom)})`,
-      dataIndex: 'amount',
-      key: 'amount',
-      align: 'right',
-    },
-  ];
-
-  const recentTradesdataSource = [
-    {
-      key: '1',
-      price: '$100.00',
-      agamount: '$855.00',
-      time: '18:49:44',
-    },
-    {
-      key: '2',
-      price: '$200.00',
-      agamount: '$2,500.00',
-      time: '18:44:34',
-    },
-    {
-      key: '3',
-      price: '$55.00',
-      agamount: '$680.00',
-      time: '18:44:34',
-    },
-    {
-      key: '4',
-      price: '$75.00',
-      agamount: '$349.00',
-      time: '18:44:34',
-    },
-    {
-      key: '5',
-      price: '$5.00',
-      agamount: '$96.00',
-      time: '18:44:34',
-    },
-    {
-      key: '6',
-      price: '$200.00',
-      agamount: '$2,500.00',
-      time: '18:44:34',
-    },
-    {
-      key: '7',
-      price: '$55.00',
-      agamount: '$680.00',
-      time: '18:44:34',
-    },
-    {
-      key: '8',
-      price: '$75.00',
-      agamount: '$349.00',
-      time: '18:44:34',
-    },
-    {
-      key: '9',
-      price: '$5.00',
-      agamount: '$96.00',
-      time: '18:44:34',
-    },
-    {
-      key: '10',
-      price: '$5.00',
-      agamount: '$96.00',
-      time: '18:44:34',
-    },
-    {
-      key: '11',
-      price: '$200.00',
-      agamount: '$2,500.00',
-      time: '18:44:34',
-    },
-    {
-      key: '12',
-      price: '$55.00',
-      agamount: '$680.00',
-      time: '18:44:34',
-    },
-    {
-      key: '13',
-      price: '$75.00',
-      agamount: '$349.00',
-      time: '18:44:34',
-    },
-    {
-      key: '14',
-      price: '$5.00',
-      agamount: '$96.00',
-      time: '18:44:34',
-    },
-    {
-      key: '15',
-      price: '$5.00',
-      agamount: '$96.00',
-      time: '18:44:34',
-    },
-  ];
-
-  const recentTradescolumns = [
-    {
-      title: 'Price (CMST)',
-      dataIndex: 'price',
-      key: 'price',
-      className: 'text-green',
-    },
-    {
-      title: 'Amount (CMDX)',
-      dataIndex: 'agamount',
-      key: 'agamount',
-      align: 'right',
-    },
-    {
-      title: 'Time',
-      dataIndex: 'time',
-      key: 'time',
-      align: 'right',
-    },
-  ];
 
   const tabItems = [
     {
@@ -565,12 +405,12 @@ const OrderBook = ({
 
   let buyOrders = orders?.filter((item) => item.direction === 1);
   buyOrders = buyOrders.sort((a, b) => {
-    return b.price - a.price; // sort descending.
+    return b.price - a.price;
   });
 
   let sellOrders = orders?.filter((item) => item.direction === 2);
   sellOrders = sellOrders.sort((a, b) => {
-    return b.price - a.price; // sort descending.
+    return b.price - a.price;
   });
 
   let recentTradeFilter = recentTrade.sort((a, b) => {
@@ -590,7 +430,7 @@ const OrderBook = ({
       label: `Open Orders(${
         openOrdersData.length > 0 ? openOrdersData.length : 0
       })`,
-      key: '1',
+      key: '10',
       children: (
         <OrderbookTable
           openOrdersData={openOrdersData}
@@ -600,7 +440,7 @@ const OrderBook = ({
     },
     {
       label: 'Trade History',
-      key: '2',
+      key: '12',
       children: <TradehistoryTable pairs={pairs} />,
     },
   ];
@@ -615,27 +455,6 @@ const OrderBook = ({
       setOrderLifeSpan(value);
     }
   };
-
-  // const tabItemsBottom = [
-  //   {
-  //     label: "Open Order (0)",
-  //     key: "1",
-  //     children: (
-  //       <Table
-  //         scroll={{ x: "100%" }}
-  //         className="order-tables"
-  //         dataSource={openOrdersData}
-  //         columns={ordersTablecolumns}
-  //         pagination={false}
-  //         locale={{ emptyText: <NoDataIcon /> }}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     label: "Trade History",
-  //     key: "2",
-  //   },
-  // ];
 
   const SettingPopup = (
     <div className="slippage-tolerance">
@@ -678,7 +497,7 @@ const OrderBook = ({
 
   const Items = [
     {
-      key: 'item-2',
+      key: 'item-1',
       label: (
         <div className={styles.dropdown__orderbook}>
           <div className="filter-button-radio">
@@ -688,8 +507,8 @@ const OrderBook = ({
               value={filterValue}
             >
               {orderBookData &&
-                orderBookData.map((item) => (
-                  <Radio.Button value={item?.price_unit}>
+                orderBookData.map((item, i) => (
+                  <Radio.Button value={item?.price_unit} key={i}>
                     {Number(item?.price_unit)
                       .toFixed(7)
                       .replace(/\.?0+$/, '')}
@@ -821,10 +640,10 @@ const OrderBook = ({
             <div className={`${styles.dropdown__orderbook__table__body__wrap}`}>
               {finalTableData.length > 0 ? (
                 <>
-                  {finalTableData?.map((item) => (
+                  {finalTableData?.map((item, index) => (
                     <div
                       className={`${styles.dropdown__orderbook__table__body}`}
-                      key={item?.pair_id}
+                      key={index}
                       onClick={() => handlePairChange(item?.pair_id)}
                     >
                       <div
@@ -919,10 +738,10 @@ const OrderBook = ({
                   {filteredPair?.length <= 0 ? (
                     <NoDataIcon />
                   ) : (
-                    filteredPair?.map((item) => (
+                    filteredPair?.map((item,index) => (
                       <div
                         className={`${styles.dropdown__orderbook__table__body}`}
-                        key={item?.pair_id}
+                        key={index}
                         onClick={() => handlePairChange(item?.pair_id)}
                       >
                         <div
@@ -1018,7 +837,7 @@ const OrderBook = ({
           </div>
         </div>
       ),
-      key: 'item-1',
+      key: 'item-15',
     },
   ];
 
@@ -1167,7 +986,6 @@ const OrderBook = ({
                   onClick={(e) => e.preventDefault()}
                 >
                   <NextImage src={ArrowRL} alt="ArrowRL" />
-
                   <div
                     className={`${styles.orderbook__trading__title}  ${
                       theme === 'dark' ? styles.dark : styles.light
@@ -1176,21 +994,6 @@ const OrderBook = ({
                     {selectedPair?.pair_symbol?.replace(/\//g, '-') || null}
                   </div>
                   <NextImage src={Drop} alt="Drop" />
-                  {/* <Icon className={'bi bi-chevron-down'} size={'0.5rem'} /> */}
-
-                  {/* <NextImage src={ArrowRL} alt="" /> */}
-                  {/* <Select
-                  onChange={handlePairChange}
-                  value={selectedPair?.pair_id || null}
-                  options={pairs?.map((item) => {
-                    return {
-                      key: item?.pair_id,
-                      value: item?.pair_id,
-                      label: item?.pair_symbol,
-                    };
-                  })}
-                  className="orderbook__select"
-                /> */}
                 </div>
               </Dropdown>
               <div
@@ -1422,18 +1225,12 @@ const OrderBook = ({
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    {/* <NextImage
-                      src={No_Data}
-                      alt="Message"
-                      height={50}
-                      width={50}
-                    /> */}
                     {'No Data'}
                   </div>
                 ) : (
                   BuySellData[0]?.sells &&
                   BuySellData[0]?.sells.map((item, index) => (
-                    <div>
+                    <div key={index}>
                       <Tooltip
                         title={
                           <>
@@ -1445,7 +1242,6 @@ const OrderBook = ({
                         }
                         overlayClassName="farm_upto_apr_tooltip"
                         placement="left"
-                        // autoAdjustOverflow={false}
                       >
                         <div
                           className={`${styles.orderbook__lower__head} ${
@@ -1464,7 +1260,6 @@ const OrderBook = ({
                               })
                             )
                           }
-                          key={item.price}
                         >
                           <div
                             className={`${styles.orderbook__buy__width__wrap}  ${styles.loss}`}
@@ -1560,18 +1355,12 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {/* <NextImage
-                    src={No_Data}
-                    alt="Message"
-                    height={50}
-                    width={50}
-                  /> */}
                   {'No Data'}
                 </div>
               ) : (
                 BuySellData[0]?.buys &&
                 BuySellData[0]?.buys.map((item, index) => (
-                  <div>
+                  <div key={index}>
                     <Tooltip
                       title={
                         <>
@@ -1583,7 +1372,6 @@ const OrderBook = ({
                       }
                       overlayClassName="farm_upto_apr_tooltip"
                       placement="left"
-                      // autoAdjustOverflow={false}
                     >
                       <div
                         className={`${styles.orderbook__lower__head} ${
@@ -1602,7 +1390,6 @@ const OrderBook = ({
                             })
                           )
                         }
-                        key={item.price}
                       >
                         <div
                           className={`${styles.orderbook__buy__width__wrap} ${styles.profit} `}
@@ -1711,12 +1498,6 @@ const OrderBook = ({
                     styles.no__data
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {/* <NextImage
-                    src={No_Data}
-                    alt="Message"
-                    height={50}
-                    width={50}
-                  /> */}
                   {'No Recent Trades'}
                 </div>
               ) : (
@@ -1811,173 +1592,15 @@ const OrderBook = ({
             }`}
           >
             <Tabs className="comdex-tabs" type="card" items={tabItems} />
-
-            {/* <Tab data={TabData} active={active} handleActive={handleActive} /> */}
-
-            {/* <div
-              className={`${styles.orderbook__element__right__body__main} ${
-                theme === "dark" ? styles.dark : styles.light
-              }`}
-            >
-              {true && (
-                <div
-                  className={`${styles.orderbook__element__right__body__tab} ${
-                    theme === "dark" ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${styles.orderbook__body__tab__head} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        styles.orderbook__body__tab__head__element
-                      } ${styles.active} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                    >
-                      {"Limit"}
-                    </div>
-                    <div
-                      className={`${
-                        styles.orderbook__body__tab__head__element
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      {"MARKET"}
-                    </div>
-                  </div>
-                  <div
-                    className={`${styles.orderbook__body__tab__body} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        styles.orderbook__body__tab__body__balance
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      {"Balance: 0.0000 CMST"}
-                    </div>
-
-                    <div
-                      className={`${
-                        styles.orderbook__body__tab__body__input__wrap
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__body__input__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"Price"}
-                      </div>
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__body__input
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <input type="text" />
-                      </div>
-                    </div>
-                    <div
-                      className={`${
-                        styles.orderbook__body__tab__body__input__wrap
-                      } ${theme === "dark" ? styles.dark : styles.light}`}
-                    >
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__body__input__title
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"Quantity"}
-                      </div>
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__body__input
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        <input type="text" />
-                      </div>
-                    </div>
-                    <div
-                      className={`${styles.orderbook__body__tab__footer} ${
-                        theme === "dark" ? styles.dark : styles.light
-                      }`}
-                    >
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__footer__element
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"10%"}
-                      </div>
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__footer__element
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"25%"}
-                      </div>
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__footer__element
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"50%"}
-                      </div>
-                      <div
-                        className={`${
-                          styles.orderbook__body__tab__footer__element
-                        } ${theme === "dark" ? styles.dark : styles.light}`}
-                      >
-                        {"100%"}
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={`${styles.orderbook__body__tab__button} ${
-                      theme === "dark" ? styles.dark : styles.light
-                    }`}
-                  >
-                    <button>{"Place Order"}</button>
-                  </div>
-                </div>
-              )}
-            </div> */}
           </div>
         </div>
       </div>
-      {/* <div className="bottom-area">
-        <Tabs className="comdex-tabs" type="card" items={tabItemsBottom} />
-      </div> */}
       <div
         className={`${styles.orderbook__table__view} ${
           theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <Tabs className="order-tabs" type="card" items={orderItems} />
-        {/* <div
-          className={`${styles.orderbook__tab__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
-          }`}
-        >
-          <div
-            className={`${styles.orderbook__tab__element} ${styles.active} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            {"Open Order (2)"}
-          </div>
-          <div
-            className={`${styles.orderbook__tab__element} ${
-              theme === "dark" ? styles.dark : styles.light
-            }`}
-          >
-            {"Trade History"}
-          </div>
-        </div>
-        <OrderbookTable openOrdersData={myOrders} /> */}
       </div>
     </div>
   );
@@ -2008,4 +1631,3 @@ const stateToProps = (state) => {
 };
 
 export default connect(stateToProps)(OrderBook);
-// export default OrderBook;

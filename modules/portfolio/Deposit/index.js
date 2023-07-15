@@ -5,7 +5,7 @@ import {
   generatePostBodyBroadcast,
 } from '@tharsis/provider/dist/rest/broadcast';
 import { createTxIBCMsgTransfer } from '@tharsis/transactions';
-import { Button, Col, Form, message, Modal, Row, Spin } from 'antd';
+import { Button, Col, Form, message, Modal, Row } from 'antd';
 import Long from 'long';
 import * as PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -406,7 +406,6 @@ const Deposit = ({
         width={480}
         onCancel={handleCancel}
         onOk={handleOk}
-        // closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
         title="IBC Deposit"
       >
         <Form layout="vertical">
@@ -420,7 +419,6 @@ const Deposit = ({
                 />
               </Form.Item>
             </Col>
-            {/* <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" /> */}
             <Col>
               <Form.Item label="To">
                 <CustomInput
@@ -438,12 +436,11 @@ const Deposit = ({
                   Amount to Deposit
                 </div>
                 <div className="availabe-balance">
-                  {/* Available */}
                   {balanceInProgress ? (
                     <Loading height={30} />
                   ) : (
                     <>
-                    <span className="assets-maxhalf">
+                      <span className="assets-maxhalf">
                         <Button
                           className="active"
                           onClick={() => {
@@ -474,7 +471,6 @@ const Deposit = ({
                           0}{' '}
                         {denomConversion(chain?.coinMinimalDenom || '')}
                       </span>
-                      
                     </>
                   )}
                 </div>

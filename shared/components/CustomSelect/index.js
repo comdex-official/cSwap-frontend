@@ -1,7 +1,11 @@
 import { Select, Input } from 'antd';
 import * as PropTypes from 'prop-types';
 import React from 'react';
-import { amountConversionWithComma, denomConversion, getDenomBalance } from '../../../utils/coin';
+import {
+  amountConversionWithComma,
+  denomConversion,
+  getDenomBalance,
+} from '../../../utils/coin';
 import NoDataIcon from '../../components/NoDataIcon/index';
 import { Icon } from '../../image/Icon';
 import { NextImage } from '../../image/NextImage';
@@ -18,7 +22,7 @@ const CustomSelect = ({
   disabled,
   onSearchChange,
   assetMap,
-  balances
+  balances,
 }) => {
   return (
     <Select
@@ -74,11 +78,10 @@ const CustomSelect = ({
       )}
     >
       {list &&
-        list.map((record) => {
+        list.map((record, i) => {
           const item = record?.denom ? record?.denom : record;
           return (
-            <>
-              <Option key={item} value={item}>
+              <Option key={i} value={item}>
                 <div className="select-inner">
                   <div className="svg-icon">
                     <div className="svg-icon-inner swap-svg-icon-inner">
@@ -91,13 +94,14 @@ const CustomSelect = ({
                       <div className="name">{denomConversion(item)}</div>
                     </div>
                   </div>
-                  <div className={'select-pair-end-content'}>{amountConversionWithComma(
-                              getDenomBalance(balances, item) || 0,
-                              assetMap[item]?.decimals
-                            )}</div>
+                  <div className={'select-pair-end-content'}>
+                    {amountConversionWithComma(
+                      getDenomBalance(balances, item) || 0,
+                      assetMap[item]?.decimals
+                    )}
+                  </div>
                 </div>
               </Option>
-            </>
           );
         })}
     </Select>
