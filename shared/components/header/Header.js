@@ -448,25 +448,24 @@ const Header = ({
     },
   ];
 
-  const [visible, setVisible] = useState(false)
-  
+  const [visible, setVisible] = useState(false);
+
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 200){
-      setVisible(true)
-    } 
-    else if (scrolled <= 200){
-      setVisible(false)
+    if (scrolled > 200) {
+      setVisible(true);
+    } else if (scrolled <= 200) {
+      setVisible(false);
     }
   };
-  
-  const scrollToTop = () =>{
+
+  const scrollToTop = () => {
     window.scrollTo({
-      top: 0, 
-      behavior: 'smooth'
+      top: 0,
+      behavior: 'smooth',
     });
   };
-  
+
   window.addEventListener('scroll', toggleVisible);
 
   return (
@@ -642,12 +641,12 @@ const Header = ({
           </div>
         </div>
 
-        <div className="top-div" onClick={scrollToTop} style={{display: visible ? '' : 'none'}}>
-          
-        <Icon
-                    className={`bi bi-chevron-up cursor`}
-                    size={'1.5rem'}
-                  />
+        <div
+          className="top-div"
+          onClick={scrollToTop}
+          style={{ display: visible ? '' : 'none' }}
+        >
+          <Icon className={`bi bi-chevron-up cursor`} size={'1.5rem'} />
         </div>
 
         <Modal
@@ -659,7 +658,7 @@ const Header = ({
           footer={null}
           header={null}
         >
-          <ConnectModal handleCancel={handleCancel2}/>
+          <ConnectModal handleCancel={handleCancel2} />
         </Modal>
 
         <Modal

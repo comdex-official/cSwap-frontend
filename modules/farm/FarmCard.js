@@ -77,6 +77,10 @@ const FarmCard = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
+  userCurrentProposalData,
+  currentProposalAllData,
+  protectedEmission,
+  proposalId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
@@ -170,7 +174,7 @@ const FarmCard = ({
   };
 
   const calculateRewardPerDay2 = (_totalApr) => {
-    console.log(_totalApr, "_totalApr")
+    console.log(_totalApr, '_totalApr');
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
@@ -337,69 +341,6 @@ const FarmCard = ({
     }
   }, []);
 
-  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
-  const [currentProposalAllData, setCurrentProposalAllData] = useState();
-  const [protectedEmission, setProtectedEmission] = useState(0);
-  const [proposalId, setProposalId] = useState();
-
-  useEffect(() => {
-    fetchVotingCurrentProposalId();
-  }, []);
-
-  const fetchVotingCurrentProposalId = () => {
-    votingCurrentProposalId(PRODUCT_ID)
-      .then((res) => {
-        setProposalId(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    if (proposalId) {
-      fetchuserProposalProjectedEmission(proposalId);
-      fetchVotingCurrentProposal(proposalId);
-    }
-  }, [address, proposalId]);
-
-  useEffect(() => {
-    if (address) {
-      fetchEmissiondata(address);
-    }
-  }, [address]);
-
-  const fetchuserProposalProjectedEmission = (proposalId) => {
-    userProposalProjectedEmission(proposalId)
-      .then((res) => {
-        setProtectedEmission(amountConversion(res));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchVotingCurrentProposal = (proposalId) => {
-    votingCurrentProposal(proposalId)
-      .then((res) => {
-        setCurrentProposalAllData(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchEmissiondata = (address) => {
-    emissiondata(address, (error, result) => {
-      if (error) {
-        message.error(error);
-        console.log(error, 'Emission Api error');
-        return;
-      }
-      setUserCurrentProposalData(result?.data);
-    });
-  };
-
   const calculateVaultEmission = (id) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
       (item) => item?.pair_id === Number(id) + 1000000
@@ -501,19 +442,21 @@ const FarmCard = ({
         poolExternalIncentiveData &&
         showMoreData &&
         poolExternalIncentiveData.length <= 0 &&
-        styles.card__active 
+        styles.card__active
       } 
       ${
         poolExternalIncentiveData &&
         showMoreData &&
         poolExternalIncentiveData.length > 0 &&
-       styles.card__active4
+        styles.card__active4
       } 
-      ${ showMoreData &&
+      ${
+        showMoreData &&
         calculateAPY(
           calculatePoolLiquidity(pool?.balances),
           Number(pool?.id)
-        ) && styles.card__active3
+        ) &&
+        styles.card__active3
       }
       ${getMasterPool() && showMoreData && styles.card__active2}  ${
         theme === 'dark' ? styles.dark : styles.light
@@ -1195,90 +1138,88 @@ const FarmCard = ({
               }`}
             >
               {poolExternalIncentiveData &&
-                (poolExternalIncentiveData.length > 0 || calculateAPY(
+              (poolExternalIncentiveData.length > 0 ||
+                calculateAPY(
                   calculatePoolLiquidity(pool?.balances),
                   Number(pool?.id)
                 )) ? (
+                <div
+                  className={`${styles.farmCard__footer__main} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                >
                   <div
-                    className={`${styles.farmCard__footer__main} ${
+                    className={`${styles.farmCard__footer__left__title} ${
                       theme === 'dark' ? styles.dark : styles.light
                     }`}
                   >
-                    <div
-                      className={`${styles.farmCard__footer__left__title} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      {'Estimated rewards earned per day'}
-                    </div> 
-                    <div
-                      className={`${styles.farmCard__footer__rewards} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      {poolExternalIncentiveData && poolExternalIncentiveData.length > 0 &&
-                        poolExternalIncentiveData?.map((singleIncentive) => {
-                          return (
-                            <div
-                              className={`${
-                                styles.farmCard__footer__rewards__title
-                              }
+                    {'Estimated rewards earned per day'}
+                  </div>
+                  <div
+                    className={`${styles.farmCard__footer__rewards} ${
+                      theme === 'dark' ? styles.dark : styles.light
+                    }`}
+                  >
+                    {poolExternalIncentiveData &&
+                      poolExternalIncentiveData.length > 0 &&
+                      poolExternalIncentiveData?.map((singleIncentive) => {
+                        return (
+                          <div
+                            className={`${
+                              styles.farmCard__footer__rewards__title
+                            }
                               ${
                                 poolExternalIncentiveData.length > 1
                                   ? styles.margin
                                   : ''
                               }
                               ${theme === 'dark' ? styles.dark : styles.light}`}
-                              key={singleIncentive?.denom}
-                            >
-                              <NextImage
-                                src={
-                                  iconList?.[singleIncentive?.denom]
-                                    ?.coinImageUrl
-                                }
-                                width={50}
-                                height={50}
-                                alt=""
-                              />{' '}
-                              ${calculateRewardPerDay(singleIncentive)}
-                            </div>
-                          );
-                        })}
-
-                          {calculateAPY(
-                              calculatePoolLiquidity(pool?.balances),
-                              Number(pool?.id)
-                            ) ? <div
-                              className={`${
-                                styles.farmCard__footer__rewards__title
+                            key={singleIncentive?.denom}
+                          >
+                            <NextImage
+                              src={
+                                iconList?.[singleIncentive?.denom]?.coinImageUrl
                               }
-                              ${poolExternalIncentiveData.length > 0 ? styles.marginTop : ""}
+                              width={50}
+                              height={50}
+                              alt=""
+                            />{' '}
+                            ${calculateRewardPerDay(singleIncentive)}
+                          </div>
+                        );
+                      })}
+
+                    {calculateAPY(
+                      calculatePoolLiquidity(pool?.balances),
+                      Number(pool?.id)
+                    ) ? (
+                      <div
+                        className={`${styles.farmCard__footer__rewards__title}
+                              ${
+                                poolExternalIncentiveData.length > 0
+                                  ? styles.marginTop
+                                  : ''
+                              }
                               ${theme === 'dark' ? styles.dark : styles.light}`}
-                              
-                            >
-                              <NextImage
-                                src={
-                                  iconList?.["uharbor"]
-                                    ?.coinImageUrl
-                                }
-                                width={50}
-                                height={50}
-                                alt=""
-                              />{' '}
-                              ${calculateRewardPerDay2(
-                                  calculateAPY(
-                                    calculatePoolLiquidity(pool?.balances),
-                                    Number(pool?.id)
-                                  )  
-                             )}
-                            </div>
-                            :
-                            null}
-                    </div>
+                      >
+                        <NextImage
+                          src={iconList?.['uharbor']?.coinImageUrl}
+                          width={50}
+                          height={50}
+                          alt=""
+                        />{' '}
+                        $
+                        {calculateRewardPerDay2(
+                          calculateAPY(
+                            calculatePoolLiquidity(pool?.balances),
+                            Number(pool?.id)
+                          )
+                        )}
+                      </div>
+                    ) : null}
                   </div>
-
-
-                ) :null}
+                </div>
+              ) : null}
 
               <div
                 className={`${styles.farmCard__footer__main} ${

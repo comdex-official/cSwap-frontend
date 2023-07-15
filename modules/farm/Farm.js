@@ -30,12 +30,17 @@ import {
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS,
   MASTER_POOL_ID,
+  PRODUCT_ID,
 } from '../../constants/common';
 import {
   fetchRestAPRs,
   queryPoolCoinDeserialize,
   queryPoolsList,
   queryPoolSoftLocks,
+  userProposalProjectedEmission,
+  votingCurrentProposal,
+  votingCurrentProposalId,
+  emissiondata,
 } from '../../services/liquidity/query';
 import {
   amountConversion,
@@ -458,6 +463,71 @@ const Farm = ({
   }, [displayPools])
 
   
+  const [userCurrentProposalData, setUserCurrentProposalData] = useState();
+  const [currentProposalAllData, setCurrentProposalAllData] = useState();
+  const [protectedEmission, setProtectedEmission] = useState(0);
+  const [proposalId, setProposalId] = useState();
+
+
+  useEffect(() => {
+    console.log('resttt');
+      fetchVotingCurrentProposalId();
+  }, []);
+
+  const fetchVotingCurrentProposalId = () => {
+    votingCurrentProposalId(PRODUCT_ID)
+      .then((res) => {
+        setProposalId(res);
+        console.log(res, 'res');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (proposalId) {
+      fetchuserProposalProjectedEmission(proposalId);
+      fetchVotingCurrentProposal(proposalId);
+    }
+  }, [address, proposalId]);
+
+  useEffect(() => {
+    if (address) {
+      fetchEmissiondata(address);
+    }
+  }, [address]);
+
+  const fetchuserProposalProjectedEmission = (proposalId) => {
+    userProposalProjectedEmission(proposalId)
+      .then((res) => {
+        setProtectedEmission(amountConversion(res));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchVotingCurrentProposal = (proposalId) => {
+    votingCurrentProposal(proposalId)
+      .then((res) => {
+        setCurrentProposalAllData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchEmissiondata = (address) => {
+    emissiondata(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        console.log(error, 'Emission Api error');
+        return;
+      }
+      setUserCurrentProposalData(result?.data);
+    });
+  };
 
   return (
     <div
@@ -933,6 +1003,10 @@ const Farm = ({
                     poolsApr={poolsApr?.[item?.id?.toNumber()]}
                     poolAprList={poolsApr && poolsApr}
                     masterPoolData={masterPoolData}
+                    userCurrentProposalData={userCurrentProposalData}
+                    currentProposalAllData={currentProposalAllData}
+                    protectedEmission={protectedEmission}
+                    proposalId={proposalId}
                   />
                 );
               })}
