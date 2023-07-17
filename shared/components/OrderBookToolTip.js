@@ -1,24 +1,20 @@
-import { Col, Row, Slider } from "antd";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { getAMP, rangeToPercentage } from "../../utils/number";
+import { Col, Row } from 'antd';
 
-const OrderBookTooltipContent = ({
-  price,
-  total,
-}) => {
+const OrderBookTooltipContent = ({ price, total }) => {
   return (
-    <div className={"orderbook__tooltip"}>
+    <div className={'orderbook__tooltip'}>
       <Row>
+        <Col>Avg Price</Col>
         <Col>
-          Avg Price 
+          {' '}
+          <span className="ml-2">~</span> {Number(price).toFixed(3)}
         </Col>
-        <Col> <span className="ml-2">~</span> {Number(price).toFixed(3)}</Col>
       </Row>
       <Row>
+        <Col>Total USD</Col>
         <Col>
-          Total USD
+          <span className="ml-2">~</span> ${Number(total).toFixed(2)}
         </Col>
-        <Col><span className="ml-2">~</span> ${Number(total).toFixed(2)}</Col>
       </Row>
     </div>
   );

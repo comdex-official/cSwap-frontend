@@ -21,10 +21,7 @@ import {
   setUserLiquidityInPools,
   setShowMyPool,
 } from '../../actions/liquidity';
-import {
-  DOLLAR_DECIMALS,
-  PRICE_DECIMALS,
-} from '../../constants/common';
+import { DOLLAR_DECIMALS, PRICE_DECIMALS } from '../../constants/common';
 import {
   amountConversion,
   commaSeparatorWithRounding,
@@ -114,7 +111,7 @@ const FarmCard = ({
     const totalMasterPoolApr = poolsApr?.incentive_rewards.filter(
       (reward) => reward.master_pool
     );
-   
+
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -639,11 +636,13 @@ const FarmCard = ({
                           >
                             <NextImage src={HirborLogo} alt="Logo" />
                             {pool?.id &&
-                              commaSeparator(
-                                calculateVaultEmission(
-                                  pool?.id?.toNumber()
-                                ).toFixed(2)
-                              )}
+                            calculateVaultEmission(pool?.id?.toNumber())
+                              ? commaSeparator(
+                                  formatNumber(
+                                    calculateVaultEmission(pool?.id?.toNumber())
+                                  )
+                                )
+                              : Number(0).toFixed(2)}
                           </div>
                         </Tooltip>
                       </div>
@@ -712,9 +711,9 @@ const FarmCard = ({
                               Number(decimalConversion(pool?.maxPrice)).toFixed(
                                 PRICE_DECIMALS
                               ) ? (
-                              <NextImage src={RangeGreen} alt="Logo"/>
+                              <NextImage src={RangeGreen} alt="Logo" />
                             ) : (
-                              <NextImage src={RangeRed} alt="Logo"/>
+                              <NextImage src={RangeRed} alt="Logo" />
                             )}
                             {Number(decimalConversion(pool?.price)).toFixed(
                               PRICE_DECIMALS
@@ -890,7 +889,7 @@ const FarmCard = ({
                       }`}
                     >
                       <NextImage src={Current} alt="Logo" />
-                     
+
                       {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
                     </div>
                   </div>

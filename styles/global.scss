@@ -797,6 +797,10 @@ a {
   }
 }
 
+.deposit-input {
+  text-align: left;
+}
+
 .ant-select {
   background: none;
 
@@ -1627,6 +1631,74 @@ a {
         background: #051637;
 
         width: 100%;
+
+        .ant-tabs-ink-bar {
+          display: none !important;
+          width: 0px !important;
+        }
+
+        .ant-tabs-ink-bar-animated {
+          display: none !important;
+          width: 0px !important;
+        }
+
+        .ant-tabs-tab {
+          width: 100%;
+          text-align: center;
+          color: $primary-color;
+          font-weight: 400;
+          font-size: $font-size-base - 2;
+          margin-left: 0;
+
+          padding: 8px 18px;
+          border-radius: 20px;
+          background: none;
+          border: 0;
+          .ant-tabs-tab-btn {
+            width: 100%;
+            color: white;
+            opacity: 0.4000000059604645;
+            .dark-mode & {
+              color: $white;
+            }
+          }
+
+          &:hover {
+            background: rgba(#fe2b56, 0.5);
+          }
+
+          &.ant-tabs-tab-active {
+            background: #fe2b56;
+            border-color: #fe2b56;
+            opacity: 1;
+
+            .ant-tabs-tab-btn {
+              font-weight: 400;
+              color: $white;
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.farm-liquidity-tab {
+  .ant-tabs-nav {
+    margin-bottom: 0 !important;
+    &:before {
+      display: none;
+    }
+
+    .ant-tabs-nav-wrap {
+      width: 100%;
+
+      .ant-tabs-nav-list {
+        border-radius: 20px;
+        background: #051637;
+        width: 100%;
+        max-width: 250px;
 
         .ant-tabs-ink-bar {
           display: none !important;

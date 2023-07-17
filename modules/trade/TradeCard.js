@@ -113,7 +113,7 @@ const TradeCard = ({
   let theme = 'dark';
   const [toggleValue, setToggleValue] = useState(false);
   const [loading, setLoading] = useState(true);
- 
+
   const handleToggleValue = (e) => {
     setToggleValue(e.target.checked);
     localStorage.setItem('trade', e.target.checked);
@@ -1154,11 +1154,7 @@ const TradeCard = ({
           </div>
         </div>
       ) : (
-        <div
-          className={`${styles.tradeCard__head__orderbook} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-        >
+        <div>
           <OrderBook
             handleToggleValue={handleToggleValue}
             toggleValue={toggleValue}
