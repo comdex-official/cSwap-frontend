@@ -7,9 +7,8 @@ import {
   getDenomBalance,
 } from '../../../utils/coin';
 import NoDataIcon from '../../components/NoDataIcon/index';
-import { Icon } from '../../image/Icon';
 import { NextImage } from '../../image/NextImage';
-import { ATOM, DownArrow, Drop } from '../../image';
+import { Drop } from '../../image';
 
 const Option = Select.Option;
 
@@ -68,8 +67,6 @@ const CustomSelect = ({
                 className="pair__input2"
                 placeholder="Select a token by symbol"
                 onChange={(event) => onSearchChange(event.target.value)}
-                // prefix={<Icon className={'bi bi-search'} />}
-                // ref={ref}
               />
             </div>
           </div>
@@ -81,27 +78,27 @@ const CustomSelect = ({
         list.map((record, i) => {
           const item = record?.denom ? record?.denom : record;
           return (
-              <Option key={i} value={item}>
-                <div className="select-inner">
-                  <div className="svg-icon">
-                    <div className="svg-icon-inner swap-svg-icon-inner">
-                      <NextImage
-                        src={iconList?.[item]?.coinImageUrl}
-                        alt={'logo'}
-                        height={25}
-                        width={25}
-                      />
-                      <div className="name">{denomConversion(item)}</div>
-                    </div>
-                  </div>
-                  <div className={'select-pair-end-content'}>
-                    {amountConversionWithComma(
-                      getDenomBalance(balances, item) || 0,
-                      assetMap[item]?.decimals
-                    )}
+            <Option key={i} value={item}>
+              <div className="select-inner">
+                <div className="svg-icon">
+                  <div className="svg-icon-inner swap-svg-icon-inner">
+                    <NextImage
+                      src={iconList?.[item]?.coinImageUrl}
+                      alt={'logo'}
+                      height={25}
+                      width={25}
+                    />
+                    <div className="name">{denomConversion(item)}</div>
                   </div>
                 </div>
-              </Option>
+                <div className={'select-pair-end-content'}>
+                  {amountConversionWithComma(
+                    getDenomBalance(balances, item) || 0,
+                    assetMap[item]?.decimals
+                  )}
+                </div>
+              </div>
+            </Option>
           );
         })}
     </Select>

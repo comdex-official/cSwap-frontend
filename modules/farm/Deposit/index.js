@@ -46,7 +46,6 @@ import PoolDetails from "../poolDetail";
 import { Icon } from "../../../shared/image/Icon";
 
 const Deposit = ({
-  active,
   theme,
   lang,
   address,
@@ -701,7 +700,7 @@ const Deposit = ({
           </div>
         </div>
       </div>
-      <PoolDetails active={active} pool={pool} />
+      <PoolDetails pool={pool} />
 
       <div className={styles.farm__deposit__buttonWrap}>
         <Button

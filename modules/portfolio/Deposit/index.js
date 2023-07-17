@@ -414,6 +414,7 @@ const Deposit = ({
               <Form.Item label="From">
                 <CustomInput
                   type="text"
+                  className={'deposit-input'}
                   value={truncateString(sourceAddress, 9, 9)}
                   disabled
                 />
@@ -423,6 +424,7 @@ const Deposit = ({
               <Form.Item label="To">
                 <CustomInput
                   type="text"
+                  className={'deposit-input'}
                   value={truncateString(address, 9, 9)}
                   disabled
                 />

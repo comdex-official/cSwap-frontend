@@ -29,13 +29,8 @@ export const HeaderData = [
     name: 'Govern',
     route: '/govern',
   },
-  // {
-  //   id: 4,
-  //   name: "ORDERBOOK",
-  //   route: "/orderbook",
-  // },
   {
-    id: 5,
+    id: 4,
     name: 'Bridge',
     route: '/bridge',
   },

@@ -259,6 +259,7 @@ const Withdraw = ({
               <Form.Item label="From">
                 <CustomInput
                   type="text"
+                  className={'deposit-input'}
                   value={truncateString(address, 9, 9)}
                   disabled
                 />
@@ -268,6 +269,7 @@ const Withdraw = ({
               <Form.Item label="To">
                 <CustomInput
                   type="text"
+                  className={'deposit-input'}
                   value={truncateString(destinationAddress, 9, 9)}
                   disabled
                 />
@@ -295,13 +297,10 @@ const Withdraw = ({
                     {chain?.balance?.amount || 0}{' '}
                     {denomConversion(chain?.coinMinimalDenom) || ''}
                   </span>
-                  
                 </div>
               </div>
 
-              <Form.Item
-                className="assets-input-box"
-              >
+              <Form.Item className="assets-input-box">
                 <CustomInput
                   value={amount}
                   onChange={(event) => onChange(event.target.value)}

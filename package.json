@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:staging": "env-cmd -f .env.staging next dev",
+    "dev:production": "env-cmd -f .env.production next dev",
+    "build:staging": "env-cmd -f .env.staging next build && next export",
+    "build:production": "env-cmd -f .env.production next build && next export",
+    "start:staging": "env-cmd -f .env.staging next start",
+    "start:production": "env-cmd -f .env.production next start"
   },
   "dependencies": {
     "@cosmjs/crypto": "^0.30.1",
@@ -35,6 +41,7 @@
     "comdex-codec": "comdex-official/proto-codecs#development",
     "cosmjs-types": "^0.7.1",
     "cosmwasm": "^1.1.1",
+    "env-cmd": "^10.1.0",
     "highcharts": "^10.3.2",
     "highcharts-react-official": "^3.2.0",
     "js-base64": "^3.7.5",

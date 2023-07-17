@@ -1,4 +1,4 @@
-import { Button, Dropdown, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import * as PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
@@ -62,29 +62,11 @@ const DisConnectModal = ({
     setIsModalOpen2(false);
   };
 
-  // const items = [
-  //   {
-  //     label: (
-
-  //     ),
-  //     key: "item-1",
-  //   },
-  // ];
-
   return (
     <div id={'topRightToogle'}>
-      {/* <Dropdown
-        menu={{ items }}
-        trigger={["click"]}
-        placement="bottomRight"
-        overlayClassName="dropconnect-overlay"
-        autoAdjustOverflow={false}
-        getPopupContainer={() => document.getElementById("topRightToogle")}
-      > */}
       <div className="connected_button" onClick={showModal2}>
         <Icon className={'bi bi-person-circle'} />
       </div>
-      {/* </Dropdown> */}
 
       <Modal
         centered={true}
@@ -99,7 +81,6 @@ const DisConnectModal = ({
       >
         <div className="wallet-connect-dropdown text-left">
           <div className="wallet-connect-upper">
-            {/* <span /> */}
             <div className="wallet-connect-tl">Account </div>
             <div className="wallet-connect-des">
               {`Connected with
@@ -173,35 +154,6 @@ const DisConnectModal = ({
                 </div>
               </div>
             </div>
-            {/* <div className="px-3">
-            <div> {variables[lang].balance_wallet}</div>
-            <div className="balance__value__data">
-              {amountConversionWithComma(
-                getDenomBalance(balances, comdex?.coinMinimalDenom) || 0
-              )}{' '}
-              {denomConversion(comdex?.coinMinimalDenom)}
-            </div>
-          </div>
-          <div className="mt-2 px-3">
-            <div>{variables[lang].address_wallet} </div>
-            <div className="wallet-address">
-              <div className="address-wallet-address d-flex">
-                <span className="mr-3"> {truncateString(address, 6, 6)} </span>{' '}
-                <Copy text={address} />
-              </div>
-            </div>
-          </div>
-          <div className="mb-2 mt-3">
-            <Button
-              type="primary"
-              onClick={showModal}
-              className="btn-filled"
-              block
-              size="small"
-            >
-              {variables[lang].disconnect}
-            </Button>
-          </div>*/}
           </div>
         </div>
       </Modal>

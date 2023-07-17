@@ -86,7 +86,6 @@
   font-size: 16px;
   line-height: 18px;
   text-align: center;
-  // opacity: 0.5;
   text-transform: capitalize;
 
   &.light {
@@ -100,45 +99,24 @@
   &.active {
     font-weight: 500;
     color: #fe2b56;
-    // opacity: 1;
-
-    // &::first-letter {
-    //   text-decoration: underline;
-    // }
   }
 
   @media screen and (max-width: 1130px) {
     margin-left: 20px;
   }
-
-  // @media screen and (max-width: $XL) {
-  //   font-size: 14px;
-  // }
-
-  // @media screen and (max-width: $MIX) {
-  //   font-size: 12px;
-  // }
 }
 
 .header__cSwap {
-  // padding: 5px 10px;
-  // width: 110px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // background: $red;
   background: #0f1022;
   border-radius: 23px;
   padding: 15px;
-  // margin-right: 10px;
   cursor: pointer;
   & > * {
     pointer-events: none;
   }
-
-  // @media screen and (max-width: $XL) {
-  //   width: 140px;
-  // }
 
   @media screen and (max-width: $L) {
     display: none;
@@ -149,23 +127,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // background: $red;
   background: #0f1022;
   border-radius: 23px;
   padding: 15px;
-  // padding: 5px 10px;
-  // width: 110px;
-  // margin-right: 10px;
   cursor: pointer;
 
   img {
     width: 18.92px;
     height: 18.92px;
   }
-
-  // @media screen and (max-width: $XL) {
-  //   width: 110px;
-  // }
 
   @media screen and (max-width: $L) {
     display: none;
@@ -190,33 +160,22 @@
 }
 
 .header__wallet {
-  // background: $red;
   background: #0f1022;
   border-radius: 23px;
   padding: 15px;
-  // width: 110px;
-  // margin-right: 10px;
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
   text-align: center;
-  // color: $white;
   color: #d9d9d9;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
+
   & > * {
     pointer-events: none;
   }
-
-  // @media screen and (max-width: $XL) {
-  //   width: 150px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   display: none;
-  // }
 }
 
 .header__cSwap__main {
@@ -243,18 +202,6 @@
   &.dark {
     color: $white;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
-
-  // @media screen and (max-width: $XL) {
-  //   font-size: 14px;
-  // }
-
-  // @media screen and (max-width: $MIX) {
-  //   font-size: 12px;
-  // }
 }
 
 .header__faucet__title {
@@ -271,18 +218,6 @@
   &.dark {
     color: $white;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
-
-  // @media screen and (max-width: $XL) {
-  //   font-size: 14px;
-  // }
-
-  // @media screen and (max-width: $MIX) {
-  //   font-size: 12px;
-  // }
 }
 
 .header__wallet__title {
@@ -297,18 +232,6 @@
   &.dark {
     color: $white;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
-
-  // @media screen and (max-width: $XL) {
-  //   font-size: 14px;
-  // }
-
-  // @media screen and (max-width: $MIX) {
-  //   font-size: 12px;
-  // }
 }
 
 .icon_dark {
@@ -357,7 +280,6 @@
 }
 
 .dropdown__wallet__menu {
-  // width: 280px;
   padding: 35px 25px;
   display: flex;
   flex-direction: column;
@@ -372,7 +294,6 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
-    /* identical to box height */
     width: 100%;
     margin-top: 20px;
     text-align: center;
@@ -415,7 +336,6 @@
   font-weight: 500;
   font-size: 22px;
   line-height: 24px;
-  // text-align: center;
   color: $white;
 
   &.span {
@@ -431,23 +351,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // background: $red;
   background: #0f1022;
   border-radius: 23px;
   padding: 15px;
-  // padding: 5px 10px;
-  // width: 70px;
-  // margin-right: 10px;
-  cursor: pointer;
+  cursor: not-allowed;
 
   img {
     width: 18.92px;
     height: 18.92px;
   }
-
-  // @media screen and (max-width: $XL) {
-  //   width: 110px;
-  // }
 
   @media screen and (max-width: $L) {
     display: none;
@@ -467,18 +379,6 @@
   &.dark {
     color: $white;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 16px;
-  // }
-
-  // @media screen and (max-width: $XL) {
-  //   font-size: 14px;
-  // }
-
-  // @media screen and (max-width: $MIX) {
-  //   font-size: 12px;
-  // }
 }
 
 .dropdown__wallet__wrap {

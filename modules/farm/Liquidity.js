@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from './Farm.module.scss';
 import { NextImage } from '../../shared/image/NextImage';
 import { TradePair } from '../../shared/image';
-import Tab from '../../shared/components/tab/Tab';
+import { Tabs } from 'antd';
 import { message } from 'antd';
 import * as PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
@@ -50,9 +50,7 @@ const Liquidity = ({
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const TabData = ['DEPOSIT', 'WITHDRAW'];
 
-  const [active, setActive] = useState('DEPOSIT');
   const [providedTokens, setProvidedTokens] = useState();
   const [activeSoftLock, setActiveSoftLock] = useState(0);
   const [queuedSoftLocks, setQueuedSoftLocks] = useState(0);
@@ -198,9 +196,31 @@ const Liquidity = ({
     }
   }, [pool?.id, providedTokens, calculatePoolLiquidity]);
 
-  const handleActive = (item) => {
-    setActive(item);
-  };
+  const tabItems = [
+    {
+      label: 'DEPOSIT',
+      key: '1',
+      children: (
+        <Deposit
+          pool={pool}
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+        />
+      ),
+    },
+    {
+      label: 'WITHDRAW',
+      key: '2',
+      children: (
+        <Withdraw
+          pool={pool}
+          refreshData={queryPoolBalance}
+          updateBalance={handleBalanceRefresh}
+          userLockedPoolTokens={userLockedPoolTokens}
+        />
+      ),
+    },
+  ];
 
   return (
     <div
@@ -218,35 +238,26 @@ const Liquidity = ({
             theme === 'dark' ? styles.dark : styles.light
           }`}
         >
-          <Tab data={TabData} active={active} handleActive={handleActive} />
-        </div>
-        <div
-          className={`${styles.liquidityCard__trade__pair} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
-          onClick={() => router.push('/')}
-        >
-          <NextImage src={TradePair} alt={'Arrow'} />
-          {'Trade Pair'}
+          <Tabs
+            defaultActiveKey="1"
+            tabBarExtraContent={
+              <>
+                <div
+                  className={`${styles.liquidityCard__trade__pair} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
+                  onClick={() => router.push('/')}
+                >
+                  <NextImage src={TradePair} alt={'Arrow'} />
+                  {'Trade Pair'}
+                </div>
+              </>
+            }
+            items={tabItems}
+            className="farm-liquidity-tab"
+          />
         </div>
       </div>
-
-      {active === 'DEPOSIT' ? (
-        <Deposit
-          pool={pool}
-          active={active}
-          refreshData={queryPoolBalance}
-          updateBalance={handleBalanceRefresh}
-        />
-      ) : (
-        <Withdraw
-          pool={pool}
-          active={active}
-          refreshData={queryPoolBalance}
-          updateBalance={handleBalanceRefresh}
-          userLockedPoolTokens={userLockedPoolTokens}
-        />
-      )}
     </div>
   );
 };

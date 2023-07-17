@@ -12,7 +12,6 @@ import {
   fetchKeplrAccountName,
   initializeChain,
 } from '../../../services/keplr';
-import variables from '../../../utils/variables';
 import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
@@ -23,7 +22,7 @@ const ConnectModal = ({
   setAccountName,
   lang,
   showAccountConnectModal,
-  handleCancel
+  handleCancel,
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
@@ -45,7 +44,7 @@ const ConnectModal = ({
       localStorage.setItem('ac', encode(account.address));
       localStorage.setItem('loginType', walletType || 'keplr');
       showAccountConnectModal(false);
-      handleCancel()
+      handleCancel();
     });
   };
 
@@ -97,19 +96,9 @@ const ConnectModal = ({
             />
           </div>
           <div className={styles.dropdown__wallet__title2}>
-            <ButtonSubmit   handleCancel={handleCancel}/>
+            <ButtonSubmit handleCancel={handleCancel} />
           </div>
         </div>
-
-        {/* <button onClick={() => handleConnectToWallet("keplr")}>
-          {"Keplr Wallet"}
-        </button>
-        <button onClick={() => handleConnectToWallet("leap")}>
-          {"Leap Cosmos Wallet"}
-        </button>
-        <button>
-          <ButtonSubmit />
-        </button> */}
       </div>
     </Spin>
   );
