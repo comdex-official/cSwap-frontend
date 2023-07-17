@@ -5,12 +5,11 @@
   margin: auto;
   padding: 0px 115px;
   position: relative;
-  // padding-top: 100px;
   padding-top: 20px;
   padding-bottom: 20px;
+
   @media screen and (max-width: $XS) {
     padding: 20px;
-    // padding-top: 80px;
   }
 }
 
@@ -23,9 +22,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%);
-  // border: 2px solid #303950;
-  // border-radius: 20px;
   border-radius: 15px;
   border: 1px solid #4f4f4f;
   background: linear-gradient(85deg, #070e1b 0%, #161440 48.59%, #070e1c 100%);
@@ -60,9 +56,6 @@
 }
 
 .portfolio__element__title {
-  // font-weight: 600;
-  // font-size: 25px;
-  // line-height: 44px;
   text-align: center;
   color: #ffffff;
   font-size: 27px;
@@ -73,14 +66,6 @@
   @media screen and (max-width: $M) {
     font-size: 15px;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 31px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 26px;
-  // }
 }
 
 .portfolio__element {
@@ -93,27 +78,14 @@
 .portfolio__element__upper__title {
   display: flex;
   align-items: center;
-  // font-weight: 400;
-  // font-size: 15px;
-  // line-height: 24px;
   text-align: center;
   flex-wrap: wrap;
-  // color: #9badc7;
-
   color: #fff;
   text-align: center;
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
   line-height: normal;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
 
   div {
     height: 14px;
@@ -171,7 +143,6 @@
 }
 
 .farmCard__element__left__logo {
-  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 42px;
   width: 42px;
@@ -181,16 +152,9 @@
     margin-right: -15px;
     z-index: 1;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__left__logo__main {
-  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;
@@ -200,12 +164,6 @@
   img {
     height: 30px;
     width: 30px;
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -219,40 +177,16 @@
   &.tableActive {
     margin-top: 0;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .portfolio__table__apr {
   display: flex;
   align-items: center;
   gap: 15px;
-
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
-
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
 
   img {
     height: 30px;
@@ -264,16 +198,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
-
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
 }
 
 .farmCard__buttonWrap {
@@ -290,20 +215,6 @@
     border: none;
     outline: none;
     color: #ffffff;
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 13px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 8px;
-    // }
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -311,7 +222,6 @@
   position: absolute;
   right: 0;
   top: -35px;
-  // justify-content: flex-end;
   @media only screen and (max-width: 800px) {
     position: unset;
     justify-content: flex-start;
@@ -333,7 +243,6 @@
 
 .farmCard__element__right__wholetab {
   display: flex;
-  // align-items: flex-start;
   align-items: center;
   gap: 30px;
 }
@@ -349,13 +258,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  // width: 250px;
 
   &.card__view {
   }
   &.tableActive {
-    // margin-left: 40px;
-    // width: 100%;
     align-items: flex-start;
   }
 }
@@ -372,10 +278,8 @@
   padding: 1px;
   position: relative;
   background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
-  // background: #a1c7ff;
 
   &.upto {
-    // background: #2a55b1;
   }
 
   &.active {
@@ -384,9 +288,6 @@
 }
 
 .farmCard__element__right__pool__title {
-  // font-weight: 550;
-  // font-size: 12px;
-  // line-height: 17px;
   font-size: 14px;
   font-style: normal;
   font-weight: 200;
@@ -394,22 +295,12 @@
   padding: 4px 15px;
   color: #ffffff;
   background: #111234;
-  // border: 0.913px solid #2a55b1;
   border-radius: 41px;
   display: flex;
   align-items: center;
   clear: both;
   display: inline-block;
-
   white-space: nowrap;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 
   &.boost {
     font-size: 14px;
@@ -424,21 +315,13 @@
     height: 13px;
     margin-right: 5px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__apr__poll__wrap {
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
   background: linear-gradient(182deg, #8481a2 -18.18%, #443da2 53.31%);
-  // margin-top: 10px;
 }
 
 .farmCard__element__right__apr_pool__title {
@@ -455,15 +338,7 @@
   white-space: nowrap;
   transition: all 1s ease-in-out;
   cursor: pointer;
-  // &.show_text {
-  //   width: 160px;
-  //   padding: 2px 15px;
-  //   // line-height: 17px;
-  //   img {
-  //     height: 14px;
-  //     margin-right: 5px;
-  //   }
-  // }
+
   span {
     font-size: 10px;
   }
@@ -480,20 +355,12 @@
     height: 14px;
     margin-right: 5px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__right__basic {
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
-  // background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
   margin-left: 10px;
 
   &.red {
@@ -522,25 +389,13 @@
     cursor: pointer;
   }
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
   img {
     height: 17px;
     margin-right: 5px;
   }
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
-.farmCard__element__wrap{
+.farmCard__element__wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;

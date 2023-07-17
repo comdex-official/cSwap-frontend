@@ -1,7 +1,6 @@
-import { Col, Row, Slider } from "antd";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { getAMP, rangeToPercentage } from "../../utils/number";
-// import { Col, Row } from "./common";
+import { Col, Row, Slider } from 'antd';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { getAMP, rangeToPercentage } from '../../utils/number';
 
 const RangeTooltipContent = ({ min, max, price, parent }) => {
   const marks = {
@@ -13,7 +12,7 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
 
   return (
     <div>
-      {parent === "pool" ? (
+      {parent === 'pool' ? (
         <>
           <div className="text-center ranged2">
             <small>
@@ -35,28 +34,28 @@ const RangeTooltipContent = ({ min, max, price, parent }) => {
         </>
       ) : null}
       <Row>
-        <Col className="ranged-tooltip-title">Min Price  <span className="ml-2">:</span></Col>
         <Col className="ranged-tooltip-title">
-          {min}
+          Min Price <span className="ml-2">:</span>
         </Col>
+        <Col className="ranged-tooltip-title">{min}</Col>
       </Row>
       <Row>
-        <Col className="ranged-tooltip-title">Max Price <span className="ml-2">:</span></Col>
         <Col className="ranged-tooltip-title">
-           {max}
+          Max Price <span className="ml-2">:</span>
         </Col>
+        <Col className="ranged-tooltip-title">{max}</Col>
       </Row>
       <Row>
-        <Col className="ranged-tooltip-title">Current Price  <span className="ml-2">:</span></Col>
         <Col className="ranged-tooltip-title">
-          {price}
+          Current Price <span className="ml-2">:</span>
         </Col>
+        <Col className="ranged-tooltip-title">{price}</Col>
       </Row>
       <Row>
-        <Col className="ranged-tooltip-title">AMP <span className="ml-2">:</span> </Col>
         <Col className="ranged-tooltip-title">
-          {amp ? `x${amp}` : ""}
+          AMP <span className="ml-2">:</span>{' '}
         </Col>
+        <Col className="ranged-tooltip-title">{amp ? `x${amp}` : ''}</Col>
       </Row>
     </div>
   );

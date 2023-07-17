@@ -596,11 +596,13 @@ const FarmTable = ({
                       >
                         <NextImage src={HirborLogo} alt="Logo" />
                         {value?.id &&
-                          commaSeparator(
-                            calculateVaultEmission(
-                              value?.id?.toNumber()
-                            ).toFixed(2)
-                          )}
+                        calculateVaultEmission(value?.id?.toNumber())
+                          ? commaSeparator(
+                              formatNumber(
+                                calculateVaultEmission(value?.id?.toNumber())
+                              )
+                            )
+                          : Number(0).toFixed(2)}
                       </div>
                     </Tooltip>
                   </div>
@@ -1112,11 +1114,13 @@ const FarmTable = ({
                       >
                         <NextImage src={HirborLogo} alt="Logo" />
                         {value?.id &&
-                          commaSeparator(
-                            calculateVaultEmission(
-                              value?.id?.toNumber()
-                            ).toFixed(2)
-                          )}
+                        calculateVaultEmission(value?.id?.toNumber())
+                          ? commaSeparator(
+                              formatNumber(
+                                calculateVaultEmission(value?.id?.toNumber())
+                              )
+                            )
+                          : Number(0).toFixed(2)}
                       </div>
                     </Tooltip>
                   </div>

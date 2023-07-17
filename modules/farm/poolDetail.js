@@ -20,7 +20,6 @@ import PoolTokenValue from "./PoolTokenValue";
 const PoolDetails = ({
   address,
   theme,
-  active,
   pool,
   poolDetails,
   iconList,

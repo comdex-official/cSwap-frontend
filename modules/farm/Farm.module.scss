@@ -12,10 +12,8 @@
   }
 
   &.show__text__alert {
-    // padding-top: 160px;
   }
   &.text__alert {
-    // padding-top: 100px;
   }
 }
 
@@ -28,11 +26,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // gap: 20px;
   position: relative;
   background-image: url('../../public/assets/images/recback.svg');
   background-size: cover;
-  // border: 2px solid #303950;
   border-radius: 20px;
   border: 1px solid #333;
   padding: 20px;
@@ -49,36 +45,12 @@
     opacity: 0.3;
     border-radius: 20px;
   }
-
-  // @media screen and (max-width: $L) {
-  //   flex-direction: column;
-  // }
 }
 
 .farm__header__body__left {
-  // position: relative;
-  // background-image: url("../../public/assets/images/space.svg");
-  // background-size: cover;
-  // border: 2px solid #303950;
-  // border-radius: 20px;
-  // padding: 20px;
-  // width: 100%;
-  // height: 275px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  // justify-content: center;
-
-  // &::before {
-  //   content: "";
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   background: linear-gradient(180deg, #030b1e 0%, rgba(3, 11, 30, 0.71) 100%);
-  //   border-radius: 20px;
-  // }
 }
 
 .farm__crosss {
@@ -87,13 +59,13 @@
   top: 10px;
   cursor: pointer;
   z-index: 10;
+
   i {
     color: #ffffff;
   }
 }
 
 .farm__header__body__right {
-  // height: 100px;
   position: absolute;
   right: 0;
   top: -30px;
@@ -109,10 +81,6 @@
   // padding: 20px;
   // width: 100%;
 
-  // @media screen and (max-width: $S) {
-  //   height: auto;
-  // }
-
   // &::before {
   //   content: "";
   //   position: absolute;
@@ -127,27 +95,15 @@
 
 .farm__header__left__title {
   position: relative;
-  // font-size: 32px;
-  // font-weight: 700;
-  // line-height: 133.3%;
   color: #ffffff;
   font-size: 40px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 37px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 22px;
-  // }
 }
 
 .farm__header__left__description {
   position: relative;
-  // font-size: 14px;
-  // line-height: 20px;
   color: #ffffff;
   opacity: 0.8;
   display: flex;
@@ -161,10 +117,6 @@
   @media screen and (max-width: $XS) {
     flex-direction: column;
   }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 }
 
 .farm__header__left__more {
@@ -176,13 +128,6 @@
   text-decoration: underline;
   margin-left: 6px;
   cursor: pointer;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 }
 
 .farm__header__right__body__step {
@@ -197,14 +142,6 @@
   font-size: 15px;
   line-height: 133.3%;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 18px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 13px;
-  // }
 }
 
 .farm__header__right__main {
@@ -224,7 +161,6 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  // padding-bottom: 40px;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(2px);
   width: 100%;
@@ -246,77 +182,42 @@
 }
 
 .farm__header__right__body__background {
-  //   background: rgba(255, 255, 255, 0.02);
-  // backdrop-filter: blur(2px);
 }
 
 .farm__header__right__body__title {
-  // font-weight: 900;
-  // font-size: 15px;
-  // line-height: 27px;
   color: #ffffff;
   font-size: 23px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 17px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
 }
 
 .farm__header__right__body__description {
-  // height: 20px;
-  // font-weight: 400;
-  // font-size: 12px;
-  // line-height: 15px;
   color: #ffffff;
   margin-top: 8px;
   font-size: 14px;
   font-style: normal;
   font-weight: 200;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 9px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 7px;
-  // }
 }
 
 .farm__header__right__body__button {
-  // max-width: 90px;
   padding: 6px 20px;
   background: #fe2b56;
   border: 1px solid #fe2b56;
   border-radius: 40px;
-  // font-weight: 400;
-  // font-size: 12px;
-  // line-height: 19px;
   text-align: center;
   color: #ffffff;
   font-size: 14.609px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  // margin-top: 25px;
   cursor: pointer;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 9px;
-  // }
 
   &.disabled {
     cursor: auto;
     background: transparent;
   }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 7px;
-  // }
 }
 
 .farm__body {
@@ -356,8 +257,6 @@
 }
 
 .farm__body__tab__wrap {
-  // width: 100%;
-  // max-width: 458px;
 }
 
 .farm__body__line {
@@ -389,11 +288,9 @@
 }
 
 .farm__body__search__wrap {
-  // max-width: 265px;
   display: flex;
   align-items: center;
   position: relative;
-
   width: 100%;
   max-width: 175px;
 
@@ -407,6 +304,7 @@
 
 .dropdown__farm {
   text-align: left;
+
   p {
     font-size: 10px;
     font-weight: 500;
@@ -415,13 +313,11 @@
 }
 
 .farm__body__filter__wrap {
-  // max-width: 133px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
-  // border: 2px solid #96a4c8;
   border: 1px solid #707070;
   border-radius: 40px;
   font-weight: 400;
@@ -431,14 +327,6 @@
   margin-right: 10px;
   text-align: right;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 
   i {
     margin-right: 10px;
@@ -462,8 +350,6 @@
 
   @media screen and (max-width: 1414px) {
     grid-template-columns: repeat(2, 1fr);
-    // column-gap: 8rem;
-    // row-gap: 1rem;
   }
 
   @media screen and (max-width: 970px) {
@@ -478,6 +364,7 @@
   transition: all 0.5s ease-in;
   height: 321px;
   overflow: hidden;
+
   &.card__active {
     height: 440px;
   }
@@ -485,10 +372,6 @@
   &.card__active4 {
     height: 480px;
   }
-
-  // &.card__active5 {
-  //   height: 610px;
-  // }
 
   &.card__active2 {
     height: 430px;
@@ -517,10 +400,8 @@
 }
 
 .farmCard__main {
-  // padding: 10px 0px;
   display: flex;
   flex-direction: column;
-
   height: 100%;
 }
 
@@ -529,8 +410,6 @@
   justify-content: space-between;
   margin-bottom: 8px;
   margin-top: 12px;
-
-  // align-items: center;
 
   &.active {
     min-height: 28px;
@@ -552,9 +431,6 @@
   &.emission__master2 {
     min-height: 22px;
   }
-
-  // margin-top: 20px;
-  // align-items: center;
 }
 
 .farmCard__element__left {
@@ -576,7 +452,6 @@
 }
 
 .farmCard__element__left__logo {
-  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 42px;
   width: 42px;
@@ -586,16 +461,9 @@
     margin-right: -20px;
     z-index: 1;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__left__logo__main {
-  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;
@@ -606,16 +474,9 @@
     height: 30px;
     width: 30px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__card__left__logo {
-  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 58px;
   width: 60px;
@@ -625,16 +486,9 @@
     margin-right: -25px;
     z-index: 1;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__card__left__logo__main {
-  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;
@@ -645,83 +499,40 @@
     height: 45px;
     width: 45px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__left__title {
-  // font-weight: 600;
-  // font-size: 17px;
-  // line-height: 25px;
   color: #ffffff;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-
   clear: both;
   display: inline-block;
-
   white-space: nowrap;
 
   &.tableActive {
     margin-top: 0;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__left__description {
-  // font-weight: 500;
-  // font-size: 12px;
-  // line-height: 20px;
   color: #ffffff;
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 9px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 7px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  // width: 250px;
 
   &.card__view {
   }
+
   &.tableActive {
-    // margin-left: 40px;
-    // width: 100%;
     align-items: flex-start;
   }
 }
@@ -730,24 +541,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: -30px;
-
-  @media screen and (max-width: $XL) {
-    flex-wrap: wrap;
-  }
+  margin-left: -50px;
 }
 
 .farmCard__element__right__basic {
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(99.28deg, #73aed2 -18.16%, #5e68c0 116.84%);
-  // background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
   margin-left: 10px;
 
   &.red {
     background: #fe2b56;
   }
+
   &.green {
     background: rgba(82, 183, 136, 1);
   }
@@ -759,7 +565,6 @@
   align-items: center;
   width: 100%;
   margin-top: 15px;
-  // margin-bottom: 8px;
 }
 
 .farmCard__element__right__basic__title {
@@ -780,21 +585,9 @@
     cursor: pointer;
   }
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
   img {
     height: 17px;
     margin-right: 5px;
-  }
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -809,20 +602,6 @@
   color: #ffffff;
   background: #132239;
   border-radius: 41px;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__right__pool {
@@ -830,10 +609,8 @@
   padding: 1px;
   position: relative;
   background: linear-gradient(182deg, #73aed2 -18.16%, #4854c3 116.84%);
-  // background: #a1c7ff;
 
   &.upto {
-    // background: #2a55b1;
   }
 
   &.active {
@@ -842,9 +619,6 @@
 }
 
 .farmCard__element__right__pool__title {
-  // font-weight: 550;
-  // font-size: 12px;
-  // line-height: 17px;
   font-size: 14px;
   font-style: normal;
   font-weight: 200;
@@ -852,22 +626,12 @@
   padding: 4px 15px;
   color: #ffffff;
   background: #111234;
-  // border: 0.913px solid #2a55b1;
   border-radius: 41px;
   display: flex;
   align-items: center;
   clear: both;
   display: inline-block;
-
   white-space: nowrap;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 
   &.boost {
     font-size: 14px;
@@ -882,40 +646,17 @@
     height: 13px;
     margin-right: 5px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__left__title2 {
-  // font-weight: 500;
-  // font-size: 13px;
-  // line-height: 50px;
   color: #ffffff;
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
   &.harbor__emision {
     line-height: 26px;
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -923,15 +664,13 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+
   &.card__center {
     align-items: center;
   }
 }
 
 .farmCard__element__right__details__title {
-  // font-weight: 450;
-  // font-size: 13px;
-  // line-height: 22px;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
@@ -939,24 +678,10 @@
   color: #ffffff;
   clear: both;
   display: inline-block;
-
   white-space: nowrap;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 9px;
-  // }
 
   i {
     margin: 0px 10px;
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -964,7 +689,6 @@
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(99.47deg, #99e0ef -18.18%, #4e98a8 53.31%);
   background: #a1c7ff;
   margin-top: 10px;
 }
@@ -972,22 +696,7 @@
 .farmCard__element__right__title {
   font-weight: 450;
   font-size: 14px;
-  // line-height: 50px;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__boost__left {
@@ -996,28 +705,11 @@
 }
 
 .farmCard__element__boost__left__title {
-  // font-weight: 520;
-  // font-size: 15px;
-  // line-height: 27px;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .table__empty__data__wrap {
@@ -1045,36 +737,17 @@
 }
 
 .farmCard__element__boost__left__description {
-  // font-weight: 800;
-  // font-size: 16px;
-  // line-height: 27px;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   margin-left: 15px;
-  // color: #68ffc0;
   color: #b0c9ee;
   cursor: pointer;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 17px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__element__boost__right {
-  // background: #fe4350;
   background: transparent;
-  // border: 2px solid #fe4350;
   border: 1px solid #fe2b56;
   border-radius: 42px;
   font-weight: 400;
@@ -1082,7 +755,6 @@
   line-height: 19px;
   padding: 2.5px 19px;
   text-align: center;
-  // color: #ffffff;
   color: #fe2b56;
   cursor: pointer;
   clear: both;
@@ -1093,18 +765,6 @@
     background: #fe2b56;
     color: #ffffff;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 9px;
-  // }
-  // @media screen and (max-width: $XS) {
-  //   font-size: 7px;
-  // }
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__buttonWrap {
@@ -1112,8 +772,8 @@
   margin: 15px 0px;
   clear: both;
   display: inline-block;
-
   white-space: nowrap;
+
   button {
     cursor: pointer;
     background: #fe4350;
@@ -1125,20 +785,6 @@
     border: none;
     outline: none;
     color: #ffffff;
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 13px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 8px;
-    // }
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -1162,20 +808,6 @@
       background: #fe2b56;
       color: #ffffff;
     }
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 13px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 8px;
-    // }
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -1189,38 +821,15 @@
     margin: 0px 10px;
     color: #bec9f8;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__details__title {
-  // font-weight: 400;
-  // font-size: 12px;
-  // line-height: 21px;
   text-align: right;
-  // color: #bec9f8;
   color: #ffffff;
   font-size: 16px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 9px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__footer__wrap {
@@ -1235,28 +844,11 @@
 }
 
 .farmCard__footer__left__title {
-  // font-weight: 700;
-  // font-size: 12px;
-  // line-height: 22px;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  // color: #b1d2e6;
   color: #ffffff;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__footer__rewards {
@@ -1271,18 +863,7 @@
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  // font-weight: 600;
-  // font-size: 12px;
-  // line-height: 20px;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 9px;
-  // }
 
   &.margin {
     margin-bottom: 10px;
@@ -1305,37 +886,14 @@
     width: 27px;
     margin-right: 10px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farmCard__footer__right__title {
-  // font-weight: 700;
-  // font-size: 12px;
-  // line-height: 24px;
   color: #ffffff;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farm__table__wrap {
@@ -1375,7 +933,6 @@
 
 .liquidityCard__tab__wrap {
   width: 100%;
-  max-width: 250px;
 }
 
 .liquidityCard__trade__pair {
@@ -1384,21 +941,14 @@
   border-radius: 57px;
   padding: 6px 20px;
   cursor: pointer;
-  // font-weight: 400;
-  // font-size: 12px;
-  // line-height: 17px;
   font-size: 14.26px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  /* identical to box height */
-
   display: flex;
   align-items: center;
   text-align: center;
-
   color: #ffffff;
-
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -1407,14 +957,6 @@
     height: 12px;
     margin-right: 5px;
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 10px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 }
 
 .tradeCard__body__item {
@@ -1444,27 +986,11 @@
 }
 
 .tradeCard__body__left__title {
-  // font-weight: 600;
-  // font-size: 12px;
-  // line-height: 22px;
   color: #ffffff;
   font-size: 10.359px;
   font-style: normal;
   font-weight: 200;
   line-height: normal;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el1 {
@@ -1474,11 +1000,7 @@
 }
 
 .tradeCard__body__right__el1__title {
-  // font-weight: 400;
-  // font-size: 12px;
-  // line-height: 20px;
   text-align: right;
-  // color: #acbfdb;
   color: #fff;
   font-size: 12px;
   font-style: normal;
@@ -1494,32 +1016,12 @@
     line-height: normal;
   }
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
-
   span {
-    // color: #fe4350;
     color: #fff;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
@@ -1533,20 +1035,6 @@
   line-height: 15px;
   text-align: center;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el1__footer {
@@ -1558,19 +1046,6 @@
   background: #0f2048;
   border-radius: 5px;
   padding: 5px 10px;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right {
@@ -1596,17 +1071,10 @@
 
   i {
     color: #3a4b6d;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
 .tradeCard__logo__wrap {
-  // background: linear-gradient(to bottom, #fe4350, #053c75);
   border-radius: 40px;
   height: 42px;
   width: 42px;
@@ -1619,7 +1087,6 @@
 }
 
 .tradeCard__logo {
-  // background: #030b1e;
   padding: 5px;
   border-radius: 40px;
   display: flex;
@@ -1635,12 +1102,6 @@
       width: 25px;
     }
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .farm__deposit__buttonWrap {
@@ -1652,29 +1113,12 @@
 }
 
 .tradeCard__body__left__item__details__title {
-  // font-weight: 700;
-  // font-size: 15px;
-  // line-height: 28px;
   font-size: 17.265px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   color: #ffffff;
   margin: 0px 10px;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 17px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 14px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el2 {
@@ -1686,77 +1130,29 @@
   color: #ffffff;
   opacity: 0.5;
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 27px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 24px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
-
   &.limit__order {
     opacity: 1;
   }
 }
 
 .tradeCard__body__right__el3 {
-  // font-weight: 600;
-  // font-size: 8px;
-  // line-height: 15px;
   text-align: right;
-  // color: #acbfdb;
   color: #fff;
   font-size: 10.632px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   margin-top: 10px;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el4 {
-  // font-weight: 600;
-  // font-size: 8px;
-  // line-height: 15px;
   text-align: right;
-  // color: #acbfdb;
   color: #fff;
   font-size: 10.632px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   margin-top: 6px;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .liquidityCard__pool__details {
@@ -1767,10 +1163,6 @@
 }
 
 .liquidityCard__pool__title {
-  // font-weight: 700;
-  // font-size: 13px;
-  // line-height: 24px;
-
   font-size: 16.265px;
   font-style: normal;
   font-weight: 300;
@@ -1778,77 +1170,30 @@
   color: #ffffff;
 
   &.title {
-    // font-weight: 700;
-    // font-size: 12px;
-    // line-height: 20px;
-    /* identical to box height */
-
     font-size: 12.085px;
-
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     color: #ffffff;
     border-bottom: 0.863px solid #343434;
     padding-bottom: 10px;
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 12px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
   }
 
   &.semiTitle {
-    // font-weight: 600;
-    // font-size: 12px;
-    // line-height: 20px;
-    // /* identical to box height */
-
-    // color: #acbfdb;
     color: #a1c7ff;
     font-size: 12.812px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 12px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
   }
 
   &.semiTitle2 {
-    // font-weight: 600;
-    // font-size: 12px;
-    // line-height: 20px;
-    // /* identical to box height */
-
-    // color: #acbfdb;
     color: #ffffff;
     font-size: 12.812px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 12px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
   }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
 }
 
 .liquidityCard__pool__details__wrap {
@@ -1861,7 +1206,6 @@
 .liquidityCard__pool__footer__details {
   display: flex;
   justify-content: space-between;
-
   margin-top: 10px;
 
   @media screen and (max-width: $XS) {
@@ -1895,20 +1239,6 @@
     margin-top: 20px;
     text-align: center;
     color: #ffffff;
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 13px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
@@ -1916,32 +1246,15 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-
-  // border-bottom: 2px solid #202e50;
 }
 
 .liquidityCard__pool__withdraw__title {
-  // font-weight: 600;
-  // font-size: 12px;
-  // line-height: 20px;
-  /* identical to box height */
-
-  // color: #acbfdb;
   color: #fff;
   font-size: 12.085px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-
   margin-top: 25px;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 12px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
 }
 
 .liquidityCard__pool__input {
@@ -1956,24 +1269,11 @@
   font-weight: 400;
   font-size: 17px;
   line-height: 21px;
-  /* identical to box height */
-
   text-align: center;
-
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 12px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
 }
 
 .liquidityCard__pool__withdraw__footer {
-  // margin-top: 20px;
-  // margin-bottom: 20px;
   margin-top: 25px;
   margin-bottom: 20px;
   display: flex;
@@ -1988,45 +1288,19 @@
 }
 
 .liquidityCard__pool__withdraw__element__title {
-  // font-weight: 500;
-  // font-size: 12px;
-  // line-height: 22px;
-  /* identical to box height */
   font-size: 14.26px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   text-align: right;
-
   color: #ffffff;
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 15px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 12px;
-  // }
-
   &.title {
-    // font-weight: 400;
-    // font-size: 12px;
-    // line-height: 20px;
-    /* identical to box height */
     font-size: 12.085px;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
-    // color: #acbfdb;
     color: #ffffff;
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 12px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
   }
 }
 
@@ -2047,23 +1321,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // width: 150px;
   gap: 10px;
-
-  // background: linear-gradient(to right, #fe2b56, #2a55b1);
 }
-
-// .apr__pool {
-//   align-items: baseline;
-// }
 
 .farmCard__element__apr__poll__wrap {
   border-radius: 41px;
   padding: 1px;
   position: relative;
-  // background: linear-gradient(99.47deg, #5938fc -18.18%, #9c75fd 53.31%);
   background: linear-gradient(182deg, #8481a2 -18.18%, #443da2 53.31%);
-  // margin-top: 10px;
 }
 
 .farmCard__element__right__apr_pool__title {
@@ -2080,15 +1345,6 @@
   white-space: nowrap;
   transition: all 1s ease-in-out;
   cursor: pointer;
-  // &.show_text {
-  //   width: 160px;
-  //   padding: 2px 15px;
-  //   // line-height: 17px;
-  //   img {
-  //     height: 14px;
-  //     margin-right: 5px;
-  //   }
-  // }
   span {
     font-size: 10px;
   }
@@ -2104,12 +1360,6 @@
   img {
     height: 14px;
     margin-right: 5px;
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -2183,7 +1433,6 @@
 
 .farmCard__element__right__wholetab {
   display: flex;
-  // align-items: flex-start;
   align-items: center;
   gap: 30px;
 }

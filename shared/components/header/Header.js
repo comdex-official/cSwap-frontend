@@ -3,28 +3,25 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NextImage } from '../../../shared/image/NextImage';
-import { DotDropdownData, HeaderData, cSwapDropdownData } from './Data';
+import { DotDropdownData, HeaderData } from './Data';
 import Lodash from 'lodash';
 import {
-  C_Logo,
   Comodo,
   Faucet,
   Harbor,
-  Hyperlink,
   Logo_Dark,
   Logo_Light,
   Shop,
   Wallet,
 } from '../../../shared/image';
 import { Icon } from '../../../shared/image/Icon';
-import Link from 'next/link';
 import Sidebar from '../sidebar/Sidebar';
 import { decode, encode } from 'js-base64';
 import {
   fetchKeplrAccountName,
   initializeChain,
 } from '../../../services/keplr';
-import { Dropdown, Modal, message } from 'antd';
+import { Modal, message } from 'antd';
 import { marketPrice } from '../../../utils/number';
 import { cmst, comdex, harbor } from '../../../config/network';
 import { amountConversion } from '../../../utils/coin';
@@ -405,8 +402,6 @@ const Header = ({
     setIsModalOpen2(false);
   };
 
-  const items = [{ label: <ConnectModal />, key: 'item-1' }];
-
   const cswapItems = [
     {
       key: 'item-2',
@@ -531,21 +526,6 @@ const Header = ({
               }
             >
               <div className={styles.header__cSwap}>
-                {/* <div className={styles.header__cSwap__main}>
-                  {theme === 'dark' ? (
-                    <NextImage src={C_Logo} alt="Logo_Dark" />
-                  ) : (
-                    <NextImage src={C_Logo} alt="Logo_Dark" />
-                  )}
-
-                  <div
-                    className={`${styles.header__cSwap__title} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                  >
-                    {'cSwap'}
-                  </div>
-                </div> */}
                 <Icon
                   className={`bi bi-grid-fill ${
                     theme === 'dark' ? styles.icon_dark : styles.icon_light
@@ -567,26 +547,10 @@ const Header = ({
                 ) : (
                   <NextImage src={Faucet} alt="Logo_Dark" />
                 )}
-
-                {/* <div
-                  className={`${styles.header__cSwap__title} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  {'Faucet'}
-                </div> */}
               </div>
-              {/* <NextImage src={Hyperlink} alt={'Logo'} height={15} width={15} /> */}
             </div>
 
             <div className={styles.header__buy}>
-              {/* <div
-                className={`${styles.header__buy__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'Buy'}
-              </div> */}
               <NextImage src={Shop} alt={'Logo'} />
             </div>
 
@@ -619,22 +583,10 @@ const Header = ({
               </div>
             ) : (
               <div id="topRightToogle2" onClick={showModal2}>
-                {/* <Dropdown
-                  menu={{ items }}
-                  placement="bottomRight"
-                  trigger={['click']}
-                  overlayClassName="dropconnect-overlay"
-                  getPopupContainer={() =>
-                    document.getElementById('topRightToogle2')
-                  }
-                  autoAdjustOverflow={false}
-                > */}
-
                 <div className={styles.header__wallet}>
                   {variables[lang]?.connect}
                   <NextImage src={Wallet} alt={'Wallet'} />
                 </div>
-                {/* </Dropdown> */}
               </div>
             )}
 

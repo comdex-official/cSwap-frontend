@@ -176,12 +176,13 @@ const PoolCardRow = ({
                       }`}
                     >
                       <NextImage src={HirborLogo} alt="Logo" />
-                      {pool?.id &&
-                        commaSeparator(
-                          calculateVaultEmission(pool?.id?.toNumber()).toFixed(
-                            2
+                      {pool?.id && calculateVaultEmission(pool?.id?.toNumber())
+                        ? commaSeparator(
+                            formatNumber(
+                              calculateVaultEmission(pool?.id?.toNumber())
+                            )
                           )
-                        )}
+                        : Number(0).toFixed(2)}
                     </div>
                   </Tooltip>
                 </div>

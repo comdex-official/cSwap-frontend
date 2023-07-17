@@ -7,8 +7,6 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  // padding-top: 60px;
-  // height: 100vh;
   height: 80vh;
   &.active_orderbook {
     display: block;
@@ -42,12 +40,6 @@
 
   i {
     color: #354a7d;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
@@ -62,20 +54,6 @@
     line-height: 22px;
     text-align: center;
     color: #ffffff;
-
-    // @media screen and (max-width: $XXL) {
-    //   font-size: 13px;
-    // }
-
-    // @media screen and (max-width: $XS) {
-    //   font-size: 10px;
-    // }
-
-    &.light {
-    }
-
-    &.dark {
-    }
 
     &.order {
       max-width: 1500px;
@@ -123,28 +101,8 @@
   text-align: right;
   color: #acbfdb;
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
-
   span {
     color: #ff4350;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
@@ -156,12 +114,6 @@
 
   i {
     color: #3a4b6d;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
@@ -170,20 +122,6 @@
   font-size: 13px;
   line-height: 22px;
   color: #ffffff;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 13px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 10px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__logo__wrap {
@@ -216,12 +154,6 @@
       width: 25px;
     }
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__left__item__details__title {
@@ -237,12 +169,6 @@
 
   @media screen and (max-width: $XS) {
     font-size: 14px;
-  }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -276,13 +202,11 @@
 }
 
 .tradeCard__body__right__el2 {
-  // margin-bottom: 4px;
   font-weight: 500;
   font-size: 32px;
   line-height: 20px;
   text-align: right;
   color: #ffffff;
-  // opacity: 1;
 
   @media screen and (max-width: $XXL) {
     font-size: 27px;
@@ -291,16 +215,6 @@
   @media screen and (max-width: $XS) {
     font-size: 24px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
-
-  // &.limit__order {
-  //   opacity: 1;
-  // }
 }
 
 .tradeCard__body__left__item__toggle_title {
@@ -316,12 +230,6 @@
   @media screen and (max-width: $XS) {
     font-size: 14px;
   }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el3 {
@@ -329,22 +237,8 @@
   font-size: 10px;
   line-height: 15px;
   text-align: right;
-  // color: #acbfdb;
   color: #ffffff;
   opacity: 0.699999988079071;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el4 {
@@ -352,23 +246,8 @@
   font-size: 10px;
   line-height: 15px;
   text-align: right;
-  // color: #acbfdb;
   color: #ffffff;
   opacity: 0.699999988079071;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__body__right__el1__title {
@@ -376,37 +255,14 @@
   font-size: 12px;
   line-height: 20px;
   text-align: right;
-  // color: #acbfdb;
   color: #ffffff;
 
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
-
   span {
-    // color: #fe4350;
     color: #ffffff;
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 }
 
 .tradeCard__body__right__el1__description {
-  // margin: 0px 6px;
   background: #234e8d;
   border-radius: 5px;
   padding: 2px 8px;
@@ -418,22 +274,8 @@
   cursor: pointer;
 
   &.active {
-    border: 1px solid #9D9D9D;
-    background: #122B4F;
-  }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
+    border: 1px solid #9d9d9d;
+    background: #122b4f;
   }
 }
 
@@ -447,24 +289,10 @@
   border-radius: 5px;
   padding: 2px 8px;
   cursor: pointer;
- 
+
   &.active {
     border: 1px solid #9d9d9d;
     background: #36429b;
-  }
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 7px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 5px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
   }
 }
 
@@ -486,47 +314,16 @@
   font-size: 12px;
   line-height: 22px;
   font-weight: 200;
-  // width: 90%;
   text-align: center;
-  // color: #80acce;
   color: #dcdcdc;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__description__left_title {
   font-weight: 200;
   font-size: 13px;
   line-height: 20px;
-  // color: #80acce;
   margin-bottom: 10px;
   color: #dcdcdc;
-
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
-
-  &.light {
-  }
-
-  &.dark {
-  }
 }
 
 .tradeCard__description__right_title {
@@ -535,21 +332,10 @@
   line-height: 20px;
   text-align: right;
   color: #dcdcdc;
-  // @media screen and (max-width: $XXL) {
-  //   font-size: 11px;
-  // }
-
-  // @media screen and (max-width: $XS) {
-  //   font-size: 8px;
-  // }
 
   &.red {
-    color: #FE2B56;
+    color: #fe2b56;
   }
-
-  // &.dark {
-  //   color: #ffffff;
-  // }
 }
 
 .tradeCard__button__wrap {
@@ -575,12 +361,6 @@
 
     @media screen and (max-width: $XS) {
       font-size: 10px;
-    }
-
-    &.light {
-    }
-
-    &.dark {
     }
   }
 }
@@ -617,12 +397,6 @@
     @media screen and (max-width: $XS) {
       font-size: 8px;
     }
-
-    &.light {
-    }
-
-    &.dark {
-    }
   }
 
   .settings__dropdown__footer {
@@ -650,12 +424,6 @@
       background: #303950;
       border-radius: 2px;
       padding: 5px 10px;
-    }
-
-    &.light {
-    }
-
-    &.dark {
     }
   }
 
@@ -695,12 +463,6 @@
         font-size: 6px;
       }
 
-      &.light {
-      }
-
-      &.dark {
-      }
-
       &:focus {
         border: 1px solid #303950;
         -webkit-box-shadow: none;
@@ -737,10 +499,6 @@
   border-radius: 10px;
   padding: 10px;
   color: #ffffff;
-}
-
-.tradeCard__head__orderbook {
-  // margin-top: 20px;
 }
 
 .tradeCard__head__spin {
