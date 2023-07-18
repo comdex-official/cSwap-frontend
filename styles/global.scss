@@ -1698,7 +1698,7 @@ a {
         border-radius: 20px;
         background: #051637;
         width: 100%;
-        max-width: 250px;
+        max-width: 200px;
 
         .ant-tabs-ink-bar {
           display: none !important;
@@ -2417,7 +2417,7 @@ a {
     }
 
     .ant-select-arrow {
-      right: 0;
+      right: 10px;
 
       img {
         fill: $border-light;
@@ -2832,6 +2832,11 @@ a {
     min-width: 350px !important;
     width: 350px !important;
 
+    @media screen and (max-width: 480px) {
+      min-width: 312px !important;
+      width: 312px !important;
+    }
+
     .dark-mode & {
       background: linear-gradient(180deg, #070d21 0%, #050d1e 100%);
     }
@@ -3067,7 +3072,7 @@ a {
       background: #030a1c;
       padding: 30px;
 
-      max-width: 388px;
+      // max-width: 388px;
 
       .ant-modal-close-x {
         i {
@@ -4276,9 +4281,19 @@ a {
     &.ant-steps-item-active {
       .ant-steps-item-container {
         display: flex;
+
+        .ant-steps-item-tail {
+          top: 4px !important;
+          margin-left: 10px !important;
+
+          &::after {
+            background-color: #fe2b56;
+          }
+        }
+
         .ant-steps-item-icon {
-          border-color: $secondary-color;
-          background: $secondary-color;
+          border-color: #fe2b56;
+          background: #fe2b56;
           width: 40.457px;
           height: 40.457px;
           display: flex;
@@ -4303,7 +4318,7 @@ a {
           margin-top: 4px;
           .ant-steps-item-title {
             &::after {
-              background: $secondary-color;
+              background: #fe2b56;
             }
           }
         }
@@ -4321,7 +4336,7 @@ a {
   }
   .ant-steps-item-wait .ant-steps-item-icon {
     background: $background-light;
-    border-color: $secondary-color;
+    border-color: #fe2b56;
     width: 40.457px;
     height: 40.457px;
     display: flex;
@@ -4346,9 +4361,9 @@ a {
     .ant-steps-item-container {
       .ant-steps-item-icon {
         background: $background-light;
-        border-color: $secondary-color;
+        border-color: #fe2b56;
         .dark-mode & {
-          background: $secondary-color;
+          background: #fe2b56;
         }
       }
     }
