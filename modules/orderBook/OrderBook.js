@@ -634,7 +634,7 @@ const OrderBook = ({
                 {`Price (${selectedPair?.base_coin})`}
               </div>
               <div className={`${styles.dropdown__orderbook__head__title}`}>
-                24h Change
+                24h Volume Change
               </div>
             </div>
             <div className={`${styles.dropdown__orderbook__table__body__wrap}`}>
@@ -680,15 +680,14 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-                        {formateNumberDecimalsAuto({
-                          price: Number(
-                            commaSeparator(
-                              formateNumberDecimalsAuto({
-                                price: item?.price || 0,
-                              })
-                            )
-                          ),
-                        })}
+                          {
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                })
+                              )
+                          
+                          }
                       </div>
                       <div
                         className={`${
@@ -738,7 +737,7 @@ const OrderBook = ({
                   {filteredPair?.length <= 0 ? (
                     <NoDataIcon />
                   ) : (
-                    filteredPair?.map((item,index) => (
+                    filteredPair?.map((item, index) => (
                       <div
                         className={`${styles.dropdown__orderbook__table__body}`}
                         key={index}
@@ -778,15 +777,14 @@ const OrderBook = ({
                         <div
                           className={`${styles.dropdown__orderbook__body__title}`}
                         >
-                          {formateNumberDecimalsAuto({
-                            price: Number(
+                          {
                               commaSeparator(
                                 formateNumberDecimalsAuto({
                                   price: item?.price || 0,
                                 })
                               )
-                            ),
-                          })}
+                          
+                          }
                         </div>
                         <div
                           className={`${
@@ -1027,16 +1025,13 @@ const OrderBook = ({
                     }`}
                   >
                     ~$
-                    {formateNumberDecimalsAuto({
-                      price:
-                        Number(
+                    {
                           commaSeparator(
                             formateNumberDecimalsAuto({
-                              price: selectedPair?.price || 0,
+                              price: Number(selectedPair?.price || 0) * marketPrice(markets, selectedPair?.base_coin_denom),
                             })
                           )
-                        ) * marketPrice(markets, selectedPair?.base_coin_denom),
-                    })}
+                      }
                   </span>
                 </div>
               </div>
@@ -1277,17 +1272,14 @@ const OrderBook = ({
                               theme === 'dark' ? styles.dark : styles.light
                             }`}
                           >
-                            {formateNumberDecimalsAuto({
-                              price: Number(
-                                commaSeparator(
-                                  formateNumberDecimalsAuto({
-                                    price: item?.price || 0,
-                                    minDecimal: 3,
-                                  })
-                                )
-                              ),
-                              minDecimal: 3,
-                            })}
+                            {
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                  minDecimal: 3,
+                                })
+                              )
+                            }
                           </div>
 
                           <div
@@ -1330,17 +1322,14 @@ const OrderBook = ({
                 }`}
               >
                 {' '}
-                $
-                {formateNumberDecimalsAuto({
-                  price:
-                    Number(
-                      commaSeparator(
-                        formateNumberDecimalsAuto({
-                          price: selectedPair?.price || 0,
-                        })
-                      )
-                    ) * marketPrice(markets, selectedPair?.base_coin_denom),
-                })}
+                ~$
+                    {
+                          commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: Number(selectedPair?.price || 0) * marketPrice(markets, selectedPair?.base_coin_denom),
+                            })
+                          )
+                      }
               </div>
             </div>
             <div
@@ -1407,17 +1396,14 @@ const OrderBook = ({
                             theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
-                          {formateNumberDecimalsAuto({
-                            price: Number(
+                          {
                               commaSeparator(
                                 formateNumberDecimalsAuto({
                                   price: item?.price || 0,
                                   minDecimal: 3,
                                 })
                               )
-                            ),
-                            minDecimal: 3,
-                          })}
+                            }
                         </div>
 
                         <div
@@ -1521,17 +1507,14 @@ const OrderBook = ({
                           : styles.profit
                       }  ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {formateNumberDecimalsAuto({
-                        price: Number(
-                          commaSeparator(
-                            formateNumberDecimalsAuto({
-                              price: item?.price || 0,
-                              minDecimal: 3,
-                            })
-                          )
-                        ),
-                        minDecimal: 3,
-                      })}
+                      {
+                              commaSeparator(
+                                formateNumberDecimalsAuto({
+                                  price: item?.price || 0,
+                                  minDecimal: 3,
+                                })
+                              )
+                            }
                     </div>
                     <div
                       className={`${

@@ -14,14 +14,14 @@
 
   @media screen and (max-width: $XS) {
     padding: 20px;
-    padding-top: 50px;
+    padding-top: 100px;
   }
 }
 
 .tradeCard__wrap {
   width: 100%;
-  margin-top: 40px;
-  margin-bottom: 20px;
+  margin-top: 100px;
+  padding-bottom: 20px;
   max-width: 471px;
   @media screen and (max-width: $XS) {
     margin-top: 60px;
