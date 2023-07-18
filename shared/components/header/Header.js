@@ -42,7 +42,6 @@ import {
 } from '../../../services/liquidity/query.js';
 import { fetchRestPrices } from '../../../services/oracle/query';
 import {
-  envConfigResult,
   ibcAssets,
   queryAssets,
   inconsResult,
@@ -59,11 +58,7 @@ import {
   setAssets,
   setAssetsInPrgoress,
 } from '../../../actions/asset.js';
-import {
-  setEnvConfig,
-  setAssetList,
-  setIconList,
-} from '../../../actions/config';
+import { setAssetList, setIconList } from '../../../actions/config';
 import { setPoolIncentives, setPoolRewards } from '../../../actions/liquidity';
 import { setMarkets } from '../../../actions/oracle';
 import { setParams } from '../../../actions/swap';
@@ -92,7 +87,6 @@ const Header = ({
   assetDenomMap,
   setAssetList,
   setIconList,
-  setEnvConfig,
 }) => {
   const theme = 'dark';
 
@@ -152,14 +146,6 @@ const Header = ({
   };
 
   useEffect(() => {
-    envConfigResult()
-      .then((result) => {
-        setEnvConfig(result?.envConfig);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
     ibcAssets()
       .then((result) => {
         setAssetList(result);
@@ -505,7 +491,7 @@ const Header = ({
               <div
                 className={styles.header__name}
                 onClick={() =>
-                  item?.id === 5 ? showModal() : router.push(item.route)
+                  item?.id === 4 ? showModal() : router.push(item.route)
                 }
               >
                 {item.name}
@@ -628,6 +614,7 @@ const Header = ({
             frameBorder="0"
             width={'100%'}
             height={'700px'}
+            id="bridge__iframe"
             style={{ borderRadius: '10px', background: '#030b1e' }}
           />
         </Modal>
@@ -705,7 +692,6 @@ const actionsToProps = {
   setAssetsInPrgoress,
   setAssetList,
   setIconList,
-  setEnvConfig,
 };
 
 export default connect(stateToProps, actionsToProps)(Header);

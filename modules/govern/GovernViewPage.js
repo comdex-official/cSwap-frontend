@@ -264,11 +264,12 @@ const GovernViewPage = ({
   const totalAmount = votingPower?.delegation_responses?.reduce(
     (sum, response) => {
       const amount = parseInt(response?.balance?.amount);
-      return sum + amount;
+    
+      return Number(sum + amount).toFixed(2);
     },
-    0
+    Number(0).toFixed(2)
   );
-
+ 
   return (
     <>
       <div className="proposal_view_back_button_container">
