@@ -25,6 +25,7 @@ import PoolTokenValue from '../PoolTokenValue';
 import PoolDetails from '../poolDetail';
 import { Icon } from '../../../shared/image/Icon';
 import { decimalConversion, rangeToPercentage } from '../../../utils/number';
+import { setUserLiquidityRefetch } from '../../../actions/liquidity';
 
 const Remove = ({
   active,
@@ -36,6 +37,10 @@ const Remove = ({
   refreshData,
   updateBalance,
   userLockedPoolTokens,
+  refetch,
+  setRefetch,
+  userLiquidityRefetch,
+  setUserLiquidityRefetch
 }) => {
   const marks = {
     0: Number(decimalConversion(pool?.minPrice)).toFixed(DOLLAR_DECIMALS),
@@ -105,6 +110,8 @@ const Remove = ({
         refreshData(pool);
         updateBalance();
         setWithdrawAmount();
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
 
         if (error) {
           message.error(error);
@@ -155,6 +162,8 @@ const Remove = ({
         setWithdrawAmount();
         refreshData(pool);
         updateBalance();
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
 
         if (error) {
           message.error(error);
@@ -204,6 +213,8 @@ const Remove = ({
         setSliderValue();
         setAmount();
         setWithdrawAmount();
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
 
         if (error) {
           message.error(error);
@@ -347,7 +358,10 @@ const Remove = ({
               } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <PoolTokenValue poolTokens={amount} /> ≈{' '}
-              {Number(amount).toFixed() || 0} PoolToken
+              {isNaN(Number(amount).toFixed(2))
+                ? Number(0).toFixed(2)
+                : Number(amount).toFixed(2) || 0}{' '}
+              PoolToken
             </div>
           </div>
           <div
@@ -370,7 +384,10 @@ const Remove = ({
               } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <PoolTokenValue poolTokens={userLockedPoolTokens} /> ≈{' '}
-              {Number(userLockedPoolTokens).toFixed() || 0} PoolToken
+              {isNaN(Number(userLockedPoolTokens).toFixed(2))
+                ? Number(0).toFixed(2)
+                : Number(userLockedPoolTokens).toFixed(2) || 0}{' '}
+              PoolToken
             </div>
           </div>
         </div>
@@ -453,7 +470,12 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     balances: state.account.balances.list,
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch
   };
 };
 
-export default connect(stateToProps)(Remove);
+const actionsToProps = {
+  setUserLiquidityRefetch
+};
+
+export default connect(stateToProps,actionsToProps)(Remove);

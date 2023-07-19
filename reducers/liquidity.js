@@ -21,7 +21,8 @@ import {
   USER_LIQUIDITY_IN_POOLS_SET,
   SET_SHOW_MY_POOL,
   SET_SELECTED_MANAGE_POOL,
-  SHOW_ELIGIBLE_LIVE_SET
+  SHOW_ELIGIBLE_LIVE_SET,
+  SET_USER_POOL_UPDATE
 } from "../constants/liquidity";
 
 const pool = (
@@ -255,6 +256,14 @@ const selectedManagePool = (state = "", action) => {
   return state;
 };
 
+const userLiquidityRefetch = (state = false, action) => {
+  if (action.type === SET_USER_POOL_UPDATE) {
+    return action.value;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolBalance,
@@ -279,5 +288,6 @@ export default combineReducers({
   showEligibleDisclaimer,
   showMyPool,
   selectedManagePool,
-  showEligibleLive
+  showEligibleLive,
+  userLiquidityRefetch
 });

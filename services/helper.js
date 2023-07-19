@@ -170,7 +170,7 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
     let walletType = localStorage.getItem('loginType');
 
-    (walletType === 'keplr' ? await window.keplr : await window.wallet) &&
+    (walletType === 'keplr' ? await window.keplr : await window.leap) &&
     walletType === 'keplr'
       ? window.keplr.enable(config.chainId)
       : window.leap.enable(config.chainId);

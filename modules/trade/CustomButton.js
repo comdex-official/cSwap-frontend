@@ -162,7 +162,7 @@ const CustomButton = ({
           let pairId = order?.attributes?.find(
             (item) => item?.key === 'pair_id'
           )?.value;
-
+         let txHash = result?.transactionHash
           if (orderId && pairId) {
             queryOrder(orderId, pairId, (error, result) => {
               if (error) {
@@ -177,7 +177,7 @@ const CustomButton = ({
                   Toaster(
                     <Snack
                       message={variables[lang].tx_success}
-                      hash={result?.transactionHash}
+                      hash={txHash}
                     />
                   )
                 )
