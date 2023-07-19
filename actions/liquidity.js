@@ -19,6 +19,7 @@ import {
   SET_SHOW_MY_POOL,
   SET_SELECTED_MANAGE_POOL,
   SHOW_ELIGIBLE_LIVE_SET,
+  SET_USER_POOL_UPDATE
 } from "../constants/liquidity";
 
 export const setPools = (list, pagination) => {
@@ -212,6 +213,13 @@ export const setShowMyPool = (value) => {
 export const setSelectedManagePool = (value) => {
   return {
     type: SET_SELECTED_MANAGE_POOL,
+    value,
+  };
+};
+
+export const setUserLiquidityRefetch = (value) => {
+  return {
+    type: SET_USER_POOL_UPDATE,
     value,
   };
 };

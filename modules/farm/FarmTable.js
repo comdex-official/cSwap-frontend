@@ -68,6 +68,9 @@ const FarmTable = ({
   showMyPool,
   selectedManagePool,
   setShowMyPool,
+  refetch,
+  setRefetch,
+  userLiquidityRefetch
 }) => {
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
     useState(false);
@@ -137,7 +140,7 @@ const FarmTable = ({
 
   const calculateMasterPoolApr = (_id) => {
     const totalMasterPoolApr = poolsApr?.[_id]?.incentive_rewards.filter(
-      (reward) => reward.master_pool
+      (reward) => !reward.master_pool
     );
 
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
@@ -217,71 +220,71 @@ const FarmTable = ({
     return fixedDecimal(totalMasterPoolApr);
   };
 
-  const getUserLiquidity = useCallback(
-    (pool) => {
-      if (address) {
-        queryPoolSoftLocks(address, pool?.id, (error, result) => {
-          if (error) {
-            message.error(error);
-            return;
-          }
+  // const getUserLiquidity = useCallback(
+  //   (pool) => {
+  //     if (address) {
+  //       queryPoolSoftLocks(address, pool?.id, (error, result) => {
+  //         if (error) {
+  //           message.error(error);
+  //           return;
+  //         }
 
-          const availablePoolToken =
-            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+  //         const availablePoolToken =
+  //           getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-          const activeSoftLock = result?.activePoolCoin;
-          const queuedSoftLocks = result?.queuedPoolCoin;
+  //         const activeSoftLock = result?.activePoolCoin;
+  //         const queuedSoftLocks = result?.queuedPoolCoin;
 
-          const queuedAmounts =
-            queuedSoftLocks &&
-            queuedSoftLocks.length > 0 &&
-            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-          const userLockedAmount =
-            Number(
-              queuedAmounts?.length > 0 &&
-                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-            ) + Number(activeSoftLock?.amount) || 0;
+  //         const queuedAmounts =
+  //           queuedSoftLocks &&
+  //           queuedSoftLocks.length > 0 &&
+  //           queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+  //         const userLockedAmount =
+  //           Number(
+  //             queuedAmounts?.length > 0 &&
+  //               queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+  //           ) + Number(activeSoftLock?.amount) || 0;
 
-          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
-          queryPoolCoinDeserialize(
-            pool?.id,
-            totalPoolToken,
-            (error, result) => {
-              if (error) {
-                message.error(error);
-                return;
-              }
+  //         const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+  //         queryPoolCoinDeserialize(
+  //           pool?.id,
+  //           totalPoolToken,
+  //           (error, result) => {
+  //             if (error) {
+  //               message.error(error);
+  //               return;
+  //             }
 
-              const providedTokens = result?.coins;
-              const totalLiquidityInDollar =
-                Number(
-                  amountConversion(
-                    providedTokens?.[0]?.amount,
-                    assetMap[providedTokens?.[0]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[0]?.denom) +
-                Number(
-                  amountConversion(
-                    providedTokens?.[1]?.amount,
-                    assetMap[providedTokens?.[1]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[1]?.denom);
-              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
-            }
-          );
-        });
-      }
-    },
-    [address, assetMap, balances, markets]
-  );
+  //             const providedTokens = result?.coins;
+  //             const totalLiquidityInDollar =
+  //               Number(
+  //                 amountConversion(
+  //                   providedTokens?.[0]?.amount,
+  //                   assetMap[providedTokens?.[0]?.denom]?.decimals
+  //                 )
+  //               ) *
+  //                 marketPrice(markets, providedTokens?.[0]?.denom) +
+  //               Number(
+  //                 amountConversion(
+  //                   providedTokens?.[1]?.amount,
+  //                   assetMap[providedTokens?.[1]?.denom]?.decimals
+  //                 )
+  //               ) *
+  //                 marketPrice(markets, providedTokens?.[1]?.denom);
+  //             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
+  //           }
+  //         );
+  //       });
+  //     }
+  //   },
+  //   [address, assetMap, balances, markets]
+  // );
 
-  useEffect(() => {
-    if (pool?.id) {
-      getUserLiquidity(pool);
-    }
-  }, [pool, getUserLiquidity]);
+  // useEffect(() => {
+  //   if (pool?.id) {
+  //     getUserLiquidity(pool);
+  //   }
+  // }, [pool, getUserLiquidity]);
 
   const [userCurrentProposalData, setUserCurrentProposalData] = useState();
   const [currentProposalAllData, setCurrentProposalAllData] = useState();
@@ -426,8 +429,10 @@ const FarmTable = ({
       );
     }
   };
+  const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
 
-  const COLUMNS = [
+  const Columns = [
     {
       title: 'Pool Pair',
       dataIndex: 'PoolPair',
@@ -935,17 +940,7 @@ const FarmTable = ({
     },
   ];
 
-  const DATA =
-    pool &&
-    pool?.map((item) => {
-      return {
-        PoolPair: item,
-        APR: item,
-        TotalLiquidity: item,
-      };
-    });
-
-  const COLUMNS2 = [
+  const Columns2 = [
     {
       title: 'Pool Pair',
       dataIndex: 'PoolPair',
@@ -1443,16 +1438,36 @@ const FarmTable = ({
     },
   ];
 
-  const DATA2 =
+  useEffect(() => {
+    const DATA2 =
+      pool &&
+      pool?.map((item) => {
+        return {
+          PoolPair: item,
+          APR: item,
+          TotalLiquidity: userLiquidityInPools[item?.id],
+          Action: item,
+        };
+      });
+      
+    setData2(DATA2);
+  }, [pool, refetch, userLiquidityRefetch]);
+
+  useEffect(() => {
+    const DATA =
     pool &&
     pool?.map((item) => {
       return {
         PoolPair: item,
         APR: item,
-        TotalLiquidity: userLiquidityInPools[item?.id],
-        Action: item,
+        TotalLiquidity: item,
       };
     });
+     
+    setData(DATA);
+  }, [pool, refetch, userLiquidityRefetch]);
+
+  
 
   const tableClassName = (record) => {
     if (getMasterPool(Number(record?.APR?.id))) {
@@ -1483,8 +1498,8 @@ const FarmTable = ({
       {noDataButton ? (
         <Table
           className={'custom-table assets-table'}
-          dataSource={DATA2}
-          columns={COLUMNS2}
+          dataSource={data2}
+          columns={Columns2}
           pagination={false}
           rowClassName={tableClassName}
           locale={{
@@ -1502,8 +1517,8 @@ const FarmTable = ({
       ) : (
         <Table
           className={'custom-table assets-table'}
-          dataSource={DATA}
-          columns={COLUMNS}
+          dataSource={data}
+          columns={Columns}
           rowClassName={tableClassName}
           pagination={false}
           locale={{
@@ -1519,7 +1534,12 @@ const FarmTable = ({
         onCancel={handleCancel}
         centered={true}
       >
-        <Liquidity theme={theme} pool={selectedSinglePool} />
+        <Liquidity
+          theme={theme}
+          pool={selectedSinglePool}
+          refetch={refetch}
+          setRefetch={setRefetch}
+        />
       </Modal>
 
       {showMyPool && (
@@ -1529,7 +1549,12 @@ const FarmTable = ({
           onCancel={handlePortofolioManageCancel}
           centered={true}
         >
-          <Liquidity theme={theme} pool={selectedManagePool} />
+          <Liquidity
+            theme={theme}
+            pool={selectedManagePool}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          />
         </Modal>
       )}
     </>
@@ -1566,6 +1591,7 @@ const stateToProps = (state) => {
     iconList: state.config?.iconList,
     selectedManagePool: state.liquidity.selectedManagePool,
     showMyPool: state.liquidity.showMyPool,
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch
   };
 };
 

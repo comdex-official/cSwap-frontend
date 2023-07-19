@@ -17,6 +17,9 @@ import {
   formateNumberDecimalsAuto,
   marketPrice,
 } from '../../utils/number';
+import {
+  toDecimals
+} from '../../utils/string';
 import OrderType from './OrderType';
 import styles from './OrderBook.module.scss';
 
@@ -31,6 +34,7 @@ const Buy = ({
   clickedValue,
   setRefresh,
   refresh,
+  assetMap,
 }) => {
   const theme = 'dark';
 
@@ -135,26 +139,30 @@ const Buy = ({
 
   const handlePriceChange = (value) => {
     setPrice(value);
-    setTotal(amount * price);
+    setTotal(amount / Number(toDecimals(String(pair?.price)).toString().trim()));
+    console.log(value)
   };
   const [active, setActive] = useState();
   const handleAmountChange = (value) => {
+    console.log(value)
     setAmount(value);
-    setTotal(value * price);
+    setTotal(value / Number(toDecimals(String(pair?.price)).toString().trim()));
   };
 
   const handleAmountPercentage = (value) => {
     setActive(+value);
-    let AmountPercentage = (value / 100) * amountConversion(quoteBalance);
-    setTotal(AmountPercentage || 0);
-    setAmount(AmountPercentage * pair?.price);
+    let AmountPercentage =
+      (value / 100) * Number(amountConversion(quoteBalance,assetMap[pair?.quote_coin_denom]?.decimals));
+      console.log(AmountPercentage)
+    setTotal(AmountPercentage / Number(toDecimals(String(pair?.price)).toString().trim()));
+    setAmount(AmountPercentage || 0);
   };
 
   const quoteBalance = getDenomBalance(balances, pair?.quote_coin_denom);
 
   const getBalanceValue = () => {
     return (
-      Number(amountConversion(quoteBalance || 0)) *
+      Number(amountConversion(quoteBalance || 0, assetMap[pair?.quote_coin_denom]?.decimals)) *
       marketPrice(markets, pair?.quote_coin_denom)
     );
   };
@@ -175,7 +183,7 @@ const Buy = ({
           >
             Balance:
             {formateNumberDecimalsAuto({
-              price: amountConversion(quoteBalance || 0),
+              price: amountConversion(quoteBalance || 0, assetMap[pair?.quote_coin_denom]?.decimals),
             })}{' '}
             {denomConversion(pair?.quote_coin_denom)}
             <label>
@@ -242,7 +250,7 @@ const Buy = ({
                 className="order_input2"
                 placeholder="0"
                 onChange={(event) => handleAmountChange(event.target.value)}
-                suffix={denomConversion(pair?.base_coin_denom)}
+                suffix={denomConversion(pair?.quote_coin_denom)}
               />
             </div>
           </div>
@@ -294,11 +302,13 @@ const Buy = ({
                 {formateNumberDecimalsAuto({
                   price: total || 0,
                 })}{' '}
-                {denomConversion(pair?.quote_coin_denom)}
+                {denomConversion(pair?.base_coin_denom)}
               </p>
               <label>
                 ~$
-                {(
+                {isNaN((
+                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                ).toFixed(4)) ? Number(0).toFixed(4) : (
                   Number(total) * marketPrice(markets, pair?.quote_coin_denom)
                 ).toFixed(4)}
               </label>
@@ -345,6 +355,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     params: state.swap.params,
     type: state.order.type,
+    assetMap: state.asset.map,
   };
 };
 

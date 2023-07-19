@@ -25,11 +25,14 @@ import {
   votingCurrentProposal,
   votingCurrentProposalId,
   emissiondata,
+  queryPoolSoftLocks,
+  queryPoolCoinDeserialize,
 } from '../../services/liquidity/query';
 import {
   amountConversion,
   denomConversion,
   fixedDecimal,
+  getDenomBalance,
 } from '../../utils/coin';
 import MyDropdown from '../../shared/components/dropDown/Dropdown';
 import { NextImage } from '../../shared/image/NextImage';
@@ -69,6 +72,7 @@ const Farm = ({
   rewardsMap,
   setShowEligibleLive,
   showEligibleLive,
+  userLiquidityRefetch,
 }) => {
   const theme = 'dark';
 
@@ -79,6 +83,7 @@ const Farm = ({
   const [displayPools, setDisplayPools] = useState([]);
   const [filterValue, setFilterValue] = useState('3');
   const [poolsApr, setPoolsApr] = useState();
+  const [refetch, setRefetch] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -99,6 +104,67 @@ const Farm = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const getUserLiquidity = useCallback(
+    (pool) => {
+      if (address) {
+        queryPoolSoftLocks(address, pool?.id, (error, result) => {
+          if (error) {
+            return;
+          }
+
+          const availablePoolToken =
+            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+
+          const activeSoftLock = result?.activePoolCoin;
+          const queuedSoftLocks = result?.queuedPoolCoin;
+
+          const queuedAmounts =
+            queuedSoftLocks &&
+            queuedSoftLocks.length > 0 &&
+            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+          const userLockedAmount =
+            Number(
+              queuedAmounts?.length > 0 &&
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+            ) + Number(activeSoftLock?.amount) || 0;
+
+          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+
+          queryPoolCoinDeserialize(
+            pool?.id,
+            totalPoolToken,
+            (error, result) => {
+              if (error) {
+                message.error(error);
+                return;
+              }
+
+              const providedTokens = result?.coins;
+              const totalLiquidityInDollar =
+                Number(
+                  amountConversion(
+                    providedTokens?.[0]?.amount,
+                    assetMap[providedTokens?.[0]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[0]?.denom) +
+                Number(
+                  amountConversion(
+                    providedTokens?.[1]?.amount,
+                    assetMap[providedTokens?.[1]?.denom]?.decimals
+                  )
+                ) *
+                  marketPrice(markets, providedTokens?.[1]?.denom);
+   
+              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
+            }
+          );
+        });
+      }
+    },
+    [assetMap, address, markets, balances, userLiquidityRefetch]
+  );
+
   useEffect(() => {
     const rawUserPools = Object.keys(userLiquidityInPools)?.map((poolKey) =>
       pools?.find(
@@ -109,14 +175,20 @@ const Farm = ({
     );
     const userPools = rawUserPools?.filter((item) => item); // removes undefined values from array
     setUserPool(userPools);
-  }, [userLiquidityInPools, filterValue, pools, filterValue]);
-
+  }, [
+    userLiquidityInPools,
+    filterValue,
+    pools,
+    filterValue,
+    userLiquidityRefetch,
+  ]);
+  
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
       setChildPool(false);
       if (filterValue !== '3') {
         if (filterValue === '4') {
-          setDisplayPools(userPools);
+            setDisplayPools(userPools);       
         } else {
           let filteredPools = pools.filter(
             (item) => item.type === Number(filterValue)
@@ -127,7 +199,7 @@ const Farm = ({
         setDisplayPools(pools);
       }
     },
-    [pools]
+    [pools,userLiquidityRefetch]
   );
 
   const getAPRs = () => {
@@ -146,7 +218,7 @@ const Farm = ({
 
   useEffect(() => {
     updateFilteredData(filterValue, userPools);
-  }, [pools, filterValue, updateFilteredData]);
+  }, [pools, filterValue, updateFilteredData, userLiquidityRefetch,userPools]);
 
   const onChange = (key) => {
     setFilterValue(key);
@@ -164,9 +236,21 @@ const Farm = ({
 
         setPools(result.pools);
         setInProgress(false);
+
+        const userPools = result?.pools;
+        if (
+          balances &&
+          balances.length > 0 &&
+          userPools &&
+          userPools.length > 0
+        ) {
+          userPools.forEach((item) => {
+            return getUserLiquidity(item);
+          });
+        }
       });
     },
-    [setPools]
+    [setPools, getUserLiquidity, userLiquidityRefetch, balances]
   );
 
   useEffect(() => {
@@ -411,7 +495,7 @@ const Farm = ({
     });
 
     setPoolAll(combinedTx);
-  }, [displayPools]);
+  }, [displayPools,userLiquidityRefetch]);
 
   const [userCurrentProposalData, setUserCurrentProposalData] = useState();
   const [currentProposalAllData, setCurrentProposalAllData] = useState();
@@ -704,7 +788,7 @@ const Farm = ({
             >
               {!listView ? (
                 <>
-                  {filterValue !== '4' && (
+                  {(
                     <NextImage
                       src={SquareWhite}
                       alt="Square"
@@ -724,7 +808,7 @@ const Farm = ({
                 </>
               ) : (
                 <>
-                  {filterValue !== '4' && (
+                  {(
                     <NextImage
                       src={Square}
                       alt="Square"
@@ -804,13 +888,15 @@ const Farm = ({
                 poolAprList={poolsApr && poolsApr}
                 noDataButton={filterValue === '4' ? true : false}
                 handleClick={handleClick}
+                refetch={refetch}
+                setRefetch={setRefetch}
               />
             </div>
           ) : inProgress ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <Loading />
             </div>
-          ) : !inProgress && displayPools.length <= 0 ? (
+          ) : !inProgress && poolAll.length <= 0 ? (
             <div className={`${styles.table__empty__data__wrap}`}>
               <div className={`${styles.table__empty__data}`}>
                 <NextImage src={No_Data} alt="Message" height={60} width={60} />
@@ -837,9 +923,7 @@ const Farm = ({
               }`}
             >
               {poolAll.map((item, i) => {
-                return filterValue === '4' ? (
-                  setListView(true)
-                ) : (
+                return (
                   <FarmCard
                     key={i}
                     theme={theme}
@@ -851,6 +935,8 @@ const Farm = ({
                     currentProposalAllData={currentProposalAllData}
                     protectedEmission={protectedEmission}
                     proposalId={proposalId}
+                    refetch={refetch}
+                    setRefetch={setRefetch}
                   />
                 );
               })}
@@ -863,7 +949,12 @@ const Farm = ({
           onCancel={handleMasterPoolCancel}
           centered={true}
         >
-          <Liquidity theme={theme} pool={masterPoolData} />
+          <Liquidity
+            theme={theme}
+            pool={masterPoolData}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          />
         </Modal>
       </div>
     </div>
@@ -909,6 +1000,7 @@ const stateToProps = (state) => {
     showEligibleLive: state.liquidity.showEligibleLive,
     showMyPool: state.liquidity.showMyPool,
     rewardsMap: state.liquidity.rewardsMap,
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch,
   };
 };
 

@@ -225,6 +225,7 @@ const OrderBook = ({
 
   const handlePairChange = (value) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
+    setClickedValue(0)
     if (ref?.current) {
       ref.current.value = '';
     }
@@ -631,7 +632,7 @@ const OrderBook = ({
                 Pair
               </div>
               <div className={`${styles.dropdown__orderbook__head__title}`}>
-                {`Price (${selectedPair?.base_coin})`}
+                {`Price`}
               </div>
               <div className={`${styles.dropdown__orderbook__head__title}`}>
                 24h Volume Change
@@ -680,14 +681,11 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
-                          {
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                })
-                              )
-                          
-                          }
+                        {commaSeparator(
+                          formateNumberDecimalsAuto({
+                            price: item?.price || 0,
+                          })
+                        )}
                       </div>
                       <div
                         className={`${
@@ -777,14 +775,11 @@ const OrderBook = ({
                         <div
                           className={`${styles.dropdown__orderbook__body__title}`}
                         >
-                          {
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                })
-                              )
-                          
-                          }
+                          {commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price: item?.price || 0,
+                            })
+                          )}
                         </div>
                         <div
                           className={`${
@@ -980,7 +975,7 @@ const OrderBook = ({
                 <div
                   className={`${styles.orderbook__trading__element} ${
                     styles.gap
-                  } ${theme === 'dark' ? styles.dark : styles.light}`}
+                  } ${styles.cursor}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <NextImage src={ArrowRL} alt="ArrowRL" />
@@ -997,7 +992,7 @@ const OrderBook = ({
               <div
                 className={`${styles.orderbook__trading__element} ${
                   styles.element__child
-                } ${theme === 'dark' ? styles.dark : styles.light}`}
+                }`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
@@ -1025,13 +1020,13 @@ const OrderBook = ({
                     }`}
                   >
                     ~$
-                    {
-                          commaSeparator(
-                            formateNumberDecimalsAuto({
-                              price: Number(selectedPair?.price || 0) * marketPrice(markets, selectedPair?.base_coin_denom),
-                            })
-                          )
-                      }
+                    {commaSeparator(
+                      formateNumberDecimalsAuto({
+                        price:
+                        (Number(Number(selectedPair?.price || 0) *
+                     Number(marketPrice(markets, selectedPair?.base_coin_denom))).toFixed(8)),
+                      })
+                    )}
                   </span>
                 </div>
               </div>
@@ -1154,7 +1149,7 @@ const OrderBook = ({
                     theme === 'dark' ? styles.dark : styles.light
                   }`}
                 >
-                  {'Order Book'}
+                  {'Orderbook'}
                 </div>
 
                 <MyDropdown
@@ -1240,7 +1235,7 @@ const OrderBook = ({
                       >
                         <div
                           className={`${styles.orderbook__lower__head} ${
-                            theme === 'dark' ? styles.dark : styles.light
+                           styles.cursor 
                           }`}
                           onClick={() =>
                             setClickedValue(
@@ -1248,7 +1243,13 @@ const OrderBook = ({
                                 price: Number(
                                   commaSeparator(
                                     formateNumberDecimalsAuto({
-                                      price: item?.price || 0,
+                                      price:
+                                      Number(item?.price) *
+                                        10 **
+                                         (
+                                            selectedPair?.base_coin_exponent -
+                                              selectedPair?.quote_coin_exponent
+                                          ) || 0,
                                     })
                                   )
                                 ),
@@ -1272,14 +1273,18 @@ const OrderBook = ({
                               theme === 'dark' ? styles.dark : styles.light
                             }`}
                           >
-                            {
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                  minDecimal: 3,
-                                })
-                              )
-                            }
+                            {commaSeparator(
+                              formateNumberDecimalsAuto({
+                                price:
+                                  Number(item?.price) *
+                                    10 **
+                                     (
+                                        selectedPair?.base_coin_exponent -
+                                          selectedPair?.quote_coin_exponent
+                                      ) || 0,
+                                minDecimal: 3,
+                              })
+                            )}
                           </div>
 
                           <div
@@ -1323,13 +1328,13 @@ const OrderBook = ({
               >
                 {' '}
                 ~$
-                    {
-                          commaSeparator(
-                            formateNumberDecimalsAuto({
-                              price: Number(selectedPair?.price || 0) * marketPrice(markets, selectedPair?.base_coin_denom),
-                            })
-                          )
-                      }
+                {commaSeparator(
+                  formateNumberDecimalsAuto({
+                    price:
+                    (Number(Number(selectedPair?.price || 0) *
+                     Number(marketPrice(markets, selectedPair?.base_coin_denom))).toFixed(8)),
+                  })
+                )}
               </div>
             </div>
             <div
@@ -1364,7 +1369,7 @@ const OrderBook = ({
                     >
                       <div
                         className={`${styles.orderbook__lower__head} ${
-                          theme === 'dark' ? styles.dark : styles.light
+                          styles.cursor 
                         }`}
                         onClick={() =>
                           setClickedValue(
@@ -1372,7 +1377,13 @@ const OrderBook = ({
                               price: Number(
                                 commaSeparator(
                                   formateNumberDecimalsAuto({
-                                    price: item?.price || 0,
+                                    price:
+                                  Number(item?.price) *
+                                    10 **
+                                     (
+                                        selectedPair?.base_coin_exponent -
+                                          selectedPair?.quote_coin_exponent
+                                      ) || 0,
                                   })
                                 )
                               ),
@@ -1396,14 +1407,18 @@ const OrderBook = ({
                             theme === 'dark' ? styles.dark : styles.light
                           }`}
                         >
-                          {
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                  minDecimal: 3,
-                                })
-                              )
-                            }
+                          {commaSeparator(
+                            formateNumberDecimalsAuto({
+                              price:
+                                  Number(item?.price) *
+                                    10 **
+                                     (
+                                        selectedPair?.base_coin_exponent -
+                                          selectedPair?.quote_coin_exponent
+                                      ) || 0,
+                              minDecimal: 3,
+                            })
+                          )}
                         </div>
 
                         <div
@@ -1507,14 +1522,12 @@ const OrderBook = ({
                           : styles.profit
                       }  ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {
-                              commaSeparator(
-                                formateNumberDecimalsAuto({
-                                  price: item?.price || 0,
-                                  minDecimal: 3,
-                                })
-                              )
-                            }
+                      {commaSeparator(
+                        formateNumberDecimalsAuto({
+                          price: item?.price || 0,
+                          minDecimal: 3,
+                        })
+                      )}
                     </div>
                     <div
                       className={`${

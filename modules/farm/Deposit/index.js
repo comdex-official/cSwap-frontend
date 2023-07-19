@@ -1,49 +1,47 @@
-import { Button, message, Slider, Tooltip } from "antd";
-import Long from "long";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { Button, message, Slider, Tooltip } from 'antd';
+import Long from 'long';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   setFirstReserveCoinDenom,
   setPoolBalance,
   setSecondReserveCoinDenom,
-} from "../../../actions/liquidity";
-import { setReverse } from "../../../actions/swap";
-import Snack from "../../../shared/components/Snack";
-import CustomInput from "../../../shared/components/CustomInput";
-import RangeTooltipContent from "../../../shared/components/RangedToolTip";
-import { comdex } from "../../../config/network";
-import { ValidateInputNumber } from "../../../config/_validation";
+  setUserLiquidityRefetch
+} from '../../../actions/liquidity';
+import { setReverse } from '../../../actions/swap';
+import Snack from '../../../shared/components/Snack';
+import CustomInput from '../../../shared/components/CustomInput';
+import RangeTooltipContent from '../../../shared/components/RangedToolTip';
+import { comdex } from '../../../config/network';
+import { ValidateInputNumber } from '../../../config/_validation';
 import {
   APP_ID,
   DEFAULT_FEE,
   DOLLAR_DECIMALS,
   PRICE_DECIMALS,
-} from "../../../constants/common";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { defaultFee } from "../../../services/transaction";
+} from '../../../constants/common';
+import { signAndBroadcastTransaction } from '../../../services/helper';
+import { defaultFee } from '../../../services/transaction';
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
   getDenomBalance,
-} from "../../../utils/coin";
+} from '../../../utils/coin';
 import {
   decimalConversion,
   getExponent,
   marketPrice,
   rangeToPercentage,
-} from "../../../utils/number";
-import {
-  errorMessageMappingParser,
-  toDecimals,
-} from "../../../utils/string";
-import variables from "../../../utils/variables";
-import styles from "../Farm.module.scss";
-import { NextImage } from "../../../shared/image/NextImage";
-import PoolDetails from "../poolDetail";
-import { Icon } from "../../../shared/image/Icon";
+} from '../../../utils/number';
+import { errorMessageMappingParser, toDecimals } from '../../../utils/string';
+import variables from '../../../utils/variables';
+import styles from '../Farm.module.scss';
+import { NextImage } from '../../../shared/image/NextImage';
+import PoolDetails from '../poolDetail';
+import { Icon } from '../../../shared/image/Icon';
 
 const Deposit = ({
   theme,
@@ -58,6 +56,10 @@ const Deposit = ({
   updateBalance,
   assetMap,
   iconList,
+  refetch,
+  setRefetch,
+  setUserLiquidityRefetch,
+  userLiquidityRefetch
 }) => {
   const marks = {
     0: Number(decimalConversion(pool?.minPrice)).toFixed(DOLLAR_DECIMALS),
@@ -122,7 +124,7 @@ const Deposit = ({
           getAmount(value, assetMap[pool?.balances?.baseCoin?.denom]?.decimals)
         ),
         firstAssetAvailableBalance,
-        "macro"
+        'macro'
       )
     );
 
@@ -141,7 +143,7 @@ const Deposit = ({
           )
         ),
         secondAssetAvailableBalance,
-        "macro"
+        'macro'
       )
     );
     isFinite(Number(numberOfTokens)) && setSecondInput(numberOfTokens);
@@ -161,7 +163,7 @@ const Deposit = ({
           getAmount(value, assetMap[pool?.balances?.quoteCoin?.denom]?.decimals)
         ),
         secondAssetAvailableBalance,
-        "macro"
+        'macro'
       )
     );
 
@@ -180,7 +182,7 @@ const Deposit = ({
           )
         ),
         firstAssetAvailableBalance,
-        "macro"
+        'macro'
       )
     );
 
@@ -214,7 +216,7 @@ const Deposit = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgDepositAndFarm",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgDepositAndFarm',
           value: {
             depositor: address.toString(),
             poolId: pool?.id,
@@ -223,13 +225,16 @@ const Deposit = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
         setInProgress(false);
         refreshData(pool);
         updateBalance();
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
+
         if (error) {
           message.error(error);
           return;
@@ -277,7 +282,7 @@ const Deposit = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgDeposit",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgDeposit',
           value: {
             depositor: address.toString(),
             poolId: pool?.id,
@@ -286,14 +291,16 @@ const Deposit = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
         setDepositProgress(false);
         refreshData(pool);
         updateBalance();
-        
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
+
         if (error) {
           message.error(error);
           return;
@@ -320,7 +327,7 @@ const Deposit = ({
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgFarm",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgFarm',
           value: {
             farmer: address,
             poolId: pool?.id,
@@ -333,14 +340,16 @@ const Deposit = ({
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
         setFarmProgress(false);
         refreshData(pool);
         updateBalance();
-        
+        setRefetch(!refetch);
+        setUserLiquidityRefetch(!userLiquidityRefetch)
+
         if (error) {
           message.error(error);
           return;
@@ -366,9 +375,9 @@ const Deposit = ({
     const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
     const price = reverse ? 1 / poolPrice : poolPrice;
 
-    return `1 ${denomIn || ""} = ${Number(
+    return `1 ${denomIn || ''} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(comdex?.coinDecimals)} ${denomOut || ""}`;
+    ).toFixed(comdex?.coinDecimals)} ${denomOut || ''}`;
   };
 
   const showDemandCoinSpotPrice = () => {
@@ -376,9 +385,9 @@ const Deposit = ({
     const denomOut = denomConversion(pool?.balances?.quoteCoin?.denom);
     const price = reverse ? poolPrice : 1 / poolPrice;
 
-    return `1 ${denomOut || ""} = ${Number(
+    return `1 ${denomOut || ''} = ${Number(
       price && isFinite(price) ? price : 0
-    ).toFixed(comdex?.coinDecimals)} ${denomIn || ""}`;
+    ).toFixed(comdex?.coinDecimals)} ${denomIn || ''}`;
   };
 
   const handleFirstInputMax = (max) => {
@@ -471,7 +480,7 @@ const Deposit = ({
                   autoAdjustOverflow={false}
                 >
                   <>
-                    <Icon className={"bi bi-info-circle"} />
+                    <Icon className={'bi bi-info-circle'} />
                   </>
                 </Tooltip>
               </div>
@@ -497,14 +506,13 @@ const Deposit = ({
           <div className={styles.tradeCard__body__main}>
             <div
               className={`${styles.tradeCard__body__left__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {`Provide ${denomConversion(pool?.balances?.baseCoin?.denom)}`}
             </div>
 
             <div className={styles.tradeCard__body__right__el1}>
-
               <div className="maxhalf">
                 <Button
                   className="active"
@@ -529,14 +537,14 @@ const Deposit = ({
               </div>
               <div
                 className={`${styles.tradeCard__body__right__el1__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <span>
                   {amountConversionWithComma(
                     firstAssetAvailableBalance,
                     assetMap[pool?.balances?.baseCoin?.denom]?.decimals
-                  )}{" "}
+                  )}{' '}
                   {denomConversion(pool?.balances?.baseCoin?.denom)}
                 </span>
               </div>
@@ -546,7 +554,7 @@ const Deposit = ({
           <div className={styles.tradeCard__body__right}>
             <div
               className={`${styles.tradeCard__body__left__item__details} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -565,7 +573,7 @@ const Deposit = ({
               <div
                 className={`${
                   styles.tradeCard__body__left__item__details__title
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 {denomConversion(pool?.balances?.baseCoin?.denom)}
               </div>
@@ -579,14 +587,14 @@ const Deposit = ({
               />
               <div
                 className={`${styles.tradeCard__body__right__el3} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 {pool?.id && showFirstCoinValue()}
               </div>
               <div
                 className={`${styles.tradeCard__body__right__el4} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 {pool?.id && showOfferCoinSpotPrice()}
@@ -601,14 +609,13 @@ const Deposit = ({
           <div className={styles.tradeCard__body__main}>
             <div
               className={`${styles.tradeCard__body__left__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {`Provide ${denomConversion(pool?.balances?.quoteCoin?.denom)}`}
             </div>
 
             <div className={styles.tradeCard__body__right__el1}>
-             
               <div className="maxhalf">
                 <Button
                   className="active"
@@ -627,19 +634,19 @@ const Deposit = ({
                     )
                   }
                 >
-                 MAX
+                  MAX
                 </Button>
               </div>
               <div
                 className={`${styles.tradeCard__body__right__el1__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <span className="">
                   {amountConversionWithComma(
                     secondAssetAvailableBalance,
                     assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
-                  )}{" "}
+                  )}{' '}
                   {denomConversion(pool?.balances?.quoteCoin?.denom)}
                 </span>
               </div>
@@ -649,7 +656,7 @@ const Deposit = ({
           <div className={styles.tradeCard__body__right}>
             <div
               className={`${styles.tradeCard__body__left__item__details} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div className={`${styles.tradeCard__logo__wrap}`}>
@@ -668,7 +675,7 @@ const Deposit = ({
               <div
                 className={`${
                   styles.tradeCard__body__left__item__details__title
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
                 {denomConversion(pool?.balances?.quoteCoin?.denom)}
               </div>
@@ -684,14 +691,14 @@ const Deposit = ({
               />
               <div
                 className={`${styles.tradeCard__body__right__el3} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 {pool?.id && showSecondCoinValue()}
               </div>
               <div
                 className={`${styles.tradeCard__body__right__el4} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 {pool?.id && showDemandCoinSpotPrice()}
@@ -821,6 +828,7 @@ const stateToProps = (state) => {
     poolBalance: state.liquidity.poolBalance,
     assetMap: state.asset.map,
     iconList: state.config?.iconList,
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch
   };
 };
 
@@ -829,6 +837,7 @@ const actionsToProps = {
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
   setReverse,
+  setUserLiquidityRefetch
 };
 
 export default connect(stateToProps, actionsToProps)(Deposit);

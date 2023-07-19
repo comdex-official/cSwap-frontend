@@ -203,7 +203,11 @@
   align-items: center;
   position: relative;
   padding: 5px 0px;
-  cursor: pointer;
+ 
+  &.cursor{
+    cursor: pointer;
+  }
+
   &.lower {
     margin-top: 10px;
   }
@@ -567,8 +571,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
+ 
   gap: 5px;
+
+  &.cursor{
+    cursor: pointer;
+  }
 
   &.gap {
     border-radius: 9.403px;
