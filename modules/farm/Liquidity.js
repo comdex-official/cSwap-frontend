@@ -47,6 +47,8 @@ const Liquidity = ({
   userLiquidityInPools,
   assetMap,
   rewardsMap,
+  refetch,
+  setRefetch
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -188,13 +190,13 @@ const Liquidity = ({
     DOLLAR_DECIMALS
   );
 
-  useEffect(() => {
-    let totalUserPoolLiquidity = Number(calculatePoolLiquidity(providedTokens));
+  // useEffect(() => {
+  //   let totalUserPoolLiquidity = Number(calculatePoolLiquidity(providedTokens));
 
-    if (pool?.id) {
-      setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity || 0);
-    }
-  }, [pool?.id, providedTokens, calculatePoolLiquidity]);
+  //   if (pool?.id) {
+  //     // setUserLiquidityInPools(pool?.id, totalUserPoolLiquidity || 0);
+  //   }
+  // }, [pool?.id, providedTokens, calculatePoolLiquidity]);
 
   const tabItems = [
     {
@@ -205,6 +207,7 @@ const Liquidity = ({
           pool={pool}
           refreshData={queryPoolBalance}
           updateBalance={handleBalanceRefresh}
+          refetch={refetch} setRefetch={setRefetch}
         />
       ),
     },
@@ -217,6 +220,7 @@ const Liquidity = ({
           refreshData={queryPoolBalance}
           updateBalance={handleBalanceRefresh}
           userLockedPoolTokens={userLockedPoolTokens}
+          refetch={refetch} setRefetch={setRefetch}
         />
       ),
     },

@@ -34,6 +34,7 @@ const Portfolio = ({
   setPools,
   setUserLiquidityInPools,
   userLiquidityInPools,
+  userLiquidityRefetch,
 }) => {
   const theme = 'dark';
 
@@ -95,7 +96,7 @@ const Portfolio = ({
         });
       }
     },
-    [assetMap, address, markets, balances]
+    [assetMap, address, markets, balances, userLiquidityRefetch]
   );
 
   const fetchPools = useCallback(
@@ -121,7 +122,7 @@ const Portfolio = ({
         }
       });
     },
-    [balances, getUserLiquidity, setPools]
+    [balances, getUserLiquidity, setPools, userLiquidityRefetch]
   );
 
   useEffect(() => {
@@ -380,6 +381,7 @@ const stateToProps = (state) => {
     userLiquidityInPools: state.liquidity.userLiquidityInPools,
     poolBalance: state.account.balances.pool,
     address: state.account.address,
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch,
   };
 };
 

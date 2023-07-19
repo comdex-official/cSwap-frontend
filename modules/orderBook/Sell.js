@@ -291,7 +291,9 @@ const Sell = ({
               </p>
               <label>
                 ~$
-                {(
+                {isNaN((
+                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                ).toFixed(4)) ? Number(0).toFixed(4) : (
                   Number(total) * marketPrice(markets, pair?.quote_coin_denom)
                 ).toFixed(4)}
               </label>
