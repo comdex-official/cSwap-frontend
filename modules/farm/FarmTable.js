@@ -220,72 +220,6 @@ const FarmTable = ({
     return fixedDecimal(totalMasterPoolApr);
   };
 
-  // const getUserLiquidity = useCallback(
-  //   (pool) => {
-  //     if (address) {
-  //       queryPoolSoftLocks(address, pool?.id, (error, result) => {
-  //         if (error) {
-  //           message.error(error);
-  //           return;
-  //         }
-
-  //         const availablePoolToken =
-  //           getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-
-  //         const activeSoftLock = result?.activePoolCoin;
-  //         const queuedSoftLocks = result?.queuedPoolCoin;
-
-  //         const queuedAmounts =
-  //           queuedSoftLocks &&
-  //           queuedSoftLocks.length > 0 &&
-  //           queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-  //         const userLockedAmount =
-  //           Number(
-  //             queuedAmounts?.length > 0 &&
-  //               queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-  //           ) + Number(activeSoftLock?.amount) || 0;
-
-  //         const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
-  //         queryPoolCoinDeserialize(
-  //           pool?.id,
-  //           totalPoolToken,
-  //           (error, result) => {
-  //             if (error) {
-  //               message.error(error);
-  //               return;
-  //             }
-
-  //             const providedTokens = result?.coins;
-  //             const totalLiquidityInDollar =
-  //               Number(
-  //                 amountConversion(
-  //                   providedTokens?.[0]?.amount,
-  //                   assetMap[providedTokens?.[0]?.denom]?.decimals
-  //                 )
-  //               ) *
-  //                 marketPrice(markets, providedTokens?.[0]?.denom) +
-  //               Number(
-  //                 amountConversion(
-  //                   providedTokens?.[1]?.amount,
-  //                   assetMap[providedTokens?.[1]?.denom]?.decimals
-  //                 )
-  //               ) *
-  //                 marketPrice(markets, providedTokens?.[1]?.denom);
-  //             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
-  //           }
-  //         );
-  //       });
-  //     }
-  //   },
-  //   [address, assetMap, balances, markets]
-  // );
-
-  // useEffect(() => {
-  //   if (pool?.id) {
-  //     getUserLiquidity(pool);
-  //   }
-  // }, [pool, getUserLiquidity]);
-
   const [userCurrentProposalData, setUserCurrentProposalData] = useState();
   const [currentProposalAllData, setCurrentProposalAllData] = useState();
   const [protectedEmission, setProtectedEmission] = useState(0);
@@ -364,7 +298,7 @@ const FarmTable = ({
     if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
       return 0;
     } else {
-      return Number(calculatedEmission);
+      return Number(calculatedEmission).toFixed(2);
     }
   };
 
@@ -518,7 +452,7 @@ const FarmTable = ({
               >
                 <div
                   className={`${styles.farmCard__element__right__emission} ${
-                    theme === 'dark' ? styles.dark : styles.light
+                   styles.emission_img 
                   }`}
                 >
                   <NextImage src={Emission} alt="Emission" />
@@ -849,9 +783,9 @@ const FarmTable = ({
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
-                className={`${styles.farmCard__element__right__details} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__right__details}
+                ${(getMasterPool(value?.id?.toNumber()) && noDataButton) || !getMasterPool(value?.id?.toNumber()) ? styles.cursor : ""}
+                `}
               >
                 <div
                   className={`${
@@ -1026,7 +960,7 @@ const FarmTable = ({
               >
                 <div
                   className={`${styles.farmCard__element__right__emission} ${
-                    theme === 'dark' ? styles.dark : styles.light
+                    styles.emission_img 
                   }`}
                 >
                   <NextImage src={Emission} alt="Emission" />
@@ -1350,9 +1284,9 @@ const FarmTable = ({
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div
-                className={`${styles.farmCard__element__right__details} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farmCard__element__right__details} 
+                ${(getMasterPool(value?.id?.toNumber()) && noDataButton) || !getMasterPool(value?.id?.toNumber()) ? styles.cursor : ""}
+                `}
               >
                 <div
                   className={`${

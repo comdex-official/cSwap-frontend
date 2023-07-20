@@ -26,6 +26,14 @@ const ConnectModal = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
+  window.addEventListener("keplr_keystorechange", () => {
+    handleConnectToWallet();
+  });
+
+  window.addEventListener("leap_keystorechange", () => {
+    handleConnectToWallet();
+  });
+
   const handleConnectToWallet = (walletType) => {
     setInProgress(true);
 

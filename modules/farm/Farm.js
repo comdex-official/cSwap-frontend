@@ -934,6 +934,7 @@ const Farm = ({
                     userCurrentProposalData={userCurrentProposalData}
                     currentProposalAllData={currentProposalAllData}
                     protectedEmission={protectedEmission}
+                    myPool={filterValue === '4' ? true : false}
                     proposalId={proposalId}
                     refetch={refetch}
                     setRefetch={setRefetch}
