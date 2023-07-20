@@ -19,6 +19,7 @@ import {
 } from '../../utils/number';
 import OrderType from './OrderType';
 import styles from './OrderBook.module.scss';
+import { ValidateInputNumber } from '../../config/_validation';
 
 const Sell = ({
   pair,
@@ -31,6 +32,7 @@ const Sell = ({
   clickedValue,
   setRefresh,
   refresh,
+  assetMap,
 }) => {
   const theme = 'dark';
 
@@ -39,6 +41,9 @@ const Sell = ({
   const [total, setTotal] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const available = getDenomBalance(balances, pair?.base_coin_denom);
+  const [validationError, setValidationError] = useState();
+
+  const isError = validationError?.message?.length > 0;
 
   useEffect(() => {
     setPrice(
@@ -124,6 +129,7 @@ const Sell = ({
     setPrice();
     setAmount();
     setTotal();
+    setValidationError();
   };
 
   const handlePriceChange = (value) => {
@@ -134,6 +140,17 @@ const Sell = ({
   const handleAmountChange = (value) => {
     setAmount(value);
     setTotal(value * price);
+    setValidationError(
+      ValidateInputNumber(
+        Number(value),
+        Number(
+          amountConversion(
+            available || 0,
+            assetMap[pair?.base_coin_denom]?.decimals
+        )
+        ),
+      )
+    );
   };
 
   const handleAmountPercentage = (value) => {
@@ -141,6 +158,17 @@ const Sell = ({
     let amountPercentage = (value / 100) * amountConversion(available);
     setAmount(amountPercentage || 0);
     setTotal(amountPercentage * pair?.price);
+    setValidationError(
+      ValidateInputNumber(
+        Number(amountPercentage),
+        Number(
+          amountConversion(
+            available || 0,
+            assetMap[pair?.base_coin_denom]?.decimals
+        )
+        ),
+      )
+    );
   };
 
   const getBalanceValue = () => {
@@ -236,6 +264,11 @@ const Sell = ({
                 onChange={(event) => handleAmountChange(event.target.value)}
                 suffix={denomConversion(pair?.base_coin_denom)}
               />
+              {isError ? (
+        <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
+          {validationError?.message}
+        </div>
+      ) : null}
             </div>
           </div>
 
@@ -336,6 +369,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     params: state.swap.params,
     type: state.order.type,
+    assetMap: state.asset.map,
   };
 };
 

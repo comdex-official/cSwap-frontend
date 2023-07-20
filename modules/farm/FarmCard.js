@@ -65,7 +65,8 @@ const FarmCard = ({
   protectedEmission,
   proposalId,
   refetch,
-  setRefetch
+  setRefetch,
+  myPool,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
@@ -236,67 +237,6 @@ const FarmCard = ({
     }
   };
 
-  // const getUserLiquidity = useCallback(
-  //   (pool) => {
-  //     if (address) {
-  //       queryPoolSoftLocks(address, pool?.id, (error, result) => {
-  //         if (error) {
-  //           message.error(error);
-  //           return;
-  //         }
-
-  //         const availablePoolToken =
-  //           getDenomBalance(balances, pool?.poolCoinDenom) || 0;
-
-  //         const activeSoftLock = result?.activePoolCoin;
-  //         const queuedSoftLocks = result?.queuedPoolCoin;
-
-  //         const queuedAmounts =
-  //           queuedSoftLocks &&
-  //           queuedSoftLocks.length > 0 &&
-  //           queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-  //         const userLockedAmount =
-  //           Number(
-  //             queuedAmounts?.length > 0 &&
-  //               queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-  //           ) + Number(activeSoftLock?.amount) || 0;
-
-  //         const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
-  //         queryPoolCoinDeserialize(
-  //           pool?.id,
-  //           totalPoolToken,
-  //           (error, result) => {
-  //             if (error) {
-  //               message.error(error);
-  //               return;
-  //             }
-
-  //             const providedTokens = result?.coins;
-  //             const totalLiquidityInDollar =
-  //               Number(
-  //                 amountConversion(
-  //                   providedTokens?.[0]?.amount,
-  //                   assetMap[providedTokens?.[0]?.denom]?.decimals
-  //                 )
-  //               ) *
-  //                 marketPrice(markets, providedTokens?.[0]?.denom) +
-  //               Number(
-  //                 amountConversion(
-  //                   providedTokens?.[1]?.amount,
-  //                   assetMap[providedTokens?.[1]?.denom]?.decimals
-  //                 )
-  //               ) *
-  //                 marketPrice(markets, providedTokens?.[1]?.denom);
-
-  //             setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
-  //           }
-  //         );
-  //       });
-  //     }
-  //   },
-  //   [address, assetMap, balances, markets]
-  // );
-
   useEffect(() => {
     setPoolExternalIncentiveData(poolsApr?.incentive_rewards);
   }, [poolsApr]);
@@ -306,12 +246,6 @@ const FarmCard = ({
       fetchMasterPoolAprData();
     }
   }, [poolAprList]);
-
-  // useEffect(() => {
-  //   if (pool?.id) {
-  //     getUserLiquidity(pool);
-  //   }
-  // }, [pool, getUserLiquidity]);
 
   useEffect(() => {
     if (showMyPool) {
@@ -334,7 +268,7 @@ const FarmCard = ({
     if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
       return 0;
     } else {
-      return Number(calculatedEmission);
+      return Number(calculatedEmission).toFixed(2);
     }
   };
 
@@ -763,6 +697,7 @@ const FarmCard = ({
 
             <Tooltip
               title={
+                (getMasterPool() && myPool) || 
                 !getMasterPool() ? (
                   <>
                     <div className="upto_apr_tooltip_farm_main_container">
@@ -871,17 +806,21 @@ const FarmCard = ({
               <div
                 className={`${styles.farmCard__element__right__details} ${
                   styles.card__center
-                } ${theme === 'dark' ? styles.dark : styles.light}`}
+                } ${(getMasterPool() && myPool) || !getMasterPool() ? styles.cursor : ""}`}
               >
                 <div
                   className={`${
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {commaSeparator(calculateApr() || 0)}%
-                  {!getMasterPool() && <Icon className={'bi bi-arrow-right'} />}
+                  {
+                  getMasterPool() && myPool ? `${commaSeparator(calculateChildPoolApr() || 0)}%` :
+                  `${commaSeparator(calculateApr() || 0)}%`}
+                  {
+                  getMasterPool() && myPool ? <Icon className={'bi bi-arrow-right'} /> :
+                  !getMasterPool() ? <Icon className={'bi bi-arrow-right'} />: ""}
                 </div>
-                {!getMasterPool() && (
+                {getMasterPool() && myPool ? (
                   <div
                     className={`${styles.farmCard__element__right__pool} ${styles.upto}`}
                   >
@@ -897,7 +836,25 @@ const FarmCard = ({
                       {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
                     </div>
                   </div>
-                )}
+                ): !getMasterPool() ?
+                (
+                  <div
+                    className={`${styles.farmCard__element__right__pool} ${styles.upto}`}
+                  >
+                    <div
+                      className={`${
+                        styles.farmCard__element__right__pool__title
+                      } ${styles.boost} ${
+                        theme === 'dark' ? styles.dark : styles.light
+                      }`}
+                    >
+                      <NextImage src={Current} alt="Logo" />
+
+                      {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
+                    </div>
+                  </div>
+                ):""
+                }
               </div>
             </Tooltip>
           </div>
@@ -919,7 +876,9 @@ const FarmCard = ({
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {`$${TotalPoolLiquidity || 0}`}
+              {myPool
+                ? `$${commaSeparator(Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS))}`
+                : `$${TotalPoolLiquidity || 0}`}
             </div>
           </div>
 
@@ -1156,7 +1115,12 @@ const FarmCard = ({
             onCancel={handleCancel}
             centered={true}
           >
-            <Liquidity theme={theme} pool={selectedSinglePool} refetch={refetch} setRefetch={setRefetch}/>
+            <Liquidity
+              theme={theme}
+              pool={selectedSinglePool}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
           </Modal>
 
           {/* For goto Pool Button  --> Master pool */}
@@ -1166,7 +1130,12 @@ const FarmCard = ({
             onCancel={handleMasterPoolCancel}
             centered={true}
           >
-            <Liquidity theme={theme} pool={masterPoolData} refetch={refetch} setRefetch={setRefetch}/>
+            <Liquidity
+              theme={theme}
+              pool={masterPoolData}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
           </Modal>
 
           {/* For my pool when user navigate through portofolio manage button  */}
@@ -1177,7 +1146,12 @@ const FarmCard = ({
               onCancel={handlePortofolioManageCancel}
               centered={true}
             >
-              <Liquidity theme={theme} pool={selectedManagePool} refetch={refetch} setRefetch={setRefetch}/>
+              <Liquidity
+                theme={theme}
+                pool={selectedManagePool}
+                refetch={refetch}
+                setRefetch={setRefetch}
+              />
             </Modal>
           )}
         </div>

@@ -17,11 +17,10 @@ import {
   formateNumberDecimalsAuto,
   marketPrice,
 } from '../../utils/number';
-import {
-  toDecimals
-} from '../../utils/string';
+import { toDecimals } from '../../utils/string';
 import OrderType from './OrderType';
 import styles from './OrderBook.module.scss';
+import { ValidateInputNumber } from '../../config/_validation';
 
 const Buy = ({
   pair,
@@ -42,6 +41,8 @@ const Buy = ({
   const [amount, setAmount] = useState();
   const [total, setTotal] = useState(0);
   const [inProgress, setInProgress] = useState(false);
+  const [active, setActive] = useState();
+  const [validationError, setValidationError] = useState();
 
   useEffect(() => {
     setPrice(
@@ -135,37 +136,77 @@ const Buy = ({
     setPrice();
     setAmount();
     setTotal();
+    setValidationError();
   };
+
+  const isError = validationError?.message?.length > 0;
 
   const handlePriceChange = (value) => {
     setPrice(value);
-    setTotal(amount / Number(toDecimals(String(pair?.price)).toString().trim()));
-    console.log(value)
+    setTotal(
+      amount / Number(toDecimals(String(pair?.price)).toString().trim())
+    );
   };
-  const [active, setActive] = useState();
+
   const handleAmountChange = (value) => {
-    console.log(value)
     setAmount(value);
     setTotal(value / Number(toDecimals(String(pair?.price)).toString().trim()));
+    setValidationError(
+      ValidateInputNumber(
+        Number(value),
+        Number(
+          amountConversion(
+            quoteBalance || 0,
+            assetMap[pair?.quote_coin_denom]?.decimals
+          )
+        ),
+      )
+    );
   };
 
   const handleAmountPercentage = (value) => {
     setActive(+value);
     let AmountPercentage =
-      (value / 100) * Number(amountConversion(quoteBalance,assetMap[pair?.quote_coin_denom]?.decimals));
-      console.log(AmountPercentage)
-    setTotal(AmountPercentage / Number(toDecimals(String(pair?.price)).toString().trim()));
+      (value / 100) *
+      Number(
+        amountConversion(
+          quoteBalance,
+          assetMap[pair?.quote_coin_denom]?.decimals
+        )
+      );
+      
+    setTotal(
+      AmountPercentage /
+        Number(toDecimals(String(pair?.price)).toString().trim())
+    );
     setAmount(AmountPercentage || 0);
+    setValidationError(
+      ValidateInputNumber(
+        Number(AmountPercentage),
+        Number(
+          amountConversion(
+            quoteBalance || 0,
+            assetMap[pair?.quote_coin_denom]?.decimals
+          )
+        ),
+      )
+    );
   };
 
   const quoteBalance = getDenomBalance(balances, pair?.quote_coin_denom);
 
   const getBalanceValue = () => {
     return (
-      Number(amountConversion(quoteBalance || 0, assetMap[pair?.quote_coin_denom]?.decimals)) *
-      marketPrice(markets, pair?.quote_coin_denom)
+      (Number(
+        amountConversion(
+          quoteBalance || 0,
+          assetMap[pair?.quote_coin_denom]?.decimals
+        )
+      ) * marketPrice(markets, pair?.quote_coin_denom))
     );
   };
+
+ 
 
   return (
     <>
@@ -183,7 +224,10 @@ const Buy = ({
           >
             Balance:
             {formateNumberDecimalsAuto({
-              price: amountConversion(quoteBalance || 0, assetMap[pair?.quote_coin_denom]?.decimals),
+              price: amountConversion(
+                quoteBalance || 0,
+                assetMap[pair?.quote_coin_denom]?.decimals
+              ),
             })}{' '}
             {denomConversion(pair?.quote_coin_denom)}
             <label>
@@ -252,6 +296,12 @@ const Buy = ({
                 onChange={(event) => handleAmountChange(event.target.value)}
                 suffix={denomConversion(pair?.quote_coin_denom)}
               />
+
+{isError ? (
+        <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
+          {validationError?.message}
+        </div>
+      ) : null}
             </div>
           </div>
 
@@ -306,11 +356,16 @@ const Buy = ({
               </p>
               <label>
                 ~$
-                {isNaN((
-                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
-                ).toFixed(4)) ? Number(0).toFixed(4) : (
-                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
-                ).toFixed(4)}
+                {isNaN(
+                  (
+                    Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                  ).toFixed(4)
+                )
+                  ? Number(0).toFixed(4)
+                  : (
+                      Number(total) *
+                      marketPrice(markets, pair?.quote_coin_denom)
+                    ).toFixed(4)}
               </label>
             </div>
           </div>
@@ -327,7 +382,9 @@ const Buy = ({
             style={{ width: '120px' }}
             block
             loading={inProgress}
-            disabled={inProgress || !price || !total}
+            disabled={
+              inProgress || !price || !total || validationError?.message
+            }
             onClick={() => handleSwap()}
           >
             {type === 'limit'

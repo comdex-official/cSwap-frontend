@@ -172,7 +172,7 @@ const MyPools = ({
     if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
       return 0;
     } else {
-      return Number(calculatedEmission);
+      return Number(calculatedEmission).toFixed(2);
     }
   };
 

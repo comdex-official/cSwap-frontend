@@ -664,7 +664,10 @@
 .farmCard__element__right__details {
   display: flex;
   align-items: center;
-  cursor: pointer;
+
+  &.cursor{
+    cursor: pointer;
+  }
 
   &.card__center {
     align-items: center;
@@ -907,6 +910,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 15px;
+  // width: 550px;
 }
 
 .liquidity__wrap {
@@ -1420,6 +1424,11 @@
 
 .farmCard__element__right__emission {
   cursor: pointer;
+
+  &.emission_img{
+    width: 50px;
+  }
+
   img {
     height: 20px;
   }
