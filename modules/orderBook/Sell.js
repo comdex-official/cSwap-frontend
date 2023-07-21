@@ -17,9 +17,11 @@ import {
   formateNumberDecimalsAuto,
   marketPrice,
 } from '../../utils/number';
+import { toDecimals } from '../../utils/string';
 import OrderType from './OrderType';
 import styles from './OrderBook.module.scss';
 import { ValidateInputNumber } from '../../config/_validation';
+import { comdex } from '../../config/network';
 
 const Sell = ({
   pair,
@@ -134,12 +136,16 @@ const Sell = ({
 
   const handlePriceChange = (value) => {
     setPrice(value);
-    setTotal(amount * value);
+    setTotal((amount * Number(toDecimals(String(value)).toString().trim())).toFixed(
+      comdex.coinDecimals
+    ));
   };
   const [active, setActive] = useState();
   const handleAmountChange = (value) => {
     setAmount(value);
-    setTotal(value * price);
+    setTotal((value * Number(toDecimals(String(price)).toString().trim())).toFixed(
+      comdex.coinDecimals
+    ));
     setValidationError(
       ValidateInputNumber(
         Number(value),
@@ -157,7 +163,7 @@ const Sell = ({
     setActive(+value);
     let amountPercentage = (value / 100) * amountConversion(available);
     setAmount(amountPercentage || 0);
-    setTotal(amountPercentage * pair?.price);
+    setTotal((amountPercentage * Number(toDecimals(String(price)).toString().trim())).toFixed(comdex.coinDecimals));
     setValidationError(
       ValidateInputNumber(
         Number(amountPercentage),
@@ -318,16 +324,16 @@ const Sell = ({
             <div className={`${styles.orderbook__body__tab__body__balance}`}>
               <p>
                 {formateNumberDecimalsAuto({
-                  price: total || 0,
+                  price: !isFinite(total) ? 0 : total || 0,
                 })}{' '}
                 {denomConversion(pair?.quote_coin_denom)}
               </p>
               <label>
                 ~$
                 {isNaN((
-                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                  Number(!isFinite(total) ? 0 : total || 0) * marketPrice(markets, pair?.quote_coin_denom)
                 ).toFixed(4)) ? Number(0).toFixed(4) : (
-                  Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                  Number(!isFinite(total) ? 0 : total || 0) * marketPrice(markets, pair?.quote_coin_denom)
                 ).toFixed(4)}
               </label>
             </div>

@@ -21,7 +21,7 @@ import {
   fetchKeplrAccountName,
   initializeChain,
 } from '../../../services/keplr';
-import { Modal, message } from 'antd';
+import { Modal, message, Tooltip } from 'antd';
 import { marketPrice } from '../../../utils/number';
 import { cmst, comdex, harbor } from '../../../config/network';
 import { amountConversion } from '../../../utils/coin';
@@ -511,6 +511,10 @@ const Header = ({
                 document.getElementById('topRightToogle')
               }
             >
+               <Tooltip
+                    title={'Switch dApps'}
+                    overlayClassName="farm_upto_apr_tooltip"
+                  >
               <div className={styles.header__cSwap}>
                 <Icon
                   className={`bi bi-grid-fill ${
@@ -519,14 +523,21 @@ const Header = ({
                   size={'1.1rem'}
                 />
               </div>
+              </Tooltip>
             </MyDropdown>
 
+
+            <Tooltip
+                    title={'Faucet'}
+                    overlayClassName="farm_upto_apr_tooltip"
+                  >
             <div
               className={styles.header__cSwap}
               onClick={() =>
                 window.open('https://faucet.comdex.one/', '_blank')
               }
             >
+              
               <div className={styles.header__cSwap__main}>
                 {theme === 'dark' ? (
                   <NextImage src={Faucet} alt="Logo_Dark" />
@@ -535,10 +546,16 @@ const Header = ({
                 )}
               </div>
             </div>
+            </Tooltip>
 
+            <Tooltip
+                    title={'Fiat Onramp'}
+                    overlayClassName="farm_upto_apr_tooltip"
+                  >
             <div className={styles.header__buy}>
               <NextImage src={Shop} alt={'Logo'} />
             </div>
+            </Tooltip>
 
             <div id={'topRightToogle3'}>
               <MyDropdown
