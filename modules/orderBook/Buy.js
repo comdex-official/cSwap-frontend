@@ -21,6 +21,7 @@ import { toDecimals } from '../../utils/string';
 import OrderType from './OrderType';
 import styles from './OrderBook.module.scss';
 import { ValidateInputNumber } from '../../config/_validation';
+import { comdex } from '../../config/network';
 
 const Buy = ({
   pair,
@@ -60,7 +61,7 @@ const Buy = ({
       Number(pair?.price) *
       (1 + Number(decimalConversion(params?.maxPriceLimitRatio)));
     const buyAmount =
-      ((Number(total) - Number(offerCoinFee)) / maxPrice) *
+      ((Number(amount) - Number(offerCoinFee)) / maxPrice) *
       10 ** Math.abs(pair?.base_coin_exponent - pair?.quote_coin_exponent);
 
     return getAmount(buyAmount, 10 ** pair?.base_coin_exponent);
@@ -83,7 +84,7 @@ const Buy = ({
 
         offerCoin: {
           denom: pair?.quote_coin_denom,
-          amount: getAmount(Number(total), 10 ** pair?.quote_coin_exponent),
+          amount: getAmount(Number(amount), 10 ** pair?.quote_coin_exponent),
         },
         demandCoinDenom: pair?.base_coin_denom,
         /** amount specifies the amount of base coin the orderer wants to buy or sell */
@@ -141,16 +142,22 @@ const Buy = ({
 
   const isError = validationError?.message?.length > 0;
 
-  const handlePriceChange = (value) => {
+  const handlePriceChange = (value) => { 
     setPrice(value);
     setTotal(
-      amount / Number(toDecimals(String(pair?.price)).toString().trim())
+      (amount / Number(toDecimals(String(value)).toString().trim())).toFixed(
+        comdex.coinDecimals
+      )
     );
   };
 
   const handleAmountChange = (value) => {
     setAmount(value);
-    setTotal(value / Number(toDecimals(String(pair?.price)).toString().trim()));
+    setTotal(
+      (value / Number(toDecimals(String(price)).toString().trim())).toFixed(
+        comdex.coinDecimals
+      )
+    );
     setValidationError(
       ValidateInputNumber(
         Number(value),
@@ -159,7 +166,7 @@ const Buy = ({
             quoteBalance || 0,
             assetMap[pair?.quote_coin_denom]?.decimals
           )
-        ),
+        )
       )
     );
   };
@@ -174,10 +181,11 @@ const Buy = ({
           assetMap[pair?.quote_coin_denom]?.decimals
         )
       );
-      
+
     setTotal(
-      AmountPercentage /
-        Number(toDecimals(String(pair?.price)).toString().trim())
+      (
+        AmountPercentage / Number(toDecimals(String(price)).toString().trim())
+      ).toFixed(comdex.coinDecimals)
     );
     setAmount(AmountPercentage || 0);
     setValidationError(
@@ -188,7 +196,7 @@ const Buy = ({
             quoteBalance || 0,
             assetMap[pair?.quote_coin_denom]?.decimals
           )
-        ),
+        )
       )
     );
   };
@@ -197,16 +205,14 @@ const Buy = ({
 
   const getBalanceValue = () => {
     return (
-      (Number(
+      Number(
         amountConversion(
           quoteBalance || 0,
           assetMap[pair?.quote_coin_denom]?.decimals
         )
-      ) * marketPrice(markets, pair?.quote_coin_denom))
+      ) * marketPrice(markets, pair?.quote_coin_denom)
     );
   };
-
- 
 
   return (
     <>
@@ -297,11 +303,15 @@ const Buy = ({
                 suffix={denomConversion(pair?.quote_coin_denom)}
               />
 
-{isError ? (
-        <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
-          {validationError?.message}
-        </div>
-      ) : null}
+              {isError ? (
+                <div
+                  className={
+                    isError ? 'alert-label' : 'alert-label alert-hidden'
+                  }
+                >
+                  {validationError?.message}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -350,7 +360,7 @@ const Buy = ({
             <div className={`${styles.orderbook__body__tab__body__balance}`}>
               <p>
                 {formateNumberDecimalsAuto({
-                  price: total || 0,
+                  price: !isFinite(total) ? 0 : total || 0,
                 })}{' '}
                 {denomConversion(pair?.base_coin_denom)}
               </p>
@@ -358,13 +368,14 @@ const Buy = ({
                 ~$
                 {isNaN(
                   (
-                    Number(total) * marketPrice(markets, pair?.quote_coin_denom)
+                    Number(!isFinite(total) ? 0 : total || 0) *
+                    marketPrice(markets, pair?.base_coin_denom)
                   ).toFixed(4)
                 )
                   ? Number(0).toFixed(4)
                   : (
-                      Number(total) *
-                      marketPrice(markets, pair?.quote_coin_denom)
+                      Number(!isFinite(total) ? 0 : total || 0) *
+                      marketPrice(markets, pair?.base_coin_denom)
                     ).toFixed(4)}
               </label>
             </div>

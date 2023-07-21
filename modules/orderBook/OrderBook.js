@@ -225,7 +225,7 @@ const OrderBook = ({
 
   const handlePairChange = (value) => {
     setSelectedPair(pairs?.find((item) => item?.pair_id === value));
-    setClickedValue(0)
+    setClickedValue(0);
     if (ref?.current) {
       ref.current.value = '';
     }
@@ -853,7 +853,10 @@ const OrderBook = ({
         formateNumberDecimalsAuto({
           price: Number(
             formateNumberDecimalsAuto({
-              price: BuySellData[0]?.buys[i]?.price || 0,
+              price:  Number(BuySellData[0]?.buys[i]?.price || 0) *
+              10 **
+                (selectedPair?.base_coin_exponent -
+                  selectedPair?.quote_coin_exponent) || 0,
               minDecimal: 3,
             })
           ),
@@ -876,15 +879,15 @@ const OrderBook = ({
     }
 
     const price = formateNumberDecimalsAuto({
-      price:
-        Number(
-          formateNumberDecimalsAuto({
-            price: selectedPair?.price || 0,
-          })
-        ) * marketPrice(markets, selectedPair?.base_coin_denom),
-    });
+      price: Number(
+        Number(selectedPair?.price || 0) *
+          Number(
+            marketPrice(markets, selectedPair?.base_coin_denom)
+          )
+      ).toFixed(8),
+    })
 
-    return amountConversion(totalAmount) * price;
+    return Number(totalAmount) * Number(price);
   };
 
   const avgPrice2 = (mouseRowIndex) => {
@@ -896,11 +899,15 @@ const OrderBook = ({
         formateNumberDecimalsAuto({
           price: Number(
             formateNumberDecimalsAuto({
-              price: BuySellData[0]?.sells[i]?.price || 0,
-              minDecimal: 3,
+              price:
+                Number(BuySellData[0]?.sells[i]?.price || 0) *
+                  10 **
+                    (selectedPair?.base_coin_exponent -
+                      selectedPair?.quote_coin_exponent) || 0,
+              minDecimal: 6,
             })
           ),
-          minDecimal: 3,
+          minDecimal: 6,
         })
       );
       count++;
@@ -921,17 +928,17 @@ const OrderBook = ({
     }
 
     const price = formateNumberDecimalsAuto({
-      price:
-        Number(
-          formateNumberDecimalsAuto({
-            price: selectedPair?.price || 0,
-          })
-        ) * marketPrice(markets, selectedPair?.base_coin_denom),
-    });
+      price: Number(
+        Number(selectedPair?.price || 0) *
+          Number(
+            marketPrice(markets, selectedPair?.base_coin_denom)
+          )
+      ).toFixed(8),
+    })
 
-    return totalAmount * price;
+    return Number(totalAmount) * Number(price);
   };
-
+console.log({selectedPair})
   return (
     <div
       className={`${styles.orderbook__wrap} ${
@@ -973,9 +980,7 @@ const OrderBook = ({
                 overlayClassName="dropconnect-overlay"
               >
                 <div
-                  className={`${styles.orderbook__trading__element} ${
-                    styles.gap
-                  } ${styles.cursor}`}
+                  className={`${styles.orderbook__trading__element} ${styles.gap} ${styles.cursor}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <NextImage src={ArrowRL} alt="ArrowRL" />
@@ -990,9 +995,7 @@ const OrderBook = ({
                 </div>
               </Dropdown>
               <div
-                className={`${styles.orderbook__trading__element} ${
-                  styles.element__child
-                }`}
+                className={`${styles.orderbook__trading__element} ${styles.element__child}`}
               >
                 <div
                   className={`${styles.orderbook__trading__element__title} ${
@@ -1022,9 +1025,15 @@ const OrderBook = ({
                     ~$
                     {commaSeparator(
                       formateNumberDecimalsAuto({
-                        price:
-                        (Number(Number(selectedPair?.price || 0) *
-                     Number(marketPrice(markets, selectedPair?.base_coin_denom))).toFixed(8)),
+                        price: Number(
+                          Number(selectedPair?.price || 0) *
+                            Number(
+                              marketPrice(
+                                markets,
+                                selectedPair?.base_coin_denom
+                              )
+                            )
+                        ).toFixed(8),
                       })
                     )}
                   </span>
@@ -1234,9 +1243,7 @@ const OrderBook = ({
                         placement="left"
                       >
                         <div
-                          className={`${styles.orderbook__lower__head} ${
-                           styles.cursor 
-                          }`}
+                          className={`${styles.orderbook__lower__head} ${styles.cursor}`}
                           onClick={() =>
                             setClickedValue(
                               formateNumberDecimalsAuto({
@@ -1244,12 +1251,11 @@ const OrderBook = ({
                                   commaSeparator(
                                     formateNumberDecimalsAuto({
                                       price:
-                                      Number(item?.price) *
-                                        10 **
-                                         (
-                                            selectedPair?.base_coin_exponent -
-                                              selectedPair?.quote_coin_exponent
-                                          ) || 0,
+                                        Number(item?.price) *
+                                          10 **
+                                            (selectedPair?.base_coin_exponent -
+                                              selectedPair?.quote_coin_exponent) ||
+                                        0,
                                     })
                                   )
                                 ),
@@ -1278,10 +1284,8 @@ const OrderBook = ({
                                 price:
                                   Number(item?.price) *
                                     10 **
-                                     (
-                                        selectedPair?.base_coin_exponent -
-                                          selectedPair?.quote_coin_exponent
-                                      ) || 0,
+                                      (selectedPair?.base_coin_exponent -
+                                        selectedPair?.quote_coin_exponent) || 0,
                                 minDecimal: 3,
                               })
                             )}
@@ -1330,9 +1334,12 @@ const OrderBook = ({
                 ~$
                 {commaSeparator(
                   formateNumberDecimalsAuto({
-                    price:
-                    (Number(Number(selectedPair?.price || 0) *
-                     Number(marketPrice(markets, selectedPair?.base_coin_denom))).toFixed(8)),
+                    price: Number(
+                      Number(selectedPair?.price || 0) *
+                        Number(
+                          marketPrice(markets, selectedPair?.base_coin_denom)
+                        )
+                    ).toFixed(8),
                   })
                 )}
               </div>
@@ -1368,9 +1375,7 @@ const OrderBook = ({
                       placement="left"
                     >
                       <div
-                        className={`${styles.orderbook__lower__head} ${
-                          styles.cursor 
-                        }`}
+                        className={`${styles.orderbook__lower__head} ${styles.cursor}`}
                         onClick={() =>
                           setClickedValue(
                             formateNumberDecimalsAuto({
@@ -1378,12 +1383,11 @@ const OrderBook = ({
                                 commaSeparator(
                                   formateNumberDecimalsAuto({
                                     price:
-                                  Number(item?.price) *
-                                    10 **
-                                     (
-                                        selectedPair?.base_coin_exponent -
-                                          selectedPair?.quote_coin_exponent
-                                      ) || 0,
+                                      Number(item?.price) *
+                                        10 **
+                                          (selectedPair?.base_coin_exponent -
+                                            selectedPair?.quote_coin_exponent) ||
+                                      0,
                                   })
                                 )
                               ),
@@ -1410,12 +1414,10 @@ const OrderBook = ({
                           {commaSeparator(
                             formateNumberDecimalsAuto({
                               price:
-                                  Number(item?.price) *
-                                    10 **
-                                     (
-                                        selectedPair?.base_coin_exponent -
-                                          selectedPair?.quote_coin_exponent
-                                      ) || 0,
+                                Number(item?.price) *
+                                  10 **
+                                    (selectedPair?.base_coin_exponent -
+                                      selectedPair?.quote_coin_exponent) || 0,
                               minDecimal: 3,
                             })
                           )}
