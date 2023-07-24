@@ -509,7 +509,15 @@ const FarmCard = ({
                 {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
                   pool?.balances?.baseCoin?.denom === 'ucmst') && (
                   <Tooltip
-                    title={'HARBOR emissions enabled'}
+                    title={
+                      <>
+                        {`HARBOR emissions enabled. Vote on your favourite pools with veHarbor to direct emissions to this pool, vote here: `}
+                        <a
+                          href="https://app.harborprotocol.one/more/vote"
+                          target="_blank"
+                        >{`https://app.harborprotocol.one/more/vote.`}</a>
+                      </>
+                    }
                     overlayClassName="farm_upto_apr_tooltip"
                   >
                     <div
@@ -697,8 +705,7 @@ const FarmCard = ({
 
             <Tooltip
               title={
-                (getMasterPool() && myPool) || 
-                !getMasterPool() ? (
+                (getMasterPool() && myPool) || !getMasterPool() ? (
                   <>
                     <div className="upto_apr_tooltip_farm_main_container">
                       <div className="upto_apr_tooltip_farm active">
@@ -806,19 +813,27 @@ const FarmCard = ({
               <div
                 className={`${styles.farmCard__element__right__details} ${
                   styles.card__center
-                } ${(getMasterPool() && myPool) || !getMasterPool() ? styles.cursor : ""}`}
+                } ${
+                  (getMasterPool() && myPool) || !getMasterPool()
+                    ? styles.cursor
+                    : ''
+                }`}
               >
                 <div
                   className={`${
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {
-                  getMasterPool() && myPool ? `${commaSeparator(calculateChildPoolApr() || 0)}%` :
-                  `${commaSeparator(calculateApr() || 0)}%`}
-                  {
-                  getMasterPool() && myPool ? <Icon className={'bi bi-arrow-right'} /> :
-                  !getMasterPool() ? <Icon className={'bi bi-arrow-right'} />: ""}
+                  {getMasterPool() && myPool
+                    ? `${commaSeparator(calculateChildPoolApr() || 0)}%`
+                    : `${commaSeparator(calculateApr() || 0)}%`}
+                  {getMasterPool() && myPool ? (
+                    <Icon className={'bi bi-arrow-right'} />
+                  ) : !getMasterPool() ? (
+                    <Icon className={'bi bi-arrow-right'} />
+                  ) : (
+                    ''
+                  )}
                 </div>
                 {getMasterPool() && myPool ? (
                   <div
@@ -836,8 +851,7 @@ const FarmCard = ({
                       {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
                     </div>
                   </div>
-                ): !getMasterPool() ?
-                (
+                ) : !getMasterPool() ? (
                   <div
                     className={`${styles.farmCard__element__right__pool} ${styles.upto}`}
                   >
@@ -853,8 +867,9 @@ const FarmCard = ({
                       {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
                     </div>
                   </div>
-                ):""
-                }
+                ) : (
+                  ''
+                )}
               </div>
             </Tooltip>
           </div>
@@ -877,7 +892,11 @@ const FarmCard = ({
               }`}
             >
               {myPool
-                ? `$${commaSeparator(Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS))}`
+                ? `$${commaSeparator(
+                    Number(userLiquidityInPools[pool?.id] || 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )
+                  )}`
                 : `$${TotalPoolLiquidity || 0}`}
             </div>
           </div>
