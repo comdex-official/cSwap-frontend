@@ -89,7 +89,15 @@ const PoolCardRow = ({
           {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
             pool?.balances?.baseCoin?.denom === 'ucmst') && (
             <Tooltip
-              title={'HARBOR emissions enabled'}
+              title={
+                <>
+                  {`HARBOR emissions enabled. Vote on your favourite pools with veHarbor to direct emissions to this pool, vote here: `}
+                  <a
+                    href="https://app.harborprotocol.one/more/vote"
+                    target="_blank"
+                  >{`https://app.harborprotocol.one/more/vote.`}</a>
+                </>
+              }
               overlayClassName="farm_upto_apr_tooltip"
             >
               <div

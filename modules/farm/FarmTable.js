@@ -70,7 +70,7 @@ const FarmTable = ({
   setShowMyPool,
   refetch,
   setRefetch,
-  userLiquidityRefetch
+  userLiquidityRefetch,
 }) => {
   const [isPortifolioManageModalOpen, setIsPortifolioManageModalOpen] =
     useState(false);
@@ -447,13 +447,19 @@ const FarmTable = ({
             {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
               value?.balances?.baseCoin?.denom === 'ucmst') && (
               <Tooltip
-                title={'HARBOR emissions enabled'}
+                title={
+                  <>
+                    {`HARBOR emissions enabled. Vote on your favourite pools with veHarbor to direct emissions to this pool, vote here: `}
+                    <a
+                      href="https://app.harborprotocol.one/more/vote"
+                      target="_blank"
+                    >{`https://app.harborprotocol.one/more/vote.`}</a>
+                  </>
+                }
                 overlayClassName="farm_upto_apr_tooltip"
               >
                 <div
-                  className={`${styles.farmCard__element__right__emission} ${
-                   styles.emission_img 
-                  }`}
+                  className={`${styles.farmCard__element__right__emission} ${styles.emission_img}`}
                 >
                   <NextImage src={Emission} alt="Emission" />
                 </div>
@@ -784,7 +790,12 @@ const FarmTable = ({
             >
               <div
                 className={`${styles.farmCard__element__right__details}
-                ${(getMasterPool(value?.id?.toNumber()) && noDataButton) || !getMasterPool(value?.id?.toNumber()) ? styles.cursor : ""}
+                ${
+                  (getMasterPool(value?.id?.toNumber()) && noDataButton) ||
+                  !getMasterPool(value?.id?.toNumber())
+                    ? styles.cursor
+                    : ''
+                }
                 `}
               >
                 <div
@@ -955,13 +966,19 @@ const FarmTable = ({
             {(value?.balances?.quoteCoin?.denom === 'ucmst' ||
               value?.balances?.baseCoin?.denom === 'ucmst') && (
               <Tooltip
-                title={'HARBOR emissions enabled'}
+                title={
+                  <>
+                    {`HARBOR emissions enabled. Vote on your favourite pools with veHarbor to direct emissions to this pool, vote here: `}
+                    <a
+                      href="https://app.harborprotocol.one/more/vote"
+                      target="_blank"
+                    >{`https://app.harborprotocol.one/more/vote.`}</a>
+                  </>
+                }
                 overlayClassName="farm_upto_apr_tooltip"
               >
                 <div
-                  className={`${styles.farmCard__element__right__emission} ${
-                    styles.emission_img 
-                  }`}
+                  className={`${styles.farmCard__element__right__emission} ${styles.emission_img}`}
                 >
                   <NextImage src={Emission} alt="Emission" />
                 </div>
@@ -1285,7 +1302,12 @@ const FarmTable = ({
             >
               <div
                 className={`${styles.farmCard__element__right__details} 
-                ${(getMasterPool(value?.id?.toNumber()) && noDataButton) || !getMasterPool(value?.id?.toNumber()) ? styles.cursor : ""}
+                ${
+                  (getMasterPool(value?.id?.toNumber()) && noDataButton) ||
+                  !getMasterPool(value?.id?.toNumber())
+                    ? styles.cursor
+                    : ''
+                }
                 `}
               >
                 <div
@@ -1383,25 +1405,23 @@ const FarmTable = ({
           Action: item,
         };
       });
-      
+
     setData2(DATA2);
   }, [pool, refetch, userLiquidityRefetch]);
 
   useEffect(() => {
     const DATA =
-    pool &&
-    pool?.map((item) => {
-      return {
-        PoolPair: item,
-        APR: item,
-        TotalLiquidity: item,
-      };
-    });
-     
+      pool &&
+      pool?.map((item) => {
+        return {
+          PoolPair: item,
+          APR: item,
+          TotalLiquidity: item,
+        };
+      });
+
     setData(DATA);
   }, [pool, refetch, userLiquidityRefetch]);
-
-  
 
   const tableClassName = (record) => {
     if (getMasterPool(Number(record?.APR?.id))) {
@@ -1525,7 +1545,7 @@ const stateToProps = (state) => {
     iconList: state.config?.iconList,
     selectedManagePool: state.liquidity.selectedManagePool,
     showMyPool: state.liquidity.showMyPool,
-    userLiquidityRefetch: state.liquidity.userLiquidityRefetch
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch,
   };
 };
 
