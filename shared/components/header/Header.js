@@ -654,11 +654,6 @@ const Header = ({
           footer={null}
           header={null}
         >
-          {loading ? (
-            <div className="fiat__loading">
-              <Loading height={100} />
-            </div>
-          ) : null}
           <iframe
             src={`${FIAT_URL}&onToAddress=${address}`}
             width="465"
