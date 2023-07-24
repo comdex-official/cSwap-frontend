@@ -29,6 +29,7 @@ import { queryAllBalances } from '../../../services/bank/query';
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  FIAT_URL,
   NETWORK_TAG,
   TRANSIT_URL,
 } from '../../../constants/common';
@@ -65,6 +66,7 @@ import { setParams } from '../../../actions/swap';
 import { useRouter } from 'next/router';
 import DisconnectModal from './DisconnectModal';
 import MyDropdown from '../dropDown/Dropdown';
+import Loading from '../../../pages/Loading';
 
 const Header = ({
   setAccountAddress,
@@ -99,7 +101,7 @@ const Header = ({
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -388,6 +390,18 @@ const Header = ({
     setIsModalOpen2(false);
   };
 
+  const [isFiatOpen, setIsFiatOpen] = useState(false);
+
+  const modalShow = () => {
+    setIsFiatOpen(true);
+  };
+  const okModal = () => {
+    setIsFiatOpen(false);
+  };
+  const cancellModal = () => {
+    setIsFiatOpen(false);
+  };
+
   const cswapItems = [
     {
       key: 'item-2',
@@ -511,50 +525,45 @@ const Header = ({
                 document.getElementById('topRightToogle')
               }
             >
-               <Tooltip
-                    title={'Switch dApps'}
-                    overlayClassName="farm_upto_apr_tooltip"
-                  >
-              <div className={styles.header__cSwap}>
-                <Icon
-                  className={`bi bi-grid-fill ${
-                    theme === 'dark' ? styles.icon_dark : styles.icon_light
-                  }`}
-                  size={'1.1rem'}
-                />
-              </div>
+              <Tooltip
+                title={'Switch dApps'}
+                overlayClassName="farm_upto_apr_tooltip"
+              >
+                <div className={styles.header__cSwap}>
+                  <Icon
+                    className={`bi bi-grid-fill ${
+                      theme === 'dark' ? styles.icon_dark : styles.icon_light
+                    }`}
+                    size={'1.1rem'}
+                  />
+                </div>
               </Tooltip>
             </MyDropdown>
 
-
-            <Tooltip
-                    title={'Faucet'}
-                    overlayClassName="farm_upto_apr_tooltip"
-                  >
-            <div
-              className={styles.header__cSwap}
-              onClick={() =>
-                window.open('https://faucet.comdex.one/', '_blank')
-              }
-            >
-              
-              <div className={styles.header__cSwap__main}>
-                {theme === 'dark' ? (
-                  <NextImage src={Faucet} alt="Logo_Dark" />
-                ) : (
-                  <NextImage src={Faucet} alt="Logo_Dark" />
-                )}
+            <Tooltip title={'Faucet'} overlayClassName="farm_upto_apr_tooltip">
+              <div
+                className={styles.header__cSwap}
+                onClick={() =>
+                  window.open('https://faucet.comdex.one/', '_blank')
+                }
+              >
+                <div className={styles.header__cSwap__main}>
+                  {theme === 'dark' ? (
+                    <NextImage src={Faucet} alt="Logo_Dark" />
+                  ) : (
+                    <NextImage src={Faucet} alt="Logo_Dark" />
+                  )}
+                </div>
               </div>
-            </div>
             </Tooltip>
 
             <Tooltip
-                    title={'Fiat Onramp'}
-                    overlayClassName="farm_upto_apr_tooltip"
-                  >
-            <div className={styles.header__buy}>
-              <NextImage src={Shop} alt={'Logo'} />
-            </div>
+              title={'Fiat Onramp'}
+              overlayClassName="farm_upto_apr_tooltip"
+            >
+              <div className={styles.header__buy} onClick={modalShow}>
+                <NextImage src={Shop} alt={'Logo'} />
+              </div>
             </Tooltip>
 
             <div id={'topRightToogle3'}>
@@ -621,7 +630,7 @@ const Header = ({
           className={'modal__wrap'}
           open={isModalOpen}
           onOk={handleOk}
-          onCancel={handleCancel}
+          onCancel={cancellModal}
           centered={true}
           footer={null}
           header={null}
@@ -633,6 +642,30 @@ const Header = ({
             height={'700px'}
             id="bridge__iframe"
             style={{ borderRadius: '10px', background: '#030b1e' }}
+          />
+        </Modal>
+
+        <Modal
+          className={'fiat__modal'}
+          open={isFiatOpen}
+          onOk={okModal}
+          onCancel={cancellModal}
+          centered={true}
+          footer={null}
+          header={null}
+        >
+          {loading ? (
+            <div className="fiat__loading">
+              <Loading height={100} />
+            </div>
+          ) : null}
+          <iframe
+            src={`${FIAT_URL}&onToAddress=${address}`}
+            width="465"
+            height="700"
+            frameBorder={0}
+            style={{ border: '0px',borderRadius: "12px" }}
+            onLoad={() => setLoading(false)}
           />
         </Modal>
       </div>
