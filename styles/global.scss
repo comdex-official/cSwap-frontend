@@ -503,6 +503,46 @@ a {
   }
 }
 
+.fiat__modal {
+  &.ant-modal {
+    max-width: 465px !important;
+
+    .ant-modal-content {
+      background: linear-gradient(
+        180deg,
+        #030b1e 0%,
+        rgba(3, 11, 30, 0.71) 100%
+      );
+
+      border-radius: 12px;
+      padding: 0;
+
+      .ant-modal-header {
+        background: linear-gradient(
+          180deg,
+          #030b1e 0%,
+          rgba(3, 11, 30, 0.71) 100%
+        );
+
+        .ant-modal-title {
+          color: #ffffff;
+        }
+      }
+
+      .ant-modal-body {
+        height: 700px !important;
+      }
+      .ant-modal-close-x {
+        display: none;
+      }
+
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
+}
+
 .modal__wallet__connect {
   &.ant-modal {
     max-width: 420px !important;
@@ -4613,4 +4653,11 @@ a {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.fiat__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
