@@ -29,6 +29,7 @@ import { toDecimals, truncateString } from '../../../utils/string';
 import variables from '../../../utils/variables';
 import style from './Deposit.module.scss';
 import Loading from '../../../pages/Loading';
+import { Toaster } from '../../../shared/components/toaster/Toaster';
 
 const Deposit = ({
   lang,
@@ -339,13 +340,18 @@ const Deposit = ({
             return;
           }
 
-          message.success(
-            <Snack
+          message
+          .loading('Processing..', 3)
+          .then(() =>
+            Toaster(
+              <Snack
               message={'Transaction Successful. Token Transfer in progress.'}
               explorerUrlToTx={chain?.explorerUrlToTx}
               hash={txhash}
             />
+            )
           );
+
 
           resetValues();
           clearInterval(time);

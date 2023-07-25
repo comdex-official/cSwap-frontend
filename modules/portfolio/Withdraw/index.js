@@ -15,6 +15,7 @@ import { denomConversion, getAmount } from '../../../utils/coin';
 import { toDecimals, truncateString } from '../../../utils/string';
 import variables from '../../../utils/variables';
 import style from './Withdraw.module.scss';
+import { Toaster } from '../../../shared/components/toaster/Toaster';
 
 const Withdraw = ({
   lang,
@@ -183,13 +184,19 @@ const Withdraw = ({
             return;
           }
 
-          message.success(
-            <Snack
-              message={'Transaction Successful. Token Transfer in progress.'}
-              explorerUrlToTx={comdex?.explorerUrlToTx}
-              hash={txhash}
-            />
-          );
+          message
+            .loading('Processing..', 3)
+            .then(() =>
+              Toaster(
+                <Snack
+                  message={
+                    'Transaction Successful. Token Transfer in progress.'
+                  }
+                  explorerUrlToTx={comdex?.explorerUrlToTx}
+                  hash={txhash}
+                />
+              )
+            );
 
           resetValues();
           clearInterval(time);

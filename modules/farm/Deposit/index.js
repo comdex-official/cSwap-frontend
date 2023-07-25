@@ -7,7 +7,7 @@ import {
   setFirstReserveCoinDenom,
   setPoolBalance,
   setSecondReserveCoinDenom,
-  setUserLiquidityRefetch
+  setUserLiquidityRefetch,
 } from '../../../actions/liquidity';
 import { setReverse } from '../../../actions/swap';
 import Snack from '../../../shared/components/Snack';
@@ -42,6 +42,7 @@ import styles from '../Farm.module.scss';
 import { NextImage } from '../../../shared/image/NextImage';
 import PoolDetails from '../poolDetail';
 import { Icon } from '../../../shared/image/Icon';
+import { Toaster } from '../../../shared/components/toaster/Toaster';
 
 const Deposit = ({
   theme,
@@ -59,7 +60,7 @@ const Deposit = ({
   refetch,
   setRefetch,
   setUserLiquidityRefetch,
-  userLiquidityRefetch
+  userLiquidityRefetch,
 }) => {
   const marks = {
     0: Number(decimalConversion(pool?.minPrice)).toFixed(DOLLAR_DECIMALS),
@@ -233,7 +234,7 @@ const Deposit = ({
         refreshData(pool);
         updateBalance();
         setRefetch(!refetch);
-        setUserLiquidityRefetch(!userLiquidityRefetch)
+        setUserLiquidityRefetch(!userLiquidityRefetch);
 
         if (error) {
           message.error(error);
@@ -245,12 +246,17 @@ const Deposit = ({
         }
 
         resetValues();
-        message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
-        );
+
+        message
+          .loading('Processing..', 3)
+          .then(() =>
+            Toaster(
+              <Snack
+                message={variables[lang].tx_success}
+                hash={result?.transactionHash}
+              />
+            )
+          );
       }
     );
   };
@@ -299,7 +305,7 @@ const Deposit = ({
         refreshData(pool);
         updateBalance();
         setRefetch(!refetch);
-        setUserLiquidityRefetch(!userLiquidityRefetch)
+        setUserLiquidityRefetch(!userLiquidityRefetch);
 
         if (error) {
           message.error(error);
@@ -311,12 +317,17 @@ const Deposit = ({
         }
 
         resetValues();
-        message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
-        );
+
+        message
+          .loading('Processing..', 3)
+          .then(() =>
+            Toaster(
+              <Snack
+                message={variables[lang].tx_success}
+                hash={result?.transactionHash}
+              />
+            )
+          );
       }
     );
   };
@@ -348,7 +359,7 @@ const Deposit = ({
         refreshData(pool);
         updateBalance();
         setRefetch(!refetch);
-        setUserLiquidityRefetch(!userLiquidityRefetch)
+        setUserLiquidityRefetch(!userLiquidityRefetch);
 
         if (error) {
           message.error(error);
@@ -360,12 +371,16 @@ const Deposit = ({
           return;
         }
 
-        message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
-        );
+        message
+          .loading('Processing..', 3)
+          .then(() =>
+            Toaster(
+              <Snack
+                message={variables[lang].tx_success}
+                hash={result?.transactionHash}
+              />
+            )
+          );
       }
     );
   };
@@ -828,7 +843,7 @@ const stateToProps = (state) => {
     poolBalance: state.liquidity.poolBalance,
     assetMap: state.asset.map,
     iconList: state.config?.iconList,
-    userLiquidityRefetch: state.liquidity.userLiquidityRefetch
+    userLiquidityRefetch: state.liquidity.userLiquidityRefetch,
   };
 };
 
@@ -837,7 +852,7 @@ const actionsToProps = {
   setFirstReserveCoinDenom,
   setSecondReserveCoinDenom,
   setReverse,
-  setUserLiquidityRefetch
+  setUserLiquidityRefetch,
 };
 
 export default connect(stateToProps, actionsToProps)(Deposit);
