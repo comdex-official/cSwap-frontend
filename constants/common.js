@@ -14,8 +14,7 @@ export const MASTER_POOL_ID = Number(envConfig?.[app]?.masterPoolId);
 export const NETWORK_TAG = envConfig?.[app]?.networkTag;
 export const HOSTED_ON_TEXT = process.env.REACT_APP_HOSTED_ON_TEXT;
 export const TRANSIT_URL = 'https://transit.comdex.one';
-export const FIAT_URL =
-  `https://app.kado.money?apiKey=${process.env.REACT_APP_FIAT_API_KEY}&onPayCurrency=USD&onRevCurrency=CMDX&offPayCurrency=CMDX&offRevCurrency=USD&onPayAmount=200&offPayAmount=50&network=COMDEX&cryptoList=USDT,USDC,CMDX&fiatList=USD,CAD,EUR&product=BUY&productList=BUY,SWAP`;
+export const FIAT_URL = `https://app.kado.money?apiKey=&onPayCurrency=USD&onRevCurrency=CMDX&offPayCurrency=CMDX&offRevCurrency=USD&onPayAmount=200&offPayAmount=50&network=COMDEX&cryptoList=USDT,USDC,CMDX&fiatList=USD,CAD,EUR&product=BUY&productList=BUY,SWAP`;
 
 //Harbor
 export const HARBOR_ASSET_ID = 9;
