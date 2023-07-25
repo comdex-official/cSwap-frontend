@@ -136,13 +136,13 @@ const TradeCard = ({
   useEffect(() => {
     const firstPool = pools[0];
     const poolPair = pairs?.list?.filter(
-      (item) => item.id.toNumber === firstPool?.pairId.toNumber
+      (item) => Number(item?.id) === Number(firstPool?.pairId)
     )[0];
 
     if (tradeData?.baseCoin) {
       setOfferCoinDenom(tradeData?.baseCoin);
       setDemandCoinDenom(tradeData?.quoteCoin);
-      updatePoolDetails(tradeData?.quoteCoinDenom, tradeData?.baseCoinDenom);
+      updatePoolDetails(tradeData?.baseCoin, tradeData?.quoteCoin);
       return;
     }
 

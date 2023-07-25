@@ -12,7 +12,11 @@ import {
   RangeGreen,
   RangeRed,
 } from '../../shared/image';
-import { commaSeparator, decimalConversion } from '../../utils/number';
+import {
+  commaSeparator,
+  decimalConversion,
+  formatNumber,
+} from '../../utils/number';
 import { PRICE_DECIMALS } from '../../constants/common';
 import RangeTooltipContent from '../../shared/components/range/RangedToolTip';
 
