@@ -15,8 +15,10 @@ import {
 } from '../../../shared/image';
 import { Modal } from 'antd';
 import { useState, useRef, useEffect } from 'react';
+import { FIAT_URL } from '../../../constants/common';
+import { connect } from 'react-redux';
 
-const Sidebar = ({ isOpen, setIsOpen }) => {
+const Sidebar = ({ isOpen, setIsOpen, address }) => {
   const theme = 'dark';
 
   const router = useRouter();
@@ -39,6 +41,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const [isFiatOpen, setIsFiatOpen] = useState(false);
+
+  const modalShow = () => {
+    setIsFiatOpen(true);
+  };
+  const okModal = () => {
+    setIsFiatOpen(false);
+  };
+  const cancellModal = () => {
+    setIsFiatOpen(false);
   };
 
   const cswapItems = [
@@ -176,7 +190,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <NextImage src={Hyperlink} alt={'Logo'} height={15} width={15} />
         </div>
 
-        <div className={styles.header__buy}>
+        <div className={styles.header__buy} onClick={modalShow}>
           <div>
             <NextImage src={Shop} alt={'Logo'} />
             <div
@@ -207,9 +221,36 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             style={{ borderRadius: '10px', background: '#030b1e' }}
           ></iframe>
         </Modal>
+
+        <Modal
+          className={'fiat__modal'}
+          open={isFiatOpen}
+          onOk={okModal}
+          onCancel={cancellModal}
+          centered={true}
+          footer={null}
+          header={null}
+        >
+          <iframe
+            src={`${FIAT_URL}&onToAddress=${address}`}
+            width="465"
+            height="700"
+            frameBorder={0}
+            style={{ border: '0px', borderRadius: '12px' }}
+          />
+        </Modal>
       </div>
     </div>
   );
 };
 
-export default Sidebar;
+const stateToProps = (state) => {
+  return {
+    lang: state.language,
+    address: state.account.address,
+  };
+};
+
+const actionsToProps = {};
+
+export default connect(stateToProps, actionsToProps)(Sidebar);
