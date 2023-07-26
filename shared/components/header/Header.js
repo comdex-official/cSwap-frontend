@@ -659,7 +659,7 @@ const Header = ({
             width="465"
             height="700"
             frameBorder={0}
-            style={{ border: '0px',borderRadius: "12px" }}
+            style={{ border: '0px', borderRadius: '12px' }}
             onLoad={() => setLoading(false)}
           />
         </Modal>
