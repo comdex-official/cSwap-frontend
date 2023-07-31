@@ -853,10 +853,11 @@ const OrderBook = ({
         formateNumberDecimalsAuto({
           price: Number(
             formateNumberDecimalsAuto({
-              price:  Number(BuySellData[0]?.buys[i]?.price || 0) *
-              10 **
-                (selectedPair?.base_coin_exponent -
-                  selectedPair?.quote_coin_exponent) || 0,
+              price:
+                Number(BuySellData[0]?.buys[i]?.price || 0) *
+                  10 **
+                    (selectedPair?.base_coin_exponent -
+                      selectedPair?.quote_coin_exponent) || 0,
               minDecimal: 3,
             })
           ),
@@ -881,11 +882,9 @@ const OrderBook = ({
     const price = formateNumberDecimalsAuto({
       price: Number(
         Number(selectedPair?.price || 0) *
-          Number(
-            marketPrice(markets, selectedPair?.base_coin_denom)
-          )
+          Number(marketPrice(markets, selectedPair?.base_coin_denom))
       ).toFixed(8),
-    })
+    });
 
     return Number(totalAmount) * Number(price);
   };
@@ -930,15 +929,13 @@ const OrderBook = ({
     const price = formateNumberDecimalsAuto({
       price: Number(
         Number(selectedPair?.price || 0) *
-          Number(
-            marketPrice(markets, selectedPair?.base_coin_denom)
-          )
+          Number(marketPrice(markets, selectedPair?.base_coin_denom))
       ).toFixed(8),
-    })
+    });
 
     return Number(totalAmount) * Number(price);
   };
-console.log({selectedPair})
+
   return (
     <div
       className={`${styles.orderbook__wrap} ${

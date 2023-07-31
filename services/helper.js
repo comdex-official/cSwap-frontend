@@ -193,15 +193,15 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
 
     client
       .sendIbcTokens(
-        transaction.msg?.value?.sender,
-        transaction.msg?.value?.receiver,
-        transaction.msg?.value?.token,
-        transaction.msg?.value?.source_port,
-        transaction.msg?.value?.source_channel,
-        transaction.msg?.value?.timeout_height,
-        transaction.msg?.value?.timeout_timestamp,
-        transaction.fee,
-        transaction.memo
+        transaction?.msg?.value?.sender,
+        transaction?.msg?.value?.receiver,
+        transaction?.msg?.value?.token,
+        transaction?.msg?.value?.source_port,
+        transaction?.msg?.value?.source_channel,
+        transaction?.msg?.value?.timeout_height,
+        transaction?.msg?.value?.timeout_timestamp,
+        transaction?.fee,
+        transaction?.memo
       )
       .then((result) => {
         if (result?.code !== undefined && result.code !== 0) {

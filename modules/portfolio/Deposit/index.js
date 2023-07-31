@@ -259,7 +259,10 @@ const Deposit = ({
           timeout_timestamp: undefined,
         },
       },
-      fee: { amount: [{ denom: chain.denom, amount: '25000' }], gas: '200000' },
+      fee: {
+        amount: [{ denom: chain.coinMinimalDenom, amount: '25000' }],
+        gas: '200000',
+      },
       memo: '',
     };
 
@@ -341,17 +344,18 @@ const Deposit = ({
           }
 
           message
-          .loading('Processing..', 3)
-          .then(() =>
-            Toaster(
-              <Snack
-              message={'Transaction Successful. Token Transfer in progress.'}
-              explorerUrlToTx={chain?.explorerUrlToTx}
-              hash={txhash}
-            />
-            )
-          );
-
+            .loading('Processing..', 3)
+            .then(() =>
+              Toaster(
+                <Snack
+                  message={
+                    'Transaction Successful. Token Transfer in progress.'
+                  }
+                  explorerUrlToTx={chain?.explorerUrlToTx}
+                  hash={txhash}
+                />
+              )
+            );
 
           resetValues();
           clearInterval(time);
