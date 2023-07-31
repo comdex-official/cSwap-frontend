@@ -49,10 +49,11 @@ const Govern = ({
   };
 
   useEffect(() => {
+    
     const fetchData = async () => {
       let nextPage = '';
       let allProposals = [];
-
+      setInProgress(true);
       do {
         const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
         const response = await fetch(url);
@@ -63,7 +64,7 @@ const Govern = ({
           ? `?pagination.key=${data.pagination.next_key}`
           : null;
       } while (nextPage !== null);
-
+      setInProgress(false);
       setProposals(allProposals?.reverse());
       setFilteredProposal(allProposals);
       setAllProposals(allProposals?.proposals);
