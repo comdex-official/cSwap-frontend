@@ -173,22 +173,26 @@ const Header = ({
     setAddressFromLocal(addressAlreadyExist);
   }, []);
 
+  const handleConnectToWallet = (walletType) => {
+    initializeChain(walletType, (error, account) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setAccountAddress(account.address);
+      fetchKeplrAccountName().then((name) => {
+        setAccountName(name);
+      });
+      localStorage.setItem('ac', encode(account.address));
+      localStorage.setItem('loginType', walletType || 'keplr');
+    });
+  };
+
   useEffect(() => {
     let walletType = localStorage.getItem('loginType');
 
     if (addressFromLocal) {
-      initializeChain(walletType, (error, account) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-        setAccountAddress(account.address);
-        fetchKeplrAccountName().then((name) => {
-          setAccountName(name);
-        });
-        localStorage.setItem('ac', encode(account.address));
-        localStorage.setItem('loginType', walletType || 'keplr');
-      });
+      handleConnectToWallet(walletType);
     }
   }, [addressFromLocal, setAccountAddress, setAccountName]);
 
@@ -463,6 +467,16 @@ const Header = ({
   };
 
   window.addEventListener('scroll', toggleVisible);
+
+  window.addEventListener('keplr_keystorechange', () => {
+    let walletType = localStorage.getItem('loginType');
+    handleConnectToWallet(walletType);
+  });
+
+  window.addEventListener('leap_keystorechange', () => {
+    let walletType = localStorage.getItem('loginType');
+    handleConnectToWallet(walletType);
+  });
 
   return (
     <div

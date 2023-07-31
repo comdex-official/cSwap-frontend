@@ -3,7 +3,7 @@ import { HighchartsReact } from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import { message } from 'antd';
 import * as PropTypes from 'prop-types';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAccountBalances } from '../../actions/account';
 import { setLPPrices, setMarkets } from '../../actions/oracle';
@@ -23,6 +23,7 @@ import {
 import { setPools, setUserLiquidityInPools } from '../../actions/liquidity';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../../constants/common';
 import variables from '../../utils/variables';
+import Loading from '../../pages/Loading';
 
 const Portfolio = ({
   lang,
@@ -37,6 +38,10 @@ const Portfolio = ({
   userLiquidityRefetch,
 }) => {
   const theme = 'dark';
+  const [totalFarmBalance, setTotalFarmBalance] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalLoading, setTotalLoading] = useState(true);
+  const [totalValue, setTotalValue] = useState(0);
 
   const getUserLiquidity = useCallback(
     (pool) => {
@@ -134,15 +139,38 @@ const Portfolio = ({
     );
   }, [markets, balances, fetchPools]);
 
-  const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
-    (a, b) => a + b,
-    0
-  );
+  const sumValues = (data) => {
+    let sum = 0;
+    for (let key in data) {
+      sum += data[key];
+    }
+    setIsLoading(false);
+    return sum;
+  };
+
+  useEffect(() => {
+    if (userLiquidityInPools) {
+      const result = sumValues(userLiquidityInPools);
+      setTotalFarmBalance(result);
+    }
+  }, [userLiquidityInPools]);
+
+  // const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
+  //   (a, b) => a + b,
+  //   0
+  // );
 
   const getTotalValue = useCallback(() => {
     const total = Number(assetBalance) + Number(totalFarmBalance);
-    return (total || 0).toFixed(DOLLAR_DECIMALS);
+    setTotalValue((total || 0).toFixed(DOLLAR_DECIMALS));
+    setTotalLoading(false);
   }, [assetBalance, totalFarmBalance]);
+
+  useEffect(() => {
+    if (totalFarmBalance) {
+      getTotalValue();
+    }
+  }, [getTotalValue]);
 
   const Options = {
     chart: {
@@ -156,8 +184,7 @@ const Portfolio = ({
       enabled: false,
     },
     title: {
-      text: `$${formatNumber(getTotalValue() || 0)}
-     `,
+      text: totalLoading || !totalValue ? 0 : `$${formatNumber(totalValue)}`,
       verticalAlign: 'middle',
       floating: true,
       style: {
@@ -226,12 +253,12 @@ const Portfolio = ({
         data: [
           {
             name: variables[lang].farm_balance,
-            y: Number(totalFarmBalance) || 0,
+            y: totalLoading || !totalValue ? 0 : Number(totalFarmBalance),
             color: '#4E5ED6',
           },
           {
             name: variables[lang].asset_balance,
-            y: Number(assetBalance) || 0,
+            y: isLoading || !totalFarmBalance ? 0 : Number(assetBalance),
             color: '#A1C7FF',
           },
         ],
@@ -285,7 +312,11 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                ${formatNumber(getTotalValue() || 0)}
+                {totalLoading || !totalValue ? (
+                  <Loading height={40} />
+                ) : (
+                  `$ ${formatNumber(totalValue)}`
+                )}
               </div>
             </div>
             <div
@@ -306,10 +337,15 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                $
-                {formatNumber(
-                  commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS) || 0
-                )}{' '}
+                {!formatNumber(
+                  commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)
+                ) ? (
+                  <Loading height={40} />
+                ) : (
+                  `$ ${formatNumber(
+                    commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)
+                  )}`
+                )}
               </div>
             </div>
             <div
@@ -329,9 +365,12 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                $
-                {formatNumber(
-                  Number(totalFarmBalance || 0).toFixed(DOLLAR_DECIMALS) || 0
+                {isLoading || !totalFarmBalance ? (
+                  <Loading height={40} />
+                ) : (
+                  `$ ${formatNumber(
+                    Number(totalFarmBalance).toFixed(DOLLAR_DECIMALS)
+                  )}`
                 )}
               </div>
             </div>
