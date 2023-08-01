@@ -170,6 +170,10 @@ const Portfolio = ({
     if (totalFarmBalance) {
       getTotalValue();
     }
+
+    setTimeout(()=>{
+      setTotalLoading(false);
+    }, 4000);
   }, [getTotalValue]);
 
   const Options = {
@@ -266,6 +270,8 @@ const Portfolio = ({
     ],
   };
 
+  console.log(totalFarmBalance, !totalFarmBalance);
+
   return (
     <div
       className={`${styles.portfolio__wrap} ${
@@ -312,7 +318,7 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {totalLoading || !totalValue ? (
+                {totalLoading ? (
                   <Loading height={40} />
                 ) : (
                   `$ ${formatNumber(totalValue)}`
@@ -365,7 +371,7 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {isLoading || !totalFarmBalance ? (
+                {isLoading ? (
                   <Loading height={40} />
                 ) : (
                   `$ ${formatNumber(
