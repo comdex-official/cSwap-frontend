@@ -49,7 +49,7 @@ const GovernOpenProposal = ({ proposals }) => {
                         className="proposal_main_container"
                         key={item?.proposal_id}
                         onClick={() =>
-                          router.push(`/governview/${item?.proposal_id}`)
+                          router.push(`/governview?id=${item?.proposal_id}`)
                         }
                       >
                         <div className="proposal_container">

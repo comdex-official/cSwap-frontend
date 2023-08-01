@@ -8,7 +8,7 @@ export default function GovernPage({ id }) {
   return <GovernViewPage id={id} />;
 }
 
-GovernPage.getInitialProps = async({ query })=> {
+GovernPage.getInitialProps = async ({ query }) => {
   const { id } = query;
   return { id };
-}
+};
