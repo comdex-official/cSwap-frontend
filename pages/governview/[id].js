@@ -8,7 +8,7 @@ export default function GovernPage({ id }) {
   return <GovernViewPage id={id} />;
 }
 
-export async function getServerSideProps(context) {
-  const { id } = context.query;
-  return { props: { id } };
+GovernPage.getInitialProps = async({ query })=> {
+  const { id } = query;
+  return { id };
 }
