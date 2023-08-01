@@ -4,11 +4,6 @@ const GovernViewPage = dynamic(() =>
   import('../../modules/govern/GovernViewPage')
 );
 
-export default function GovernPage({ id }) {
-  return <GovernViewPage id={id} />;
+export default function GovernPage() {
+  return <GovernViewPage />;
 }
-
-GovernPage.getInitialProps = async ({ query }) => {
-  const { id } = query;
-  return { id };
-};
