@@ -41,6 +41,7 @@ import { NextImage } from '../../shared/image/NextImage';
 import { Hyperlink } from '../../shared/image';
 
 const GovernViewPage = ({
+  id,
   address,
   setProposal,
   proposalMap,
@@ -51,7 +52,7 @@ const GovernViewPage = ({
   proposalTallyMap,
 }) => {
   const router = useRouter();
-  const { id } = router.query;
+  // const { id } = router.query;
 
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
