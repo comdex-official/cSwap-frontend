@@ -15,7 +15,7 @@ import {
 } from '../../../shared/image';
 import { Modal } from 'antd';
 import { useState, useRef, useEffect } from 'react';
-import { FIAT_URL } from '../../../constants/common';
+import { FIAT_URL, TRANSIT_URL } from '../../../constants/common';
 import { connect } from 'react-redux';
 
 const Sidebar = ({ isOpen, setIsOpen, address }) => {
@@ -129,7 +129,7 @@ const Sidebar = ({ isOpen, setIsOpen, address }) => {
               <div
                 className={styles.header__name}
                 onClick={() => {
-                  item?.id === 5 ? showModal() : router.push(item.route);
+                  item?.id === 4 ? showModal() : router.push(item.route);
                   setIsOpen(!isOpen);
                 }}
               >
@@ -214,7 +214,7 @@ const Sidebar = ({ isOpen, setIsOpen, address }) => {
           header={null}
         >
           <iframe
-            src="https://dev-transit.comdex.one/"
+            src={TRANSIT_URL}
             frameBorder="0"
             width={'100%'}
             height={'700px'}
