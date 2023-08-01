@@ -161,7 +161,6 @@ const Portfolio = ({
   // );
 
   const getTotalValue = useCallback(() => {
-    console.log("SSSSS")
     const total = Number(assetBalance) + Number(totalFarmBalance);
     setTotalValue((total || 0).toFixed(DOLLAR_DECIMALS));
     setTotalLoading(false);
