@@ -53,7 +53,7 @@ const GovernViewPage = ({
 }) => {
   const router = useRouter();
   // const { id } = router.query;
-
+  console.log(id);
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
   const [votingPower, setVotingPower] = useState();
