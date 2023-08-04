@@ -75,7 +75,7 @@ const GovernViewPage = ({
   //   setGovernId(value);
   // }, []);
 
-  console.log(id);
+  // console.log(id);
 
   const fetchTallyParamsProposer = useCallback(() => {
     setInProgress(true);

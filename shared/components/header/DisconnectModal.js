@@ -45,7 +45,6 @@ const DisConnectModal = ({
     setAccountAddress('');
     localStorage.removeItem('ac');
     localStorage.removeItem('loginType');
-    window.location.reload();
   };
 
   const [isModalOpen2, setIsModalOpen2] = useState(false);
