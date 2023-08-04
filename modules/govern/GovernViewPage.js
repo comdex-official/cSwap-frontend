@@ -347,7 +347,7 @@ const GovernViewPage = ({
                 </div>
                 <div className="proposal_stats_container">
                   <div className="title">My Voting power</div>
-                  <div className="value">{totalAmount}</div>
+                  <div className="value">{address ? totalAmount : '-'}</div>
                 </div>
               </div>
             </div>
