@@ -41,8 +41,8 @@ const GovernPastProposal = ({ proposals }) => {
                         className="proposal_main_container"
                         key={item?.proposal_id}
                         onClick={() => {
-                          localStorage.setItem('govern', item?.proposal_id);
-                          router.push(`/governview`);
+                          // localStorage.setItem('govern', item?.proposal_id);
+                          router.push(`/governview?id=${item?.proposal_id}`);
                         }}
                       >
                         <div className="proposal_container">
