@@ -51,9 +51,9 @@ const GovernViewPage = ({
   proposalTallyMap,
 }) => {
   const router = useRouter();
-  // const { id } = router.query;
+  const { id } = router.query;
 
-  const [id, setGovernId] = useState();
+  // const [id, setGovernId] = useState();
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
   const [votingPower, setVotingPower] = useState();
@@ -70,12 +70,12 @@ const GovernViewPage = ({
   let proposer = proposerMap?.[id];
   let proposalTally = proposalTallyMap?.[id];
 
-  useEffect(() => {
-    const value = localStorage.getItem('govern');
-    setGovernId(value);
-  }, []);
+  // useEffect(() => {
+  //   const value = localStorage.getItem('govern');
+  //   setGovernId(value);
+  // }, []);
 
-  console.log(id);
+  // console.log(id);
 
   const fetchTallyParamsProposer = useCallback(() => {
     setInProgress(true);
