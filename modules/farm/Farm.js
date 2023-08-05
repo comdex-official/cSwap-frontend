@@ -155,7 +155,7 @@ const Farm = ({
                   )
                 ) *
                   marketPrice(markets, providedTokens?.[1]?.denom);
-   
+
               setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
           );
@@ -182,13 +182,13 @@ const Farm = ({
     filterValue,
     userLiquidityRefetch,
   ]);
-  
+
   const updateFilteredData = useCallback(
     (filterValue, userPools) => {
       setChildPool(false);
       if (filterValue !== '3') {
         if (filterValue === '4') {
-            setDisplayPools(userPools);       
+          setDisplayPools(userPools);
         } else {
           let filteredPools = pools.filter(
             (item) => item.type === Number(filterValue)
@@ -199,7 +199,7 @@ const Farm = ({
         setDisplayPools(pools);
       }
     },
-    [pools,userLiquidityRefetch]
+    [pools, userLiquidityRefetch]
   );
 
   const getAPRs = () => {
@@ -218,7 +218,7 @@ const Farm = ({
 
   useEffect(() => {
     updateFilteredData(filterValue, userPools);
-  }, [pools, filterValue, updateFilteredData, userLiquidityRefetch,userPools]);
+  }, [pools, filterValue, updateFilteredData, userLiquidityRefetch, userPools]);
 
   const onChange = (key) => {
     setFilterValue(key);
@@ -310,17 +310,26 @@ const Farm = ({
     {
       key: '1',
       label: 'Basic',
-      disabled: address && Object.keys(userLiquidityInPools).length === 0 ? true : false,
+      disabled:
+        address && Object.keys(userLiquidityInPools).length === 0
+          ? true
+          : false,
     },
     {
       key: '2',
       label: 'Ranged',
-      disabled: address && Object.keys(userLiquidityInPools).length === 0 ? true : false,
+      disabled:
+        address && Object.keys(userLiquidityInPools).length === 0
+          ? true
+          : false,
     },
     {
       key: '4',
       label: 'My Pools',
-      disabled: address && Object.keys(userLiquidityInPools).length === 0 ? true : false,
+      disabled:
+        address && Object.keys(userLiquidityInPools).length === 0
+          ? true
+          : false,
     },
   ];
 
@@ -495,7 +504,7 @@ const Farm = ({
     });
 
     setPoolAll(combinedTx);
-  }, [displayPools,userLiquidityRefetch]);
+  }, [displayPools, userLiquidityRefetch]);
 
   const [userCurrentProposalData, setUserCurrentProposalData] = useState();
   const [currentProposalAllData, setCurrentProposalAllData] = useState();
@@ -678,7 +687,9 @@ const Farm = ({
                         className={`${
                           styles.farm__header__right__body__button
                         } ${theme === 'dark' ? styles.dark : styles.light}`}
-                        onClick={() => setMasterPoolModalOpen(true)}
+                        onClick={() =>
+                          masterPoolData ? setMasterPoolModalOpen(true) : ''
+                        }
                       >
                         {'Go to master pool'}
                       </div>
@@ -719,7 +730,9 @@ const Farm = ({
                         className={`${
                           styles.farm__header__right__body__button
                         } ${theme === 'dark' ? styles.dark : styles.light}`}
-                        onClick={() => setChildPool(!isChildPool)}
+                        onClick={() =>
+                          masterPoolData ? setChildPool(!isChildPool) : ''
+                        }
                       >
                         {isChildPool ? 'Go to all pools' : 'Go to child pools'}
                       </div>
@@ -788,7 +801,7 @@ const Farm = ({
             >
               {!listView ? (
                 <>
-                  {(
+                  {
                     <NextImage
                       src={SquareWhite}
                       alt="Square"
@@ -796,7 +809,7 @@ const Farm = ({
                       height={15}
                       width={15}
                     />
-                  )}
+                  }
 
                   <NextImage
                     src={List}
@@ -808,7 +821,7 @@ const Farm = ({
                 </>
               ) : (
                 <>
-                  {(
+                  {
                     <NextImage
                       src={Square}
                       alt="Square"
@@ -816,7 +829,7 @@ const Farm = ({
                       height={15}
                       width={15}
                     />
-                  )}
+                  }
 
                   <NextImage
                     src={ListWhite}
