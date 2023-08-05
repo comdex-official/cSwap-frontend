@@ -1118,7 +1118,9 @@ const FarmCard = ({
                       className={`${styles.farmCard__element__boost__right} ${
                         theme === 'dark' ? styles.dark : styles.light
                       }`}
-                      onClick={() => setMasterPoolModalOpen(true)}
+                      onClick={() =>
+                        masterPoolData ? setMasterPoolModalOpen(true) : ''
+                      }
                     >
                       {'Go to Pool'}
                     </div>
