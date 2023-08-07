@@ -171,7 +171,7 @@ const Portfolio = ({
       getTotalValue();
     }
 
-    setTimeout(()=>{
+    setTimeout(() => {
       setTotalLoading(false);
     }, 4000);
   }, [getTotalValue]);
@@ -269,8 +269,6 @@ const Portfolio = ({
       },
     ],
   };
-
-  console.log(totalFarmBalance, !totalFarmBalance);
 
   return (
     <div
