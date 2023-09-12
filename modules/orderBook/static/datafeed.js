@@ -62,7 +62,7 @@ const getResolutionValue = (resolution) => {
 };
 
 const handleIncreaseLength = (dataArray) => {
-  if (dataArray.length <= 200) {
+  if (dataArray.length <= 500) {
     const newArray = [...dataArray];
 
     for (let i = 0; i < 500; i++) {
