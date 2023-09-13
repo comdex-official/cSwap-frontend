@@ -204,7 +204,8 @@ const TradeCard = ({
   const fetchPairs = () => {
     queryLiquidityPairs((error, data) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
@@ -215,7 +216,8 @@ const TradeCard = ({
   const fetchPools = (offset, limit, countTotal, reverse) => {
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
@@ -575,7 +577,8 @@ const TradeCard = ({
   const fetchPair = () => {
     queryLiquidityPair(pair?.id, (error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 

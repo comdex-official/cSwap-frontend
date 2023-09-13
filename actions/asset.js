@@ -110,7 +110,8 @@ export const fetchProofHeight = (rest, channel, callback) => {
       callback(null, response.data?.proof_height);
     })
     .catch((error) => {
-      message.error(error?.message);
+      // message.error(error?.message);
+      console.log(error);
       callback(error?.message);
     });
 };

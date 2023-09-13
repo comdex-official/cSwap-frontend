@@ -35,7 +35,8 @@ const Order = ({ lang, assetMap }) => {
     if (address) {
       queryUserOrders(Long.fromNumber(0), address, (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 
