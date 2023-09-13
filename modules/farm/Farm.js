@@ -310,26 +310,26 @@ const Farm = ({
     {
       key: '1',
       label: 'Basic',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
     {
       key: '2',
       label: 'Ranged',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
     {
       key: '4',
       label: 'My Pools',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
   ];
 
