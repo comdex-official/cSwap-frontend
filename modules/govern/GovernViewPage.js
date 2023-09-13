@@ -74,7 +74,8 @@ const GovernViewPage = ({
     fetchRestTallyParamsProposer((error, result) => {
       setInProgress(false);
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
       setTallyParams(result);
@@ -85,7 +86,8 @@ const GovernViewPage = ({
     (address) => {
       fetchRestVotingPower(address, (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
         setVotingPower(result);
@@ -99,7 +101,8 @@ const GovernViewPage = ({
     fetchRestBondexTokens((error, result) => {
       setInProgress(false);
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
       setBondedTokens(result);

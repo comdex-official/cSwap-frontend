@@ -94,7 +94,8 @@ const PoolDetails = ({
       Number(userPoolTokens) + userLockedPoolTokens,
       (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 

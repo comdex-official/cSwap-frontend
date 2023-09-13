@@ -149,7 +149,7 @@ const MyPools = ({
   const fetchEmissiondata = (address) => {
     emissiondata(address, (error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
         console.log(error);
         return;
       }

@@ -104,7 +104,8 @@ const TradehistoryTable = ({ address, pairs }) => {
       fetchTradingHistory(address, 'market_order', (error, result) => {
         setInProgress(false);
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 
@@ -121,7 +122,8 @@ const TradehistoryTable = ({ address, pairs }) => {
       fetchTradingHistory(address, 'limit_order', (error, result) => {
         setInProgress(false);
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 

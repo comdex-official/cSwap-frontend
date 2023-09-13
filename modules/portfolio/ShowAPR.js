@@ -34,7 +34,8 @@ const ShowAPR = ({
     fetchRestAPRs((error, result) => {
       setIsFetchingAPR(false);
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 

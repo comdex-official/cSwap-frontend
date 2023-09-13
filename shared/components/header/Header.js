@@ -307,7 +307,8 @@ const Header = ({
   const fetchPrices = useCallback(() => {
     fetchRestPrices((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
@@ -319,7 +320,8 @@ const Header = ({
     (offset, limit, countTotal, reverse) => {
       queryAssets(offset, limit, countTotal, reverse, (error, data) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 
@@ -342,7 +344,8 @@ const Header = ({
   const fetchParams = useCallback(() => {
     queryLiquidityParams((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
@@ -355,7 +358,8 @@ const Header = ({
   const fetchPoolIncentives = useCallback(() => {
     queryPoolIncentives((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
@@ -366,7 +370,8 @@ const Header = ({
   const getAPRs = useCallback(() => {
     fetchRestAPRs((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
