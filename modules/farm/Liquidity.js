@@ -113,7 +113,8 @@ const Liquidity = ({
       Number(userPoolTokens) + userLockedPoolTokens,
       (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 

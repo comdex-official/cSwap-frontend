@@ -74,7 +74,8 @@ const Portfolio = ({
             totalPoolToken,
             (error, result) => {
               if (error) {
-                message.error(error);
+                // message.error(error);
+                console.log(error);
                 return;
               }
 
@@ -108,7 +109,8 @@ const Portfolio = ({
     (offset, limit, countTotal, reverse) => {
       queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 

@@ -166,7 +166,8 @@ const OrderBook = ({
     if (address && pairId) {
       queryUserOrders(Long.fromNumber(pairId), address, (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 
@@ -179,7 +180,8 @@ const OrderBook = ({
     if (pair?.pair_id) {
       queryOrders(Long.fromNumber(pair?.pair_id), (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           return;
         }
 
