@@ -15,7 +15,8 @@ const PoolTokenValue = ({ pool, poolTokens, markets, assetMap }) => {
       if (poolTokens) {
         queryPoolCoinDeserialize(pool?.id, poolTokens, (error, result) => {
           if (error) {
-            message.error(error);
+            // message.error(error);
+            console.log(error);
             return;
           }
 

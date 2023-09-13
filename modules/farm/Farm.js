@@ -135,7 +135,8 @@ const Farm = ({
             totalPoolToken,
             (error, result) => {
               if (error) {
-                message.error(error);
+                // message.error(error);
+                console.log(error);
                 return;
               }
 
@@ -205,7 +206,8 @@ const Farm = ({
   const getAPRs = () => {
     fetchRestAPRs((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
       setPoolsApr(result?.data);
@@ -229,7 +231,8 @@ const Farm = ({
       setInProgress(true);
       queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
         if (error) {
-          message.error(error);
+          // message.error(error);
+          console.log(error);
           setInProgress(false);
           return;
         }
@@ -310,26 +313,26 @@ const Farm = ({
     {
       key: '1',
       label: 'Basic',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
     {
       key: '2',
       label: 'Ranged',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
     {
       key: '4',
       label: 'My Pools',
-      disabled:
-        address && Object.keys(userLiquidityInPools).length === 0
-          ? true
-          : false,
+      // disabled:
+      //   address && Object.keys(userLiquidityInPools).length === 0
+      //     ? true
+      //     : false,
     },
   ];
 
@@ -561,7 +564,7 @@ const Farm = ({
   const fetchEmissiondata = (address) => {
     emissiondata(address, (error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
         console.log(error);
         return;
       }

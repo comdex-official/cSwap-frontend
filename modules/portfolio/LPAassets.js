@@ -114,7 +114,8 @@ const LPAsssets = ({
   const getLpPrices = () => {
     fetchRestLPPrices((error, result) => {
       if (error) {
-        message.error(error);
+        // message.error(error);
+        console.log(error);
         return;
       }
 
