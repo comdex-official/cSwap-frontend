@@ -158,7 +158,7 @@ const FarmCard = ({
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(apr) / 100)) /
       365;
-
+    console.log(calculateReward);
     return fixedDecimal(calculateReward);
   };
 
@@ -167,7 +167,7 @@ const FarmCard = ({
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
       365;
-
+    console.log(calculateReward);
     return fixedDecimal(calculateReward);
   };
 
