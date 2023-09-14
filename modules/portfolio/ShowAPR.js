@@ -29,17 +29,23 @@ const ShowAPR = ({
   const theme = 'dark';
   const [isFetchingAPR, setIsFetchingAPR] = useState(false);
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const getAPRs = useCallback(() => {
     setIsFetchingAPR(true);
     fetchRestAPRs((error, result) => {
       setIsFetchingAPR(false);
       if (error) {
-        // message.error(error);
+        retries++;
         console.log(error);
-        return;
+        if (retries < maxRetries) {
+          getAPRs();
+        }
       }
-
+      if(result){
       setPoolRewards(result?.data);
+      }
     });
   }, [setPoolRewards]);
 

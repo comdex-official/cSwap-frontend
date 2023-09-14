@@ -63,15 +63,26 @@ const CreatePoolModal = ({
   const baseAvailable = getDenomBalance(balances, baseToken);
   const quoteAvailable = getDenomBalance(balances, quoteToken);
 
+  const maxRetries = 2;
+  let retries = 0;
+
   useEffect(() => {
-    queryLiquidityPairs((error, result) => {
-      if (error) {
-        return;
-      }
+    const liquidityPairs = () => {
+      queryLiquidityPairs((error, result) => {
+        if (error) {
+          retries++;
+          console.log(error);
+          if (retries < maxRetries) {
+            liquidityPairs();
+          }
+        }
+        if(result){
+        setLiquidityPairs(result?.pairs);
+        }
+      });
+    };
 
-      setLiquidityPairs(result?.pairs);
-    });
-
+    liquidityPairs();
     resetValues();
   }, []);
 

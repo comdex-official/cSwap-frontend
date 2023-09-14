@@ -1,44 +1,49 @@
-import { message } from "antd";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { DOLLAR_DECIMALS } from "../../constants/common";
-import { queryPoolCoinDeserialize } from "../../services/liquidity/query";
-import { amountConversion } from "../../utils/coin";
-import { commaSeparator, marketPrice } from "../../utils/number";
+import { message } from 'antd';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { DOLLAR_DECIMALS } from '../../constants/common';
+import { queryPoolCoinDeserialize } from '../../services/liquidity/query';
+import { amountConversion } from '../../utils/coin';
+import { commaSeparator, marketPrice } from '../../utils/number';
 
 const PoolTokenValue = ({ pool, poolTokens, markets, assetMap }) => {
   const [totalLiquidityInDollar, setTotalLiquidityInDollar] = useState();
+  const maxRetriesL = 2;
+  let retriesL = 0;
 
   const queryTokensShares = useCallback(
     (pool) => {
       if (poolTokens) {
         queryPoolCoinDeserialize(pool?.id, poolTokens, (error, result) => {
           if (error) {
-            // message.error(error);
+            retriesL++;
             console.log(error);
-            return;
+            if (retriesL < maxRetriesL) {
+              queryTokensShares(pool);
+            }
           }
+          if (result) {
+            const providedTokens = result?.coins;
+            const totalLiquidityInDollar =
+              Number(
+                amountConversion(
+                  providedTokens?.[0]?.amount,
+                  assetMap[providedTokens?.[0]?.denom]?.decimals
+                )
+              ) *
+                marketPrice(markets, providedTokens?.[0]?.denom) +
+              Number(
+                amountConversion(
+                  providedTokens?.[1]?.amount,
+                  assetMap[providedTokens?.[1]?.denom]?.decimals
+                )
+              ) *
+                marketPrice(markets, providedTokens?.[1]?.denom);
 
-          const providedTokens = result?.coins;
-          const totalLiquidityInDollar =
-            Number(
-              amountConversion(
-                providedTokens?.[0]?.amount,
-                assetMap[providedTokens?.[0]?.denom]?.decimals
-              )
-            ) *
-            marketPrice(markets, providedTokens?.[0]?.denom) +
-            Number(
-              amountConversion(
-                providedTokens?.[1]?.amount,
-                assetMap[providedTokens?.[1]?.denom]?.decimals
-              )
-            ) *
-            marketPrice(markets, providedTokens?.[1]?.denom);
-
-          if (totalLiquidityInDollar) {
-            setTotalLiquidityInDollar(totalLiquidityInDollar);
+            if (totalLiquidityInDollar) {
+              setTotalLiquidityInDollar(totalLiquidityInDollar);
+            }
           }
         });
       }
@@ -59,7 +64,7 @@ const PoolTokenValue = ({ pool, poolTokens, markets, assetMap }) => {
         Number(poolTokens ? totalLiquidityInDollar || 0 : 0).toFixed(
           DOLLAR_DECIMALS
         )
-      )}{" "}
+      )}{' '}
     </>
   );
 };

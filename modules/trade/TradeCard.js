@@ -213,15 +213,21 @@ const TradeCard = ({
     });
   };
 
+  const maxRetriesP = 2;
+  let retriesP = 0;
+
   const fetchPools = (offset, limit, countTotal, reverse) => {
     queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
       if (error) {
-        // message.error(error);
+        retriesP++;
         console.log(error);
-        return;
+        if (retriesP < maxRetriesP) {
+          fetchPools(offset, limit, countTotal, reverse);
+        }
       }
-
+      if(result){
       setPools(result.pools);
+      }
     });
   };
 
@@ -574,12 +580,18 @@ const TradeCard = ({
     }
   }, [pool]);
 
+  const maxRetriesR = 2;
+  let retriesR = 0;
+
   const fetchPair = () => {
     queryLiquidityPair(pair?.id, (error, result) => {
       if (error) {
-        // message.error(error);
+        retriesR++;
         console.log(error);
-        return;
+        setInProgress(false);
+        if (retriesR < maxRetriesR) {
+          fetchPair();
+        }
       }
 
       if (result?.pair) {
@@ -588,13 +600,21 @@ const TradeCard = ({
     });
   };
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const fetchPool = () => {
     queryPool(pool?.id, (error, result) => {
       if (error) {
-        return;
+        retries++;
+        console.log(error);
+        if (retries < maxRetries) {
+          fetchPool();
+        }
       }
-
+      if(result){
       setPool(result?.pool);
+      }
     });
   };
 

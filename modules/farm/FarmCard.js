@@ -158,22 +158,21 @@ const FarmCard = ({
       : eApr
       ? Number(calculateApr() || 0) - Number(eApr)
       : calculateApr() || 0;
-   
+
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(apr) / 100)) /
       365;
-    console.log(calculateReward);
+
     return fixedDecimal(calculateReward);
   };
 
   const calculateRewardPerDay2 = (_totalApr) => {
-   
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
       365;
-    console.log(calculateReward);
+
     return fixedDecimal(calculateReward);
   };
 
@@ -322,8 +321,6 @@ const FarmCard = ({
       return Number(calculatedAPY).toFixed(DOLLAR_DECIMALS);
     }
   };
-
-
 
   const calculatePerDollorEmissioAmount = (_id, _totalLiquidity) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
