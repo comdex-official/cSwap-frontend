@@ -1,22 +1,22 @@
-import { Button, message, Table, Tabs } from "antd";
-import Long from "long";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { setOrders } from "../../actions/order";
-import { APP_ID } from "../../constants/common";
-import { signAndBroadcastTransaction } from "../../services/helper";
-import { queryUserOrders } from "../../services/liquidity/query";
-import { defaultFee } from "../../services/transaction";
+import { Button, message, Table, Tabs } from 'antd';
+import Long from 'long';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { setOrders } from '../../actions/order';
+import { APP_ID } from '../../constants/common';
+import { signAndBroadcastTransaction } from '../../services/helper';
+import { queryUserOrders } from '../../services/liquidity/query';
+import { defaultFee } from '../../services/transaction';
 import {
   amountConversion,
   denomConversion,
   orderPriceReverseConversion,
-} from "../../utils/coin";
-import { errorMessageMappingParser, orderStatusText } from "../../utils/string";
-import variables from "../../utils/variables";
-import NoDataIcon from "../../shared/components/NoDataIcon";
-import Snack from "../../shared/components/Snack";
+} from '../../utils/coin';
+import { errorMessageMappingParser, orderStatusText } from '../../utils/string';
+import variables from '../../utils/variables';
+import NoDataIcon from '../../shared/components/NoDataIcon';
+import Snack from '../../shared/components/Snack';
 
 const Order = ({ lang, assetMap }) => {
   const address = useSelector((state) => state.account.address);
@@ -31,17 +31,23 @@ const Order = ({ lang, assetMap }) => {
     return () => clearInterval(intervalId);
   }, [address]);
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const fetchOrders = async (address) => {
     if (address) {
       queryUserOrders(Long.fromNumber(0), address, (error, result) => {
         if (error) {
-          // message.error(error);
+          retries++;
           console.log(error);
-          return;
+          if (retries < maxRetries) {
+            fetchOrders(address);
+          }
         }
-
+        if(result){
         setOrders(result?.orders);
         setMyOrders(result?.orders);
+        }
       });
     }
   };
@@ -53,7 +59,7 @@ const Order = ({ lang, assetMap }) => {
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.liquidity.v1beta1.MsgCancelOrder",
+          typeUrl: '/comdex.liquidity.v1beta1.MsgCancelOrder',
           value: {
             orderer: address.toString(),
             appId: Long.fromNumber(APP_ID),
@@ -62,7 +68,7 @@ const Order = ({ lang, assetMap }) => {
           },
         },
         fee: defaultFee(),
-        memo: "",
+        memo: '',
       },
       address,
       (error, result) => {
@@ -91,47 +97,47 @@ const Order = ({ lang, assetMap }) => {
 
   const openOrderColumns = [
     {
-      title: "Order ID",
-      dataIndex: "id",
-      key: "id",
+      title: 'Order ID',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: "Expire Time",
-      dataIndex: "expire_time",
+      title: 'Expire Time',
+      dataIndex: 'expire_time',
     },
     {
-      title: "BUY/SELL",
-      dataIndex: "buy_sell",
+      title: 'BUY/SELL',
+      dataIndex: 'buy_sell',
     },
     {
-      title: "Offered Coin",
-      dataIndex: "offered_coin",
+      title: 'Offered Coin',
+      dataIndex: 'offered_coin',
     },
     {
-      title: "Trade Amount",
-      dataIndex: "trade_amount",
+      title: 'Trade Amount',
+      dataIndex: 'trade_amount',
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: 'Price',
+      dataIndex: 'price',
     },
     {
-      title: "Received",
-      dataIndex: "received",
+      title: 'Received',
+      dataIndex: 'received',
     },
     {
-      title: "Remaining",
-      dataIndex: "remaining",
+      title: 'Remaining',
+      dataIndex: 'remaining',
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: 'Status',
+      dataIndex: 'status',
     },
     {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      align: "right",
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      align: 'right',
       render: (item) => (
         <Button
           type="primary"
@@ -151,17 +157,17 @@ const Order = ({ lang, assetMap }) => {
     myOrders.map((item, index) => {
       return {
         key: index,
-        id: item?.id ? item?.id?.toNumber() : "",
+        id: item?.id ? item?.id?.toNumber() : '',
         expire_time: item?.expireAt
-          ? moment(item.expireAt).format("MMM DD, YYYY HH:mm")
-          : "",
-        buy_sell: item?.direction === 1 ? "BUY" : "SELL",
+          ? moment(item.expireAt).format('MMM DD, YYYY HH:mm')
+          : '',
+        buy_sell: item?.direction === 1 ? 'BUY' : 'SELL',
         offered_coin: item?.offerCoin
           ? `${amountConversion(
               item?.offerCoin?.amount,
               assetMap[item?.offerCoin?.denom]?.decimals
             )} ${denomConversion(item?.offerCoin?.denom)}`
-          : "",
+          : '',
         trade_amount: item?.amount ? amountConversion(item?.amount) : 0,
         price: item?.price ? orderPriceReverseConversion(item.price) : 0,
         received: item?.receivedCoin
@@ -169,22 +175,22 @@ const Order = ({ lang, assetMap }) => {
               item?.receivedCoin?.amount,
               assetMap[item?.receivedCoin?.denom]?.decimals
             )} ${denomConversion(item?.receivedCoin?.denom)}`
-          : "",
+          : '',
         remaining: item?.remainingOfferCoin
           ? `${amountConversion(
               item?.remainingOfferCoin?.amount,
               assetMap[item?.remainingOfferCoin?.denom]?.decimals
             )} ${denomConversion(item?.remainingOfferCoin?.denom)}`
-          : "",
-        status: item?.status ? orderStatusText(item.status) : "",
+          : '',
+        status: item?.status ? orderStatusText(item.status) : '',
         action: item,
       };
     });
 
   const tabItems = [
     {
-      label: "Active Orders",
-      key: "1",
+      label: 'Active Orders',
+      key: '1',
       children: (
         <Table
           showHeader={true}
@@ -192,7 +198,7 @@ const Order = ({ lang, assetMap }) => {
           dataSource={openOrdersData}
           pagination={false}
           className="custom-table"
-          scroll={{ x: "100%" }}
+          scroll={{ x: '100%' }}
           locale={{ emptyText: <NoDataIcon /> }}
         />
       ),

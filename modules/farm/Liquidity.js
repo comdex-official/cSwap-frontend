@@ -71,14 +71,22 @@ const Liquidity = ({
         queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
     ) + Number(activeSoftLock?.amount) || 0;
 
+  const maxRetriesP = 2;
+  let retriesP = 0;
+
   const fetchSoftLock = useCallback(() => {
     queryPoolSoftLocks(address, pool?.id, (error, result) => {
       if (error) {
-        return;
+        retriesP++;
+        console.log(error);
+        if (retriesP < maxRetriesP) {
+          fetchSoftLock();
+        }
       }
-
+      if(result){
       setActiveSoftLock(result?.activePoolCoin);
       setQueuedSoftLocks(result?.queuedPoolCoin);
+      }
     });
   }, [address, pool?.id]);
 
@@ -88,14 +96,22 @@ const Liquidity = ({
     }
   }, [address, pool, refreshBalance, fetchSoftLock]);
 
+  const maxRetriesPool = 2;
+  let retriesPool = 0;
+
   const fetchPool = useCallback(
     (id) => {
       queryPool(id, (error, result) => {
         if (error) {
-          return;
+          retriesPool++;
+          console.log(error);
+          if (retriesPool < maxRetriesPool) {
+            fetchPool(id);
+          }
         }
-
+        if(result){
         setPool(result?.pool);
+        }
       });
     },
     [id, setPool]
@@ -107,18 +123,24 @@ const Liquidity = ({
     }
   }, [id, fetchPool]);
 
+  const maxRetriesL = 2;
+  let retriesL = 0;
+
   const fetchProvidedCoins = useCallback(() => {
     queryPoolCoinDeserialize(
       pool?.id,
       Number(userPoolTokens) + userLockedPoolTokens,
       (error, result) => {
         if (error) {
-          // message.error(error);
+          retriesL++;
           console.log(error);
-          return;
+          if (retriesL < maxRetriesL) {
+            fetchProvidedCoins();
+          }
         }
-
+        if(result){
         setProvidedTokens(result?.coins);
+        }
       }
     );
   }, [pool?.id, userLockedPoolTokens, userPoolTokens]);
@@ -138,19 +160,27 @@ const Liquidity = ({
     }
   };
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const fetchPoolBalance = (address) => {
     setFetchBalanceInProgress(true);
     queryAllBalances(address, (error, result) => {
       setFetchBalanceInProgress(false);
 
       if (error) {
-        return;
+        retries++;
+        console.log(error);
+        if (retries < maxRetries) {
+          fetchPoolBalance(address);
+        }
       }
-
+      if(result){
       setPoolBalance(result.balances);
       const spotPrice =
         result.balances?.baseCoin?.amount / result.balances?.quoteCoin?.amount;
       setSpotPrice(spotPrice.toFixed(6));
+      }
     });
   };
 
