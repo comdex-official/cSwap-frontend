@@ -149,11 +149,16 @@ const FarmCard = ({
   };
 
   const calculateRewardPerDay = (_totalApr) => {
-    const apr =
-      getMasterPool() && myPool
-        ? calculateChildPoolApr() || 0
-        : calculateApr() || 0;
-
+    const eApr = calculateAPY(
+      calculatePoolLiquidity(pool?.balances),
+      Number(pool?.id)
+    );
+    const apr = getMasterPool()
+      ? _totalApr?.apr
+      : eApr
+      ? Number(calculateApr() || 0) - Number(eApr)
+      : calculateApr() || 0;
+   
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(apr) / 100)) /
@@ -163,6 +168,7 @@ const FarmCard = ({
   };
 
   const calculateRewardPerDay2 = (_totalApr) => {
+   
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
@@ -316,6 +322,8 @@ const FarmCard = ({
       return Number(calculatedAPY).toFixed(DOLLAR_DECIMALS);
     }
   };
+
+
 
   const calculatePerDollorEmissioAmount = (_id, _totalLiquidity) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
