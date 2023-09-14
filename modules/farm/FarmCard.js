@@ -1015,7 +1015,7 @@ const FarmCard = ({
                           height={50}
                           alt="Logo"
                         />{' '}
-                        $$
+                        $
                         {calculateRewardPerDay2(
                           calculateAPY(
                             calculatePoolLiquidity(pool?.balances),
