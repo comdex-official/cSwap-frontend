@@ -116,7 +116,7 @@ const FarmCard = ({
     const totalMasterPoolApr = poolsApr?.incentive_rewards.filter(
       (reward) => !reward.master_pool
     );
-    console.log(totalMasterPoolApr?.[0]?.ap);
+
     return fixedDecimal(totalMasterPoolApr?.[0]?.apr);
   };
 
@@ -135,7 +135,7 @@ const FarmCard = ({
     let harborQTY = calculateVaultEmission(Number(pool?.id));
     let calculatedAPY =
       (365 * ((harborQTY / 7) * harborTokenPrice)) / Number(_totalLiquidity);
-    console.log(total, calculatedAPY);
+
     return fixedDecimal(total + calculatedAPY);
   };
 
@@ -149,11 +149,16 @@ const FarmCard = ({
   };
 
   const calculateRewardPerDay = (_totalApr) => {
+    const apr =
+      getMasterPool() && myPool
+        ? calculateChildPoolApr() || 0
+        : calculateApr() || 0;
+
     let calculateReward =
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
-        (Number(_totalApr?.apr) / 100)) /
+        (Number(apr) / 100)) /
       365;
-    console.log(calculateReward);
+
     return fixedDecimal(calculateReward);
   };
 
@@ -162,7 +167,7 @@ const FarmCard = ({
       (Number(userLiquidityInPools[pool?.id] || 0).toFixed(DOLLAR_DECIMALS) *
         (Number(_totalApr) / 100)) /
       365;
-    console.log(calculateReward);
+
     return fixedDecimal(calculateReward);
   };
 
