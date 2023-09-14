@@ -59,6 +59,9 @@ const Deposit = ({
     );
   };
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
@@ -76,9 +79,16 @@ const Deposit = ({
         (error, result) => {
           setBalanceInProgress(false);
 
-          if (error) return;
-
+          if (error) {
+            retries++;
+            console.log(error);
+            if (retries < maxRetries) {
+              initialize();
+            }
+          }
+          if(result){
           setAvailableBalance(result?.balance);
+          }
         }
       );
 

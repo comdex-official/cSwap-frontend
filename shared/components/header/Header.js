@@ -266,14 +266,23 @@ const Header = ({
     [getPrice, setAssetBalance, assetMap]
   );
 
+  const maxRetriesAllBalance = 2;
+  let retriesAllBalnce = 0;
+
   const fetchBalances = useCallback(
     (address) => {
       queryAllBalances(address, (error, result) => {
         if (error) {
-          return;
+          retriesAllBalnce++;
+          console.log(error);
+          if (retriesAllBalnce < maxRetriesAllBalance) {
+            fetchBalances(address);
+          }
         }
-        setAccountBalances(result.balances, result.pagination);
-        calculateAssetBalance(result.balances);
+        if (result) {
+          setAccountBalances(result.balances, result.pagination);
+          calculateAssetBalance(result.balances);
+        }
       });
     },
     [calculateAssetBalance, setAccountBalances]
@@ -316,16 +325,22 @@ const Header = ({
     });
   }, [setMarkets]);
 
+  const maxRetriesAssets = 2;
+  let retriesAsset = 0;
+
   const fetchAssets = useCallback(
     (offset, limit, countTotal, reverse) => {
       queryAssets(offset, limit, countTotal, reverse, (error, data) => {
         if (error) {
-          // message.error(error);
+          retriesAsset++;
           console.log(error);
-          return;
+          if (retriesAsset < maxRetriesAssets) {
+            fetchAssets(offset, limit, countTotal, reverse);
+          }
         }
-
-        setAssets(data.assets);
+        if (data) {
+          setAssets(data.assets);
+        }
       });
     },
     [setAssets]
@@ -341,12 +356,17 @@ const Header = ({
     );
   }, [fetchAssets, fetchPrices]);
 
+  const maxRetriesP = 2;
+  let retriesP = 0;
+
   const fetchParams = useCallback(() => {
     queryLiquidityParams((error, result) => {
       if (error) {
-        // message.error(error);
+        retriesP++;
         console.log(error);
-        return;
+        if (retriesP < maxRetriesP) {
+          fetchParams();
+        }
       }
 
       if (result?.params) {
@@ -355,27 +375,39 @@ const Header = ({
     });
   }, [setParams]);
 
+  const maxRetriesIncentive = 2;
+  let retriesIncentive = 0;
+
   const fetchPoolIncentives = useCallback(() => {
     queryPoolIncentives((error, result) => {
       if (error) {
-        // message.error(error);
+        retriesIncentive++;
         console.log(error);
-        return;
+        if (retriesIncentive < maxRetriesIncentive) {
+          fetchPoolIncentives();
+        }
       }
-
-      setPoolIncentives(result?.poolIncentives);
+      if (result) {
+        setPoolIncentives(result?.poolIncentives);
+      }
     });
   }, [setPoolIncentives]);
+
+  const maxRetries = 2;
+  let retries = 0;
 
   const getAPRs = useCallback(() => {
     fetchRestAPRs((error, result) => {
       if (error) {
-        // message.error(error);
+        retries++;
         console.log(error);
-        return;
+        if (retries < maxRetries) {
+          getAPRs();
+        }
       }
-
-      setPoolRewards(result?.data);
+      if (result) {
+        setPoolRewards(result?.data);
+      }
     });
   }, [setPoolRewards]);
 

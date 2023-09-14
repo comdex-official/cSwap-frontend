@@ -42,15 +42,23 @@ const Portfolio = ({
   const [isLoading, setIsLoading] = useState(true);
   const [totalLoading, setTotalLoading] = useState(true);
   const [totalValue, setTotalValue] = useState(0);
+  const maxRetriesL = 2;
+  let retriesL = 0;
+  const maxRetriesP = 2;
+  let retriesP = 0;
 
   const getUserLiquidity = useCallback(
     (pool) => {
       if (address) {
         queryPoolSoftLocks(address, pool?.id, (error, result) => {
           if (error) {
-            return;
+            retriesP++;
+            console.log(error);
+            if (retriesP < maxRetriesP) {
+              getUserLiquidity(pool);
+            }
           }
-
+          if(result){
           const availablePoolToken =
             getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
@@ -74,11 +82,13 @@ const Portfolio = ({
             totalPoolToken,
             (error, result) => {
               if (error) {
-                // message.error(error);
+                retriesL++;
                 console.log(error);
-                return;
+                if (retriesL < maxRetriesL) {
+                  getUserLiquidity(pool);
+                }
               }
-
+              if(result){
               const providedTokens = result?.coins;
               const totalLiquidityInDollar =
                 Number(
@@ -97,23 +107,32 @@ const Portfolio = ({
                   marketPrice(markets, providedTokens?.[1]?.denom);
 
               setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
+                  }
             }
           );
+        }
         });
       }
     },
     [assetMap, address, markets, balances, userLiquidityRefetch]
   );
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const fetchPools = useCallback(
     (offset, limit, countTotal, reverse) => {
       queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
         if (error) {
-          // message.error(error);
+          retries++;
           console.log(error);
-          return;
+          if (retries < maxRetries) {
+            fetchPools(
+              offset, limit, countTotal, reverse
+            );
+          }
         }
-
+        if(result){
         setPools(result.pools, result.pagination);
 
         const userPools = result?.pools;
@@ -127,6 +146,7 @@ const Portfolio = ({
             return getUserLiquidity(item);
           });
         }
+      }
       });
     },
     [balances, getUserLiquidity, setPools, userLiquidityRefetch]
