@@ -1,21 +1,21 @@
-import styles from "./Farm.module.scss";
-import { NextImage } from "../../shared/image/NextImage";
-import { message } from "antd";
-import * as PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { setTradeData } from "../../actions/tradePair";
+import styles from './Farm.module.scss';
+import { NextImage } from '../../shared/image/NextImage';
+import { message } from 'antd';
+import * as PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { setTradeData } from '../../actions/tradePair';
 import {
   queryPoolCoinDeserialize,
   queryPoolSoftLocks,
-} from "../../services/liquidity/query";
+} from '../../services/liquidity/query';
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getDenomBalance,
-} from "../../utils/coin";
-import PoolTokenValue from "./PoolTokenValue";
+} from '../../utils/coin';
+import PoolTokenValue from './PoolTokenValue';
 
 const PoolDetails = ({
   address,
@@ -77,16 +77,27 @@ const PoolDetails = ({
         queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
     ) + Number(activeSoftLock?.amount) || 0;
 
+  const maxRetriesP = 2;
+  let retriesP = 0;
+
   const fetchSoftLock = useCallback(() => {
     queryPoolSoftLocks(address, pool?.id, (error, result) => {
       if (error) {
-        return;
+        retriesP++;
+        console.log(error);
+        if (retriesP < maxRetriesP) {
+          fetchSoftLock();
+        }
       }
-
+      if(result){
       setActiveSoftLock(result?.activePoolCoin);
       setQueuedSoftLocks(result?.queuedPoolCoin);
+      }
     });
   }, [address, pool?.id]);
+
+  const maxRetriesL = 2;
+  let retriesL = 0;
 
   const fetchProvidedCoins = useCallback(() => {
     queryPoolCoinDeserialize(
@@ -94,12 +105,15 @@ const PoolDetails = ({
       Number(userPoolTokens) + userLockedPoolTokens,
       (error, result) => {
         if (error) {
-          // message.error(error);
+          retriesL++;
           console.log(error);
-          return;
+          if (retriesL < maxRetriesL) {
+            fetchProvidedCoins();
+          }
         }
-
+        if(result){
         setProvidedTokens(result?.coins);
+        }
       }
     );
   }, [pool?.id, userLockedPoolTokens, userPoolTokens]);
@@ -125,34 +139,34 @@ const PoolDetails = ({
     <div>
       <div
         className={`${styles.liquidityCard__pool__details} ${
-          theme === "dark" ? styles.dark : styles.light
+          theme === 'dark' ? styles.dark : styles.light
         }`}
       >
         <div
           className={`${styles.liquidityCard__pool__title} ${styles.title} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
-          {"Pool Details"}
+          {'Pool Details'}
         </div>
         <div
           className={`${styles.liquidityCard__pool__details__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.farmCard__element__left__logo__wrap} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.farmCard__element__left__logo} ${
                 styles.first
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <NextImage
@@ -168,11 +182,11 @@ const PoolDetails = ({
             <div
               className={`${styles.farmCard__element__left__logo} ${
                 styles.last
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.farmCard__element__left__logo__main} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <NextImage
@@ -188,7 +202,7 @@ const PoolDetails = ({
           </div>
           <div
             className={`${styles.liquidityCard__pool__title} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             {showPairDenoms()}
@@ -197,24 +211,24 @@ const PoolDetails = ({
 
         <div
           className={`${styles.liquidityCard__pool__footer__details} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.liquidityCard__pool__element} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.liquidityCard__pool__title} ${
                 styles.semiTitle
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               {`${denomConversion(pool?.balances?.baseCoin?.denom)} - 50% `}
             </div>
             <div
               className={`${styles.liquidityCard__pool__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {pool?.balances?.baseCoin?.denom &&
@@ -228,19 +242,19 @@ const PoolDetails = ({
           </div>
           <div
             className={`${styles.liquidityCard__pool__element} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.liquidityCard__pool__title} ${
                 styles.semiTitle
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               {`${denomConversion(pool?.balances?.quoteCoin?.denom)} - 50% `}
             </div>
             <div
               className={`${styles.liquidityCard__pool__title} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               {pool?.balances?.quoteCoin?.denom &&
@@ -255,44 +269,44 @@ const PoolDetails = ({
         </div>
         <div
           className={`${styles.liquidityCard__pool__footer__details__wrap} ${
-            theme === "dark" ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         >
           <div
             className={`${styles.liquidityCard__pool__title} ${styles.title} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
-            {"Your Details"}
+            {'Your Details'}
           </div>
           <div
             className={`${styles.liquidityCard__pool__footer__details} ${
-              theme === "dark" ? styles.dark : styles.light
+              theme === 'dark' ? styles.dark : styles.light
             }`}
           >
             <div
               className={`${styles.liquidityCard__pool__element} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
                   styles.semiTitle2
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
-                {"My Amount"}
+                {'My Amount'}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 {pool?.balances?.baseCoin?.denom &&
                   showPoolBalance2(
                     providedTokens,
                     pool?.balances?.baseCoin?.denom
-                  )}{" "}
-                +{" "}
+                  )}{' '}
+                +{' '}
                 {pool?.balances?.quoteCoin?.denom &&
                   showPoolBalance2(
                     providedTokens,
@@ -303,18 +317,18 @@ const PoolDetails = ({
             <div
               className={`${styles.liquidityCard__pool__element} ${
                 styles.semiTitle
-              } ${theme === "dark" ? styles.dark : styles.light}`}
+              } ${theme === 'dark' ? styles.dark : styles.light}`}
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
                   styles.semiTitle2
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
-                {"Available LP Amount"}
+                {'Available LP Amount'}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <PoolTokenValue poolTokens={userPoolTokens} />
@@ -322,19 +336,19 @@ const PoolDetails = ({
             </div>
             <div
               className={`${styles.liquidityCard__pool__element} ${
-                theme === "dark" ? styles.dark : styles.light
+                theme === 'dark' ? styles.dark : styles.light
               }`}
             >
               <div
                 className={`${styles.liquidityCard__pool__title} ${
                   styles.semiTitle2
-                } ${theme === "dark" ? styles.dark : styles.light}`}
+                } ${theme === 'dark' ? styles.dark : styles.light}`}
               >
-                {"Farming Amount"}
+                {'Farming Amount'}
               </div>
               <div
                 className={`${styles.liquidityCard__pool__title} ${
-                  theme === "dark" ? styles.dark : styles.light
+                  theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
                 <PoolTokenValue poolTokens={userLockedPoolTokens} />

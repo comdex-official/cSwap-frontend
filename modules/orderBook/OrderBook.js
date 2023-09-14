@@ -162,30 +162,42 @@ const OrderBook = ({
     return () => clearInterval(intervalId);
   }, [selectedPair, refresh]);
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const fetchUserOrders = async (address, pairId) => {
     if (address && pairId) {
       queryUserOrders(Long.fromNumber(pairId), address, (error, result) => {
         if (error) {
-          // message.error(error);
+          retries++;
           console.log(error);
-          return;
+          if (retries < maxRetries) {
+            fetchUserOrders(address, pairId);
+          }
         }
-
+        if(result){
         setMyOrders(result?.orders);
+        }
       });
     }
   };
+
+  const maxRetriesOrder = 2;
+  let retriesOrder = 0;
 
   const fetchOrders = async (pair) => {
     if (pair?.pair_id) {
       queryOrders(Long.fromNumber(pair?.pair_id), (error, result) => {
         if (error) {
-          // message.error(error);
+          retriesOrder++;
           console.log(error);
-          return;
+          if (retriesOrder < maxRetriesOrder) {
+            fetchOrders(pair);
+          }
         }
-
+        if(result){
         setOrders(result?.orders);
+        }
       });
     }
   };

@@ -104,14 +104,23 @@ const Farm = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const maxRetriesL = 2;
+  let retriesL = 0;
+  const maxRetriesP = 2;
+  let retriesP = 0;
+
   const getUserLiquidity = useCallback(
     (pool) => {
       if (address) {
         queryPoolSoftLocks(address, pool?.id, (error, result) => {
           if (error) {
-            return;
+            retriesP++;
+            console.log(error);
+            if (retriesP < maxRetriesP) {
+              getUserLiquidity(pool);
+            }
           }
-
+if(result){
           const availablePoolToken =
             getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
@@ -135,11 +144,13 @@ const Farm = ({
             totalPoolToken,
             (error, result) => {
               if (error) {
-                // message.error(error);
+                retriesL++;
                 console.log(error);
-                return;
+                if (retriesL < maxRetriesL) {
+                  getUserLiquidity(pool);
+                }
               }
-
+if(result){
               const providedTokens = result?.coins;
               const totalLiquidityInDollar =
                 Number(
@@ -159,7 +170,10 @@ const Farm = ({
 
               setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
             }
+          }
+            
           );
+        }
         });
       }
     },
@@ -203,14 +217,21 @@ const Farm = ({
     [pools, userLiquidityRefetch]
   );
 
+  const maxRetries = 2;
+  let retries = 0;
+
   const getAPRs = () => {
     fetchRestAPRs((error, result) => {
       if (error) {
-        // message.error(error);
+        retries++;
         console.log(error);
-        return;
+        if (retries < maxRetries) {
+          getAPRs();
+        }
       }
+      if(result){
       setPoolsApr(result?.data);
+      }
     });
   };
 
@@ -226,17 +247,22 @@ const Farm = ({
     setFilterValue(key);
   };
 
+  const maxRetriesR = 2;
+  let retriesR = 0;
+
   const fetchPools = useCallback(
     (offset, limit, countTotal, reverse) => {
       setInProgress(true);
       queryPoolsList(offset, limit, countTotal, reverse, (error, result) => {
         if (error) {
-          // message.error(error);
+          retriesR++;
           console.log(error);
           setInProgress(false);
-          return;
+          if (retriesR < maxRetriesR) {
+            fetchPools(offset, limit, countTotal, reverse);
+          }
         }
-
+        if(result){
         setPools(result.pools);
         setInProgress(false);
 
@@ -251,6 +277,7 @@ const Farm = ({
             return getUserLiquidity(item);
           });
         }
+      }
       });
     },
     [setPools, getUserLiquidity, userLiquidityRefetch, balances]
