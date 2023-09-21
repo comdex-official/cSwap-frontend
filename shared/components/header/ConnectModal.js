@@ -11,13 +11,11 @@ import {
 import {
   fetchKeplrAccountName,
   initializeChain,
-  initializeLeapSnap,
 } from '../../../services/keplr';
 import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
 import { Keplr, Wallet2, Cosmos, Ledger } from '../../image';
-import { getSnap } from '@leapwallet/cosmos-snap-provider';
 
 const ConnectModal = ({
   setAccountAddress,
@@ -51,17 +49,6 @@ const ConnectModal = ({
     });
   };
 
-  const handleLeapSnapConnect = async () => {
-    console.log("Clicked on Leap Snap");
-    initializeLeapSnap((error, response) => {
-      if (error) {
-        console.log(error, "Error in snap");
-      }
-      console.log(response, "response");
-    })
-    // const snapInstalled = await getSnap();
-    // console.log(snapInstalled, 'snapInstalled');
-  }
 
   return (
     <Spin spinning={inProgress}>
@@ -105,7 +92,6 @@ const ConnectModal = ({
         <div
           className={styles.dropdown__wallet__title__wrap}
           onClick={() => handleConnectToWallet('metamask')}
-        // onClick={() => handleLeapSnapConnect()}
         >
           <div className={styles.dropdown__wallet__logo}>
             <NextImage src={Cosmos} alt="Keplr" />

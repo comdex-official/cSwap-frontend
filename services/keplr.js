@@ -204,41 +204,6 @@ export const fetchKeplrAccountName = async () => {
 };
 
 
-export const initializeLeapSnap = (callback) => {
-  (async () => {
-    // try {
-    const snapInstalled = await getSnap();
-    console.log(snapInstalled, "snapInstalled");
-    if (!snapInstalled) {
-      connectSnap(); // Initiates installation if not already present
-      await suggestChain(getChainConfig())
-    } else {
-      const key = await getKey(comdex?.chainId);
-      console.log(key, "Key");
-      // await suggestChain(getChainConfig())
-    }
-    //   if (LeapProvider) {
-    //     try {
-    //       const accounts = await LeapProvider.enable();
-    //       console.log(accounts, "accounts[0]");
-    //     } catch (error) {
-    //       console.error('Error enabling Leap:', error);
-    //       callback(error?.message)
-    //     }
-    //   } else {
-    //     console.error('LeapProvider not found. Make sure Leap Metamask Snap is installed.');
-    //   }
-
-    //   callback(null, accounts[0])
-    // } catch (error) {
-    //   callback(error?.message)
-    // }
-
-
-
-  })()
-}
-
 export const initializeChain = (type, callback) => {
   (async () => {
     let walletType = type || localStorage.getItem("loginType");
