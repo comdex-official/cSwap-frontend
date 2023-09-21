@@ -26,7 +26,7 @@ const ConnectModal = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
-  
+
   const handleConnectToWallet = (walletType) => {
     setInProgress(true);
 
@@ -48,6 +48,7 @@ const ConnectModal = ({
       handleCancel();
     });
   };
+
 
   return (
     <Spin spinning={inProgress}>
@@ -85,6 +86,18 @@ const ConnectModal = ({
           </div>
           <div className={styles.dropdown__wallet__title2}>
             {'Leap Cosmos Wallet'}
+          </div>
+        </div>
+
+        <div
+          className={styles.dropdown__wallet__title__wrap}
+          onClick={() => handleConnectToWallet('metamask')}
+        >
+          <div className={styles.dropdown__wallet__logo}>
+            <NextImage src={Cosmos} alt="Keplr" />
+          </div>
+          <div className={styles.dropdown__wallet__title2}>
+            {'Leap Cosmos Metamask'}
           </div>
         </div>
 
