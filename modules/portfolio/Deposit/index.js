@@ -249,6 +249,7 @@ const Deposit = ({
     const data = {
       msg: {
         typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
+        // typeUrl: '/cosmos-sdk/MsgTransfer',
         value: {
           source_port: 'transfer',
           source_channel: chain.destChannelId,

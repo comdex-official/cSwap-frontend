@@ -216,6 +216,7 @@ export const aminoSignIBCTx = (config, transaction, sourceAddress = "", callback
     if (walletType === "metamask") {
       console.log("in Metamask ");
       const offlineSigner = new CosmjsOfflineSigner(config.chainId);
+      const accounts = await offlineSigner.getAccounts();
       // const offlineSigner1 = getOfflineSigner(comdex?.chainId);
       // const offlineSigner = window.getOfflineSignerOnlyAmino &&
       //   window.getOfflineSignerOnlyAmino(config.chainId)
@@ -225,6 +226,8 @@ export const aminoSignIBCTx = (config, transaction, sourceAddress = "", callback
       // const accounts = await offlineSigner.getAccounts();
       // console.log(transaction, "transaction");
       console.log(offlineSigner, "offlineSigner");
+      console.log(accounts, "accounts");
+      console.log(transaction, "transaction");
       // console.log(offlineSigner1, "offlineSigner1");
 
       const ibcMessage = {
@@ -255,8 +258,10 @@ export const aminoSignIBCTx = (config, transaction, sourceAddress = "", callback
       // })
       //   .then((client) => {
       //     client
-      //       .sign(
-      //         address,
+      //       .signAndBroadcast(
+      //         accounts?.[0].address,
+      //         // sourceAddress,
+      //         // transaction?.msg?.value?.receiver,
       //         [transaction.message],
       //         transaction.fee,
       //         transaction.memo

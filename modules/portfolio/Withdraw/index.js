@@ -107,7 +107,7 @@ const Withdraw = ({
       memo: '',
     };
 
-    aminoSignIBCTx(getChainConfig(), data, (error, result) => {
+    aminoSignIBCTx(getChainConfig(), data, address, (error, result) => {
       if (error) {
         if (result?.transactionHash) {
           message.error(
