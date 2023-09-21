@@ -249,7 +249,6 @@ const Deposit = ({
     const data = {
       msg: {
         typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
-        // typeUrl: '/cosmos-sdk/MsgTransfer',
         value: {
           source_port: 'transfer',
           source_channel: chain.destChannelId,
@@ -277,7 +276,7 @@ const Deposit = ({
       memo: '',
     };
 
-    aminoSignIBCTx(chain.chainInfo, data, sourceAddress, (error, result) => {
+    aminoSignIBCTx(chain.chainInfo, data, (error, result) => {
       if (error) {
         if (result?.transactionHash) {
           message.error(

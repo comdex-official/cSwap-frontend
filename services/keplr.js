@@ -126,46 +126,14 @@ export const initializeIBCChain = (config, callback) => {
     let walletType = localStorage.getItem('loginType');
 
     if (walletType === "metamask") {
-      // let isNoExtensionExists =
-      //   walletType === 'keplr'
-      //     ? !window.getOfflineSigner || !window.keplr
-      //     : !window?.leap?.getOfflineSigner || !window.leap;
-
-
-      // const accounts = await offlineSigner.getAccounts();
-
-      // if (isNoExtensionExists) {
-      //   const error = `Please install ${walletType} wallet extension`;
-      //   callback(error);
-      // }
-      //  else {
-      // await connectSnap();
-      // let suggestMetakaskChain = await suggestChain(getChainConfig(config))
-
-      // if (suggestMetakaskChain) {
       try {
         const offlineSigner = new CosmjsOfflineSigner(config?.chainId);
-        // walletType === 'keplr'
-        //   ? await window.keplr.experimentalSuggestChain(config)
-        //   : await window.leap.experimentalSuggestChain(config);
-        // const offlineSigner =
-        //   walletType === 'keplr'
-        //     ? window.getOfflineSigner(config?.chainId)
-        //     : window?.leap?.getOfflineSigner(config?.chainId);
         const accounts = await offlineSigner.getAccounts();
-
-        console.log(offlineSigner, "offlineSigner in initialize");
-        console.log(accounts, "accounts in initialize");
 
         callback(null, accounts[0]);
       } catch (error) {
         callback(error?.message);
       }
-      // } else {
-      //   const versionError = 'Please use the recent version of keplr extension';
-      //   callback(versionError);
-      // }
-      // }
     } else {
       let isNoExtensionExists =
         walletType === 'keplr'
@@ -276,41 +244,22 @@ export const initializeChain = (type, callback) => {
     let walletType = type || localStorage.getItem("loginType");
     if (walletType === "metamask") {
       (async () => {
-        // try {
-        // const snapInstalled = await getSnap();
-        let snapInstalled;
-        getSnap().then((res) => {
-          console.log(res, "res");
-          snapInstalled = res;
-        }).catch((error) => {
-          console.log(error, "errro");
-        })
-        console.log(snapInstalled, "snapInstalled");
 
-        if (!snapInstalled) {
-          console.log("In if cond");
-          await connectSnap(); // Initiates installation if not already present
-          await suggestChain(getChainConfig())
-          const key = await getKey(comdex?.chainId);
-          // if (!key) {
-          //   await suggestChain(getChainConfig())
-          //   const key = await getKey(comdex?.chainId);
-          //   console.log(key, "Key In if block ke if me");
-          //   callback(null, key);
-          // }
-          console.log(key, "Key");
-          callback(null, key);
-        } else {
-          console.log("In else con");
-          // await suggestChain(getChainConfig())
-          const key = await getKey(comdex?.chainId);
-          console.log(key, "Key");
-          callback(null, key);
-        }
-        // } catch (error) {
-        //   // callback(error?.message);
-        //   console.log(error);
-        // }
+        getSnap()
+          .then(async (res) => {
+            if (!res) {
+              await connectSnap(); // Initiates installation if not already present
+              await suggestChain(getChainConfig());
+              const key = await getKey(comdex?.chainId);
+              callback(null, key);
+            } else {
+              const key = await getKey(comdex?.chainId);
+              callback(null, key);
+            }
+          })
+          .catch((error) => {
+            console.log(error, 'errro');
+          });
 
       })()
     } else {
