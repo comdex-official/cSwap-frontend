@@ -11,11 +11,13 @@ import {
 import {
   fetchKeplrAccountName,
   initializeChain,
+  initializeLeapSnap,
 } from '../../../services/keplr';
 import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
 import { Keplr, Wallet2, Cosmos, Ledger } from '../../image';
+import { getSnap } from '@leapwallet/cosmos-snap-provider';
 
 const ConnectModal = ({
   setAccountAddress,
@@ -26,7 +28,7 @@ const ConnectModal = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
 
-  
+
   const handleConnectToWallet = (walletType) => {
     setInProgress(true);
 
@@ -48,6 +50,18 @@ const ConnectModal = ({
       handleCancel();
     });
   };
+
+  const handleLeapSnapConnect = async () => {
+    console.log("Clicked on Leap Snap");
+    initializeLeapSnap((error, response) => {
+      if (error) {
+        console.log(error, "Error in snap");
+      }
+      console.log(response, "response");
+    })
+    // const snapInstalled = await getSnap();
+    // console.log(snapInstalled, 'snapInstalled');
+  }
 
   return (
     <Spin spinning={inProgress}>
@@ -85,6 +99,19 @@ const ConnectModal = ({
           </div>
           <div className={styles.dropdown__wallet__title2}>
             {'Leap Cosmos Wallet'}
+          </div>
+        </div>
+
+        <div
+          className={styles.dropdown__wallet__title__wrap}
+          onClick={() => handleConnectToWallet('metamask')}
+        // onClick={() => handleLeapSnapConnect()}
+        >
+          <div className={styles.dropdown__wallet__logo}>
+            <NextImage src={Cosmos} alt="Keplr" />
+          </div>
+          <div className={styles.dropdown__wallet__title2}>
+            {'Leap Cosmos Metamask'}
           </div>
         </div>
 
