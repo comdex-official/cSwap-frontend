@@ -15,7 +15,7 @@ import {
 import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
-import { Keplr, Wallet2, Cosmos, Ledger } from '../../image';
+import { Keplr, Wallet2, Cosmos, Ledger, LeapSnapMetamask } from '../../image';
 
 const ConnectModal = ({
   setAccountAddress,
@@ -94,10 +94,10 @@ const ConnectModal = ({
           onClick={() => handleConnectToWallet('metamask')}
         >
           <div className={styles.dropdown__wallet__logo}>
-            <NextImage src={Cosmos} alt="Keplr" />
+            <NextImage src={LeapSnapMetamask} alt="Keplr" />
           </div>
           <div className={styles.dropdown__wallet__title2}>
-            {'Leap Cosmos Metamask'}
+            {'Leap Snap'}
           </div>
         </div>
 

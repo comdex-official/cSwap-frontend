@@ -40,6 +40,7 @@ import Wallet from '../../public/assets/images/wallet.svg';
 import Wallet2 from '../../public/assets/images/wallet2.svg';
 import Keplr from '../../public/assets/images/keplr.svg';
 import Cosmos from '../../public/assets/images/cosmos.svg';
+import LeapSnapMetamask from '../../public/assets/images/MM Leap Loog.svg';
 import Ledger from '../../public/assets/images/ledger.svg';
 import Info2 from '../../public/assets/images/info2.svg';
 import Pin from '../../public/assets/images/pin.svg';
@@ -101,5 +102,6 @@ export {
   OrderSlider,
   RangeRed,
   RangeGreen,
-  Docs
+  Docs,
+  LeapSnapMetamask
 };
