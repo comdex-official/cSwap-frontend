@@ -38,9 +38,13 @@ const ConnectModal = ({
       }
 
       setAccountAddress(account.address);
-      fetchKeplrAccountName().then((name) => {
-        setAccountName(name);
-      });
+      if (walletType === "metamask") {
+        setAccountName("Leap Snap");
+      } else {
+        fetchKeplrAccountName().then((name) => {
+          setAccountName(name);
+        });
+      }
 
       localStorage.setItem('ac', encode(account.address));
       localStorage.setItem('loginType', walletType || 'keplr');

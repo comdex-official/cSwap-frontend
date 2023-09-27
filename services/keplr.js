@@ -224,6 +224,7 @@ export const initializeChain = (type, callback) => {
           })
           .catch((error) => {
             console.log(error, 'errro');
+            callback(error?.message);
           });
 
       })()
