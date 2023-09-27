@@ -180,9 +180,13 @@ const Header = ({
         return;
       }
       setAccountAddress(account.address);
-      fetchKeplrAccountName().then((name) => {
-        setAccountName(name);
-      });
+      if (walletType === "metamask") {
+        setAccountName("Leap Snap");
+      } else {
+        fetchKeplrAccountName().then((name) => {
+          setAccountName(name);
+        });
+      }
       localStorage.setItem('ac', encode(account.address));
       localStorage.setItem('loginType', walletType || 'keplr');
     });
@@ -227,13 +231,17 @@ const Header = ({
   useEffect(() => {
     const savedAddress = localStorage.getItem('ac');
     const userAddress = savedAddress ? decode(savedAddress) : address;
-
+    const walletType = localStorage.getItem('loginType');
     if (userAddress) {
       setAccountAddress(userAddress);
 
-      fetchKeplrAccountName().then((name) => {
-        setAccountName(name);
-      });
+      if (walletType === "metamask") {
+        setAccountName("Leap Snap");
+      } else {
+        fetchKeplrAccountName().then((name) => {
+          setAccountName(name);
+        });
+      }
     }
   }, [address, refreshBalance, setAccountAddress, setAccountName]);
 
@@ -517,9 +525,8 @@ const Header = ({
 
   return (
     <div
-      className={`${styles.header__wrap} ${
-        scrolled ? styles.header__bg : ''
-      } dark`}
+      className={`${styles.header__wrap} ${scrolled ? styles.header__bg : ''
+        } dark`}
       ref={headerRef}
     >
       <div className={styles.header__main}>
@@ -528,9 +535,8 @@ const Header = ({
           onClick={() => setMobileHam(!mobileHam)}
         >
           <Icon
-            className={`bi bi-list ${
-              theme === 'dark' ? styles.icon_dark : styles.icon_light
-            }`}
+            className={`bi bi-list ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+              }`}
             size={'1.5rem'}
           />
         </div>
@@ -549,9 +555,8 @@ const Header = ({
           {HeaderData.map((item, i) => (
             <div
               key={item.id}
-              className={`${styles.header__left__element} ${
-                theme === 'dark' ? styles.dark : styles.light
-              } ${isActive(item.route) ? styles.active : ''}`}
+              className={`${styles.header__left__element} ${theme === 'dark' ? styles.dark : styles.light
+                } ${isActive(item.route) ? styles.active : ''}`}
             >
               <div
                 className={styles.header__name}
@@ -582,9 +587,8 @@ const Header = ({
               >
                 <div className={styles.header__cSwap}>
                   <Icon
-                    className={`bi bi-grid-fill ${
-                      theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                    className={`bi bi-grid-fill ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                      }`}
                     size={'1.1rem'}
                   />
                 </div>
@@ -628,9 +632,8 @@ const Header = ({
               >
                 <div className={styles.header__dot}>
                   <Icon
-                    className={`bi bi-three-dots-vertical cursor ${
-                      theme === 'dark' ? styles.icon_dark : styles.icon_light
-                    }`}
+                    className={`bi bi-three-dots-vertical cursor ${theme === 'dark' ? styles.icon_dark : styles.icon_light
+                      }`}
                     size={'1.2rem'}
                   />
                 </div>
