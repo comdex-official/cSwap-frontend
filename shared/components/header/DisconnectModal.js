@@ -87,7 +87,7 @@ const DisConnectModal = ({
                   ? 'Native-ledger'
                   : localStorage.getItem('loginType') === 'keplr'
                     ? 'Keplr'
-                    : 'Leap Snap'
+                    : 'Metamask'
                 }`}
             </div>
           </div>
