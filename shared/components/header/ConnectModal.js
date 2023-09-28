@@ -39,7 +39,7 @@ const ConnectModal = ({
 
       setAccountAddress(account.address);
       if (walletType === "metamask") {
-        setAccountName("Leap Snap");
+        setAccountName("Metamask");
       } else {
         fetchKeplrAccountName().then((name) => {
           setAccountName(name);
