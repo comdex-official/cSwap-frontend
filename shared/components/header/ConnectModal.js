@@ -101,7 +101,7 @@ const ConnectModal = ({
             <NextImage src={LeapSnapMetamask} alt="Keplr" />
           </div>
           <div className={styles.dropdown__wallet__title2}>
-            {'Leap Snap'}
+            {'Metamask'}
           </div>
         </div>
 
