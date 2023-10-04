@@ -16,6 +16,7 @@ import ButtonSubmit from './Ledger/index';
 import styles from './Header.module.scss';
 import { NextImage } from '../../image/NextImage';
 import { Keplr, Wallet2, Cosmos, Ledger, LeapSnapMetamask } from '../../image';
+import { comdex } from '../../../config/network';
 
 const ConnectModal = ({
   setAccountAddress,
@@ -23,9 +24,9 @@ const ConnectModal = ({
   lang,
   showAccountConnectModal,
   handleCancel,
+  activeAcount,
 }) => {
   const [inProgress, setInProgress] = useState(false);
-
 
   const handleConnectToWallet = (walletType) => {
     setInProgress(true);
@@ -38,8 +39,8 @@ const ConnectModal = ({
       }
 
       setAccountAddress(account.address);
-      if (walletType === "metamask") {
-        setAccountName("Metamask");
+      if (walletType === 'metamask') {
+        setAccountName('Metamask');
       } else {
         fetchKeplrAccountName().then((name) => {
           setAccountName(name);
@@ -52,7 +53,6 @@ const ConnectModal = ({
       handleCancel();
     });
   };
-
 
   return (
     <Spin spinning={inProgress}>
@@ -100,9 +100,7 @@ const ConnectModal = ({
           <div className={styles.dropdown__wallet__logo}>
             <NextImage src={LeapSnapMetamask} alt="Keplr" />
           </div>
-          <div className={styles.dropdown__wallet__title2}>
-            {'Metamask'}
-          </div>
+          <div className={styles.dropdown__wallet__title2}>{'Metamask'}</div>
         </div>
 
         <div className={styles.dropdown__wallet__title__wrap}>
