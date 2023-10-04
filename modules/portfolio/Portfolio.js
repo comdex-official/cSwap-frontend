@@ -175,7 +175,12 @@ const Portfolio = ({
   useEffect(() => {
     if (userLiquidityInPools) {
       const result = sumValues(userLiquidityInPools);
-      setTotalFarmBalance(result);
+      console.log(result);
+      if (address) {
+        setTotalFarmBalance(result);
+      } else {
+        setTotalFarmBalance(0);
+      }
     }
   }, [userLiquidityInPools, address]);
 
@@ -186,8 +191,13 @@ const Portfolio = ({
 
   const getTotalValue = useCallback(() => {
     const total = Number(assetBalance) + Number(totalFarmBalance);
-    setTotalValue((total || 0).toFixed(DOLLAR_DECIMALS));
-    setTotalLoading(false);
+    if (address) {
+      setTotalValue((total || 0).toFixed(DOLLAR_DECIMALS));
+      setTotalLoading(false);
+    } else {
+      setTotalValue((0).toFixed(DOLLAR_DECIMALS));
+      setTotalLoading(false);
+    }
   }, [assetBalance, totalFarmBalance, address]);
 
   useEffect(() => {
@@ -340,10 +350,12 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {totalLoading ? (
+                {totalValue === 0 ? (
+                  `$ 0`
+                ) : totalLoading ? (
                   <Loading height={40} />
                 ) : (
-                  `$ ${formatNumber(totalValue)}`
+                  `$ ${formatNumber(totalValue || 0)}`
                 )}
               </div>
             </div>

@@ -21,7 +21,7 @@ import {
   fetchKeplrAccountName,
   initializeChain,
 } from '../../../services/keplr';
-import { Modal, message, Tooltip } from 'antd';
+import { Modal, message, Tooltip, Skeleton } from 'antd';
 import { marketPrice } from '../../../utils/number';
 import { cmst, comdex, harbor } from '../../../config/network';
 import { amountConversion } from '../../../utils/coin';
@@ -209,7 +209,7 @@ const Header = ({
             setActiveAcount(false);
             return;
           }
-
+          console.log(walletType);
           setAccountAddress(account.address);
           if (walletType === 'metamask') {
             setAccountName('Metamask');
@@ -696,6 +696,13 @@ const Header = ({
                 </div>
                 <DisconnectModal />
               </div>
+            ) : activeAcount ? (
+              <Skeleton.Button
+                active
+                shape={'round'}
+                className={styles.header__wallet}
+                style={{ padding: '10px' }}
+              />
             ) : (
               <div id="topRightToogle2" onClick={showModal2}>
                 <div className={styles.header__wallet}>
@@ -726,7 +733,10 @@ const Header = ({
           footer={null}
           header={null}
         >
-          <ConnectModal handleCancel={handleCancel2} />
+          <ConnectModal
+            handleCancel={handleCancel2}
+            activeAcount={activeAcount}
+          />
         </Modal>
 
         <Modal
