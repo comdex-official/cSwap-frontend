@@ -46,6 +46,9 @@ export const amountConversionWithComma = (amount, decimals) => {
 };
 
 export const commaSeparatorWithRounding = (amount, round) => {
+  if (amount === 0 || amount === '0' || amount === undefined) {
+    return 0;
+  }
   return commaSeparator(amount.toFixed(getExponent(round)));
 };
 

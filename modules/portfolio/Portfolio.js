@@ -58,59 +58,63 @@ const Portfolio = ({
               getUserLiquidity(pool);
             }
           }
-          if(result){
-          const availablePoolToken =
-            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+          if (result) {
+            const availablePoolToken =
+              getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-          const activeSoftLock = result?.activePoolCoin;
-          const queuedSoftLocks = result?.queuedPoolCoin;
+            const activeSoftLock = result?.activePoolCoin;
+            const queuedSoftLocks = result?.queuedPoolCoin;
 
-          const queuedAmounts =
-            queuedSoftLocks &&
-            queuedSoftLocks.length > 0 &&
-            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-          const userLockedAmount =
-            Number(
-              queuedAmounts?.length > 0 &&
-                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-            ) + Number(activeSoftLock?.amount) || 0;
+            const queuedAmounts =
+              queuedSoftLocks &&
+              queuedSoftLocks.length > 0 &&
+              queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+            const userLockedAmount =
+              Number(
+                queuedAmounts?.length > 0 &&
+                  queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+              ) + Number(activeSoftLock?.amount) || 0;
 
-          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+            const totalPoolToken =
+              Number(availablePoolToken) + userLockedAmount;
 
-          queryPoolCoinDeserialize(
-            pool?.id,
-            totalPoolToken,
-            (error, result) => {
-              if (error) {
-                retriesL++;
-                console.log(error);
-                if (retriesL < maxRetriesL) {
-                  getUserLiquidity(pool);
+            queryPoolCoinDeserialize(
+              pool?.id,
+              totalPoolToken,
+              (error, result) => {
+                if (error) {
+                  retriesL++;
+                  console.log(error);
+                  if (retriesL < maxRetriesL) {
+                    getUserLiquidity(pool);
+                  }
+                }
+                if (result) {
+                  const providedTokens = result?.coins;
+                  const totalLiquidityInDollar =
+                    Number(
+                      amountConversion(
+                        providedTokens?.[0]?.amount,
+                        assetMap[providedTokens?.[0]?.denom]?.decimals
+                      )
+                    ) *
+                      marketPrice(markets, providedTokens?.[0]?.denom) +
+                    Number(
+                      amountConversion(
+                        providedTokens?.[1]?.amount,
+                        assetMap[providedTokens?.[1]?.denom]?.decimals
+                      )
+                    ) *
+                      marketPrice(markets, providedTokens?.[1]?.denom);
+
+                  setUserLiquidityInPools(
+                    pool?.id,
+                    totalLiquidityInDollar || 0
+                  );
                 }
               }
-              if(result){
-              const providedTokens = result?.coins;
-              const totalLiquidityInDollar =
-                Number(
-                  amountConversion(
-                    providedTokens?.[0]?.amount,
-                    assetMap[providedTokens?.[0]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[0]?.denom) +
-                Number(
-                  amountConversion(
-                    providedTokens?.[1]?.amount,
-                    assetMap[providedTokens?.[1]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[1]?.denom);
-
-              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
-                  }
-            }
-          );
-        }
+            );
+          }
         });
       }
     },
@@ -127,26 +131,24 @@ const Portfolio = ({
           retries++;
           console.log(error);
           if (retries < maxRetries) {
-            fetchPools(
-              offset, limit, countTotal, reverse
-            );
+            fetchPools(offset, limit, countTotal, reverse);
           }
         }
-        if(result){
-        setPools(result.pools, result.pagination);
+        if (result) {
+          setPools(result.pools, result.pagination);
 
-        const userPools = result?.pools;
-        if (
-          balances &&
-          balances.length > 0 &&
-          userPools &&
-          userPools.length > 0
-        ) {
-          userPools.forEach((item) => {
-            return getUserLiquidity(item);
-          });
+          const userPools = result?.pools;
+          if (
+            balances &&
+            balances.length > 0 &&
+            userPools &&
+            userPools.length > 0
+          ) {
+            userPools.forEach((item) => {
+              return getUserLiquidity(item);
+            });
+          }
         }
-      }
       });
     },
     [balances, getUserLiquidity, setPools, userLiquidityRefetch]
@@ -175,7 +177,7 @@ const Portfolio = ({
       const result = sumValues(userLiquidityInPools);
       setTotalFarmBalance(result);
     }
-  }, [userLiquidityInPools]);
+  }, [userLiquidityInPools, address]);
 
   // const totalFarmBalance = Object.values(userLiquidityInPools)?.reduce(
   //   (a, b) => a + b,
@@ -186,7 +188,7 @@ const Portfolio = ({
     const total = Number(assetBalance) + Number(totalFarmBalance);
     setTotalValue((total || 0).toFixed(DOLLAR_DECIMALS));
     setTotalLoading(false);
-  }, [assetBalance, totalFarmBalance]);
+  }, [assetBalance, totalFarmBalance, address]);
 
   useEffect(() => {
     if (totalFarmBalance) {
@@ -363,9 +365,11 @@ const Portfolio = ({
                   theme === 'dark' ? styles.dark : styles.light
                 }`}
               >
-                {!formatNumber(
-                  commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)
-                ) ? (
+                {assetBalance === 0 ? (
+                  `$ 0`
+                ) : !formatNumber(
+                    commaSeparatorWithRounding(assetBalance, DOLLAR_DECIMALS)
+                  ) ? (
                   <Loading height={40} />
                 ) : (
                   `$ ${formatNumber(
