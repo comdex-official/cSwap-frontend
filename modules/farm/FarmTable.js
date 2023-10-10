@@ -285,17 +285,19 @@ const FarmTable = ({
 
   const calculateVaultEmission = (id) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
-      (item) => item?.pair_id === Number(id) + 1000000
+      (item) => item?.pair_id === Number(id) + 1000000 && item?.pair_name !== ''
     );
 
     totalVoteOfPair = totalVoteOfPair?.[0]?.total_vote || 0;
     let totalWeight = currentProposalAllData?.total_voted_weight || 0;
-    let projectedEmission = protectedEmission;
+    let projectedEmission = totalVoteOfPair === 0 ? 0 : protectedEmission;
 
     let calculatedEmission =
       (Number(totalVoteOfPair) / Number(totalWeight)) * projectedEmission;
 
     if (isNaN(calculatedEmission) || calculatedEmission === Infinity) {
+      return 0;
+    } else if (calculatedEmission === 0) {
       return 0;
     } else {
       return Number(calculatedEmission).toFixed(2);
@@ -342,12 +344,13 @@ const FarmTable = ({
 
   const calculatePerDollorEmissioAmount = (_id, _totalLiquidity) => {
     let totalVoteOfPair = userCurrentProposalData?.filter(
-      (item) => item?.pair_id === Number(_id) + 1000000
+      (item) =>
+        item?.pair_id === Number(_id) + 1000000 && item?.pair_name !== ''
     );
     totalVoteOfPair = totalVoteOfPair?.[0]?.total_vote || 0;
     let totalWeight = currentProposalAllData?.total_voted_weight || 0;
     let projectedEmission = protectedEmission;
-    let totalLiquidity = _totalLiquidity;
+    let totalLiquidity = totalVoteOfPair === 0 ? 0 : _totalLiquidity;
     let calculatedEmission =
       (Number(totalVoteOfPair) / Number(totalWeight)) * projectedEmission;
     let calculatePerDollorValue = calculatedEmission / Number(totalLiquidity);
