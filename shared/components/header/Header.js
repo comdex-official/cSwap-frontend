@@ -209,7 +209,7 @@ const Header = ({
             setActiveAcount(false);
             return;
           }
-          console.log(walletType);
+
           setAccountAddress(account.address);
           if (walletType === 'metamask') {
             setAccountName('Metamask');
@@ -357,7 +357,7 @@ const Header = ({
         if (error) {
           return;
         }
-        console.log(result?.data);
+
         if (result?.data?.length) {
           setAppAssets(result?.data);
         }
@@ -386,11 +386,9 @@ const Header = ({
         if (error) {
           retriesAsset++;
           console.log(error);
-          if (retriesAsset < maxRetriesAssets) {
-            fetchAssets(offset, limit, countTotal, reverse);
-          }
         }
-        if (data) {
+
+        if (data.assets) {
           setAssets(data.assets);
         }
       });
