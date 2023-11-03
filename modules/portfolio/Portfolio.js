@@ -175,7 +175,7 @@ const Portfolio = ({
   useEffect(() => {
     if (userLiquidityInPools) {
       const result = sumValues(userLiquidityInPools);
-      console.log(result);
+
       if (address) {
         setTotalFarmBalance(result);
       } else {
