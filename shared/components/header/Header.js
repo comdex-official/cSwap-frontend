@@ -357,7 +357,7 @@ const Header = ({
         if (error) {
           return;
         }
-
+        console.log(result?.data);
         if (result?.data?.length) {
           setAppAssets(result?.data);
         }
