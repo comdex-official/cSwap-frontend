@@ -388,9 +388,7 @@ const Header = ({
           console.log(error);
         }
 
-        if (data.assets) {
-          setAssets(data.assets);
-        }
+        setAssets(data.assets);
       });
     },
     [setAssets]
