@@ -391,7 +391,7 @@ const Header = ({
         setAssets(data.assets);
       });
     },
-    [setAssets]
+    [setAssets, address]
   );
 
   useEffect(() => {
