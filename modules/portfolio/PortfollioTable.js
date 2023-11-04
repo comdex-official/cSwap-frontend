@@ -260,13 +260,10 @@ const PortofolioTable = ({
     (item) => item?.ibcDenomHash === assetDenomMap?.[item?.ibcDenomHash]?.denom
   );
 
-  console.log({ appAssets });
   let ibcBalances = appAssets?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
-
-    console.log({ ibcBalance });
 
     const value =
       getPrice(ibcBalance?.denom) *
@@ -296,8 +293,6 @@ const PortofolioTable = ({
       withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
-
-  console.log({ ibcBalances });
 
   const nativeCoin = balances.filter(
     (item) => item.denom === comdex?.coinMinimalDenom
