@@ -35,11 +35,9 @@ let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 //   return amountWithoutScientificNumber;
 // };
 
-export const getAmount = (selectedAmount, coinDecimals) => {
+export const getAmount = (selectedAmount, decimal) => {
   const decimalSelectedAmount = new Decimal(selectedAmount);
-  const decimalCoinDecimals = new Decimal(
-    coinDecimals || 10 ** comdex.coinDecimals
-  );
+  const decimalCoinDecimals = new Decimal(decimal || 10 ** comdex.coinDecimals);
   const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
   return formattedAmount.toString();
 };
