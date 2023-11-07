@@ -1,9 +1,9 @@
+import Decimal from 'decimal.js';
 import { ibcAssets } from '../config/ibc_asset_api';
 import { comdex } from '../config/network';
 import { DOLLAR_DECIMALS } from '../constants/common';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';
-import Decimal from 'decimal.js';
 
 const getDenomToDisplaySymbolMap = () => {
   let myMap = {};
@@ -23,6 +23,26 @@ const getDenomToDisplaySymbolMap = () => {
 };
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
+
+// export const getAmount = (selectedAmount, decimal) => {
+//   let result =
+//     Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
+
+//   let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+//     Number(result)?.toFixed(0)?.toString()
+//   );
+
+//   return amountWithoutScientificNumber;
+// };
+
+export const getAmount = (selectedAmount, coinDecimals) => {
+  const decimalSelectedAmount = new Decimal(selectedAmount);
+  const decimalCoinDecimals = new Decimal(
+    coinDecimals || 10 ** comdex.coinDecimals
+  );
+  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
+  return formattedAmount.toString();
+};
 
 export const amountConversionWithComma = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
@@ -75,16 +95,6 @@ export const orderPriceConversion = (amount) => {
   let result = Number(amount) * 10 ** 18;
   result = convertScientificNumberIntoDecimal(result);
   return result.toString();
-};
-
-export const getAmount = (selectedAmount, decimal) => {
-  const decimalSelectedAmount = new Decimal(selectedAmount);
-  const decimalCoinDecimals = new Decimal(decimal || 10 ** comdex.coinDecimals);
-  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
-  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
-    Number(formattedAmount)?.toFixed(0)?.toString()
-  );
-  return amountWithoutScientificNumber;
 };
 
 export const orderPriceReverseConversion = (amount) => {
