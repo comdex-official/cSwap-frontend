@@ -3,6 +3,7 @@ import { comdex } from '../config/network';
 import { DOLLAR_DECIMALS } from '../constants/common';
 import { commaSeparator, getExponent } from './number';
 import { lowercaseFirstLetter } from './string';
+import Decimal from 'decimal.js';
 
 const getDenomToDisplaySymbolMap = () => {
   let myMap = {};
@@ -23,15 +24,24 @@ const getDenomToDisplaySymbolMap = () => {
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 
-export const getAmount = (selectedAmount, decimal) => {
-  let result =
-    Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
+// export const getAmount = (selectedAmount, decimal) => {
+//   let result =
+//     Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
 
-  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
-    Number(result)?.toFixed(0)?.toString()
+//   let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+//     Number(result)?.toFixed(0)?.toString()
+//   );
+
+//   return amountWithoutScientificNumber;
+// };
+
+export const getAmount = (selectedAmount, coinDecimals) => {
+  const decimalSelectedAmount = new Decimal(selectedAmount);
+  const decimalCoinDecimals = new Decimal(
+    coinDecimals || 10 ** comdex.coinDecimals
   );
-
-  return amountWithoutScientificNumber;
+  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
+  return formattedAmount.toString();
 };
 
 export const amountConversionWithComma = (amount, decimals) => {
