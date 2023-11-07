@@ -24,27 +24,6 @@ const getDenomToDisplaySymbolMap = () => {
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 
-// export const getAmount = (selectedAmount, decimal) => {
-//   let result =
-//     Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
-
-//   let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
-//     Number(result)?.toFixed(0)?.toString()
-//   );
-
-//   return amountWithoutScientificNumber;
-// };
-
-export const getAmount = (selectedAmount, decimal) => {
-  const decimalSelectedAmount = new Decimal(selectedAmount);
-  const decimalCoinDecimals = new Decimal(decimal || 10 ** comdex.coinDecimals);
-  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
-  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
-    Number(formattedAmount)?.toFixed(0)?.toString()
-  );
-  return amountWithoutScientificNumber;
-};
-
 export const amountConversionWithComma = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;
 
@@ -96,6 +75,16 @@ export const orderPriceConversion = (amount) => {
   let result = Number(amount) * 10 ** 18;
   result = convertScientificNumberIntoDecimal(result);
   return result.toString();
+};
+
+export const getAmount = (selectedAmount, decimal) => {
+  const decimalSelectedAmount = new Decimal(selectedAmount);
+  const decimalCoinDecimals = new Decimal(decimal || 10 ** comdex.coinDecimals);
+  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
+  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+    Number(formattedAmount)?.toFixed(0)?.toString()
+  );
+  return amountWithoutScientificNumber;
 };
 
 export const orderPriceReverseConversion = (amount) => {
