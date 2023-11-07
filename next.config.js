@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
-  reactStrictMode: false,
+  reactStrictMode: true,
   swcMinify: true,
   distDir: 'build',
   images: {

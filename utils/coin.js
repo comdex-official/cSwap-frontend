@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js';
 import { ibcAssets } from '../config/ibc_asset_api';
 import { comdex } from '../config/network';
 import { DOLLAR_DECIMALS } from '../constants/common';
@@ -24,24 +23,15 @@ const getDenomToDisplaySymbolMap = () => {
 
 let denomToDisplaySymbol = getDenomToDisplaySymbolMap();
 
-// export const getAmount = (selectedAmount, decimal) => {
-//   let result =
-//     Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
+export const getAmount = (selectedAmount, decimal) => {
+  let result =
+    Number(selectedAmount) * (Number(decimal) || 10 ** comdex.coinDecimals);
 
-//   let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
-//     Number(result)?.toFixed(0)?.toString()
-//   );
-
-//   return amountWithoutScientificNumber;
-// };
-
-export const getAmount = (selectedAmount, coinDecimals) => {
-  const decimalSelectedAmount = new Decimal(selectedAmount);
-  const decimalCoinDecimals = new Decimal(
-    coinDecimals || 10 ** comdex.coinDecimals
+  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+    Number(result)?.toFixed(0)?.toString()
   );
-  const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
-  return formattedAmount.toString();
+
+  return amountWithoutScientificNumber;
 };
 
 export const amountConversionWithComma = (amount, decimals) => {
