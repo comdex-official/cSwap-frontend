@@ -79,17 +79,17 @@ const Sidebar = ({ isOpen, setIsOpen, address }) => {
 
   useEffect(() => {
     if (isOpen) {
-      function handleClickOutside(event) {
+      const handleClickOutside = (event) => {
         if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
           setIsOpen(!isOpen);
         }
-      }
-    }
+      };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
   }, [wrapperRef, isOpen]);
 
   return (
