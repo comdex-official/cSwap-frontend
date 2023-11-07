@@ -39,7 +39,10 @@ export const getAmount = (selectedAmount, decimal) => {
   const decimalSelectedAmount = new Decimal(selectedAmount);
   const decimalCoinDecimals = new Decimal(decimal || 10 ** comdex.coinDecimals);
   const formattedAmount = decimalSelectedAmount.mul(decimalCoinDecimals);
-  return formattedAmount.toString();
+  let amountWithoutScientificNumber = convertScientificNumberIntoDecimal(
+    Number(formattedAmount)?.toFixed(0)?.toString()
+  );
+  return amountWithoutScientificNumber;
 };
 
 export const amountConversionWithComma = (amount, decimals) => {
