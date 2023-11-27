@@ -88,7 +88,11 @@ const CustomSelect = ({
                       height={25}
                       width={25}
                     />
-                    <div className="name">{denomConversion(item)}</div>
+                    <div className="name">
+                      {denomConversion(item).includes('ibc/')
+                        ? ''
+                        : denomConversion(item)}
+                    </div>
                   </div>
                 </div>
                 <div className={'select-pair-end-content'}>

@@ -2397,10 +2397,16 @@ a {
       padding-left: 0;
       box-shadow: none !important;
 
+      .ant-select-selection-item[title] {
+        display: none !important;
+      }
+      
+      
       .ant-select-selection-item {
         display: flex;
         align-items: center;
         color: $text-color-dark2;
+
 
         .dark-mode & {
           color: $white;
@@ -2947,7 +2953,7 @@ a {
           }
         }
       }
-
+      
       &.ant-select-item-option-selected,
       &.ant-select-item-option-active {
         background: $background-light;
