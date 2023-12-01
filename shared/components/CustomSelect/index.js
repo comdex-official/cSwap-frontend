@@ -89,7 +89,8 @@ const CustomSelect = ({
                       width={25}
                     />
                     <div className="name">
-                      {denomConversion(item).includes('ibc/')
+                      {denomConversion(item) &&
+                      denomConversion(item).includes('ibc/')
                         ? ''
                         : denomConversion(item)}
                     </div>
