@@ -1,0 +1,9 @@
+{
+    "presets": [
+        "next/babel",
+        "react-app"
+    ],
+    "plugins": [
+        "@babel/plugin-proposal-optional-chaining"
+    ]
+}
