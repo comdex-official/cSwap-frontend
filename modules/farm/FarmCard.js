@@ -521,7 +521,7 @@ const FarmCard = ({
                     ''
                   )}
                 </div>
-                {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
+                {/* {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
                   pool?.balances?.baseCoin?.denom === 'ucmst') && (
                   <Tooltip
                     title={
@@ -543,9 +543,9 @@ const FarmCard = ({
                       <NextImage src={Emission} alt="Emission" />
                     </div>
                   </Tooltip>
-                )}
+                )} */}
 
-                {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
+                {/* {(pool?.balances?.quoteCoin?.denom === 'ucmst' ||
                   pool?.balances?.baseCoin?.denom === 'ucmst') && (
                   <>
                     <div
@@ -609,7 +609,7 @@ const FarmCard = ({
                       </div>
                     </div>
                   </>
-                )}
+                )} */}
 
                 {pool?.type === 2 ? (
                   <div
@@ -724,9 +724,7 @@ const FarmCard = ({
                   <>
                     <div className="upto_apr_tooltip_farm_main_container">
                       <div className="upto_apr_tooltip_farm active">
-                        <span className="text">
-                          Total APR (incl. MP Rewards):
-                        </span>
+                        <span className="text">Total APR :</span>
                         <span className="value">
                           {' '}
                           {commaSeparator(calculateUptoApr() || 0)}%
@@ -742,7 +740,7 @@ const FarmCard = ({
                             height={15}
                             width={15}
                           />{' '}
-                          CMDX yield only):
+                          CMDX):
                         </span>
                         {calculateExternalBasePoolApr()?.length > 0 ? (
                           calculateExternalBasePoolApr().map((item, index) => (
@@ -800,7 +798,10 @@ const FarmCard = ({
                         ''
                       )}
 
-                      <div className="upto_apr_tooltip_farm active">
+                      <div
+                        className="upto_apr_tooltip_farm active"
+                        style={{ marginBottom: '0' }}
+                      >
                         <span className="text">Swap Fee APR :</span>
                         <span className="value">
                           {' '}
@@ -811,14 +812,14 @@ const FarmCard = ({
                         </span>
                       </div>
 
-                      <div className="upto_apr_tooltip_farm">
+                      {/* <div className="upto_apr_tooltip_farm">
                         <span className="text">Available MP Boost:</span>
                         <span className="value">
                           {' '}
                           Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
                           for providing liquidity in the Master Pool
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </>
                 ) : null
@@ -839,16 +840,18 @@ const FarmCard = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {getMasterPool() && myPool
-                    ? `${commaSeparator(calculateChildPoolApr() || 0)}%`
-                    : `${commaSeparator(calculateApr() || 0)}%`}
-                  {getMasterPool() && myPool ? (
+                  {getMasterPool()
+                    ? getMasterPool() && myPool
+                      ? `${commaSeparator(calculateChildPoolApr() || 0)}%`
+                      : `${commaSeparator(calculateApr() || 0)}%`
+                    : ''}
+                  {/* {getMasterPool() && myPool ? (
                     <Icon className={'bi bi-arrow-right'} />
                   ) : !getMasterPool() ? (
                     <Icon className={'bi bi-arrow-right'} />
                   ) : (
                     ''
-                  )}
+                  )} */}
                 </div>
                 {getMasterPool() && myPool ? (
                   <div
@@ -878,8 +881,11 @@ const FarmCard = ({
                       }`}
                     >
                       <NextImage src={Current} alt="Logo" />
+                      {getMasterPool() && myPool
+                        ? `${commaSeparator(calculateChildPoolApr() || 0)}%`
+                        : `${commaSeparator(calculateApr() || 0)}%`}
 
-                      {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`}
+                      {/* {`Upto ${commaSeparator(calculateUptoApr() || 0)}%`} */}
                     </div>
                   </div>
                 ) : (
@@ -1061,7 +1067,7 @@ const FarmCard = ({
                   )}
                 </div>
               </div>
-              {!getMasterPool() && (
+              {/* {!getMasterPool() && (
                 <div
                   className={`${styles.farmCard__footer__main} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -1090,9 +1096,9 @@ const FarmCard = ({
                     )}
                   </div>
                 </div>
-              )}
+              )} */}
 
-              <div
+              {/* <div
                 className={`${styles.farmCard__element} ${
                   getMasterPool() ? styles.active : ''
                 } ${theme === 'dark' ? styles.dark : styles.light}`}
@@ -1141,7 +1147,7 @@ const FarmCard = ({
                     </div>
                   </>
                 )}
-              </div>
+              </div> */}
             </div>
           )}
 
