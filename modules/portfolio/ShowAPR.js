@@ -43,8 +43,8 @@ const ShowAPR = ({
           getAPRs();
         }
       }
-      if(result){
-      setPoolRewards(result?.data);
+      if (result) {
+        setPoolRewards(result?.data);
       }
     });
   }, [setPoolRewards]);
@@ -135,153 +135,159 @@ const ShowAPR = ({
           {Object.keys(list)?.map((key, index) => (
             <div key={uuid()}>
               {index < 2 ? (
-                <Tooltip
-                  title={
-                    !list[key]?.master_pool ? (
-                      <>
-                        <div className="upto_apr_tooltip_farm_main_container">
-                          <div className="upto_apr_tooltip_farm active">
-                            <span className="text">
-                              Total APR (incl. MP Rewards):
-                            </span>
-                            <span className="value">
-                              {' '}
-                              {commaSeparator(calculateUptoApr() || 0)}%
-                            </span>
-                          </div>
-
-                          <div className="upto_apr_tooltip_farm active">
-                            <span className="text">
-                              Base APR ({' '}
-                              <NextImage
-                                src={iconList?.['ucmdx']?.coinImageUrl}
-                                alt={'logo'}
-                                height={15}
-                                width={15}
-                              />{' '}
-                              CMDX yield only):
-                            </span>
-                            <span className="value">
-                              {' '}
-                              {list[key]?.master_pool ? (
-                                commaSeparator(calculateMasterPoolApr()) || 0
-                              ) : calculateExternalBasePoolApr(Number(pool?.id))
-                                  ?.length > 0 ? (
-                                calculateExternalBasePoolApr(
-                                  Number(pool?.id)
-                                ).map((item) => (
-                                  <span className="value">
-                                    {commaSeparator(
-                                      fixedDecimal(item?.apr) || 0
-                                    )}
-                                    %
-                                  </span>
-                                ))
-                              ) : (
-                                <span className="value">0%</span>
-                              )}
-                            </span>
-                          </div>
-
-                          {calculateExternalPoolApr(Number(pool?.id))?.length >
-                            0 && (
-                            <div className="upto_apr_tooltip_farm active">
-                              <span className="text">External APR:</span>
-                              <span className="value">
-                                <div className="eApr">
-                                  {calculateExternalPoolApr(
-                                    Number(pool?.id)
-                                  ).map((item) => (
-                                    <>
-                                      <NextImage
-                                        src={
-                                          iconList?.[item?.denom]?.coinImageUrl
-                                        }
-                                        alt={'logo'}
-                                        height={15}
-                                        width={15}
-                                      />
-                                      {commaSeparator(
-                                        fixedDecimal(item?.apr) || 0
-                                      )}
-                                      %
-                                    </>
-                                  ))}
-                                </div>
-                              </span>
-                            </div>
-                          )}
-
-                          {calculateAPY(
-                            userLiquidityInPools[pool?.id],
-                            Number(pool?.id)
-                          ) ? (
-                            <div className="upto_apr_tooltip_farm active">
-                              <span className="text">Emission APY:</span>
-
-                              <span className="value">
-                                {calculateAPY(
-                                  userLiquidityInPools[pool?.id],
-                                  Number(pool?.id)
-                                )
-                                  ? calculateAPY(
-                                      userLiquidityInPools[pool?.id],
-                                      Number(pool?.id)
-                                    ) + '%'
-                                  : null}
-                              </span>
-                            </div>
-                          ) : (
-                            ''
-                          )}
-
-                          <div className="upto_apr_tooltip_farm active">
-                            <span className="text">Swap Fee APR :</span>
-                            <span className="value">
-                              {' '}
-                              {fixedDecimal(
-                                rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
-                              )}
-                              %
-                            </span>
-                          </div>
-
-                          <div className="upto_apr_tooltip_farm">
-                            <span className="text">Available MP Boost:</span>
-                            <span className="value">
-                              {' '}
-                              Upto{' '}
-                              {commaSeparator(fetchMasterPoolAprData() || 0)}%
-                              for providing liquidity in the Master Pool
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    ) : null
-                  }
-                  overlayClassName="farm_upto_apr_tooltip"
+                <div
+                  className={`${styles.farmCard__element__right__details} ${
+                    theme === 'dark' ? styles.dark : styles.light
+                  }`}
                 >
                   <div
-                    className={`${styles.farmCard__element__right__details} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
+                    className={`${
+                      styles.farmCard__element__right__details__title
+                    } ${theme === 'dark' ? styles.dark : styles.light}`}
                   >
-                    <div
-                      className={`${
-                        styles.farmCard__element__right__details__title
-                      } ${theme === 'dark' ? styles.dark : styles.light}`}
-                    >
-                      {list[key]?.master_pool
+                    {list[key]?.master_pool
+                      ? list[key]?.master_pool
                         ? ''
-                        : `${commaSeparator(calculateChildPoolApr()) || 0}%`}
+                        : `${commaSeparator(calculateChildPoolApr()) || 0}%`
+                      : ''}
 
-                      {!list[key]?.master_pool ? (
+                    {/* {!list[key]?.master_pool ? (
                         <Icon className={'bi bi-arrow-right'} />
                       ) : (
                         ''
-                      )}
-                    </div>
-                    {!list[key]?.master_pool ? (
+                      )} */}
+                  </div>
+                  {!list[key]?.master_pool ? (
+                    <Tooltip
+                      title={
+                        !list[key]?.master_pool ? (
+                          <>
+                            <div className="upto_apr_tooltip_farm_main_container">
+                              <div className="upto_apr_tooltip_farm active">
+                                <span className="text">Total APR :</span>
+                                <span className="value">
+                                  {' '}
+                                  {commaSeparator(calculateUptoApr() || 0)}%
+                                </span>
+                              </div>
+
+                              <div className="upto_apr_tooltip_farm active">
+                                <span className="text">
+                                  Base APR ({' '}
+                                  <NextImage
+                                    src={iconList?.['ucmdx']?.coinImageUrl}
+                                    alt={'logo'}
+                                    height={15}
+                                    width={15}
+                                  />{' '}
+                                  CMDX):
+                                </span>
+                                <span className="value">
+                                  {' '}
+                                  {list[key]?.master_pool ? (
+                                    commaSeparator(calculateMasterPoolApr()) ||
+                                    0
+                                  ) : calculateExternalBasePoolApr(
+                                      Number(pool?.id)
+                                    )?.length > 0 ? (
+                                    calculateExternalBasePoolApr(
+                                      Number(pool?.id)
+                                    ).map((item) => (
+                                      <span className="value">
+                                        {commaSeparator(
+                                          fixedDecimal(item?.apr) || 0
+                                        )}
+                                        %
+                                      </span>
+                                    ))
+                                  ) : (
+                                    <span className="value">0%</span>
+                                  )}
+                                </span>
+                              </div>
+
+                              {calculateExternalPoolApr(Number(pool?.id))
+                                ?.length > 0 && (
+                                <div className="upto_apr_tooltip_farm active">
+                                  <span className="text">External APR:</span>
+                                  <span className="value">
+                                    <div className="eApr">
+                                      {calculateExternalPoolApr(
+                                        Number(pool?.id)
+                                      ).map((item) => (
+                                        <>
+                                          <NextImage
+                                            src={
+                                              iconList?.[item?.denom]
+                                                ?.coinImageUrl
+                                            }
+                                            alt={'logo'}
+                                            height={15}
+                                            width={15}
+                                          />
+                                          {commaSeparator(
+                                            fixedDecimal(item?.apr) || 0
+                                          )}
+                                          %
+                                        </>
+                                      ))}
+                                    </div>
+                                  </span>
+                                </div>
+                              )}
+
+                              {calculateAPY(
+                                userLiquidityInPools[pool?.id],
+                                Number(pool?.id)
+                              ) ? (
+                                <div className="upto_apr_tooltip_farm active">
+                                  <span className="text">Emission APY:</span>
+
+                                  <span className="value">
+                                    {calculateAPY(
+                                      userLiquidityInPools[pool?.id],
+                                      Number(pool?.id)
+                                    )
+                                      ? calculateAPY(
+                                          userLiquidityInPools[pool?.id],
+                                          Number(pool?.id)
+                                        ) + '%'
+                                      : null}
+                                  </span>
+                                </div>
+                              ) : (
+                                ''
+                              )}
+
+                              <div
+                                className="upto_apr_tooltip_farm active"
+                                style={{ marginBottom: '0' }}
+                              >
+                                <span className="text">Swap Fee APR :</span>
+                                <span className="value">
+                                  {' '}
+                                  {fixedDecimal(
+                                    rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
+                                  )}
+                                  %
+                                </span>
+                              </div>
+
+                              {/* <div className="upto_apr_tooltip_farm">
+                                <span className="text">Available MP Boost:</span>
+                                <span className="value">
+                                  {' '}
+                                  Upto{' '}
+                                  {commaSeparator(fetchMasterPoolAprData() || 0)}%
+                                  for providing liquidity in the Master Pool
+                                </span>
+                              </div> */}
+                            </div>
+                          </>
+                        ) : null
+                      }
+                      overlayClassName="farm_upto_apr_tooltip"
+                    >
                       <div
                         className={`${styles.farmCard__element__right__pool} ${
                           theme === 'dark' ? styles.dark : styles.light
@@ -295,14 +301,15 @@ const ShowAPR = ({
                           }`}
                         >
                           <NextImage src={Current} alt="Logo" />
-                          {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
+                          {/* {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`} */}
+                          {`${commaSeparator(calculateChildPoolApr()) || 0}%`}
                         </div>
                       </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                </Tooltip>
+                    </Tooltip>
+                  ) : (
+                    ''
+                  )}
+                </div>
               ) : (
                 ''
               )}
@@ -335,144 +342,153 @@ const ShowAPR = ({
     } else {
       return Object.keys(list)?.map((key) => (
         <div key={uuid()}>
-          <Tooltip
-            title={
-              !list[key]?.master_pool ? (
-                <>
-                  <div className="upto_apr_tooltip_farm_main_container">
-                    <div className="upto_apr_tooltip_farm">
-                      <span className="text">
-                        Total APR (incl. MP Rewards):
-                      </span>
-                      <span className="value">
-                        {' '}
-                        {commaSeparator(calculateUptoApr() || 0)}%
-                      </span>
-                    </div>
-
-                    <div className="upto_apr_tooltip_farm">
-                      <span className="text">
-                        Base APR ({' '}
-                        <NextImage
-                          src={iconList?.['ucmdx']?.coinImageUrl}
-                          alt={'logo'}
-                          height={15}
-                          width={15}
-                        />{' '}
-                        CMDX yield only):
-                      </span>
-                      <span className="value">
-                        {' '}
-                        {list[key]?.master_pool ? (
-                          commaSeparator(calculateMasterPoolApr()) || 0
-                        ) : calculateExternalBasePoolApr(Number(pool?.id))
-                            ?.length > 0 ? (
-                          calculateExternalBasePoolApr(Number(pool?.id)).map(
-                            (item) => (
-                              <span className="value">
-                                {commaSeparator(fixedDecimal(item?.apr) || 0)}%
-                              </span>
-                            )
-                          )
-                        ) : (
-                          <span className="value">0%</span>
-                        )}
-                      </span>
-                    </div>
-
-                    {calculateExternalPoolApr(Number(pool?.id))?.length > 0 && (
-                      <div className="upto_apr_tooltip_farm active">
-                        <span className="text">External APR:</span>
-                        <span className="value">
-                          <div className="eApr">
-                            {calculateExternalPoolApr(Number(pool?.id)).map(
-                              (item) => (
-                                <>
-                                  <NextImage
-                                    src={iconList?.[item?.denom]?.coinImageUrl}
-                                    alt={'logo'}
-                                    height={15}
-                                    width={15}
-                                  />
-                                  {commaSeparator(fixedDecimal(item?.apr) || 0)}
-                                  %
-                                </>
-                              )
-                            )}
-                          </div>
-                        </span>
-                      </div>
-                    )}
-
-                    {calculateAPY(
-                      userLiquidityInPools[pool?.id],
-                      Number(pool?.id)
-                    ) ? (
-                      <div className="upto_apr_tooltip_farm active">
-                        <span className="text">Emission APY:</span>
-
-                        <span className="value">
-                          {calculateAPY(
-                            userLiquidityInPools[pool?.id],
-                            Number(pool?.id)
-                          )
-                            ? calculateAPY(
-                                userLiquidityInPools[pool?.id],
-                                Number(pool?.id)
-                              ) + '%'
-                            : null}
-                        </span>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-
-                    <div className="upto_apr_tooltip_farm">
-                      <span className="text">Swap Fee APR :</span>
-                      <span className="value">
-                        {' '}
-                        {fixedDecimal(
-                          rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
-                        )}
-                        %
-                      </span>
-                    </div>
-
-                    <div className="upto_apr_tooltip_farm">
-                      <span className="text">Available MP Boost:</span>
-                      <span className="value">
-                        {' '}
-                        Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
-                        for providing liquidity in the Master Pool
-                      </span>
-                    </div>
-                  </div>
-                </>
-              ) : null
-            }
-            overlayClassName="farm_upto_apr_tooltip"
+          <div
+            className={`${styles.farmCard__element__right__details} ${
+              theme === 'dark' ? styles.dark : styles.light
+            }`}
           >
             <div
-              className={`${styles.farmCard__element__right__details} ${
+              className={`${styles.farmCard__element__right__details__title} ${
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              <div
-                className={`${
-                  styles.farmCard__element__right__details__title
-                } ${theme === 'dark' ? styles.dark : styles.light}`}
-              >
-                {list[key]?.master_pool
+              {list[key]?.master_pool
+                ? list[key]?.master_pool
                   ? ''
-                  : `${commaSeparator(calculateChildPoolApr()) || 0}%`}
+                  : `${commaSeparator(calculateChildPoolApr()) || 0}%`
+                : ''}
 
-                {!list[key]?.master_pool ? (
+              {/* {!list[key]?.master_pool ? (
                   <Icon className={'bi bi-arrow-right'} />
                 ) : (
                   ''
-                )}
-              </div>
-              {!list[key]?.master_pool ? (
+                )} */}
+            </div>
+            {!list[key]?.master_pool ? (
+              <Tooltip
+                title={
+                  !list[key]?.master_pool ? (
+                    <>
+                      <div className="upto_apr_tooltip_farm_main_container">
+                        <div className="upto_apr_tooltip_farm active">
+                          <span className="text">Total APR :</span>
+                          <span className="value">
+                            {' '}
+                            {commaSeparator(calculateUptoApr() || 0)}%
+                          </span>
+                        </div>
+
+                        <div className="upto_apr_tooltip_farm active">
+                          <span className="text">
+                            Base APR ({' '}
+                            <NextImage
+                              src={iconList?.['ucmdx']?.coinImageUrl}
+                              alt={'logo'}
+                              height={15}
+                              width={15}
+                            />{' '}
+                            CMDX):
+                          </span>
+                          <span className="value">
+                            {' '}
+                            {list[key]?.master_pool ? (
+                              commaSeparator(calculateMasterPoolApr()) || 0
+                            ) : calculateExternalBasePoolApr(Number(pool?.id))
+                                ?.length > 0 ? (
+                              calculateExternalBasePoolApr(
+                                Number(pool?.id)
+                              ).map((item) => (
+                                <span className="value">
+                                  {commaSeparator(fixedDecimal(item?.apr) || 0)}
+                                  %
+                                </span>
+                              ))
+                            ) : (
+                              <span className="value">0%</span>
+                            )}
+                          </span>
+                        </div>
+
+                        {calculateExternalPoolApr(Number(pool?.id))?.length >
+                          0 && (
+                          <div className="upto_apr_tooltip_farm active">
+                            <span className="text">External APR:</span>
+                            <span className="value">
+                              <div className="eApr">
+                                {calculateExternalPoolApr(Number(pool?.id)).map(
+                                  (item) => (
+                                    <>
+                                      <NextImage
+                                        src={
+                                          iconList?.[item?.denom]?.coinImageUrl
+                                        }
+                                        alt={'logo'}
+                                        height={15}
+                                        width={15}
+                                      />
+                                      {commaSeparator(
+                                        fixedDecimal(item?.apr) || 0
+                                      )}
+                                      %
+                                    </>
+                                  )
+                                )}
+                              </div>
+                            </span>
+                          </div>
+                        )}
+
+                        {calculateAPY(
+                          userLiquidityInPools[pool?.id],
+                          Number(pool?.id)
+                        ) ? (
+                          <div className="upto_apr_tooltip_farm active">
+                            <span className="text">Emission APY:</span>
+
+                            <span className="value">
+                              {calculateAPY(
+                                userLiquidityInPools[pool?.id],
+                                Number(pool?.id)
+                              )
+                                ? calculateAPY(
+                                    userLiquidityInPools[pool?.id],
+                                    Number(pool?.id)
+                                  ) + '%'
+                                : null}
+                            </span>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+
+                        <div
+                          className="upto_apr_tooltip_farm active"
+                          style={{ marginBottom: '0' }}
+                        >
+                          <span className="text">Swap Fee APR :</span>
+                          <span className="value">
+                            {' '}
+                            {fixedDecimal(
+                              rewardsMap?.swap_fee_rewards?.[0]?.apr || 0
+                            )}
+                            %
+                          </span>
+                        </div>
+
+                        {/* <div className="upto_apr_tooltip_farm">
+                           <span className="text">Available MP Boost:</span>
+                           <span className="value">
+                             {' '}
+                             Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
+                             for providing liquidity in the Master Pool
+                           </span>
+                         </div> */}
+                      </div>
+                    </>
+                  ) : null
+                }
+                overlayClassName="farm_upto_apr_tooltip"
+              >
                 <div
                   className={`${styles.farmCard__element__right__pool} ${
                     theme === 'dark' ? styles.dark : styles.light
@@ -486,14 +502,15 @@ const ShowAPR = ({
                     }`}
                   >
                     <NextImage src={Current} alt="Logo" />
-                    {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`}
+                    {/* {`Upto ${commaSeparator(calculateUptoApr() || 0)} %`} */}
+                    {`${commaSeparator(calculateChildPoolApr()) || 0}%`}
                   </div>
                 </div>
-              ) : (
-                ''
-              )}
-            </div>
-          </Tooltip>
+              </Tooltip>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
       ));
     }

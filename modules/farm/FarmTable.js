@@ -442,7 +442,7 @@ const FarmTable = ({
             </div>
           </div>
 
-          <div
+          {/* <div
             className={`${styles.farmCard__element__right__wholetab} ${
               theme === 'dark' ? styles.dark : styles.light
             }`}
@@ -648,7 +648,7 @@ const FarmTable = ({
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       ),
       sorter: (a, b) =>
@@ -675,9 +675,7 @@ const FarmTable = ({
                   <>
                     <div className="upto_apr_tooltip_farm_main_container">
                       <div className="upto_apr_tooltip_farm active">
-                        <span className="text">
-                          Total APR (incl. MP Rewards):
-                        </span>
+                        <span className="text">Total APR :</span>
                         <span className="value">
                           {' '}
                           {commaSeparator(
@@ -696,7 +694,7 @@ const FarmTable = ({
                             height={15}
                             width={15}
                           />{' '}
-                          CMDX yield only):
+                          CMDX):
                         </span>
 
                         {calculateExternalBasePoolApr(Number(value?.id))
@@ -765,7 +763,10 @@ const FarmTable = ({
                         ''
                       )}
 
-                      <div className="upto_apr_tooltip_farm active">
+                      <div
+                        className="upto_apr_tooltip_farm active"
+                        style={{ marginBottom: '0' }}
+                      >
                         <span className="text">Swap Fee APR :</span>
                         <span className="value">
                           {' '}
@@ -777,14 +778,14 @@ const FarmTable = ({
                         </span>
                       </div>
 
-                      <div className="upto_apr_tooltip_farm">
+                      {/* <div className="upto_apr_tooltip_farm">
                         <span className="text">Available MP Boost:</span>
                         <span className="value">
                           {' '}
                           Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
                           for providing liquidity in the Master Pool
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </>
                 ) : null
@@ -806,10 +807,13 @@ const FarmTable = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {commaSeparator(calculateApr(Number(value?.id), value) || 0)}%
-                  {!getMasterPool(value?.id?.toNumber()) && (
+                  {getMasterPool(value?.id?.toNumber()) &&
+                    `${commaSeparator(
+                      calculateApr(Number(value?.id), value) || 0
+                    )} %`}
+                  {/* {!getMasterPool(value?.id?.toNumber()) && (
                     <Icon className={'bi bi-arrow-right'} />
-                  )}
+                  )} */}
                 </div>
 
                 <div
@@ -831,9 +835,13 @@ const FarmTable = ({
                         }`}
                       >
                         <NextImage src={Current} alt="Logo" />
-                        {`Upto ${commaSeparator(
+                        {/* {`Upto ${commaSeparator(
                           calculateUptoApr(Number(value?.id), value) || 0
-                        )}%`}
+                        )}%`} */}
+                        {commaSeparator(
+                          calculateApr(Number(value?.id), value) || 0
+                        )}
+                        %
                       </div>
                     </div>
                   )}
@@ -961,7 +969,7 @@ const FarmTable = ({
             </div>
           </div>
 
-          <div
+          {/* <div
             className={`${styles.farmCard__element__right__wholetab} ${
               theme === 'dark' ? styles.dark : styles.light
             }`}
@@ -1167,7 +1175,7 @@ const FarmTable = ({
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       ),
       sorter: (a, b) =>
@@ -1193,9 +1201,7 @@ const FarmTable = ({
                 <>
                   <div className="upto_apr_tooltip_farm_main_container">
                     <div className="upto_apr_tooltip_farm active">
-                      <span className="text">
-                        Total APR (incl. MP Rewards):
-                      </span>
+                      <span className="text">Total APR :</span>
                       <span className="value">
                         {' '}
                         {commaSeparator(
@@ -1214,7 +1220,7 @@ const FarmTable = ({
                           height={15}
                           width={15}
                         />{' '}
-                        CMDX yield only):
+                        CMDX):
                       </span>
                       {calculateExternalBasePoolApr(Number(value?.id))?.length >
                       0 ? (
@@ -1278,7 +1284,10 @@ const FarmTable = ({
                       ''
                     )}
 
-                    <div className="upto_apr_tooltip_farm active">
+                    <div
+                      className="upto_apr_tooltip_farm active"
+                      style={{ marginBottom: '0' }}
+                    >
                       <span className="text">Swap Fee APR :</span>
                       <span className="value">
                         {' '}
@@ -1290,14 +1299,14 @@ const FarmTable = ({
                       </span>
                     </div>
 
-                    <div className="upto_apr_tooltip_farm">
+                    {/* <div className="upto_apr_tooltip_farm">
                       <span className="text">Available MP Boost:</span>
                       <span className="value">
                         {' '}
                         Upto {commaSeparator(fetchMasterPoolAprData() || 0)}%
                         for providing liquidity in the Master Pool
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </>
               }
@@ -1318,10 +1327,11 @@ const FarmTable = ({
                     styles.farmCard__element__right__details__title
                   } ${theme === 'dark' ? styles.dark : styles.light}`}
                 >
-                  {`${commaSeparator(
-                    calculateChildPoolApr(Number(value?.id), value) || 0
-                  )}%`}
-                  {<Icon className={'bi bi-arrow-right'} />}
+                  {getMasterPool(value?.id?.toNumber()) &&
+                    `${commaSeparator(
+                      calculateChildPoolApr(Number(value?.id), value) || 0
+                    )}%`}
+                  {/* {<Icon className={'bi bi-arrow-right'} />} */}
                 </div>
                 {
                   <div
@@ -1337,9 +1347,13 @@ const FarmTable = ({
                       }`}
                     >
                       <NextImage src={Current} alt="Logo" />
-                      {`Upto ${commaSeparator(
+                      {/* {`Upto ${commaSeparator(
                         calculateUptoApr(Number(value?.id), value) || 0
-                      )}%`}
+                      )}%`} */}
+                      {commaSeparator(
+                        calculateApr(Number(value?.id), value) || 0
+                      )}
+                      %
                     </div>
                   </div>
                 }
