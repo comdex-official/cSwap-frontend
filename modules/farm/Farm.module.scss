@@ -371,7 +371,7 @@
   }
 
   &.card__active4 {
-    height: 480px;
+    height: 390px;
   }
 
   &.card__active2 {
@@ -664,7 +664,11 @@
 .farmCard__element__right__details {
   display: flex;
   align-items: center;
+ 
 
+  &.width{
+    width: 50%;
+  }
   &.cursor{
     cursor: pointer;
   }
