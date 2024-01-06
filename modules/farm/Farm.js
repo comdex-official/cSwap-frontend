@@ -120,60 +120,63 @@ const Farm = ({
               getUserLiquidity(pool);
             }
           }
-if(result){
-          const availablePoolToken =
-            getDenomBalance(balances, pool?.poolCoinDenom) || 0;
+          if (result) {
+            const availablePoolToken =
+              getDenomBalance(balances, pool?.poolCoinDenom) || 0;
 
-          const activeSoftLock = result?.activePoolCoin;
-          const queuedSoftLocks = result?.queuedPoolCoin;
+            const activeSoftLock = result?.activePoolCoin;
+            const queuedSoftLocks = result?.queuedPoolCoin;
 
-          const queuedAmounts =
-            queuedSoftLocks &&
-            queuedSoftLocks.length > 0 &&
-            queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
-          const userLockedAmount =
-            Number(
-              queuedAmounts?.length > 0 &&
-                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
-            ) + Number(activeSoftLock?.amount) || 0;
+            const queuedAmounts =
+              queuedSoftLocks &&
+              queuedSoftLocks.length > 0 &&
+              queuedSoftLocks?.map((item) => item?.poolCoin?.amount);
+            const userLockedAmount =
+              Number(
+                queuedAmounts?.length > 0 &&
+                  queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+              ) + Number(activeSoftLock?.amount) || 0;
 
-          const totalPoolToken = Number(availablePoolToken) + userLockedAmount;
+            const totalPoolToken =
+              Number(availablePoolToken) + userLockedAmount;
 
-          queryPoolCoinDeserialize(
-            pool?.id,
-            totalPoolToken,
-            (error, result) => {
-              if (error) {
-                retriesL++;
-                console.log(error);
-                if (retriesL < maxRetriesL) {
-                  getUserLiquidity(pool);
+            queryPoolCoinDeserialize(
+              pool?.id,
+              totalPoolToken,
+              (error, result) => {
+                if (error) {
+                  retriesL++;
+                  console.log(error);
+                  if (retriesL < maxRetriesL) {
+                    getUserLiquidity(pool);
+                  }
+                }
+                if (result) {
+                  const providedTokens = result?.coins;
+                  const totalLiquidityInDollar =
+                    Number(
+                      amountConversion(
+                        providedTokens?.[0]?.amount,
+                        assetMap[providedTokens?.[0]?.denom]?.decimals
+                      )
+                    ) *
+                      marketPrice(markets, providedTokens?.[0]?.denom) +
+                    Number(
+                      amountConversion(
+                        providedTokens?.[1]?.amount,
+                        assetMap[providedTokens?.[1]?.denom]?.decimals
+                      )
+                    ) *
+                      marketPrice(markets, providedTokens?.[1]?.denom);
+
+                  setUserLiquidityInPools(
+                    pool?.id,
+                    totalLiquidityInDollar || 0
+                  );
                 }
               }
-if(result){
-              const providedTokens = result?.coins;
-              const totalLiquidityInDollar =
-                Number(
-                  amountConversion(
-                    providedTokens?.[0]?.amount,
-                    assetMap[providedTokens?.[0]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[0]?.denom) +
-                Number(
-                  amountConversion(
-                    providedTokens?.[1]?.amount,
-                    assetMap[providedTokens?.[1]?.denom]?.decimals
-                  )
-                ) *
-                  marketPrice(markets, providedTokens?.[1]?.denom);
-
-              setUserLiquidityInPools(pool?.id, totalLiquidityInDollar || 0);
-            }
+            );
           }
-            
-          );
-        }
         });
       }
     },
@@ -229,8 +232,8 @@ if(result){
           getAPRs();
         }
       }
-      if(result){
-      setPoolsApr(result?.data);
+      if (result) {
+        setPoolsApr(result?.data);
       }
     });
   };
@@ -262,22 +265,22 @@ if(result){
             fetchPools(offset, limit, countTotal, reverse);
           }
         }
-        if(result){
-        setPools(result.pools);
-        setInProgress(false);
+        if (result) {
+          setPools(result.pools);
+          setInProgress(false);
 
-        const userPools = result?.pools;
-        if (
-          balances &&
-          balances.length > 0 &&
-          userPools &&
-          userPools.length > 0
-        ) {
-          userPools.forEach((item) => {
-            return getUserLiquidity(item);
-          });
+          const userPools = result?.pools;
+          if (
+            balances &&
+            balances.length > 0 &&
+            userPools &&
+            userPools.length > 0
+          ) {
+            userPools.forEach((item) => {
+              return getUserLiquidity(item);
+            });
+          }
         }
-      }
       });
     },
     [setPools, getUserLiquidity, userLiquidityRefetch, balances]
@@ -637,163 +640,164 @@ if(result){
           </div>
         )}
 
-        {showEligibleLive && (
-          <div
-            className={`${styles.farm__header} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
-          >
-            <div
-              className={`${styles.farm__crosss} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <Icon className={'bi bi-x-lg'} onClick={closeDisclaimer2} />
-            </div>
-            <div
-              className={`${styles.farm__header__body__left} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <div
-                className={`${styles.farm__header__left__title} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                {'cSwap v2 Live'}
-              </div>
-              <div
-                className={`${styles.farm__header__left__description} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                <div>
-                  {
-                    'Supercharge your LP earnings with boosted rewards on cSwap.'
-                  }
-                  <span
-                    className={`${styles.farm__header__left__more} ${
-                      theme === 'dark' ? styles.dark : styles.light
-                    }`}
-                    onClick={() =>
-                      window.open(
-                        'https://docs.cswap.one/farming-rewards',
-                        '_blank'
-                      )
-                    }
-                  >
-                    {'learn more'}
-                  </span>
-                </div>
-              </div>
-              <div
-                className={`${styles.farm__header__right__main} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
-              >
-                <div
-                  className={`${styles.farm__header__right__body} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farm__header__right__body__background
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <div
-                      className={`${styles.farm__header__right__body__step} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      <div
-                        className={`${
-                          styles.farm__header__right__body__title
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      >
-                        {'STEP 1'}
-                      </div>
-                      <div
-                        className={`${
-                          styles.farm__header__right__body__button
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                        onClick={() =>
-                          masterPoolData ? setMasterPoolModalOpen(true) : ''
-                        }
-                      >
-                        {'Go to master pool'}
-                      </div>
-                    </div>
+        {/* {showEligibleLive ? (
+          // <div
+          //   className={`${styles.farm__header} ${
+          //     theme === 'dark' ? styles.dark : styles.light
+          //   }`}
+          // >
+          //   <div
+          //     className={`${styles.farm__crosss} ${
+          //       theme === 'dark' ? styles.dark : styles.light
+          //     }`}
+          //   >
+          //     <Icon className={'bi bi-x-lg'} onClick={closeDisclaimer2} />
+          //   </div>
+          //   <div
+          //     className={`${styles.farm__header__body__left} ${
+          //       theme === 'dark' ? styles.dark : styles.light
+          //     }`}
+          //   >
+          //     <div
+          //       className={`${styles.farm__header__left__title} ${
+          //         theme === 'dark' ? styles.dark : styles.light
+          //       }`}
+          //     >
+          //       {'cSwap v2 Live'}
+          //     </div>
+          //     <div
+          //       className={`${styles.farm__header__left__description} ${
+          //         theme === 'dark' ? styles.dark : styles.light
+          //       }`}
+          //     >
+          //       <div>
+          //         {
+          //           'Supercharge your LP earnings with boosted rewards on cSwap.'
+          //         }
+          //         <span
+          //           className={`${styles.farm__header__left__more} ${
+          //             theme === 'dark' ? styles.dark : styles.light
+          //           }`}
+          //           onClick={() =>
+          //             window.open(
+          //               'https://docs.cswap.one/farming-rewards',
+          //               '_blank'
+          //             )
+          //           }
+          //         >
+          //           {'learn more'}
+          //         </span>
+          //       </div>
+          //     </div>
+          //     <div
+          //       className={`${styles.farm__header__right__main} ${
+          //         theme === 'dark' ? styles.dark : styles.light
+          //       }`}
+          //     >
+          //       <div
+          //         className={`${styles.farm__header__right__body} ${
+          //           theme === 'dark' ? styles.dark : styles.light
+          //         }`}
+          //       >
+          //         <div
+          //           className={`${
+          //             styles.farm__header__right__body__background
+          //           } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //         >
+          //           <div
+          //             className={`${styles.farm__header__right__body__step} ${
+          //               theme === 'dark' ? styles.dark : styles.light
+          //             }`}
+          //           >
+          //             <div
+          //               className={`${
+          //                 styles.farm__header__right__body__title
+          //               } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //             >
+          //               {'STEP 1'}
+          //             </div>
+          //             <div
+          //               className={`${
+          //                 styles.farm__header__right__body__button
+          //               } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //               onClick={() =>
+          //                 masterPoolData ? setMasterPoolModalOpen(true) : ''
+          //               }
+          //             >
+          //               {'Go to master pool'}
+          //             </div>
+          //           </div>
 
-                    <div
-                      className={`${
-                        styles.farm__header__right__body__description
-                      } ${theme === 'dark' ? styles.dark : styles.light}`}
-                    >
-                      {'Provide liquidity in the Master pool'}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={`${styles.farm__header__right__body} ${
-                    theme === 'dark' ? styles.dark : styles.light
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles.farm__header__right__body__background
-                    } ${theme === 'dark' ? styles.dark : styles.light}`}
-                  >
-                    <div
-                      className={`${styles.farm__header__right__body__step} ${
-                        theme === 'dark' ? styles.dark : styles.light
-                      }`}
-                    >
-                      <div
-                        className={`${
-                          styles.farm__header__right__body__title
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                      >
-                        {'STEP 2'}
-                      </div>
-                      <div
-                        className={`${
-                          styles.farm__header__right__body__button
-                        } ${theme === 'dark' ? styles.dark : styles.light}`}
-                        onClick={() =>
-                          masterPoolData ? setChildPool(!isChildPool) : ''
-                        }
-                      >
-                        {isChildPool ? 'Go to all pools' : 'Go to child pools'}
-                      </div>
-                    </div>
+          //           <div
+          //             className={`${
+          //               styles.farm__header__right__body__description
+          //             } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //           >
+          //             {'Provide liquidity in the Master pool'}
+          //           </div>
+          //         </div>
+          //       </div>
+          //       <div
+          //         className={`${styles.farm__header__right__body} ${
+          //           theme === 'dark' ? styles.dark : styles.light
+          //         }`}
+          //       >
+          //         <div
+          //           className={`${
+          //             styles.farm__header__right__body__background
+          //           } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //         >
+          //           <div
+          //             className={`${styles.farm__header__right__body__step} ${
+          //               theme === 'dark' ? styles.dark : styles.light
+          //             }`}
+          //           >
+          //             <div
+          //               className={`${
+          //                 styles.farm__header__right__body__title
+          //               } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //             >
+          //               {'STEP 2'}
+          //             </div>
+          //             <div
+          //               className={`${
+          //                 styles.farm__header__right__body__button
+          //               } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //               onClick={() =>
+          //                 masterPoolData ? setChildPool(!isChildPool) : ''
+          //               }
+          //             >
+          //               {isChildPool ? 'Go to all pools' : 'Go to child pools'}
+          //             </div>
+          //           </div>
 
-                    <div
-                      className={`${
-                        styles.farm__header__right__body__description
-                      } ${theme === 'dark' ? styles.dark : styles.light}`}
-                    >
-                      {`Deposit Equal value of assets in Child Pool 
-                    or pools as your Master Pool to 
-                    earn boosted rewards`}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`${styles.farm__header__body__right} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
-            >
-              <Lottie
-                animationData={Rocket}
-                loop={true}
-                style={{ height: 300 }}
-              />
-            </div>
-          </div>
-        )}
+          //           <div
+          //             className={`${
+          //               styles.farm__header__right__body__description
+          //             } ${theme === 'dark' ? styles.dark : styles.light}`}
+          //           >
+          //             {`Deposit Equal value of assets in Child Pool 
+          //           or pools as your Master Pool to 
+          //           earn boosted rewards`}
+          //           </div>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   </div>
+          //   <div
+          //     className={`${styles.farm__header__body__right} ${
+          //       theme === 'dark' ? styles.dark : styles.light
+          //     }`}
+          //   >
+          //     <Lottie
+          //       animationData={Rocket}
+          //       loop={true}
+          //       style={{ height: 300 }}
+          //     />
+          //   </div>
+          // </div>
+        ):""} */}
+
         <div
           className={`${styles.farm__body} ${
             theme === 'dark' ? styles.dark : styles.light
