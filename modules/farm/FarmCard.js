@@ -905,7 +905,7 @@ const FarmCard = ({
                 theme === 'dark' ? styles.dark : styles.light
               }`}
             >
-              {'Total Liquidity'}
+              {myPool ? 'User Liquidity' : 'Total Liquidity'}
             </div>
             <div
               className={`${styles.farmCard__element__right__title} ${

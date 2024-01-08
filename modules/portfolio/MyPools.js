@@ -288,7 +288,7 @@ const MyPools = ({
       showSorterTooltip: false,
     },
     {
-      title: <>My Liquidity</>,
+      title: <>User Liquidity</>,
       dataIndex: 'position',
       key: 'position',
       width: 200,

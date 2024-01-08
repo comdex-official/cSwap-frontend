@@ -4,7 +4,7 @@ import moment from 'moment';
 // DatafeedConfiguration implementation
 const configurationData = {
   // Represents the resolutions for bars supported by your datafeed
-  supported_resolutions: ['1', '5', '30', '60', '1D', '1W', '1M'],
+  supported_resolutions: ['1', '5', '30', '60', '240', '1D', '1W', '1M'],
 
   resulation: [
     {
@@ -19,7 +19,9 @@ const configurationData = {
     {
       60: '3600',
     },
-
+    {
+      240: '14400',
+    },
     {
       '1D': '86400',
     },
