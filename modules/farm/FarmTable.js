@@ -1369,7 +1369,7 @@ const FarmTable = ({
       showSorterTooltip: false,
     },
     {
-      title: 'My Liquidity',
+      title: 'User Liquidity',
       dataIndex: 'TotalLiquidity',
       key: 'TotalLiquidity',
       render: (value) => (
