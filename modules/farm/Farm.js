@@ -529,11 +529,15 @@ const Farm = ({
 
   useEffect(() => {
     const combinedTx = displayPools.sort((a, b) => {
-      const aHasMasterPool = getMasterPool(a?.id?.toNumber()) || 0;
+      // const aHasMasterPool = getMasterPool(a?.id?.toNumber()) || 0;
 
-      const bHasMasterPool = getMasterPool(b?.id?.toNumber()) || 0;
+      // const bHasMasterPool = getMasterPool(b?.id?.toNumber()) || 0;
 
-      return aHasMasterPool === bHasMasterPool ? 0 : aHasMasterPool ? -1 : 1;
+      // return aHasMasterPool === bHasMasterPool ? 0 : aHasMasterPool ? -1 : 1;
+      const aTotalPoolLiquidity = calculatePoolLiquidity(a?.balances);
+      const bTotalPoolLiquidity = calculatePoolLiquidity(b?.balances);
+
+      return bTotalPoolLiquidity - aTotalPoolLiquidity;
     });
 
     setPoolAll(combinedTx);
