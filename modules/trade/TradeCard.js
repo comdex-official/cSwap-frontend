@@ -73,6 +73,7 @@ import variables from '../../utils/variables';
 import Order from './OrderTable';
 import OrderBook from '../orderBook/OrderBook';
 import Loading from '../../pages/Loading';
+import { useCallback } from 'react';
 
 const TradeCard = ({
   lang,
@@ -225,8 +226,8 @@ const TradeCard = ({
           fetchPools(offset, limit, countTotal, reverse);
         }
       }
-      if(result){
-      setPools(result.pools);
+      if (result) {
+        setPools(result.pools);
       }
     });
   };
@@ -263,6 +264,21 @@ const TradeCard = ({
     }
   }, [pair, setBaseCoinPoolPrice, assetMap]);
 
+  const calculatePoolLiquidity = useCallback(
+    (poolBalance) => {
+      if (poolBalance && Object.values(poolBalance)?.length) {
+        const values = Object.values(poolBalance).map(
+          (item) =>
+            Number(
+              amountConversion(item?.amount, assetMap[item?.denom]?.decimals)
+            ) * marketPrice(markets, item?.denom)
+        );
+        return values?.reduce((prev, next) => prev + next, 0); // returning sum value
+      } else return 0;
+    },
+    [markets, assetMap]
+  );
+
   const updatePoolDetails = async (denomIn, denomOut) => {
     const selectedPair = pairs?.list?.filter(
       (item) =>
@@ -273,15 +289,25 @@ const TradeCard = ({
     if (selectedPair?.id) {
       setPair(selectedPair);
 
-      const selectedPool = pools.filter(
-        (item) => item.pairId.toNumber() === selectedPair?.id.toNumber()
-      )[0];
+      const filteredPool = pools
+        ?.filter(
+          (item) => item.pairId.toNumber() === selectedPair?.id.toNumber()
+        )
+        .sort((a, b) => {
+          const aTotalPoolLiquidity = calculatePoolLiquidity(a?.balances);
+          const bTotalPoolLiquidity = calculatePoolLiquidity(b?.balances);
+
+          return bTotalPoolLiquidity - aTotalPoolLiquidity;
+        });
+
+      const selectedPool = filteredPool[0];
 
       if (selectedPair?.baseCoinDenom !== denomIn) {
         setReverse(true);
       } else {
         setReverse(false);
       }
+
       setPool(selectedPool);
       setPoolBalance(selectedPool?.balances);
     } else {
@@ -348,7 +374,7 @@ const TradeCard = ({
   const calculateDemandCoinAmount = (price, input) => {
     const expectedOutAmount = price * input;
     setDemandCoinAmount(expectedOutAmount.toFixed(6));
-
+    console.log(pool);
     // calculating slippage for ranged pools.
     if (pool?.type === 2) {
       let minPrice = Number(decimalConversion(pool?.minPrice));
@@ -474,6 +500,36 @@ const TradeCard = ({
     return (pool?.id ? price || 0 : 0).toFixed(6);
   };
 
+  const calculatedMinimReceived = () => {
+    const value =
+      Number(offerCoin?.amount) -
+      ((Number(decimalConversion(params?.swapFeeRate) || 0) *
+        100 *
+        Number(offerCoin.amount)) /
+        100 +
+        Number(slippage)?.toFixed(comdex.coinDecimals));
+    const total = marketPrice(markets, offerCoin?.denom) * value;
+
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
+  };
+
+  const calculatedSwapFee = () => {
+    const value =
+      (Number(decimalConversion(params?.swapFeeRate) || 0) *
+        100 *
+        Number(offerCoin.amount)) /
+      100;
+    const total = marketPrice(markets, offerCoin?.denom) * value;
+    if (Number(total) < 0.01 && total !== 0) {
+      return `≈ < $0.01`;
+    }
+    return `≈ $${Number(total && isFinite(total) ? total : 0).toFixed(
+      DOLLAR_DECIMALS
+    )}`;
+  };
+
   const handleMaxClick = () => {
     if (offerCoin?.denom === comdex.coinMinimalDenom) {
       const value =
@@ -484,10 +540,7 @@ const TradeCard = ({
 
       return Number(value) > nativeOfferCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value - nativeOfferCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     } else {
@@ -496,10 +549,7 @@ const TradeCard = ({
 
       return Number(value) > offerCoinFee
         ? handleOfferCoinAmountChange(
-            amountConversion(
-              value - offerCoinFee,
-              assetMap[offerCoin?.denom]?.decimals
-            )
+            amountConversion(value, assetMap[offerCoin?.denom]?.decimals)
           )
         : handleOfferCoinAmountChange();
     }
@@ -612,8 +662,8 @@ const TradeCard = ({
           fetchPool();
         }
       }
-      if(result){
-      setPool(result?.pool);
+      if (result) {
+        setPool(result?.pool);
       }
     });
   };
@@ -1111,18 +1161,37 @@ const TradeCard = ({
                         styles.tradeCard__description__left_title
                       } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {'Swap Fee'}
+                      {`Swap Fee (${
+                        Number(decimalConversion(params?.swapFeeRate) || 0) *
+                        100
+                      }%)`}
                     </div>
                     <div
                       className={`${
                         styles.tradeCard__description__right_title
                       } ${theme === 'dark' ? styles.dark : styles.light}`}
                     >
-                      {Number(decimalConversion(params?.swapFeeRate) || 0) *
-                        100}
-                      %
+                      {calculatedSwapFee()}
                     </div>
                   </div>
+
+                  {/* <div className={styles.tradeCard__description__el}>
+                    <div
+                      className={`${
+                        styles.tradeCard__description__left_title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      {`Minimum Received`}
+                    </div>
+                    <div
+                      className={`${
+                        styles.tradeCard__description__right_title
+                      } ${theme === 'dark' ? styles.dark : styles.light}`}
+                    >
+                      <span>0.27888102</span>
+                      <span>{calculatedMinimReceived()}</span>
+                    </div>
+                  </div> */}
 
                   {!toggleValue && (
                     <div
