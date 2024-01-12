@@ -171,29 +171,29 @@ const Deposit = ({
       const sign =
         walletType === 'keplr'
           ? await window?.keplr?.signDirect(
-            chain.chainInfo?.chainId,
-            sourceAddress,
-            {
-              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-              authInfoBytes:
-                transferMsg.signDirect.authInfo.serializeBinary(),
-              chainId: chainInfoForMsg.cosmosChainId,
-              accountNumber: new Long(sender.accountNumber),
-            },
-            { isEthereum: true }
-          )
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            )
           : await window?.leap?.signDirect(
-            chain.chainInfo?.chainId,
-            sourceAddress,
-            {
-              bodyBytes: transferMsg.signDirect.body.serializeBinary(),
-              authInfoBytes:
-                transferMsg.signDirect.authInfo.serializeBinary(),
-              chainId: chainInfoForMsg.cosmosChainId,
-              accountNumber: new Long(sender.accountNumber),
-            },
-            { isEthereum: true }
-          );
+              chain.chainInfo?.chainId,
+              sourceAddress,
+              {
+                bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+                authInfoBytes:
+                  transferMsg.signDirect.authInfo.serializeBinary(),
+                chainId: chainInfoForMsg.cosmosChainId,
+                accountNumber: new Long(sender.accountNumber),
+              },
+              { isEthereum: true }
+            );
 
       if (sign !== undefined) {
         let rawTx = createTxRaw(
@@ -467,15 +467,16 @@ const Deposit = ({
                           className="active"
                           onClick={() => {
                             setAmount(
-                              availableBalance?.amount > DEFAULT_FEE
-                                ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
-                                : amountConversion(
-                                  availableBalance?.amount,
-                                  assetMap[chain?.ibcDenomHash]?.decimals
-                                )
+                              // availableBalance?.amount > DEFAULT_FEE
+                              //   ? amountConversion(
+                              //       availableBalance?.amount - DEFAULT_FEE,
+                              //       assetMap[chain?.ibcDenomHash]?.decimals
+                              //     )
+                              //   :
+                              amountConversion(
+                                availableBalance?.amount,
+                                assetMap[chain?.ibcDenomHash]?.decimals
+                              )
                             );
                           }}
                         >

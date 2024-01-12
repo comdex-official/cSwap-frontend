@@ -411,6 +411,7 @@ const Farm = ({
               <Radio.Button value={'Pool Liquidity'}>
                 Pool Liquidity
               </Radio.Button>
+              <Radio.Button value={'Pool Id'}>Pool Id</Radio.Button>
             </Radio.Group>
           </div>
         </div>
@@ -447,7 +448,7 @@ const Farm = ({
     onChange('3');
   };
 
-  const calculatePoolLiquidity = useCallback((poolBalance) => {
+  const calculatePoolLiquidity = (poolBalance) => {
     if (poolBalance && Object.values(poolBalance)?.length) {
       const values = Object.values(poolBalance).map(
         (item) =>
@@ -457,7 +458,7 @@ const Farm = ({
       );
       return values?.reduce((prev, next) => prev + next, 0); // returning sum value
     } else return 0;
-  }, []);
+  };
 
   const getMasterPool = (_id) => {
     const hasMasterPool = rewardsMap?.[_id]?.incentive_rewards?.some(
@@ -522,6 +523,15 @@ const Farm = ({
         );
       });
       setDisplayPools(sortedCards);
+    } else if (value === 'Pool Id') {
+      const sortedCards = displayPools.sort((a, b) => {
+        const aPoolID = a?.id?.toNumber() || 0;
+
+        const bPoolID = b?.id?.toNumber() || 0;
+
+        return aPoolID - bPoolID;
+      });
+      setDisplayPools(sortedCards);
     }
   };
 
@@ -530,13 +540,11 @@ const Farm = ({
   useEffect(() => {
     const combinedTx = displayPools.sort((a, b) => {
       // const aHasMasterPool = getMasterPool(a?.id?.toNumber()) || 0;
-
       // const bHasMasterPool = getMasterPool(b?.id?.toNumber()) || 0;
-
       // return aHasMasterPool === bHasMasterPool ? 0 : aHasMasterPool ? -1 : 1;
+
       const aTotalPoolLiquidity = calculatePoolLiquidity(a?.balances);
       const bTotalPoolLiquidity = calculatePoolLiquidity(b?.balances);
-
       return bTotalPoolLiquidity - aTotalPoolLiquidity;
     });
 

@@ -305,7 +305,6 @@
 .tradeCard__description__el {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .tradeCard__description__el2 {
@@ -332,6 +331,8 @@
   line-height: 20px;
   text-align: right;
   color: #dcdcdc;
+  display: flex;
+  flex-direction: column;
 
   &.red {
     color: #fe2b56;
