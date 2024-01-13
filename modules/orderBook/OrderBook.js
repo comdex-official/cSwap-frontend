@@ -175,8 +175,8 @@ const OrderBook = ({
             fetchUserOrders(address, pairId);
           }
         }
-        if(result){
-        setMyOrders(result?.orders);
+        if (result) {
+          setMyOrders(result?.orders);
         }
       });
     }
@@ -195,8 +195,8 @@ const OrderBook = ({
             fetchOrders(pair);
           }
         }
-        if(result){
-        setOrders(result?.orders);
+        if (result) {
+          setOrders(result?.orders);
         }
       });
     }
@@ -695,9 +695,10 @@ const OrderBook = ({
                       <div
                         className={`${styles.dropdown__orderbook__body__title}`}
                       >
+                        $
                         {commaSeparator(
                           formateNumberDecimalsAuto({
-                            price: item?.price || 0,
+                            price: item?.quote_coin_price || 0,
                           })
                         )}
                       </div>
@@ -789,9 +790,10 @@ const OrderBook = ({
                         <div
                           className={`${styles.dropdown__orderbook__body__title}`}
                         >
+                          $
                           {commaSeparator(
                             formateNumberDecimalsAuto({
-                              price: item?.price || 0,
+                              price: item?.quote_coin_price || 0,
                             })
                           )}
                         </div>
@@ -1036,15 +1038,7 @@ const OrderBook = ({
                     ~$
                     {commaSeparator(
                       formateNumberDecimalsAuto({
-                        price: Number(
-                          Number(selectedPair?.price || 0) *
-                            Number(
-                              marketPrice(
-                                markets,
-                                selectedPair?.base_coin_denom
-                              )
-                            )
-                        ).toFixed(8),
+                        price: selectedPair?.quote_coin_price || 0,
                       })
                     )}
                   </span>
