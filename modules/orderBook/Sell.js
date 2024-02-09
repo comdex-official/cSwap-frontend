@@ -103,7 +103,7 @@ const Sell = ({
         message: getMessage(),
         fee: {
           amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
-          gas: '500000',
+          gas: '200000',
         },
         memo: '',
       },
@@ -136,16 +136,20 @@ const Sell = ({
 
   const handlePriceChange = (value) => {
     setPrice(value);
-    setTotal((amount * Number(toDecimals(String(value)).toString().trim())).toFixed(
-      comdex.coinDecimals
-    ));
+    setTotal(
+      (amount * Number(toDecimals(String(value)).toString().trim())).toFixed(
+        comdex.coinDecimals
+      )
+    );
   };
   const [active, setActive] = useState();
   const handleAmountChange = (value) => {
     setAmount(value);
-    setTotal((value * Number(toDecimals(String(price)).toString().trim())).toFixed(
-      comdex.coinDecimals
-    ));
+    setTotal(
+      (value * Number(toDecimals(String(price)).toString().trim())).toFixed(
+        comdex.coinDecimals
+      )
+    );
     setValidationError(
       ValidateInputNumber(
         Number(value),
@@ -153,8 +157,8 @@ const Sell = ({
           amountConversion(
             available || 0,
             assetMap[pair?.base_coin_denom]?.decimals
+          )
         )
-        ),
       )
     );
   };
@@ -163,7 +167,11 @@ const Sell = ({
     setActive(+value);
     let amountPercentage = (value / 100) * amountConversion(available);
     setAmount(amountPercentage || 0);
-    setTotal((amountPercentage * Number(toDecimals(String(price)).toString().trim())).toFixed(comdex.coinDecimals));
+    setTotal(
+      (
+        amountPercentage * Number(toDecimals(String(price)).toString().trim())
+      ).toFixed(comdex.coinDecimals)
+    );
     setValidationError(
       ValidateInputNumber(
         Number(amountPercentage),
@@ -171,8 +179,8 @@ const Sell = ({
           amountConversion(
             available || 0,
             assetMap[pair?.base_coin_denom]?.decimals
+          )
         )
-        ),
       )
     );
   };
@@ -271,10 +279,14 @@ const Sell = ({
                 suffix={denomConversion(pair?.base_coin_denom)}
               />
               {isError ? (
-        <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
-          {validationError?.message}
-        </div>
-      ) : null}
+                <div
+                  className={
+                    isError ? 'alert-label' : 'alert-label alert-hidden'
+                  }
+                >
+                  {validationError?.message}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -330,11 +342,17 @@ const Sell = ({
               </p>
               <label>
                 ~$
-                {isNaN((
-                  Number(!isFinite(total) ? 0 : total || 0) * marketPrice(markets, pair?.quote_coin_denom)
-                ).toFixed(4)) ? Number(0).toFixed(4) : (
-                  Number(!isFinite(total) ? 0 : total || 0) * marketPrice(markets, pair?.quote_coin_denom)
-                ).toFixed(4)}
+                {isNaN(
+                  (
+                    Number(!isFinite(total) ? 0 : total || 0) *
+                    marketPrice(markets, pair?.quote_coin_denom)
+                  ).toFixed(4)
+                )
+                  ? Number(0).toFixed(4)
+                  : (
+                      Number(!isFinite(total) ? 0 : total || 0) *
+                      marketPrice(markets, pair?.quote_coin_denom)
+                    ).toFixed(4)}
               </label>
             </div>
           </div>

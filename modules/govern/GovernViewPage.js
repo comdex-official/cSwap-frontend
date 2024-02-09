@@ -31,6 +31,7 @@ import {
 import { formatTime } from '../../utils/date';
 import { formatNumber } from '../../utils/number';
 import {
+  getLastWord,
   proposalOptionMap,
   stringTagParser,
   truncateString,
@@ -502,7 +503,11 @@ const GovernViewPage = ({
           <div className="proposal_description_main_container">
             <div className="proposal_heading">Description</div>
             <div className="proposal_para">
-              {stringTagParser(proposal?.content?.description || ' ')}
+              {proposal?.content?.description
+                ? stringTagParser(proposal?.content?.description)
+                : proposal?.content?.['@type']
+                ? getLastWord(proposal?.content?.['@type'])
+                : ' '}
             </div>
 
             <div className="proposal_suggest_box">

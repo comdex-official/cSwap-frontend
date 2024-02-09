@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import * as PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
-import { stringTagParser } from '../../../utils/string';
+import { getLastWord, stringTagParser } from '../../../utils/string';
 import { DOLLAR_DECIMALS } from '../../../constants/common';
 import { Progress } from '@mantine/core';
 import MyTimer from '../../../shared/components/governTimer';
@@ -78,16 +78,28 @@ const GovernOpenProposal = ({ proposals }) => {
 
                           <div className="haeading_container">
                             <div className="heading">
-                              {item?.content?.title}
+                              {item?.content?.title
+                                ? item?.content?.title
+                                : item?.content?.['@type']
+                                ? getLastWord(item?.content?.['@type'])
+                                : ''}
                             </div>
                           </div>
 
                           <div className="para_main_container">
                             <div className="para_container">
-                              {stringTagParser(
-                                item?.content?.description.substring(0, 150) ||
-                                  ' '
-                              ) + '......'}{' '}
+                              {item?.content?.description
+                                ? stringTagParser(
+                                    (item?.content?.description &&
+                                      item?.content?.description.substring(
+                                        0,
+                                        150
+                                      )) ||
+                                      ' '
+                                  ) + '......'
+                                : item?.content?.['@type']
+                                ? getLastWord(item?.content?.['@type'])
+                                : ''}{' '}
                             </div>
                           </div>
 
