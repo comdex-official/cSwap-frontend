@@ -226,3 +226,8 @@ export const errorMessageMappingParser = (message) => {
   }
   return str;
 };
+
+export const getLastWord = (inputString) => {
+  const parts = inputString.split('.');
+  return parts[parts.length - 1];
+};

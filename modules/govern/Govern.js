@@ -49,7 +49,6 @@ const Govern = ({
   };
 
   useEffect(() => {
-    
     const fetchData = async () => {
       let nextPage = '';
       let allProposals = [];
@@ -58,7 +57,6 @@ const Govern = ({
         const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
         const response = await fetch(url);
         const data = await response.json();
-
         allProposals = [...allProposals, ...data.proposals];
         nextPage = data.pagination.next_key
           ? `?pagination.key=${data.pagination.next_key}`

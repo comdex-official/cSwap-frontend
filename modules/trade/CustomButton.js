@@ -137,7 +137,7 @@ const CustomButton = ({
         message: getMessage(isLimitOrder),
         fee: {
           amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
-          gas: '500000',
+          gas: '200000',
         },
         memo: '',
       },
@@ -162,7 +162,7 @@ const CustomButton = ({
           let pairId = order?.attributes?.find(
             (item) => item?.key === 'pair_id'
           )?.value;
-         let txHash = result?.transactionHash
+          let txHash = result?.transactionHash;
           if (orderId && pairId) {
             queryOrder(orderId, pairId, (error, result) => {
               if (error) {
@@ -175,10 +175,7 @@ const CustomButton = ({
                 .loading('Processing..', 3)
                 .then(() =>
                   Toaster(
-                    <Snack
-                      message={variables[lang].tx_success}
-                      hash={txHash}
-                    />
+                    <Snack message={variables[lang].tx_success} hash={txHash} />
                   )
                 )
                 .then(() =>
@@ -197,7 +194,6 @@ const CustomButton = ({
                     );
                   }, 1000)
                 );
-
             });
           }
         }
