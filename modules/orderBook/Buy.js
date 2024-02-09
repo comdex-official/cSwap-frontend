@@ -110,7 +110,7 @@ const Buy = ({
         message: getMessage(),
         fee: {
           amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
-          gas: '500000',
+          gas: '200000',
         },
         memo: '',
       },
@@ -142,7 +142,7 @@ const Buy = ({
 
   const isError = validationError?.message?.length > 0;
 
-  const handlePriceChange = (value) => { 
+  const handlePriceChange = (value) => {
     setPrice(value);
     setTotal(
       (amount / Number(toDecimals(String(value)).toString().trim())).toFixed(
