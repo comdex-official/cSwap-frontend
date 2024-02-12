@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import * as PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
-import { stringTagParser } from '../../../utils/string';
+import { getLastWord, stringTagParser } from '../../../utils/string';
 import { DOLLAR_DECIMALS } from '../../../constants/common';
 import { Progress } from '@mantine/core';
 import MyTimer from '../../../shared/components/governTimer';
@@ -12,10 +12,10 @@ const GovernOpenProposal = ({ proposals }) => {
   const router = useRouter();
 
   const calculateVotes = useCallback((value, final_tally_result) => {
-    let yes = Number(final_tally_result?.yes);
-    let no = Number(final_tally_result?.no);
-    let veto = Number(final_tally_result?.no_with_veto);
-    let abstain = Number(final_tally_result?.abstain);
+    let yes = Number(final_tally_result?.yes_count);
+    let no = Number(final_tally_result?.no_count);
+    let veto = Number(final_tally_result?.no_with_veto_count);
+    let abstain = Number(final_tally_result?.abstain_count);
     let totalValue = yes + no + abstain + veto;
 
     let result = Number((Number(value) / totalValue || 0) * 100).toFixed(
@@ -47,16 +47,14 @@ const GovernOpenProposal = ({ proposals }) => {
                     return (
                       <div
                         className="proposal_main_container"
-                        key={item?.proposal_id}
+                        key={item?.id}
                         onClick={() => {
-                          router.push(`/governview?id=${item?.proposal_id}`);
+                          router.push(`/governview?id=${item?.id}`);
                         }}
                       >
                         <div className="proposal_container">
                           <div className="id_timer_container">
-                            <div className="proposal_id">
-                              #{item?.proposal_id}
-                            </div>
+                            <div className="proposal_id">#{item?.id}</div>
                             <div className="proposal_timer">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -78,16 +76,28 @@ const GovernOpenProposal = ({ proposals }) => {
 
                           <div className="haeading_container">
                             <div className="heading">
-                              {item?.content?.title}
+                              {item?.messages[0]?.content?.title
+                                ? item?.messages[0]?.content?.title
+                                : item?.messages[0]?.['@type']
+                                ? getLastWord(item?.messages[0]?.['@type'])
+                                : '------'}
                             </div>
                           </div>
 
                           <div className="para_main_container">
                             <div className="para_container">
-                              {stringTagParser(
-                                item?.content?.description.substring(0, 150) ||
-                                  ' '
-                              ) + '......'}{' '}
+                              {item?.messages[0]?.content?.description
+                                ? stringTagParser(
+                                    (item?.messages[0]?.content?.description &&
+                                      item?.messages[0]?.content?.description.substring(
+                                        0,
+                                        150
+                                      )) ||
+                                      ' '
+                                  ) + '......'
+                                : item?.messages[0]?.['@type']
+                                ? getLastWord(item?.messages[0]?.['@type'])
+                                : ''}{' '}
                             </div>
                           </div>
 
@@ -104,7 +114,7 @@ const GovernOpenProposal = ({ proposals }) => {
                                     <div className="value">
                                       {' '}
                                       {`${calculateVotes(
-                                        item?.final_tally_result?.yes,
+                                        item?.final_tally_result?.yes_count,
                                         item?.final_tally_result
                                       )}%`}
                                     </div>
@@ -118,7 +128,7 @@ const GovernOpenProposal = ({ proposals }) => {
                                   <div className="data_container">
                                     <div className="title">No</div>
                                     <div className="value">{`${calculateVotes(
-                                      item?.final_tally_result?.no,
+                                      item?.final_tally_result?.no_count,
                                       item?.final_tally_result
                                     )}%`}</div>
                                   </div>
@@ -133,7 +143,8 @@ const GovernOpenProposal = ({ proposals }) => {
                                     <div className="value">
                                       {' '}
                                       {`${calculateVotes(
-                                        item?.final_tally_result?.no_with_veto,
+                                        item?.final_tally_result
+                                          ?.no_with_veto_count,
                                         item?.final_tally_result
                                       )}%`}
                                     </div>
@@ -149,7 +160,7 @@ const GovernOpenProposal = ({ proposals }) => {
                                     <div className="value">
                                       {' '}
                                       {`${calculateVotes(
-                                        item?.final_tally_result?.abstain,
+                                        item?.final_tally_result?.abstain_count,
                                         item?.final_tally_result
                                       )}%`}
                                     </div>
