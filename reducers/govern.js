@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 import {
   ACTIVE_TAB_SET,
   ALL_PROPOSALS_SET,
@@ -6,7 +6,7 @@ import {
   PROPOSAL_SET,
   PROPOSAL_TALLY_SET,
   PROPOSER_SET,
-} from "../constants/govern";
+} from '../constants/govern';
 
 const allProposals = (state = [], action) => {
   if (action.type === ALL_PROPOSALS_SET) {
@@ -28,7 +28,7 @@ const proposalMap = (state = {}, action) => {
   if (action.type === PROPOSAL_SET) {
     return {
       ...state,
-      [action?.value?.proposal_id]: action.value || {},
+      [action?.value?.id]: action.value || {},
     };
   }
 
@@ -57,9 +57,9 @@ const proposerMap = (state = {}, action) => {
   return state;
 };
 
-const getTab = (state = "", action) => {
+const getTab = (state = '', action) => {
   if (action.type === ACTIVE_TAB_SET) {
-    return action.value || "";
+    return action.value || '';
   }
 
   return state;

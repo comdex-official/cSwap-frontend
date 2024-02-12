@@ -54,7 +54,7 @@ const Govern = ({
       let allProposals = [];
       setInProgress(true);
       do {
-        const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
+        const url = `${comdex?.rest}/cosmos/gov/v1/proposals${nextPage}`;
         const response = await fetch(url);
         const data = await response.json();
         allProposals = [...allProposals, ...data.proposals];

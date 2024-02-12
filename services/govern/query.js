@@ -1,8 +1,8 @@
-import axios from "axios";
-import { QueryClientImpl } from "cosmjs-types/cosmos/gov/v1beta1/query";
-import Long from "long";
-import { comdex } from "../../config/network";
-import { createQueryClient } from "../helper";
+import axios from 'axios';
+import { QueryClientImpl } from 'cosmjs-types/cosmos/gov/v1beta1/query';
+import Long from 'long';
+import { comdex } from '../../config/network';
+import { createQueryClient } from '../helper';
 
 let myClient = null;
 
@@ -33,7 +33,7 @@ export const queryAllProposals = (callback) => {
     }
 
     queryService
-      .Proposals({ proposalStatus: 0, voter: "", depositor: "" })
+      .Proposals({ proposalStatus: 0, voter: '', depositor: '' })
       .then((result) => {
         callback(null, result);
       })
@@ -91,7 +91,7 @@ export const fetchRestProposals = (callback) => {
 
 export const fetchRestProposal = (id, callback) => {
   axios
-    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
+    .get(`${comdex?.rest}/cosmos/gov/v1/proposals/${id}`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -126,9 +126,7 @@ export const fetchRestProposer = (id, callback) => {
 
 export const fetchRestTallyParamsProposer = (callback) => {
   axios
-    .get(
-      `${comdex?.rest}/cosmos/gov/v1beta1/params/tallying`
-    )
+    .get(`${comdex?.rest}/cosmos/gov/v1beta1/params/tallying`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -139,9 +137,7 @@ export const fetchRestTallyParamsProposer = (callback) => {
 
 export const fetchRestBondexTokens = (callback) => {
   axios
-    .get(
-      `${comdex?.rest}/cosmos/staking/v1beta1/pool`
-    )
+    .get(`${comdex?.rest}/cosmos/staking/v1beta1/pool`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -150,11 +146,9 @@ export const fetchRestBondexTokens = (callback) => {
     });
 };
 
-export const fetchRestVotingPower = (address,callback) => {
+export const fetchRestVotingPower = (address, callback) => {
   axios
-    .get(
-      `${comdex?.rest}/cosmos/staking/v1beta1/delegations/${address}`
-    )
+    .get(`${comdex?.rest}/cosmos/staking/v1beta1/delegations/${address}`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -162,4 +156,3 @@ export const fetchRestVotingPower = (address,callback) => {
       callback(error?.message);
     });
 };
-
