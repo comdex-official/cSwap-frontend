@@ -229,5 +229,6 @@ export const errorMessageMappingParser = (message) => {
 
 export const getLastWord = (inputString) => {
   const parts = inputString.split('.');
-  return parts[parts.length - 1];
+  const text = parts[parts.length - 1];
+  return text.replace(/([a-z])([A-Z])/g, '$1 $2');
 };
