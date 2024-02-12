@@ -171,6 +171,7 @@ const GovernViewPage = ({
         if (error) {
           return;
         }
+
         setInProgress(false);
         setProposal(result?.proposal);
       });
@@ -186,6 +187,7 @@ const GovernViewPage = ({
         if (error) {
           return;
         }
+
         if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
           setProposer(
             result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
@@ -197,17 +199,17 @@ const GovernViewPage = ({
   }, [id, setProposal, setProposer, setProposalTally]);
 
   const fetchVote = useCallback(() => {
-    queryUserVote(address, proposal?.proposal_id, (error, result) => {
+    queryUserVote(address, proposal?.id, (error, result) => {
       if (error) {
         return;
       }
 
       setVotedOption(result?.vote?.option);
     });
-  }, [address, proposal?.proposal_id]);
+  }, [address, proposal?.id]);
 
   useEffect(() => {
-    if (proposal?.proposal_id) {
+    if (proposal?.id) {
       fetchVote();
     }
   }, [address, id, proposal, fetchVote]);
@@ -276,6 +278,8 @@ const GovernViewPage = ({
     Number(0).toFixed(2)
   );
 
+  console.log(proposalMap, 'skskksks');
+
   return (
     <>
       <div className="proposal_view_back_button_container">
@@ -292,12 +296,13 @@ const GovernViewPage = ({
         <div className="govern_view_container">
           <div className="proposal_detail_main_container">
             <div className="proposal_detail_container">
-              <div className="proposal_id">
-                {' '}
-                #{proposal?.proposal_id || '-'}
-              </div>
+              <div className="proposal_id"> #{proposal?.id || '-'}</div>
               <div className="proposal_title">
-                {proposal?.content?.title || '------'}
+                {proposal?.messages[0]?.content?.title
+                  ? proposal?.messages[0]?.content?.title
+                  : proposal?.messages[0]?.['@type']
+                  ? getLastWord(proposal?.messages[0]?.['@type'])
+                  : '------'}
               </div>
               <div className="proposal_overview_container">
                 <div className="proposal_stats_container">
@@ -503,10 +508,10 @@ const GovernViewPage = ({
           <div className="proposal_description_main_container">
             <div className="proposal_heading">Description</div>
             <div className="proposal_para">
-              {proposal?.content?.description
-                ? stringTagParser(proposal?.content?.description)
-                : proposal?.content?.['@type']
-                ? getLastWord(proposal?.content?.['@type'])
+              {proposal?.messages[0]?.content?.description
+                ? stringTagParser(proposal?.messages[0]?.content?.description)
+                : proposal?.messages[0]?.['@type']
+                ? getLastWord(proposal?.messages[0]?.['@type'])
                 : ' '}
             </div>
 
