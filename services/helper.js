@@ -16,8 +16,12 @@ import { customAminoTypes } from './aminoConverter';
 import { strideAccountParser } from './parser';
 import { myRegistry } from './registry';
 // import { CosmjsOfflineSigner } from '@leapwallet/cosmos-snap-provider';
-import { CosmjsOfflineSigner, cosmjsOfflineSigner } from '@leapwallet/cosmos-snap-provider';
+import {
+  CosmjsOfflineSigner,
+  cosmjsOfflineSigner,
+} from '@leapwallet/cosmos-snap-provider';
 import { cosmos, codec } from '@cosmjs/launchpad';
+import { DEFAULT_FEE } from '../constants/common';
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
@@ -72,7 +76,6 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
     const offlineSigner = new CosmjsOfflineSigner(comdex?.chainId);
     const accounts = await offlineSigner.getAccounts();
 
-
     if (address !== accounts[0].address) {
       const error = 'Connected account is not active in Keplr';
       callback(error);
@@ -86,14 +89,24 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
     })
       .then((client) => {
         client
-          .signAndBroadcast(
-            address,
-            [transaction.message],
-            transaction.fee,
-            transaction.memo
-          )
-          .then((result) => {
-            callback(null, result);
+          .simulate(address, [transaction.message], '')
+          .then((gasfees) => {
+            client
+              .signAndBroadcast(
+                address,
+                [transaction.message],
+                {
+                  amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
+                  gas: String(gasfees + 50000),
+                },
+                transaction.memo
+              )
+              .then((result) => {
+                callback(null, result);
+              })
+              .catch((error) => {
+                callback(error?.message);
+              });
           })
           .catch((error) => {
             callback(error?.message);
@@ -102,7 +115,6 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
       .catch((error) => {
         callback(error && error.message);
       });
-
   } else {
     const [offlineSigner, accounts] = await KeplrWallet(comdex.chainId);
     if (address !== accounts[0].address) {
@@ -118,14 +130,24 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
     })
       .then((client) => {
         client
-          .signAndBroadcast(
-            address,
-            [transaction.message],
-            transaction.fee,
-            transaction.memo
-          )
-          .then((result) => {
-            callback(null, result);
+          .simulate(address, [transaction.message], '')
+          .then((gasfees) => {
+            client
+              .signAndBroadcast(
+                address,
+                [transaction.message],
+                {
+                  amount: [{ denom: 'ucmdx', amount: DEFAULT_FEE.toString() }],
+                  gas: String(gasfees + 50000),
+                },
+                transaction.memo
+              )
+              .then((result) => {
+                callback(null, result);
+              })
+              .catch((error) => {
+                callback(error?.message);
+              });
           })
           .catch((error) => {
             callback(error?.message);
@@ -135,7 +157,6 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
         callback(error && error.message);
       });
   }
-
 };
 
 async function LedgerWallet(hdpath, prefix) {
@@ -213,7 +234,7 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
     let walletType = localStorage.getItem('loginType');
 
-    if (walletType === "metamask") {
+    if (walletType === 'metamask') {
       const offlineSigner = new CosmjsOfflineSigner(config.chainId);
 
       const client = await SigningStargateClient.connectWithSigner(
@@ -247,19 +268,18 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
         .catch((error) => {
           callback(error?.message);
         });
-
     } else {
       (walletType === 'keplr' ? await window.keplr : await window.leap) &&
-        walletType === 'keplr'
+      walletType === 'keplr'
         ? window.keplr.enable(config.chainId)
         : window.leap.enable(config.chainId);
 
       const offlineSigner =
         walletType === 'keplr'
           ? window.getOfflineSignerOnlyAmino &&
-          window.getOfflineSignerOnlyAmino(config.chainId)
+            window.getOfflineSignerOnlyAmino(config.chainId)
           : window?.leap?.getOfflineSignerOnlyAmino &&
-          window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
+            window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
 
       const client = await SigningStargateClient.connectWithSigner(
         config.rpc,
