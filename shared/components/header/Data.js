@@ -54,7 +54,7 @@ export const DotDropdownData = [
     id: 0,
     name: 'Discord',
     icon: Discord,
-    link: 'https://discord.com/invite/7vjPvWKKMT',
+    link: 'https://discord.gg/comdexofficial',
   },
   {
     id: 1,
