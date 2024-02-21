@@ -1,1 +1,0 @@
-export const MARKET_LIST_SET = "MARKET_LIST_SET";
