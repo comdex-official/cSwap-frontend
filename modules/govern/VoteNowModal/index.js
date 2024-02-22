@@ -27,7 +27,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
           typeUrl: '/cosmos.gov.v1beta1.MsgVote',
           value: {
             option: userVote,
-            proposalId: Long.fromNumber(proposal?.proposal_id),
+            proposalId: Long.fromNumber(proposal?.id),
             voter: address,
           },
         },
@@ -36,6 +36,9 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
       },
       address,
       (error, result) => {
+        if (error) {
+          console.log(error);
+        }
         setInProgress(false);
         setIsModalOpen(false);
         setUserVote();
@@ -72,7 +75,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         className="btn-filled2 voote__now"
         onClick={showModal}
         loading={inProgress}
-        disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
+        disabled={proposal?.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'}
       >
         Vote Now
       </Button>
@@ -91,7 +94,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
           <div>
             <div sm="12">
               <h3>Vote Now</h3>
-        
+
               <div className="votenow-modal-element-main">
                 <div
                   className={
