@@ -50,6 +50,7 @@ const GovernViewPage = ({
   proposerMap,
   setProposalTally,
   proposalTallyMap,
+  assetMap,
 }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -204,7 +205,9 @@ const GovernViewPage = ({
         return;
       }
 
-      setVotedOption(result?.vote?.option);
+      setVotedOption(
+        result?.vote?.options[result?.vote?.options.length - 1]?.option
+      );
     });
   }, [address, proposal?.id]);
 
@@ -269,16 +272,17 @@ const GovernViewPage = ({
     setTab('2');
   };
 
-  const totalAmount = votingPower?.delegation_responses?.reduce(
+  const totalAmount = votingPower?.delegation_responses.reduce(
     (sum, response) => {
-      const amount = parseInt(response?.balance?.amount);
-
-      return Number(sum + amount).toFixed(2);
+      const amountInToken = amountConversion(
+        response?.balance?.amount,
+        assetMap[response?.balance?.denom]?.decimals
+      );
+      const amount = parseInt(amountInToken);
+      return sum + amount;
     },
-    Number(0).toFixed(2)
+    0
   );
-
-  console.log(proposalMap, 'skskksks');
 
   return (
     <>
@@ -348,7 +352,9 @@ const GovernViewPage = ({
                 </div>
                 <div className="proposal_stats_container">
                   <div className="title">My Voting power</div>
-                  <div className="value">{address ? totalAmount : '-'}</div>
+                  <div className="value">
+                    {address ? `${Number(totalAmount).toFixed(2)} CMDX` : '-'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -562,6 +568,7 @@ const stateToProps = (state) => {
     proposalMap: state.govern.proposalMap,
     proposerMap: state.govern.proposerMap,
     proposalTallyMap: state.govern.proposalTallyMap,
+    assetMap: state.asset.map,
   };
 };
 
