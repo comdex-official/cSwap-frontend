@@ -521,7 +521,7 @@ const GovernViewPage = ({
                 : ' '}
             </div>
 
-            <div className="proposal_suggest_box">
+            {/*  <div className="proposal_suggest_box">
               <p>No other parameters are being changed.</p>
               <p>
                 {' '}
@@ -542,7 +542,7 @@ const GovernViewPage = ({
                 Vote <span>Abstain</span> to express no interest in the
                 proposal.
               </p>
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>
