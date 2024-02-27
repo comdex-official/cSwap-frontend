@@ -32,6 +32,18 @@ const getCurrencies = (chain) => {
         coinMinimalDenom: harbor?.coinMinimalDenom,
         coinDecimals: harbor?.coinDecimals,
       },
+      {
+        coinDenom: 'ATOM',
+        coinMinimalDenom:
+          'ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352',
+        coinDecimals: 6,
+      },
+      {
+        coinDenom: 'NUSDC',
+        coinMinimalDenom:
+          'ibc/D031367F58DFD5EED54A49ADCB4EFB44AD9ECCAE383708BFDCCACF3CF463B77C',
+        coinDecimals: 6,
+      },
     ];
   } else {
     return [
@@ -79,6 +91,20 @@ export const getChainConfig = (chain = comdex) => {
               average: 3,
               high: 4,
             },
+      },
+      {
+        coinDenom: 'ATOM',
+        coinMinimalDenom:
+          'ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352',
+        coinDecimals: 6,
+        coinGeckoId: 'cosmos',
+      },
+      {
+        coinDenom: 'NUSDC',
+        coinMinimalDenom:
+          'ibc/D031367F58DFD5EED54A49ADCB4EFB44AD9ECCAE383708BFDCCACF3CF463B77C',
+        coinDecimals: 6,
+        coinGeckoId: 'usd-coin',
       },
     ],
     coinType: chain?.coinType,
@@ -248,7 +274,7 @@ export const initializeChain = (type, callback) => {
             : walletType === 'leap'
             ? window.leap.experimentalSuggestChain
             : null; // Add more conditions for other wallet types if needed
-
+        console.log(getChainConfig());
         if (suggestChain) {
           try {
             if (walletType === 'keplr') {
