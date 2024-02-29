@@ -4,7 +4,7 @@ import {
   ChainStore,
   getKeplrFromWindow,
 } from '@keplr-wallet/stores';
-import { cmst, comdex, harbor } from '../config/network';
+import { atom, cmst, comdex, harbor, usdc } from '../config/network';
 import {
   CosmjsOfflineSigner,
   connectSnap,
@@ -31,18 +31,6 @@ const getCurrencies = (chain) => {
         coinDenom: harbor?.coinDenom,
         coinMinimalDenom: harbor?.coinMinimalDenom,
         coinDecimals: harbor?.coinDecimals,
-      },
-      {
-        coinDenom: 'ATOM',
-        coinMinimalDenom:
-          'ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352',
-        coinDecimals: 6,
-      },
-      {
-        coinDenom: 'NUSDC',
-        coinMinimalDenom:
-          'ibc/D031367F58DFD5EED54A49ADCB4EFB44AD9ECCAE383708BFDCCACF3CF463B77C',
-        coinDecimals: 6,
       },
     ];
   } else {
@@ -93,18 +81,16 @@ export const getChainConfig = (chain = comdex) => {
             },
       },
       {
-        coinDenom: 'ATOM',
-        coinMinimalDenom:
-          'ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352',
-        coinDecimals: 6,
-        coinGeckoId: 'cosmos',
+        coinDenom: atom.coinDenom,
+        coinMinimalDenom: atom.coinMinimalDenom,
+        coinDecimals: atom.coinDecimals,
+        coinGeckoId: atom.coinGeckoId,
       },
       {
-        coinDenom: 'NUSDC',
-        coinMinimalDenom:
-          'ibc/D031367F58DFD5EED54A49ADCB4EFB44AD9ECCAE383708BFDCCACF3CF463B77C',
-        coinDecimals: 6,
-        coinGeckoId: 'usd-coin',
+        coinDenom: usdc.coinDenom,
+        coinMinimalDenom: usdc.coinMinimalDenom,
+        coinDecimals: usdc.coinDecimals,
+        coinGeckoId: usdc.coinGeckoId,
       },
     ],
     coinType: chain?.coinType,
