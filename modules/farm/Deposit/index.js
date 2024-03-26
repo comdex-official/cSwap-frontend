@@ -193,18 +193,48 @@ const Deposit = ({
   const handleDepositFarmClick = () => {
     setInProgress(true);
 
+    let firstAmount = 0;
+    let secondAmount = 0;
+    if (
+      Number(firstAssetAvailableBalance) ===
+      Number(
+        getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        )
+      )
+    ) {
+      firstAmount = amountConversion(
+        firstAssetAvailableBalance - DEFAULT_FEE,
+        assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+      );
+    } else if (
+      Number(secondAssetAvailableBalance) ===
+      Number(
+        getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        )
+      )
+    ) {
+      secondAmount = amountConversion(
+        secondAssetAvailableBalance - DEFAULT_FEE,
+        assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+      );
+    }
+
     const deposits = [
       {
         denom: pool?.balances?.baseCoin?.denom,
         amount: getAmount(
-          firstInput,
+          firstAmount > 0 ? firstAmount : firstInput,
           assetMap[pool?.balances?.baseCoin?.denom]?.decimals
         ),
       },
       {
         denom: pool?.balances?.quoteCoin?.denom,
         amount: getAmount(
-          secondInput,
+          secondAmount > 0 ? secondAmount : secondInput,
           assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
         ),
       },
@@ -263,19 +293,48 @@ const Deposit = ({
 
   const handleDepositClick = () => {
     setDepositProgress(true);
+    let firstAmount = 0;
+    let secondAmount = 0;
+    if (
+      Number(firstAssetAvailableBalance) ===
+      Number(
+        getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        )
+      )
+    ) {
+      firstAmount = amountConversion(
+        firstAssetAvailableBalance - DEFAULT_FEE,
+        assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+      );
+    } else if (
+      Number(secondAssetAvailableBalance) ===
+      Number(
+        getAmount(
+          firstInput,
+          assetMap[pool?.balances?.baseCoin?.denom]?.decimals
+        )
+      )
+    ) {
+      secondAmount = amountConversion(
+        secondAssetAvailableBalance - DEFAULT_FEE,
+        assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
+      );
+    }
 
     const deposits = [
       {
         denom: pool?.balances?.baseCoin?.denom,
         amount: getAmount(
-          firstInput,
+          firstAmount > 0 ? firstAmount : firstInput,
           assetMap[pool?.balances?.baseCoin?.denom]?.decimals
         ),
       },
       {
         denom: pool?.balances?.quoteCoin?.denom,
         amount: getAmount(
-          secondInput,
+          secondAmount > 0 ? secondAmount : secondInput,
           assetMap[pool?.balances?.quoteCoin?.denom]?.decimals
         ),
       },
