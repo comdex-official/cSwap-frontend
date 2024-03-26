@@ -83,12 +83,12 @@ const Liquidity = ({
           fetchSoftLock();
         }
       }
-      if(result){
-      setActiveSoftLock(result?.activePoolCoin);
-      setQueuedSoftLocks(result?.queuedPoolCoin);
+      if (result) {
+        setActiveSoftLock(result?.activePoolCoin);
+        setQueuedSoftLocks(result?.queuedPoolCoin);
       }
     });
-  }, [address, pool?.id]);
+  }, [address, pool?.id, refreshBalance]);
 
   useEffect(() => {
     if (address && pool?.id) {
@@ -109,8 +109,8 @@ const Liquidity = ({
             fetchPool(id);
           }
         }
-        if(result){
-        setPool(result?.pool);
+        if (result) {
+          setPool(result?.pool);
         }
       });
     },
@@ -138,8 +138,8 @@ const Liquidity = ({
             fetchProvidedCoins();
           }
         }
-        if(result){
-        setProvidedTokens(result?.coins);
+        if (result) {
+          setProvidedTokens(result?.coins);
         }
       }
     );
@@ -175,11 +175,12 @@ const Liquidity = ({
           fetchPoolBalance(address);
         }
       }
-      if(result){
-      setPoolBalance(result.balances);
-      const spotPrice =
-        result.balances?.baseCoin?.amount / result.balances?.quoteCoin?.amount;
-      setSpotPrice(spotPrice.toFixed(6));
+      if (result) {
+        setPoolBalance(result.balances);
+        const spotPrice =
+          result.balances?.baseCoin?.amount /
+          result.balances?.quoteCoin?.amount;
+        setSpotPrice(spotPrice.toFixed(6));
       }
     });
   };
