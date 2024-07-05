@@ -134,7 +134,7 @@ const Farm = ({
             const userLockedAmount =
               Number(
                 queuedAmounts?.length > 0 &&
-                  queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
+                queuedAmounts?.reduce((a, b) => Number(a) + Number(b), 0)
               ) + Number(activeSoftLock?.amount) || 0;
 
             const totalPoolToken =
@@ -160,14 +160,14 @@ const Farm = ({
                         assetMap[providedTokens?.[0]?.denom]?.decimals
                       )
                     ) *
-                      marketPrice(markets, providedTokens?.[0]?.denom) +
+                    marketPrice(markets, providedTokens?.[0]?.denom) +
                     Number(
                       amountConversion(
                         providedTokens?.[1]?.amount,
                         assetMap[providedTokens?.[1]?.denom]?.decimals
                       )
                     ) *
-                      marketPrice(markets, providedTokens?.[1]?.denom);
+                    marketPrice(markets, providedTokens?.[1]?.denom);
 
                   setUserLiquidityInPools(
                     pool?.id,
@@ -616,14 +616,12 @@ const Farm = ({
 
   return (
     <div
-      className={`${styles.farm__wrap}  ${
-        showEligibleDisclaimer ? styles.show__text__alert : styles.text__alert
-      }`}
+      className={`${styles.farm__wrap}  ${showEligibleDisclaimer ? styles.show__text__alert : styles.text__alert
+        }`}
     >
       <div
-        className={`${styles.farm__main} ${
-          theme === 'dark' ? styles.dark : styles.light
-        }`}
+        className={`${styles.farm__main} ${theme === 'dark' ? styles.dark : styles.light
+          }`}
       >
         {showEligibleDisclaimer && (
           <div
@@ -635,16 +633,19 @@ const Farm = ({
           >
             <div className="reward">
               <NextImage src={Info2} alt="Info" height={15} width={15} />
-              Users need to farm for 24 hours in order to be eligible for
-              rewards.
+              {/* Users need to farm for 24 hours in order to be eligible for
+              rewards. */}
+              cSwap is<a href="https://forum.comdex.one/t/sunset-of-cswap-on-the-comdex-chain/1066/1" target='_blank' style={{ color: "#4ac9e2", textDecoration: "underline" }}>sunsetting.</a>Please withdraw your liquidity before the deadline.
               <Icon className={'bi bi-x-lg'} onClick={closeDisclaimer} />
             </div>
             <div className="distribution">
               {incentivesMap?.[MASTER_POOL_ID]?.nextDistribution ? (
                 <Timer
-                  text={'Next Reward distribution in '}
+                  text={'Shutdown countdown: '}
                   expiryTimestamp={
-                    incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
+                    // incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
+                    // "Sun Sep 01 2024 00:00:00 GMT+0530 (India Standard Time)"
+                    "2024-09-01T00:00:00+05:30"
                   }
                 />
               ) : null}
@@ -811,19 +812,16 @@ const Farm = ({
         ):""} */}
 
         <div
-          className={`${styles.farm__body} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farm__body} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           <div
-            className={`${styles.farm__body__left} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__body__left} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div
-              className={`${styles.farm__body__tab__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__tab__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <div>
                 <Tabs
@@ -836,14 +834,12 @@ const Farm = ({
               </div>
             </div>
             <div
-              className={`${styles.farm__body__line} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__line} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             />
             <div
-              className={`${styles.farm__body__icon__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__icon__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {!listView ? (
                 <>
@@ -889,9 +885,8 @@ const Farm = ({
             </div>
           </div>
           <div
-            className={`${styles.farm__body__right} ${
-              theme === 'dark' ? styles.dark : styles.light
-            }`}
+            className={`${styles.farm__body__right} ${theme === 'dark' ? styles.dark : styles.light
+              }`}
           >
             <div>
               <CreatePool
@@ -907,18 +902,16 @@ const Farm = ({
               className="farm-sort"
             >
               <div
-                className={`${styles.farm__body__filter__wrap} ${
-                  theme === 'dark' ? styles.dark : styles.light
-                }`}
+                className={`${styles.farm__body__filter__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                  }`}
               >
                 <Icon className={'bi bi-funnel-fill'} />
                 {filterValue1 ? filterValue1 : 'Sort By'}
               </div>
             </MyDropdown>
             <div
-              className={`${styles.farm__body__search__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__body__search__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <Input
                 placeholder="Search Pools.."
@@ -930,15 +923,13 @@ const Farm = ({
           </div>
         </div>
         <div
-          className={`${styles.farm__footer} ${
-            theme === 'dark' ? styles.dark : styles.light
-          }`}
+          className={`${styles.farm__footer} ${theme === 'dark' ? styles.dark : styles.light
+            }`}
         >
           {listView ? (
             <div
-              className={`${styles.farm__table__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__table__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               <FarmTable
                 theme={theme}
@@ -977,9 +968,8 @@ const Farm = ({
             </div>
           ) : (
             <div
-              className={`${styles.farm__footer__card__wrap} ${
-                theme === 'dark' ? styles.dark : styles.light
-              }`}
+              className={`${styles.farm__footer__card__wrap} ${theme === 'dark' ? styles.dark : styles.light
+                }`}
             >
               {poolAll.map((item, i) => {
                 return (
