@@ -4075,13 +4075,15 @@ a {
 
   @media screen and (max-width: 1540px) {
     font-size: $font-size-base;
-    max-width: 510px;
+    // max-width: 510px;
+    max-width: 600px;
     height: 60px;
     padding: 0 16px 0 14px;
   }
   @media screen and (max-width: 1280px) {
     font-size: $font-size-sm - 1;
-    max-width: 466px;
+    // max-width: 466px;
+    max-width: 475px;
     padding: 0 16px 0 14px;
   }
   @media screen and (max-width: 991px) {
@@ -4092,7 +4094,7 @@ a {
   }
   @media screen and (max-width: 576px) {
     max-width: 90%;
-    height: 80px;
+    height: 90px;
   }
 
   .icon {
