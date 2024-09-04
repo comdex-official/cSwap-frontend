@@ -644,11 +644,20 @@ const Farm = ({
                   text={'Shutdown countdown: '}
                   expiryTimestamp={
                     // incentivesMap?.[MASTER_POOL_ID]?.nextDistribution
-                    // "Sun Sep 01 2024 00:00:00 GMT+0530 (India Standard Time)"
-                    "2024-09-01T00:00:00+05:30"
+                    // "Sun Sep 14 2024 00:00:00 GMT+0530 (India Standard Time)"
+                    "2024-09-14T00:00:00+05:30"
                   }
                 />
-              ) : null}
+                // ) : null}
+              ) :
+                <Timer
+                  text={'Shutdown countdown: '}
+                  expiryTimestamp={
+                    // "Sun Sep 14 2024 00:00:00 GMT+0530 (India Standard Time)"
+                    "2024-09-14T00:00:00+05:30"
+                  }
+                />
+              }
             </div>
           </div>
         )}
